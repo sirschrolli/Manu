@@ -27,6 +27,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from ambience_dsp import (apply_room, bell, curve, env_ad, env_asr, filt, fit_level, formant_filter, rng, room, saw,  # noqa: E402
                           soft_clip, tone, trim_tail, fade_edges)
+from ambience_dsp import audible_bass  # noqa: E402
 from dsp import write_ogg  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent.parent
@@ -876,9 +877,7 @@ def v(path: str, pitch: float = 1.0, volume: float = 1.0, reach: int | None = No
 EVENTS = {
     "entity.void_maw.ambient": (["void_maw_ambient"], 24),
     "entity.void_maw.inhale": (["void_maw_inhale"], 32),
-    "entity.void_maw.bite": ([v(f"mob/ravager/bite{i}", 1.25) for i in range(1, 4)], None),
-    "entity.void_maw.hurt": ([v(f"mob/guardian/guardian_hit{i}", 0.6) for i in range(1, 5)], None),
-    "entity.void_maw.death": ([v("mob/guardian/guardian_death", 0.5)], None),
+    # Biss, Schmerz und Tod des Leerenschlunds: creature_sounds.py
     "entity.shard_warden.ambient": (["shard_warden_ambient"], 20),
     "entity.shard_warden.hurt": ([v(f"block/amethyst/break{i}", 0.55, 1.0) for i in range(1, 5)]
                                  + [v(f"mob/irongolem/hit{i}", 0.75) for i in range(1, 5)], None),
@@ -932,6 +931,11 @@ def files_of(name: str) -> list[str]:
     return [f"kingdomsatwar:entity/void/{name}{i + 1}" for i in range(SYNTH[name][1])]
 
 
+# Seit 1.1.4: diese sehr tiefen Klänge bekommen Obertöne ihres Basses, damit sie auch auf kleinen Lautsprechern
+# (Laptop, Fernseher, Kopfhörer ohne Bass) zu hören sind – siehe ambience_dsp.audible_bass.
+AUDIBLE = {"shattered_king_quake", "shard_warden_ambient"}
+
+
 def render(name: str, preview: Path | None) -> list[str]:
     fn, count, space, level = SYNTH[name]
     files = []
@@ -941,6 +945,8 @@ def render(name: str, preview: Path | None) -> list[str]:
             x = apply_room(x, room(SR, space[0], 700 + i, stereo=False, damping=6000), space[1])
         x = trim_tail(x, SR, -55.0)
         x = fade_edges(x, SR, 0.002, 0.04)
+        if name in AUDIBLE:
+            x = audible_bass(x, SR)
         x = soft_clip(fit_level(x, level, -2.0))
         path = OUT / f"{name}{i + 1}.ogg"
         write_ogg(x.astype(np.float32), SR, path, quality=5.0)

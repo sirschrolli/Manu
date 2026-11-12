@@ -34,6 +34,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from ambience_dsp import (apply_room, band, colored_noise, curve, fade_edges, filt, fit_level, formant_filter, glide,  # noqa: E402
                           highpass_gain, lowpass_gain, resonator, rng, room, shaped_noise, smoothstep, soft_clip, tilt, tone,
                           trim_tail)
+from ambience_dsp import audible_bass  # noqa: E402
 from dsp import write_ogg  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent.parent
@@ -1174,6 +1175,11 @@ def files_of(name: str) -> list[str]:
     return [f"kingdomsatwar:entity/monster/{name}{i + 1}" for i in range(SYNTH[name][1])]
 
 
+# Seit 1.1.4: diese sehr tiefen Klänge bekommen Obertöne ihres Basses, damit sie auch auf kleinen Lautsprechern
+# (Laptop, Fernseher, Kopfhörer ohne Bass) zu hören sind – siehe ambience_dsp.audible_bass.
+AUDIBLE = {"rift_hound_step"}
+
+
 def render(name: str, preview: Path | None) -> list[str]:
     fn, count, space, level = SYNTH[name]
     for i in range(count):
@@ -1182,6 +1188,8 @@ def render(name: str, preview: Path | None) -> list[str]:
             x = apply_room(x, room(SR, space[0], 900 + i, stereo=False, damping=6500), space[1])
         x = trim_tail(x, SR, -55.0)
         x = fade_edges(x, SR, 0.002, 0.04)
+        if name in AUDIBLE:
+            x = audible_bass(x, SR)
         x = soft_clip(fit_level(x, level, -2.0))
         write_ogg(x.astype(np.float32), SR, OUT / f"{name}{i + 1}.ogg", quality=5.0)
         if preview is not None:

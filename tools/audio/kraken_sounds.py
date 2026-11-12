@@ -26,6 +26,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from ambience_dsp import (apply_room, env_ad, env_asr, filt, fit_level, resonator, rng, room, soft_clip, tone,  # noqa: E402
                           trim_tail, fade_edges)
+from ambience_dsp import audible_bass  # noqa: E402
 from dsp import write_ogg  # noqa: E402
 from sea_creatures import blip, click, mix_at  # noqa: E402
 
@@ -335,19 +336,12 @@ def v(path: str, pitch: float = 1.0, volume: float = 1.0, reach: int | None = No
 # Ereignis: Liste der Klänge (eigene über ihren Namen in SYNTH, Vanilla über v(...)) und Reichweite der eigenen
 EVENTS = {
     "entity.kraken.ambient": (["kraken_ambient"], 40),
-    "entity.kraken.hurt": ([v(f"mob/squid/hurt{i}", 0.5) for i in range(1, 5)] + [v(f"mob/guardian/guardian_hit{i}", 0.55, 0.8) for i in range(1, 5)],
-                           None),
+    # Biss, Schmerz, Tinte, Schlag, Welle und Strudel des Kraken: sea_boss_sounds.py
     "entity.kraken.death": (["kraken_death"], 80),
     "entity.kraken.rise": (["kraken_rise"], 80),
     "entity.kraken.roar": (["kraken_roar"], 80),
-    "entity.kraken.wave": ([v("liquid/heavy_splash", 0.5, 1.0, 64)] + [v(f"mob/dolphin/splash{i}", 0.5, 1.0, 64) for i in range(1, 4)], None),
     "entity.kraken.sweep": (["kraken_sweep"], 48),
     "entity.kraken.grab": (["kraken_grab"], 40),
-    "entity.kraken.bite": ([v(f"mob/ravager/bite{i}", 0.6, 1.0, 40) for i in range(1, 4)], None),
-    "entity.kraken.ink": ([v(f"mob/glow_squid/squirt{i}", 0.5, 1.0, 48) for i in range(1, 4)], None),
-    "entity.kraken.whirl": ([v(f"ambient/underwater/additions/bubbles{i}", 0.6, 1.0, 64) for i in range(1, 7)], None),
-    "entity.kraken.slam": ([v("mob/warden/attack_impact_1", 0.6, 1.0, 48), v("mob/warden/attack_impact_2", 0.6, 1.0, 48),
-                            v("liquid/heavy_splash", 0.7, 1.0, 48)], None),
     "entity.kraken.swim": (["kraken_swim"], 40),
     "entity.kraken.charge": (["kraken_charge"], 64),
     "entity.kraken.dive": (["kraken_dive"], 64),
@@ -355,6 +349,15 @@ EVENTS = {
     "entity.kraken.geyser": (["kraken_geyser"], 48),
     "entity.kraken.tentacle": (["kraken_tentacle"], 48),
 }
+
+
+# Seit 1.1.4: diese sehr tiefen Klänge bekommen Obertöne ihres Basses, damit sie auch auf kleinen Lautsprechern
+# (Laptop, Fernseher, Kopfhörer ohne Bass) zu hören sind – siehe ambience_dsp.audible_bass.
+AUDIBLE = {"kraken_death", "kraken_roar", "kraken_ambient"}
+
+
+def files_of(name: str) -> list[str]:
+    return [f"kingdomsatwar:entity/sea/{name}{i + 1}" for i in range(SYNTH[name][1])]
 
 
 def render(name: str, preview: Path | None) -> list[str]:
@@ -366,6 +369,8 @@ def render(name: str, preview: Path | None) -> list[str]:
             x = apply_room(x, room(SR, space[0], 1300 + i, stereo=False, damping=5000), space[1])
         x = trim_tail(x, SR, -55.0)
         x = fade_edges(x, SR, 0.002, 0.05)
+        if name in AUDIBLE:
+            x = audible_bass(x, SR)
         x = soft_clip(fit_level(x, level, -2.0))
         path = OUT / f"{name}{i + 1}.ogg"
         write_ogg(x.astype(np.float32), SR, path, quality=5.0)
@@ -380,11 +385,12 @@ def render(name: str, preview: Path | None) -> list[str]:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--preview", type=Path, help="Ordner für Spektrogramme")
+    ap.add_argument("--only", nargs="*", help="nur diese Klänge neu erzeugen (die übrigen Dateien bleiben)")
     args = ap.parse_args()
     if args.preview:
         args.preview.mkdir(parents=True, exist_ok=True)
     OUT.mkdir(parents=True, exist_ok=True)
-    rendered = {name: render(name, args.preview) for name in SYNTH}
+    rendered = {name: render(name, args.preview) if not args.only or name in args.only else files_of(name) for name in SYNTH}
     events = {}
     for key, (sounds, reach) in EVENTS.items():
         entries = []

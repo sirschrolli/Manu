@@ -33,6 +33,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from ambience_dsp import (apply_room, curve, env_ad, env_asr, fade_edges, filt, fit_level, formant_filter, glide,  # noqa: E402
                           phase_of, resonator, rng, room, saw, soft_clip, tone, trim_tail)
+from ambience_dsp import audible_bass  # noqa: E402
 from dsp import write_ogg  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent.parent
@@ -888,6 +889,11 @@ EVENTS["item.bannhammer.ban"] = (["ban"], 32)
 EVENTS["item.glitch_wings.blink"] = (["blink"], 16)
 
 
+# Seit 1.1.4: diese sehr tiefen Klänge bekommen Obertöne ihres Basses, damit sie auch auf kleinen Lautsprechern
+# (Laptop, Fernseher, Kopfhörer ohne Bass) zu hören sind – siehe ambience_dsp.audible_bass.
+AUDIBLE = {"step", "smash"}
+
+
 def render(name: str, preview: Path | None, write: bool) -> list[str]:
     fn, count, space, level, stem = SYNTH[name]
     files = []
@@ -901,6 +907,8 @@ def render(name: str, preview: Path | None, write: bool) -> list[str]:
         x = hp(x, 28.0)
         x = trim_tail(x, SR, -55.0)
         x = fade_edges(x, SR, 0.002, 0.05)
+        if name in AUDIBLE:
+            x = audible_bass(x, SR)
         x = soft_clip(fit_level(x, level, -2.0))
         write_ogg(x.astype(np.float32), SR, OUT / f"{stem}{i + 1}.ogg", quality=5.0)
         if preview is not None:

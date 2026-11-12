@@ -25,6 +25,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from ambience_dsp import (apply_room, bell, env_ad, env_asr, fade_edges, filt, fit_level, glide, rng, room, saw,  # noqa: E402
                           soft_clip, tone, trim_tail)
+from ambience_dsp import audible_bass  # noqa: E402
 from dsp import write_ogg  # noqa: E402
 from star_sounds import choir, horn, mix_at, noise, shimmer, thud, whoosh  # noqa: E402
 
@@ -591,6 +592,11 @@ def files_of(name: str) -> list[str]:
     return [f"kingdomsatwar:creator/{name}{i + 1}" for i in range(SYNTH[name][1])]
 
 
+# Seit 1.1.4: diese sehr tiefen Klänge bekommen Obertöne ihres Basses, damit sie auch auf kleinen Lautsprechern
+# (Laptop, Fernseher, Kopfhörer ohne Bass) zu hören sind – siehe ambience_dsp.audible_bass.
+AUDIBLE = {"judgment", "land", "impact", "stun", "smite"}
+
+
 def render(name: str) -> list[str]:
     fn, count, space, level = SYNTH[name]
     files = []
@@ -601,6 +607,8 @@ def render(name: str) -> list[str]:
             x = apply_room(x, room(SR, space[0], 2300 + i, stereo=False, damping=7500), space[1])
         x = trim_tail(x, SR, -55.0)
         x = fade_edges(x, SR, 0.002, 0.06)
+        if name in AUDIBLE:
+            x = audible_bass(x, SR)
         x = soft_clip(fit_level(x, level, -6.0))
         path = OUT / f"{name}{i + 1}.ogg"
         write_ogg(x.astype(np.float32), SR, path, quality=5.0)

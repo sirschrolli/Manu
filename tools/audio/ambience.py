@@ -1603,6 +1603,35 @@ def bed_abyss_chaos():
     return b
 
 
+def dragon_far(sr: int, seed: int) -> np.ndarray:
+    """
+    Ein Drache brüllt weit weg (seit 1.1.4 mit der Stimme der Drachen der Mod statt des Enderdrachen): die Luft schluckt die
+    Höhen, und von den Bergen kommt ein spätes, dumpfes Echo.
+    """
+    from dragon_sounds import dragon_roar
+    r = rng(seed)
+    x = filt(filt(dragon_roar(seed), "low", 1500.0, sr, 2), "high", 60.0, sr, 2)
+    y = np.zeros(len(x) + int(1.4 * sr))
+    y[:len(x)] += x
+    d = int(r.uniform(0.45, 0.8) * sr)
+    y[d:d + len(x)] += 0.3 * filt(x, "low", 900.0, sr, 2)
+    return y
+
+
+def dragon_wings(sr: int, seed: int) -> np.ndarray:
+    """Ein Drache zieht vorüber: vier bis sechs schwere Flügelschläge, erst näher, dann wieder ferner, dumpf durch die Weite."""
+    from dragon_sounds import dragon_flap
+    from monster_sounds import mix_at
+    r = rng(seed)
+    beats = int(r.integers(4, 7))
+    period = r.uniform(0.75, 0.95)
+    y = np.zeros(int((beats * period + 1.5) * sr))
+    for k in range(beats):
+        u = k / max(1, beats - 1)
+        mix_at(y, dragon_flap(seed + k), max(0.0, k * period + r.uniform(-0.03, 0.03)), math.sin(math.pi * (0.15 + 0.7 * u)))
+    return filt(y, "low", 1600.0, sr, 2)
+
+
 # Seit 0.61 nicht mehr dabei (künstlich und auf Dauer anstrengend): Laubrauschen, Schilf, Vogelchor, Grillen, Insektensummen
 # und Froschchor – an ihre Stelle treten Einzelklänge, viele davon echte Naturaufnahmen von Minecraft (VANILLA_SPOTS).
 RETIRED_BEDS = {"leaves": bed_leaves, "reeds": bed_reeds, "birds_forest": bed_birds_forest, "birds_meadow": bed_birds_meadow,
@@ -1673,12 +1702,12 @@ SPOTS = {
     "glitch_far": (glitch_far, 3, VAST, 32, "Etwas flackert", "Something glitches"),
     "void_choir": (void_choir, 3, VAST, 96, "Ein ferner Chor", "A distant choir"),
     "world_tear": (world_tear, 4, VAST, 128, "Die Welt reißt in der Ferne", "The world tears in the distance"),
+    "dragon_far": (dragon_far, 4, VAST, 128, "Drache brüllt in der Ferne", "Distant dragon roar"),
+    "dragon_wings": (dragon_wings, 3, CANYON, 96, "Schwingen rauschen", "Great wings beat"),
 }
 
 # Sätze, die nur auf Vanilla-Klänge verweisen: (Pfade, Tonhöhe, Lautstärke, Reichweite, Untertitel DE/EN)
 VANILLA_SPOTS = {
-    "dragon_far": ([f"mob/enderdragon/growl{i}" for i in range(1, 5)], 0.55, 0.7, 128, "Drache brüllt in der Ferne", "Distant dragon roar"),
-    "dragon_wings": ([f"mob/enderdragon/wings{i}" for i in range(1, 7)], 0.6, 0.6, 96, "Schwingen rauschen", "Great wings beat"),
     "fireflies": ([f"block/firefly_bush/firefly_bush{i}" for i in range(1, 12)], 1.0, 0.6, 24, "Glühwürmchen summen", "Fireflies buzz"),
     "amethyst": ([f"block/amethyst/resonate{i}" for i in range(1, 5)], 0.8, 0.8, 48, "Kristall schwingt", "Crystal resonates"),
     "soul_voices": ([f"ambient/nether/soulsand_valley/voices{i}" for i in range(1, 6)] + [f"ambient/nether/soulsand_valley/whisper{i}" for i in range(1, 9)],

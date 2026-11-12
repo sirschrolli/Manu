@@ -32,6 +32,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from ambience_dsp import (apply_room, bell, env_ad, env_asr, filt, fit_level, formant_filter, glide, resonator, rng, room, saw,  # noqa: E402
                           soft_clip, tone, trim_tail, fade_edges)
+from ambience_dsp import audible_bass  # noqa: E402
 from dsp import write_ogg  # noqa: E402
 from keeper_sounds import gravel, impact, thud  # noqa: E402
 from kraken_sounds import gush, moving_resonator  # noqa: E402
@@ -361,6 +362,15 @@ EVENTS = {f"entity.soul_shepherd.{name}": reach for name, reach in (
     ("wisps", 40), ("wisp_hit", 24), ("fog", 32), ("pen", 40), ("crash", 48), ("storm", 48), ("fury", 64))}
 
 
+# Seit 1.1.4: diese sehr tiefen Klänge bekommen Obertöne ihres Basses, damit sie auch auf kleinen Lautsprechern
+# (Laptop, Fernseher, Kopfhörer ohne Bass) zu hören sind – siehe ambience_dsp.audible_bass.
+AUDIBLE = {"step", "crash"}
+
+
+def files_of(name: str) -> list[str]:
+    return [f"kingdomsatwar:entity/shadow/soul_shepherd_{name}{i + 1}" for i in range(SYNTH[name][1])]
+
+
 def render(name: str, preview: Path | None) -> list[str]:
     fn, count, space, level = SYNTH[name]
     files = []
@@ -370,6 +380,8 @@ def render(name: str, preview: Path | None) -> list[str]:
             x = apply_room(x, room(SR, space[0], 2100 + i, stereo=False, damping=4200), space[1])
         x = trim_tail(x, SR, -55.0)
         x = fade_edges(x, SR, 0.002, 0.05)
+        if name in AUDIBLE:
+            x = audible_bass(x, SR)
         x = soft_clip(fit_level(x, level, -2.0))
         path = OUT / f"soul_shepherd_{name}{i + 1}.ogg"
         write_ogg(x.astype(np.float32), SR, path, quality=5.0)
@@ -384,13 +396,14 @@ def render(name: str, preview: Path | None) -> list[str]:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--preview", type=Path, help="Ordner für Spektrogramme")
+    ap.add_argument("--only", nargs="*", help="nur diese Klänge neu erzeugen (die übrigen Dateien bleiben)")
     args = ap.parse_args()
     if args.preview:
         args.preview.mkdir(parents=True, exist_ok=True)
     OUT.mkdir(parents=True, exist_ok=True)
     events = {}
     for name in SYNTH:
-        files = render(name, args.preview)
+        files = render(name, args.preview) if not args.only or name in args.only else files_of(name)
         reach = EVENTS[f"entity.soul_shepherd.{name}"]
         events[f"entity.soul_shepherd.{name}"] = {"sounds": [{"name": f, "attenuation_distance": reach} for f in files],
                                                   "subtitle": f"subtitles.kingdomsatwar.entity.soul_shepherd.{name}"}

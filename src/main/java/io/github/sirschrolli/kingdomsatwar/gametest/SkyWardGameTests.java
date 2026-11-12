@@ -104,6 +104,7 @@ final class SkyWardGameTests {
 
     /** Ein Spieler im Überlebensmodus, verwundbar, der fallen kann (die Testwelt läuft im Kreativmodus). */
     private static ServerPlayer flyer(GameTestHelper helper, String name) {
+        keepTicking(helper, -32, 48, -40, 48);
         ServerPlayer player = MageGameTests.survivalPlayer(helper, name, new EmbeddedChannel[1], 0);
         player.connection.markClientLoaded();
         player.getAbilities().invulnerable = false;
@@ -113,11 +114,33 @@ final class SkyWardGameTests {
         return player;
     }
 
-    /** Lässt den Spieler an dieser Stelle (in Koordinaten des Tests) mit diesen Schwingen gleiten. */
+    /**
+     * Hält die Chunks rund um den Test am Laufen (Koordinaten des Tests): Flieger und Pfeile verlassen den kleinen Test-Bereich
+     * weit, und draußen blieben Wesen sonst stehen – ein Pfeil hielt dann mitten im Flug an der Grenze zum nächsten Chunk an.
+     * Die Chunks gibt der Testlauf am Ende des Durchgangs wieder frei.
+     */
+    private static void keepTicking(GameTestHelper helper, int minX, int maxX, int minZ, int maxZ) {
+        ServerLevel level = helper.getLevel();
+        BlockPos a = helper.absolutePos(new BlockPos(minX, 0, minZ));
+        BlockPos b = helper.absolutePos(new BlockPos(maxX, 0, maxZ));
+        for (int cx = Math.min(a.getX(), b.getX()) >> 4; cx <= Math.max(a.getX(), b.getX()) >> 4; cx++) {
+            for (int cz = Math.min(a.getZ(), b.getZ()) >> 4; cz <= Math.max(a.getZ(), b.getZ()) >> 4; cz++) {
+                level.setChunkForced(cx, cz, true);
+                level.getChunk(cx, cz);
+            }
+        }
+    }
+
+    /**
+     * Lässt den Spieler an dieser Stelle (in Koordinaten des Tests) mit diesen Schwingen gleiten. Er meldet sich dort auch
+     * an (wie es sonst seine Verbindung jeden Tick tut): nur um Spieler herum laufen die Wesen weiter – sonst bliebe ein
+     * Pfeil, der den Test-Bereich verlässt, an der Grenze zum nächsten Chunk stehen.
+     */
     private static void glide(GameTestHelper helper, ServerPlayer player, Vec3 at, ItemStack wings) {
         player.setItemSlot(EquipmentSlot.CHEST, wings);
         Vec3 pos = helper.absoluteVec(at);
         player.snapTo(pos.x, pos.y, pos.z, 0.0f, 0.0f);
+        player.level().getChunkSource().move(player);
         player.setDeltaMovement(Vec3.ZERO);
         player.startFallFlying();
     }
@@ -516,7 +539,9 @@ final class SkyWardGameTests {
             seen[2] = SkyBoltEntity.charge(level, boss, player, SkyTheme.STAR, 2);
         }));
         helper.runAfterDelay(120, () -> guard(helper, level, player, boss, () -> {
-            helper.assertTrue(seen[2].isRemoved() && seen[2].outcome() == SkyBoltEntity.Outcome.HIT, "Der Sternenpfeil trifft nicht: " + seen[2].outcome());
+            helper.assertTrue(seen[2].isRemoved() && seen[2].outcome() == SkyBoltEntity.Outcome.HIT, "Der Sternenpfeil trifft nicht: " + seen[2].outcome()
+                    + " (Zustand " + seen[2].state() + ", Pfeil " + helper.relativeVec(seen[2].position()) + ", Flieger "
+                    + helper.relativeVec(player.position()) + (player.isFallFlying() ? " gleitet" : " gleitet nicht") + ")");
             helper.assertTrue(FlightBan.banned(player) && player.hasEffect(MobEffects.GLOWING), "Der Sternenpfeil bannt nicht oder lässt nicht leuchten");
             Vec3 pull = player.getDeltaMovement();
             helper.assertTrue(pull.z < -0.2 && pull.y < 0.0, "Kein Ruck zum Boss hin: " + pull);

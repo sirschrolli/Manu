@@ -25,6 +25,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from ambience_dsp import (apply_room, bell, env_ad, env_asr, filt, fit_level, rng, room, soft_clip, tone,  # noqa: E402
                           trim_tail, fade_edges, saw, glide, curve, formant_filter)
+from ambience_dsp import audible_bass  # noqa: E402
 from dsp import write_ogg  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent.parent
@@ -310,6 +311,15 @@ EVENTS = {f"entity.glutschmied.{name}": ([name], reach) for name, reach in (
     ("stoke", 48), ("ambient", 24), ("hurt", 32), ("death", 64), ("step", 16))}
 
 
+# Seit 1.1.4: diese sehr tiefen Klänge bekommen Obertöne ihres Basses, damit sie auch auf kleinen Lautsprechern
+# (Laptop, Fernseher, Kopfhörer ohne Bass) zu hören sind – siehe ambience_dsp.audible_bass.
+AUDIBLE = {"step"}
+
+
+def files_of(name: str) -> list[str]:
+    return [f"kingdomsatwar:forge/glutschmied_{name}{i + 1}" for i in range(SYNTH[name][1])]
+
+
 def render(name: str, preview: Path | None) -> list[str]:
     fn, count, space, level = SYNTH[name]
     files = []
@@ -319,6 +329,8 @@ def render(name: str, preview: Path | None) -> list[str]:
             x = apply_room(x, room(SR, space[0], 1500 + i, stereo=False, damping=6000), space[1])
         x = trim_tail(x, SR, -55.0)
         x = fade_edges(x, SR, 0.002, 0.05)
+        if name in AUDIBLE:
+            x = audible_bass(x, SR)
         x = soft_clip(fit_level(x, level, -2.0))
         path = OUT / f"glutschmied_{name}{i + 1}.ogg"
         write_ogg(x.astype(np.float32), SR, path, quality=5.0)
@@ -333,11 +345,12 @@ def render(name: str, preview: Path | None) -> list[str]:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--preview", type=Path, help="Ordner für Spektrogramme")
+    ap.add_argument("--only", nargs="*", help="nur diese Klänge neu erzeugen (die übrigen Dateien bleiben)")
     args = ap.parse_args()
     if args.preview:
         args.preview.mkdir(parents=True, exist_ok=True)
     OUT.mkdir(parents=True, exist_ok=True)
-    rendered = {name: render(name, args.preview) for name in SYNTH}
+    rendered = {name: render(name, args.preview) if not args.only or name in args.only else files_of(name) for name in SYNTH}
     events = {}
     for key, (sounds, reach) in EVENTS.items():
         entries = []

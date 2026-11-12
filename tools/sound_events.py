@@ -49,84 +49,8 @@ def event(subtitle: str, *groups: list) -> dict:
 # Die Tonhöhe hängt zusätzlich von der Wachstumsstufe ab (DragonEntity#getVoicePitch: 1,7 Schlüpfling …
 # 0,8 Uralter Drache). Minecraft begrenzt die Tonhöhe auf 0,5–2,0.
 EVENTS: dict[str, dict] = {
-    # --- Drachen ---
-    "entity.dragon.ambient": event(
-        "entity.dragon.ambient",
-        v("mob/enderdragon/growl", 4, pitch=1.15, volume=0.35),
-        v("mob/ravager/idle", 4, pitch=0.7, volume=0.9),
-    ),
-    "entity.dragon.baby_ambient": event(
-        "entity.dragon.baby_ambient",
-        v("mob/sniffer/happy", 5, pitch=0.95, volume=0.55),
-        v("mob/hoglin/idle", 3, pitch=1.1, volume=0.45, start=2),
-    ),
-    "entity.dragon.hurt": event(
-        "entity.dragon.hurt",
-        v("mob/enderdragon/hit", 4, pitch=1.15, volume=0.55),
-        v("mob/ravager/hurt", 4, pitch=0.85, volume=0.8),
-    ),
-    "entity.dragon.death": event(
-        "entity.dragon.death",
-        v("mob/ravager/death", 3, pitch=0.7),
-    ),
-    "entity.dragon.roar": event(
-        "entity.dragon.roar",
-        v("mob/ravager/roar", 4, pitch=0.8, attenuation=48),
-        v("mob/enderdragon/growl", 2, pitch=0.95, volume=0.7, attenuation=48),
-    ),
-    "entity.dragon.flap": event(
-        "entity.dragon.flap",
-        v("mob/enderdragon/wings", 6, pitch=1.2, volume=0.45),
-    ),
-    "entity.dragon.step": event(
-        "entity.dragon.step",
-        v("mob/sniffer/step", 6, volume=0.7),
-        v("mob/ravager/step", 5, pitch=0.9, volume=0.5),
-    ),
-    "entity.dragon.eat": event(
-        "entity.dragon.eat",
-        v("mob/sniffer/eat", 3, pitch=1.1, volume=0.8),
-        v("random/eat", 3, pitch=0.8, volume=0.6),
-    ),
-    "entity.dragon.bite": event(
-        "entity.dragon.bite",
-        v("mob/ravager/bite", 3, pitch=1.05),
-        v("mob/hoglin/attack", 2, pitch=0.9, volume=0.8),
-    ),
-    "entity.dragon.grow": event(
-        "entity.dragon.grow",
-        v("random/levelup", 0, pitch=0.75, volume=0.7),
-    ),
-    "entity.dragon.breath.fire": event(
-        "entity.dragon.breath.fire",
-        v("mob/blaze/breathe", 4, pitch=0.55),
-        v("mob/ghast/fireball4", 0, pitch=0.6, volume=0.8),
-    ),
-    "entity.dragon.breath.ice": event(
-        "entity.dragon.breath.ice",
-        v("mob/breeze/wind_burst", 3, pitch=0.8),
-        v("block/powder_snow/break", 3, pitch=0.6),
-    ),
-    "entity.dragon.breath.lightning": event(
-        "entity.dragon.breath.lightning",
-        v("mob/warden/sonic_charge", 4, pitch=1.7, volume=0.8),
-        v("item/trident/thunder", 2, pitch=1.3, volume=0.5),
-    ),
-    "entity.dragon.breath.nature": event(
-        "entity.dragon.breath.nature",
-        v("mob/breeze/wind_burst", 3, pitch=1.0, volume=0.8),
-        v("block/chorus_flower/grow", 4, pitch=0.7),
-    ),
-    "entity.dragon.breath.earth": event(
-        "entity.dragon.breath.earth",
-        v("dig/gravel", 4, pitch=0.5),
-        v("mob/goat/impact", 2, pitch=0.6, volume=0.8),
-    ),
-    "entity.dragon.breath.water": event(
-        "entity.dragon.breath.water",
-        v("liquid/heavy_splash", 0, pitch=1.1),
-        v("mob/glow_squid/squirt", 3, pitch=0.6),
-    ),
+    # Eigene Klänge statt Verweisen: Drachen und Dracheneier in audio/dragon_sounds.py; Höhlentroll, Lindwurm, Hirsch, Gans,
+    # Urelch, Moorschnapper, Flamingo (Schmerz, Tod) und Kommandostab in audio/creature_sounds.py
     # --- Soldaten und Banditen ---
     "entity.soldier.hurt": event(
         "entity.soldier.hurt",
@@ -152,11 +76,6 @@ EVENTS: dict[str, dict] = {
         "entity.bandit.death",
         v("mob/pillager/death", 2, pitch=0.92),
     ),
-    "item.command_baton.command": event(
-        "item.command_baton.command",
-        v("note/bell", 0, pitch=1.19, volume=0.6),
-    ),
-    # --- Dracheneier ---
     # --- Wilde Kreaturen ---
     "entity.wild_boar.ambient": event(
         "entity.wild_boar.ambient",
@@ -167,22 +86,6 @@ EVENTS: dict[str, dict] = {
     "entity.wild_boar.hurt": event("entity.wild_boar.hurt", v("mob/hoglin/hurt", 4, pitch=1.25)),
     "entity.wild_boar.death": event("entity.wild_boar.death", v("mob/hoglin/death", 3, pitch=1.25)),
     "entity.wild_boar.step": event("entity.wild_boar.step", v("mob/hoglin/step", 6, pitch=1.3, volume=0.5)),
-    "entity.deer.ambient": event(
-        "entity.deer.ambient",
-        v("mob/fox/idle", 6, pitch=0.75, volume=0.5),
-        v("mob/horse/breathe", 3, pitch=1.4, volume=0.4),
-    ),
-    "entity.deer.hurt": event("entity.deer.hurt", v("mob/fox/hurt", 4, pitch=0.8)),
-    "entity.deer.death": event("entity.deer.death", v("mob/fox/death", 2, pitch=0.75)),
-    "entity.deer.step": event("entity.deer.step", v("mob/horse/soft", 6, pitch=1.4, volume=0.6)),
-    "entity.goose.ambient": event(
-        "entity.goose.ambient",
-        v("mob/horse/donkey/idle", 3, pitch=1.85, volume=0.45),
-        v("mob/parrot/idle", 6, pitch=0.6, volume=0.6),
-    ),
-    "entity.goose.hiss": event("entity.goose.hiss", v("mob/cat/hiss", 3, pitch=1.3, volume=0.7)),
-    "entity.goose.hurt": event("entity.goose.hurt", v("mob/parrot/hurt", 2, pitch=0.7)),
-    "entity.goose.death": event("entity.goose.death", v("mob/parrot/death", 4, pitch=0.7)),
     # --- Tiere der eigenen Biome (0.85) ---
     # Schneeleopard: tiefe Katzenstimmen (Ozelot, Streuner, Königskatze), Fauchen und Schnurren tiefer gestimmt
     "entity.snow_leopard.ambient": event(
@@ -208,31 +111,6 @@ EVENTS: dict[str, dict] = {
         v("mob/cat/royal/death", 0, pitch=0.6),
     ),
     "entity.snow_leopard.step": event("entity.snow_leopard.step", v("mob/wolf/step", 5, pitch=0.9, volume=0.5)),
-    # Urelch: tiefe Rufe (Rind, Kamel), der Brunftruf des Bullen, Schnauben, schwere Schritte
-    "entity.primeval_elk.ambient": event(
-        "entity.primeval_elk.ambient",
-        v("mob/cow/say", 4, pitch=0.55, volume=0.75),
-        v("mob/camel/ambient", 8, pitch=0.62, volume=0.6),
-    ),
-    "entity.primeval_elk.bugle": event(
-        "entity.primeval_elk.bugle",
-        v("mob/cow/moody/ambient", 9, pitch=0.5, volume=1.0, attenuation=48),
-        v("mob/ravager/idle", 8, pitch=1.15, volume=0.5, attenuation=48),
-    ),
-    "entity.primeval_elk.angry": event(
-        "entity.primeval_elk.angry",
-        v("mob/horse/angry", 1, pitch=0.55, volume=0.9),
-        v("mob/hoglin/angry", 6, pitch=0.75, volume=0.7),
-    ),
-    "entity.primeval_elk.impact": event(
-        "entity.primeval_elk.impact",
-        v("mob/goat/impact", 2, pitch=0.6),
-        v("mob/ravager/step", 5, pitch=0.6, volume=0.8),
-    ),
-    "entity.primeval_elk.eat": event("entity.primeval_elk.eat", v("mob/camel/eat", 5, pitch=0.8, volume=0.8)),
-    "entity.primeval_elk.hurt": event("entity.primeval_elk.hurt", v("mob/camel/hurt", 4, pitch=0.72)),
-    "entity.primeval_elk.death": event("entity.primeval_elk.death", v("mob/camel/death", 2, pitch=0.66)),
-    "entity.primeval_elk.step": event("entity.primeval_elk.step", v("mob/camel/step", 6, pitch=0.85, volume=0.9)),
     # --- Wesen der eigenen Biome (0.86) ---
     # Glutsalamander: quiekende Molchlaute (tiefer), dazu leises Knistern; Fußtapsen wie ein Frosch
     "entity.ember_salamander.ambient": event(
@@ -247,19 +125,6 @@ EVENTS: dict[str, dict] = {
     ),
     "entity.ember_salamander.step": event("entity.ember_salamander.step", v("mob/frog/step", 4, pitch=1.3, volume=0.35)),
     "entity.ember_salamander.ignite": event("entity.ember_salamander.ignite", v("fire/ignite", 0, pitch=1.15, volume=0.8)),
-    # Moorschnapper: tiefe Schildkrötenlaute, Fauchen, das Zuschnappen der Kiefer, schwere Schritte
-    "entity.mire_snapper.ambient": event("entity.mire_snapper.ambient", v("mob/turtle/idle", 3, pitch=0.55, volume=0.8)),
-    "entity.mire_snapper.hiss": event(
-        "entity.mire_snapper.hiss",
-        v("mob/cat/hiss", 3, pitch=0.45, volume=0.9),
-    ),
-    "entity.mire_snapper.snap": event("entity.mire_snapper.snap", v("mob/evocation_illager/fangs", 0, pitch=1.15, volume=0.9)),
-    "entity.mire_snapper.hurt": event("entity.mire_snapper.hurt", v("mob/turtle/hurt", 5, pitch=0.6)),
-    "entity.mire_snapper.death": event("entity.mire_snapper.death", v("mob/turtle/death", 3, pitch=0.6)),
-    "entity.mire_snapper.step": event("entity.mire_snapper.step", v("mob/turtle/walk", 5, pitch=0.7, volume=0.6)),
-    # Flamingo: Verletzt und Tod wie ein Papagei, tiefer (der Ruf und die Flügel sind eigene Klänge, siehe beast_sounds.py)
-    "entity.flamingo.hurt": event("entity.flamingo.hurt", v("mob/parrot/hurt", 2, pitch=0.62)),
-    "entity.flamingo.death": event("entity.flamingo.death", v("mob/parrot/death", 4, pitch=0.6)),
     "entity.will_o_wisp.ambient": event(
         "entity.will_o_wisp.ambient",
         v("block/amethyst/resonate", 4, pitch=1.6, volume=0.35),
@@ -271,41 +136,6 @@ EVENTS: dict[str, dict] = {
         "entity.will_o_wisp.vanish",
         v("block/amethyst/shimmer", 0, pitch=0.8, volume=0.6),
         v("random/glass", 3, pitch=1.8, volume=0.25),
-    ),
-    "entity.cave_troll.ambient": event("entity.cave_troll.ambient", v("mob/ravager/idle", 8, pitch=0.65)),
-    "entity.cave_troll.hurt": event("entity.cave_troll.hurt", v("mob/ravager/hurt", 4, pitch=0.7)),
-    "entity.cave_troll.death": event("entity.cave_troll.death", v("mob/ravager/death", 3, pitch=0.6)),
-    "entity.cave_troll.step": event("entity.cave_troll.step", v("mob/ravager/step", 5, pitch=0.6, volume=0.9)),
-    "entity.cave_troll.smash": event(
-        "entity.cave_troll.smash",
-        v("mob/ravager/bite", 3, pitch=0.6),
-        v("mob/zoglin/attack", 2, pitch=0.6, volume=0.8),
-    ),
-    "entity.cave_troll.petrify": event("entity.cave_troll.petrify", v("dig/stone", 4, pitch=0.7, volume=0.8)),
-    "entity.lindworm.ambient": event(
-        "entity.lindworm.ambient",
-        v("mob/cat/hiss", 3, pitch=0.55),
-        v("mob/enderdragon/growl", 4, pitch=1.4, volume=0.25),
-    ),
-    "entity.lindworm.hurt": event("entity.lindworm.hurt", v("mob/hoglin/hurt", 4, pitch=0.7)),
-    "entity.lindworm.death": event(
-        "entity.lindworm.death",
-        v("mob/ravager/death", 3, pitch=0.85),
-        v("mob/enderdragon/growl", 4, pitch=0.9, volume=0.4),
-    ),
-    "entity.lindworm.bite": event("entity.lindworm.bite", v("mob/ravager/bite", 3, pitch=0.9)),
-    "entity.lindworm.slither": event(
-        "entity.lindworm.slither",
-        v("step/sand", 5, pitch=0.6, volume=0.5),
-        v("mob/turtle/walk", 5, pitch=0.5, volume=0.4),
-    ),
-    "block.dragon_egg.crack": event(
-        "block.dragon_egg.crack",
-        v("mob/turtle/egg/egg_crack", 5, pitch=0.7),
-    ),
-    "block.dragon_egg.hatch": event(
-        "block.dragon_egg.hatch",
-        v("mob/turtle/egg/egg_break", 2, pitch=0.65),
     ),
 }
 

@@ -27,6 +27,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from ambience_dsp import (apply_room, bell, curve, env_ad, env_asr, fade_edges, filt, fit_level, formant_filter, glide, rng,  # noqa: E402
                           room, saw, soft_clip, tone, trim_tail)
+from ambience_dsp import audible_bass  # noqa: E402
 from dsp import write_ogg  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent.parent
@@ -366,11 +367,24 @@ SYNTH = {
     "shatter": (shatter, 2, (1.8, 0.35), -13.0),
 }
 
+# Seit 1.1.4 nach Lautheit (LUFS) statt nach Effektivwert eingepegelt: der harte Aufschlag begrenzte den Pegel, der
+# Schmerz klang zu schwach. Name: Lautheit in LUFS
+LUFS = {"hurt": -18.0}
+
 # Ereignis: (Klänge, Reichweite)
 EVENTS = {f"entity.stone_keeper.{name}": ([name], reach) for name, reach in (
     ("ambient", 24), ("hurt", 32), ("death", 64), ("step", 16), ("awaken", 48), ("roar", 64), ("smash", 48), ("stomp", 48),
     ("dig", 32), ("throw", 32), ("boulder", 40), ("crystal", 32), ("beam_charge", 40), ("beam", 48), ("armor", 48),
     ("shatter", 48))}
+
+
+def files_of(name: str) -> list[str]:
+    return [f"kingdomsatwar:fae/keeper_{name}{i + 1}" for i in range(SYNTH[name][1])]
+
+
+# Seit 1.1.4: diese sehr tiefen Klänge bekommen Obertöne ihres Basses, damit sie auch auf kleinen Lautsprechern
+# (Laptop, Fernseher, Kopfhörer ohne Bass) zu hören sind – siehe ambience_dsp.audible_bass.
+AUDIBLE = {"step", "stomp"}
 
 
 def render(name: str, preview: Path | None) -> list[str]:
@@ -382,7 +396,13 @@ def render(name: str, preview: Path | None) -> list[str]:
             x = apply_room(x, room(SR, space[0], 1700 + i, stereo=False, damping=6000), space[1])
         x = trim_tail(x, SR, -55.0)
         x = fade_edges(x, SR, 0.002, 0.05)
-        x = soft_clip(fit_level(x, level, -2.0))
+        if name in AUDIBLE:
+            x = audible_bass(x, SR)
+        if name in LUFS:
+            from dragon_sounds import fit_lufs
+            x = fit_lufs(x, LUFS[name])
+        else:
+            x = soft_clip(fit_level(x, level, -2.0))
         path = OUT / f"keeper_{name}{i + 1}.ogg"
         write_ogg(x.astype(np.float32), SR, path, quality=5.0)
         files.append(f"kingdomsatwar:fae/keeper_{name}{i + 1}")
@@ -396,11 +416,12 @@ def render(name: str, preview: Path | None) -> list[str]:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--preview", type=Path, help="Ordner für Spektrogramme")
+    ap.add_argument("--only", nargs="*", help="nur diese Klänge neu erzeugen (die übrigen Dateien bleiben)")
     args = ap.parse_args()
     if args.preview:
         args.preview.mkdir(parents=True, exist_ok=True)
     OUT.mkdir(parents=True, exist_ok=True)
-    rendered = {name: render(name, args.preview) for name in SYNTH}
+    rendered = {name: render(name, args.preview) if not args.only or name in args.only else files_of(name) for name in SYNTH}
     events = {}
     for key, (sounds, reach) in EVENTS.items():
         entries = []

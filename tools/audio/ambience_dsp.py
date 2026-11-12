@@ -330,6 +330,42 @@ def peak_db(x: np.ndarray) -> float:
     return 20 * math.log10(float(np.max(np.abs(x))) + 1e-12)
 
 
+def bass_presence(x: np.ndarray, sr: int, gain: float, cutoff: float = 180.0, top: float = 1600.0) -> np.ndarray:
+    """
+    Lässt sehr tiefe Klänge (schwere Schritte, Aufschläge, Gebrüll riesiger Wesen) auch auf kleinen Lautsprechern hörbar
+    werden (seit 1.1.4): Der Bass wird sanft gesättigt; die so entstehenden Obertöne (cutoff·1,2 bis top Hz) kommen dazu,
+    und das Ohr „hört“ den tiefen Grundton daraus von selbst wieder hinzu (fehlender Grundton). Auf guten Lautsprechern
+    bleibt der Klang fast gleich, nur etwas griffiger.
+    """
+    low = filt(x, "low", cutoff, sr, 4)
+    peak = float(np.max(np.abs(low))) + 1e-12
+    harm = np.tanh(3.0 * low / peak) * peak
+    harm = filt(filt(harm, "high", cutoff * 1.2, sr, 4), "low", top, sr, 2)
+    return x + gain * harm
+
+
+def small_speaker_loss(x: np.ndarray, sr: int) -> float:
+    """Um wie viel dB die Lautheit (LUFS) sinkt, wenn alles unter 200 Hz fehlt – wie auf kleinen Lautsprechern."""
+    import pyloudnorm
+    xx = x if len(x) >= int(0.4 * sr) else np.concatenate([x, np.zeros(int(0.4 * sr) - len(x))])
+    meter = pyloudnorm.Meter(sr, block_size=0.2)
+    full = meter.integrated_loudness(xx)
+    small = meter.integrated_loudness(filt(xx, "high", 200.0, sr, 4))
+    return float(small - full) if np.isfinite(full) and np.isfinite(small) else 0.0
+
+
+def audible_bass(x: np.ndarray, sr: int, target: float = -8.0, max_gain: float = 2.5) -> np.ndarray:
+    """So wenig bass_presence wie nötig, bis höchstens target dB auf kleinen Lautsprechern verloren gehen."""
+    if small_speaker_loss(x, sr) >= target:
+        return x
+    y = x
+    for gain in (0.5, 0.8, 1.2, 1.7, 2.1, max_gain):
+        y = bass_presence(x, sr, gain)
+        if small_speaker_loss(y, sr) >= target:
+            break
+    return y
+
+
 def soft_clip(x: np.ndarray, ceiling: float = 0.89) -> np.ndarray:
     """Weiche Begrenzung (nur die lautesten Spitzen werden sanft gerundet)."""
     k = ceiling

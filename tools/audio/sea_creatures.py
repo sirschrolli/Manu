@@ -2,8 +2,8 @@
 """
 Erzeugt die Stimmen der Meereswesen: das gläserne Schimmern und Nesseln der Leuchtqualle, das unheimliche Summen des
 Anglerfischs und das Klappern, Kneifen und Knacken der Riesenkrabbe. Alles entsteht aus Rauschen und Tönen (siehe
-ambience_dsp.py). Wo Vanilla-Klänge passen (Gischt, Bisse, Wasser), verweist sounds.json nur auf sie – es werden keine
-Minecraft-Dateien kopiert.
+ambience_dsp.py). Bisse, Schmerz und Tod von Hai, Anglerfisch, Mantarochen und Leuchtqualle (früher Klänge von Minecraft)
+erzeugt seit 1.1.4 creature_sounds.py, die übrigen Klänge des Karkinos sea_boss_sounds.py.
 
 Aufruf (aus dem Projektordner):
     python3 tools/audio/sea_creatures.py [--preview /pfad]
@@ -25,6 +25,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from ambience_dsp import (apply_room, bell, env_ad, env_asr, filt, fit_level, resonator, rng, room, soft_clip, tone,  # noqa: E402
                           trim_tail, fade_edges)
+from ambience_dsp import audible_bass  # noqa: E402
 from dsp import write_ogg  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent.parent
@@ -301,6 +302,10 @@ SYNTH = {
 }
 
 
+# Seit 1.1.4 nach Lautheit (LUFS) statt nach Effektivwert eingepegelt: sehr kurze, harte Klänge blieben sonst zu leise
+# (die Spitzen begrenzten den Pegel). Name: Lautheit in LUFS
+LUFS = {"giant_crab_death": -19.0}
+
 def v(path: str, pitch: float = 1.0, volume: float = 1.0, reach: int | None = None) -> dict:
     e = {"name": f"minecraft:{path}"}
     if pitch != 1.0:
@@ -314,43 +319,32 @@ def v(path: str, pitch: float = 1.0, volume: float = 1.0, reach: int | None = No
 
 # Ereignis: Liste der Klänge (eigene über ihren Namen in SYNTH, Vanilla über v(...)) und Reichweite der eigenen
 EVENTS = {
-    "entity.manta_ray.hurt": ([v(f"mob/squid/hurt{i}", 0.6) for i in range(1, 5)], None),
-    "entity.manta_ray.death": ([v(f"mob/squid/death{i}", 0.55) for i in range(1, 4)], None),
-    "entity.manta_ray.leap": ([v(f"mob/dolphin/jump{i}", 0.65, 1.0, 32) for i in range(1, 4)], None),
-    "entity.manta_ray.splash": ([v("liquid/heavy_splash", 0.75, 1.0, 48)] + [v(f"mob/dolphin/splash{i}", 0.6, 1.0, 48) for i in range(1, 4)], None),
+    # eigene Klänge in anderen Skripten: Hai, Mantarochen, Anglerfisch (Biss, Schmerz, Tod), Riesenkrabbe (Schritt) und
+    # Leuchtqualle (Schmerz, Tod) in creature_sounds.py; Karkinos (Schmerz, Schlag, Graben, Ausbruch, Schritt, Gezeiten,
+    # Lanze) in sea_boss_sounds.py
     "entity.glow_jellyfish.ambient": (["glow_jellyfish_ambient"], 12),
-    "entity.glow_jellyfish.hurt": ([v(f"mob/slime/small{i}", 1.25, 0.7) for i in range(1, 6)], None),
-    "entity.glow_jellyfish.death": ([v(f"mob/slime/small{i}", 1.05, 0.8) for i in range(1, 6)], None),
     "entity.glow_jellyfish.sting": (["glow_jellyfish_sting"], 16),
-    "entity.shark.hurt": ([v(f"entity/fish/hurt{i}", 0.55) for i in range(1, 5)], None),
-    "entity.shark.death": ([v(f"entity/fish/hurt{i}", 0.45) for i in range(1, 5)], None),
-    "entity.shark.bite": ([v(f"mob/ravager/bite{i}", 1.15) for i in range(1, 4)], None),
     "entity.anglerfish.ambient": (["anglerfish_ambient"], 20),
-    "entity.anglerfish.hurt": ([v(f"mob/guardian/guardian_hit{i}", 1.3) for i in range(1, 5)], None),
-    "entity.anglerfish.death": ([v("mob/guardian/guardian_death", 1.25)], None),
-    "entity.anglerfish.snap": ([v("mob/evocation_illager/fangs", 1.2)], None),
-    "entity.anglerfish.bite": ([v(f"mob/ravager/bite{i}", 1.35) for i in range(1, 4)], None),
     "entity.giant_crab.clack": (["giant_crab_clack"], 16),
     "entity.giant_crab.pinch": (["giant_crab_pinch"], 16),
     "entity.giant_crab.hurt": (["giant_crab_hurt"], 16),
     "entity.giant_crab.death": (["giant_crab_death"], 16),
-    "entity.giant_crab.step": ([v(f"mob/spider/step{i}", 1.7, 0.5) for i in range(1, 5)], None),
     "entity.reef_colossus.ambient": (["reef_colossus_ambient"], 32),
-    "entity.reef_colossus.hurt": ([v(f"mob/turtle/hurt{i}", 0.5) for i in range(1, 5)] + [v(f"block/basalt/break{i}", 0.6, 0.8) for i in range(1, 5)],
-                                  None),
     "entity.reef_colossus.death": (["reef_colossus_death"], 64),
     "entity.reef_colossus.roar": (["reef_colossus_roar"], 64),
     "entity.reef_colossus.clack": (["reef_colossus_clack"], 40),
-    "entity.reef_colossus.slam": ([v("mob/warden/attack_impact_1", 0.75, 1.0, 40), v("mob/warden/attack_impact_2", 0.75, 1.0, 40)], None),
     "entity.reef_colossus.jet": (["reef_colossus_jet"], 40),
-    "entity.reef_colossus.burrow": ([v("mob/warden/dig", 1.1, 1.0, 40), v("mob/sniffer/longdig1", 0.7, 1.0, 40),
-                                     v("mob/sniffer/longdig2", 0.7, 1.0, 40)], None),
-    "entity.reef_colossus.erupt": ([v("mob/warden/emerge", 1.2, 1.0, 48)], None),
     "entity.reef_colossus.roll": (["reef_colossus_roll"], 40),
-    "entity.reef_colossus.step": ([v(f"mob/ravager/step{i}", 0.75, 0.8) for i in range(1, 5)], None),
-    "entity.reef_colossus.tide": ([v("mob/guardian/curse", 0.7, 1.0, 64)], None),
-    "entity.reef_colossus.lance": ([v("liquid/heavy_splash", 0.8, 1.0, 40)] + [v(f"item/trident/thunder{i}", 1.4, 0.5, 40) for i in (1, 2)], None),
 }
+
+
+def files_of(name: str) -> list[str]:
+    return [f"kingdomsatwar:entity/sea/{name}{i + 1}" for i in range(SYNTH[name][1])]
+
+
+# Seit 1.1.4: diese sehr tiefen Klänge bekommen Obertöne ihres Basses, damit sie auch auf kleinen Lautsprechern
+# (Laptop, Fernseher, Kopfhörer ohne Bass) zu hören sind – siehe ambience_dsp.audible_bass.
+AUDIBLE = {"reef_colossus_death", "reef_colossus_roar"}
 
 
 def render(name: str, preview: Path | None) -> list[str]:
@@ -362,7 +356,13 @@ def render(name: str, preview: Path | None) -> list[str]:
             x = apply_room(x, room(SR, space[0], 900 + i, stereo=False, damping=6000), space[1])
         x = trim_tail(x, SR, -55.0)
         x = fade_edges(x, SR, 0.002, 0.04)
-        x = soft_clip(fit_level(x, level, -2.0))
+        if name in AUDIBLE:
+            x = audible_bass(x, SR)
+        if name in LUFS:
+            from dragon_sounds import fit_lufs
+            x = fit_lufs(x, LUFS[name])
+        else:
+            x = soft_clip(fit_level(x, level, -2.0))
         path = OUT / f"{name}{i + 1}.ogg"
         write_ogg(x.astype(np.float32), SR, path, quality=5.0)
         files.append(f"kingdomsatwar:entity/sea/{name}{i + 1}")
@@ -376,11 +376,12 @@ def render(name: str, preview: Path | None) -> list[str]:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--preview", type=Path, help="Ordner für Spektrogramme")
+    ap.add_argument("--only", nargs="*", help="nur diese Klänge neu erzeugen (die übrigen Dateien bleiben)")
     args = ap.parse_args()
     if args.preview:
         args.preview.mkdir(parents=True, exist_ok=True)
     OUT.mkdir(parents=True, exist_ok=True)
-    rendered = {name: render(name, args.preview) for name in SYNTH}
+    rendered = {name: render(name, args.preview) if not args.only or name in args.only else files_of(name) for name in SYNTH}
     events = {}
     for key, (sounds, reach) in EVENTS.items():
         entries = []

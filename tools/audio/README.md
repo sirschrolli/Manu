@@ -147,3 +147,25 @@ python3 tools/audio/void_creatures.py [--preview /tmp/spektren]
 ```
 
 Es schreibt die `.ogg`-Dateien nach `…/sounds/entity/void/` und die Einträge `entity.<wesen>.<klang>` in `sounds.json`.
+
+## Klänge der Wesen und Bosse (seit 1.1.3/1.1.4)
+
+Jedes Klangereignis gehört genau **einem** Skript; es schreibt nur seine eigenen Einträge in `sounds.json` (die
+Untertitel bleiben). Alle Klang-Skripte kennen `--only name …` (nur diese Klänge neu, die übrigen Dateien bleiben) und
+die meisten `--preview /pfad` (Spektrogramme und `.wav` zum Prüfen).
+
+| Skript | Wesen |
+|---|---|
+| `dragon_sounds.py` | die Drachen (Stimme, Schwingen, Schritte, Biss, Atem aller sechs Elemente, das Ei) |
+| `sea_boss_sounds.py` | Kraken (Biss, Schmerz, Tinte, Schlag, Woge, Strudel), Karkinos, Nyxar |
+| `creature_sounds.py` | Höhlentroll, Lindwurm, Hirsch, Urelch, Gans, Flamingo (Schmerz, Tod), Moorschnapper, Hai, Anglerfisch, Mantarochen, Riesenkrabbe (Schritt), Leuchtqualle (Schmerz, Tod), Leerenschlund (Biss, Schmerz, Tod), Kommandostab |
+| `monster_sounds.py`, `beast_sounds.py`, `sea_creatures.py`, `void_creatures.py`, `kraken_sounds.py` und die Skripte der Bosse | die übrigen eigenen Klänge |
+| `../sound_events.py` | Verweise auf Klänge von Minecraft, wo sie gut passen (Wildschwein, Schneeleopard, Banditen, Soldaten …) |
+
+**Lautheit:** Die neueren Skripte pegeln nach Lautheit (`fit_lufs` in `dragon_sounds.py`, LUFS mit sanftem Begrenzer),
+die älteren nach Effektivwert (`fit_level`); sehr kurze, harte Klänge, die dabei zu leise blieben, stehen dort in `LUFS`.
+
+**Kleine Lautsprecher:** Sehr tiefe Klänge (schwere Schritte, Aufschläge, Gebrüll riesiger Wesen) verlieren auf Laptops,
+Fernsehern und manchen Kopfhörern fast alles. Die Skripte führen sie in `AUDIBLE`; `ambience_dsp.audible_bass` gibt
+ihnen dann so viele Obertöne ihres Basses, dass oberhalb von 200 Hz höchstens 8 dB Lautheit verloren gehen – das Ohr hört
+den tiefen Grundton daraus wieder hinzu.

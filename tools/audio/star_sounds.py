@@ -28,6 +28,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from ambience_dsp import (apply_room, bell, curve, env_ad, env_asr, fade_edges, filt, fit_level, formant_filter, glide,  # noqa: E402
                           rng, room, saw, soft_clip, tone, trim_tail)
+from ambience_dsp import audible_bass  # noqa: E402
 from dsp import write_ogg  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent.parent
@@ -461,6 +462,11 @@ def files_of(name: str) -> list[str]:
     return [f"kingdomsatwar:star/{stem}{i + 1}" for i in range(SYNTH[name][1])]
 
 
+# Seit 1.1.4: diese sehr tiefen Klänge bekommen Obertöne ihres Basses, damit sie auch auf kleinen Lautsprechern
+# (Laptop, Fernseher, Kopfhörer ohne Bass) zu hören sind – siehe ambience_dsp.audible_bass.
+AUDIBLE = {"ambient"}
+
+
 def render(name: str, preview: Path | None) -> list[str]:
     fn, count, space, level = SYNTH[name]
     files = []
@@ -470,6 +476,8 @@ def render(name: str, preview: Path | None) -> list[str]:
             x = apply_room(x, room(SR, space[0], 1700 + i, stereo=False, damping=7000), space[1])
         x = trim_tail(x, SR, -55.0)
         x = fade_edges(x, SR, 0.002, 0.06)
+        if name in AUDIBLE:
+            x = audible_bass(x, SR)
         x = soft_clip(fit_level(x, level, -2.0))
         stem = "star_wings_boost" if name == "boost" else f"asteria_{name}"
         path = OUT / f"{stem}{i + 1}.ogg"
