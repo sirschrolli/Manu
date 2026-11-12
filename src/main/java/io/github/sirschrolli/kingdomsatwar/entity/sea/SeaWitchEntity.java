@@ -838,7 +838,7 @@ public class SeaWitchEntity extends Monster implements io.github.sirschrolli.kin
             }
             level.addFreshEntity(shark);
             this.sharks.add(shark.getUUID());
-            this.inkCloud(level, at, 24);
+            this.inkCloud(level, at, 10);
         }
         this.sharkCooldown = 500;
     }

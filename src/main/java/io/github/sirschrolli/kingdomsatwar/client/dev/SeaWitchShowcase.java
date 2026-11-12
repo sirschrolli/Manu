@@ -79,11 +79,11 @@ final class SeaWitchShowcase {
         steps.add(Step.server(any -> locate(sea(any), g)));
         steps.add(Step.until(() -> g.ready, 12000));
         // die Grotte von außen (in ihrer toten Zone)
-        steps.add(look(g, 19.0, 11.0, 8.0, 6.0, 5.0, 0.0));
+        steps.add(look(g, 27.0, 13.0, 11.0, 3.0, 4.0, 0.0));
         shot(steps, "grotto_outside", true);
         steps.add(look(g, 8.0, 26.0, 17.0, 0.0, 5.0, 0.0));
         shot(steps, "grotto_dome", false);
-        steps.add(look(g, WitchGrottoPiece.REACH - 4.0, 3.4, 0.4, WitchGrottoPiece.RADIUS - 5.0, 3.6, 0.0));
+        steps.add(look(g, WitchGrottoPiece.REACH + 1.0, 5.0, 2.5, WitchGrottoPiece.RADIUS - 2.0, 3.6, 0.0));
         shot(steps, "grotto_entrance", false);
         // innen
         steps.add(Step.server(any -> {
@@ -181,11 +181,11 @@ final class SeaWitchShowcase {
                 {"WHIRLPOOL", "34", "witch_whirlpool", "55", "8.5", "2.5", "0.7", "8.0", ""},
                 {"SONG", "34", "witch_song", "30", "6.5", "0.2", "0.1", "8.0", ""},
                 {"BUBBLE", "24", "witch_bubble", "40", "8.0", "1.0", "0.55", "7.0", ""},
-                {"SHARKS", "32", "witch_sharks", "50", "9.5", "2.0", "0.4", "8.0", ""},
+                {"SHARKS", "27", "witch_sharks", "35", "10.5", "2.5", "0.3", "8.0", ""},
                 {"CORAL", "24", "witch_coral", "50", "9.0", "3.0", "0.5", "8.0", ""},
                 {"TAIL", "11", "witch_tail", "75", "6.5", "0.6", "0.3", "2.6", ""},
                 {"FURY", "16", "witch_fury_scream", "35", "6.5", "0.4", "0.0", "7.0", ""},
-                {"FURY", "22", "witch_fury", "35", "9.0", "1.0", "0.0", "7.0", ""},
+                {"FURY", "25", "witch_fury", "35", "9.5", "4.5", "0.0", "7.0", ""},
                 {"CURSE", "30", "witch_curse", "55", "8.0", "2.0", "0.2", "7.0", "1"}}) {
             SeaWitchEntity.Attack attack = SeaWitchEntity.Attack.valueOf(shot[0]);
             int tick = Integer.parseInt(shot[1]);

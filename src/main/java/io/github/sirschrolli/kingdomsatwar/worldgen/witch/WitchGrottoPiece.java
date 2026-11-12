@@ -391,6 +391,14 @@ public class WitchGrottoPiece extends StructurePiece {
                             this.water(x, y, z);                  // was außen an der Kuppel klebt (Tang, Seegras), weicht
                         }
                     }
+                    // über der Kuppel bleibt nichts stehen (etwa eine Felsnadel, die vorher schon hier wuchs); flache Hänge am
+                    // Rand dürfen sich an sie lehnen
+                    int above = Math.max(this.f + 8, this.f + (int) Math.ceil(HEIGHT * Math.sqrt(Math.max(0.0, 1.0 - (rh / ro) * (rh / ro)))));
+                    for (int y = above + 1; y < this.sea && y <= this.box.maxY(); y++) {
+                        if (this.in(x, y, z) && !this.level.getBlockState(new BlockPos(x, y, z)).is(Blocks.WATER)) {
+                            this.water(x, y, z);
+                        }
+                    }
                 }
             }
         }
