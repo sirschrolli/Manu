@@ -81,6 +81,15 @@ final class VoidModels {
 
         ModModelProvider.flat(items, VoidBlocks.VOID_SHARD.get());
         ModModelProvider.flat(items, VoidBlocks.SHATTERED_CROWN.get());
+        // Himmelseisen und die Rüstung der Sternwandler (0.99)
+        ModModelProvider.ore(blocks, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_ORE, VoidBlocks.VOID_STONE.base().get(), "sky_iron");
+        ModModelProvider.glowingCube(blocks, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_BLOCK.get());
+        ModModelProvider.flat(items, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.RAW_SKY_IRON.get());
+        ModModelProvider.flat(items, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_INGOT.get());
+        ModModelProvider.armor(items, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.STARWALKER_HELMET.get(),
+                io.github.sirschrolli.kingdomsatwar.registry.VoidGear.STARWALKER_CHESTPLATE.get(),
+                io.github.sirschrolli.kingdomsatwar.registry.VoidGear.STARWALKER_LEGGINGS.get(),
+                io.github.sirschrolli.kingdomsatwar.registry.VoidGear.STARWALKER_BOOTS.get());
         ModModelProvider.glowingCube(blocks, VoidBlocks.THRONE_SEAL.get());
         for (var egg : VoidBlocks.spawnEggs()) {
             ModModelProvider.flat(items, egg.get());

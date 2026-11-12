@@ -34,6 +34,7 @@ public final class ModTags {
         public static final TagKey<Block> ORES_MOONSTONE = common("ores/moonstone");
         public static final TagKey<Block> ORES_AQUAMARINE = common("ores/aquamarine");
         public static final TagKey<Block> ORES_DUSK_QUARTZ = common("ores/dusk_quartz");
+        public static final TagKey<Block> ORES_SKY_IRON = common("ores/sky_iron");
         public static final TagKey<Block> STORAGE_BLOCKS_MOONSILVER = common("storage_blocks/moonsilver");
         public static final TagKey<Block> STORAGE_BLOCKS_NIGHTSTEEL = common("storage_blocks/nightsteel");
         public static final TagKey<Block> STORAGE_BLOCKS_SOUL_CRYSTAL = common("storage_blocks/soul_crystal");
@@ -41,6 +42,7 @@ public final class ModTags {
         public static final TagKey<Block> STORAGE_BLOCKS_MOONSTONE = common("storage_blocks/moonstone");
         public static final TagKey<Block> STORAGE_BLOCKS_AQUAMARINE = common("storage_blocks/aquamarine");
         public static final TagKey<Block> STORAGE_BLOCKS_DUSK_QUARTZ = common("storage_blocks/dusk_quartz");
+        public static final TagKey<Block> STORAGE_BLOCKS_SKY_IRON = common("storage_blocks/sky_iron");
         public static final TagKey<Block> ORES_CARBON = common("ores/carbon");
         public static final TagKey<Block> ORES_GEMSTONE = common("ores/gemstone");
         public static final TagKey<Block> ORES_KONTERIT = common("ores/konterit");
@@ -251,6 +253,7 @@ public final class ModTags {
         public static final TagKey<Item> REPAIRS_KEEPER_MAUL = mod("repairs_keeper_maul");
         public static final TagKey<Item> REPAIRS_AQUAMARINE_ARMOR = mod("repairs_aquamarine_armor");
         public static final TagKey<Item> REPAIRS_DUSK_ARMOR = mod("repairs_dusk_armor");
+        public static final TagKey<Item> REPAIRS_STARWALKER_ARMOR = mod("repairs_starwalker_armor");
         public static final TagKey<Item> REPAIRS_SHEPHERD_CROOK = mod("repairs_shepherd_crook");
         public static final TagKey<Item> REPAIRS_SEA_WITCH_STAFF = mod("repairs_sea_witch_staff");
         /** Reparieren die Waffen und Rüstungen aus Monsterteilen (0.70). */
@@ -298,6 +301,9 @@ public final class ModTags {
         public static final TagKey<Item> ORES_MOONSTONE = common("ores/moonstone");
         public static final TagKey<Item> ORES_AQUAMARINE = common("ores/aquamarine");
         public static final TagKey<Item> ORES_DUSK_QUARTZ = common("ores/dusk_quartz");
+        public static final TagKey<Item> ORES_SKY_IRON = common("ores/sky_iron");
+        public static final TagKey<Item> RAW_MATERIALS_SKY_IRON = common("raw_materials/sky_iron");
+        public static final TagKey<Item> INGOTS_SKY_IRON = common("ingots/sky_iron");
         public static final TagKey<Item> INGOTS_MOONSILVER = common("ingots/moonsilver");
         public static final TagKey<Item> INGOTS_NIGHTSTEEL = common("ingots/nightsteel");
         public static final TagKey<Item> INGOTS_ABYSSITE = common("ingots/abyssite");
@@ -315,6 +321,7 @@ public final class ModTags {
         public static final TagKey<Item> STORAGE_BLOCKS_MOONSTONE = common("storage_blocks/moonstone");
         public static final TagKey<Item> STORAGE_BLOCKS_AQUAMARINE = common("storage_blocks/aquamarine");
         public static final TagKey<Item> STORAGE_BLOCKS_DUSK_QUARTZ = common("storage_blocks/dusk_quartz");
+        public static final TagKey<Item> STORAGE_BLOCKS_SKY_IRON = common("storage_blocks/sky_iron");
         public static final TagKey<Item> DRAGON_SCALES = mod("dragon_scales");
         public static final TagKey<Item> ORES_CARBON = common("ores/carbon");
         public static final TagKey<Item> ORES_GEMSTONE = common("ores/gemstone");

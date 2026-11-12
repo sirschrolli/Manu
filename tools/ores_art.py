@@ -142,6 +142,27 @@ DUSK_POINTS = [
     "................",
 ]
 
+# Himmelseisenerz (0.99): Bruchstücke gefallener Sterne – blankes Eisen (1-4, oben links der Glanz) mit einer schwarzen
+# Schmelzkruste (5-6) am Rand, wie eingesprengte Meteoritensplitter
+SKY_IRON_CHUNKS = [
+    "................",
+    "..5665..........",
+    ".563446.....56..",
+    ".5344326...5436.",
+    ".6322165...6321.",
+    "..65556.....55..",
+    "......566.......",
+    ".....53446......",
+    ".....643325.....",
+    "......53216.....",
+    ".......556....5.",
+    "..56.........546",
+    ".5446........631",
+    ".6321.........5.",
+    "..556...........",
+    "................",
+]
+
 # Edelstein-Erz: grüne (1-4) und violette (5-8) Steine
 GEM_MIXED = [
     "................",
@@ -213,6 +234,8 @@ MOONSTONE_LILAC = tones("#523e9e", "#8e74d8", "#cbb6f6", "#faf0ff")
 AQUAMARINE = tones("#17406e", "#2f86c0", "#78d2ee", "#dcfcff")
 DUSK_VIOLET = tones("#2a1f45", "#4f3a80", "#8a6cc4", "#e4d8ff")
 DUSK_EMBER = tones("#4e2232", "#8a3f50", "#c8746a", "#ffc4a0")
+SKY_IRON = tones("#3c4660", "#6f7ea2", "#aebfe0", "#f0f6ff")
+SKY_CRUST = tones("#141018", "#2a2229", "#463a40", "#6a5a5a")
 
 
 def build(put: Callable[[str, Image.Image], None]) -> None:
@@ -243,6 +266,9 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     dusk = overlay(DUSK_POINTS, DUSK_VIOLET, DUSK_EMBER)
     put("block/dusk_quartz_ore_overlay", dusk)
     put("block/dusk_quartz_ore_glow", glow_of(dusk, DUSK_VIOLET[3:] + DUSK_EMBER[2:]))
+    sky = overlay(SKY_IRON_CHUNKS, SKY_IRON, SKY_CRUST)
+    put("block/sky_iron_ore_overlay", sky)
+    put("block/sky_iron_ore_glow", glow_of(sky, SKY_IRON[3:]))
 
 
 if __name__ == "__main__":
@@ -253,7 +279,7 @@ if __name__ == "__main__":
     ref = Path(sys.argv[2]) if len(sys.argv) > 2 else None
     bases = {"carbon": "stone", "gemstone": "stone", "konterit": "stone", "aetherit": "stone", "draconium": "stone",
              "wyvernit": "stone", "moonsilver": "shadow_stone", "nightsteel": "shadow_stone",
-             "soul_crystal": "deep_shadow_stone_side", "abyssite": "deep_shadow_stone_side", "dusk_quartz": "shadow_stone"}
+             "soul_crystal": "deep_shadow_stone_side", "abyssite": "deep_shadow_stone_side", "dusk_quartz": "shadow_stone", "sky_iron": "void_stone"}
     out: dict[str, Image.Image] = {}
     build(lambda k, v: out.__setitem__(k.split("/")[-1], v))
     zoom = 6

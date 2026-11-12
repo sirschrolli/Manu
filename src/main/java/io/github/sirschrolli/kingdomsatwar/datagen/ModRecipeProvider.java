@@ -692,6 +692,11 @@ public class ModRecipeProvider extends RecipeProvider {
         storage(duskQuartz, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ_BLOCK.get());
         smeltOre(duskQuartz, 1.0f, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ_ORE.get(), io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DEEP_DUSK_QUARTZ_ORE.get());
         this.duskArmor(duskQuartz);
+        // Himmelseisen und die Rüstung der Sternwandler (0.99)
+        Item skyIron = io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_INGOT.get();
+        storage(skyIron, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_BLOCK.get());
+        smeltOre(skyIron, 1.2f, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.RAW_SKY_IRON.get(), io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_ORE.get());
+        this.starwalkerArmor(skyIron);
         ItemLike faestone = FaeBlocks.FAESTONE.base().get();
         ItemLike faeBricks = FaeBlocks.FAESTONE_BRICKS.base().get();
         shaped(RecipeCategory.BUILDING_BLOCKS, faeBricks, 4)
@@ -1138,6 +1143,21 @@ public class ModRecipeProvider extends RecipeProvider {
     }
 
     /** Die Taucherrüstung aus Aquamarin: der Helm mit Sichtfenster (Glasscheibe), der Harnisch mit Perle, Flossen mit Tang. */
+    /** Die Rüstung der Sternwandler (0.99): Himmelseisen, in Helm und Harnisch ein Leerensplitter. */
+    private void starwalkerArmor(Item ingot) {
+        String has = getHasName(ingot);
+        var set = io.github.sirschrolli.kingdomsatwar.registry.VoidGear.starwalkerSet();
+        Item shard = io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_SHARD.get();
+        shaped(RecipeCategory.COMBAT, set.get(0).get()).pattern("ISI").pattern("I I")
+                .define('I', ingot).define('S', shard).unlockedBy(has, has(ingot)).save(output, key("starwalker_helmet"));
+        shaped(RecipeCategory.COMBAT, set.get(1).get()).pattern("I I").pattern("ISI").pattern("III")
+                .define('I', ingot).define('S', shard).unlockedBy(has, has(ingot)).save(output, key("starwalker_chestplate"));
+        shaped(RecipeCategory.COMBAT, set.get(2).get()).pattern("III").pattern("I I").pattern("I I")
+                .define('I', ingot).unlockedBy(has, has(ingot)).save(output, key("starwalker_leggings"));
+        shaped(RecipeCategory.COMBAT, set.get(3).get()).pattern("I I").pattern("I I")
+                .define('I', ingot).unlockedBy(has, has(ingot)).save(output, key("starwalker_boots"));
+    }
+
     /** Die Dämmerrüstung (0.98): Dämmerquarz mit weichem Leder. */
     private void duskArmor(Item gem) {
         String has = getHasName(gem);

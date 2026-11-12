@@ -786,6 +786,27 @@ public class ModLanguageProvider extends LanguageProvider {
                 "Schneller schleichen (Beinlinge, Stiefel), sanft landen (Stiefel), beim Schleichen im Dunkeln sehen (Kapuze)");
         text(ModItems.loreKey("dusk_armor", 3), "Full set while sneaking: almost unseen",
                 "Voller Satz beim Schleichen: fast unsichtbar");
+        // Himmelseisen und die Rüstung der Sternwandler (0.99)
+        block(io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_ORE, "Sky Iron Ore", "Himmelseisenerz");
+        block(io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_BLOCK, "Block of Sky Iron", "Himmelseisenblock");
+        item(io.github.sirschrolli.kingdomsatwar.registry.VoidGear.RAW_SKY_IRON, "Raw Sky Iron", "Rohes Himmelseisen");
+        lore("raw_sky_iron", "Iron from a fallen star, under a black crust of fire",
+                "Eisen aus einem gefallenen Stern, unter einer schwarzen Kruste aus Feuer");
+        item(io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_INGOT, "Sky Iron Ingot", "Himmelseisenbarren");
+        lore("sky_iron_ingot", "Polished, it shows the pattern of the stars",
+                "Geschliffen zeigt es das Muster der Sterne");
+        item(io.github.sirschrolli.kingdomsatwar.registry.VoidGear.STARWALKER_HELMET, "Starwalker Helm", "Sternwandlerhelm");
+        item(io.github.sirschrolli.kingdomsatwar.registry.VoidGear.STARWALKER_CHESTPLATE, "Starwalker Cuirass", "Sternwandlerharnisch");
+        item(io.github.sirschrolli.kingdomsatwar.registry.VoidGear.STARWALKER_LEGGINGS, "Starwalker Greaves", "Sternwandlerbeinschienen");
+        item(io.github.sirschrolli.kingdomsatwar.registry.VoidGear.STARWALKER_BOOTS, "Starwalker Boots", "Sternwandlerstiefel");
+        lore("starwalker_armor", "Each piece: lighter – jump higher, fall slower; boots: soft landing",
+                "Jeder Teil: leichter – höher springen, langsamer fallen; Stiefel: sanft landen");
+        text(ModItems.loreKey("starwalker_armor", 2), "Full set: hold jump in the air to float down gently",
+                "Voller Satz: Sprungtaste in der Luft halten – du schwebst sanft herab");
+        text(ModItems.loreKey("starwalker_armor", 3), "Full set: falling into the void carries you back (every two minutes)",
+                "Voller Satz: Sturz ins Nichts trägt dich zurück (alle zwei Minuten)");
+        text("message.kingdomsatwar.starwalker_anchor", "The stars carry you back to firm ground",
+                "Die Sterne tragen dich zurück auf festen Boden");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_SOIL, "Fae Soil", "Feenerde");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_GRASS, "Fae Grass Block", "Feengrasblock");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_MOSS, "Fae Moss", "Feenmoos");

@@ -31,6 +31,7 @@ public class ModEquipmentAssetProvider extends EquipmentAssetProvider {
         humanoid(output, io.github.sirschrolli.kingdomsatwar.registry.FaeGear.MOONSTONE_ASSET);
         humanoid(output, io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_ASSET);
         humanoid(output, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_ASSET);
+        humanoid(output, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.STARWALKER_ASSET);
         // Die Krone sitzt nur auf dem Kopf
         output.accept(ModEquipment.CROWN_ASSET, EquipmentClientInfo.builder()
                 .addLayers(EquipmentClientInfo.LayerType.HUMANOID, new EquipmentClientInfo.Layer(ModEquipment.CROWN_ASSET.identifier()))

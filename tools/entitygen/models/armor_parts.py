@@ -20,6 +20,11 @@
     eine Halbmaske aus Stoff über Mund und Nase; ein kurzer, unten zerschlissener Schulterumhang mit einer Schließe aus
     zwei Quarzspitzen, Lederwickel an den Oberarmen und Handgelenken; ein Gürtel mit zwei Taschen und einem Dolch im
     Rücken, Knieschützer aus Leder mit Quarzniete; weiche Stiefel mit umgeschlagenem Schaft und Wickelriemen
+  * Himmelseisen (seit 0.99, die Rüstung der Sternwandler): ein Sternenkamm über der Stirn und ein silberner Grat über den
+    Helm, an den Schläfen Kometenflossen aus drei Klingen, deren Spitzen im Licht der Leere leuchten; ein Stern mit
+    Kristall auf der Brust, gewölbte Schulterplatten, über denen zwei Kristallsplitter schweben, Armreife; ein kurzer
+    Kometenmantel aus Sternentuch, der nach unten spitz zuläuft; ein Gürtel mit Kristallschnalle, Kniekacheln mit
+    Sternnieten; Stiefel mit Zehenkappen und kleinen Kometenflossen an den Fersen
   * Aquamarin (seit 0.97, die Taucherrüstung): ein runder Taucherhelm aus Aquamarin mit Messingkragen, vorn ein großes
     Sichtfenster (man sieht das Gesicht dahinter), an den Seiten kleine Bullaugen, oben ein Ventil, hinten der Schlauch;
     zwei Luftflaschen auf dem Rücken mit Ventilen und Messingbändern, eine Druckanzeige auf der Brust, flache
@@ -37,7 +42,7 @@ from ..geometry import Model
 from ..paint import Ctx, along, hash01, hexc, mix, noise3, pick, ramp, rel_y
 
 SETS = ["steel", "konterit", "nightsteel", "abyssite", "fire", "ice", "lightning", "nature", "earth", "water", "crown",
-        "leather", "chainmail", "iron", "gold", "diamond", "netherite", "copper", "turtle", "moonstone", "aquamarine", "dusk"]
+        "leather", "chainmail", "iron", "gold", "diamond", "netherite", "copper", "turtle", "moonstone", "aquamarine", "dusk", "starwalker"]
 SLOTS = {"head": ["head"], "chest": ["body", "left_arm", "right_arm"], "legs": ["body", "left_leg", "right_leg"],
          "feet": ["left_leg", "right_leg"]}
 
@@ -114,6 +119,10 @@ PALETTES = {
         "dusk_leather": ramp("#1e130c", "#9a7658", 7),
         "dusk_quartz": ramp("#2a1d4a", "#efe6ff", 7),
         "dusk_ember": ramp("#5c2434", "#ffcaa4", 6),
+        # Himmelseisen (0.99): die Rüstung der Sternwandler
+        "star_plate": ramp("#141a2e", "#b4c4ea", 8),
+        "star_glow": ramp("#3a74d6", "#f4fbff", 6),
+        "star_shard": ramp("#30206e", "#eadcff", 7),
     }
 }
 
@@ -533,6 +542,83 @@ def _moonstone(m: Model) -> None:
         _crescent(m, f, f"moon_ankle_{bone}", (3.35 * side, 9.8, 0.4), (0.0, 90.0 * side, 0.0), 0.62)
 
 
+# ------------------------------------------------------------------ Himmelseisen (0.99): die Rüstung der Sternwandler
+
+def _star(m: Model, parent: str, name: str, center, size: float, depth: float = 0.5) -> None:
+    """Ein vierzackiger Stern (zwei gekreuzte Balken und ein Kern), flach in der x-y-Ebene, leuchtend."""
+    cx, cy, cz = center
+    m.cube(parent, (cx - 0.3 * size, cy - size, cz), (0.6 * size, 2.0 * size, depth), "star_light")
+    m.cube(parent, (cx - 0.8 * size, cy - 0.3 * size, cz), (1.6 * size, 0.6 * size, depth), "star_light")
+    m.cube(parent, (cx - 0.45 * size, cy - 0.45 * size, cz - 0.15), (0.9 * size, 0.9 * size, depth + 0.15), "star_core")
+
+
+def _comet_fin(m: Model, parent: str, name: str, pivot, rot, scale: float = 1.0) -> None:
+    """Eine Kometenflosse: drei flache Klingen (in der y-z-Ebene), die nach hinten ziehen und immer steiler aufsteigen –
+    am Ansatz Sternsilber, zur Spitze das Licht der Leere."""
+    m.bone(name, parent, pivot, rot)
+    sc = scale
+    m.cube(name, (-0.4, -0.9 * sc, -0.8 * sc), (0.8, 1.8 * sc, 1.6 * sc), "silver")
+    for k, (angle, length, height) in enumerate(((6.0, 6.2, 1.3), (22.0, 5.0, 1.1), (40.0, 3.6, 0.9))):
+        b = f"{name}_blade_{k}"
+        m.bone(b, name, (0.0, -0.3 * sc - 0.35 * k * sc, 0.2 * sc), (angle, 0.0, 0.0))
+        m.cube(b, (-0.2, -height * sc / 2, 0.0), (0.4, height * sc, length * sc), "star_fin")
+
+
+def _starwalker(m: Model) -> None:
+    h = _slot(m, "starwalker", "head", "head")
+    # ein silberner Grat über den Helm und vorn über dem Sehschlitz der Sternenkamm
+    m.cube(h, (-0.45, -9.95, -4.9), (0.9, 0.95, 9.8), "silver")
+    _star(m, h, "star_crest", (0.0, -7.9, -5.75), 1.25)
+    # Kometenflossen an den Schläfen
+    _comet_fin(m, h, "star_fin_left", (5.25, -5.6, -1.6), (12.0, 10.0, 0.0), 1.15)
+    _comet_fin(m, h, "star_fin_right", (-5.25, -5.6, -1.6), (12.0, -10.0, 0.0), 1.15)
+
+    b = _slot(m, "starwalker", "chest", "body")
+    # der Stern auf der Brust mit seinem Kristall
+    m.cube(b, (-1.6, 1.6, -3.45), (3.2, 3.2, 0.45), "silver")
+    _star(m, b, "star_chest", (0.0, 3.2, -3.95), 1.35)
+    # der Kometenmantel: oben breit, unten spitz zulaufend
+    m.bone("star_cape", b, (0.0, 0.0, 3.1), (5.0, 0.0, 0.0))
+    m.cube("star_cape", (-4.6, 0.0, 0.0), (9.2, 5.4, 0.6), "moon_cloth")
+    m.bone("star_cape_mid", "star_cape", (0.0, 5.2, 0.05), (6.0, 0.0, 0.0))
+    m.cube("star_cape_mid", (-3.6, 0.0, 0.0), (7.2, 3.8, 0.6), "moon_cloth")
+    m.bone("star_cape_tip", "star_cape_mid", (0.0, 3.6, 0.05), (6.0, 0.0, 0.0))
+    m.cube("star_cape_tip", (-2.2, 0.0, 0.0), (4.4, 2.8, 0.6), "moon_cloth")
+    m.cube("star_cape_tip", (-1.0, 2.7, 0.0), (2.0, 1.6, 0.6), "moon_cloth")
+    for x in (-4.6, 3.2):
+        m.cube(b, (x, -0.7, -3.6), (1.4, 1.4, 0.7), "star_core")           # die Spangen des Mantels
+    for side, bone in ((1, "left_arm"), (-1, "right_arm")):
+        a = _slot(m, "starwalker", "chest", bone)
+        p = f"star_pauldron_{bone}"
+        m.bone(p, a, (1.0 * side, -3.1, 0.0), (0.0, 0.0, 12.0 * side))
+        m.cube(p, (_mx(-3.1, 6.8, side), -1.5, -3.6), (6.8, 1.6, 7.2), "star_plate")
+        m.cube(p, (_mx(-2.0, 5.9, side), 0.1, -3.7), (5.9, 1.3, 7.4), "star_plate")
+        m.cube(p, (_mx(-0.5, 1.0, side), -2.1, -3.6), (1.0, 0.6, 7.2), "silver")          # der Grat
+        # zwei Kristallsplitter, die über der Schulter schweben
+        _spike(m, p, f"star_float_a_{bone}", (1.6 * side, -3.6, -1.2), (8.0, 0.0, 14.0 * side), 2.0, 0.9, "star_shard")
+        _spike(m, p, f"star_float_b_{bone}", (0.4 * side, -3.0, 1.5), (-10.0, 0.0, -10.0 * side), 1.5, 0.7, "star_shard")
+        # der Armreif mit einem kleinen Stern
+        m.cube(a, (_mx(-2.3, 6.6, side), 6.0, -3.3), (6.6, 1.7, 6.6), "star_plate")
+        m.cube(a, (_mx(0.5, 1.0, side), 6.35, -3.7), (1.0, 1.0, 0.5), "star_core")
+
+    t = _slot(m, "starwalker", "legs", "body")
+    # die Gürtelschnalle: ein Kristall in Silber
+    m.cube(t, (-1.1, 10.1, -3.5), (2.2, 2.0, 0.45), "silver")
+    m.cube(t, (-0.65, 10.45, -3.85), (1.3, 1.3, 0.5), "star_shard")
+    for side, bone in ((1, "left_leg"), (-1, "right_leg")):
+        g = _slot(m, "starwalker", "legs", bone)
+        # Kniekachel mit Sternniete, außen ein Seitenflügel
+        m.cube(g, (-2.2, 3.5, -3.15), (4.4, 2.9, 0.75), "star_plate")
+        m.cube(g, (-0.5, 4.4, -3.6), (1.0, 1.0, 0.5), "star_core")
+        m.cube(g, (_mx(2.15, 0.7, side), 3.9, -2.6), (0.7, 2.1, 2.2), "star_plate")
+
+    for side, bone in ((1, "left_leg"), (-1, "right_leg")):
+        f = _slot(m, "starwalker", "feet", bone)
+        # die Zehenkappe und an der Ferse eine kleine Kometenflosse
+        m.cube(f, (-2.5, 10.4, -4.1), (5.0, 2.4, 1.4), "star_plate")
+        _comet_fin(m, f, f"star_heel_{bone}", (1.2 * side, 9.6, 2.7), (14.0, 8.0 * side, 0.0), 0.62)
+
+
 # ------------------------------------------------------------------ Dämmerquarz (0.98): die Rüstung der Schleicher
 
 def _quartz_points(m: Model, parent: str, name: str, pivot, rot, scale: float = 1.0) -> None:
@@ -891,6 +977,7 @@ def build() -> Model:
     _moonstone(m)
     _aquamarine(m)
     _dusk(m)
+    _starwalker(m)
     # Plätze ohne eigene Teile bekommen leere Knochen, damit Java jeden Namen findet
     for s in SETS:
         for slot, bones in SLOTS.items():
@@ -1267,6 +1354,47 @@ def _star_cloth(ctx: Ctx):
     return col
 
 
+def _star_plate(ctx: Ctx):
+    """Himmelseisen: blaustählerne Platte mit Sternsilbersaum unten; auf den Flächen ganz fein das Muster der Sterne."""
+    col = _metal("star_plate", rim="silver", rim_from=0.84)(ctx)
+    if ctx.face not in ("top", "bottom") and rel_y(ctx) < 0.84:
+        if (ctx.s + 2 * ctx.t) % 7 == 0:
+            col = mix(col, pick(ctx.pal["star_plate"], 0.9), 0.35)
+        elif (2 * ctx.s - ctx.t) % 9 == 0:
+            col = mix(col, pick(ctx.pal["star_plate"], 0.15), 0.3)
+    return col
+
+
+def _star_light(ctx: Ctx):
+    """Die Zacken eines Sterns: kühles Licht der Leere, zur Mitte weiß – alles leuchtet."""
+    cx, cy = (ctx.w - 1) / 2, (ctx.h - 1) / 2
+    d = max(abs(ctx.s - cx) / max(1.0, cx), abs(ctx.t - cy) / max(1.0, cy)) if ctx.face in ("front", "back") else 0.5
+    col = pick(ctx.pal["star_glow"], 0.95 - 0.5 * d)
+    ctx.glow = col
+    return col
+
+
+def _star_core(ctx: Ctx):
+    """Der Kern eines Sterns (und die Sternnieten): fast weiß, leuchtend."""
+    col = pick(ctx.pal["star_glow"], 0.9 + (0.1 if ctx.s == 0 and ctx.t == 0 else 0.0))
+    ctx.glow = col
+    return col
+
+
+def _star_fin(ctx: Ctx):
+    """Klinge einer Kometenflosse: am Ansatz Sternsilber, nach hinten das Licht der Leere; die Spitze leuchtet und läuft
+    spitz zu."""
+    oz, d = ctx.cube.origin[2], ctx.cube.size[2]
+    tz = (ctx.local[2] - oz) / d if d > 0 else 0.0
+    ry = rel_y(ctx)
+    if tz > 0.82 and abs(ry - 0.5) > 0.5 - (1.0 - tz) * 2.4:
+        return None                                       # spitz zulaufend
+    col = mix(pick(ctx.pal["silver"], 0.75 - 0.25 * ry), pick(ctx.pal["star_glow"], 0.55 + 0.4 * tz), min(1.0, tz * 1.3))
+    if tz > 0.55:
+        ctx.glow = mix((0, 0, 0, 255), col, min(1.0, (tz - 0.55) * 2.6))
+    return col
+
+
 def _aqua_shell(ctx: Ctx):
     """Die Helmschale aus Aquamarin: glatt und glänzend, oben hell, unten tief meerblau; ein heller Lichtstreif läuft schräg
     über jede Seite, feine Schliffkanten an den Rändern."""
@@ -1530,6 +1658,11 @@ def materials(variant: str) -> dict:
         "dusk_wrap": _dusk_wrap,
         "dusk_gem": _dusk_gem,
         "dusk_buckle": _metal("silver"),
+        "star_plate": _star_plate,
+        "star_light": _star_light,
+        "star_core": _star_core,
+        "star_fin": _star_fin,
+        "star_shard": _crystal("star_shard", "star_glow", 0.55),
     }
     for e in DRAGON:
         out["dragon_scale_" + e] = _scale(DRAGON[e][0])

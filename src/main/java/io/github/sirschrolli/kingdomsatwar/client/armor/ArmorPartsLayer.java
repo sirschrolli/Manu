@@ -59,7 +59,7 @@ public class ArmorPartsLayer<S extends HumanoidRenderState, M extends HumanoidMo
             Map.entry("lightning_dragon_scale", "lightning"), Map.entry("nature_dragon_scale", "nature"),
             Map.entry("earth_dragon_scale", "earth"), Map.entry("water_dragon_scale", "water"),
             Map.entry("gemstone_crown", "crown"), Map.entry("moonstone", "moonstone"), Map.entry("aquamarine", "aquamarine"),
-            Map.entry("dusk", "dusk"));
+            Map.entry("dusk", "dusk"), Map.entry("starwalker", "starwalker"));
     /** Die Rüstungen von Minecraft (Ausrüstungs-Asset minecraft:…) → Name ihres Satzes. */
     private static final Map<String, String> VANILLA = Map.of("leather", "leather", "chainmail", "chainmail", "iron", "iron",
             "gold", "gold", "diamond", "diamond", "netherite", "netherite", "copper", "copper", "turtle_scute", "turtle");

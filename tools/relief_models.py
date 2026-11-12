@@ -52,6 +52,7 @@ ITEMS: dict[str, tuple[str, float, float]] = {
 GROUPS: dict[tuple[float, float], list[str]] = {
     (1.25, 0.5): [  # Barren und Erze: kantig, gleichmäßig dick
         "abyssite_ingot", "moonsilver_ingot", "nightsteel_ingot", "steel_ingot", "raw_moonsilver", "raw_nightsteel", "steel_blend",
+        "sky_iron_ingot", "raw_sky_iron",
         "draconium", "konterit", "carbon", "wyvernit", "aetherit", "moonsilver_nugget", "reinforced_handle", "siege_stone",
     ],
     (1.5, 0.5): [   # Steine, Kristalle, Splitter

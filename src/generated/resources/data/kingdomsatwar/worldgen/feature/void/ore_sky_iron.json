@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:ore",
+  "discard_chance_on_air_exposure": 0.2,
+  "size": 6,
+  "targets": [
+    {
+      "state": "kingdomsatwar:sky_iron_ore",
+      "target": {
+        "block": "kingdomsatwar:void_stone",
+        "predicate_type": "minecraft:block_match"
+      }
+    }
+  ]
+}

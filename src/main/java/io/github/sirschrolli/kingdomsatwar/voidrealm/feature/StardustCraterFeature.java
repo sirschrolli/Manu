@@ -59,6 +59,7 @@ public record StardustCraterFeature() implements Feature {
         // der gefallene Stern
         BlockPos star = ground.below(depth - 1);
         VoidBuild.blob(level, origin, star, 1.6 + random.nextDouble(), crystal, random, 0.6);
+        skyIronCore(level, origin, star, random);
         for (int k = 0; k < 6; k++) {
             BlockPos at = star.offset(random.nextInt(5) - 2, 2, random.nextInt(5) - 2);
             while (at.getY() > star.getY() - 2 && level.isEmptyBlock(at.below())) {
@@ -69,5 +70,36 @@ public record StardustCraterFeature() implements Feature {
             }
         }
         return true;
+    }
+
+    /**
+     * Der Kern des gefallenen Sterns (seit 0.99): Himmelseisen, vom Kristall umhüllt (innen ganz, außen hier und da), dazu
+     * ein paar Brocken, die beim Einschlag in den Grund unter dem Stern getrieben wurden.
+     */
+    private static void skyIronCore(WorldGenLevel level, BlockPos origin, BlockPos star, RandomSource random) {
+        BlockState iron = io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_ORE.get().defaultBlockState();
+        double core = 1.1 + random.nextDouble() * 0.6;
+        int r = (int) Math.ceil(core) + 1;
+        for (int dx = -r; dx <= r; dx++) {
+            for (int dy = -r; dy <= r; dy++) {
+                for (int dz = -r; dz <= r; dz++) {
+                    BlockPos p = star.offset(dx, dy, dz);
+                    if (!VoidBuild.inReach(origin, p) || !level.getBlockState(p).is(VoidBlocks.VOID_CRYSTAL.get())) {
+                        continue;
+                    }
+                    double d = Math.sqrt(dx * dx + dy * dy * 1.4 + dz * dz);
+                    if (d <= core || random.nextFloat() < 0.22f) {
+                        level.setBlock(p, iron, 2);
+                    }
+                }
+            }
+        }
+        for (int k = 0; k < 4; k++) {
+            BlockPos p = star.offset(random.nextInt(3) - 1, -1 - random.nextInt(2), random.nextInt(3) - 1);
+            BlockState there = level.getBlockState(p);
+            if (VoidBuild.inReach(origin, p) && (there.is(VoidBlocks.STARDUST.get()) || there.is(VoidBlocks.VOID_STONE.base().get()))) {
+                level.setBlock(p, iron, 2);
+            }
+        }
     }
 }

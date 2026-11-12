@@ -90,6 +90,16 @@ public final class VoidFeatures {
     // Die Features (Reihenfolge je Schritt = Reihenfolge in den Biomen)
     // =====================================================================================
 
+    // --- Himmelseisenerz (seit 0.99): kleine Adern im Leerenstein der Bruchstücke (die meisten Versuche treffen ins Nichts) ---
+    static final Entry ORE_SKY_IRON = entry(GenerationStep.Decoration.UNDERGROUND_ORES, "ore_sky_iron",
+            () -> new net.minecraft.world.level.levelgen.feature.OreFeature(List.of(net.minecraft.world.level.levelgen.feature.BlockReplacement.replace(
+                    new net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest(VoidBlocks.VOID_STONE.base().get()),
+                    io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_ORE.get().defaultBlockState())), 6, 0.2f),
+            List.of(CountPlacement.of(18), InSquarePlacement.spread(),
+                    net.minecraft.world.level.levelgen.placement.HeightRangePlacement.uniform(
+                            net.minecraft.world.level.levelgen.VerticalAnchor.absolute(30), net.minecraft.world.level.levelgen.VerticalAnchor.absolute(220)),
+                    BiomeFilter.biome()));
+
     static final Entry SPIRES_GREAT = entry(LOCAL, "shard_spires_great", () -> new ShardSpireFeature(14, 30, 3.4f, false),
             floor(RarityFilter.onAverageOnceEvery(2)));
     static final Entry SPIRES = entry(LOCAL, "shard_spires", () -> new ShardSpireFeature(6, 14, 1.8f, false),
@@ -144,6 +154,7 @@ public final class VoidFeatures {
         BiomeGenerationSettings.Builder builder = new BiomeGenerationSettings.Builder(placed, carvers);
         List<Entry> wanted = new ArrayList<>(List.of(chosen));
         wanted.add(HANGING);
+        wanted.add(ORE_SKY_IRON);
         Map<GenerationStep.Decoration, List<Entry>> byStep = new EnumMap<>(GenerationStep.Decoration.class);
         for (Entry entry : ENTRIES) {
             if (wanted.contains(entry)) {

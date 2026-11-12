@@ -26,6 +26,7 @@ import item_style as st
 import items_armor as icons
 import items_gear as gear
 import dusk_textures as dusk_tex
+import sky_iron_textures as sky_tex
 
 Rect = tuple[int, int, int, int]  # x, y, Breite, Höhe
 
@@ -697,8 +698,32 @@ def dusk() -> Design:
     })
 
 
+def starwalker() -> Design:
+    """Himmelseisen (die Rüstung der Sternwandler, 0.99): blaustählerne Platten mit Säumen aus Sternsilber. Der Helm ist
+    geschlossen, sein Sehschlitz leuchtet im Licht der Leere, über der Stirn steht ein Stern; auf der Brust ein Stern mit
+    einem Kristall in der Mitte über einem Sternbild, auf dem Rücken drei Sterne in einer Reihe, an Knien und Gürtel
+    Kristalle (Sternenkamm, Kometenflossen, Schulterplatten mit schwebenden Splittern und der kurze Kometenmantel kommen als
+    3D-Teile)."""
+    return Design("starwalker", {"A": sky_tex.PLATE, "B": gear.MOONSILVER, "D": sky_tex.STARLIGHT, "E": sky_tex.CRYSTAL}, d={
+        "head_top": [".", ".", "...ed...", "...fd...", "...fd...", "...ed..."],
+        "head_front": ["...st...", "..tuut..", "...ts...", "3rsttsr3", ".", ".", "."],
+        "head_side": [".", ".", ".", "rr......", ".", ".....f..", ".", "."],
+        "head_back": [".", ".", "eeddddcc"],
+        "body_front": [".", ".f....d.", "..f..d..", "...ts...", "..tGFs..", "...sr...", ".", ".t......", "......t.",
+                       "...t....", ".", "..dccb.."],
+        "body_back": [".", ".", ".", "..t.....", "...t....", "....t...", ".", "."],
+        "arm_side": TRIM_ARM,
+        "boot_side": TRIM_BOOT,
+        "boot_front": TRIM_BOOT,
+        "belt_front": ["."] * 7 + ["feeGFdcb"],
+        "belt_back": TRIM_BELT,
+        "belt_side": TRIM_BELT_SIDE,
+        "thigh_front": [".", ".", ".", ".", ".GF."],
+    })
+
+
 def designs() -> list[Design]:
-    return [steel(), nightsteel(), abyssite(), konterit(), werewolf_pelt(), ember_scale(), moonstone(), aquamarine(), dusk()] + \
+    return [steel(), nightsteel(), abyssite(), konterit(), werewolf_pelt(), ember_scale(), moonstone(), aquamarine(), dusk(), starwalker()] + \
         [dragon(k) for k in icons.DRAGONS]
 
 

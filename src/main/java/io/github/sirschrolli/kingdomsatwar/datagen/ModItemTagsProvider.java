@@ -274,6 +274,22 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         for (var piece : io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.duskSet()) {
             add(ItemTags.TRIMMABLE_ARMOR, piece);
         }
+        // Himmelseisen und die Rüstung der Sternwandler (0.99)
+        copy(ModTags.Blocks.ORES_SKY_IRON, ModTags.Items.ORES_SKY_IRON);
+        copy(ModTags.Blocks.STORAGE_BLOCKS_SKY_IRON, ModTags.Items.STORAGE_BLOCKS_SKY_IRON);
+        add(ModTags.Items.RAW_MATERIALS_SKY_IRON, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.RAW_SKY_IRON);
+        tag(Tags.Items.RAW_MATERIALS).addTag(ModTags.Items.RAW_MATERIALS_SKY_IRON);
+        add(ModTags.Items.INGOTS_SKY_IRON, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_INGOT);
+        tag(Tags.Items.INGOTS).addTag(ModTags.Items.INGOTS_SKY_IRON);
+        add(ItemTags.BEACON_PAYMENT_ITEMS, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_INGOT);
+        add(ModTags.Items.REPAIRS_STARWALKER_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_INGOT);
+        add(ItemTags.HEAD_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.STARWALKER_HELMET);
+        add(ItemTags.CHEST_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.STARWALKER_CHESTPLATE);
+        add(ItemTags.LEG_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.STARWALKER_LEGGINGS);
+        add(ItemTags.FOOT_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.STARWALKER_BOOTS);
+        for (var piece : io.github.sirschrolli.kingdomsatwar.registry.VoidGear.starwalkerSet()) {
+            add(ItemTags.TRIMMABLE_ARMOR, piece);
+        }
         add(ModTags.Items.REPAIRS_GLITCH_GEAR, io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.GLITCH_SHARD);
         add(ItemTags.DURABILITY_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.BANNHAMMER,
                 io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.GLITCH_WINGS);
