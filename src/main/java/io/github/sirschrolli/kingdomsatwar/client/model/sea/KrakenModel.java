@@ -338,7 +338,7 @@ public class KrakenModel extends EntityModel<KrakenRenderState> {
         }
         float wind = Anim.bump(s, 0.9f, 1.15f, 1.35f);
         float dash = Anim.bump(s - 1.15f, 0.15f, 0.8f, 1.9f);
-        this.body.xRot += -0.28f * wind + 0.42f * dash;
+        this.body.xRot += -0.18f * wind + 0.42f * dash;
         this.mantle.xRot -= 0.3f * dash;
         float puff = 0.1f * wind - 0.16f * dash;
         this.mantle.xScale += puff;
@@ -348,7 +348,7 @@ public class KrakenModel extends EntityModel<KrakenRenderState> {
         for (int i = 0; i < ARMS; i++) {
             ModelPart[] arm = this.arms[i];
             float back = backward(i);
-            arm[0].xRot += -0.55f * wind - 0.32f * dash;
+            arm[0].xRot += -0.42f * wind - 0.32f * dash;
             arm[0].yRot += back * (-0.25f * wind + 0.85f * dash);
             for (int k = 1; k < ARM_PARTS; k++) {
                 arm[k].xRot += -0.06f * wind + 0.1f * dash;
@@ -357,7 +357,7 @@ public class KrakenModel extends EntityModel<KrakenRenderState> {
         for (int side = 0; side < 2; side++) {
             ModelPart[] tentacle = this.tentacles[side];
             // die Fangarme stoßen gebündelt nach vorn
-            tentacle[0].xRot += -0.4f * wind - 0.45f * dash;
+            tentacle[0].xRot += -0.3f * wind - 0.45f * dash;
             tentacle[0].yRot += (side == 0 ? 0.35f : -0.35f) * dash;
             for (int k = 1; k <= TENTACLE_PARTS; k++) {
                 tentacle[k].xRot += 0.06f * dash;

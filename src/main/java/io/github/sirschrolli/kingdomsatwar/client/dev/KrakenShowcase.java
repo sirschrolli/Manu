@@ -290,6 +290,7 @@ final class KrakenShowcase {
             steps.add(Step.waitTicks(at));
             steps.add(Step.screenshot(file));
         }
+        newAttacks(steps, c, boss, soldiers);
         // Tod: er erschlafft und sinkt zurück in den Schlund
         steps.add(Step.until(() -> boss[0] == null || "none".equals(boss[0].currentAttack()), 200));
         steps.add(Step.server(any -> {
@@ -307,6 +308,137 @@ final class KrakenShowcase {
         steps.add(Step.waitTicks(60));
         steps.add(Step.screenshot("kraken_tod_2"));
         steps.add(Step.waitTicks(40));
+    }
+
+    /** Ein Bild aus einer Kamera, die dem Kraken folgt: seitlich ({@code side}, rechts +), darüber, dahinter ({@code back}, vorn −). */
+    private static void follow(Deque<Step> steps, String name, double[] c, KrakenEntity[] boss, double side, double up, double back, double lookUp) {
+        steps.add(Step.server(any -> {
+            KrakenEntity b = boss[0];
+            if (b == null) {
+                return;
+            }
+            double yaw = Math.toRadians(b.getYRot());
+            net.minecraft.world.phys.Vec3 fwd = new net.minecraft.world.phys.Vec3(-Math.sin(yaw), 0.0, Math.cos(yaw));
+            net.minecraft.world.phys.Vec3 right = new net.minecraft.world.phys.Vec3(-fwd.z, 0.0, fwd.x);
+            // innerhalb des Felsenrings bleiben: sonst von der anderen Seite (gespiegelt), notfalls von oben
+            net.minecraft.world.phys.Vec3 cam = null;
+            for (double[] flip : new double[][] {{1, 1}, {-1, 1}, {1, -1}, {-1, -1}}) {
+                net.minecraft.world.phys.Vec3 p = b.position().add(fwd.scale(-back * flip[1])).add(right.scale(side * flip[0])).add(0.0, up, 0.0);
+                if (Math.sqrt(Math.pow(p.x - c[0], 2) + Math.pow(p.z - c[1], 2)) <= 22.0) {
+                    cam = p;
+                    break;
+                }
+            }
+            if (cam == null) {
+                cam = b.position().add(fwd.scale(-6.0)).add(0.0, up + 14.0, 0.0);
+            }
+            net.minecraft.world.phys.Vec3 at = b.position().add(fwd.scale(3.0)).add(0.0, lookUp, 0.0);
+            double lx = at.x - cam.x;
+            double ly = at.y - cam.y;
+            double lz = at.z - cam.z;
+            float camYaw = (float) (-Math.atan2(lx, lz) * 180.0 / Math.PI);
+            float camPitch = (float) (-Math.atan2(ly, Math.sqrt(lx * lx + lz * lz)) * 180.0 / Math.PI);
+            player(any).teleportTo(urmeer(any), cam.x, cam.y - 1.62, cam.z, Set.of(), camYaw, camPitch, true);
+        }));
+        steps.add(Step.waitTicks(4));
+        steps.add(Step.screenshot(name));
+    }
+
+    /**
+     * Seit 1.00: er schwimmt umher (aus mehreren Blickwinkeln), dann Rammstoß, Ausbruch aus der Tiefe und Tentakelkäfig gegen
+     * einen Ritter, der östlich von ihm im offenen Wasser treibt, und das Geysirfeld um das Floß.
+     */
+    private static void newAttacks(Deque<Step> steps, double[] c, KrakenEntity[] boss, List<LivingEntity> soldiers) {
+        LivingEntity[] swimmer = new LivingEntity[1];
+        steps.add(Step.until(() -> boss[0] == null || "none".equals(boss[0].currentAttack()), 200));
+        steps.add(Step.server(any -> {
+            ServerLevel level = urmeer(any);
+            SoldierEntity s = ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get().create(level, EntitySpawnReason.COMMAND);
+            if (s != null) {
+                s.snapTo(c[0] + 14.0, c[2] - 0.6, c[1] + 2.0, 90.0f, 0.0f);
+                s.setPermanentlyInvulnerable(true);
+                s.setPersistenceRequired();
+                s.setNoAi(true);
+                s.setNoGravity(true);
+                level.addFreshEntity(s);
+                swimmer[0] = s;
+            }
+            KrakenEntity b = boss[0];
+            if (b != null) {
+                b.setHealth(b.getMaxHealth() * 0.8f);
+                b.forceSwim(swimmer[0] != null ? swimmer[0] : soldiers.isEmpty() ? null : soldiers.get(0), true);
+            }
+        }));
+        // er schwimmt: von vorn, von der Seite, von oben mit dem Kielwasser
+        steps.add(Step.waitTicks(120));
+        follow(steps, "kraken_schwimmt_1", c, boss, -12.0, 7.0, -18.0, 5.0);
+        steps.add(Step.waitTicks(40));
+        follow(steps, "kraken_schwimmt_2", c, boss, 20.0, 6.0, 2.0, 4.0);
+        steps.add(Step.waitTicks(40));
+        follow(steps, "kraken_schwimmt_3", c, boss, 6.0, 22.0, 20.0, 0.0);
+        steps.add(Step.waitTicks(30));
+        follow(steps, "kraken_schwimmt_4", c, boss, -9.0, 3.0, 12.0, 4.0);
+
+        // die neuen Angriffe (Name, Ziel: Schwimmer oder Floß, Bilder: Tick, Kamera relativ zur Mitte, Blickpunkt)
+        Object[][] attacks = {
+                // (die Kameras bleiben innerhalb des Felsenrings, sonst steht ein Fels im Bild)
+                {"charge", true, new double[][] {{18, 6, 10, 19, 7, 3, 0}, {31, 6, 10, 19, 10, 3, 0}}},
+                {"breach", true, new double[][] {{14, -3, 9, 19, 3, 3, 0}, {48, 8, 20, 16, 11, 0, 2}, {KrakenEntity.BREACH_ERUPT + 3, 4, 9, 18, 13, 8, 2},
+                        {KrakenEntity.BREACH_ERUPT + 12, 4, 9, 18, 13, 6, 2}}},
+                // (die Geysire steigen zufällig verteilt auf – also von hoch oben, über den Felsen)
+                {"geyser", true, new double[][] {{28, 12, 24, 20, 13, 2, 2}, {KrakenEntity.GEYSER_FIRST + KrakenEntity.GEYSER_WARN + 3, 12, 24, 20, 13, 5,
+                        2}}},
+                {"cage", true, new double[][] {{KrakenEntity.CAGE_SPAWN + 16, 12, 10, 17, 14, 3, 2}, {KrakenEntity.CAGE_SPAWN + 46, 8, 12, 15, 14, 2, 2},
+                        {KrakenEntity.CAGE_SPAWN + 59, 6, 9, 14, 14, 3, 2}}}};
+        for (Object[] attack : attacks) {
+            String name = (String) attack[0];
+            boolean atSwimmer = (Boolean) attack[1];
+            double[][] shots = (double[][]) attack[2];
+            boolean any = false;
+            for (double[] shot : shots) {
+                any |= Step.wanted("kraken_" + name + "_" + (int) shot[0]);
+            }
+            if (!any) {
+                continue;
+            }
+            steps.add(Step.until(() -> boss[0] == null || "none".equals(boss[0].currentAttack()), 300));
+            steps.add(Step.server(any2 -> {
+                KrakenEntity b = boss[0];
+                if (b == null) {
+                    return;
+                }
+                ServerLevel level = urmeer(any2);
+                b.forceSwim(null, false);
+                b.debugReturnHome();
+                LivingEntity target = atSwimmer ? swimmer[0] : soldiers.isEmpty() ? null : soldiers.get(0);
+                if (target != null) {
+                    double dx = target.getX() - b.getX();
+                    double dz = target.getZ() - b.getZ();
+                    float yaw = -((float) Math.atan2(dx, dz)) * (float) (180.0 / Math.PI);
+                    b.setYRot(yaw);
+                    b.setYBodyRot(yaw);
+                    b.setYHeadRot(yaw);
+                }
+                b.forceAttack(level, name, target, true);
+            }));
+            int done = 0;
+            for (double[] shot : shots) {
+                steps.add(look(c, shot[1], shot[2], shot[3], shot[4], shot[5], shot[6]));
+                steps.add(Step.waitTicks(Math.max(1, (int) shot[0] - done)));
+                done = (int) shot[0];
+                steps.add(Step.screenshot("kraken_" + name + "_" + (int) shot[0]));
+                done += 3;
+            }
+        }
+        steps.add(Step.until(() -> boss[0] == null || "none".equals(boss[0].currentAttack()), 300));
+        steps.add(Step.server(any -> {
+            if (boss[0] != null) {
+                boss[0].debugReturnHome();
+            }
+            if (swimmer[0] != null) {
+                swimmer[0].discard();
+            }
+        }));
     }
 
     /** Die Krakenangel: in der Hand (eigene Sicht und von vorn), ausgeworfen über dem Schlund und unter Wasser. */
