@@ -16,7 +16,7 @@ import net.minecraft.world.level.levelgen.structure.StructureType;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Der Uhrturm (seit 1.01): frei schwebend im Abgrund, in einem leer gefegten Auge des Chaos – das große Zifferblatt mit dem
+ * Der Uhrturm (seit 1.1): frei schwebend im Abgrund, in einem leer gefegten Auge des Chaos – das große Zifferblatt mit dem
  * Uhrwerkherz, der Turm mit Uhrwerkkammer und Glockenstube, schwebende Zahnräder. Die Höhe des Zifferblatts hängt vom Zufall
  * des Bauwerks ab ({@link #HEIGHTS}); das Biom an der Mitte muss passen. Die Form baut {@link ClockTowerPiece}.
  */

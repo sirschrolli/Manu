@@ -59,7 +59,7 @@ final class AbyssModels {
                     .face(Direction.UP, face -> face.uvs(0, 0, 16, 16).texture(HEART_GLOW).cullface(Direction.UP)))
             .build();
 
-    /** Der Uhrturm (1.01): Uhrwerk, Zifferblatt, das Uhrwerkherz (je Phase), der Minutenzeiger, das Spawn-Ei. */
+    /** Der Uhrturm (1.1): Uhrwerk, Zifferblatt, das Uhrwerkherz (je Phase), der Minutenzeiger, das Spawn-Ei. */
     private static void clockTower(BlockModelGenerators blocks, ItemModelGenerators items) {
         blocks.createTrivialCube(io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCKWORK.get());
         blocks.createTrivialCube(io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCK_FACE.get());
@@ -105,7 +105,7 @@ final class AbyssModels {
                 .select(Direction.Axis.Z, BlockModelGenerators.plainVariant(ew))));
 
         ModModelProvider.flat(items, AbyssBlocks.RIFT_KEY.get());
-        // Chronit (seit 1.01): Erz im Chaosgestein, Kristall, Block, die Rüstung der Zeitwächter
+        // Chronit (seit 1.1): Erz im Chaosgestein, Kristall, Block, die Rüstung der Zeitwächter
         ModModelProvider.ore(blocks, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_ORE, AbyssBlocks.CHAOS_STONE.base().get(), "chronit");
         ModModelProvider.glowingCube(blocks, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_BLOCK.get());
         ModModelProvider.flat(items, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT.get());

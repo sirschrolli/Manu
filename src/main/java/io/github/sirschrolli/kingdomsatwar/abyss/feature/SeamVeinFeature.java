@@ -11,7 +11,7 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.Feature;
 
 /**
- * Eine <b>Weltennaht</b> über den Boden: eine zackige, glühende Fuge, die dem Gelände folgt. Seit 1.01 gerinnt an ihr die
+ * Eine <b>Weltennaht</b> über den Boden: eine zackige, glühende Fuge, die dem Gelände folgt. Seit 1.1 gerinnt an ihr die
  * Zeit zu <b>Chronit</b>: unter manchem Stück der Naht und hier und da daneben steckt Chronit-Erz.
  */
 public record SeamVeinFeature() implements Feature {

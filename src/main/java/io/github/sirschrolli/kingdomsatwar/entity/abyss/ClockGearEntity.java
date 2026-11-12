@@ -25,7 +25,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Ein Zahnrad des Stundenwächters (seit 1.01): Er schleudert es, und es rollt auf der Kante über das Zifferblatt – an Wänden
+ * Ein Zahnrad des Stundenwächters (seit 1.1): Er schleudert es, und es rollt auf der Kante über das Zifferblatt – an Wänden
  * und am Rand des Zifferblatts prallt es ab. Wen es überrollt, den trifft es ({@link #damage}) und stößt ihn mit. Nach
  * {@link #LIFE} Ticks (oder wenn sein Herr fällt) zerspringt es. Wird nicht gespeichert.
  */

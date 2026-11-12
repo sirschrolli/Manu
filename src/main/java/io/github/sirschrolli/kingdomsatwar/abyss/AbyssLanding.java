@@ -52,7 +52,7 @@ public final class AbyssLanding {
     static @Nullable BlockPos findSite(ServerLevel level, BlockPos near) {
         ChunkGenerator generator = level.getChunkSource().getGenerator();
         RandomState random = level.getChunkSource().randomState();
-        // nicht auf das Zifferblatt eines Uhrturms (seit 1.01): dort, wo einer stehen kann, sucht sie weiter
+        // nicht auf das Zifferblatt eines Uhrturms (seit 1.1): dort, wo einer stehen kann, sucht sie weiter
         var towers = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE_SET)
                 .get(io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.CLOCK_TOWERS).orElse(null);
         var state = level.getChunkSource().getGeneratorState();

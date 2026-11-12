@@ -79,7 +79,7 @@ import net.neoforged.neoforge.event.RegisterGameTestsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 /**
- * Tests der Erweiterung des Abgrunds (seit 1.01): Chronit (Erz, Drops, an den Weltennähten), die Rüstung der Zeitwächter
+ * Tests der Erweiterung des Abgrunds (seit 1.1): Chronit (Erz, Drops, an den Weltennähten), die Rüstung der Zeitwächter
  * (Schutz, Die Zeit stockt, Zweite Chance mit Totem und Abklingzeit), der Uhrturm (Bauwerk und Verteilung im Abgrund), der Kampf
  * gegen den Stundenwächter und sein Minutenzeiger.
  */

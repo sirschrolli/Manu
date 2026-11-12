@@ -447,7 +447,7 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarSpiderlingEntity>> STAR_SPIDERLING =
             ENTITIES.registerEntityType("star_spiderling", io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarSpiderlingEntity::new, MobCategory.MONSTER,
                     builder -> builder.sized(0.9f, 0.5f).eyeHeight(0.35f).noLootTable().clientTrackingRange(10));
-    /** Der Stundenwächter (1.01): steht erstarrt über dem Uhrwerkherz in der Mitte des großen Zifferblatts am Uhrturm (Abgrund). */
+    /** Der Stundenwächter (1.1): steht erstarrt über dem Uhrwerkherz in der Mitte des großen Zifferblatts am Uhrturm (Abgrund). */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.abyss.HourWardenEntity>> HOUR_WARDEN =
             ENTITIES.registerEntityType("hour_warden", io.github.sirschrolli.kingdomsatwar.entity.abyss.HourWardenEntity::new, MobCategory.MONSTER,
                     builder -> builder.sized(1.6f, 4.3f).eyeHeight(3.8f).fireImmune().notInPeaceful().clientTrackingRange(16).updateInterval(2));

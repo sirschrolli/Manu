@@ -41,7 +41,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Die Rüstung der Zeitwächter (seit 1.01) aus Chronit – geronnener Zeit aus dem Abgrund:
+ * Die Rüstung der Zeitwächter (seit 1.1) aus Chronit – geronnener Zeit aus dem Abgrund:
  * <ul>
  *     <li><b>Die Zeit stockt</b> (jeder Teil): Wer den Träger trifft, gerät manchmal ins Stocken – für einen Augenblick
  *     langsamer, auch seine Schläge ({@link #SLOW_CHANCE} je Teil);</li>

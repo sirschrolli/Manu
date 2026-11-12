@@ -30,7 +30,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * Der Minutenzeiger (seit 1.01): die Beute des Stundenwächters – der lange Zeiger der großen Uhr als Klinge, aus Uhrbronze
+ * Der Minutenzeiger (seit 1.1): die Beute des Stundenwächters – der lange Zeiger der großen Uhr als Klinge, aus Uhrbronze
  * mit einem Kern aus Chronit, die Spitze ein durchbrochenes Herz wie an alten Turmuhren. Er schlägt wie ein Schwert, und
  * <ul>
  *     <li>jeder Treffer rückt ihn eine Minute vor; der <b>zwölfte schlägt die Stunde</b>: Ein Glockenschlag rollt um das Ziel

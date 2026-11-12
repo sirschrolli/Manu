@@ -21,7 +21,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 
 /**
- * Der Uhrturm und sein Stundenwächter (seit 1.01): Uhrbronze (mit Treppe, Stufe und Mauer), Uhrwerk, Zifferblatt, das
+ * Der Uhrturm und sein Stundenwächter (seit 1.1): Uhrbronze (mit Treppe, Stufe und Mauer), Uhrwerk, Zifferblatt, das
  * Uhrwerkherz in der Mitte des großen Zifferblatts, über dem der Stundenwächter erstarrt steht, der Minutenzeiger (seine
  * Beute) und sein Spawn-Ei. Der Wächter selbst, seine Zahnräder und das Pendel stehen in {@link ModEntities}.
  */

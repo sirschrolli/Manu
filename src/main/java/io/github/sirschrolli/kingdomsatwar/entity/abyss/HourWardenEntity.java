@@ -57,7 +57,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Der Stundenwächter (seit 1.01): Als die Welten zerbrachen, blieb in einer von ihnen die große Uhr stehen – eine Minute vor
+ * Der Stundenwächter (seit 1.1): Als die Welten zerbrachen, blieb in einer von ihnen die große Uhr stehen – eine Minute vor
  * Mitternacht. Ihr Turm stürzte in den Abgrund, wo die Zeit stillsteht, und mit ihm ihr Wächter: ein Ritter aus Uhrbronze, so
  * groß wie zwei Männer, hinter dem Kopf ein Zifferblatt wie ein Heiligenschein, in der Brust ein Uhrwerk, am Gürtel ein Pendel
  * und zwei Uhrgewichte, in den Händen zwei Klingen wie Zeiger – rechts der lange Minutenzeiger, links der breite Stundenzeiger.

@@ -255,6 +255,8 @@ final class Showcase {
                         SoulShepherdShowcase.boss(steps);
                     } else if (scene.equals("star_weaver")) {
                         StarWeaverShowcase.boss(steps);
+                    } else if (scene.equals("hour_warden")) {
+                        HourWardenShowcase.boss(steps);
                     } else if (scene.equals("anni_boss")) {
                         AnniShowcase.boss(steps);
                     } else if (scene.equals("creator_boss")) {

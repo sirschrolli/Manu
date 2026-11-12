@@ -30,7 +30,7 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSeriali
 import org.jspecify.annotations.Nullable;
 
 /**
- * Der Uhrturm (seit 1.01), Chunk für Chunk gebaut – frei schwebend im Abgrund, in einem leer gefegten Auge des Chaos:
+ * Der Uhrturm (seit 1.1), Chunk für Chunk gebaut – frei schwebend im Abgrund, in einem leer gefegten Auge des Chaos:
  * <ol>
  *     <li>Das <b>große Zifferblatt</b>: eine runde Scheibe aus Email (31 Blöcke breit) mit einem Lünettenring aus Uhrbronze,
  *     einer Minutenbahn, zwölf Stundenmarken (die vier Hauptstunden aus Chronit) und zwei eingelegten Zeigern – sie stehen

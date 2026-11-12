@@ -283,14 +283,14 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         tag(Tags.Items.INGOTS).addTag(ModTags.Items.INGOTS_SKY_IRON);
         add(ItemTags.BEACON_PAYMENT_ITEMS, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_INGOT);
         add(ModTags.Items.REPAIRS_STARWALKER_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_INGOT);
-        // Chronit (seit 1.01)
+        // Chronit (seit 1.1)
         copy(ModTags.Blocks.ORES_CHRONIT, ModTags.Items.ORES_CHRONIT);
         copy(ModTags.Blocks.STORAGE_BLOCKS_CHRONIT, ModTags.Items.STORAGE_BLOCKS_CHRONIT);
         add(ModTags.Items.GEMS_CHRONIT, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT);
         tag(Tags.Items.GEMS).addTag(ModTags.Items.GEMS_CHRONIT);
         add(ItemTags.BEACON_PAYMENT_ITEMS, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT);
         add(ModTags.Items.REPAIRS_TIMEWARDEN_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT);
-        // der Minutenzeiger (1.01): ein Schwert, mit Chronit auszubessern
+        // der Minutenzeiger (1.1): ein Schwert, mit Chronit auszubessern
         add(ModTags.Items.REPAIRS_MINUTE_HAND, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT);
         add(ItemTags.SWORDS, io.github.sirschrolli.kingdomsatwar.registry.ClockTower.MINUTE_HAND);
         add(ItemTags.HEAD_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_HELMET);

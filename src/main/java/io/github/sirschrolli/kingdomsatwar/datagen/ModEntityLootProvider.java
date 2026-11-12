@@ -464,7 +464,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_CRYSTAL.get(), 2, 4))
                 .withPool(drop(ModItems.GEMSTONE.get(), 2, 4))
                 .withPool(drop(ModItems.GOLD_COIN.get(), 4, 9)));
-        // der Stundenwächter (1.01): der Minutenzeiger, ein Herzkristall, Chronit, Uhrbronze, Uhrwerk und Schätze; seine Zahnräder
+        // der Stundenwächter (1.1): der Minutenzeiger, ein Herzkristall, Chronit, Uhrbronze, Uhrwerk und Schätze; seine Zahnräder
         // und das Pendel hinterlassen nichts
         this.add(ModEntities.HOUR_WARDEN.get(), LootTable.lootTable()
                 .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.ClockTower.MINUTE_HAND.get(), 1))

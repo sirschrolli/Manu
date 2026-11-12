@@ -697,12 +697,12 @@ public class ModRecipeProvider extends RecipeProvider {
         storage(skyIron, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_BLOCK.get());
         smeltOre(skyIron, 1.2f, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.RAW_SKY_IRON.get(), io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_ORE.get());
         this.starwalkerArmor(skyIron);
-        // Chronit und die Rüstung der Zeitwächter (1.01)
+        // Chronit und die Rüstung der Zeitwächter (1.1)
         Item chronit = io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT.get();
         storage(chronit, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_BLOCK.get());
         smeltOre(chronit, 1.4f, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_ORE.get());
         this.timewardenArmor(chronit);
-        // der Uhrturm (1.01): Uhrbronze aus Kupfer und Gold, Uhrwerk aus Uhrbronze und Chronit, Zifferblatt aus Kalzit und Knochenmehl
+        // der Uhrturm (1.1): Uhrbronze aus Kupfer und Gold, Uhrwerk aus Uhrbronze und Chronit, Zifferblatt aus Kalzit und Knochenmehl
         ItemLike clockBronze = io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCK_BRONZE.base().get();
         shaped(RecipeCategory.BUILDING_BLOCKS, clockBronze, 4).pattern("CGC").pattern("GCG").pattern("CGC")
                 .define('C', net.minecraft.world.item.Items.COPPER_INGOT).define('G', net.minecraft.world.item.Items.GOLD_NUGGET)
@@ -1175,7 +1175,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('I', ingot).unlockedBy(has, has(ingot)).save(output, key("starwalker_boots"));
     }
 
-    /** Die Rüstung der Zeitwächter (1.01): Chronit in Gold gefasst, im Harnisch das Herz der Uhr – eine Weltennaht. */
+    /** Die Rüstung der Zeitwächter (1.1): Chronit in Gold gefasst, im Harnisch das Herz der Uhr – eine Weltennaht. */
     private void timewardenArmor(Item gem) {
         String has = getHasName(gem);
         var set = io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.timewardenSet();

@@ -22,7 +22,7 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 
 /**
- * Chronit (seit 1.01): Im Abgrund steht die Zeit still – und wo zwei Welten aneinanderstoßen, an den glühenden Weltennähten,
+ * Chronit (seit 1.1): Im Abgrund steht die Zeit still – und wo zwei Welten aneinanderstoßen, an den glühenden Weltennähten,
  * gerinnt sie zu Kristall. Chronit ist bernsteinfarben, in seinem Innern hängen erstarrte Funken wie Staub in einem
  * Sonnenstrahl. Daraus die Rüstung der Zeitwächter, die ihren Träger einmal vor dem Tod zurückspult (siehe
  * {@link io.github.sirschrolli.kingdomsatwar.item.abyss.TimewardenArmor}).

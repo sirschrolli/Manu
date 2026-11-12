@@ -295,14 +295,14 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(ModTags.Blocks.STORAGE_BLOCKS_SKY_IRON, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_BLOCK);
         tag(Tags.BlockItems.STORAGE_BLOCKS.block()).addTag(ModTags.Blocks.STORAGE_BLOCKS_SKY_IRON);
         add(BlockTags.BEACON_BASE_BLOCKS, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_BLOCK);
-        // Chronit (seit 1.01)
+        // Chronit (seit 1.1)
         add(BlockTags.MINEABLE_WITH_PICKAXE, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_ORE, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_BLOCK);
         add(BlockTags.NEEDS_DIAMOND_TOOL, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_ORE, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_BLOCK);
         add(ModTags.Blocks.ORES_CHRONIT, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_ORE);
         tag(Tags.BlockItems.ORES.block()).addTag(ModTags.Blocks.ORES_CHRONIT);
         tag(BlockItemTags.ORES.block()).addTag(ModTags.Blocks.ORES_CHRONIT);
         add(ModTags.Blocks.STORAGE_BLOCKS_CHRONIT, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_BLOCK);
-        // der Uhrturm (1.01): Uhrwerk und Zifferblatt mit der Spitzhacke, die Uhrbronze ab Stein; das Herz übersteht Drachen und Wither
+        // der Uhrturm (1.1): Uhrwerk und Zifferblatt mit der Spitzhacke, die Uhrbronze ab Stein; das Herz übersteht Drachen und Wither
         add(BlockTags.MINEABLE_WITH_PICKAXE, io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCKWORK, io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCK_FACE);
         add(BlockTags.NEEDS_STONE_TOOL, io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCKWORK);
         io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCK_BRONZE.all().forEach(block -> add(BlockTags.NEEDS_STONE_TOOL, block));

@@ -30,7 +30,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Das Uhrwerkherz (seit 1.01): In der Nabe des großen Zifferblatts vor dem Uhrturm sitzt ein Herz aus Uhrbronze, in dessen
+ * Das Uhrwerkherz (seit 1.1): In der Nabe des großen Zifferblatts vor dem Uhrturm sitzt ein Herz aus Uhrbronze, in dessen
  * Mitte ein Chronit glimmt. Darüber steht der Stundenwächter erstarrt, seit die Uhr eine Minute vor Mitternacht stehen blieb.
  * Solange er lebt, tickt das Herz; ist er besiegt, bleibt es stehen – ein Chronit darin zieht es wieder auf, und ein neuer
  * Wächter erwacht. Unzerstörbar; man steht darauf wie auf dem Zifferblatt.

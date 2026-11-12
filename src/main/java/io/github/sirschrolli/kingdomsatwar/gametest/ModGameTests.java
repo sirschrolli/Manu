@@ -197,7 +197,7 @@ public final class ModGameTests {
         SeaWitchGameTests.init(); // seit 0.97: die Meerhexe, die Hexengrotte, der Hexenstab
         SoulShepherdGameTests.init(); // seit 0.98: der Seelenhirte, der Seelenpferch, der Hirtenstab
         StarWeaverGameTests.init(); // seit 0.99: Himmelseisen, die Rüstung der Sternwandler, das Sternennetz, die Sternenweberin
-        ClockTowerGameTests.init(); // seit 1.01: Chronit, die Rüstung der Zeitwächter, der Uhrturm, der Stundenwächter
+        ClockTowerGameTests.init(); // seit 1.1: Chronit, die Rüstung der Zeitwächter, der Uhrturm, der Stundenwächter
         AnniGameTests.init();     // Anni der Troll, Fehlerkern, Wiederherstellung als Anni 2.0, Bannhammer, Fehlerflügel
         BeastGameTests.init();    // die neuen Monster: Werwolf, Moorschlurfer, Glutwurm, Aschengeist
         GearGameTests.init();     // Waffen und Rüstungen aus Monsterteilen

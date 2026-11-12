@@ -24,7 +24,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Das Pendel des Stundenwächters (seit 1.01): Hoch über seinem Ziel erscheint ein riesiges Pendel aus Uhrbronze – eine lange
+ * Das Pendel des Stundenwächters (seit 1.1): Hoch über seinem Ziel erscheint ein riesiges Pendel aus Uhrbronze – eine lange
  * Stange, unten eine sichelförmige Klinge um eine Scheibe aus Chronit. Es hängt zuerst zur Seite gehoben (eine Linie aus
  * Bernstein am Boden zeigt seine Bahn), dann schwingt es dreimal über den Boden: Wer in seiner Bahn steht, wird getroffen und
  * mitgerissen – wer zur Seite tritt, nicht. Danach vergeht es. Das Wesen steht am Aufhängepunkt. Wird nicht gespeichert.

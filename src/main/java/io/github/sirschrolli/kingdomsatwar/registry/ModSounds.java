@@ -251,7 +251,7 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_BREACH = register("entity.kraken.breach");
     public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_GEYSER = register("entity.kraken.geyser");
     public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_TENTACLE = register("entity.kraken.tentacle");
-    // seit 1.01: die Rüstung der Zeitwächter (Chronit)
+    // seit 1.1: die Rüstung der Zeitwächter (Chronit)
     public static final DeferredHolder<SoundEvent, SoundEvent> TIMEWARDEN_REWIND = register("item.timewarden.rewind");
     public static final DeferredHolder<SoundEvent, SoundEvent> TIMEWARDEN_TICK = register("item.timewarden.tick");
     public static final DeferredHolder<SoundEvent, SoundEvent> TIMEWARDEN_READY = register("item.timewarden.ready");
@@ -330,7 +330,7 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WEAVER_SPINDLE = register("entity.star_weaver.spindle");
     public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WEAVER_FURY = register("entity.star_weaver.fury");
     public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WEAVER_SPIDERLING = register("entity.star_weaver.spiderling");
-    // der Stundenwächter (seit 1.01)
+    // der Stundenwächter (seit 1.1)
     public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_AMBIENT = register("entity.hour_warden.ambient");
     public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_HURT = register("entity.hour_warden.hurt");
     public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_DEATH = register("entity.hour_warden.death");
@@ -350,7 +350,7 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_STAGGER = register("entity.hour_warden.stagger");
     public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_FURY = register("entity.hour_warden.fury");
     public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_TOLL = register("entity.hour_warden.toll");
-    // der Minutenzeiger (seit 1.01)
+    // der Minutenzeiger (seit 1.1)
     public static final DeferredHolder<SoundEvent, SoundEvent> MINUTE_HAND_HOUR = register("item.minute_hand.hour");
     public static final DeferredHolder<SoundEvent, SoundEvent> MINUTE_HAND_JUMP = register("item.minute_hand.jump");
     public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_AMBIENT = register("entity.stone_keeper.ambient");

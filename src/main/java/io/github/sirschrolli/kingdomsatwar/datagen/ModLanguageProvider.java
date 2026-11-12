@@ -812,7 +812,7 @@ public class ModLanguageProvider extends LanguageProvider {
                 "Voller Satz: Sturz ins Nichts trägt dich zurück (alle zwei Minuten)");
         text("message.kingdomsatwar.starwalker_anchor", "The stars carry you back to firm ground",
                 "Die Sterne tragen dich zurück auf festen Boden");
-        // Chronit und die Rüstung der Zeitwächter (1.01)
+        // Chronit und die Rüstung der Zeitwächter (1.1)
         block(io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_ORE, "Chronite Ore", "Chronit-Erz");
         block(io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_BLOCK, "Block of Chronite", "Chronitblock");
         item(io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT, "Chronite", "Chronit");
@@ -1083,7 +1083,7 @@ public class ModLanguageProvider extends LanguageProvider {
                 {"spiderling", "Star spiderling chirps", "Sternspinnling zirpt"}}) {
             subtitle("entity.star_weaver." + e[0], e[1], e[2]);
         }
-        // der Uhrturm und der Stundenwächter (1.01)
+        // der Uhrturm und der Stundenwächter (1.1)
         creature(ModEntities.HOUR_WARDEN, io.github.sirschrolli.kingdomsatwar.registry.ClockTower.HOUR_WARDEN_SPAWN_EGG, "Hour Warden", "Stundenwächter",
                 "Stundenwächter");
         add(ModEntities.CLOCK_GEAR.get(), pick("Clockwork Gear", "Zahnrad"));

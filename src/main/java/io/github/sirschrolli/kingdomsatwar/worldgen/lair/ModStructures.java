@@ -100,7 +100,7 @@ public final class ModStructures {
             STAR_WEB = TYPES.register("star_web", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.weaver.StarWebStructure.CODEC);
     public static final DeferredHolder<StructurePieceType, StructurePieceType> STAR_WEB_PIECE =
             PIECES.register("star_web", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.weaver.StarWebPiece::new);
-    /** Der Uhrturm (seit 1.01): frei schwebend im Abgrund, mit dem großen Zifferblatt und dem Stundenwächter. */
+    /** Der Uhrturm (seit 1.1): frei schwebend im Abgrund, mit dem großen Zifferblatt und dem Stundenwächter. */
     public static final DeferredHolder<StructureType<?>, StructureType<io.github.sirschrolli.kingdomsatwar.worldgen.clock.ClockTowerStructure>>
             CLOCK_TOWER = TYPES.register("clock_tower", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.clock.ClockTowerStructure.CODEC);
     public static final DeferredHolder<StructurePieceType, StructurePieceType> CLOCK_TOWER_PIECE =
@@ -351,7 +351,7 @@ public final class ModStructures {
                         .generationStep(GenerationStep.Decoration.TOP_LAYER_MODIFICATION)
                         .terrainAdapation(TerrainAdjustment.NONE)
                         .build()));
-        // die Uhrtürme (1.01): frei schwebend im Abgrund; auf dem Zifferblatt und im Turm entstehen keine Monster
+        // die Uhrtürme (1.1): frei schwebend im Abgrund; auf dem Zifferblatt und im Turm entstehen keine Monster
         context.register(CLOCK_TOWER_STRUCTURE, new io.github.sirschrolli.kingdomsatwar.worldgen.clock.ClockTowerStructure(
                 new Structure.StructureSettings.Builder(biomes.getOrThrow(ModTags.Biomes.HAS_CLOCK_TOWER))
                         .spawnOverrides(java.util.Map.of(
@@ -622,7 +622,7 @@ public final class ModStructures {
                         1.0f, 63_401_877, java.util.Optional.of(new net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement
                                 .ExclusionZone(context.lookup(Registries.STRUCTURE_SET).getOrThrow(VOID_THRONE_SET), 12)),
                         20, 8, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR)));
-        // Uhrtürme (1.01): Felder von 24 Chunks, mindestens 10 Chunks Abstand, 12 Chunks fern des Schlunds der Welten
+        // Uhrtürme (1.1): Felder von 24 Chunks, mindestens 10 Chunks Abstand, 12 Chunks fern des Schlunds der Welten
         context.register(CLOCK_TOWERS, new StructureSet(structures.getOrThrow(CLOCK_TOWER_STRUCTURE),
                 new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(net.minecraft.core.Vec3i.ZERO,
                         net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement.FrequencyReductionMethod.DEFAULT,

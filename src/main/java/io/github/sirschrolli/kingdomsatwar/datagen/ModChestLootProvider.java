@@ -758,7 +758,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(LootItem.lootTableItem(Items.BOOK).setWeight(3)
                                 .apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
                         .add(EmptyLootItem.emptyItem().setWeight(6))));
-        // der Uhrturm (1.01): Chronit, Uhrbronze und Uhrwerk, Gold und Uhrmacherzeug; selten ein Teil der Rüstung der Zeitwächter
+        // der Uhrturm (1.1): Chronit, Uhrbronze und Uhrwerk, Gold und Uhrmacherzeug; selten ein Teil der Rüstung der Zeitwächter
         this.output.accept(ModLootTables.CLOCK_TOWER_CHEST, coins(LootTable.lootTable(), 3, 9, 1, 4, 0.15f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(4, 7))

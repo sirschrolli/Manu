@@ -188,7 +188,7 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
         // die Seelenpferche (0.98): im Seelensumpf der Schattenwelt
         this.tag(ModTags.Biomes.HAS_SOUL_PEN).add(io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes.SOUL_MARSH);
         this.tag(ModTags.Biomes.HAS_STAR_WEB).add(io.github.sirschrolli.kingdomsatwar.voidrealm.VoidBiomes.EXPANSE);
-        // die Uhrtürme (1.01): in jedem Biom des Abgrunds
+        // die Uhrtürme (1.1): in jedem Biom des Abgrunds
         io.github.sirschrolli.kingdomsatwar.abyss.AbyssBiomes.ALL.forEach(key -> this.tag(ModTags.Biomes.HAS_CLOCK_TOWER).add(key));
         // die Hexengrotten (0.97): in den tiefen, dunklen Gegenden des Urmeers
         this.tag(ModTags.Biomes.HAS_WITCH_GROTTO).add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.DEEP)
