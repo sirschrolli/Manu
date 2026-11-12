@@ -1457,7 +1457,7 @@ public class ReefColossusEntity extends Monster implements io.github.sirschrolli
                         this.getX(), this.getY() + 3.2, this.getZ(), 10, 1.6, 1.0, 1.6, 0.1);
             }
             if (this.deathTime == 55 && this.hasSpear() && !io.github.sirschrolli.kingdomsatwar.entity.boss.BossLoot.signatureDrops(this)) {
-                // nach dem ersten eigenen Sieg nur noch selten: sonst zerspringt der Speer in der Kuppel zu Aquamarinsplittern
+                // nur selten (auch beim ersten Sieg): sonst zerspringt der Speer in der Kuppel zu Aquamarinsplittern
                 this.entityData.set(DATA_SPEAR, false);
                 Vec3 tip = spearTip(this.position(), this.yBodyRot);
                 level.sendParticles(ModParticles.SEA_GLOW.get(), tip.x, tip.y, tip.z, 80, 0.8, 0.8, 0.8, 0.2);

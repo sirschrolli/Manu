@@ -1809,7 +1809,7 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
             this.begin(first ? Attack.ASCEND : Attack.TRANSCEND);
             return;
         }
-        // wer ihn zuletzt traf: für die Beute (Sonderstücke und Kristalle beim ersten eigenen Sieg, siehe BossLoot)
+        // wer ihn zuletzt traf: für die Beute (Kristalle beim ersten eigenen Sieg, siehe BossLoot)
         Player lastPlayer = this.getLastHurtByPlayer();
         this.victor = lastPlayer != null ? lastPlayer.getUUID() : null;
         super.die(source);

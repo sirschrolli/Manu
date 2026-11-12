@@ -3,55 +3,8 @@
   "pools": [
     {
       "condition": {
-        "type": "minecraft:entity_properties",
-        "entity": "attacking_player",
-        "predicate": {
-          "minecraft:type_specific/player": {
-            "stats": [
-              {
-                "type": "minecraft:killed",
-                "stat": "kingdomsatwar:glutschmied",
-                "value": 1
-              }
-            ]
-          }
-        }
-      },
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "kingdomsatwar:glut_spear"
-        }
-      ],
-      "rolls": 1
-    },
-    {
-      "condition": {
-        "type": "minecraft:all_of",
-        "terms": [
-          {
-            "type": "minecraft:inverted",
-            "term": {
-              "type": "minecraft:entity_properties",
-              "entity": "attacking_player",
-              "predicate": {
-                "minecraft:type_specific/player": {
-                  "stats": [
-                    {
-                      "type": "minecraft:killed",
-                      "stat": "kingdomsatwar:glutschmied",
-                      "value": 1
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          {
-            "type": "minecraft:random_chance",
-            "chance": 0.2
-          }
-        ]
+        "type": "minecraft:random_chance",
+        "chance": 0.2
       },
       "entries": [
         {
@@ -98,7 +51,7 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 3,
+                "max": 2,
                 "min": 1
               }
             },
@@ -128,11 +81,11 @@
             "type": "minecraft:random_chance_with_enchanted_bonus",
             "enchanted_chance": {
               "type": "minecraft:linear",
-              "base": 0.4,
-              "per_level_above_first": 0.05
+              "base": 0.18,
+              "per_level_above_first": 0.03
             },
             "enchantment": "minecraft:looting",
-            "unenchanted_chance": 0.35
+            "unenchanted_chance": 0.15
           }
         ]
       },
@@ -153,8 +106,8 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 4,
-                "min": 2
+                "max": 2,
+                "min": 1
               }
             },
             {
@@ -181,7 +134,7 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 2,
+                "max": 1,
                 "min": 0
               }
             },
@@ -209,8 +162,8 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 5,
-                "min": 2
+                "max": 2,
+                "min": 1
               }
             },
             {

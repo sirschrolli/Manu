@@ -3,55 +3,8 @@
   "pools": [
     {
       "condition": {
-        "type": "minecraft:entity_properties",
-        "entity": "attacking_player",
-        "predicate": {
-          "minecraft:type_specific/player": {
-            "stats": [
-              {
-                "type": "minecraft:killed",
-                "stat": "kingdomsatwar:lightning_mage",
-                "value": 1
-              }
-            ]
-          }
-        }
-      },
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "kingdomsatwar:lightning_spell_tablet"
-        }
-      ],
-      "rolls": 1
-    },
-    {
-      "condition": {
-        "type": "minecraft:all_of",
-        "terms": [
-          {
-            "type": "minecraft:inverted",
-            "term": {
-              "type": "minecraft:entity_properties",
-              "entity": "attacking_player",
-              "predicate": {
-                "minecraft:type_specific/player": {
-                  "stats": [
-                    {
-                      "type": "minecraft:killed",
-                      "stat": "kingdomsatwar:lightning_mage",
-                      "value": 1
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          {
-            "type": "minecraft:random_chance",
-            "chance": 0.2
-          }
-        ]
+        "type": "minecraft:random_chance",
+        "chance": 0.2
       },
       "entries": [
         {
@@ -98,8 +51,8 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 4,
-                "min": 2
+                "max": 2,
+                "min": 1
               }
             },
             {
@@ -126,7 +79,7 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 3,
+                "max": 2,
                 "min": 1
               }
             },
@@ -154,11 +107,11 @@
             "options": "#kingdomsatwar:loot/arcane"
           },
           "name": "minecraft:book",
-          "weight": 25
+          "weight": 15
         },
         {
           "type": "minecraft:empty",
-          "weight": 75
+          "weight": 85
         }
       ],
       "rolls": 1
@@ -166,7 +119,7 @@
     {
       "condition": {
         "type": "minecraft:random_chance",
-        "chance": 0.5
+        "chance": 0.3
       },
       "entries": [
         {

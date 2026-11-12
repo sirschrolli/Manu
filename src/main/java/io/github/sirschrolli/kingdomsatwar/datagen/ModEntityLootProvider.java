@@ -23,7 +23,6 @@ import net.minecraft.advancements.predicates.MinMaxBounds;
 import net.minecraft.advancements.predicates.entity.PlayerPredicate;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
@@ -111,21 +110,21 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.SHADOW_ESSENCE.get(), 10, 16))
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_UPGRADE_SMITHING_TEMPLATE.get(), 1, 2))
                 .withPool(drop(ModItems.GEMSTONE.get(), 4, 8)));
-        // Erzmagier (in jedem ihrer Türme einer): die Zaubertafel beim ersten eigenen Sieg sicher, danach selten; der
-        // Manakristall nur beim ersten Sieg; dazu etwas Gold, Aetherit und vielleicht ein verzaubertes Buch
+        // Erzmagier (in jedem ihrer Türme einer): die Zaubertafel selten (auch beim ersten Sieg); der Manakristall nur beim
+        // ersten eigenen Sieg; dazu ein wenig Gold, Aetherit und vielleicht ein verzaubertes Buch
         for (DragonType type : DragonType.values()) {
             EntityType<?> mage = ModEntities.MAGES.get(type).get();
             this.add(mage, signature(LootTable.lootTable(), mage,
                     ModItems.SPELL_TABLETS.get(io.github.sirschrolli.kingdomsatwar.magic.Spell.of(type)).get())
                     .withPool(firstOnly(mage, ModItems.MANA_CRYSTAL.get(), 1))
-                    .withPool(drop(ModItems.GOLD_COIN.get(), 2, 4))
-                    .withPool(drop(ModItems.AETHERIT.get(), 1, 3))
-                    .withPool(this.modBook(io.github.sirschrolli.kingdomsatwar.registry.ModTags.Enchantments.LOOT_ARCANE, 25))
+                    .withPool(drop(ModItems.GOLD_COIN.get(), 1, 2))
+                    .withPool(drop(ModItems.AETHERIT.get(), 1, 2))
+                    .withPool(this.modBook(io.github.sirschrolli.kingdomsatwar.registry.ModTags.Enchantments.LOOT_ARCANE, 15))
                     .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
                             .add(LootItem.lootTableItem(net.minecraft.world.item.Items.BOOK)
                                     .apply(net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction
                                             .randomApplicableEnchantment(this.enchantments)))
-                            .when(LootItemRandomChanceCondition.randomChance(0.5f))));
+                            .when(LootItemRandomChanceCondition.randomChance(0.3f))));
         }
         this.add(ModEntities.VINELING.get(), LootTable.lootTable()
                 .withPool(drop(Items.VINE, 0, 2))
@@ -388,33 +387,33 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(meat(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.CRAB_MEAT.get(), 1, 2))
                 .withPool(rare(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.CRAB_CLAW.get(), 0.2f, 0.05f)));
         // Karkinos (mit dem Gezeitenhorn zurückzurufen): der Gezeiten-Speer bricht im Tod aus seiner Kuppel (nicht in der
-        // Beute – beim ersten eigenen Sieg sicher, danach selten, sonst zerspringt er); Gezeitenhorn, Herz des Meeres und
-        // Herzkristall nur beim ersten Sieg (wer ihn zurückruft, bringt jedes Mal ein Herz des Meeres mit)
+        // Beute – selten, sonst zerspringt er); Gezeitenhorn und Herz des Meeres selten; der Herzkristall nur beim ersten
+        // eigenen Sieg; sonst wenig
         EntityType<?> karkinos = ModEntities.REEF_COLOSSUS.get();
         this.add(karkinos, LootTable.lootTable()
-                .withPool(firstOnly(karkinos, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_HORN.get(), 1))
-                .withPool(firstOnly(karkinos, net.minecraft.world.item.Items.HEART_OF_THE_SEA, 1))
+                .withPool(chance(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_HORN.get(), RARE))
+                .withPool(chance(net.minecraft.world.item.Items.HEART_OF_THE_SEA, RARE))
                 .withPool(firstOnly(karkinos, ModItems.HEART_CRYSTAL.get(), 1))
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.CRAB_CLAW.get(), 0, 1))
-                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.CRAB_MEAT.get(), 2, 4))
-                .withPool(drop(net.minecraft.world.item.Items.PRISMARINE_CRYSTALS, 4, 8))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.CRAB_MEAT.get(), 1, 3))
+                .withPool(drop(net.minecraft.world.item.Items.PRISMARINE_CRYSTALS, 2, 4))
                 .withPool(drop(net.minecraft.world.item.Items.NAUTILUS_SHELL, 0, 1))
-                .withPool(drop(ModItems.GOLD_COIN.get(), 2, 5))
-                .withPool(drop(ModItems.GEMSTONE.get(), 0, 2)));
-        // der Kraken (0.91, mit dem Gezeitenhorn zurückzurufen): die Krakenangel beim ersten eigenen Sieg sicher, danach selten;
-        // Herzkristall und Herz des Meeres nur beim ersten Sieg; Tinte, Nautilusse und etwas aus den Wracks
+                .withPool(drop(ModItems.GOLD_COIN.get(), 1, 2))
+                .withPool(drop(ModItems.GEMSTONE.get(), 0, 1)));
+        // der Kraken (0.91, mit dem Gezeitenhorn zurückzurufen): die Krakenangel selten (auch beim ersten Sieg), das Herz des
+        // Meeres selten; der Herzkristall nur beim ersten eigenen Sieg; Tinte, ein Nautilus und wenig aus den Wracks
         EntityType<?> kraken = ModEntities.KRAKEN.get();
         this.add(kraken, signature(LootTable.lootTable(), kraken,
                 io.github.sirschrolli.kingdomsatwar.registry.FishingItems.rod(io.github.sirschrolli.kingdomsatwar.fishing.RodType.KRAKEN))
                 .withPool(firstOnly(kraken, ModItems.HEART_CRYSTAL.get(), 1))
-                .withPool(firstOnly(kraken, net.minecraft.world.item.Items.HEART_OF_THE_SEA, 1))
-                .withPool(drop(net.minecraft.world.item.Items.INK_SAC, 6, 10))
-                .withPool(drop(net.minecraft.world.item.Items.GLOW_INK_SAC, 3, 6))
-                .withPool(drop(net.minecraft.world.item.Items.NAUTILUS_SHELL, 1, 2))
-                .withPool(drop(net.minecraft.world.item.Items.PRISMARINE_CRYSTALS, 5, 10))
-                .withPool(drop(net.minecraft.world.item.Items.DIAMOND, 0, 2))
-                .withPool(drop(ModItems.GEMSTONE.get(), 1, 2))
-                .withPool(drop(ModItems.GOLD_COIN.get(), 4, 8)));
+                .withPool(chance(net.minecraft.world.item.Items.HEART_OF_THE_SEA, RARE))
+                .withPool(drop(net.minecraft.world.item.Items.INK_SAC, 3, 6))
+                .withPool(drop(net.minecraft.world.item.Items.GLOW_INK_SAC, 1, 3))
+                .withPool(drop(net.minecraft.world.item.Items.NAUTILUS_SHELL, 0, 1))
+                .withPool(drop(net.minecraft.world.item.Items.PRISMARINE_CRYSTALS, 2, 5))
+                .withPool(drop(net.minecraft.world.item.Items.DIAMOND, 0, 1))
+                .withPool(drop(ModItems.GEMSTONE.get(), 0, 1))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 2, 3)));
         // Wesen des Feenreichs: Feen lassen beim Sterben Feenstaub, Pilzlinge Laternenpilze, Dornwichte Stöcke und Dornen
         this.add(ModEntities.FAIRY.get(), LootTable.lootTable()
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST.get(), 0, 1)));
@@ -428,27 +427,27 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.THORNBRIAR.get(), 0, 2))
                 .withPool(rare(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST.get(), 0.25f, 0.05f))
                 .withPool(drop(ModItems.SILVER_COIN.get(), 0, 2)));
-        // Noctua, die Mottenkönigin (auf dem Altar spinnt sich nach jedem Sieg ein neuer Kokon): die Feen-Elytren beim ersten
-        // eigenen Sieg sicher, danach selten; der Herzkristall nur beim ersten Sieg; Feenstaub, Mottenseide und etwas Gold;
-        // ihre Mondfalter verglimmen ohne Beute
+        // Noctua, die Mottenkönigin (auf dem Altar spinnt sich nach jedem Sieg ein neuer Kokon): die Feen-Elytren selten (auch
+        // beim ersten Sieg); der Herzkristall nur beim ersten eigenen Sieg; Feenstaub, Mottenseide und ein wenig Gold; ihre
+        // Mondfalter verglimmen ohne Beute
         EntityType<?> noctua = ModEntities.MOTH_QUEEN.get();
         this.add(noctua, signature(LootTable.lootTable(), noctua, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_ELYTRA.get())
                 .withPool(firstOnly(noctua, ModItems.HEART_CRYSTAL.get(), 1))
-                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST.get(), 4, 8))
-                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOTH_SILK.get(), 2, 4))
-                .withPool(drop(ModItems.GEMSTONE.get(), 0, 2))
-                .withPool(drop(ModItems.GOLD_COIN.get(), 2, 5)));
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST.get(), 2, 4))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOTH_SILK.get(), 1, 2))
+                .withPool(drop(ModItems.GEMSTONE.get(), 0, 1))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 1, 2)));
         this.add(ModEntities.MOON_MOTH.get(), LootTable.lootTable());
-        // der Steinhüter (mit Mondstein neu zu wecken) – seine Rüstung ist die Mondsteinrüstung: der Hüterhammer beim ersten
-        // eigenen Sieg sicher, danach selten; der Herzkristall nur beim ersten Sieg; sonst nur Werkstoff der Rüstung, maßvoll
+        // der Steinhüter (mit Mondstein neu zu wecken) – seine Rüstung ist die Mondsteinrüstung: der Hüterhammer selten (auch beim
+        // ersten Sieg); der Herzkristall nur beim ersten eigenen Sieg; sonst nur Werkstoff der Rüstung, maßvoll
         // (Mondstein für etwa ein Teil, Feenstaub); seine Felsbrocken zerschellen ohne Beute
         EntityType<?> keeper = ModEntities.STONE_KEEPER.get();
         this.add(keeper, signature(LootTable.lootTable(), keeper, io.github.sirschrolli.kingdomsatwar.registry.FaeGear.KEEPER_MAUL.get())
                 .withPool(firstOnly(keeper, ModItems.HEART_CRYSTAL.get(), 1))
                 .withPool(material(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOONSTONE.get(), 3, 5))
                 .withPool(material(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST.get(), 1, 2)));
-        // die Meerhexe (0.97, mit einer Perle neu zu wecken) – ihre Rüstung ist die Aquamarinrüstung: der Hexenstab beim
-        // ersten eigenen Sieg sicher, danach selten; der Herzkristall nur beim ersten Sieg; sonst nur Werkstoff der Rüstung,
+        // die Meerhexe (0.97, mit einer Perle neu zu wecken) – ihre Rüstung ist die Aquamarinrüstung: der Hexenstab selten
+        // (auch beim ersten Sieg); der Herzkristall nur beim ersten eigenen Sieg; sonst nur Werkstoff der Rüstung,
         // maßvoll (Aquamarin für etwa ein Teil, manchmal eine Perle); ihre Tinte hinterlässt nichts
         EntityType<?> witch = ModEntities.SEA_WITCH.get();
         this.add(witch, signature(LootTable.lootTable(), witch, io.github.sirschrolli.kingdomsatwar.registry.SeaWitch.WITCH_STAFF.get())
@@ -456,14 +455,14 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(material(io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE.get(), 3, 5))
                 .withPool(material(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.PEARL.get(), 0, 1)));
         // der Seelenhirte (0.98, mit einem Seelenkristall neu zu wecken) – seine Rüstung ist die Dämmerrüstung: der Hirtenstab
-        // beim ersten eigenen Sieg sicher, danach selten; der Herzkristall nur beim ersten Sieg; sonst nur Werkstoff der
+        // selten (auch beim ersten Sieg); der Herzkristall nur beim ersten eigenen Sieg; sonst nur Werkstoff der
         // Rüstung, maßvoll (Dämmerquarz für etwa ein Teil); seine Irrlichter hinterlassen nichts
         EntityType<?> shepherd = ModEntities.SOUL_SHEPHERD.get();
         this.add(shepherd, signature(LootTable.lootTable(), shepherd, io.github.sirschrolli.kingdomsatwar.registry.SoulShepherd.CROOK.get())
                 .withPool(firstOnly(shepherd, ModItems.HEART_CRYSTAL.get(), 1))
                 .withPool(material(io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ.get(), 2, 4)));
         // die Sternenweberin (0.99, mit Himmelseisen neu zu wecken) – ihre Rüstung ist die Sternenwandlerrüstung: der
-        // Sternenbogen beim ersten eigenen Sieg sicher, danach selten; der Herzkristall nur beim ersten Sieg; sonst nur Werkstoff
+        // Sternenbogen selten (auch beim ersten Sieg); der Herzkristall nur beim ersten eigenen Sieg; sonst nur Werkstoff
         // der Rüstung, maßvoll (Himmelseisen für etwa ein Teil, manchmal ein Leerensplitter); ihre Brut, ihre Netzballen und
         // Pfeile hinterlassen nichts
         EntityType<?> weaver = ModEntities.STAR_WEAVER.get();
@@ -471,50 +470,50 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(firstOnly(weaver, ModItems.HEART_CRYSTAL.get(), 1))
                 .withPool(material(io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_INGOT.get(), 3, 5))
                 .withPool(material(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_SHARD.get(), 0, 1)));
-        // der Stundenwächter (1.1, mit Chronit neu zu wecken) – seine Rüstung ist die Zeitwächterrüstung: der Minutenzeiger beim
-        // ersten eigenen Sieg sicher, danach selten; der Herzkristall nur beim ersten Sieg; sonst nur Werkstoff der Rüstung,
+        // der Stundenwächter (1.1, mit Chronit neu zu wecken) – seine Rüstung ist die Zeitwächterrüstung: der Minutenzeiger selten
+        // (auch beim ersten Sieg); der Herzkristall nur beim ersten eigenen Sieg; sonst nur Werkstoff der Rüstung,
         // maßvoll (Chronit für etwa ein Teil); seine Zahnräder und das Pendel hinterlassen nichts
         EntityType<?> warden = ModEntities.HOUR_WARDEN.get();
         this.add(warden, signature(LootTable.lootTable(), warden, io.github.sirschrolli.kingdomsatwar.registry.ClockTower.MINUTE_HAND.get())
                 .withPool(firstOnly(warden, ModItems.HEART_CRYSTAL.get(), 1))
                 .withPool(material(io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT.get(), 3, 5)));
-        // Malleus, der Glutschmied (ein Netheritbarren facht den Amboss wieder an): der Glutspeer beim ersten eigenen Sieg
-        // sicher, danach selten; der Herzkristall nur beim ersten Sieg; Glutklumpen, Gold und selten Netheritschrott; seine
+        // Malleus, der Glutschmied (ein Netheritbarren facht den Amboss wieder an): der Glutspeer selten (auch beim ersten
+        // Sieg); der Herzkristall nur beim ersten eigenen Sieg; Glutklumpen, ein wenig Gold und selten Netheritschrott; seine
         // Glutklumpen zerplatzen ohne Beute
         EntityType<?> malleus = ModEntities.GLUTSCHMIED.get();
         this.add(malleus, signature(LootTable.lootTable(), malleus, io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.GLUT_SPEAR.get())
                 .withPool(firstOnly(malleus, ModItems.HEART_CRYSTAL.get(), 1))
-                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.MOLTEN_GLOB.get(), 1, 3))
-                .withPool(rare(net.minecraft.world.item.Items.NETHERITE_SCRAP, 0.35f, 0.05f))
-                .withPool(drop(net.minecraft.world.item.Items.GOLD_INGOT, 2, 4))
-                .withPool(drop(ModItems.GEMSTONE.get(), 0, 2))
-                .withPool(drop(ModItems.GOLD_COIN.get(), 2, 5)));
-        // Asteria, die Sternenreiterin (ein Endkristall entzündet den Sternstein neu): Lanze und Schwingen ihres Rochens beim
-        // ersten eigenen Sieg sicher, danach selten; der Herzkristall nur beim ersten Sieg; Sternsplitter und etwas aus dem End
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.MOLTEN_GLOB.get(), 1, 2))
+                .withPool(rare(net.minecraft.world.item.Items.NETHERITE_SCRAP, 0.15f, 0.03f))
+                .withPool(drop(net.minecraft.world.item.Items.GOLD_INGOT, 1, 2))
+                .withPool(drop(ModItems.GEMSTONE.get(), 0, 1))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 1, 2)));
+        // Asteria, die Sternenreiterin (ein Endkristall entzündet den Sternstein neu): Lanze und Schwingen ihres Rochens selten
+        // (auch beim ersten Sieg); der Herzkristall nur beim ersten eigenen Sieg; Sternsplitter und ein wenig aus dem End
         EntityType<?> asteria = ModEntities.ASTERIA.get();
         LootTable.Builder asteriaLoot = signature(LootTable.lootTable(), asteria, io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_LANCE.get());
         this.add(asteria, signature(asteriaLoot, asteria, io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_WINGS.get())
                 .withPool(firstOnly(asteria, ModItems.HEART_CRYSTAL.get(), 1))
-                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_SHARD.get(), 2, 4))
-                .withPool(drop(net.minecraft.world.item.Items.ENDER_PEARL, 1, 2))
-                .withPool(drop(net.minecraft.world.item.Items.CHORUS_FRUIT, 1, 3))
-                .withPool(drop(net.minecraft.world.item.Items.GOLD_INGOT, 2, 4))
-                .withPool(drop(ModItems.GEMSTONE.get(), 1, 2))
-                .withPool(drop(ModItems.GOLD_COIN.get(), 3, 6)));
-        // MissMystik, die Feen-Zauberkünstlerin (Feenstaub in den Zylinder ruft sie zurück): Kartendeck und Zylinder beim ersten
-        // eigenen Sieg sicher, danach selten; der Herzkristall nur beim ersten Sieg; Feenstaub, Amethyst und etwas Gold
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_SHARD.get(), 1, 2))
+                .withPool(drop(net.minecraft.world.item.Items.ENDER_PEARL, 0, 1))
+                .withPool(drop(net.minecraft.world.item.Items.CHORUS_FRUIT, 0, 2))
+                .withPool(drop(net.minecraft.world.item.Items.GOLD_INGOT, 1, 2))
+                .withPool(drop(ModItems.GEMSTONE.get(), 0, 1))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 1, 3)));
+        // MissMystik, die Feen-Zauberkünstlerin (Feenstaub in den Zylinder ruft sie zurück): Kartendeck und Zylinder selten
+        // (auch beim ersten Sieg); der Herzkristall nur beim ersten eigenen Sieg; Feenstaub, Amethyst und ein wenig Gold
         EntityType<?> mystik = ModEntities.MISS_MYSTIK.get();
         LootTable.Builder mystikLoot = signature(LootTable.lootTable(), mystik, io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.MYSTIC_DECK.get());
         this.add(mystik, signature(mystikLoot, mystik, io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.MYSTIC_TOP_HAT.get())
                 .withPool(firstOnly(mystik, ModItems.HEART_CRYSTAL.get(), 1))
-                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST.get(), 2, 4))
-                .withPool(drop(net.minecraft.world.item.Items.AMETHYST_SHARD, 2, 4))
-                .withPool(drop(net.minecraft.world.item.Items.GOLD_INGOT, 1, 3))
-                .withPool(drop(ModItems.GEMSTONE.get(), 0, 2))
-                .withPool(drop(ModItems.GOLD_COIN.get(), 2, 5)));
-        // Schrolli der Schöpfer (ein neuer Schöpferfunke ruft ihn erneut): Zepter, Schwingen, Heiligenschein und Ringe beim
-        // ersten eigenen Sieg sicher, danach selten; Herz- und Manakristalle, Goldäpfel und das Totem nur beim ersten Sieg;
-        // dazu die größten Schätze der Mod – beim ersten Sieg doppelt (liegen vor seinem Thron)
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST.get(), 1, 2))
+                .withPool(drop(net.minecraft.world.item.Items.AMETHYST_SHARD, 1, 2))
+                .withPool(drop(net.minecraft.world.item.Items.GOLD_INGOT, 0, 2))
+                .withPool(drop(ModItems.GEMSTONE.get(), 0, 1))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 1, 2)));
+        // Schrolli der Schöpfer (ein neuer Schöpferfunke ruft ihn erneut): Zepter, Schwingen, Heiligenschein und Ringe selten
+        // (auch beim ersten Sieg); Herz- und Manakristalle nur beim ersten eigenen Sieg; Goldapfel und Totem selten; dazu ein
+        // Netherstern, ein Buch des Arkanen und Schätze, maßvoll (liegen vor seinem Thron)
         EntityType<?> schrolli = ModEntities.SCHROLLI.get();
         LootTable.Builder schrolliLoot = LootTable.lootTable();
         for (ItemLike gear : new ItemLike[] {io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_SCEPTER.get(),
@@ -526,35 +525,27 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         this.add(schrolli, schrolliLoot
                 .withPool(firstOnly(schrolli, ModItems.HEART_CRYSTAL.get(), 3))
                 .withPool(firstOnly(schrolli, ModItems.MANA_CRYSTAL.get(), 3))
-                .withPool(firstOnly(schrolli, net.minecraft.world.item.Items.ENCHANTED_GOLDEN_APPLE, 2))
-                .withPool(firstOnly(schrolli, net.minecraft.world.item.Items.TOTEM_OF_UNDYING, 1))
+                .withPool(chance(net.minecraft.world.item.Items.ENCHANTED_GOLDEN_APPLE, 0.25f))
+                .withPool(chance(net.minecraft.world.item.Items.TOTEM_OF_UNDYING, RARE))
                 .withPool(exactly(net.minecraft.world.item.Items.NETHER_STAR, 1))
-                .withPool(firstOnly(schrolli, net.minecraft.world.item.Items.NETHER_STAR, 1))
                 .withPool(this.modBook(io.github.sirschrolli.kingdomsatwar.registry.ModTags.Enchantments.LOOT_ARCANE, 100))
-                .withPool(this.modBook(io.github.sirschrolli.kingdomsatwar.registry.ModTags.Enchantments.LOOT_ARCANE, 100)
-                        .when(firstVictory(schrolli)))
-                .withPool(drop(net.minecraft.world.item.Items.NETHERITE_INGOT, 1, 2))
-                .withPool(drop(net.minecraft.world.item.Items.NETHERITE_INGOT, 1, 2).when(firstVictory(schrolli)))
-                .withPool(drop(net.minecraft.world.item.Items.DIAMOND_BLOCK, 1, 3))
-                .withPool(drop(net.minecraft.world.item.Items.DIAMOND_BLOCK, 2, 3).when(firstVictory(schrolli)))
-                .withPool(drop(net.minecraft.world.item.Items.GOLD_BLOCK, 3, 6))
-                .withPool(drop(net.minecraft.world.item.Items.GOLD_BLOCK, 5, 10).when(firstVictory(schrolli)))
-                .withPool(drop(ModItems.GEMSTONE.get(), 4, 8))
-                .withPool(drop(ModItems.GEMSTONE.get(), 6, 8).when(firstVictory(schrolli)))
-                .withPool(drop(ModItems.GOLD_COIN.get(), 16, 32))
-                .withPool(drop(ModItems.GOLD_COIN.get(), 24, 32).when(firstVictory(schrolli))));
-        // Anni der Troll (ein Redstoneblock startet den Fehlerkern neu): Bannhammer und Fehlerflügel beim ersten eigenen Sieg
-        // sicher, danach selten; der Herzkristall nur beim ersten Sieg; Fehlersplitter und Redstone aus der kaputten Welt
+                .withPool(exactly(net.minecraft.world.item.Items.NETHERITE_INGOT, 1))
+                .withPool(exactly(net.minecraft.world.item.Items.DIAMOND_BLOCK, 1))
+                .withPool(drop(net.minecraft.world.item.Items.GOLD_BLOCK, 1, 3))
+                .withPool(drop(ModItems.GEMSTONE.get(), 2, 4))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 6, 12)));
+        // Anni der Troll (ein Redstoneblock startet den Fehlerkern neu): Bannhammer und Fehlerflügel selten (auch beim ersten
+        // Sieg); der Herzkristall nur beim ersten eigenen Sieg; ein paar Fehlersplitter und Redstone aus der kaputten Welt
         EntityType<?> anni = ModEntities.ANNI_TROLL.get();
         LootTable.Builder anniLoot = signature(LootTable.lootTable(), anni, io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.BANNHAMMER.get());
         this.add(anni, signature(anniLoot, anni, io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.GLITCH_WINGS.get())
                 .withPool(firstOnly(anni, ModItems.HEART_CRYSTAL.get(), 1))
-                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.GLITCH_SHARD.get(), 2, 4))
-                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.MISSING_BLOCK.get(), 1, 2))
-                .withPool(drop(net.minecraft.world.item.Items.REDSTONE, 4, 8))
-                .withPool(drop(net.minecraft.world.item.Items.DIAMOND, 0, 2))
-                .withPool(drop(ModItems.GEMSTONE.get(), 1, 2))
-                .withPool(drop(ModItems.GOLD_COIN.get(), 4, 7)));
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.GLITCH_SHARD.get(), 1, 2))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.MISSING_BLOCK.get(), 0, 1))
+                .withPool(drop(net.minecraft.world.item.Items.REDSTONE, 2, 4))
+                .withPool(drop(net.minecraft.world.item.Items.DIAMOND, 0, 1))
+                .withPool(drop(ModItems.GEMSTONE.get(), 0, 1))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 2, 3)));
         // Umbrer lassen nichts fallen (wie Dorfbewohner), Wächter ein wenig Mondsilber
         this.add(ModEntities.UMBRER.get(), LootTable.lootTable());
         this.add(ModEntities.UMBRER_GUARD.get(), LootTable.lootTable()
@@ -597,18 +588,21 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                         .addStat(Stats.ENTITY_KILLED, boss.builtInRegistryHolder(), MinMaxBounds.Ints.exactly(1)).build()));
     }
 
-    /** Das Sonderstück eines Bosses, der mehrfach kommt: beim ersten eigenen Sieg sicher, danach selten. */
+    /** So selten fällt das Sonderstück eines Bosses, der mehrfach kommt (und anderes Wertvolle). */
+    private static final float RARE = io.github.sirschrolli.kingdomsatwar.entity.boss.BossLoot.SIGNATURE_CHANCE;
+
+    /** Das Sonderstück eines Bosses, der mehrfach kommt: bei jedem Sieg selten – auch beim ersten (seit 1.1.5). */
     private static LootTable.Builder signature(LootTable.Builder table, EntityType<?> boss, ItemLike item) {
-        return table
-                .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1)).add(LootItem.lootTableItem(item))
-                        .when(firstVictory(boss)))
-                .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1)).add(LootItem.lootTableItem(item))
-                        .when(InvertedLootItemCondition.invert(firstVictory(boss)))
-                        .when(LootItemRandomChanceCondition.randomChance(
-                                io.github.sirschrolli.kingdomsatwar.entity.boss.BossLoot.SIGNATURE_CHANCE)));
+        return table.withPool(chance(item, RARE));
     }
 
-    /** Nur beim ersten eigenen Sieg (Herz- und Manakristalle, das Gezeitenhorn, das Herz des Meeres …). */
+    /** Ein Stück mit dieser Wahrscheinlichkeit, ohne Plünderung. */
+    private static LootPool.Builder chance(ItemLike item, float probability) {
+        return LootPool.lootPool().setRolls(ContextIntProviders.exactly(1)).add(LootItem.lootTableItem(item))
+                .when(LootItemRandomChanceCondition.randomChance(probability));
+    }
+
+    /** Nur beim ersten eigenen Sieg (Herz- und Manakristalle). */
     private static LootPool.Builder firstOnly(EntityType<?> boss, ItemLike item, int count) {
         return exactly(item, count).when(firstVictory(boss));
     }

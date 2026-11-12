@@ -28,7 +28,6 @@ import net.minecraft.gametest.framework.TestData;
 import net.minecraft.gametest.framework.TestEnvironmentDefinition;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffects;
@@ -377,16 +376,14 @@ final class ReefGameTests {
 
     private static void death(GameTestHelper helper, ServerLevel level, ReefColossusEntity boss, AtollCoreBlockEntity core, BlockPos center) {
         boss.setHealth(1.0f);
-        // ein erster Sieg: der Speer fällt sicher (der Spieler bleibt, bis Karkinos ihn mitten im Sterben loslässt)
-        ServerPlayer victor = BossLootGameTests.challenger(helper);
-        BossLootGameTests.finish(level, boss, victor, 50.0f);
+        // ein erster Sieg: der Herzkristall fällt sicher (der Gezeiten-Speer nur selten)
+        BossLootGameTests.firstVictory(helper, boss, 50.0f);
         helper.assertTrue(boss.isDeadOrDying(), "Karkinos fällt nicht");
         helper.runAfterDelay(ReefColossusEntity.DEATH_TICKS + 8, () -> {
-            BossLootGameTests.leave(level, victor);
             helper.assertTrue(core.phase() == AtollCoreBlockEntity.Phase.DEFEATED, "Das Atoll merkt den Sieg nicht");
             AABB area = new AABB(center).inflate(40);
-            helper.assertFalse(level.getEntitiesOfClass(ItemEntity.class, area, e -> e.getItem().is(SeaBlocks.TIDE_SPEAR.get())).isEmpty(),
-                    "Karkinos lässt den Gezeiten-Speer nicht fallen");
+            helper.assertFalse(level.getEntitiesOfClass(ItemEntity.class, area, e -> e.getItem().is(io.github.sirschrolli.kingdomsatwar.registry.ModItems.HEART_CRYSTAL.get())).isEmpty(),
+                    "Karkinos lässt keinen Herzkristall fallen");
             helper.assertTrue(level.getEntitiesOfClass(GiantCrabEntity.class, area, net.minecraft.world.entity.Entity::isAlive).isEmpty(),
                     "Die Brut bleibt nach seinem Tod");
             // das Gezeitenhorn ruft ihn zurück

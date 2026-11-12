@@ -361,8 +361,8 @@ final class KrakenGameTests {
                 .thenExecuteAfter(KrakenEntity.DEATH_TICKS + 8, () -> {
                     helper.assertTrue(core.phase() == KrakenCoreBlockEntity.Phase.DEFEATED, "Der Schlund merkt den Sieg nicht");
                     AABB area = new AABB(center).inflate(40.0);
-                    helper.assertFalse(level.getEntitiesOfClass(ItemEntity.class, area, e -> e.getItem().is(FishingItems.rod(RodType.KRAKEN))).isEmpty(),
-                            "Der Kraken lässt die Krakenangel nicht fallen");
+                    helper.assertFalse(level.getEntitiesOfClass(ItemEntity.class, area, e -> e.getItem().is(io.github.sirschrolli.kingdomsatwar.registry.ModItems.HEART_CRYSTAL.get())).isEmpty(),
+                            "Der Kraken lässt keinen Herzkristall fallen");
                     helper.assertTrue(level.getEntitiesOfClass(SharkEntity.class, area, Entity::isAlive).isEmpty(), "Die Haie bleiben nach seinem Tod");
                     helper.assertTrue(level.getEntitiesOfClass(KrakenEntity.class, area, Entity::isAlive).isEmpty(), "Der Kraken bleibt nach dem Tod");
                     // das Gezeitenhorn ruft ihn zurück

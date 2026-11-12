@@ -3,27 +3,12 @@
   "pools": [
     {
       "condition": {
-        "type": "minecraft:entity_properties",
-        "entity": "attacking_player",
-        "predicate": {
-          "minecraft:type_specific/player": {
-            "stats": [
-              {
-                "type": "minecraft:killed",
-                "stat": "kingdomsatwar:reef_colossus",
-                "value": 1
-              }
-            ]
-          }
-        }
+        "type": "minecraft:random_chance",
+        "chance": 0.2
       },
       "entries": [
         {
           "type": "minecraft:item",
-          "modifier": {
-            "type": "minecraft:set_count",
-            "count": 1
-          },
           "name": "kingdomsatwar:tide_horn"
         }
       ],
@@ -31,27 +16,12 @@
     },
     {
       "condition": {
-        "type": "minecraft:entity_properties",
-        "entity": "attacking_player",
-        "predicate": {
-          "minecraft:type_specific/player": {
-            "stats": [
-              {
-                "type": "minecraft:killed",
-                "stat": "kingdomsatwar:reef_colossus",
-                "value": 1
-              }
-            ]
-          }
-        }
+        "type": "minecraft:random_chance",
+        "chance": 0.2
       },
       "entries": [
         {
           "type": "minecraft:item",
-          "modifier": {
-            "type": "minecraft:set_count",
-            "count": 1
-          },
           "name": "minecraft:heart_of_the_sea"
         }
       ],
@@ -122,8 +92,8 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 4,
-                "min": 2
+                "max": 3,
+                "min": 1
               }
             },
             {
@@ -150,8 +120,8 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 8,
-                "min": 4
+                "max": 4,
+                "min": 2
               }
             },
             {
@@ -206,8 +176,8 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 5,
-                "min": 2
+                "max": 2,
+                "min": 1
               }
             },
             {
@@ -234,7 +204,7 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 2,
+                "max": 1,
                 "min": 0
               }
             },

@@ -169,8 +169,8 @@ final class ForgeGameTests {
             helper.assertTrue(level.getBlockState(pos).getValue(GlutAnvilBlock.PHASE) == GlutAnvilBlock.Phase.COLD, "Der Amboss erkaltet nicht");
             helper.runAfterDelay(GlutschmiedEntity.DEATH_TICKS + 5, () -> {
                 helper.assertTrue(smith.isRemoved(), "Er zerfällt nicht");
-                helper.assertFalse(level.getEntitiesOfClass(ItemEntity.class, area, e -> e.getItem().is(ForgeBlocks.GLUT_SPEAR.get())).isEmpty(),
-                        "Er lässt den Glutspeer nicht fallen");
+                helper.assertFalse(level.getEntitiesOfClass(ItemEntity.class, area, e -> e.getItem().is(io.github.sirschrolli.kingdomsatwar.registry.ModItems.HEART_CRYSTAL.get())).isEmpty(),
+                        "Er lässt keinen Herzkristall fallen");
                 // ein Netheritbarren facht die Esse neu an
                 helper.assertTrue(forge.rekindle(level, null), "Netherit facht die Esse nicht an");
                 var again = level.getEntitiesOfClass(GlutschmiedEntity.class, area, LivingEntity::isAlive);

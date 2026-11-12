@@ -482,8 +482,8 @@ final class SoulShepherdGameTests {
         helper.assertTrue(shepherd.isDeadOrDying(), "Der Hirte stirbt nicht");
         helper.runAfterDelay(SoulShepherdEntity.DEATH_TICKS + 6, () -> {
             helper.assertTrue(shepherd.isRemoved(), "Der Hirte zerfällt nicht");
-            boolean crook = !level.getEntitiesOfClass(ItemEntity.class, around, e -> e.getItem().is(SoulShepherd.CROOK.get())).isEmpty();
-            helper.assertTrue(crook, "Er lässt den Hirtenstab nicht fallen");
+            boolean crystal = !level.getEntitiesOfClass(ItemEntity.class, around, e -> e.getItem().is(io.github.sirschrolli.kingdomsatwar.registry.ModItems.HEART_CRYSTAL.get())).isEmpty();
+            helper.assertTrue(crystal, "Er lässt keinen Herzkristall fallen");
             helper.assertTrue(level.getBlockState(bellPos).getValue(SoulBellBlock.PHASE) == SoulBellBlock.Phase.DEFEATED,
                     "Die Glocke verstummt nicht");
             helper.assertTrue(bell.recall(level, null), "Ein Seelenkristall ruft ihn nicht zurück");

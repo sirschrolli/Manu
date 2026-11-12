@@ -396,7 +396,7 @@ final class KeeperGameTests {
         helper.runAfterDelay(StoneKeeperEntity.DEATH_TICKS + 5, () -> {
             helper.assertTrue(keeper.isRemoved(), "Er zerfällt nicht");
             List<ItemEntity> drops = level.getEntitiesOfClass(ItemEntity.class, area, e -> true);
-            helper.assertTrue(drops.stream().anyMatch(e -> e.getItem().is(FaeGear.KEEPER_MAUL.get())), "Er lässt den Hüterhammer nicht fallen");
+            helper.assertTrue(drops.stream().anyMatch(e -> e.getItem().is(io.github.sirschrolli.kingdomsatwar.registry.ModItems.HEART_CRYSTAL.get())), "Er lässt keinen Herzkristall fallen");
             helper.assertTrue(drops.stream().anyMatch(e -> e.getItem().is(FaeBlocks.MOONSTONE.get())), "Er lässt keinen Mondstein fallen");
             drops.forEach(Entity::discard);
             helper.assertTrue(stone.recall(level, null), "Ein Mondstein ruft keinen neuen Hüter");

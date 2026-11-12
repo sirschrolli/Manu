@@ -212,10 +212,8 @@ final class MystikGameTests {
                         helper.runAfterDelay(MissMystikEntity.DEATH_TICKS + 5, () -> {
                             helper.assertTrue(mystik.isRemoved(), "Sie vergeht nicht");
                             var drops = level.getEntitiesOfClass(ItemEntity.class, area, e -> true);
-                            helper.assertTrue(drops.stream().anyMatch(e -> e.getItem().is(MystikBlocks.MYSTIC_DECK.get())),
-                                    "Sie lässt das Kartendeck nicht fallen");
-                            helper.assertTrue(drops.stream().anyMatch(e -> e.getItem().is(MystikBlocks.MYSTIC_TOP_HAT.get())),
-                                    "Sie lässt den Zylinder nicht fallen");
+                            helper.assertTrue(drops.stream().anyMatch(e -> e.getItem().is(io.github.sirschrolli.kingdomsatwar.registry.ModItems.HEART_CRYSTAL.get())),
+                                    "Sie lässt keinen Herzkristall fallen");
                             drops.forEach(Entity::discard);
                             helper.assertTrue(hat.refill(level, null), "Feenstaub ruft sie nicht zurück");
                             var again = level.getEntitiesOfClass(MissMystikEntity.class, area, e -> e.isAlive() && pos.equals(e.home()));

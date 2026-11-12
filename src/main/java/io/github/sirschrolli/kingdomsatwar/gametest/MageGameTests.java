@@ -8,7 +8,6 @@ import io.github.sirschrolli.kingdomsatwar.entity.boss.mage.MageBossEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.mage.MageImageEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.mage.MagicMissile;
 import io.github.sirschrolli.kingdomsatwar.loot.ModLootTables;
-import io.github.sirschrolli.kingdomsatwar.magic.Spell;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
 import io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures;
@@ -234,8 +233,8 @@ final class MageGameTests {
      * Sanktum betritt. Gegen sein Element ist er gefeit; sein Runenschild fängt vier Schläge ab und zerbricht; seine
      * Geschosse lassen sich zurückschlagen; ein Spiegelbild zerplatzt beim ersten Treffer. Unter zwei Dritteln beginnt die
      * zweite Phase (beim Wechsel unverwundbar). Flieht der Spieler ins Geschoss darunter, ist er kein Ziel mehr – der Magier
-     * kehrt geheilt an seinen Platz zurück. Erneut geweckt und besiegt, lässt er am Ende der Todesanimation seine
-     * Zaubertafel fallen.
+     * kehrt geheilt an seinen Platz zurück. Erneut geweckt und besiegt, lässt er am Ende der Todesanimation seine Beute
+     * fallen – beim ersten eigenen Sieg einen Manakristall (die Zaubertafel nur selten).
      */
     private static void mageBoss(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
@@ -355,8 +354,8 @@ final class MageGameTests {
                 .thenExecute(() -> {
                     helper.assertValueEqual(barriers(level, piece), 0, "Bannsiegel nach dem Sieg");
                     List<ItemEntity> drops = level.getEntitiesOfClass(ItemEntity.class, new AABB(piece.home()).inflate(6.0));
-                    helper.assertTrue(drops.stream().anyMatch(e -> e.getItem().is(ModItems.SPELL_TABLETS.get(Spell.FIRE).get())),
-                            "keine Feuer-Zaubertafel als Beute");
+                    helper.assertTrue(drops.stream().anyMatch(e -> e.getItem().is(ModItems.MANA_CRYSTAL.get())),
+                            "kein Manakristall als Beute beim ersten Sieg");
                     level.getServer().getPlayerList().remove(player);
                     forceChunks(level, piece, false);
                 })

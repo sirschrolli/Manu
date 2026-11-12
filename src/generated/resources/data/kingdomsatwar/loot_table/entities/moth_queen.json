@@ -3,55 +3,8 @@
   "pools": [
     {
       "condition": {
-        "type": "minecraft:entity_properties",
-        "entity": "attacking_player",
-        "predicate": {
-          "minecraft:type_specific/player": {
-            "stats": [
-              {
-                "type": "minecraft:killed",
-                "stat": "kingdomsatwar:moth_queen",
-                "value": 1
-              }
-            ]
-          }
-        }
-      },
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "kingdomsatwar:fae_elytra"
-        }
-      ],
-      "rolls": 1
-    },
-    {
-      "condition": {
-        "type": "minecraft:all_of",
-        "terms": [
-          {
-            "type": "minecraft:inverted",
-            "term": {
-              "type": "minecraft:entity_properties",
-              "entity": "attacking_player",
-              "predicate": {
-                "minecraft:type_specific/player": {
-                  "stats": [
-                    {
-                      "type": "minecraft:killed",
-                      "stat": "kingdomsatwar:moth_queen",
-                      "value": 1
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          {
-            "type": "minecraft:random_chance",
-            "chance": 0.2
-          }
-        ]
+        "type": "minecraft:random_chance",
+        "chance": 0.2
       },
       "entries": [
         {
@@ -98,8 +51,8 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 8,
-                "min": 4
+                "max": 4,
+                "min": 2
               }
             },
             {
@@ -126,8 +79,8 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 4,
-                "min": 2
+                "max": 2,
+                "min": 1
               }
             },
             {
@@ -154,7 +107,7 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 2,
+                "max": 1,
                 "min": 0
               }
             },
@@ -182,8 +135,8 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 5,
-                "min": 2
+                "max": 2,
+                "min": 1
               }
             },
             {

@@ -840,7 +840,7 @@ final class ClockTowerGameTests {
     }
 
     /**
-     * Tod: der Minutenzeiger und ein Herzkristall, das Herz bleibt stehen (und erlischt); Chronit ruft einen neuen Wächter;
+     * Tod: ein Herzkristall und Chronit (der Minutenzeiger nur selten), das Herz bleibt stehen (und erlischt); Chronit ruft einen neuen Wächter;
      * zurückgesetzt steht beim nächsten Besuch wieder einer erstarrt da – wer ihm zu nahe kommt, weckt ihn.
      */
     private static void death(GameTestHelper helper, Field field, ClockHeartBlockEntity heart, HourWardenEntity warden) {
@@ -853,7 +853,7 @@ final class ClockTowerGameTests {
         helper.assertTrue(warden.isDeadOrDying(), "Der Wächter stirbt nicht");
         helper.runAfterDelay(HourWardenEntity.DEATH_TICKS + 6, () -> {
             helper.assertTrue(warden.isRemoved(), "Der Wächter zerspringt nicht");
-            for (var drop : List.of(ClockTower.MINUTE_HAND.get(), ModItems.HEART_CRYSTAL.get(), AbyssGear.CHRONIT.get())) {
+            for (var drop : List.of(ModItems.HEART_CRYSTAL.get(), AbyssGear.CHRONIT.get())) {
                 helper.assertFalse(level.getEntitiesOfClass(ItemEntity.class, around, e -> e.getItem().is(drop)).isEmpty(), "Er lässt nicht fallen: " + drop);
             }
             BlockState stopped = level.getBlockState(heartPos);

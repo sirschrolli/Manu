@@ -53,9 +53,9 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Beute der Bosse, die mehrfach kommen (seit 1.1.3): beim ersten eigenen Sieg das Sonderstück sicher und Herz- oder
- * Manakristalle, bei jedem weiteren Sieg das Sonderstück nur selten und keine Kristalle; Bosse mit eigener Rüstung lassen
- * sonst nur deren Werkstoff fallen, in maßvoller Menge.
+ * Beute der Bosse, die mehrfach kommen (seit 1.1.5): das Sonderstück bei jedem Sieg nur selten – auch beim ersten –, Herz- oder
+ * Manakristalle nur beim ersten eigenen Sieg, wenige Münzen; Bosse mit eigener Rüstung lassen sonst nur deren Werkstoff
+ * fallen, in maßvoller Menge.
  */
 final class BossLootGameTests {
     private static final Identifier ARENA = KingdomsAtWar.id("test_arena");
@@ -73,8 +73,8 @@ final class BossLootGameTests {
     }
 
     /**
-     * Ein Spieler, der diesen Boss noch nie besiegt hat – sein Todesstoß ist sein erster Sieg, dann fallen Sonderstück und
-     * Kristall sicher (siehe {@link BossLoot}). Er steht weit weg am Weltursprung; danach mit {@link #leave} entfernen.
+     * Ein Spieler, der diesen Boss noch nie besiegt hat – sein Todesstoß ist sein erster Sieg, dann fällt der Kristall sicher
+     * (siehe {@link BossLoot}). Er steht weit weg am Weltursprung; danach mit {@link #leave} entfernen.
      */
     static ServerPlayer challenger(GameTestHelper helper) {
         return helper.makeMockServerPlayerInLevel();
@@ -91,8 +91,8 @@ final class BossLootGameTests {
     }
 
     /**
-     * Der erste Sieg eines Spielers über diesen Boss: die Kampftests prüfen so die volle Beute. Der Spieler verlässt das Spiel
-     * gleich wieder, damit er den Rest des Tests nicht stört (die Beute fällt schon beim Tod).
+     * Der erste Sieg eines Spielers über diesen Boss: die Kampftests prüfen so, dass der Herzkristall fällt. Der Spieler
+     * verlässt das Spiel gleich wieder, damit er den Rest des Tests nicht stört (die Beute fällt schon beim Tod).
      */
     static void firstVictory(GameTestHelper helper, LivingEntity boss, float amount) {
         ServerLevel level = helper.getLevel();
@@ -105,41 +105,47 @@ final class BossLootGameTests {
     private record Material(Item item, int min, int max) {}
 
     /**
-     * Ein Boss, der mehrfach kommt: seine Sonderstücke, welcher Kristall wie oft beim ersten Sieg, was er beim ersten Sieg
-     * sonst noch sicher lässt, und – bei Bossen mit eigener Rüstung – der Werkstoff (dann fällt sonst nichts).
+     * Ein Boss, der mehrfach kommt: seine Sonderstücke und was sonst nur selten fällt (beides bei jedem Sieg, auch beim ersten,
+     * etwa zu einem Fünftel), welcher Kristall wie oft beim ersten Sieg (und was beim ersten Sieg sonst noch sicher kommt –
+     * nur weitere Kristalle), wie viele Goldmünzen höchstens fallen (ohne Plünderung) und – bei Bossen mit eigener Rüstung –
+     * der Werkstoff (dann fällt sonst nichts).
      */
-    private record Boss(EntityType<?> type, List<Item> signature, Item crystal, int crystals, List<Item> firstOnly,
-            @Nullable List<Material> armor) {}
+    private record Boss(EntityType<?> type, List<Item> signature, List<Item> rare, Item crystal, int crystals, List<Item> firstOnly,
+            int maxCoins, @Nullable List<Material> armor) {}
 
     private static List<Boss> bosses() {
         Item heart = ModItems.HEART_CRYSTAL.get();
         java.util.ArrayList<Boss> list = new java.util.ArrayList<>(List.of(
-                new Boss(ModEntities.STONE_KEEPER.get(), List.of(FaeGear.KEEPER_MAUL.get()), heart, 1, List.of(),
+                new Boss(ModEntities.STONE_KEEPER.get(), List.of(FaeGear.KEEPER_MAUL.get()), List.of(), heart, 1, List.of(), 0,
                         List.of(new Material(FaeBlocks.MOONSTONE.get(), 3, 5), new Material(FaeBlocks.FAE_DUST.get(), 1, 2))),
-                new Boss(ModEntities.SEA_WITCH.get(), List.of(SeaWitch.WITCH_STAFF.get()), heart, 1, List.of(),
+                new Boss(ModEntities.SEA_WITCH.get(), List.of(SeaWitch.WITCH_STAFF.get()), List.of(), heart, 1, List.of(), 0,
                         List.of(new Material(SeaGear.AQUAMARINE.get(), 3, 5), new Material(SeaBlocks.PEARL.get(), 0, 1))),
-                new Boss(ModEntities.SOUL_SHEPHERD.get(), List.of(SoulShepherd.CROOK.get()), heart, 1, List.of(),
+                new Boss(ModEntities.SOUL_SHEPHERD.get(), List.of(SoulShepherd.CROOK.get()), List.of(), heart, 1, List.of(), 0,
                         List.of(new Material(ShadowGear.DUSK_QUARTZ.get(), 2, 4))),
-                new Boss(ModEntities.STAR_WEAVER.get(), List.of(StarWeaver.STAR_BOW.get()), heart, 1, List.of(),
+                new Boss(ModEntities.STAR_WEAVER.get(), List.of(StarWeaver.STAR_BOW.get()), List.of(), heart, 1, List.of(), 0,
                         List.of(new Material(VoidGear.SKY_IRON_INGOT.get(), 3, 5), new Material(VoidBlocks.VOID_SHARD.get(), 0, 1))),
-                new Boss(ModEntities.HOUR_WARDEN.get(), List.of(ClockTower.MINUTE_HAND.get()), heart, 1, List.of(),
+                new Boss(ModEntities.HOUR_WARDEN.get(), List.of(ClockTower.MINUTE_HAND.get()), List.of(), heart, 1, List.of(), 0,
                         List.of(new Material(AbyssGear.CHRONIT.get(), 3, 5))),
-                new Boss(ModEntities.MISS_MYSTIK.get(), List.of(MystikBlocks.MYSTIC_DECK.get(), MystikBlocks.MYSTIC_TOP_HAT.get()), heart, 1,
-                        List.of(), null),
-                new Boss(ModEntities.ANNI_TROLL.get(), List.of(AnniBlocks.BANNHAMMER.get(), AnniBlocks.GLITCH_WINGS.get()), heart, 1, List.of(),
-                        null),
-                new Boss(ModEntities.GLUTSCHMIED.get(), List.of(ForgeBlocks.GLUT_SPEAR.get()), heart, 1, List.of(), null),
-                new Boss(ModEntities.ASTERIA.get(), List.of(StarBlocks.STAR_LANCE.get(), StarBlocks.STAR_WINGS.get()), heart, 1, List.of(), null),
-                new Boss(ModEntities.MOTH_QUEEN.get(), List.of(FaeBlocks.FAE_ELYTRA.get()), heart, 1, List.of(), null),
-                new Boss(ModEntities.KRAKEN.get(), List.of(FishingItems.rod(RodType.KRAKEN)), heart, 1, List.of(Items.HEART_OF_THE_SEA), null),
+                new Boss(ModEntities.MISS_MYSTIK.get(), List.of(MystikBlocks.MYSTIC_DECK.get(), MystikBlocks.MYSTIC_TOP_HAT.get()), List.of(),
+                        heart, 1, List.of(), 2, null),
+                new Boss(ModEntities.ANNI_TROLL.get(), List.of(AnniBlocks.BANNHAMMER.get(), AnniBlocks.GLITCH_WINGS.get()), List.of(), heart, 1,
+                        List.of(), 3, null),
+                new Boss(ModEntities.GLUTSCHMIED.get(), List.of(ForgeBlocks.GLUT_SPEAR.get()), List.of(), heart, 1, List.of(), 2, null),
+                new Boss(ModEntities.ASTERIA.get(), List.of(StarBlocks.STAR_LANCE.get(), StarBlocks.STAR_WINGS.get()), List.of(), heart, 1,
+                        List.of(), 3, null),
+                new Boss(ModEntities.MOTH_QUEEN.get(), List.of(FaeBlocks.FAE_ELYTRA.get()), List.of(), heart, 1, List.of(), 2, null),
+                new Boss(ModEntities.KRAKEN.get(), List.of(FishingItems.rod(RodType.KRAKEN)), List.of(Items.HEART_OF_THE_SEA), heart, 1,
+                        List.of(), 3, null),
                 // Karkinos: der Gezeiten-Speer bricht aus der Kuppel (eigener Code, nicht in der Tabelle)
-                new Boss(ModEntities.REEF_COLOSSUS.get(), List.of(), heart, 1, List.of(SeaBlocks.TIDE_HORN.get(), Items.HEART_OF_THE_SEA), null),
+                new Boss(ModEntities.REEF_COLOSSUS.get(), List.of(), List.of(SeaBlocks.TIDE_HORN.get(), Items.HEART_OF_THE_SEA), heart, 1,
+                        List.of(), 2, null),
                 new Boss(ModEntities.SCHROLLI.get(), List.of(CreatorBlocks.CREATOR_SCEPTER.get(), CreatorBlocks.CREATOR_WINGS.get(),
-                        CreatorBlocks.CREATOR_HALO.get(), CreatorBlocks.CREATOR_RINGS.get()), heart, 3,
-                        List.of(Items.TOTEM_OF_UNDYING, Items.ENCHANTED_GOLDEN_APPLE, ModItems.MANA_CRYSTAL.get()), null)));
+                        CreatorBlocks.CREATOR_HALO.get(), CreatorBlocks.CREATOR_RINGS.get()), List.of(Items.TOTEM_OF_UNDYING), heart, 3,
+                        List.of(ModItems.MANA_CRYSTAL.get()), 12, null)));
         for (var mage : ModEntities.MAGES.entrySet()) {
             list.add(new Boss(mage.getValue().get(), List.of(ModItems.SPELL_TABLETS.get(
-                    io.github.sirschrolli.kingdomsatwar.magic.Spell.of(mage.getKey())).get()), ModItems.MANA_CRYSTAL.get(), 1, List.of(), null));
+                    io.github.sirschrolli.kingdomsatwar.magic.Spell.of(mage.getKey())).get()), List.of(), ModItems.MANA_CRYSTAL.get(), 1,
+                    List.of(), 2, null));
         }
         return list;
     }
@@ -151,50 +157,41 @@ final class BossLootGameTests {
             for (Boss boss : bosses()) {
                 LootTable table = level.getServer().reloadableRegistries().getLootTable(boss.type().getDefaultLootTable().orElseThrow());
                 String name = EntityType.getKey(boss.type()).getPath();
-
-                // der erste eigene Sieg: alles Besondere sicher
-                player.getStats().setValue(player, Stats.ENTITY_KILLED.get(boss.type()), 1);
-                for (int roll = 0; roll < 20; roll++) {
-                    Map<Item, Integer> loot = roll(table, params(level, player, true));
-                    for (Item item : boss.signature()) {
-                        helper.assertTrue(loot.getOrDefault(item, 0) == 1, name + ": beim ersten Sieg fehlt " + item + " – " + loot);
-                    }
-                    helper.assertTrue(loot.getOrDefault(boss.crystal(), 0) == boss.crystals(),
-                            name + ": beim ersten Sieg nicht " + boss.crystals() + " Kristalle – " + loot);
-                    for (Item item : boss.firstOnly()) {
-                        helper.assertTrue(loot.getOrDefault(item, 0) >= 1, name + ": beim ersten Sieg fehlt " + item + " – " + loot);
-                    }
-                    if (boss.armor() != null) {
-                        armorOnly(helper, name, boss, loot);
-                    }
-                }
-
-                // jeder weitere Sieg – und ein Sieg ohne Spieler (etwa durch Soldaten): Kristalle nie, das Sonderstück selten
-                player.getStats().setValue(player, Stats.ENTITY_KILLED.get(boss.type()), 2);
-                for (boolean withPlayer : new boolean[] {true, false}) {
+                // der erste eigene Sieg (Statistik 1), jeder weitere (2) und ein Sieg ohne Spieler (etwa durch Soldaten)
+                for (int stat : new int[] {1, 2, 0}) {
+                    boolean first = stat == 1;
+                    boolean withPlayer = stat != 0;
+                    player.getStats().setValue(player, Stats.ENTITY_KILLED.get(boss.type()), Math.max(1, stat));
                     int rolls = 400;
-                    Map<Item, Integer> signatures = new HashMap<>();
+                    Map<Item, Integer> seen = new HashMap<>();
                     for (int roll = 0; roll < rolls; roll++) {
                         Map<Item, Integer> loot = roll(table, params(level, player, withPlayer));
-                        helper.assertTrue(!loot.containsKey(ModItems.HEART_CRYSTAL.get()) && !loot.containsKey(ModItems.MANA_CRYSTAL.get()),
-                                name + ": nach dem ersten Sieg noch Kristalle – " + loot);
+                        // Kristalle: beim ersten eigenen Sieg genau so viele, sonst nie
+                        int crystals = loot.getOrDefault(boss.crystal(), 0);
+                        helper.assertTrue(crystals == (first ? boss.crystals() : 0),
+                                name + ": " + crystals + " Kristalle (" + (first ? "erster Sieg" : "danach") + ") – " + loot);
                         for (Item item : boss.firstOnly()) {
-                            if (item != Items.ENCHANTED_GOLDEN_APPLE) {
-                                helper.assertTrue(!loot.containsKey(item), name + ": nach dem ersten Sieg noch " + item + " – " + loot);
-                            }
+                            helper.assertTrue(first == loot.containsKey(item),
+                                    name + ": " + item + (first ? " fehlt beim ersten Sieg" : " fällt auch danach") + " – " + loot);
                         }
+                        helper.assertTrue(loot.getOrDefault(ModItems.GOLD_COIN.get(), 0) <= boss.maxCoins(),
+                                name + ": mehr als " + boss.maxCoins() + " Goldmünzen – " + loot);
                         for (Item item : boss.signature()) {
-                            signatures.merge(item, loot.getOrDefault(item, 0), Integer::sum);
+                            seen.merge(item, loot.getOrDefault(item, 0), Integer::sum);
+                        }
+                        for (Item item : boss.rare()) {
+                            seen.merge(item, loot.getOrDefault(item, 0), Integer::sum);
                         }
                         if (boss.armor() != null) {
                             armorOnly(helper, name, boss, loot);
                         }
                     }
-                    for (Item item : boss.signature()) {
-                        double rate = signatures.getOrDefault(item, 0) / (double) rolls;
+                    // Sonderstücke (und anderes Seltene): bei jedem Sieg selten – auch beim ersten
+                    for (Item item : seen.keySet()) {
+                        double rate = seen.get(item) / (double) rolls;
                         helper.assertTrue(rate > BossLoot.SIGNATURE_CHANCE * 0.5 && rate < BossLoot.SIGNATURE_CHANCE * 1.6,
-                                name + ": " + item + " fällt danach zu " + Math.round(rate * 100) + " % (erwartet etwa "
-                                        + Math.round(BossLoot.SIGNATURE_CHANCE * 100) + " %)");
+                                name + ": " + item + " fällt " + (first ? "beim ersten Sieg" : "danach") + " zu " + Math.round(rate * 100)
+                                        + " % (erwartet etwa " + Math.round(BossLoot.SIGNATURE_CHANCE * 100) + " %)");
                     }
                 }
             }

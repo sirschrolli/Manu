@@ -446,9 +446,13 @@ final class SchrolliGameTests {
 
     /**
      * Der Altar: ohne Funken ruft er nicht; mit Funken ruft eine Berührung den Schöpfer (hier ohne Kampfdimension: am Altar).
-     * Fällt er (zweimal), ist der Funke verglüht, die Beute liegt vor dem Altar (Zepter und Schwingen), und wer dabei war,
-     * ist Gottbezwinger.
+     * Fällt er (zweimal), ist der Funke verglüht, die Beute liegt vor dem Altar (beim ersten eigenen Sieg mit den Herz- und
+     * Manakristallen), und wer dabei war, ist Gottbezwinger.
      */
+    private static int count(List<ItemStack> drops, net.minecraft.world.item.Item item) {
+        return drops.stream().filter(s -> s.is(item)).mapToInt(ItemStack::getCount).sum();
+    }
+
     private static void altar(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         Field field = field(helper, 3, 20);
@@ -488,10 +492,13 @@ final class SchrolliGameTests {
                     try {
                         List<ItemStack> drops = level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, field.area()).stream()
                                 .map(net.minecraft.world.entity.item.ItemEntity::getItem).toList();
-                        helper.assertTrue(drops.stream().anyMatch(s -> s.is(CreatorBlocks.CREATOR_SCEPTER.get())), "Kein Zepter in der Beute");
-                        helper.assertTrue(drops.stream().anyMatch(s -> s.is(CreatorBlocks.CREATOR_WINGS.get())), "Keine Schwingen in der Beute");
-                        helper.assertTrue(drops.stream().anyMatch(s -> s.is(CreatorBlocks.CREATOR_HALO.get())), "Kein Heiligenschein in der Beute");
-                        helper.assertTrue(drops.stream().anyMatch(s -> s.is(CreatorBlocks.CREATOR_RINGS.get())), "Keine Räder in der Beute");
+                        // seit 1.1.5 fallen Zepter, Schwingen, Heiligenschein und Räder nur selten (auch beim ersten Sieg); sicher
+                        // sind beim ersten eigenen Sieg nur je drei Herz- und Manakristalle (und der Netherstern bei jedem)
+                        helper.assertTrue(count(drops, io.github.sirschrolli.kingdomsatwar.registry.ModItems.HEART_CRYSTAL.get()) == 3,
+                                "Keine drei Herzkristalle in der Beute: " + drops);
+                        helper.assertTrue(count(drops, io.github.sirschrolli.kingdomsatwar.registry.ModItems.MANA_CRYSTAL.get()) == 3,
+                                "Keine drei Manakristalle in der Beute: " + drops);
+                        helper.assertTrue(count(drops, net.minecraft.world.item.Items.NETHER_STAR) >= 1, "Kein Netherstern in der Beute: " + drops);
                         helper.assertTrue(Godslayer.is(player), "Wer dabei war, wird nicht Gottbezwinger");
                         helper.assertTrue(player.getDisplayName().toString().contains("title.kingdomsatwar.godslayer.prefix"),
                                 "Kein Titel vor dem Namen: " + player.getDisplayName());

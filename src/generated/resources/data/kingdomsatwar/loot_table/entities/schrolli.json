@@ -3,19 +3,8 @@
   "pools": [
     {
       "condition": {
-        "type": "minecraft:entity_properties",
-        "entity": "attacking_player",
-        "predicate": {
-          "minecraft:type_specific/player": {
-            "stats": [
-              {
-                "type": "minecraft:killed",
-                "stat": "kingdomsatwar:schrolli",
-                "value": 1
-              }
-            ]
-          }
-        }
+        "type": "minecraft:random_chance",
+        "chance": 0.2
       },
       "entries": [
         {
@@ -27,55 +16,8 @@
     },
     {
       "condition": {
-        "type": "minecraft:all_of",
-        "terms": [
-          {
-            "type": "minecraft:inverted",
-            "term": {
-              "type": "minecraft:entity_properties",
-              "entity": "attacking_player",
-              "predicate": {
-                "minecraft:type_specific/player": {
-                  "stats": [
-                    {
-                      "type": "minecraft:killed",
-                      "stat": "kingdomsatwar:schrolli",
-                      "value": 1
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          {
-            "type": "minecraft:random_chance",
-            "chance": 0.2
-          }
-        ]
-      },
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "kingdomsatwar:creator_scepter"
-        }
-      ],
-      "rolls": 1
-    },
-    {
-      "condition": {
-        "type": "minecraft:entity_properties",
-        "entity": "attacking_player",
-        "predicate": {
-          "minecraft:type_specific/player": {
-            "stats": [
-              {
-                "type": "minecraft:killed",
-                "stat": "kingdomsatwar:schrolli",
-                "value": 1
-              }
-            ]
-          }
-        }
+        "type": "minecraft:random_chance",
+        "chance": 0.2
       },
       "entries": [
         {
@@ -87,55 +29,8 @@
     },
     {
       "condition": {
-        "type": "minecraft:all_of",
-        "terms": [
-          {
-            "type": "minecraft:inverted",
-            "term": {
-              "type": "minecraft:entity_properties",
-              "entity": "attacking_player",
-              "predicate": {
-                "minecraft:type_specific/player": {
-                  "stats": [
-                    {
-                      "type": "minecraft:killed",
-                      "stat": "kingdomsatwar:schrolli",
-                      "value": 1
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          {
-            "type": "minecraft:random_chance",
-            "chance": 0.2
-          }
-        ]
-      },
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "kingdomsatwar:creator_wings"
-        }
-      ],
-      "rolls": 1
-    },
-    {
-      "condition": {
-        "type": "minecraft:entity_properties",
-        "entity": "attacking_player",
-        "predicate": {
-          "minecraft:type_specific/player": {
-            "stats": [
-              {
-                "type": "minecraft:killed",
-                "stat": "kingdomsatwar:schrolli",
-                "value": 1
-              }
-            ]
-          }
-        }
+        "type": "minecraft:random_chance",
+        "chance": 0.2
       },
       "entries": [
         {
@@ -147,91 +42,8 @@
     },
     {
       "condition": {
-        "type": "minecraft:all_of",
-        "terms": [
-          {
-            "type": "minecraft:inverted",
-            "term": {
-              "type": "minecraft:entity_properties",
-              "entity": "attacking_player",
-              "predicate": {
-                "minecraft:type_specific/player": {
-                  "stats": [
-                    {
-                      "type": "minecraft:killed",
-                      "stat": "kingdomsatwar:schrolli",
-                      "value": 1
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          {
-            "type": "minecraft:random_chance",
-            "chance": 0.2
-          }
-        ]
-      },
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "kingdomsatwar:creator_halo"
-        }
-      ],
-      "rolls": 1
-    },
-    {
-      "condition": {
-        "type": "minecraft:entity_properties",
-        "entity": "attacking_player",
-        "predicate": {
-          "minecraft:type_specific/player": {
-            "stats": [
-              {
-                "type": "minecraft:killed",
-                "stat": "kingdomsatwar:schrolli",
-                "value": 1
-              }
-            ]
-          }
-        }
-      },
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "kingdomsatwar:creator_rings"
-        }
-      ],
-      "rolls": 1
-    },
-    {
-      "condition": {
-        "type": "minecraft:all_of",
-        "terms": [
-          {
-            "type": "minecraft:inverted",
-            "term": {
-              "type": "minecraft:entity_properties",
-              "entity": "attacking_player",
-              "predicate": {
-                "minecraft:type_specific/player": {
-                  "stats": [
-                    {
-                      "type": "minecraft:killed",
-                      "stat": "kingdomsatwar:schrolli",
-                      "value": 1
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          {
-            "type": "minecraft:random_chance",
-            "chance": 0.2
-          }
-        ]
+        "type": "minecraft:random_chance",
+        "chance": 0.2
       },
       "entries": [
         {
@@ -299,27 +111,12 @@
     },
     {
       "condition": {
-        "type": "minecraft:entity_properties",
-        "entity": "attacking_player",
-        "predicate": {
-          "minecraft:type_specific/player": {
-            "stats": [
-              {
-                "type": "minecraft:killed",
-                "stat": "kingdomsatwar:schrolli",
-                "value": 1
-              }
-            ]
-          }
-        }
+        "type": "minecraft:random_chance",
+        "chance": 0.25
       },
       "entries": [
         {
           "type": "minecraft:item",
-          "modifier": {
-            "type": "minecraft:set_count",
-            "count": 2
-          },
           "name": "minecraft:enchanted_golden_apple"
         }
       ],
@@ -327,27 +124,12 @@
     },
     {
       "condition": {
-        "type": "minecraft:entity_properties",
-        "entity": "attacking_player",
-        "predicate": {
-          "minecraft:type_specific/player": {
-            "stats": [
-              {
-                "type": "minecraft:killed",
-                "stat": "kingdomsatwar:schrolli",
-                "value": 1
-              }
-            ]
-          }
-        }
+        "type": "minecraft:random_chance",
+        "chance": 0.2
       },
       "entries": [
         {
           "type": "minecraft:item",
-          "modifier": {
-            "type": "minecraft:set_count",
-            "count": 1
-          },
           "name": "minecraft:totem_of_undying"
         }
       ],
@@ -367,21 +149,20 @@
       "rolls": 1
     },
     {
-      "condition": {
-        "type": "minecraft:entity_properties",
-        "entity": "attacking_player",
-        "predicate": {
-          "minecraft:type_specific/player": {
-            "stats": [
-              {
-                "type": "minecraft:killed",
-                "stat": "kingdomsatwar:schrolli",
-                "value": 1
-              }
-            ]
-          }
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:enchant_randomly",
+            "options": "#kingdomsatwar:loot/arcane"
+          },
+          "name": "minecraft:book",
+          "weight": 100
         }
-      },
+      ],
+      "rolls": 1
+    },
+    {
       "entries": [
         {
           "type": "minecraft:item",
@@ -389,120 +170,6 @@
             "type": "minecraft:set_count",
             "count": 1
           },
-          "name": "minecraft:nether_star"
-        }
-      ],
-      "rolls": 1
-    },
-    {
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "modifier": {
-            "type": "minecraft:enchant_randomly",
-            "options": "#kingdomsatwar:loot/arcane"
-          },
-          "name": "minecraft:book",
-          "weight": 100
-        }
-      ],
-      "rolls": 1
-    },
-    {
-      "condition": {
-        "type": "minecraft:entity_properties",
-        "entity": "attacking_player",
-        "predicate": {
-          "minecraft:type_specific/player": {
-            "stats": [
-              {
-                "type": "minecraft:killed",
-                "stat": "kingdomsatwar:schrolli",
-                "value": 1
-              }
-            ]
-          }
-        }
-      },
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "modifier": {
-            "type": "minecraft:enchant_randomly",
-            "options": "#kingdomsatwar:loot/arcane"
-          },
-          "name": "minecraft:book",
-          "weight": 100
-        }
-      ],
-      "rolls": 1
-    },
-    {
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "modifier": [
-            {
-              "type": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 2,
-                "min": 1
-              }
-            },
-            {
-              "type": "minecraft:enchanted_count_increase",
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 1.0,
-                "min": 0.0
-              },
-              "enchantment": "minecraft:looting"
-            }
-          ],
-          "name": "minecraft:netherite_ingot"
-        }
-      ],
-      "rolls": 1
-    },
-    {
-      "condition": {
-        "type": "minecraft:entity_properties",
-        "entity": "attacking_player",
-        "predicate": {
-          "minecraft:type_specific/player": {
-            "stats": [
-              {
-                "type": "minecraft:killed",
-                "stat": "kingdomsatwar:schrolli",
-                "value": 1
-              }
-            ]
-          }
-        }
-      },
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "modifier": [
-            {
-              "type": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 2,
-                "min": 1
-              }
-            },
-            {
-              "type": "minecraft:enchanted_count_increase",
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 1.0,
-                "min": 0.0
-              },
-              "enchantment": "minecraft:looting"
-            }
-          ],
           "name": "minecraft:netherite_ingot"
         }
       ],
@@ -512,46 +179,16 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "modifier": [
-            {
-              "type": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 3,
-                "min": 1
-              }
-            },
-            {
-              "type": "minecraft:enchanted_count_increase",
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 1.0,
-                "min": 0.0
-              },
-              "enchantment": "minecraft:looting"
-            }
-          ],
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": 1
+          },
           "name": "minecraft:diamond_block"
         }
       ],
       "rolls": 1
     },
     {
-      "condition": {
-        "type": "minecraft:entity_properties",
-        "entity": "attacking_player",
-        "predicate": {
-          "minecraft:type_specific/player": {
-            "stats": [
-              {
-                "type": "minecraft:killed",
-                "stat": "kingdomsatwar:schrolli",
-                "value": 1
-              }
-            ]
-          }
-        }
-      },
       "entries": [
         {
           "type": "minecraft:item",
@@ -561,6 +198,34 @@
               "count": {
                 "type": "minecraft:uniform",
                 "max": 3,
+                "min": 1
+              }
+            },
+            {
+              "type": "minecraft:enchanted_count_increase",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.0
+              },
+              "enchantment": "minecraft:looting"
+            }
+          ],
+          "name": "minecraft:gold_block"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 4,
                 "min": 2
               }
             },
@@ -574,126 +239,12 @@
               "enchantment": "minecraft:looting"
             }
           ],
-          "name": "minecraft:diamond_block"
-        }
-      ],
-      "rolls": 1
-    },
-    {
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "modifier": [
-            {
-              "type": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 6,
-                "min": 3
-              }
-            },
-            {
-              "type": "minecraft:enchanted_count_increase",
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 1.0,
-                "min": 0.0
-              },
-              "enchantment": "minecraft:looting"
-            }
-          ],
-          "name": "minecraft:gold_block"
-        }
-      ],
-      "rolls": 1
-    },
-    {
-      "condition": {
-        "type": "minecraft:entity_properties",
-        "entity": "attacking_player",
-        "predicate": {
-          "minecraft:type_specific/player": {
-            "stats": [
-              {
-                "type": "minecraft:killed",
-                "stat": "kingdomsatwar:schrolli",
-                "value": 1
-              }
-            ]
-          }
-        }
-      },
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "modifier": [
-            {
-              "type": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 10,
-                "min": 5
-              }
-            },
-            {
-              "type": "minecraft:enchanted_count_increase",
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 1.0,
-                "min": 0.0
-              },
-              "enchantment": "minecraft:looting"
-            }
-          ],
-          "name": "minecraft:gold_block"
-        }
-      ],
-      "rolls": 1
-    },
-    {
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "modifier": [
-            {
-              "type": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 8,
-                "min": 4
-              }
-            },
-            {
-              "type": "minecraft:enchanted_count_increase",
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 1.0,
-                "min": 0.0
-              },
-              "enchantment": "minecraft:looting"
-            }
-          ],
           "name": "kingdomsatwar:gemstone"
         }
       ],
       "rolls": 1
     },
     {
-      "condition": {
-        "type": "minecraft:entity_properties",
-        "entity": "attacking_player",
-        "predicate": {
-          "minecraft:type_specific/player": {
-            "stats": [
-              {
-                "type": "minecraft:killed",
-                "stat": "kingdomsatwar:schrolli",
-                "value": 1
-              }
-            ]
-          }
-        }
-      },
       "entries": [
         {
           "type": "minecraft:item",
@@ -702,79 +253,8 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 8,
+                "max": 12,
                 "min": 6
-              }
-            },
-            {
-              "type": "minecraft:enchanted_count_increase",
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 1.0,
-                "min": 0.0
-              },
-              "enchantment": "minecraft:looting"
-            }
-          ],
-          "name": "kingdomsatwar:gemstone"
-        }
-      ],
-      "rolls": 1
-    },
-    {
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "modifier": [
-            {
-              "type": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 32,
-                "min": 16
-              }
-            },
-            {
-              "type": "minecraft:enchanted_count_increase",
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 1.0,
-                "min": 0.0
-              },
-              "enchantment": "minecraft:looting"
-            }
-          ],
-          "name": "kingdomsatwar:gold_coin"
-        }
-      ],
-      "rolls": 1
-    },
-    {
-      "condition": {
-        "type": "minecraft:entity_properties",
-        "entity": "attacking_player",
-        "predicate": {
-          "minecraft:type_specific/player": {
-            "stats": [
-              {
-                "type": "minecraft:killed",
-                "stat": "kingdomsatwar:schrolli",
-                "value": 1
-              }
-            ]
-          }
-        }
-      },
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "modifier": [
-            {
-              "type": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 32,
-                "min": 24
               }
             },
             {

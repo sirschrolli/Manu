@@ -389,8 +389,8 @@ final class SeaWitchGameTests {
         helper.assertTrue(witch.isDeadOrDying(), "Die Hexe stirbt nicht");
         helper.runAfterDelay(SeaWitchEntity.DEATH_TICKS + 6, () -> {
             helper.assertTrue(witch.isRemoved(), "Die Hexe zerfließt nicht");
-            boolean staff = !level.getEntitiesOfClass(ItemEntity.class, around, e -> e.getItem().is(SeaWitch.WITCH_STAFF.get())).isEmpty();
-            helper.assertTrue(staff, "Sie lässt den Hexenstab nicht fallen");
+            boolean crystal = !level.getEntitiesOfClass(ItemEntity.class, around, e -> e.getItem().is(io.github.sirschrolli.kingdomsatwar.registry.ModItems.HEART_CRYSTAL.get())).isEmpty();
+            helper.assertTrue(crystal, "Sie lässt keinen Herzkristall fallen");
             long sharks = level.getEntitiesOfClass(LivingEntity.class, around, e -> e.entityTags().contains(SeaWitchEntity.SHARK_TAG)).size();
             helper.assertTrue(sharks == 0, "Ihre Haie bleiben: " + sharks);
             helper.assertTrue(level.getBlockState(cauldronPos).getValue(WitchCauldronBlock.PHASE) == WitchCauldronBlock.Phase.DEFEATED,

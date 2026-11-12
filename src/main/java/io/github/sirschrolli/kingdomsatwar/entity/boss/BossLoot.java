@@ -8,16 +8,16 @@ import net.minecraft.world.entity.player.Player;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Beute der Bosse, die mehrfach kommen (seit 1.1.3): Wer einen solchen Boss zum ersten Mal selbst besiegt, bekommt sein
- * Sonderstück (Waffe, Schwingen, Zylinder …) sicher, dazu Herz- oder Manakristall; bei jedem weiteren Sieg nur noch mit
- * {@link #SIGNATURE_CHANCE}, Kristalle gar nicht mehr. So lohnt sich der erste Kampf, ohne dass sich Waffen und Kristalle
- * beliebig ernten lassen. Die Beutetabellen prüfen dasselbe über die Statistik „getötet“ des Spielers, der den Boss zuletzt
- * getroffen hat; hier steht es für Beute, die der Boss selbst fallen lässt (etwa der Gezeiten-Speer aus Karkinos' Kuppel).
+ * Beute der Bosse, die mehrfach kommen (seit 1.1.5): Ihr Sonderstück (Waffe, Schwingen, Zylinder …) fällt bei jedem Sieg nur
+ * mit {@link #SIGNATURE_CHANCE} – auch beim ersten. Nur der Herz- oder Manakristall kommt beim ersten eigenen Sieg sicher,
+ * danach nie wieder; Münzen und Schätze sind maßvoll. So lassen sich Waffen und Kristalle nicht beliebig ernten. Die
+ * Beutetabellen prüfen den ersten Sieg über die Statistik „getötet“ des Spielers, der den Boss zuletzt getroffen hat; hier
+ * steht die Wahrscheinlichkeit für Beute, die der Boss selbst fallen lässt (etwa der Gezeiten-Speer aus Karkinos' Kuppel).
  */
 public final class BossLoot {
     private BossLoot() {}
 
-    /** Wie oft das Sonderstück nach dem ersten eigenen Sieg noch fällt. */
+    /** Wie oft das Sonderstück bei einem Sieg fällt (auch beim ersten). */
     public static final float SIGNATURE_CHANCE = 0.2f;
 
     /**
@@ -28,8 +28,8 @@ public final class BossLoot {
         return player instanceof ServerPlayer server && server.getStats().getValue(Stats.ENTITY_KILLED.get(boss)) == 1;
     }
 
-    /** Fällt das Sonderstück? Beim ersten eigenen Sieg sicher, sonst mit {@link #SIGNATURE_CHANCE}. */
+    /** Fällt das Sonderstück? Bei jedem Sieg mit {@link #SIGNATURE_CHANCE}. */
     public static boolean signatureDrops(LivingEntity boss) {
-        return firstVictory(boss.getLastHurtByPlayer(), boss.getType()) || boss.getRandom().nextFloat() < SIGNATURE_CHANCE;
+        return boss.getRandom().nextFloat() < SIGNATURE_CHANCE;
     }
 }
