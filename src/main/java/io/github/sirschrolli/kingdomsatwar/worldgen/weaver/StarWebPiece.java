@@ -156,7 +156,11 @@ public class StarWebPiece extends StructurePiece {
             }
         }
 
+        /** Der Block an dieser Stelle – außerhalb des Chunks, der gerade entsteht, gilt Luft (dort darf nichts gelesen werden). */
         BlockState get(int x, int y, int z) {
+            if (!this.box.isInside(x, y, z)) {
+                return Blocks.AIR.defaultBlockState();
+            }
             return this.level.getBlockState(new BlockPos(x, y, z));
         }
 
@@ -226,7 +230,7 @@ public class StarWebPiece extends StructurePiece {
                     }
                     // über der Platte bleibt es frei
                     for (int y = this.f; y <= this.f + 4; y++) {
-                        if (!this.get(x, y, z).isAir() && this.in(x, y, z)) {
+                        if (this.in(x, y, z) && !this.get(x, y, z).isAir()) {
                             this.set(x, y, z, Blocks.AIR.defaultBlockState());
                         }
                     }
