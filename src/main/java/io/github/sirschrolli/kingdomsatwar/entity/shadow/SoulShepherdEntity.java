@@ -520,13 +520,13 @@ public class SoulShepherdEntity extends Monster implements io.github.sirschrolli
         this.begin(Attack.DORMANT);
     }
 
-    /** Er wendet sich seiner Glocke zu. */
+    /** Er steht vor seiner Glocke und blickt über den Pferch (von der Glocke weg, zum Haupttor). */
     public void faceLair() {
-        if (this.lair == null) {
+        if (this.lair == null || this.home == null) {
             return;
         }
-        double dx = this.lair.getX() + 0.5 - this.getX();
-        double dz = this.lair.getZ() + 0.5 - this.getZ();
+        double dx = this.home.getX() - this.lair.getX();
+        double dz = this.home.getZ() - this.lair.getZ();
         if (dx * dx + dz * dz < 0.01) {
             return;
         }

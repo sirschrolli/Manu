@@ -65,6 +65,11 @@ public record ShadowTreeFeature(Kind kind) implements Feature {
         if (io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.UmbrerVillageStructure.isNearVillage(level, origin, this.kind == Kind.GIANT ? 9 : 5)) {
             return false;
         }
+        // … und der Seelenpferch (0.98) auf einer Lichtung im Sumpf
+        if (level instanceof net.minecraft.server.level.WorldGenRegion
+                && io.github.sirschrolli.kingdomsatwar.worldgen.shepherd.SoulPenPiece.inClearing(level, origin.getX(), origin.getZ(), 7)) {
+            return false;
+        }
         BlockState ground = level.getBlockState(origin.below());
         boolean wet = this.kind == Kind.MARSH && level.getFluidState(origin).isSource();
         if (!wet && !isSoil(ground) || !wet && !level.getBlockState(origin).canBeReplaced()) {

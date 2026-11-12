@@ -63,7 +63,7 @@ public class UmbrerVillageStructure extends Structure {
     }
 
     /** Liegt der Chunk näher als {@code distance} Blöcke an Nyxars Zitadelle? */
-    static boolean nearCitadelArea(Structure.GenerationContext context, ChunkPos chunk, int distance) {
+    public static boolean nearCitadelArea(Structure.GenerationContext context, ChunkPos chunk, int distance) {
         var set = context.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE_SET)
                 .get(io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.SHADOW_CITADEL_SET);
         if (set.isEmpty() || !(set.get().value().placement()

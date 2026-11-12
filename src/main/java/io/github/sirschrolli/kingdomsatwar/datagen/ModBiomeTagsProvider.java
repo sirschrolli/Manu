@@ -185,6 +185,8 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
                 .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.CORAL_GARDEN)
                 .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.PEARL_GROUNDS)
                 .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.DEEP);
+        // die Seelenpferche (0.98): im Seelensumpf der Schattenwelt
+        this.tag(ModTags.Biomes.HAS_SOUL_PEN).add(io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes.SOUL_MARSH);
         // die Hexengrotten (0.97): in den tiefen, dunklen Gegenden des Urmeers
         this.tag(ModTags.Biomes.HAS_WITCH_GROTTO).add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.DEEP)
                 .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.KELP_FOREST)

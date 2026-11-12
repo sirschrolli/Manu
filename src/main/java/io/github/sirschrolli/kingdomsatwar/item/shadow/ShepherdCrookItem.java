@@ -63,16 +63,17 @@ public class ShepherdCrookItem extends Item {
         SpellFxEntity.create(level, SpellFxEntity.Kind.BEAM, from, null, 0x6FE8D8, 10, 0.12f).end(target.getBoundingBox().getCenter()).spawn();
         level.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, target.getX(), target.getY(0.6), target.getZ(), 10, 0.3, 0.4, 0.3, 0.04);
         level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.SOUL_SHEPHERD_HOOK.get(), SoundSource.PLAYERS, 1.0f, 1.25f);
+        // erst der Schaden (sein Rückstoß würde den Zug sonst aufheben), dann der Zug
+        target.hurtServer(level, player.damageSources().playerAttack(player), damage);
+        target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 40, 1), player);
         Vec3 pull = player.position().subtract(target.position()).multiply(1.0, 0.0, 1.0);
         double d = pull.length();
         double resist = target.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
         double k = Math.min(1.8, 0.45 + d * 0.09) * Math.max(0.0, 1.0 - resist);
         if (d > 1.5 && k > 0.01) {
-            target.setDeltaMovement(target.getDeltaMovement().scale(0.3).add(pull.scale(k / d)).add(0.0, 0.32 * Math.max(0.0, 1.0 - resist), 0.0));
+            target.setDeltaMovement(pull.scale(k / d).add(0.0, 0.32 * Math.max(0.0, 1.0 - resist), 0.0));
             target.needsSync = true;
         }
-        target.hurtServer(level, player.damageSources().playerAttack(player), damage);
-        target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 40, 1), player);
     }
 
     /** Das Wesen, auf das der Spieler zielt (nicht er selbst, seine Tiere oder Rüstungsständer), oder null. */

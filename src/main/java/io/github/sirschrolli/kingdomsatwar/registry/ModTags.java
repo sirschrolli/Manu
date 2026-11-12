@@ -189,6 +189,7 @@ public final class ModTags {
         /** Wo Meeresdörfer stehen (seit 0.93): die Landschaften unter Wasser und die offenen Weiten des Urmeers. */
         public static final TagKey<Biome> HAS_SEA_VILLAGE = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_sea_village"));
         public static final TagKey<Biome> HAS_WITCH_GROTTO = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_witch_grotto"));
+        public static final TagKey<Biome> HAS_SOUL_PEN = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_soul_pen"));
         /** Wo Dörfer der jeweiligen Bauweise entstehen (Fachwerk, nordisch, Lehm, Pfahlbau). */
         public static final java.util.Map<io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageStyle, TagKey<Biome>> HAS_VILLAGE = villageTags();
         /** Wo die eigenen Bauwerke der Oberwelt stehen können (je Art). */

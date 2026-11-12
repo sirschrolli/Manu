@@ -195,6 +195,7 @@ public final class ModGameTests {
         MystikGameTests.init();   // MissMystik, die Feen-Zauberkünstlerin, Kartendeck, Zylinder, Zauberbühne
         KeeperGameTests.init();   // seit 0.96: der Steinhüter, der alte Mondsteinbruch, Mondstein, Mondsteinrüstung, Hüterhammer
         SeaWitchGameTests.init(); // seit 0.97: die Meerhexe, die Hexengrotte, der Hexenstab
+        SoulShepherdGameTests.init(); // seit 0.98: der Seelenhirte, der Seelenpferch, der Hirtenstab
         AnniGameTests.init();     // Anni der Troll, Fehlerkern, Wiederherstellung als Anni 2.0, Bannhammer, Fehlerflügel
         BeastGameTests.init();    // die neuen Monster: Werwolf, Moorschlurfer, Glutwurm, Aschengeist
         GearGameTests.init();     // Waffen und Rüstungen aus Monsterteilen
@@ -282,6 +283,7 @@ public final class ModGameTests {
         MystikGameTests.register(event, environment);
         KeeperGameTests.register(event, environment);
         SeaWitchGameTests.register(event, environment);
+        SoulShepherdGameTests.register(event, environment);
         AnniGameTests.register(event, environment);
         BeastGameTests.register(event, environment);
         GearGameTests.register(event, environment);

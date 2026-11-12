@@ -40,7 +40,7 @@ public class SoulBellBlockEntity extends BlockEntity {
     private SoulBellBlock.Phase phase = SoulBellBlock.Phase.SLEEPING;
     private @Nullable UUID shepherd;
     /** Wo der Hirte steht (relativ zur Glocke). */
-    private BlockPos homeOffset = new BlockPos(0, -4, 2);
+    private BlockPos homeOffset = new BlockPos(0, -io.github.sirschrolli.kingdomsatwar.worldgen.shepherd.SoulPenPiece.BELL_Y, 1);
     private int missing;
     private final Map<UUID, Long> warned = new HashMap<>();
 

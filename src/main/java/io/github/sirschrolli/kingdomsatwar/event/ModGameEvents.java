@@ -105,6 +105,11 @@ public final class ModGameEvents {
                         .then(Commands.literal("tp").executes(context -> witchGrotto(context.getSource(), "tp")))
                         .then(Commands.literal("awaken").executes(context -> witchGrotto(context.getSource(), "awaken")))
                         .then(Commands.literal("reset").executes(context -> witchGrotto(context.getSource(), "reset"))))
+                .then(Commands.literal("seelenpferch").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .executes(context -> soulPen(context.getSource(), ""))
+                        .then(Commands.literal("tp").executes(context -> soulPen(context.getSource(), "tp")))
+                        .then(Commands.literal("awaken").executes(context -> soulPen(context.getSource(), "awaken")))
+                        .then(Commands.literal("reset").executes(context -> soulPen(context.getSource(), "reset"))))
                 .then(Commands.literal("mondsteinbruch").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .executes(context -> moonstoneQuarry(context.getSource(), ""))
                         .then(Commands.literal("tp").executes(context -> moonstoneQuarry(context.getSource(), "tp")))
@@ -662,6 +667,84 @@ public final class ModGameEvents {
         }
         source.sendSuccess(() -> Component.literal("Die Meerhexe erwacht!"), true);
         return witch != null ? 1 : 0;
+    }
+
+    /**
+     * {@code /kaw seelenpferch}: Lage des nächsten Seelenpferchs in der Schattenwelt; {@code tp} bringt einen an das Ende des
+     * Stegs vor dem Haupttor (auch aus einer anderen Welt), {@code awaken} weckt den Seelenhirten (oder ruft einen neuen, wenn
+     * er besiegt ist), {@code reset} lässt ihn wieder in Andacht versinken.
+     */
+    private static int soulPen(net.minecraft.commands.CommandSourceStack source, String mode) throws
+            com.mojang.brigadier.exceptions.CommandSyntaxException {
+        ServerLevel shadow = source.getServer().getLevel(io.github.sirschrolli.kingdomsatwar.world.ShadowGate.SHADOW_WORLD);
+        if (shadow == null || (source.getLevel() != shadow && mode.isEmpty())) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.seelenpferch.not_shadow"));
+            return 0;
+        }
+        BlockPos from = source.getLevel() == shadow ? BlockPos.containing(source.getPosition()) : BlockPos.ZERO;
+        var structure = shadow.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .get(io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.SOUL_PEN_STRUCTURE);
+        var found = structure.isEmpty() ? null : shadow.getChunkSource().getGenerator().findNearestMapStructure(shadow,
+                net.minecraft.core.HolderSet.direct(structure.get()), from, 100, false);
+        if (found == null) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.seelenpferch.none"));
+            return 0;
+        }
+        BlockPos corner = found.getFirst();
+        int cx = (corner.getX() & ~15) + 8;
+        int cz = (corner.getZ() & ~15) + 8;
+        int distance = (int) Math.sqrt(Math.pow(cx - from.getX(), 2) + Math.pow(cz - from.getZ(), 2));
+        Component where = Component.literal(cx + ", " + cz).withStyle(net.minecraft.ChatFormatting.DARK_AQUA);
+        source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.seelenpferch.where", where, distance), false);
+        if (mode.isEmpty()) {
+            return 1;
+        }
+        for (int dx = -2; dx <= 2; dx++) {
+            for (int dz = -2; dz <= 2; dz++) {
+                shadow.getChunk((cx >> 4) + dx, (cz >> 4) + dz);
+            }
+        }
+        BlockPos bell = findSoulBell(shadow, cx, cz);
+        if (mode.equals("tp")) {
+            ServerPlayer player = source.getPlayerOrException();
+            int floor = bell != null ? bell.getY() - io.github.sirschrolli.kingdomsatwar.worldgen.shepherd.SoulPenPiece.BELL_Y
+                    : shadow.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, cx, cz);
+            // ans Ende des Stegs vor dem Haupttor, mit Blick auf den Glockenstuhl
+            net.minecraft.core.Direction gate = io.github.sirschrolli.kingdomsatwar.worldgen.shepherd.SoulPenPiece.GATE;
+            int reach = io.github.sirschrolli.kingdomsatwar.worldgen.shepherd.SoulPenPiece.PATH_END;
+            player.teleportTo(shadow, cx + 0.5 + gate.getStepX() * reach, floor, cz + 0.5 + gate.getStepZ() * reach, java.util.Set.of(),
+                    gate.getOpposite().toYRot(), 5.0f, true);
+            return 1;
+        }
+        if (bell == null || !(shadow.getBlockEntity(bell) instanceof io.github.sirschrolli.kingdomsatwar.block.shadow.SoulBellBlockEntity be)) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.seelenpferch.no_bell"));
+            return 0;
+        }
+        if (mode.equals("reset")) {
+            be.reset(shadow);
+            source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.seelenpferch.reset"), true);
+            return 1;
+        }
+        io.github.sirschrolli.kingdomsatwar.entity.shadow.SoulShepherdEntity shepherd = be.shepherd(shadow);
+        if (shepherd == null) {
+            shepherd = be.spawn(shadow, true);
+        } else {
+            shepherd.awaken();
+        }
+        source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.seelenpferch.awakened"), true);
+        return shepherd != null ? 1 : 0;
+    }
+
+    /** Sucht die Seelenglocke über der Mitte des Pferchs (von oben nach unten). */
+    private static @org.jspecify.annotations.Nullable BlockPos findSoulBell(ServerLevel level, int x, int z) {
+        int top = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
+        for (int y = top + 2; y > top - 24; y--) {
+            BlockPos pos = new BlockPos(x, y, z);
+            if (level.getBlockState(pos).is(io.github.sirschrolli.kingdomsatwar.registry.SoulShepherd.SOUL_BELL.get())) {
+                return pos;
+            }
+        }
+        return null;
     }
 
     /** Sucht den Hexenkessel in der Mitte der Grotte (von oben nach unten). */

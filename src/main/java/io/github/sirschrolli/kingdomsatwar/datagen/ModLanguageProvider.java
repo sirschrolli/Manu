@@ -988,6 +988,12 @@ public class ModLanguageProvider extends LanguageProvider {
                 {"storm", "Souls whirl", "Seelen wirbeln"}, {"fury", "Soul Shepherd screams", "Seelenhirte schreit"}}) {
             subtitle("entity.soul_shepherd." + e[0], e[1], e[2]);
         }
+        text("command.kingdomsatwar.seelenpferch.where", "Nearest Soul Pen: %s (%s blocks)", "Nächster Seelenpferch: %s (%s Blöcke)");
+        text("command.kingdomsatwar.seelenpferch.not_shadow", "Soul pens only exist in the Shadow World.", "Seelenpferche gibt es nur in der Schattenwelt.");
+        text("command.kingdomsatwar.seelenpferch.none", "No Soul Pen nearby.", "Kein Seelenpferch in der Nähe.");
+        text("command.kingdomsatwar.seelenpferch.no_bell", "There is no Soul Bell in this pen.", "In diesem Pferch hängt keine Seelenglocke.");
+        text("command.kingdomsatwar.seelenpferch.awakened", "The Soul Shepherd awakens!", "Der Seelenhirte erwacht!");
+        text("command.kingdomsatwar.seelenpferch.reset", "The Soul Shepherd sinks back into prayer.", "Der Seelenhirte versinkt wieder in Andacht.");
         text("command.kingdomsatwar.hexengrotte.where", "Nearest Witch's Grotto: %s (%s blocks)", "Nächste Hexengrotte: %s (%s Blöcke)");
         text("command.kingdomsatwar.hexengrotte.not_sea", "Witch's grottos only exist in the Primordial Sea.", "Hexengrotten gibt es nur im Urmeer.");
         text("command.kingdomsatwar.hexengrotte.none", "No Witch's Grotto nearby.", "Keine Hexengrotte in der Nähe.");

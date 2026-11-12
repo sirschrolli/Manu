@@ -90,6 +90,11 @@ public final class ModStructures {
             WITCH_GROTTO = TYPES.register("witch_grotto", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.witch.WitchGrottoStructure.CODEC);
     public static final DeferredHolder<StructurePieceType, StructurePieceType> WITCH_GROTTO_PIECE =
             PIECES.register("witch_grotto", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.witch.WitchGrottoPiece::new);
+    // der Seelenpferch (0.98): im Seelensumpf der Schattenwelt, Boss der Seelenhirte
+    public static final DeferredHolder<StructureType<?>, StructureType<io.github.sirschrolli.kingdomsatwar.worldgen.shepherd.SoulPenStructure>>
+            SOUL_PEN = TYPES.register("soul_pen", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.shepherd.SoulPenStructure.CODEC);
+    public static final DeferredHolder<StructurePieceType, StructurePieceType> SOUL_PEN_PIECE =
+            PIECES.register("soul_pen", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.shepherd.SoulPenPiece::new);
     public static final DeferredHolder<StructurePieceType, StructurePieceType> SEA_VILLAGE_PIECE =
             PIECES.register("sea_village", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.merfolk.SeaVillagePiece::new);
     public static final DeferredHolder<StructureType<?>, StructureType<io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneStructure>>
@@ -196,6 +201,8 @@ public final class ModStructures {
     public static final ResourceKey<StructureSet> SEA_VILLAGES = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("sea_villages"));
     public static final ResourceKey<Structure> WITCH_GROTTO_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("witch_grotto"));
     public static final ResourceKey<StructureSet> WITCH_GROTTOS = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("witch_grottos"));
+    public static final ResourceKey<Structure> SOUL_PEN_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("soul_pen"));
+    public static final ResourceKey<StructureSet> SOUL_PENS = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("soul_pens"));
 
     /** Die Dörfer der Umbrer in der Schattenwelt. */
     public static final ResourceKey<Structure> UMBRER_VILLAGE_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("umbrer_village"));
@@ -303,6 +310,16 @@ public final class ModStructures {
         // die Hexengrotten (0.97): nach Tang und Seegras gebaut; in der Grotte entstehen keine Monster (dort wacht die Hexe)
         context.register(WITCH_GROTTO_STRUCTURE, new io.github.sirschrolli.kingdomsatwar.worldgen.witch.WitchGrottoStructure(
                 new Structure.StructureSettings.Builder(biomes.getOrThrow(ModTags.Biomes.HAS_WITCH_GROTTO))
+                        .spawnOverrides(java.util.Map.of(
+                                net.minecraft.world.entity.MobCategory.MONSTER, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
+                                        net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
+                                        net.minecraft.util.random.WeightedList.of())))
+                        .generationStep(GenerationStep.Decoration.TOP_LAYER_MODIFICATION)
+                        .terrainAdapation(TerrainAdjustment.NONE)
+                        .build()));
+        // die Seelenpferche (0.98): nach den Pflanzen gebaut (Bäume wachsen dort gar nicht erst); im Pferch entstehen keine Monster
+        context.register(SOUL_PEN_STRUCTURE, new io.github.sirschrolli.kingdomsatwar.worldgen.shepherd.SoulPenStructure(
+                new Structure.StructureSettings.Builder(biomes.getOrThrow(ModTags.Biomes.HAS_SOUL_PEN))
                         .spawnOverrides(java.util.Map.of(
                                 net.minecraft.world.entity.MobCategory.MONSTER, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
                                         net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
@@ -557,6 +574,13 @@ public final class ModStructures {
                         1.0f, 47_920_311, java.util.Optional.of(new net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement
                                 .ExclusionZone(context.lookup(Registries.STRUCTURE_SET).getOrThrow(KRAKEN_MAW_SET), 8)),
                         30, 12, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR)));
+        // Seelenpferche (0.98): Felder von 14 Chunks, mindestens 5 Chunks Abstand, 6 Chunks fern der Dörfer der Umbrer
+        context.register(SOUL_PENS, new StructureSet(structures.getOrThrow(SOUL_PEN_STRUCTURE),
+                new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(net.minecraft.core.Vec3i.ZERO,
+                        net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement.FrequencyReductionMethod.DEFAULT,
+                        1.0f, 51_772_903, java.util.Optional.of(new net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement
+                                .ExclusionZone(context.lookup(Registries.STRUCTURE_SET).getOrThrow(UMBRER_VILLAGES), 6)),
+                        14, 5, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR)));
         // Meeresdörfer: Felder von 22 Chunks, mindestens 9 Chunks Abstand, 7 Chunks fern des Krakenschlunds
         context.register(SEA_VILLAGES, new StructureSet(structures.getOrThrow(SEA_VILLAGE_STRUCTURE),
                 new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(net.minecraft.core.Vec3i.ZERO,
