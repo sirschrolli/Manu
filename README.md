@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.95.0 – Rüstungen in 3D.** Getragene Rüstungen haben jetzt **echte 3D-Teile passend zu ihrem Material** – an Spielern und auf Rüstungsständern, für **alle Rüstungen der Mod und die von Minecraft**. Die **Stahlrüstung** ist ein Ritter: Kamm und roter **Helmbusch**, Schulterstücke aus drei Platten mit Goldsaum, Ellbogenkacheln, Beintaschen, Kniebuckel und goldene **Sporen**. **Konterit** (leicht und schnell) trägt **Flügel an den Schläfen und Knöcheln**, einen Stirnstein, sichelförmige Schulterstücke und einen **kurzen Umhang**. **Nachtstahl** hat eine **Krone aus Nachtkristallen** und Kristallstacheln auf Schultern, Rücken, Knien und Fersen, deren Spitzen leuchten. **Abyssit** hat zwei große **Hörner** mit leuchtenden Adern, einen Stirnkristall, schwere Schulterstücke und leuchtende Kristalle. Die **Drachenschuppen** tragen die **Hörner ihres Drachen** (Feuer geschwungen mit Glut, Eis aus Kristall, Blitz gezackt, Natur ein **Geweih mit Blättern**, Erde **Widderhörner**, Wasser **Flossen**), Rückenstacheln (Blätter, ein Flossensaum, Steinplatten), Schulterschuppen mit Kralle, Krallen an den Stiefeln und zu den Beinschienen einen **Drachenschwanz** mit der Spitze ihres Elements (eine glühende Flamme, ein Eiskristall, eine Blitzklinge, ein Blatt, eine Steinkeule mit Bernstein, eine Flosse). Die **Edelsteinkrone** bekommt Zacken mit Perlen und Edelsteine. Und die Rüstungen von Minecraft: **Leder** (Feder, Pelzkragen, Gürtel mit Tasche, Pelzstulpen), **Kettenhemd** (Kettenkragen, Kettenschultern, Kettenschurz), **Kupfer** (Helmspitze, Platten mit Grünspan), **Eisen** (Nasenschutz, Schulterstücke, Kniebuckel), **Gold** (Strahlenkamm, Rubine, Sonnenscheibe), **Diamant** (Kamm und Schultern aus Diamantsplittern), **Netherit** (Hörner, schwere Schulterstücke mit Dornen) und der **Schildkrötenpanzer**. Verzauberte Rüstungen schimmern auch an ihren 3D-Teilen.
+> **Testversion 0.96.0 – Der Steinhüter.** Im Feenreich liegen jetzt **alte Mondsteinbrüche**: runde Gruben, zwölf Blöcke tief, in drei Stufen abgebaut, mit Rampen an den Wänden, offenen **Adern aus Mondsteinerz**, gemeißelten Lampen, überhängendem Moos mit Leuchtranken, zwei Gerüsten aus Glimmerholz, einem **Kran**, an dessen Kette noch ein behauener Block hängt, und der **Hütte des Vorarbeiters** mit einer Truhe. Am Grund kniet vor dem leuchtenden **Hüterstein** der **Steinhüter** und schläft – ein Riese aus Feenstein mit Lavendelmoos, Mondsteinkristallen und einem pulsierenden Herzen. Wer hinabsteigt, weckt ihn: **Faustschlag**, **Stampfer**, **Felswurf**, **Kristallspur**, **Felssprung** (er folgt dir auf die Terrassen) und im Zorn der **Mondstrahl**; unter halber Kraft wächst ihm ein **Kristallpanzer**, der zerspringt – dann ist er benommen. Eigene Bossleiste, eigene Klänge. Er hinterlässt den **Hüterhammer** (in 3D, Rechtsklick: eine Spur aus Mondsteinkristallen); der erloschene Stein ruft mit einem **Mondstein** einen neuen Hüter. Neu ist auch das **Mondsteinerz** im ganzen Feenreich (Mondstein, Mondsteinblock) und die **Mondsteinrüstung** der Zauberer – Schutz wie Eisen, sehr gut verzauberbar, **mehr Mana** und schnellere Erholung (der volle Satz 80 Mana mehr), in 3D mit Stirnreif, Sternenmantel, Schulterstücken mit Mondsicheln und spitzen Zauberschuhen.
+> In 0.95 kamen **Rüstungen in 3D**: Getragene Rüstungen haben jetzt **echte 3D-Teile passend zu ihrem Material** – an Spielern und auf Rüstungsständern, für **alle Rüstungen der Mod und die von Minecraft**. Die **Stahlrüstung** ist ein Ritter: Kamm und roter **Helmbusch**, Schulterstücke aus drei Platten mit Goldsaum, Ellbogenkacheln, Beintaschen, Kniebuckel und goldene **Sporen**. **Konterit** (leicht und schnell) trägt **Flügel an den Schläfen und Knöcheln**, einen Stirnstein, sichelförmige Schulterstücke und einen **kurzen Umhang**. **Nachtstahl** hat eine **Krone aus Nachtkristallen** und Kristallstacheln auf Schultern, Rücken, Knien und Fersen, deren Spitzen leuchten. **Abyssit** hat zwei große **Hörner** mit leuchtenden Adern, einen Stirnkristall, schwere Schulterstücke und leuchtende Kristalle. Die **Drachenschuppen** tragen die **Hörner ihres Drachen** (Feuer geschwungen mit Glut, Eis aus Kristall, Blitz gezackt, Natur ein **Geweih mit Blättern**, Erde **Widderhörner**, Wasser **Flossen**), Rückenstacheln (Blätter, ein Flossensaum, Steinplatten), Schulterschuppen mit Kralle, Krallen an den Stiefeln und zu den Beinschienen einen **Drachenschwanz** mit der Spitze ihres Elements (eine glühende Flamme, ein Eiskristall, eine Blitzklinge, ein Blatt, eine Steinkeule mit Bernstein, eine Flosse). Die **Edelsteinkrone** bekommt Zacken mit Perlen und Edelsteine. Und die Rüstungen von Minecraft: **Leder** (Feder, Pelzkragen, Gürtel mit Tasche, Pelzstulpen), **Kettenhemd** (Kettenkragen, Kettenschultern, Kettenschurz), **Kupfer** (Helmspitze, Platten mit Grünspan), **Eisen** (Nasenschutz, Schulterstücke, Kniebuckel), **Gold** (Strahlenkamm, Rubine, Sonnenscheibe), **Diamant** (Kamm und Schultern aus Diamantsplittern), **Netherit** (Hörner, schwere Schulterstücke mit Dornen) und der **Schildkrötenpanzer**. Verzauberte Rüstungen schimmern auch an ihren 3D-Teilen.
 > In 0.94 kamen **schönere Bossleisten**: Die Leisten aller Bosse leben jetzt: Erscheint ein Boss, **senkt sich seine Leiste herab**, das **Namensband entrollt sich** (ein Band mit Borte, Ziersteinen und Schwalbenschwänzen in den Farben des Bosses) und die Füllung **lädt sich auf** – die Phasen-Edelsteine leuchten auf, sobald sie erreicht sind. Die Edelsteine sitzen jetzt **genau bei den Kampfphasen** jedes Bosses (beim Kraken bei zwei Dritteln und einem Drittel, beim Weltenfresser dreimal, bei der Wahren Gestalt Schrollis bei Nova, Apokalypse und Neuschöpfung, bei Noctua, Malleus, Asteria und Anni bei der Hälfte …), mit einer **Kerbe** in der Leiste. **Treffer** lassen den Rahmen beben, das verlorene Stück weiß aufblitzen und das Bildnis rot; **Heilung** schimmert. Ein **Glanz** zieht über die Rahmen, um jede Leiste schweben **Teilchen ihres Bosses** – Glut, Schneeflocken, Funken, Blätter, Staub, Luftblasen, Schattenrauch, Sterne, Flügelstaub, Konfetti, Störpixel oder Tinte –, **mit jeder Phase mehr**. Erreicht ein Boss eine Phase, **zerspringt ihr Edelstein** klirrend in Splitter, Rahmen und Namensband blitzen auf; in der **letzten Phase** strömt und pulsiert die Füllung schneller, der Rahmen glüht, das Bildnis färbt sich vor Wut rot. **Der Kraken** hat jetzt seine eigene Leiste (bisher zeigte er nur die Leiste von Minecraft): Bronze mit Patina und Seepocken, zwei purpurrote Arme mit Saugnäpfen klammern sich an den Rahmen, als Spitze ein eingerollter Arm, darunter Tang und Tinte, im Medaillon sein Bildnis mit den goldenen Augen und eine Füllung aus wirbelnder Tinte mit leuchtenden Punkten. Bosse mit **Namensschild** behalten ihre eigene Leiste.
 > In 0.93 kamen **Meeresdörfer**: Im Urmeer lebt jetzt **das Meervolk**: Auf dem Grund der Tangwälder, Korallengärten, Perlmuttgründe und Weiten stehen **Meeresdörfer** – ein Platz aus Prismarin und Perlmutt mit einer **Dreizacksäule**, deren Zinken leuchten, ringsum **Muschelhäuser** (runde Kuppeln aus dem Holz der Landschaft mit Bullaugen und einer leuchtenden Perle obenauf), der gewundene **Gesangsturm** aus Perlmutt, Tanggärten, Korallenbeete und Marktstände. Dort wohnen **Meerjungfrauen** in sechs Gestalten (Koralle, Tang, Perle, Lagune, Gold und die leuchtende Tiefsee): Sie treten Wasser, wenn sie stehen, schwimmen waagrecht wie Delfine, summen kleine Melodien und tauschen gegen **Perlen** – die **Perlentaucherin** (Perlmutt, Nautilusschalen, ein Herz des Meeres), die **Korallengärtnerin** (die Setzlinge der Meeresbäume, Korallen), die **Muschelbauerin** (Meereshölzer, Türen, Laternen, Prismarin) und die **Gezeitensängerin** (Tränke, Bücher mit den Verzauberungen des Wassers, ein Aquisitor). **Tritonwachen** mit Flossenhelm und Dreizack halten Haie und Ertrunkene fern und werfen ihren Dreizack nach jedem, der eine Meerjungfrau angreift. Perlen gibt es für Fisch, Tang, Prismarin und Tinte, in den Truhen der Dörfer und manchmal in Muscheln.
 > In 0.92 kamen **Wälder unter Wasser**: **vier Meereshölzer** – das olivbraune, faserige **Tangholz**, das rosarote **Korallenholz**, das helle, schimmernde **Perlholz** und das dunkle **Tiefseeholz** mit leuchtenden Adern –, jedes mit Stamm, Holz, entrindeten Stämmen, Brettern, Treppen, Stufen, Tür, Falltür, Zaun, Zauntor, Blättern und Setzling. Die Setzlinge wachsen **unter Wasser** (auf Sand, Kies, Ton, Schlamm oder Erde, auch ohne Licht) zu **Meeresbäumen**: Der Tangbaum schwankt bis zu zwanzig Blöcke hoch und trägt Wedel voller goldener Schwimmblasen, der Korallenbaum verzweigt sich zu Fächern, der Perlbaum neigt sich unter seiner runden, schimmernden Krone, und der Tiefseebaum windet sich und lässt leuchtende Vorhänge herabhängen. Dazu kommen **vier neue Landschaften im Urmeer**: der **Tangwald**, der **Korallengarten**, die **Perlmuttgründe** und die **Leuchtende Tiefe** – jede mit ihren Bäumen, eigenen Tieren und Klängen und **vierzig eigenen Fischarten** in allen fünf Seltenheiten, darunter zwei Legenden (etwa der **Dämmergrünkaiser** im Tangwald und die **Scheinkaiserin** in der Leuchtenden Tiefe). Zusammen sind es jetzt **2053 Arten**.
@@ -399,6 +400,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Meeresdörfer** (0.93): das Meervolk im Urmeer – Meerjungfrauen in sechs Gestalten und vier Berufen (Perlentaucherin, Korallengärtnerin, Muschelbauerin, Gezeitensängerin), die gegen Perlen tauschen, Tritonwachen mit Dreizack; Meeresdörfer mit Dreizacksäule, Muschelhäusern, Gesangsturm, Gärten und Marktständen; Perlen als Währung | ✅ fertig |
 | **Schönere Bossleisten** (0.94): die Leisten aller Bosse leben – Erscheinen mit entrollendem Namensband und Aufladen, Phasen-Edelsteine genau bei den Kampfphasen jedes Bosses (sie zerspringen in Splitter), Beben und Aufblitzen bei Treffern, Schimmer bei Heilung, ein Glanz über dem Rahmen, Teilchen je Boss und Phase, die letzte Phase pulsierend; die eigene Leiste des Kraken; mit Namensschild bleibt die eigene Leiste | ✅ fertig |
 | **Rüstungen in 3D** (0.95): getragene Rüstungen mit 3D-Teilen passend zum Material – Stahl (Helmbusch, Schulterstücke, Sporen), Konterit (Flügel, Umhang), Nachtstahl (Kristallkrone und Stacheln), Abyssit (Hörner, Kristalle), Drachenschuppen je Element (Hörner oder Geweih, Rückenstacheln, Drachenschwanz, Krallen), Edelsteinkrone; dazu Leder, Kettenhemd, Kupfer, Eisen, Gold, Diamant, Netherit und Schildkrötenpanzer | ✅ fertig |
+| **Der Steinhüter** (0.96): der alte Mondsteinbruch im Feenreich (drei Stufen, Rampen, Erzadern, Lampen, Gerüste, Kran, Hütte mit Truhe); der Steinhüter als Boss (schläft vor dem Hüterstein, sieben Angriffe, Kristallpanzer, Benommenheit, eigene Bossleiste und Klänge, Rückruf mit Mondstein); der Hüterhammer in 3D; Mondsteinerz, Mondstein, Mondsteinblock und die Mondsteinrüstung (mehr Mana, in 3D) | ✅ fertig |
 | **Der Weg zum Unsterblichen** (0.77): Heldenstufe bis 200, fünf neue Ränge (Mythos, Halbgott, Titan, Sternenwanderer, Unsterblicher) mit Abzeichen und Wahrzeichen, Heldenkraft je Stufe, Talente bis 40 Punkte (Meisterschaft), je 25 Herz- und Manakristalle, das Licht der Unsterblichkeit, Heldenherzen in Schichten | ✅ fertig |
 | **Schrolli greift zur Klinge** (0.76): Nahkampf am Boden – Landung, Beine in goldenen Beinschienen, die Klinge aus Licht mit Lichtspur, sieben Künste der Klinge (Klingenhieb, Lichtsicheln, Sturmlauf, Klingenwirbel, Himmelssturz, Schwingenwehr mit Gegenschlag, Weltenklinge), jetzt 33 Künste; warme, leisere Klänge und Musik | ✅ fertig |
 | **Die Kampfdimensionen** (0.74): Mondbühne, Glutesse, Sternenzelt, Fehlerraum, Thronwelt und Weltenschlund – die sechs großen Bosse ziehen ihre Gegner in ein Abbild ihres Horts unter einem fremden Himmel (Regeln wie in der Arkanen Sphäre, Nachzügler folgen); nach der Niederlage erwacht der Boss unversehrt in seiner ursprünglichen Gestalt; Spawn-Ei des Weltenfressers; `/locate` findet Schlund und Thron | ✅ fertig |
@@ -459,7 +461,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.95.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.96.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -467,7 +469,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.95.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.96.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -2958,6 +2960,78 @@ Feenrose, Feder und einem Herz-Ass im Band:
 Zauberzylinder, Kartendeck, Zylinder der Mystik und das Spawn-Ei liegen im Kreativ-Reiter **„Legenden“**, die
 **Samtvorhänge** (auch mit Fransen) zum Bauen eigener Bühnen im Reiter des Feenreichs.
 
+### Der Steinhüter und der alte Mondsteinbruch (seit 0.96)
+
+![Der Steinhüter im alten Mondsteinbruch, seine Angriffe, der Hüterhammer und die Mondsteinrüstung](docs/bilder/steinhueter.jpg)
+
+Seit 0.96 liegen im Feenreich **alte Mondsteinbrüche** – verlassene Gruben des alten Volks, das hier einst den Mondstein für
+die Feenportale brach. Eine runde Grube, **zwölf Blöcke tief**, in drei Stufen abgebaut: der Grund und zwei Terrassen,
+darüber der Rand – Gras und Feenerde über dem Fels. In den Wänden aus Feenstein liegen offene **Adern aus Mondsteinerz** und
+leuchten gemeißelte **Mondsteinlampen**; an den Kanten ragen Grasnarbe und Moos über, kurze Leuchtranken hängen herab.
+**Rampen** aus Feensteinziegeln führen an den Wänden entlang von Stufe zu Stufe hinab. An zwei Wänden stehen **Gerüste** aus
+Glimmerholz (ein Laufsteg mit Geländer, eine Leiter, oben ein Balken mit Leuchtranken und ein liegengebliebenes Werkstück),
+am Nordrand ein **Kran**: ein Mast auf einem Fuß aus Ziegeln, ein Ausleger über die Grube und ein Gegengewicht, eine Winde –
+und an seiner Kette hängt noch ein behauener Block. Im Südwesten steht die **Hütte des Vorarbeiters** mit Satteldach,
+Steinsäge, Werkbank und einer **Truhe** (Mondstein, Ziegel, Werkzeug, Proviant – mit etwas Glück ein Teil der
+Mondsteinrüstung); überall gestapelte Quader, Geröll, lose Brocken Mondsteinerz und Lampenpilze im Moos. Höchstens ein
+Bruch je Gebiet von gut 500 × 500 Blöcken, nie zu nahe an einem Mondhain oder einer Zauberbühne; Bäume und Felsen lassen
+ihn frei (Finden: `/kaw mondsteinbruch` im Feenreich, mit `tp`, `awaken` und `reset`).
+
+Am Grund steht auf einem Sockel aus Mondsteinziegeln der **Hüterstein** – ein gemeißeltes Auge über einer Mondsichel,
+unzerstörbar, bläulich leuchtend –, und vor ihm **kniet der Steinhüter** und schläft: ein Riese aus behauenen Quadern
+Feenstein, gut dreieinhalb Blöcke hoch, mit Lavendelmoos und leuchtenden Sporen auf Schultern und Kopf, Mondsteinkristallen
+auf den Schultern und einem Kristallkamm auf dem Rücken, Bändern aus Mondstein um die Unterarme, einer Runenplatte auf der
+Brust mit dem pulsierenden **Hüterherz** und Leuchtranken, die von ihm herabhängen. Wer sich dem Bruch nähert, hört es
+knirschen („Tief unten knirscht Stein … etwas bewacht diesen Bruch.“). Wer an den Grund hinabsteigt, weckt ihn: Er hebt den
+Kopf, seine Augen glimmen auf, er stemmt sich hoch, Moos und Steine rieseln – und er brüllt. Schlafend und beim Erwachen
+ist er unverwundbar (wer ihn im Schlaf schlägt, weckt ihn).
+
+Er steht in der Reihe der Bosse **zwischen Noctua und den Erzmagiern** (440 Lebenspunkte, Rüstung 10, Zähigkeit 3, lässt
+sich nicht wegstoßen, nimmt keinen Fallschaden). Lockt man ihn zu weit fort oder stürzt er hinab, zerfällt er zu Geröll und
+setzt sich an seinem Platz neu zusammen – mit seinem **Felssprung** folgt er dir aber auch auf die Terrassen. Eigene
+Bossleiste (Quader aus Feenstein mit leuchtenden Fugen, Lavendelmoos, Mondsteinkristalle und Leuchtranken mit Blüten, eine
+Füllung aus milchigem Mondstein mit wanderndem Schimmer, im Medaillon sein Bildnis), eigene Klänge.
+
+| Angriff | Was geschieht |
+|---|---|
+| **Faustschlag** | beide Fäuste hoch – und vor sich in den Boden: Der Grund reißt auf, wer davor steht, wird schwer getroffen und fliegt |
+| **Stampfer** | er stampft auf, und eine Erschütterung läuft als Ring über den Grund – wer darin steht, fliegt (wer springt, nicht) |
+| **Felswurf** | er reißt einen Felsbrocken aus dem Boden, stemmt ihn über den Kopf und schleudert ihn im Bogen dorthin, wo du gleich sein wirst – er zerschellt (im Zorn in Mondsteinkristalle) |
+| **Kristallspur** | er rammt die Fäuste in den Boden: Mondsteinkristalle brechen in einer Spur auf dich zu hervor, schleudern hoch und verlangsamen (im Zorn drei Spuren im Fächer) |
+| **Felssprung** | tief in die Knie – und er springt dir nach, auch auf die Stufen des Bruchs; bei der Landung bebt der Boden |
+| **Mondstrahl** | nur im Zorn: Das Hüterherz sammelt Licht, dann bricht ein Strahl daraus hervor und folgt dir – langsamer, als du laufen kannst; Wände halten ihn auf. Wer getroffen wird, leuchtet und wird langsamer |
+| **Kristallpanzer** | unter halber Kraft ballt er die Fäuste und brüllt: Kristalle wachsen über Brust, Arme, Beine und Kopf (wer zu nah steht, wird weggestoßen). Der Panzer lässt nur zwei Fünftel des Schadens durch, bis er nach 70 Schaden **zerspringt** – dann ist er eine Weile **benommen**, und jeder Treffer zählt anderthalbfach |
+
+Unter halber Kraft ist er **zornig**: schneller, kürzere Pausen, härtere Schläge. Findet er niemanden mehr, kehrt er an seinen
+Platz zurück und kniet nach einer Weile wieder nieder – geheilt und ohne Panzer. Besiegt sinkt er auf die Knie, das Licht in
+ihm erlischt, und er zerfällt zu Geröll. Er hinterlässt den **Hüterhammer**, einen **Herzkristall**, Mondstein,
+Mondsteinblöcke, gemeißelten Mondstein, Feenstaub, Edelsteine und Münzen. Der Hüterstein **erlischt** – ein **Mondstein**
+darauf (Rechtsklick) ruft einen neuen Hüter, der sich sofort aus dem Geröll erhebt.
+
+**Der Hüterhammer** – die Waffe des Steinhüters: ein Kopf aus Feenstein, mit Mondstein gebunden, an einem Stiel aus
+versteinertem Glimmerholz, Kristalle obenauf (in der Hand in 3D):
+
+| Eigenschaft | Wirkung |
+|---|---|
+| Schlag | schwer und langsam: 10 Schaden, 0,8 Schläge je Sekunde |
+| **Kristallspur** | Rechtsklick auf festem Boden: **sieben Mondsteinkristalle** brechen nacheinander vor dir aus dem Boden, schleudern Gegner hoch und verlangsamen sie (7 Schaden, mit Schärfe mehr) – dich selbst, deine Tiere und Rüstungsständer verschonen sie; danach ruht er sechs Sekunden |
+| Haltbarkeit | 1.600, mit **Mondstein** zu reparieren, verzauberbar, episch |
+
+**Mondstein:** **Mondsteinerz** steckt in Adern im Feenstein des ganzen Feenreichs – nach unten häufiger, an Hängen und in den
+Wänden der Mondsteinbrüche offen. Mit einer **Eisenspitzhacke** abgebaut gibt es **Mondstein** (das Erz selbst lässt sich
+auch schmelzen): einen milchig-weißen, bläulich schimmernden Edelstein. Neun ergeben einen **Mondsteinblock** (facettiert, ein Schimmer wandert
+darüber), ein Mondstein macht aus acht Feensteinziegeln acht **Mondsteinziegel** (für Feenportale und zum Bauen).
+
+**Die Mondsteinrüstung** – die Rüstung der Zauberer, aus Mondstein und Feenstaub: Schutz wie Eisen (Zähigkeit 1), aber so
+gut verzauberbar wie kaum eine andere Rüstung – und jeder Teil **speichert Mondlicht**: 15 Mana mehr und eine um ein Zehntel
+schnellere Erholung, der volle Satz noch einmal 20 Mana und ein Zehntel dazu – zusammen **80 Mana mehr** und eine um die
+**Hälfte schnellere Erholung**. In 3D trägt sie einen **Stirnreif** aus Mondsilber mit Mondstein und Mondsichel, einen
+**Sternenmantel** an zwei Mondsteinen, einen großen Mondstein auf der Brust, **Schulterstücke mit Mondsicheln**, Armreife mit
+Mondstein, einen Gürtel mit Sichelschnalle, Robenschöße und **spitze, aufgebogene Zauberschuhe**.
+
+Mondsteinerz, Mondstein, Mondsteinblock, die Rüstung, der Hüterhammer und das Spawn-Ei des Steinhüters liegen im
+Kreativ-Reiter des Feenreichs.
+
 ### Anni der Troll
 
 ![Anni der Troll in seiner Fehlerzone – und als Anni 2.0](docs/bilder/anni_troll.jpg)
@@ -4258,7 +4332,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.95.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.96.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -4412,14 +4486,16 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    - **0.94 – Schönere Bossleisten** (fertig): die Leisten aller Bosse leben (Erscheinen, Namensband,
      Edelsteine bei den echten Phasen, die zerspringen, Treffer, Glanz, Teilchen, letzte Phase), dazu die eigene
      Leiste des Kraken;
-   - zuletzt **0.95 – Rüstungen in 3D** (fertig): getragene Rüstungen mit 3D-Teilen passend zum Material – alle
-     Rüstungen der Mod und die von Minecraft.
+   - **0.95 – Rüstungen in 3D** (fertig): getragene Rüstungen mit 3D-Teilen passend zum Material – alle
+     Rüstungen der Mod und die von Minecraft;
+   - zuletzt **0.96 – Der Steinhüter** (fertig): der alte Mondsteinbruch im Feenreich mit dem Steinhüter als
+     Boss, der Hüterhammer, Mondsteinerz und die Mondsteinrüstung der Zauberer.
 
    Damit ist der Weg der Geschichte vollständig – vom Siegel der sechs Drachen bis zum Weltenfresser im Abgrund.
 
-   **Als Nächstes geplant:** neue Bosse, Erze und Bauwerke für alle Dimensionen und bessere Klänge.
+   **Als Nächstes geplant:** weitere Bosse, Erze und Bauwerke für die anderen Dimensionen und bessere Klänge.
 
-   Die Bosse werden in dieser Reihenfolge stärker: Karkinos und Noctua (früh im Spiel) → Erzmagier → MissMystik →
+   Die Bosse werden in dieser Reihenfolge stärker: Karkinos und Noctua (früh im Spiel) → Steinhüter → Erzmagier → MissMystik →
    Malleus → Drachen → Asteria → Kraken → Anni der Troll → Zerbrochener König → Weltenfresser → Schrolli der Schöpfer.
 
 ## Danksagung

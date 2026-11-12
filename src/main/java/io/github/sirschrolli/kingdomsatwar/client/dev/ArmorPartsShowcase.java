@@ -30,7 +30,7 @@ final class ArmorPartsShowcase {
     private static final int OZ = 260;
     private static final double SPACING = 2.6;
     /** So viele Sätze der Mod stehen vorn in der Reihe (danach die von Minecraft). */
-    private static final int MOD_SETS = 11;
+    private static final int MOD_SETS = 12;
 
     private ArmorPartsShowcase() {}
 
@@ -52,6 +52,12 @@ final class ArmorPartsShowcase {
                             : Items.AIR));
         }
         sets.add(List.of(ModItems.GEMSTONE_CROWN.get(), ModItems.STEEL_CHESTPLATE.get(), Items.AIR, Items.AIR, Items.AIR));
+        // die Mondsteinrüstung der Zauberer (seit 0.96), dazu der Hüterhammer
+        sets.add(List.of(io.github.sirschrolli.kingdomsatwar.registry.FaeGear.MOONSTONE_HELMET.get(),
+                io.github.sirschrolli.kingdomsatwar.registry.FaeGear.MOONSTONE_CHESTPLATE.get(),
+                io.github.sirschrolli.kingdomsatwar.registry.FaeGear.MOONSTONE_LEGGINGS.get(),
+                io.github.sirschrolli.kingdomsatwar.registry.FaeGear.MOONSTONE_BOOTS.get(),
+                io.github.sirschrolli.kingdomsatwar.registry.FaeGear.KEEPER_MAUL.get()));
         // die Rüstungen von Minecraft
         sets.add(List.of(Items.LEATHER_HELMET, Items.LEATHER_CHESTPLATE, Items.LEATHER_LEGGINGS, Items.LEATHER_BOOTS, Items.BOW));
         sets.add(List.of(Items.CHAINMAIL_HELMET, Items.CHAINMAIL_CHESTPLATE, Items.CHAINMAIL_LEGGINGS, Items.CHAINMAIL_BOOTS,

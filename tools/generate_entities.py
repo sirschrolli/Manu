@@ -27,11 +27,11 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               enderman, endermite, shulker, shulker_bullet, ender_dragon,
                               crystal_crawler, deer, dragon, dragon_armor, glimmer_moth, goose, lindworm, moosling, night_wing,
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp,
-                              ice_lance, icicle, ice_prison, phoenix, poison_flower, stone_fist, stone_spike, thorn_vine,
+                              ice_lance, icicle, ice_prison, phoenix, poison_flower, stone_fist, stone_spike, thorn_vine, moon_crystal,
                               void_maw, shard_warden, distortling, star_ray, warden_shard, shattered_king,
                               shattered_crown, manta_ray, glow_jellyfish, shark, anglerfish, giant_crab, reef_colossus, kraken, mermaid,
                               armor_parts,
-                              fairy, mushroomling, thorn_wight, moth_queen, glutschmied, asteria,
+                              fairy, mushroomling, thorn_wight, moth_queen, glutschmied, asteria, stone_keeper, keeper_boulder,
                               miss_mystik, light_dove, magic_sword, anni_troll,
                               werewolf, mire_shambler, ember_wyrm, ash_wraith, soul_heron, night_ram, rift_hound, chorus_maw,
                               world_eater, world_eater_segment, world_eater_tail, world_chunk,
@@ -88,6 +88,10 @@ def main():
     write_model(thorn_wight, "ThornWightGeometry", "Geometrie des Dornwichts.", "thorn_wight", thorn_wight.PALETTES, preview)
     write_model(glutschmied, "GlutschmiedGeometry", "Geometrie des Glutschmieds Malleus (im Spiel 1,4-fach vergrößert).",
                 "glutschmied", glutschmied.PALETTES, preview)
+    write_model(stone_keeper, "StoneKeeperGeometry", "Geometrie des Steinhüters (im Spiel 1,4-fach vergrößert).",
+                "stone_keeper", stone_keeper.PALETTES, preview)
+    write_model(keeper_boulder, "KeeperBoulderGeometry", "Geometrie des Felsbrockens, den der Steinhüter schleudert.",
+                "stone_keeper/boulder", keeper_boulder.PALETTES, preview)
     write_model(asteria, "AsteriaGeometry",
                 "Geometrie Asterias, der Sternenreiterin, auf ihrem gepanzerten Sternenrochen (im Spiel 1,2-fach vergrößert).",
                 "asteria", asteria.PALETTES, preview)
@@ -441,6 +445,8 @@ def main():
                 "Geometrie des Eisgefängnisses (acht Kristalle shard0–shard7 mit Drehpunkt am Fuß auf dem Boden, dazu der "
                 "Kristallknoten \"cap\"; durchscheinend, die Kristalle wachsen einzeln aus dem Boden).",
                 "spell/ice_prison", ice_prison.PALETTES, preview)
+    write_model(moon_crystal, "MoonCrystalGeometry", "Geometrie der Mondsteinkristalle (Kristallspur des Steinhüters, seit 0.96).",
+                "spell/moon_crystal", moon_crystal.PALETTES, preview)
     write_model(stone_spike, "StoneSpikeGeometry",
                 "Geometrie des Steinstachels (Felsdorn \"spike\" und Geröll \"rubble\", beide mit Drehpunkt auf dem Boden).",
                 "spell/stone_spike", stone_spike.PALETTES, preview)

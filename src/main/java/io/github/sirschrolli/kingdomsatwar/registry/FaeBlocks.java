@@ -60,8 +60,10 @@ import net.neoforged.neoforge.registries.DeferredItem;
 public final class FaeBlocks {
     private FaeBlocks() {}
 
-    /** Inhalt des Kreativ-Tabs „Das Feenreich“ (in Reihenfolge). */
+    /** Inhalt des Kreativ-Tabs „Das Feenreich“ (in Reihenfolge; die Spawn-Eier stehen in {@link #EGGS} am Ende). */
     static final List<Supplier<? extends ItemLike>> TAB = new ArrayList<>();
+    /** Die Spawn-Eier des Feenreichs (im Kreativ-Tab nach allem anderen). */
+    static final List<Supplier<? extends ItemLike>> EGGS = new ArrayList<>();
 
     /** Lädt die Klasse, damit sich alle Blöcke anmelden, bevor die Register gefüllt werden. */
     public static void init() {}
@@ -93,6 +95,26 @@ public final class FaeBlocks {
     public static final DeferredBlock<Block> CHISELED_MOONSTONE = ModBlocks.blockWithItem("chiseled_moonstone", Block::new,
             p -> p.mapColor(MapColor.QUARTZ).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(2.0f, 6.0f)
                     .sound(SoundType.CALCITE).lightLevel(s -> 8),
+            UnaryOperator.identity(), TAB);
+
+    // ---------------------------------------------------------------- Mondstein (seit 0.96)
+
+    /**
+     * Mondsteinerz: milchweiße, bläulich schimmernde Mondsteine im Feenstein, die ein wenig leuchten – das Erz, das das alte
+     * Volk einst brach (ab einer Eisenspitzhacke; Glück bringt mehr).
+     */
+    public static final DeferredBlock<net.minecraft.world.level.block.DropExperienceBlock> MOONSTONE_ORE = ModBlocks.blockWithItem(
+            "moonstone_ore", p -> new net.minecraft.world.level.block.DropExperienceBlock(net.minecraft.util.valueproviders.UniformInt.of(3, 7), p),
+            p -> p.mapColor(MapColor.COLOR_LIGHT_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops()
+                    .strength(3.0f, 3.0f).sound(SoundType.CALCITE).lightLevel(s -> 4),
+            UnaryOperator.identity(), TAB);
+    /** Mondstein: ein milchiger Stein, in dem ein blauer Schimmer wandert – er speichert Mondlicht. */
+    public static final DeferredItem<Item> MOONSTONE = addItem(ModItems.ITEMS.registerSimpleItem("moonstone",
+            p -> p.component(net.minecraft.core.component.DataComponents.LORE, ModItems.lore("moonstone", 1))));
+    /** Mondsteinblock: neun geschliffene Mondsteine – er leuchtet sanft und klingt wie ein Glockenspiel. */
+    public static final DeferredBlock<Block> MOONSTONE_BLOCK = ModBlocks.blockWithItem("moonstone_block", Block::new,
+            p -> p.mapColor(MapColor.QUARTZ).instrument(NoteBlockInstrument.CHIME).requiresCorrectToolForDrops().strength(5.0f, 6.0f)
+                    .sound(SoundType.AMETHYST).lightLevel(s -> 7),
             UnaryOperator.identity(), TAB);
 
     // =====================================================================================
@@ -253,6 +275,22 @@ public final class FaeBlocks {
             ip -> ip.rarity(Rarity.EPIC).component(net.minecraft.core.component.DataComponents.LORE, ModItems.lore("moth_cocoon", 1)), TAB);
 
     // =====================================================================================
+    // Der Mondsteinbruch (seit 0.96)
+    // =====================================================================================
+
+    /** Der Hüterstein am Grund des Mondsteinbruchs (unzerstörbar; erloschen ruft ein Mondstein einen neuen Steinhüter). */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.fae.KeeperStoneBlock> KEEPER_STONE = ModBlocks.blockWithItem(
+            "keeper_stone", io.github.sirschrolli.kingdomsatwar.block.fae.KeeperStoneBlock::new,
+            p -> p.mapColor(MapColor.COLOR_LIGHT_GRAY).strength(-1.0f, 3_600_000.0f).noLootTable().sound(SoundType.STONE)
+                    .lightLevel(s -> s.getValue(io.github.sirschrolli.kingdomsatwar.block.fae.KeeperStoneBlock.PHASE).light)
+                    .pushReaction(PushReaction.IMMOVEABLE).isValidSpawn((state, level, pos, type) -> false),
+            ip -> ip.rarity(Rarity.EPIC).component(net.minecraft.core.component.DataComponents.LORE, ModItems.lore("keeper_stone", 2)), TAB);
+    public static final net.neoforged.neoforge.registries.DeferredHolder<net.minecraft.world.level.block.entity.BlockEntityType<?>,
+            net.minecraft.world.level.block.entity.BlockEntityType<io.github.sirschrolli.kingdomsatwar.block.fae.KeeperStoneBlockEntity>> KEEPER_STONE_ENTITY =
+            ModBlockEntities.BLOCK_ENTITIES.register("keeper_stone", () -> new net.minecraft.world.level.block.entity.BlockEntityType<>(
+                    io.github.sirschrolli.kingdomsatwar.block.fae.KeeperStoneBlockEntity::new, KEEPER_STONE.get()));
+
+    // =====================================================================================
     // Das Portal
     // =====================================================================================
 
@@ -332,15 +370,17 @@ public final class FaeBlocks {
     public static final DeferredItem<SpawnEggItem> MUSHROOMLING_SPAWN_EGG = egg("mushroomling", () -> ModEntities.MUSHROOMLING.get());
     public static final DeferredItem<SpawnEggItem> THORN_WIGHT_SPAWN_EGG = egg("thorn_wight", () -> ModEntities.THORN_WIGHT.get());
     public static final DeferredItem<SpawnEggItem> MOTH_QUEEN_SPAWN_EGG = egg("moth_queen", () -> ModEntities.MOTH_QUEEN.get());
+    public static final DeferredItem<SpawnEggItem> STONE_KEEPER_SPAWN_EGG = egg("stone_keeper", () -> ModEntities.STONE_KEEPER.get());
 
     public static List<DeferredItem<SpawnEggItem>> spawnEggs() {
-        return List.of(FAIRY_SPAWN_EGG, FAE_WISP_SPAWN_EGG, MUSHROOMLING_SPAWN_EGG, THORN_WIGHT_SPAWN_EGG, MOTH_QUEEN_SPAWN_EGG);
+        return List.of(FAIRY_SPAWN_EGG, FAE_WISP_SPAWN_EGG, MUSHROOMLING_SPAWN_EGG, THORN_WIGHT_SPAWN_EGG, MOTH_QUEEN_SPAWN_EGG,
+                STONE_KEEPER_SPAWN_EGG);
     }
 
     /** Spawn-Eier der Wesen des Feenreichs. */
     static DeferredItem<SpawnEggItem> egg(String name, Supplier<EntityType<? extends Mob>> type) {
         DeferredItem<SpawnEggItem> item = ModItems.ITEMS.registerItem(name + "_spawn_egg", SpawnEggItem::new, p -> p.spawnEgg(type.get()));
-        TAB.add(item);
+        EGGS.add(item);
         return item;
     }
 }

@@ -427,6 +427,15 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.MothQueenEntity>> MOTH_QUEEN =
             ENTITIES.registerEntityType("moth_queen", io.github.sirschrolli.kingdomsatwar.entity.fae.MothQueenEntity::new, MobCategory.MONSTER,
                     builder -> builder.sized(3.2f, 2.6f).eyeHeight(2.0f).fireImmune().notInPeaceful().clientTrackingRange(16).updateInterval(2));
+    /** Der Steinhüter (0.96): kniet am Grund des alten Mondsteinbruchs im Feenreich, bis jemand an den Grund tritt. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.StoneKeeperEntity>> STONE_KEEPER =
+            ENTITIES.registerEntityType("stone_keeper", io.github.sirschrolli.kingdomsatwar.entity.fae.StoneKeeperEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(2.4f, 3.6f).eyeHeight(3.0f).fireImmune().notInPeaceful()
+                            .clientTrackingRange(16).updateInterval(2));
+    /** Ein Felsbrocken, den der Steinhüter aus dem Boden reißt und schleudert. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.KeeperBoulderEntity>> KEEPER_BOULDER =
+            ENTITIES.registerEntityType("keeper_boulder", io.github.sirschrolli.kingdomsatwar.entity.fae.KeeperBoulderEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(1.2f, 1.2f).noLootTable().clientTrackingRange(8).updateInterval(2));
     /** Malleus, der Glutschmied: kniet auf dem Dach der Aschenesse an seinem Amboss, bis jemand ihm zu nahe kommt. */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.nether.GlutschmiedEntity>> GLUTSCHMIED =
             ENTITIES.registerEntityType("glutschmied", io.github.sirschrolli.kingdomsatwar.entity.nether.GlutschmiedEntity::new,
@@ -931,6 +940,7 @@ public final class ModEntities {
         event.put(MUSHROOMLING.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MushroomlingEntity.createAttributes().build());
         event.put(THORN_WIGHT.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.ThornWightEntity.createAttributes().build());
         event.put(MOTH_QUEEN.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MothQueenEntity.createAttributes().build());
+        event.put(STONE_KEEPER.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.StoneKeeperEntity.createAttributes().build());
         event.put(MOON_MOTH.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MoonMothEntity.createAttributes().build());
         event.put(GLUTSCHMIED.get(), io.github.sirschrolli.kingdomsatwar.entity.nether.GlutschmiedEntity.createAttributes().build());
         event.put(ASTERIA.get(), io.github.sirschrolli.kingdomsatwar.entity.end.AsteriaEntity.createAttributes().build());

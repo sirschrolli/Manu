@@ -247,6 +247,8 @@ final class Showcase {
                         StarShowcase.boss(steps);
                     } else if (scene.equals("mystik_boss")) {
                         MystikShowcase.boss(steps);
+                    } else if (scene.equals("keeper_boss")) {
+                        KeeperShowcase.boss(steps);
                     } else if (scene.equals("anni_boss")) {
                         AnniShowcase.boss(steps);
                     } else if (scene.equals("creator_boss")) {

@@ -49,6 +49,7 @@ PHASES = {
     "void": (0.5, 0.25),                 # Zorn bei der Hälfte, unter einem Viertel neun Kronensplitter
     "reef": (0.66, 0.4),                 # Ruf ins Riff, dann die Flut
     "kraken": (0.67, 0.34),              # zweimal ruft er die Tiefe, beim zweiten Mal gerät er in Raserei
+    "keeper": (0.5,),                    # unter halber Kraft legt er den Kristallpanzer an
     "moth": (0.5,), "forge": (0.5,), "star": (0.5,), "anni": (0.5,), "anni2": (0.5,),
     "mystic": (0.6, 0.3),                # Zugabe und großes Finale
     "schrolli": (0.7, 0.4),              # erste Gestalt: zweimal schneller
@@ -165,6 +166,17 @@ ELEMENTS = {
                    under0="#9a4e5a", under1="#cc7e88", under2="#eab0b0", sucker="#f6d8d6", sucker_dark="#6e2a38",
                    spot="#3ad0e0", spot_light="#a8faff", barnacle="#d8d2c2", barnacle_dark="#6a665c",
                    weed="#3e5a2c", weed_light="#6e8a3e", ink="#1c0818", ink_light="#4a1a3e"),
+    # der Steinhüter (seit 0.96): behauene Quader aus Feenstein, in deren Fugen Mondlicht schimmert; hinter dem Medaillon
+    # wächst sein Kristallkamm hervor, auf dem Rahmen liegen Polster aus Lavendelmoos, aus denen kleine Mondsteinkristalle
+    # sprießen, darunter hängen Leuchtranken mit Blüten; als Spitze ein liegender Kristall. Füllung wie milchiger Mondstein,
+    # über den ein bläulicher Schimmer zieht
+    "keeper": dict(m0="#2a2536", m1="#645c76", m2="#c4bcd4", acc="#7cb4ff", glow="#e2f0ff", deep="#0c1230",
+                   f0="#14245e", f1="#3a5cb4", f2="#9ec2f2", f3="#f4f9ff",
+                   seam0="#1e3e9a", seam1="#4f8cf0", seam2="#cfe6ff",
+                   moss0="#3a2a62", moss1="#62489a", moss2="#9478cc", moss3="#c8b2ec",
+                   crystal0="#24367e", crystal1="#4f6cc8", crystal2="#8eacf0", crystal3="#e8f2ff",
+                   vine="#28403a", vine_light="#4e7468", bloom_pink="#ff9ad0", bloom_cyan="#9af2ff",
+                   bloom_light="#f2fffe", spore="#ffb0e4"),
 }
 
 OUTLINE = (12, 10, 12, 255)
@@ -2226,6 +2238,205 @@ def fill_strip_kraken() -> Image.Image:
 
 
 # =============================================================================================
+# Der Steinhüter (seit 0.96)
+# =============================================================================================
+
+def _keeper_crystal(layer: Image.Image, g: dict, x0: float, y0: float, ang: float, length: float, width: float,
+                    seed: int) -> None:
+    """Ein Mondsteinkristall von der Seite: ein sechskantiges Prisma (oben links die helle Fläche, in der Mitte die Kante im
+    Licht, unten rechts die Schattenseite), das in eine Spitze ausläuft; am Fuß dunkler, darin ein paar Glitzerpunkte."""
+    lp = layer.load()
+    ca, sa = math.cos(ang), math.sin(ang)
+    tip0 = 0.68
+    reach = int(length + width + 2)
+    for y in range(max(0, int(y0) - reach), min(FRAME_H, int(y0) + reach + 1)):
+        for x in range(max(0, int(x0) - reach), min(FRAME_W, int(x0) + reach + 1)):
+            dx, dy = x + 0.5 - x0, y + 0.5 - y0
+            u = dx * ca + dy * sa
+            v = -dx * sa + dy * ca
+            if u < 0.0 or u > length:
+                continue
+            k = u / length
+            half = width if k < tip0 else width * (1.0 - (k - tip0) / (1.0 - tip0)) + 0.2
+            if abs(v) > half:
+                continue
+            s = v / max(half, 0.01)
+            if s < -0.3:
+                col = g["crystal2"]
+            elif s < 0.2:
+                col = g["crystal3"] if k > 0.18 else g["crystal2"]
+            else:
+                col = g["crystal1"]
+            if k < 0.22:
+                col = mix(col, g["crystal0"], 0.55 * (1.0 - k / 0.22))
+            if k > tip0 and s < 0.2:
+                col = mix(col, g["crystal3"], 0.45)
+            if abs(s) > 0.78 and half > 1.1:
+                col = mix(col, g["crystal0"], 0.35)
+            if hash01(x, y, seed, 611) > 0.93 and abs(s) < 0.6 and k > 0.25:
+                col = g["crystal3"]
+            lp[x, y] = col
+
+
+def deco_keeper(img: Image.Image, pal: dict) -> None:
+    """Der Steinhüter: hinter dem Medaillon wächst sein Kristallkamm hervor (oben vier Mondsteinkristalle, fächerförmig,
+    unten zwei kleine); unter der Leiste hängen Leuchtranken mit Blättchen und je einer leuchtenden Blüte, dazwischen
+    hängt Moos über die Kante; als Spitze ein liegender Kristall mit zwei kleinen. (Moos und Kristalle auf dem Rahmen
+    folgen in post_keeper, über dem Rahmen.)"""
+    g = {k: c(pal, k) for k in pal}
+    bottom = BAR_Y + BAR_H + 2
+
+    # der Kristallkamm hinter dem Medaillon
+    comb = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    for i, (x0, y0, ang, length, width) in enumerate((
+            (31.0, 15.0, -80.0, 14.0, 2.2), (33.5, 15.0, -57.0, 16.5, 2.8), (36.0, 16.0, -35.0, 17.5, 2.4),
+            (38.0, 17.0, -15.0, 12.5, 1.8), (36.0, 30.0, 30.0, 11.0, 1.9), (34.0, 33.0, 56.0, 9.0, 1.6))):
+        _keeper_crystal(comb, g, x0, y0, math.radians(ang), length, width, i + 1)
+    _outline(comb, OUTLINE)
+    img.alpha_composite(comb)
+
+    # die Spitze: ein liegender Kristall, dazu zwei kleine schräg darüber und darunter
+    tip = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    _keeper_crystal(tip, g, 229.0, 22.5, 0.0, 10.4, 2.4, 11)
+    _keeper_crystal(tip, g, 230.0, 19.5, math.radians(-38.0), 7.0, 1.5, 12)
+    _keeper_crystal(tip, g, 230.0, 25.5, math.radians(34.0), 6.0, 1.4, 13)
+    _outline(tip, OUTLINE)
+    img.alpha_composite(tip)
+
+    # Leuchtranken unter der Leiste: sie schwingen ein wenig, tragen Blättchen und enden in einer Blüte
+    px = img.load()
+    vines = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    vp = vines.load()
+    for i, x0 in enumerate((57, 70, 96, 108, 127, 151, 175, 186, 203, 221)):
+        length = 4 + round(hash01(x0, 613) * 7)
+        phase = hash01(x0, 617) * math.tau
+        x = x0
+        for k in range(length):
+            x = x0 + round(0.9 * math.sin(k * 0.75 + phase))
+            put(vp, vines, x, bottom + 1 + k, g["vine_light"] if k % 3 == 1 else g["vine"])
+            if k % 3 == 2 and k < length - 1:
+                side = 1 if (k // 3 + i) % 2 else -1
+                put(vp, vines, x + side, bottom + 1 + k, mix(g["vine_light"], g["moss2"], 0.35))
+        bloom = g["bloom_pink"] if i % 2 else g["bloom_cyan"]
+        by = bottom + 2 + length
+        for dx, dy in ((0, 0), (-1, 0), (1, 0), (0, -1), (0, 1)):
+            put(vp, vines, x + dx, by + dy, g["bloom_light"] if (dx, dy) == (0, 0) else bloom)
+    # Moos, das über die Unterkante hängt
+    for x0, width in ((63, 4), (89, 3), (118, 5), (166, 4), (196, 3), (212, 4)):
+        for dx in range(width):
+            depth = 1 + (1 if 0 < dx < width - 1 else 0) + (1 if hash01(x0 + dx, 619) > 0.7 else 0)
+            for k in range(depth):
+                put(vp, vines, x0 + dx, bottom + 1 + k, g["moss1"] if k < depth - 1 else g["moss0"])
+    _outline(vines, OUTLINE)
+    vl = vines.load()
+    for y in range(FRAME_H):
+        for x in range(FRAME_W):
+            if vl[x, y][3] and y > bottom:
+                px[x, y] = vl[x, y]
+
+
+def post_keeper(img: Image.Image, pal: dict) -> None:
+    """Nach dem Rahmen: Polster aus Lavendelmoos auf der Oberkante (mit Sporen), aus drei davon sprießen kleine
+    Mondsteinkristalle; Moos auch auf dem Ring des Medaillons, oben rechts am Fuß des Kristallkamms und unten links."""
+    g = {k: c(pal, k) for k in pal}
+    px = img.load()
+    top = BAR_Y - 3
+
+    def gem_free(x: int) -> bool:
+        return all(abs(x - (BAR_X + round(BAR_W * f))) > 8 for f in GEMS)
+
+    cushions = [(60, 14, 3.0), (88, 18, 3.6), (116, 12, 2.6), (163, 16, 3.4), (190, 12, 2.4), (214, 14, 3.2)]
+    sprouts = {88: ((-3, -100.0, 7.0, 1.5), (1, -78.0, 9.0, 1.7), (4, -58.0, 5.5, 1.3)),
+               163: ((-2, -84.0, 7.5, 1.6), (2, -62.0, 5.0, 1.2)),
+               214: ((-3, -112.0, 5.0, 1.2), (0, -88.0, 8.0, 1.6), (3, -70.0, 5.5, 1.3))}
+    crystals = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    for cx, spec in sprouts.items():
+        for j, (dx, ang, length, width) in enumerate(spec):
+            _keeper_crystal(crystals, g, cx + dx + 0.5, top - 0.5, math.radians(ang), length, width, cx + j)
+    _outline(crystals, OUTLINE)
+    cp = crystals.load()
+    for y in range(0, top):
+        for x in range(FRAME_W):
+            if cp[x, y][3]:
+                px[x, y] = cp[x, y]
+
+    moss = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    mp = moss.load()
+    for cx, width, height in cushions:
+        for x in range(cx - width // 2, cx + width // 2 + 1):
+            if not gem_free(x):
+                continue
+            t = (x - cx) / (width / 2 + 0.5)
+            if abs(t) >= 1.0:
+                continue
+            h = height * (1.0 - t * t) ** 0.6 + (hash01(x, 631) - 0.5) * 1.1
+            y_top = top + 1 - max(1, round(h))
+            y_bot = top + 1 + (1 if hash01(x, 633) > 0.55 else 0)
+            for y in range(y_top, y_bot + 1):
+                k = (y - y_top) / max(1, y_bot - y_top)
+                col = _ramp((g["moss3"], g["moss2"], g["moss1"], g["moss0"]), k * 0.9 + 0.1 * hash01(x, y, 635))
+                if y == y_top and hash01(x, 637) > 0.82:
+                    col = g["spore"] if hash01(x, 639) > 0.5 else g["bloom_cyan"]
+                mp[x, y] = col
+    # Moos auf dem Ring des Medaillons: oben rechts (am Fuß des Kristallkamms) und unten links
+    for a0, a1, seed in ((-72.0, -34.0, 641), (124.0, 146.0, 643)):
+        for k in range(int((a1 - a0) * 1.4)):
+            ang = math.radians(a0 + k / 1.4)
+            hump = 0.4 + 1.1 * math.sin(math.pi * k / ((a1 - a0) * 1.4)) + (hash01(k // 3, seed) - 0.5) * 0.9
+            inner = EMB_R - 1.5 - 1.5 * math.sin(math.pi * k / ((a1 - a0) * 1.4))
+            for r10 in range(int(inner * 10), int((EMB_R + hump) * 10), 4):
+                r = r10 / 10.0
+                x = round(EMB_X - 0.5 + math.cos(ang) * r)
+                y = round(EMB_Y - 0.5 + math.sin(ang) * r)
+                if not (0 <= x < FRAME_W and 0 <= y < FRAME_H):
+                    continue
+                t = (r - inner) / (EMB_R + hump - inner)
+                col = _ramp((g["moss0"], g["moss1"], g["moss2"], g["moss3"]), t)
+                if t > 0.8 and hash01(x, y, seed + 1) > 0.86:
+                    col = g["spore"] if hash01(x, y, seed + 2) > 0.5 else g["bloom_cyan"]
+                mp[x, y] = col
+    # Kontur nur nach außen, nie in das Fenster der Leiste
+    _outline(moss, OUTLINE)
+    ml = moss.load()
+    for y in range(FRAME_H):
+        for x in range(FRAME_W):
+            if not ml[x, y][3] or (BAR_X <= x < BAR_X + BAR_W and BAR_Y <= y < BAR_Y + BAR_H):
+                continue
+            if ml[x, y] == OUTLINE and px[x, y][3] and px[x, y] != OUTLINE:
+                continue                                       # auf dem Rahmen selbst keine zusätzliche Kontur
+            px[x, y] = ml[x, y]
+
+
+def fill_strip_keeper() -> Image.Image:
+    """Füllung des Steinhüters: milchiger Mondstein – weiche Wolken im Blau, über die schräg ein heller Schimmer zieht
+    (mit bläulichem Saum, wie das Licht in einem echten Mondstein), dazwischen einzelne Glitzerpunkte."""
+    pal = ELEMENTS["keeper"]
+    f0, f1, f2, f3 = (c(pal, k) for k in ("f0", "f1", "f2", "f3"))
+    acc = c(pal, "acc")
+    tau = math.tau
+    img = Image.new("RGBA", (256, BAR_H), CLEAR)
+    px = img.load()
+    for y in range(BAR_H):
+        top = 1.0 - y / (BAR_H - 1)
+        for x in range(256):
+            cloud = fill_value("keeper", x, y)
+            col = mix(mix(f0, f1, 0.25 + 0.55 * top), f2, max(0.0, cloud - 0.3) * 0.9)
+            s = ((x + 2.2 * y + 7.0 * math.sin(tau * x / 128)) % 128) / 128.0
+            band = math.exp(-((s - 0.5) / 0.085) ** 2)
+            rim = math.exp(-((s - 0.62) / 0.045) ** 2)
+            col = mix(col, f3, 0.7 * band)
+            col = mix(col, acc, 0.45 * rim)
+            if hash01(x, y, 651) > 0.984 and 1 <= y <= BAR_H - 2:
+                col = f3
+            if y == 1:
+                col = mix(col, f3, 0.3)
+            if y == BAR_H - 1:
+                col = mix(col, f0, 0.55)
+            px[x, y] = col
+    return img
+
+
+# =============================================================================================
 # Namensband (seit 0.94)
 # =============================================================================================
 
@@ -2235,6 +2446,7 @@ BANNER_COLORS = {
     "anni": dict(trim="#f800f8", trim_dark="#22d8e8", fabric="#14101c"),
     "anni2": dict(trim="#ff2040", trim_dark="#ff8a30", fabric="#1a0a10"),
     "world_eater": dict(trim="#e8541a", trim_dark="#54444e", fabric="#1c0a0a"),
+    "keeper": dict(trim="#a8d2ff", trim_dark="#4e5a8a", fabric="#141428"),
 }
 
 
@@ -2321,13 +2533,13 @@ def banner_cap(element: str) -> Image.Image:
 
 
 POST = {"schrolli": post_schrolli, "schrolli_true": post_schrolli, "schrolli_almighty": post_almighty,
-        "world_eater": post_world_eater, "kraken": post_kraken}
-BORDERS = {"world_eater": frame_border_stone}
+        "world_eater": post_world_eater, "kraken": post_kraken, "keeper": post_keeper}
+BORDERS = {"world_eater": frame_border_stone, "keeper": frame_border_stone}
 
 
 DECOS = {"schrolli": deco_schrolli, "schrolli_true": deco_schrolli, "schrolli_almighty": deco_almighty,
          "world_eater": deco_world_eater, "anni": deco_anni, "anni2": deco_anni, "mystic": deco_mystic, "star": deco_star, "forge": deco_forge, "moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
-         "water": deco_water, "kraken": deco_kraken}
+         "water": deco_water, "kraken": deco_kraken, "keeper": deco_keeper}
 
 
 def frame(element: str, phases: tuple | None = None) -> Image.Image:
@@ -2458,6 +2670,10 @@ def fill_value(element: str, x: int, y: int) -> float:
     if element == "kraken":
         # Schlieren der Tinte
         return 0.5 + 0.5 * math.sin(tau * x / 64 + 2.3 * math.sin(tau * y / 18 + tau * x / 32))
+    if element == "keeper":
+        # milchiger Mondstein: weiche Wolken (der Schimmer kommt in fill_strip_keeper dazu)
+        return (0.5 + 0.22 * math.sin(tau * x / 64 + 1.3 * math.sin(tau * y / 9 + tau * x / 128))
+                + 0.14 * math.sin(tau * x / 32 - tau * y / 18))
     if element == "shadow":
         # wabernder Rauch, durch den einzelne Seelen ziehen
         smoke = 0.42 + 0.22 * math.sin(tau * x / 64 + 2.0 * math.sin(tau * y / 9 + tau * x / 32))
@@ -2509,6 +2725,8 @@ def fill_strip(element: str) -> Image.Image:
         return fill_strip_world_eater()
     if element == "kraken":
         return fill_strip_kraken()
+    if element == "keeper":
+        return fill_strip_keeper()
     pal = ELEMENTS[element]
     f0, f1, f2, f3 = (c(pal, k) for k in ("f0", "f1", "f2", "f3"))
     img = Image.new("RGBA", (256, BAR_H), CLEAR)
@@ -2636,14 +2854,14 @@ def portrait(element: str) -> Image.Image:
     mit dunkler Kontur (2 Pixel = 1 Pixel im Spiel), damit er sich vom Grund des Medaillons abhebt."""
     from entitygen.models import (asteria, boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water,
                                   glutschmied, kraken, miss_mystik, moth_queen, reef_colossus, shattered_king, anni_troll,
-                                  schrolli, world_eater)
+                                  schrolli, stone_keeper, world_eater)
     from entitygen.paint import paint_model
     from entitygen.preview import render
     mod = {"fire": boss_fire, "ice": boss_ice, "lightning": boss_lightning, "nature": boss_nature, "earth": boss_earth,
            "water": boss_water, "shadow": boss_shadow, "void": shattered_king, "reef": reef_colossus, "moth": moth_queen,
            "forge": glutschmied, "star": asteria, "mystic": miss_mystik, "anni": anni_troll, "anni2": anni_troll,
            "schrolli": schrolli, "schrolli_true": schrolli, "schrolli_almighty": schrolli, "world_eater": world_eater,
-           "kraken": kraken}[element]
+           "kraken": kraken, "keeper": stone_keeper}[element]
     m = mod.build()
     m.pack()
     variant = "anni_troll_v2" if element == "anni2" else element if element.startswith("schrolli") else next(iter(mod.PALETTES))
@@ -2720,6 +2938,19 @@ def portrait(element: str) -> Image.Image:
             for child in bone.children:
                 strip_kraken(child)
         strip_kraken(m.root)
+    if element == "keeper":
+        # der Kopf mit Stirnkristallen und Mondstein, dahinter der Kristallkamm, die Schulterfelsen mit ihren Kristallen (ohne
+        # Unterarme, Beine, Ranken, Felsbrocken und Kristallpanzer)
+        def strip_keeper(bone):
+            name = bone.name
+            if name.startswith(("left_leg", "right_leg", "left_shin", "right_shin", "left_forearm", "right_forearm", "vine",
+                                "boulder", "armor")):
+                bone.cubes.clear()
+            if name in ("left_arm", "right_arm"):
+                del bone.cubes[1:]                       # nur der Schulterfels
+            for child in bone.children:
+                strip_keeper(child)
+        strip_keeper(m.root)
     if element in ("anni", "anni2"):
         # Kopf mit Grinsen, Bildschirmauge, Ohren und Haarschopf (ohne Leib, Arme und Hammer)
         def strip_anni(bone):
@@ -2732,17 +2963,17 @@ def portrait(element: str) -> Image.Image:
                 strip_anni(child)
         strip_anni(m.root)
     zoom = {"kraken": 1.5, "schrolli": 1.0, "schrolli_true": 1.0, "schrolli_almighty": 1.0, "world_eater": 1.35, "nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86, "star": 0.92, "mystic": 0.95,
-            "anni": 1.0, "anni2": 1.0}.get(element, 1.2)
+            "anni": 1.0, "anni2": 1.0, "keeper": 0.8}.get(element, 1.2)
     yaw = {"kraken": -20, "schrolli": -22, "schrolli_true": -22, "schrolli_almighty": -22, "world_eater": -6, "water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14, "star": -24, "mystic": -22, "anni": -24,
-           "anni2": -24}.get(element, -42)
-    pitch = {"kraken": -18, "schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2}.get(element, 6)
+           "anni2": -24, "keeper": -20}.get(element, -42)
+    pitch = {"kraken": -18, "schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2, "keeper": -5}.get(element, 6)
     big = render(m, tex, glow, yaw, pitch, 448, pose=getattr(mod, "FOLD_POSE", None), background=(0, 0, 0, 0), zoom=zoom,
                  focus=["body"] if element in ("reef", "kraken") else ["helm"] if element == "star" else ["head"])
     img = big.resize((64, 64), Image.LANCZOS)
     img = ImageEnhance.Brightness(img).enhance({"kraken": 1.85, "fire": 1.9, "earth": 1.5, "lightning": 1.9, "nature": 1.6, "shadow": 2.4,
                                                  "void": 1.0, "reef": 1.35, "moth": 1.25, "forge": 1.65, "star": 1.15, "mystic": 1.2,
                                                  "anni": 1.45, "anni2": 1.45, "schrolli": 1.5, "schrolli_true": 1.5,
-                                                 "schrolli_almighty": 1.45, "world_eater": 2.0}.get(element, 1.4))
+                                                 "schrolli_almighty": 1.45, "world_eater": 2.0, "keeper": 1.3}.get(element, 1.4))
     img = ImageEnhance.Color(img).enhance(1.15)
     img = ImageEnhance.Contrast(img).enhance(1.12)
     if element == "schrolli_almighty":

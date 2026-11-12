@@ -41,6 +41,9 @@ public final class ModLootTables {
     public static final ResourceKey<LootTable> VOID_RUIN_CHEST = ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/void_ruin"));
     /** Truhen in den Ruinen des Feenreichs. */
     public static final ResourceKey<LootTable> FAE_RUIN_CHEST = ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/fae_ruin"));
+    /** Die Truhe in der Hütte des Vorarbeiters im alten Mondsteinbruch (seit 0.96). */
+    public static final ResourceKey<LootTable> MOONSTONE_QUARRY_CHEST =
+            ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/moonstone_quarry"));
     public static final ResourceKey<LootTable> MOON_TEMPLE_CHEST = ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/moon_temple"));
     public static final ResourceKey<LootTable> MOON_TEMPLE_CRYPT = ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/moon_temple_crypt"));
     public static final ResourceKey<LootTable> CRYSTAL_MINE_CHEST = ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/crystal_mine"));

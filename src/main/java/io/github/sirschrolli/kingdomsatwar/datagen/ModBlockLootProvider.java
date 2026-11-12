@@ -329,7 +329,9 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
     }
 
     private void fae() {
+        ore(FaeBlocks.MOONSTONE_ORE, FaeBlocks.MOONSTONE.get());
         for (DeferredBlock<? extends Block> block : java.util.List.of(FaeBlocks.MOSSY_FAESTONE_BRICKS, FaeBlocks.CHISELED_MOONSTONE,
+                FaeBlocks.MOONSTONE_BLOCK,
                 FaeBlocks.FAE_SOIL, FaeBlocks.FAE_MOSS, FaeBlocks.GLIMMERWOOD_LOG, FaeBlocks.GLIMMERWOOD_WOOD,
                 FaeBlocks.STRIPPED_GLIMMERWOOD_LOG, FaeBlocks.STRIPPED_GLIMMERWOOD_WOOD, FaeBlocks.GLIMMERWOOD_TRAPDOOR,
                 FaeBlocks.GLIMMERWOOD_FENCE, FaeBlocks.GLIMMERWOOD_FENCE_GATE, FaeBlocks.GLIMMERWOOD_SAPLING, FaeBlocks.FAE_MUSHROOM_STEM,

@@ -77,7 +77,9 @@ public class SpellFxEntity extends Entity {
          * Riss im Boden: ein gezackter, dunkler Spalt vom Ursprung zum Endpunkt, in dem Licht glüht; er reißt vom Ursprung her
          * auf. Größe = Breite, Zusatz = Ticks, bevor er aufreißt.
          */
-        FISSURE;
+        FISSURE,
+        /** Mondsteinkristalle, die aus dem Boden brechen (Kristallspur des Steinhüters, seit 0.96). Größe = Maßstab. */
+        CRYSTAL;
 
         public static Kind of(int index) {
             return values()[Mth.clamp(index, 0, values().length - 1)];
@@ -346,6 +348,24 @@ public class SpellFxEntity extends Entity {
                         level.addParticle(particle, this.getX() + Math.cos(a) * r, this.getY() + this.random.nextDouble() * this.param(),
                                 this.getZ() + Math.sin(a) * r, 0.0, 0.12, 0.0);
                     }
+                }
+            }
+            case CRYSTAL -> {
+                if (t == 1) {
+                    this.groundBurst(size * 1.1, 22);
+                    for (int i = 0; i < 10; i++) {
+                        level.addParticle(ParticleTypes.END_ROD, this.getX() + (this.random.nextDouble() - 0.5) * size * 1.4,
+                                this.getY() + this.random.nextDouble() * size * 1.6, this.getZ() + (this.random.nextDouble() - 0.5) * size * 1.4,
+                                0.0, 0.05, 0.0);
+                    }
+                }
+                if (t > 2 && t < life - 6 && this.random.nextInt(4) == 0) {
+                    level.addParticle(ParticleTypes.END_ROD, this.getX() + (this.random.nextDouble() - 0.5) * size,
+                            this.getY() + size * (0.6 + this.random.nextDouble() * 1.2), this.getZ() + (this.random.nextDouble() - 0.5) * size,
+                            0.0, 0.02, 0.0);
+                }
+                if (t == life - 6) {
+                    this.groundBurst(size * 0.9, 10);
                 }
             }
             case SPIKE, FIST, VINE -> {

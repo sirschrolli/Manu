@@ -151,6 +151,10 @@ public final class BossBarRenderer {
         // der Kraken: Bronze mit Patina, seine Arme klammern sich an den Rahmen, die Füllung seine Tinte
         STYLES.put("kraken", style("kraken", 0xFF7684, new float[] {0.67f, 0.34f}, new Motes(Drift.BUBBLE, 3.5f, 0xD6FFF8, 0x36DCD2),
                 new Motes(Drift.DRIP, 1.2f, 0x4A1A3E, 0x1C0818)));
+        // der Steinhüter (Feenreich, seit 0.96): Quader aus Feenstein mit leuchtenden Fugen, Lavendelmoos und Mondsteinkristalle,
+        // Leuchtranken; die Füllung milchiger Mondstein mit wanderndem Schimmer; unter halber Kraft legt er den Kristallpanzer an
+        STYLES.put("keeper", style("keeper", 0xA8D4FF, new float[] {0.5f}, new Motes(Drift.DUST, 3.0f, 0xBFB8CF, 0x938AA6, 0x645C76),
+                new Motes(Drift.GLITTER, 1.5f, 0xFFB0E4, 0x9AF2FF, 0xD4ECFF)));
         // Noctua, die Mottenkönigin (Feenreich): Mondsilber mit Mottenflügeln, Füllung aus schimmerndem Flügelstaub
         STYLES.put("moth", style("moth", 0xFFB8E8, new float[] {0.5f}, new Motes(Drift.GLITTER, 4.5f, 0xFFF0FA, 0xFF8AD0, 0x9EE8C8)));
         // Malleus, der Glutschmied: geschwärztes Eisen mit Nieten, glühende Nähte, Hammer und Speer gekreuzt

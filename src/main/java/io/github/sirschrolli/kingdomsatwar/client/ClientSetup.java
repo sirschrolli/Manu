@@ -152,6 +152,9 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.ICICLE, io.github.sirschrolli.kingdomsatwar.client.model.geom.IcicleGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.ICE_PRISON, io.github.sirschrolli.kingdomsatwar.client.model.geom.IcePrisonGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.STONE_SPIKE, io.github.sirschrolli.kingdomsatwar.client.model.geom.StoneSpikeGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.MOON_CRYSTAL, io.github.sirschrolli.kingdomsatwar.client.model.geom.MoonCrystalGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.STONE_KEEPER, io.github.sirschrolli.kingdomsatwar.client.model.geom.StoneKeeperGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.KEEPER_BOULDER, io.github.sirschrolli.kingdomsatwar.client.model.geom.KeeperBoulderGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.STONE_FIST, io.github.sirschrolli.kingdomsatwar.client.model.geom.StoneFistGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.THORN_VINE, io.github.sirschrolli.kingdomsatwar.client.model.geom.ThornVineGeometry::createLayer);
         event.registerLayerDefinition(io.github.sirschrolli.kingdomsatwar.client.creator.CreatorGearLayer.LAYER,
@@ -240,6 +243,10 @@ public final class ClientSetup {
                 io.github.sirschrolli.kingdomsatwar.client.renderer.fae.MothQueenRenderer::new);
         event.registerEntityRenderer(ModEntities.MOON_MOTH.get(),
                 io.github.sirschrolli.kingdomsatwar.client.renderer.fae.MoonMothRenderer::new);
+        event.registerEntityRenderer(ModEntities.STONE_KEEPER.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.fae.StoneKeeperRenderer::new);
+        event.registerEntityRenderer(ModEntities.KEEPER_BOULDER.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.fae.KeeperBoulderRenderer::new);
         event.registerEntityRenderer(ModEntities.GLUTSCHMIED.get(),
                 io.github.sirschrolli.kingdomsatwar.client.renderer.nether.GlutschmiedRenderer::new);
         event.registerEntityRenderer(ModEntities.GLUTKLUMPEN.get(),

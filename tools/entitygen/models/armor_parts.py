@@ -13,6 +13,9 @@
     Platten), Schulterschuppen mit Kralle, ein Drachenschwanz zu den Beinschienen (mit der Spitze des Elements) und Krallen
     an den Stiefeln
   * Edelsteinkrone: Zacken und Edelsteine über dem Reif
+  * Mondstein (seit 0.96, die Rüstung der Zauberer): ein Stirnreif aus Mondsilber mit leuchtender Mondsichel und Mondstein,
+    ein langer Sternenmantel bis an die Knie, Mondsicheln auf den Schultern, Armreife mit Mondsteinen, ein Gürtel mit
+    Sichelschnalle, Robenschöße über den Beinen und spitze, aufgebogene Schuhe mit Mondsicheln an den Knöcheln
 
 Knochen: <satz>_<platz>_<knochen> (z. B. steel_chest_left_arm), je im Raum des gleichnamigen Knochens des Spielers
 (Drehpunkt 0) – ArmorPartsLayer.java hängt sie an Kopf, Körper, Arme und Beine. Die Oberfläche der flachen Rüstung liegt
@@ -26,7 +29,7 @@ from ..geometry import Model
 from ..paint import Ctx, along, hash01, hexc, mix, noise3, pick, ramp, rel_y
 
 SETS = ["steel", "konterit", "nightsteel", "abyssite", "fire", "ice", "lightning", "nature", "earth", "water", "crown",
-        "leather", "chainmail", "iron", "gold", "diamond", "netherite", "copper", "turtle"]
+        "leather", "chainmail", "iron", "gold", "diamond", "netherite", "copper", "turtle", "moonstone"]
 SLOTS = {"head": ["head"], "chest": ["body", "left_arm", "right_arm"], "legs": ["body", "left_leg", "right_leg"],
          "feet": ["left_leg", "right_leg"]}
 
@@ -83,6 +86,12 @@ PALETTES = {
         "copper": ramp("#6a2e18", "#f6b080", 8),
         "verdigris": ramp("#1e5a4a", "#8ae0c0", 6),
         "turtle": ramp("#163a12", "#9ad06a", 7),
+        # Mondstein (0.96)
+        "moon": ramp("#3a4486", "#edf1ff", 8),
+        "moon_glow": ramp("#2f6ee6", "#eefaff", 6),
+        "moon_gem": ramp("#6c78c4", "#ffffff", 6),
+        "moon_cloth": ramp("#0a0c2a", "#3e4ca6", 7),
+        "moon_star": ramp("#9a9ae8", "#fffef0", 4),
     }
 }
 
@@ -432,6 +441,76 @@ def _crown(m: Model) -> None:
         m.cube(h, (x, y, z), (w, hh, d), gem)
 
 
+# ------------------------------------------------------------------ Mondstein (0.96)
+
+def _crescent(m: Model, parent: str, name: str, pivot, rot, scale: float = 1.0) -> None:
+    """Eine Mondsichel, aufrecht in der x-y-Ebene, die Spitzen nach oben: unten ein Bogen, zu beiden Seiten drei Glieder,
+    die erst nach außen, dann hinauf und zur Spitze wieder einwärts streben (leuchtend)."""
+    m.bone(name, parent, pivot, rot)
+    k = scale
+    m.cube(name, (-1.3 * k, -0.9 * k, -0.35), (2.6 * k, 0.9 * k, 0.7), "moon_crescent")
+    for side in (1, -1):
+        _chain(m, name, f"{name}_{'left' if side > 0 else 'right'}", (1.05 * k * side, -0.45 * k, 0.0),
+               [(0.95 * k, 1.5 * k, 0.65, (0.0, 0.0, 58.0 * side)), (0.75 * k, 1.35 * k, 0.6, (0.0, 0.0, -40.0 * side)),
+                (0.5 * k, 1.15 * k, 0.5, (0.0, 0.0, -36.0 * side))], "moon_crescent")
+
+
+def _moonstone(m: Model) -> None:
+    h = _slot(m, "moonstone", "head", "head")
+    # der Stirnreif aus Mondsilber (rundum), vorn ein Mondstein, darüber die Mondsichel, an den Schläfen kleine Steine
+    m.cube(h, (-5.45, -7.7, -5.45), (10.9, 1.0, 0.6), "silver")
+    m.cube(h, (-5.45, -7.7, 4.85), (10.9, 1.0, 0.6), "silver")
+    m.cube(h, (-5.45, -7.7, -4.85), (0.6, 1.0, 9.7), "silver")
+    m.cube(h, (4.85, -7.7, -4.85), (0.6, 1.0, 9.7), "silver")
+    m.cube(h, (-1.3, -8.5, -5.75), (2.6, 2.4, 0.4), "silver")                               # Fassung
+    m.cube(h, (-0.95, -8.2, -6.15), (1.9, 1.8, 0.6), "moon_gem")
+    _crescent(m, h, "moon_diadem", (0.0, -8.6, -5.75), (-8.0, 0.0, 0.0), 1.25)
+    m.cube(h, (-5.95, -7.9, -0.7), (0.55, 1.4, 1.4), "moon_gem")
+    m.cube(h, (5.4, -7.9, -0.7), (0.55, 1.4, 1.4), "moon_gem")
+
+    b = _slot(m, "moonstone", "chest", "body")
+    # der Sternenmantel, an zwei Mondsteinen auf den Schultern
+    m.bone("moon_cape", b, (0.0, -0.2, 3.1), (5.0, 0.0, 0.0))
+    m.cube("moon_cape", (-4.7, 0.0, 0.0), (9.4, 8.6, 0.6), "moon_cloth")
+    m.bone("moon_cape_hem", "moon_cape", (0.0, 8.4, 0.05), (8.0, 0.0, 0.0))
+    m.cube("moon_cape_hem", (-4.6, 0.0, 0.0), (9.2, 8.4, 0.6), "moon_cloth")
+    for x in (-4.4, 2.8):
+        m.cube(b, (x, -0.7, -3.6), (1.6, 1.6, 0.7), "moon_gem")
+    # ein großer Mondstein auf der Brust in einer Fassung aus Mondsilber
+    m.cube(b, (-1.7, 1.4, -3.45), (3.4, 3.6, 0.5), "silver")
+    m.cube(b, (-1.15, 1.9, -3.85), (2.3, 2.6, 0.6), "moon_gem")
+    for side, bone in ((1, "left_arm"), (-1, "right_arm")):
+        a = _slot(m, "moonstone", "chest", bone)
+        p = f"moon_pauldron_{bone}"
+        m.bone(p, a, (1.0 * side, -3.0, 0.0), (0.0, 0.0, 12.0 * side))
+        m.cube(p, (_mx(-3.1, 6.6, side), -1.5, -3.6), (6.6, 1.7, 7.2), "moon_plate")
+        m.cube(p, (_mx(-2.0, 5.8, side), 0.2, -3.7), (5.8, 1.3, 7.4), "moon_plate")
+        _crescent(m, p, f"moon_shoulder_{bone}", (1.4 * side, -1.4, 0.0), (0.0, 90.0 * side, 0.0), 1.0)
+        # Armreif mit Mondstein
+        m.cube(a, (_mx(-2.25, 6.5, side), 5.5, -3.25), (6.5, 2.3, 6.5), "moon_plate")
+        m.cube(a, (_mx(0.4, 1.2, side), 6.0, -3.7), (1.2, 1.3, 0.5), "moon_gem")
+
+    t = _slot(m, "moonstone", "legs", "body")
+    # Gürtel mit Sichelschnalle
+    _crescent(m, t, "moon_buckle", (0.0, 11.5, -3.3), (0.0, 0.0, 0.0), 0.75)
+    m.cube(t, (-0.6, 10.6, -3.55), (1.2, 1.1, 0.5), "moon_gem")
+    for side, bone in ((1, "left_leg"), (-1, "right_leg")):
+        g = _slot(m, "moonstone", "legs", bone)
+        # Robenschöße: vorn und außen, unten mit Silberborte
+        m.bone(f"moon_robe_{bone}", g, (0.0, -0.6, -2.75), (-6.0, 0.0, 0.0))
+        m.cube(f"moon_robe_{bone}", (-2.4, 0.0, -0.3), (4.8, 7.8, 0.5), "moon_cloth")
+        m.bone(f"moon_robe_side_{bone}", g, (2.75 * side, -0.6, 0.0), (0.0, 0.0, -6.0 * side))
+        m.cube(f"moon_robe_side_{bone}", (_mx(0.0, 0.5, side), 0.0, -2.4), (0.5, 7.8, 4.8), "moon_cloth")
+
+    for side, bone in ((1, "left_leg"), (-1, "right_leg")):
+        f = _slot(m, "moonstone", "feet", bone)
+        # spitze, aufgebogene Schuhe der Zauberer
+        _chain(m, f, f"moon_toe_{bone}", (0.0, 12.0, -2.3),
+               [(3.4, 1.7, 1.4, (90.0, 0.0, 0.0)), (2.4, 1.5, 1.1, (-28.0, 0.0, 0.0)), (1.4, 1.3, 0.8, (-42.0, 0.0, 0.0)),
+                (0.7, 1.0, 0.6, (-46.0, 0.0, 0.0))], "moon_plate")
+        _crescent(m, f, f"moon_ankle_{bone}", (3.35 * side, 9.8, 0.4), (0.0, 90.0 * side, 0.0), 0.62)
+
+
 # ------------------------------------------------------------------ die Rüstungen von Minecraft
 
 def _leather(m: Model) -> None:
@@ -622,6 +701,7 @@ def build() -> Model:
     _netherite(m)
     _copper(m)
     _turtle(m)
+    _moonstone(m)
     # Plätze ohne eigene Teile bekommen leere Knochen, damit Java jeden Namen findet
     for s in SETS:
         for slot, bones in SLOTS.items():
@@ -955,6 +1035,49 @@ def _turtle_shell(ctx: Ctx):
     return pick(ctx.pal["turtle"], v)
 
 
+def _moon_gem(ctx: Ctx):
+    """Mondstein: milchig weiß, oben ein Glanz – quer darüber wandert ein blauer Schimmer, der leuchtet."""
+    ry = rel_y(ctx)
+    v = 0.62 + 0.3 * (1.0 - ry) + (_noise(ctx, 67) - 0.5) * 0.06
+    if ctx.s == 0 and ctx.t == 0:
+        v = 1.0
+    col = pick(ctx.pal["moon_gem"], v)
+    band = abs(ry - 0.45)
+    if band < 0.22 and ctx.face not in ("top", "bottom"):
+        g = pick(ctx.pal["moon_glow"], 0.55 + 0.4 * (1.0 - band / 0.22))
+        col = mix(col, g, 0.6)
+        ctx.glow = col
+    return col
+
+
+def _moon_crescent(ctx: Ctx):
+    """Die Mondsichel: helles Mondlicht, zu den Spitzen weißer; sie leuchtet ganz."""
+    t = _seg_t(ctx) if (ctx.cube.tag or "").count(":") == 2 else 0.0
+    v = 0.5 + 0.45 * t + (0.08 if ctx.face in ("front", "west") else 0.0)
+    col = pick(ctx.pal["moon_glow"], v)
+    ctx.glow = col
+    return col
+
+
+def _star_cloth(ctx: Ctx):
+    """Sternenmantel: nachtblauer Stoff mit weichen Falten, darin gestickte Sterne (sie glimmen), unten eine Silberborte."""
+    ry = rel_y(ctx)
+    fold = 0.5 + 0.5 * math.sin((ctx.local[0] + ctx.local[2]) * 1.5)
+    v = 0.34 + 0.32 * fold - 0.12 * ry + (_noise(ctx, 71) - 0.5) * 0.05
+    if ctx.face == "front" and ctx.cube.size[2] < 1.0 and ctx.cube.size[0] > 6.0:
+        v -= 0.14                                         # Innenseite des Mantels
+    col = pick(ctx.pal["moon_cloth"], v)
+    hem = (ctx.cube.origin[1] + ctx.cube.size[1] - ctx.local[1]) < 0.75
+    if hem and ctx.face not in ("top", "bottom"):
+        return pick(ctx.pal["silver"], 0.62 + (_noise(ctx, 73) - 0.5) * 0.15)
+    n = hash01(ctx.u * 3 + 1, ctx.v * 5 + 2, 79)
+    if n > 0.963:
+        star = pick(ctx.pal["moon_star"], 0.6 + (n - 0.963) * 10.0)
+        ctx.glow = mix((0, 0, 0, 255), star, 0.75)
+        return star
+    return col
+
+
 def materials(variant: str) -> dict:
     out = {
         "fur": _fur,
@@ -1003,6 +1126,10 @@ def materials(variant: str) -> dict:
         "sapphire": _gem("sapphire", glowing=False),
         "emerald": _gem("emerald", glowing=False),
         "amethyst": _gem("amethyst", glowing=False),
+        "moon_plate": _metal("moon", rim="silver", rim_from=0.82),
+        "moon_gem": _moon_gem,
+        "moon_crescent": _moon_crescent,
+        "moon_cloth": _star_cloth,
     }
     for e in DRAGON:
         out["dragon_scale_" + e] = _scale(DRAGON[e][0])

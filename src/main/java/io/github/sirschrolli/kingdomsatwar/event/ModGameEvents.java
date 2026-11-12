@@ -100,6 +100,11 @@ public final class ModGameEvents {
                         .then(Commands.literal("tp").executes(context -> mystikStage(context.getSource(), "tp")))
                         .then(Commands.literal("awaken").executes(context -> mystikStage(context.getSource(), "awaken")))
                         .then(Commands.literal("reset").executes(context -> mystikStage(context.getSource(), "reset"))))
+                .then(Commands.literal("mondsteinbruch").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .executes(context -> moonstoneQuarry(context.getSource(), ""))
+                        .then(Commands.literal("tp").executes(context -> moonstoneQuarry(context.getSource(), "tp")))
+                        .then(Commands.literal("awaken").executes(context -> moonstoneQuarry(context.getSource(), "awaken")))
+                        .then(Commands.literal("reset").executes(context -> moonstoneQuarry(context.getSource(), "reset"))))
                 .then(Commands.literal("fehlerzone").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .executes(context -> errorZone(context.getSource(), ""))
                         .then(Commands.literal("tp").executes(context -> errorZone(context.getSource(), "tp")))
@@ -521,6 +526,77 @@ public final class ModGameEvents {
         }
         source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.zauberbuehne.awakened"), true);
         return 1;
+    }
+
+    /**
+     * {@code /kaw mondsteinbruch}: Lage des nächsten alten Mondsteinbruchs im Feenreich; {@code tp} bringt einen an den Südrand
+     * (auch aus einer anderen Welt), {@code awaken} weckt den Steinhüter (oder ruft einen neuen, wenn der alte besiegt ist),
+     * {@code reset} lässt ihn wieder schlafen.
+     */
+    private static int moonstoneQuarry(net.minecraft.commands.CommandSourceStack source, String mode) throws
+            com.mojang.brigadier.exceptions.CommandSyntaxException {
+        ServerLevel fae = source.getServer().getLevel(io.github.sirschrolli.kingdomsatwar.fae.FaeGate.FAE_REALM);
+        if (fae == null || (source.getLevel() != fae && mode.isEmpty())) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.mondsteinbruch.not_fae"));
+            return 0;
+        }
+        net.minecraft.world.phys.Vec3 from = source.getLevel() == fae ? source.getPosition() : net.minecraft.world.phys.Vec3.ZERO;
+        BlockPos center = io.github.sirschrolli.kingdomsatwar.fae.Mondsteinbruch.nearest(fae.getSeed(), (int) Math.floor(from.x),
+                (int) Math.floor(from.z));
+        if (center == null) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.mondsteinbruch.none"));
+            return 0;
+        }
+        int distance = (int) Math.sqrt(Math.pow(center.getX() - from.x, 2) + Math.pow(center.getZ() - from.z, 2));
+        Component where = Component.literal(center.getX() + ", " + center.getZ()).withStyle(net.minecraft.ChatFormatting.AQUA);
+        source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.mondsteinbruch.where", where, distance), false);
+        if (mode.isEmpty()) {
+            return 1;
+        }
+        fae.getChunk(center.getX() >> 4, center.getZ() >> 4);
+        if (mode.equals("tp")) {
+            ServerPlayer player = source.getPlayerOrException();
+            int x = center.getX();
+            int z = center.getZ() + 19;
+            fae.getChunk(x >> 4, z >> 4);
+            int y = fae.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
+            player.teleportTo(fae, x + 0.5, y, z + 0.5, java.util.Set.of(), 180.0f, 25.0f, true);
+            return 1;
+        }
+        BlockPos stonePos = findKeeperStone(fae, center);
+        if (stonePos == null || !(fae.getBlockEntity(stonePos) instanceof io.github.sirschrolli.kingdomsatwar.block.fae.KeeperStoneBlockEntity stone)) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.mondsteinbruch.no_stone"));
+            return 0;
+        }
+        if (mode.equals("reset")) {
+            stone.reset(fae);
+            source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.mondsteinbruch.reset"), true);
+            return 1;
+        }
+        io.github.sirschrolli.kingdomsatwar.entity.fae.StoneKeeperEntity keeper = stone.keeper(fae);
+        if (keeper == null) {
+            keeper = stone.spawn(fae, true);
+        } else {
+            keeper.awaken();
+        }
+        if (keeper == null) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.mondsteinbruch.no_stone"));
+            return 0;
+        }
+        source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.mondsteinbruch.awakened"), true);
+        return 1;
+    }
+
+    /** Sucht den Hüterstein am Grund des Mondsteinbruchs (von oben nach unten, in der Mitte). */
+    private static @org.jspecify.annotations.Nullable BlockPos findKeeperStone(ServerLevel level, BlockPos center) {
+        int top = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, center.getX(), center.getZ());
+        for (int y = top + 2; y > top - 24; y--) {
+            BlockPos pos = new BlockPos(center.getX(), y, center.getZ());
+            if (level.getBlockState(pos).is(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.KEEPER_STONE.get())) {
+                return pos;
+            }
+        }
+        return null;
     }
 
     /**

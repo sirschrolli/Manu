@@ -670,6 +670,19 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy(getHasName(moonstone), has(moonstone))
                 .save(output, key("chiseled_moonstone"));
         stonecut(FaeBlocks.CHISELED_MOONSTONE.get(), 1, moonstone);
+        // Mondstein (0.96): der Stein aus dem Feenreich – Block, Ziegel aus Feensteinziegeln, die Rüstung der Zauberer
+        Item gem = FaeBlocks.MOONSTONE.get();
+        storage(gem, FaeBlocks.MOONSTONE_BLOCK.get());
+        smeltOre(gem, 1.0f, FaeBlocks.MOONSTONE_ORE.get());
+        shaped(RecipeCategory.BUILDING_BLOCKS, moonstone, 8)
+                .pattern("BBB")
+                .pattern("BMB")
+                .pattern("BBB")
+                .define('B', FaeBlocks.FAESTONE_BRICKS.base().get())
+                .define('M', gem)
+                .unlockedBy(getHasName(gem), has(gem))
+                .save(output, key("moonstone_bricks_from_moonstone"));
+        this.moonstoneArmor(gem);
         ItemLike faestone = FaeBlocks.FAESTONE.base().get();
         ItemLike faeBricks = FaeBlocks.FAESTONE_BRICKS.base().get();
         shaped(RecipeCategory.BUILDING_BLOCKS, faeBricks, 4)
@@ -1098,6 +1111,21 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('M', material).define('L', Items.LEATHER).unlockedBy(has, has(material)).save(output, key(getItemName(leggings)));
         shaped(RecipeCategory.COMBAT, boots).pattern("MLM").pattern("M M")
                 .define('M', material).define('L', Items.LEATHER).unlockedBy(has, has(material)).save(output, key(getItemName(boots)));
+    }
+
+    /** Mondsteinrüstung: Platten aus Mondstein, mit Feenstaub verbunden statt mit Leder gepolstert. */
+    private void moonstoneArmor(Item gem) {
+        String has = getHasName(gem);
+        Item dust = FaeBlocks.FAE_DUST.get();
+        var set = io.github.sirschrolli.kingdomsatwar.registry.FaeGear.moonstoneSet();
+        shaped(RecipeCategory.COMBAT, set.get(0).get()).pattern("MMM").pattern("MDM")
+                .define('M', gem).define('D', dust).unlockedBy(has, has(gem)).save(output, key("moonstone_helmet"));
+        shaped(RecipeCategory.COMBAT, set.get(1).get()).pattern("MDM").pattern("MMM").pattern("MMM")
+                .define('M', gem).define('D', dust).unlockedBy(has, has(gem)).save(output, key("moonstone_chestplate"));
+        shaped(RecipeCategory.COMBAT, set.get(2).get()).pattern("MMM").pattern("MDM").pattern("M M")
+                .define('M', gem).define('D', dust).unlockedBy(has, has(gem)).save(output, key("moonstone_leggings"));
+        shaped(RecipeCategory.COMBAT, set.get(3).get()).pattern("MDM").pattern("M M")
+                .define('M', gem).define('D', dust).unlockedBy(has, has(gem)).save(output, key("moonstone_boots"));
     }
 
     /** Drachenschuppen-Rüstung: Schuppen rund um das passende Stück Stahlrüstung genietet. */

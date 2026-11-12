@@ -75,6 +75,9 @@ public final class ModFeatureTypes {
             FEATURE_TYPES.register("fae_mondhain", () -> io.github.sirschrolli.kingdomsatwar.fae.feature.MondhainFeature.CODEC);
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.fae.feature.MystikStageFeature>> MYSTIK_STAGE =
             FEATURE_TYPES.register("fae_mystik_stage", () -> io.github.sirschrolli.kingdomsatwar.fae.feature.MystikStageFeature.CODEC);
+    /** Der alte Mondsteinbruch (seit 0.96): die Grube des Steinhüters. */
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.fae.feature.MondsteinbruchFeature>> MOONSTONE_QUARRY =
+            FEATURE_TYPES.register("fae_moonstone_quarry", () -> io.github.sirschrolli.kingdomsatwar.fae.feature.MondsteinbruchFeature.CODEC);
 
     // --- Oberwelt (eigene Biome) ---
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.BoulderFeature>> BOULDER =

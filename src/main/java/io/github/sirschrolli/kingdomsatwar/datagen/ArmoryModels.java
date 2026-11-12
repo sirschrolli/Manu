@@ -37,6 +37,9 @@ final class ArmoryModels {
         MonsterGearModels.weapon(items, Armory.EMBER_PICKAXE.get(), "ember_pickaxe", ArmoryShapes.EMBER_PICKAXE, 0.64f, 2.0f);
         MonsterGearModels.weapon(items, Armory.VEIN_BREAKER.get(), "vein_breaker", ArmoryShapes.VEIN_BREAKER, 0.64f, 1.0f);
         MonsterGearModels.weapon(items, Armory.ORE_SEEKER.get(), "ore_seeker", ArmoryShapes.ORE_SEEKER, 0.62f, 1.0f);
+        // der Hüterhammer (0.96): die Beute des Steinhüters
+        MonsterGearModels.weapon(items, io.github.sirschrolli.kingdomsatwar.registry.FaeGear.KEEPER_MAUL.get(), "keeper_maul",
+                ArmoryShapes.KEEPER_MAUL, 0.55f, 3.5f);
         // die runden Schilde sind kleiner als der von Minecraft: aus eigener Sicht etwas höher, damit man sie sieht
         shield(items, Armory.STEEL_BUCKLER.get(), "steel_buckler", ArmoryShieldShapes.STEEL_BUCKLER, 3.5f);
         shield(items, Armory.DRAGON_SHIELD.get(), "dragon_shield", ArmoryShieldShapes.DRAGON_SHIELD, 0.0f);

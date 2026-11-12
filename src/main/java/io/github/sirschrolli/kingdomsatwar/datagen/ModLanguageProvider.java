@@ -742,6 +742,20 @@ public class ModLanguageProvider extends LanguageProvider {
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOSSY_FAESTONE_BRICKS, "Mossy Faestone Bricks", "Bemooste Feensteinziegel");
         set("moonstone_bricks", "moonstone_brick", "Moonstone Bricks", "Mondsteinziegel", "Moonstone Brick", "Mondsteinziegel");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.CHISELED_MOONSTONE, "Chiseled Moonstone", "Gemeißelter Mondstein");
+        // Mondstein (0.96)
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOONSTONE_ORE, "Moonstone Ore", "Mondsteinerz");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOONSTONE_BLOCK, "Block of Moonstone", "Mondsteinblock");
+        item(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOONSTONE, "Moonstone", "Mondstein");
+        lore("moonstone", "A milky stone with a wandering blue shimmer – it stores moonlight",
+                "Ein milchiger Stein, in dem ein blauer Schimmer wandert – er speichert Mondlicht");
+        item(io.github.sirschrolli.kingdomsatwar.registry.FaeGear.MOONSTONE_HELMET, "Moonstone Circlet", "Mondsteindiadem");
+        item(io.github.sirschrolli.kingdomsatwar.registry.FaeGear.MOONSTONE_CHESTPLATE, "Moonstone Chestplate", "Mondsteinharnisch");
+        item(io.github.sirschrolli.kingdomsatwar.registry.FaeGear.MOONSTONE_LEGGINGS, "Moonstone Leggings", "Mondsteinbeinschutz");
+        item(io.github.sirschrolli.kingdomsatwar.registry.FaeGear.MOONSTONE_BOOTS, "Moonstone Boots", "Mondsteinstiefel");
+        lore("moonstone_armor", "Stores moonlight: each piece +15 mana and 10 % faster mana regeneration",
+                "Speichert Mondlicht: jeder Teil +15 Mana und 10 % schnellere Erholung");
+        text(ModItems.loreKey("moonstone_armor", 2), "Full set: another +20 mana and 10 % more",
+                "Voller Satz: noch einmal +20 Mana und 10 % mehr");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_SOIL, "Fae Soil", "Feenerde");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_GRASS, "Fae Grass Block", "Feengrasblock");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_MOSS, "Fae Moss", "Feenmoos");
@@ -835,6 +849,51 @@ public class ModLanguageProvider extends LanguageProvider {
             subtitle("entity.moth_queen." + e[0], e[1], e[2]);
         }
         subtitle("item.fae_elytra.flap", "Wings beat", "Flügel schlagen");
+        // der Steinhüter und der alte Mondsteinbruch (0.96)
+        creature(ModEntities.STONE_KEEPER, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.STONE_KEEPER_SPAWN_EGG,
+                "Stone Keeper", "Steinhüter", "Steinhüter");
+        add(ModEntities.KEEPER_BOULDER.get(), pick("Keeper's Boulder", "Felsbrocken des Steinhüters"));
+        text("boss.kingdomsatwar.keeper", "The Stone Keeper", "Der Steinhüter");
+        text("boss.kingdomsatwar.keeper.named", "%s", "%s");
+        text("boss.kingdomsatwar.keeper.title", "Keeper of the Old Moonstone Quarry", "Hüter des alten Mondsteinbruchs");
+        item(io.github.sirschrolli.kingdomsatwar.registry.FaeGear.KEEPER_MAUL, "Keeper's Maul", "Hüterhammer");
+        lore("keeper_maul", "The weapon of the Stone Keeper – heavy, slow, every blow lands", "Die Waffe des Steinhüters – schwer, langsam, jeder Schlag sitzt");
+        text(ModItems.loreKey("keeper_maul", 2), "Use on solid ground: a trail of moonstone crystals bursts forth",
+                "Benutzen auf festem Boden: eine Spur aus Mondsteinkristallen bricht hervor");
+        text(ModItems.loreKey("keeper_maul", 3), "Repair with Moonstone", "Mit Mondstein reparieren");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.KEEPER_STONE, "Keeper Stone", "Hüterstein");
+        lore("keeper_stone", "Carved by the old people: an eye above a crescent", "Vom alten Volk gemeißelt: ein Auge über einer Mondsichel");
+        text(ModItems.loreKey("keeper_stone", 2), "Once its glow is gone, a Moonstone calls a new Keeper",
+                "Ist es erloschen, ruft ein Mondstein einen neuen Hüter");
+        text("block.kingdomsatwar.keeper_stone.hint", "Something vast sleeps here … step down to the bottom of the quarry, if you dare.",
+                "Hier schläft etwas Gewaltiges … steig hinab zum Grund des Bruchs, wenn du dich traust.");
+        text("block.kingdomsatwar.keeper_stone.awake", "The Keeper is awake!", "Der Hüter ist erwacht!");
+        text("block.kingdomsatwar.keeper_stone.defeated", "The stone has gone dark. A Moonstone on it would call a new Keeper.",
+                "Der Stein ist erloschen. Ein Mondstein darauf würde einen neuen Hüter rufen.");
+        text("block.kingdomsatwar.keeper_stone.warning", "Stone grinds deep below … something guards this quarry.",
+                "Tief unten knirscht Stein … etwas bewacht diesen Bruch.");
+        text("block.kingdomsatwar.keeper_stone.peaceful", "The Keeper sleeps soundly (the world is set to Peaceful).",
+                "Der Hüter schläft tief und fest (die Welt steht auf „Friedlich“).");
+        for (String[] e : new String[][] {{"ambient", "Stone Keeper rumbles", "Steinhüter grollt"},
+                {"hurt", "Stone Keeper cracks", "Steinhüter splittert"}, {"death", "Stone Keeper crumbles", "Steinhüter zerfällt"},
+                {"step", "Heavy stone footsteps", "Schwere Schritte aus Stein"}, {"awaken", "Stone grinds awake", "Fels erwacht knirschend"},
+                {"roar", "Stone Keeper roars", "Steinhüter brüllt"}, {"smash", "Fists strike the ground", "Fäuste schlagen auf"},
+                {"stomp", "The ground quakes", "Der Boden bebt"}, {"dig", "Rock tears loose", "Fels reißt los"},
+                {"throw", "Boulder hurled", "Felsbrocken fliegt"}, {"boulder", "Boulder shatters", "Felsbrocken zerschellt"},
+                {"crystal", "Crystals burst from the ground", "Kristalle brechen hervor"},
+                {"beam_charge", "Moonlight gathers in the stone", "Mondlicht sammelt sich im Stein"},
+                {"beam", "Moonbeam blazes", "Mondstrahl gleißt"}, {"armor", "Crystal armor grows", "Kristallpanzer wächst"},
+                {"shatter", "Crystal armor shatters", "Kristallpanzer zerspringt"}}) {
+            subtitle("entity.stone_keeper." + e[0], e[1], e[2]);
+        }
+        text("command.kingdomsatwar.mondsteinbruch.where", "Nearest Old Moonstone Quarry: %s (%s blocks)",
+                "Nächster alter Mondsteinbruch: %s (%s Blöcke)");
+        text("command.kingdomsatwar.mondsteinbruch.not_fae", "Moonstone quarries only exist in the Fae Realm.",
+                "Mondsteinbrüche gibt es nur im Feenreich.");
+        text("command.kingdomsatwar.mondsteinbruch.none", "No moonstone quarry nearby.", "Kein Mondsteinbruch in der Nähe.");
+        text("command.kingdomsatwar.mondsteinbruch.no_stone", "There is no Keeper Stone in this quarry.", "In diesem Bruch steht kein Hüterstein.");
+        text("command.kingdomsatwar.mondsteinbruch.awakened", "The Keeper rises!", "Der Hüter erhebt sich!");
+        text("command.kingdomsatwar.mondsteinbruch.reset", "The Keeper sleeps again.", "Der Hüter schläft wieder.");
         text("command.kingdomsatwar.mondhain.where", "Nearest Moon Grove: %s (%s blocks)", "Nächster Mondhain: %s (%s Blöcke)");
         text("command.kingdomsatwar.zauberbuehne.where", "Nearest Magic Stage: %s (%s blocks)", "Nächste Zauberbühne: %s (%s Blöcke)");
         text("command.kingdomsatwar.zauberbuehne.not_fae", "Magic Stages only exist in the Fae Realm.", "Zauberbühnen gibt es nur im Feenreich.");

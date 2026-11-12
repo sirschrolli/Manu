@@ -28,6 +28,7 @@ public class ModEquipmentAssetProvider extends EquipmentAssetProvider {
         ModEquipment.SCALE_ASSETS.values().forEach(asset -> humanoid(output, asset));
         humanoid(output, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.PELT_ASSET);
         humanoid(output, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_ASSET);
+        humanoid(output, io.github.sirschrolli.kingdomsatwar.registry.FaeGear.MOONSTONE_ASSET);
         // Die Krone sitzt nur auf dem Kopf
         output.accept(ModEquipment.CROWN_ASSET, EquipmentClientInfo.builder()
                 .addLayers(EquipmentClientInfo.LayerType.HUMANOID, new EquipmentClientInfo.Layer(ModEquipment.CROWN_ASSET.identifier()))

@@ -1006,6 +1006,9 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     # der Mondhain, der Kokon und die Feen-Elytren
     import fae_boss_textures
     fae_boss_textures.build(put, ANIMATIONS)
+    # Mondstein (0.96): Block mit wanderndem Schimmer und der Stein
+    import moonstone_textures
+    moonstone_textures.build(put, ANIMATIONS)
 
 
 if __name__ == "__main__":

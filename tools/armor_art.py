@@ -628,8 +628,30 @@ def ember_scale() -> Design:
     })
 
 
+def moonstone() -> Design:
+    """Mondstein (die Rüstung der Zauberer): milchig-blaue Platten mit Mondsilbersäumen; ein Stirnreif mit Mondstein und
+    Mondsichel (offenes Gesicht), auf der Brust ein großer Mondstein über einer Silberborte wie an einer Robe, auf dem Rücken
+    eine Mondsichel (Diadem, Umhang und Robenschöße kommen als 3D-Teile)."""
+    return Design("moonstone", {"A": icons.MOON_PLATE, "B": gear.MOONSILVER, "D": icons.MOON_GLOW, "E": icons.MOON_GEM},
+                  open_face=True, d={
+        "head_front": ["...ts...", "..eGFd..", "fffeeddc"],
+        "head_side": [".", ".", "feeeddcc"],
+        "head_back": [".", ".", "eeddddcc"],
+        "body_front": [".", ".f....d.", "..f..d..", "...GF...", "..GFEE..", "...ED...", "...ed...", "...ed...", "...dc...", ".",
+                       "..dccb.."],
+        "body_back": [".", ".", ".", "...ts...", "..t.....", "..s.....", "...rq...", ".", "."],
+        "arm_side": TRIM_ARM,
+        "boot_side": TRIM_BOOT,
+        "boot_front": TRIM_BOOT,
+        "belt_front": ["."] * 7 + ["feeGFdcb"],
+        "belt_back": TRIM_BELT,
+        "belt_side": TRIM_BELT_SIDE,
+        "thigh_front": [".", ".", ".", ".", ".GF."],
+    })
+
+
 def designs() -> list[Design]:
-    return [steel(), nightsteel(), abyssite(), konterit(), werewolf_pelt(), ember_scale()] + [dragon(k) for k in icons.DRAGONS]
+    return [steel(), nightsteel(), abyssite(), konterit(), werewolf_pelt(), ember_scale(), moonstone()] + [dragon(k) for k in icons.DRAGONS]
 
 
 # =============================================================================

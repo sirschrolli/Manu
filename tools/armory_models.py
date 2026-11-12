@@ -45,6 +45,21 @@ REGIONS: dict[str, dict[str, UV]] = {
         "tassel": (7, 8, 10, 14),       # roter Quast unter dem Kopf
         "tassel_side": (10, 8, 11, 14),
     },
+    "keeper_maul": {
+        "handle": (0, 0, 1, 16),        # versteinertes Glimmerholz
+        "handle_side": (1, 0, 2, 16),
+        "wrap": (2, 0, 4, 5),           # Lederwicklung
+        "band": (2, 5, 4, 7),           # Mondsteinbänder am Stiel (leuchten)
+        "band_top": (2, 7, 4, 9),
+        "head": (4, 0, 12, 6),          # der Kopf von vorn: gefügte Feensteinquader, in der Mitte der Mondstein
+        "head_side": (4, 6, 12, 9),     # von oben/unten
+        "face": (12, 0, 16, 6),         # die Schlagflächen: grober Fels
+        "gem": (12, 6, 14, 8),          # der Mondstein vorn und hinten (leuchtet)
+        "crystal": (14, 6, 16, 14),     # Kristalle oben auf dem Kopf: Spitze oben
+        "crystal_edge": (12, 8, 13, 14),
+        "pommel": (4, 9, 6, 11),        # der Knaufstein
+        "pommel_top": (6, 9, 8, 11),
+    },
     "draconium_warhammer": {
         "handle": (0, 0, 2, 16),        # dunkles Holz mit Draconiumbändern
         "wrap": (2, 0, 4, 6),           # Schuppenleder
@@ -231,6 +246,32 @@ def draconium_warhammer() -> Shape:
     return s
 
 
+def keeper_maul() -> Shape:
+    """Der Hüterhammer (0.96): ein langer Stiel aus versteinertem Glimmerholz mit Lederwicklung und Mondsteinbändern, unten ein
+    Knaufstein, oben der schwere Kopf aus gefügtem Feenstein – vorn und hinten ein leuchtender Mondstein, die Schlagflächen
+    grober Fels, obenauf zwei Mondsteinkristalle."""
+    s = Shape(REGIONS["keeper_maul"])
+    s.box(7.0, -7.0, 7.0, 9.0, -5.4, 9.0, "pommel", cap="pommel_top")
+    s.box(7.35, -5.4, 7.35, 8.65, 12.8, 8.65, "handle", side="handle_side", cap="band_top")
+    s.box(7.2, -4.2, 7.2, 8.8, 1.8, 8.8, "wrap", cap="band_top")
+    for y in (3.6, 7.6, 11.4):
+        s.box(7.15, y, 7.15, 8.85, y + 0.8, 8.85, "band", cap="band_top", glow=True)
+    # der Kopf: Mittelstück, nach außen die Schlagflächen (etwas schmaler, wie behauen)
+    frame = (3.0, 12.6, 13.0, 18.8)
+    plate(s, 5.0, 12.6, 11.0, 18.8, 5.6, 10.4, "head", frame, side="face", cap="head_side")
+    plate(s, 3.8, 12.9, 5.0, 18.5, 5.8, 10.2, "head", frame, side="face", cap="head_side")
+    plate(s, 11.0, 12.9, 12.2, 18.5, 5.8, 10.2, "head", frame, side="face", cap="head_side")
+    s.box(3.0, 13.3, 6.2, 3.8, 18.1, 9.8, "face", cap="head_side")
+    s.box(12.2, 13.3, 6.2, 13.0, 18.1, 9.8, "face", cap="head_side")
+    # der Mondstein vorn und hinten (leuchtet)
+    s.box(6.9, 14.3, 5.44, 9.1, 17.1, 5.62, "gem", glow=True)
+    s.box(6.9, 14.3, 10.38, 9.1, 17.1, 10.56, "gem", glow=True)
+    # zwei Mondsteinkristalle obenauf
+    s.chain(6.6, 18.6, 18, -6, [1.5, 1.3, 0.9], (-0.7, -0.15), (0.7, 0.15), (1.1, 0.3), "crystal", "crystal_edge", glow=True)
+    s.chain(9.6, 18.6, -24, 8, [1.1, 0.9, 0.6], (-0.55, -0.12), (0.55, 0.12), (0.9, 0.25), "crystal", "crystal_edge", glow=True)
+    return s
+
+
 def nightsteel_dagger() -> Shape:
     """Nachtstahl-Dolch: ein Knauf mit Mondstein, der umwickelte Griff, eine geschwungene Parierstange und die kurze, breite
     Klinge mit violett glühender Hohlkehle."""
@@ -383,6 +424,7 @@ def ore_seeker() -> Shape:
 ITEMS = {
     "STEEL_HALBERD": ("steel_halberd", steel_halberd),
     "DRACONIUM_WARHAMMER": ("draconium_warhammer", draconium_warhammer),
+    "KEEPER_MAUL": ("keeper_maul", keeper_maul),
     "NIGHTSTEEL_DAGGER": ("nightsteel_dagger", nightsteel_dagger),
     "ABYSSITE_GREATSWORD": ("abyssite_greatsword", abyssite_greatsword),
     "STEEL_DOUBLE_AXE": ("steel_double_axe", steel_double_axe),

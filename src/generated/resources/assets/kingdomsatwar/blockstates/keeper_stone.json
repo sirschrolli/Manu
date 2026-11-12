@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "phase=awake": {
+      "model": "kingdomsatwar:block/keeper_stone"
+    },
+    "phase=defeated": {
+      "model": "kingdomsatwar:block/keeper_stone_dark"
+    },
+    "phase=sleeping": {
+      "model": "kingdomsatwar:block/keeper_stone"
+    }
+  }
+}

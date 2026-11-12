@@ -32,6 +32,9 @@ NIGHTSTEEL = st.ramp("#5c5f8c", dark=0.12, light=0.93, cool=270, chroma_light=0.
 ABYSS = st.ramp("#3a2a4e", dark=0.06, light=0.74, cool=280, chroma_light=0.6)
 BRASS = st.ramp("#c89a3a", dark=0.28, light=0.95, warm=90)
 TASSEL = st.ramp("#b8302a", dark=0.18, light=0.85, cool=330)
+FAESTONE = st.ramp("#b4abc6", dark=0.3, light=0.95, cool=270, hue_dark=12, chroma_light=0.4)
+PETRIFIED = st.ramp("#8c8496", dark=0.2, light=0.86, cool=280)
+MOONSTONE_GEM = st.fixed("#2f4ea8", "#4f78d8", "#7aa6f0", "#a8ccff", "#cfe6ff", "#eef6ff", "#ffffff")
 # leuchtende Farben (nur in den Leuchtmasken)
 EMBER = st.fixed("#5a1606", "#8a2a08", "#c8400c", "#ff6a14", "#ff9a2e", "#ffc860", "#fff0b8")
 VIOLET = st.fixed("#2a0c4a", "#4a1a7a", "#7a32b8", "#a85cf0", "#c88aff", "#e4c0ff", "#f8ecff")
@@ -260,6 +263,53 @@ def draconium_warhammer_atlas():
     return img, glow
 
 
+def keeper_maul_atlas():
+    R = _regions("keeper_maul")
+    img, glow = _blank()
+    paint(img, R["handle"], wood(PETRIFIED, 23))
+    paint(img, R["handle_side"], wood(PETRIFIED, 29))
+    paint(img, R["wrap"], wrap(LEATHER))
+    paint(img, R["pommel"], metal(FAESTONE, 3.5))
+    paint(img, R["pommel_top"], top(FAESTONE))
+    band = lambda x, y, w, h: _lv(MOONSTONE_GEM, 5 if y == 0 else 3 if y == h - 1 else 4)
+    paint(img, R["band"], band)
+    paint(glow, R["band"], band)
+    paint(img, R["band_top"], top(FAESTONE))
+
+    def head(x, y, w, h):
+        # gefügte Feensteinquader: Reihen mit versetzten Fugen, die Mitte frei für den Mondstein
+        if y == 0:
+            return _lv(FAESTONE, 6)
+        if y == h - 1:
+            return _lv(FAESTONE, 1)
+        if x == 0 or x == w - 1:
+            return _lv(FAESTONE, 5 if x == 0 else 2)
+        row = (y - 1) // 4
+        joint = (y - 1) % 4 == 3 or (x + (row % 2) * 3) % 6 == 0
+        if joint:
+            return _lv(FAESTONE, 1)
+        return _lv(FAESTONE, 4 if (x * 7 + y * 3) % 5 else 5)
+    paint(img, R["head"], head)
+    paint(img, R["head_side"], lambda x, y, w, h: _lv(FAESTONE, 5 if y == 0 else 2 if y == h - 1 else (4 if (x + y) % 3 else 3)))
+
+    def face(x, y, w, h):
+        # Schlagfläche: grober, behauener Fels
+        if x == 0 or y == 0:
+            return _lv(FAESTONE, 5)
+        if x == w - 1 or y == h - 1:
+            return _lv(FAESTONE, 1)
+        return _lv(FAESTONE, 3 + ((x * 5 + y * 3) % 4 == 0) - ((x + y * 2) % 5 == 0))
+    paint(img, R["face"], face)
+    gem = lambda x, y, w, h: _lv(MOONSTONE_GEM, 6 if (x, y) == (1, 1) else 5 if y < h / 2 else 3)
+    paint(img, R["gem"], gem)
+    paint(glow, R["gem"], gem)
+    paint(img, R["crystal"], strand(MOONSTONE_GEM, 6.0, 2.0, True, 31))
+    paint(img, R["crystal_edge"], strand(MOONSTONE_GEM, 5.0, 2.0, False))
+    paint(glow, R["crystal"], glow_strand(MOONSTONE_GEM))
+    paint(glow, R["crystal_edge"], glow_strand(MOONSTONE_GEM))
+    return img, glow
+
+
 def nightsteel_dagger_atlas():
     R = _regions("nightsteel_dagger")
     img, glow = _blank()
@@ -447,6 +497,7 @@ ATLASES = {
     "steel_halberd": steel_halberd_atlas, "draconium_warhammer": draconium_warhammer_atlas, "nightsteel_dagger": nightsteel_dagger_atlas,
     "abyssite_greatsword": abyssite_greatsword_atlas, "steel_double_axe": steel_double_axe_atlas, "miner_hammer": miner_hammer_atlas,
     "ember_pickaxe": ember_pickaxe_atlas, "vein_breaker": vein_breaker_atlas, "ore_seeker": ore_seeker_atlas,
+    "keeper_maul": keeper_maul_atlas,
 }
 
 
@@ -653,7 +704,47 @@ def icon(name: str) -> Image.Image:
     return st.Spr.art(art).outline(prefer=prefer).image(ramps)
 
 
+def keeper_maul_icon() -> Image.Image:
+    """Der Hüterhammer im Inventar: schräg wie die Kriegshämmer – der Stiel von unten links nach oben rechts, quer darauf der
+    Kopf aus Feenstein (gefügt, mit Mondstein in der Mitte), obenauf zwei kleine Kristalle, unten der Knaufstein."""
+    s = st.Spr(16, 16)
+    # Stiel (A: versteinertes Holz), Wicklung (F: Leder), Knaufstein (B)
+    for k in range(10):
+        x, y = 2 + k, 13 - k
+        if k < 2:
+            continue
+        lvl = 4 if k % 3 else 3
+        s.set(x, y, ("F", 3 + (k % 2)) if 3 <= k <= 5 else ("A", lvl))
+        s.set(x - 1, y, ("A", 2) if not 3 <= k <= 5 else ("F", 2))
+    s.set(1, 14, ("B", 3))
+    s.set(2, 14, ("B", 2))
+    s.set(1, 13, ("B", 5))
+    s.set(2, 13, ("B", 4))
+    # der Kopf: ein Quader quer zum Stiel, Mitte bei (10, 5)
+    cx, cy = 10.0, 5.0
+    for y in range(16):
+        for x in range(16):
+            u = ((x - cx) + (y - cy)) / 1.4142          # entlang des Kopfs (unten rechts = +)
+            v = ((x - cx) - (y - cy)) / 1.4142          # quer (nach oben rechts = +)
+            if abs(u) <= 4.6 and abs(v) <= 2.25:
+                lvl = 4 + (1 if v > 0.8 else 0) - (1 if v < -1.2 else 0)
+                if abs(u) > 3.6:
+                    lvl -= 1                             # die Schlagflächen etwas dunkler
+                if int((u + 4.6) * 1.1) % 3 == 0 and abs(u) <= 3.6:
+                    lvl -= 1                             # Fugen zwischen den Quadern
+                s.set(x, y, ("B", max(1, min(6, lvl))))
+                if abs(u) <= 0.8 and abs(v) <= 1.0:
+                    s.set(x, y, ("E", 5 if v > 0 else 4))
+    s.set(10, 5, ("E", 6))
+    # zwei Kristalle obenauf (D)
+    for (x, y, lvl) in ((8, 2, 4), (7, 1, 5), (12, 4, 4), (12, 3, 5), (13, 2, 6)):
+        s.set(x, y, ("D", lvl))
+    return s.outline(prefer=("E", "D", "B", "F", "A")).image({"A": PETRIFIED, "B": FAESTONE, "D": MOONSTONE_GEM, "E": MOONSTONE_GEM,
+                                                               "F": LEATHER})
+
+
 ICONS = {name: (lambda n=name: icon(n)) for name in ICON_ART}
+ICONS["keeper_maul"] = keeper_maul_icon
 
 
 def build(put) -> None:

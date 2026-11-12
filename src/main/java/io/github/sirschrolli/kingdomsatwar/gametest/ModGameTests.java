@@ -193,6 +193,7 @@ public final class ModGameTests {
         ForgeGameTests.init();    // Malleus, der Glutschmied, und der Glutspeer
         StarGameTests.init();     // Asteria, die Sternenreiterin, Sternenlanze und Sternenschwingen
         MystikGameTests.init();   // MissMystik, die Feen-Zauberkünstlerin, Kartendeck, Zylinder, Zauberbühne
+        KeeperGameTests.init();   // seit 0.96: der Steinhüter, der alte Mondsteinbruch, Mondstein, Mondsteinrüstung, Hüterhammer
         AnniGameTests.init();     // Anni der Troll, Fehlerkern, Wiederherstellung als Anni 2.0, Bannhammer, Fehlerflügel
         BeastGameTests.init();    // die neuen Monster: Werwolf, Moorschlurfer, Glutwurm, Aschengeist
         GearGameTests.init();     // Waffen und Rüstungen aus Monsterteilen
@@ -278,6 +279,7 @@ public final class ModGameTests {
         ForgeGameTests.register(event, environment);
         StarGameTests.register(event, environment);
         MystikGameTests.register(event, environment);
+        KeeperGameTests.register(event, environment);
         AnniGameTests.register(event, environment);
         BeastGameTests.register(event, environment);
         GearGameTests.register(event, environment);

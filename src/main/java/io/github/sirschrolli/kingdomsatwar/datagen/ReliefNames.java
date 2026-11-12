@@ -70,6 +70,7 @@ final class ReliefNames {
             "molten_glob",
             "moonsilver_ingot",
             "moonsilver_nugget",
+            "moonstone",
             "moth_cocoon",
             "nature_dragon_scale",
             "nature_rune",

@@ -79,6 +79,27 @@ GEM_C = [
     "................",
 ]
 
+# Mondstein-Erz (0.96): runde, glatt gewaschene Steine (Cabochons) – oben links ein Glanz, unten rechts dunkel; einer schimmert
+# fliederfarben (5-8) statt blau
+MOON_STONES = [
+    "................",
+    "..43............",
+    ".4432.....4.....",
+    ".3321....432....",
+    "..21......2.....",
+    "................",
+    "................",
+    "......887.......",
+    ".....88876......",
+    ".....77765..43..",
+    "......665...32..",
+    "................",
+    "...43...........",
+    "..4432.....443..",
+    "...21......321..",
+    "................",
+]
+
 # Edelstein-Erz: grüne (1-4) und violette (5-8) Steine
 GEM_MIXED = [
     "................",
@@ -145,6 +166,8 @@ MOONSILVER = tones("#6a7592", "#96a2bc", "#c2cde0", "#eef3fb")
 NIGHTSTEEL = tones("#22204a", "#34346e", "#4c4e98", "#7c80cc")
 SOUL = tones("#0e5c58", "#18a69c", "#58e4d6", "#dafff8")
 ABYSSITE = tones("#4c0c48", "#8c1a82", "#e04ad2", "#ffc4f4")
+MOONSTONE = tones("#34509c", "#6f8fdc", "#b4d0fa", "#f2f8ff")
+MOONSTONE_LILAC = tones("#523e9e", "#8e74d8", "#cbb6f6", "#faf0ff")
 
 
 def build(put: Callable[[str, Image.Image], None]) -> None:
@@ -166,6 +189,9 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     abyss = overlay(mirror(METAL_A), ABYSSITE)
     put("block/abyssite_ore_overlay", abyss)
     put("block/abyssite_ore_glow", glow_of(abyss, ABYSSITE[2:]))
+    moon = overlay(MOON_STONES, MOONSTONE, MOONSTONE_LILAC)
+    put("block/moonstone_ore_overlay", moon)
+    put("block/moonstone_ore_glow", glow_of(moon, MOONSTONE[2:] + MOONSTONE_LILAC[2:]))
 
 
 if __name__ == "__main__":

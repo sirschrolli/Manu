@@ -8642,6 +8642,222 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.star_ray.hurt"
   },
+  "entity.stone_keeper.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:fae/keeper_ambient1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:fae/keeper_ambient2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:fae/keeper_ambient3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.stone_keeper.ambient"
+  },
+  "entity.stone_keeper.armor": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:fae/keeper_armor1",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.stone_keeper.armor"
+  },
+  "entity.stone_keeper.awaken": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:fae/keeper_awaken1",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.stone_keeper.awaken"
+  },
+  "entity.stone_keeper.beam": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:fae/keeper_beam1",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.stone_keeper.beam"
+  },
+  "entity.stone_keeper.beam_charge": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:fae/keeper_beam_charge1",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.stone_keeper.beam_charge"
+  },
+  "entity.stone_keeper.boulder": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:fae/keeper_boulder1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:fae/keeper_boulder2",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:fae/keeper_boulder3",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.stone_keeper.boulder"
+  },
+  "entity.stone_keeper.crystal": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:fae/keeper_crystal1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:fae/keeper_crystal2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:fae/keeper_crystal3",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:fae/keeper_crystal4",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.stone_keeper.crystal"
+  },
+  "entity.stone_keeper.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:fae/keeper_death1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.stone_keeper.death"
+  },
+  "entity.stone_keeper.dig": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:fae/keeper_dig1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:fae/keeper_dig2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.stone_keeper.dig"
+  },
+  "entity.stone_keeper.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:fae/keeper_hurt1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:fae/keeper_hurt2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:fae/keeper_hurt3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.stone_keeper.hurt"
+  },
+  "entity.stone_keeper.roar": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:fae/keeper_roar1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:fae/keeper_roar2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.stone_keeper.roar"
+  },
+  "entity.stone_keeper.shatter": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:fae/keeper_shatter1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:fae/keeper_shatter2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.stone_keeper.shatter"
+  },
+  "entity.stone_keeper.smash": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:fae/keeper_smash1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:fae/keeper_smash2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.stone_keeper.smash"
+  },
+  "entity.stone_keeper.step": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:fae/keeper_step1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:fae/keeper_step2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:fae/keeper_step3",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:fae/keeper_step4",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.stone_keeper.step"
+  },
+  "entity.stone_keeper.stomp": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:fae/keeper_stomp1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:fae/keeper_stomp2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.stone_keeper.stomp"
+  },
+  "entity.stone_keeper.throw": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:fae/keeper_throw1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:fae/keeper_throw2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.stone_keeper.throw"
+  },
   "entity.storm_gull.call": {
     "sounds": [
       {

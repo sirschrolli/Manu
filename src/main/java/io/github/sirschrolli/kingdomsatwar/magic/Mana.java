@@ -18,7 +18,8 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
  * Mana für die Zauber des Aetherit-Stabs. Jeder Zauber kostet Mana (mehr auf höherer Stufe und voll aufgeladen); es
  * füllt sich von selbst wieder auf – kurz nach einem Zauber noch nicht, dann stetig. Wie viel man fassen kann und wie
  * schnell es zurückkehrt, wächst mit der Stufe des besten Stabs, den man bei sich trägt (100 Mana als Lehrling, 20 mehr
- * je Stufe), und jeder aufgenommene Manakristall fasst 20 mehr. Im Kreativmodus kostet Zaubern nichts.
+ * je Stufe), und jeder aufgenommene Manakristall fasst 20 mehr – die Mondsteinrüstung noch einmal bis zu 80 (seit 0.96). Im
+ * Kreativmodus kostet Zaubern nichts.
  */
 @EventBusSubscriber(modid = KingdomsAtWar.MODID)
 public final class Mana {
@@ -57,7 +58,8 @@ public final class Mana {
     /** So viel Mana fasst der Spieler – nach dem besten Stab, den er bei sich trägt, und seinen Manakristallen. */
     public static float maxFor(Player player) {
         return max(bestStaff(player)) + io.github.sirschrolli.kingdomsatwar.hero.Crystals.bonusMana(player)
-                + io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.bonusMana(player);
+                + io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.bonusMana(player)
+                + io.github.sirschrolli.kingdomsatwar.item.fae.MoonstoneArmor.bonusMana(player);
     }
 
     /** Mana je Sekunde mit diesem Stab. */
@@ -120,13 +122,18 @@ public final class Mana {
         regenerate(player, REGEN_INTERVAL);
     }
 
-    /** Erholung über so viele Ticks (bis zum Höchstwert des besten Stabs im Gepäck, der Manakristalle und der Zauberkunst). */
+    /**
+     * Erholung über so viele Ticks (bis zum Höchstwert des besten Stabs im Gepäck, der Manakristalle, der Zauberkunst und der
+     * Mondsteinrüstung; Zauberkunst und Mondstein beschleunigen sie).
+     */
     public static void regenerate(Player player, int ticks) {
         ItemStack staff = bestStaff(player);
         float max = maxFor(player);
         float mana = get(player);
         if (mana < max) {
-            set(player, Math.min(max, mana + regen(staff) * io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.manaRegenFactor(player) * ticks / 20.0f));
+            float factor = io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.manaRegenFactor(player)
+                    * io.github.sirschrolli.kingdomsatwar.item.fae.MoonstoneArmor.regenFactor(player);
+            set(player, Math.min(max, mana + regen(staff) * factor * ticks / 20.0f));
         }
     }
 

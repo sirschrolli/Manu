@@ -62,6 +62,7 @@ public class SpellFxRenderer extends EntityRenderer<SpellFxEntity, SpellFxRender
     private final SpellFxModels.Vine vine;
     private final SpellFxModels.Flower flower;
     private final SpellFxModels.Prison prison;
+    private final SpellFxModels.Crystal crystal;
 
     public SpellFxRenderer(EntityRendererProvider.Context context) {
         super(context);
@@ -71,6 +72,7 @@ public class SpellFxRenderer extends EntityRenderer<SpellFxEntity, SpellFxRender
         this.vine = new SpellFxModels.Vine(context.bakeLayer(ModModelLayers.THORN_VINE));
         this.flower = new SpellFxModels.Flower(context.bakeLayer(ModModelLayers.POISON_FLOWER));
         this.prison = new SpellFxModels.Prison(context.bakeLayer(ModModelLayers.ICE_PRISON));
+        this.crystal = new SpellFxModels.Crystal(context.bakeLayer(ModModelLayers.MOON_CRYSTAL));
     }
 
     private static Identifier texture(String id) {
@@ -141,6 +143,7 @@ public class SpellFxRenderer extends EntityRenderer<SpellFxEntity, SpellFxRender
             case FLOWER -> this.model(this.flower, "poison_flower", false, state, poseStack, collector, 1.0f);
             case PRISON -> this.model(this.prison, "ice_prison", true, state, poseStack, collector,
                     Mth.clamp((state.life - state.age) / 3.0f, 0.0f, 1.0f));
+            case CRYSTAL -> this.model(this.crystal, "moon_crystal", false, state, poseStack, collector, 1.0f);
         }
         poseStack.popPose();
         super.submit(state, poseStack, collector, camera);

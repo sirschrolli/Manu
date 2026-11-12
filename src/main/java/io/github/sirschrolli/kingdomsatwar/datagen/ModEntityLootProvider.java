@@ -424,6 +424,16 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(ModItems.GEMSTONE.get(), 2, 4))
                 .withPool(drop(ModItems.GOLD_COIN.get(), 4, 9)));
         this.add(ModEntities.MOON_MOTH.get(), LootTable.lootTable());
+        // der Steinhüter: der Hüterhammer, ein Herzkristall, viel Mondstein und Schätze; seine Felsbrocken zerschellen ohne Beute
+        this.add(ModEntities.STONE_KEEPER.get(), LootTable.lootTable()
+                .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.FaeGear.KEEPER_MAUL.get(), 1))
+                .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 1))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOONSTONE.get(), 8, 14))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOONSTONE_BLOCK.get(), 1, 2))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.CHISELED_MOONSTONE.get(), 2, 4))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST.get(), 4, 8))
+                .withPool(drop(ModItems.GEMSTONE.get(), 2, 4))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 4, 9)));
         // Malleus, der Glutschmied: der Glutspeer, ein Herzkristall, Glutklumpen, Netheritschrott und Schätze; seine
         // Glutklumpen zerplatzen ohne Beute
         this.add(ModEntities.GLUTSCHMIED.get(), LootTable.lootTable()

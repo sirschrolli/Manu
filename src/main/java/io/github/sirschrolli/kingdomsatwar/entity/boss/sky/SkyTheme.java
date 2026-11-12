@@ -45,7 +45,9 @@ public enum SkyTheme {
     /** Der Weltenfresser: der Getroffene wird in den Schlund gezogen. */
     MAW(3, 0xFF3A5A, 0xFFC0C8, () -> ModParticles.BOSS_SHADOW.get()),
     /** Schrolli: Fesseln aus Licht – der Getroffene ist geschwächt und leuchtet. */
-    CREATOR(3, 0xFFD24A, 0xFFF8DC, () -> ModParticles.DIVINE_SPARK.get());
+    CREATOR(3, 0xFFD24A, 0xFFF8DC, () -> ModParticles.DIVINE_SPARK.get()),
+    /** Der Steinhüter (0.96): Mondstein umschließt den Getroffenen – er ist schwer und langsam. */
+    KEEPER(1, 0x9ED0FF, 0xF2FAFF, () -> ModParticles.FAE_SPARK.get());
 
     private static final SkyTheme[] VALUES = values();
 

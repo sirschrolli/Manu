@@ -30,13 +30,17 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.carver.WorldCarver;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.feature.BlockReplacement;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.OreFeature;
 import net.minecraft.world.level.levelgen.feature.SimpleBlockFeature;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
+import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.OffsetPlacement;
@@ -44,6 +48,7 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.RarityFilter;
 import net.minecraft.world.level.levelgen.placement.SurfaceWaterDepthFilter;
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 
 /**
  * Was im Feenreich wächst und steht: Glimmerbäume, Glimmerriesen und Tränenglimmer, Riesenpilze, Dornbäume und
@@ -138,6 +143,12 @@ public final class FaeFeatures {
             Blocks.CALCITE.defaultBlockState(), 0.3f, state(FaeBlocks.MOONSTONE_BRICKS.base()), 0.0f, Blocks.AIR.defaultBlockState(),
             1.2f, 2.4f, true), ground(rare(3), 4));
 
+    // --- Mondsteinerz (seit 0.96): Adern im Feenstein, nach unten häufiger (an Hängen und im Mondsteinbruch auch offen) ---
+    static final Entry ORE_MOONSTONE = entry(GenerationStep.Decoration.UNDERGROUND_ORES, "ore_moonstone", () -> new OreFeature(
+            List.of(BlockReplacement.replace(new BlockMatchTest(FaeBlocks.FAESTONE.base().get()), state(FaeBlocks.MOONSTONE_ORE))), 5, 0.0f),
+            List.of(CountPlacement.of(8), InSquarePlacement.spread(),
+                    HeightRangePlacement.triangle(VerticalAnchor.absolute(-8), VerticalAnchor.absolute(68)), BiomeFilter.biome()));
+
     // --- Der Mondhain (einer pro Feld, in allen Biomen; die Lichtung der Mottenkönigin) ---
     static final Entry MONDHAIN = entry(STRUCTURES, "mondhain", io.github.sirschrolli.kingdomsatwar.fae.feature.MondhainFeature::new,
             List.of(new SpacedPlacement(io.github.sirschrolli.kingdomsatwar.fae.Mondhain.SPACING,
@@ -149,6 +160,13 @@ public final class FaeFeatures {
             List.of(new SpacedPlacement(io.github.sirschrolli.kingdomsatwar.fae.MystikStage.SPACING,
                     io.github.sirschrolli.kingdomsatwar.fae.MystikStage.SEPARATION, io.github.sirschrolli.kingdomsatwar.fae.MystikStage.SALT, 0),
                     BiomeFilter.biome()));
+
+    // --- Der alte Mondsteinbruch (seit 0.96; höchstens einer pro Feld, in allen Biomen; der Steinhüter kniet an seinem Grund) ---
+    static final Entry MOONSTONE_QUARRY = entry(STRUCTURES, "moonstone_quarry",
+            io.github.sirschrolli.kingdomsatwar.fae.feature.MondsteinbruchFeature::new,
+            List.of(new SpacedPlacement(io.github.sirschrolli.kingdomsatwar.fae.Mondsteinbruch.SPACING,
+                    io.github.sirschrolli.kingdomsatwar.fae.Mondsteinbruch.SEPARATION, io.github.sirschrolli.kingdomsatwar.fae.Mondsteinbruch.SALT,
+                    0), BiomeFilter.biome()));
 
     // --- Ruinen ---
     static final Entry RUINS = entry(STRUCTURES, "ruins", FaeRuinFeature::new,
@@ -240,26 +258,26 @@ public final class FaeFeatures {
     }
 
     static BiomeGenerationSettings meadows(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, BOULDERS, MONDHAIN, MYSTIK_STAGE, RUINS, MEADOW_TREES, MUSHROOMS_RARE, SPROUTS_DENSE, MEADOW_FLOWERS, STARLACE,
+        return settings(placed, carvers, ORE_MOONSTONE, BOULDERS, MONDHAIN, MYSTIK_STAGE, MOONSTONE_QUARRY, RUINS, MEADOW_TREES, MUSHROOMS_RARE, SPROUTS_DENSE, MEADOW_FLOWERS, STARLACE,
                 LANTERNS_RARE, LILIES_RARE, FAIRY_RINGS);
     }
 
     static BiomeGenerationSettings glimmerwood(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, BOULDERS, MONDHAIN, MYSTIK_STAGE, RUINS, GRAND_TREES, FOREST_TREES, MUSHROOMS_RARE, SPROUTS, FLOWERS, STARLACE,
+        return settings(placed, carvers, ORE_MOONSTONE, BOULDERS, MONDHAIN, MYSTIK_STAGE, MOONSTONE_QUARRY, RUINS, GRAND_TREES, FOREST_TREES, MUSHROOMS_RARE, SPROUTS, FLOWERS, STARLACE,
                 LANTERNS_RARE, LILIES_RARE, FAIRY_RINGS_RARE);
     }
 
     static BiomeGenerationSettings mushroomGrove(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, BOULDERS_MOSSY, MONDHAIN, MYSTIK_STAGE, RUINS, MUSHROOM_CLUSTERS, MUSHROOMS, SPROUTS, FLOWERS, LANTERNS, LILIES_RARE,
+        return settings(placed, carvers, ORE_MOONSTONE, BOULDERS_MOSSY, MONDHAIN, MYSTIK_STAGE, MOONSTONE_QUARRY, RUINS, MUSHROOM_CLUSTERS, MUSHROOMS, SPROUTS, FLOWERS, LANTERNS, LILIES_RARE,
                 FAIRY_RINGS_RARE);
     }
 
     static BiomeGenerationSettings moonlitLakes(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, BOULDERS_SHORE, MONDHAIN, MYSTIK_STAGE, RUINS, LAKE_TREES, MEADOW_TREES, SPROUTS_DENSE, FLOWERS, STARLACE, LILIES);
+        return settings(placed, carvers, ORE_MOONSTONE, BOULDERS_SHORE, MONDHAIN, MYSTIK_STAGE, MOONSTONE_QUARRY, RUINS, LAKE_TREES, MEADOW_TREES, SPROUTS_DENSE, FLOWERS, STARLACE, LILIES);
     }
 
     static BiomeGenerationSettings thornwild(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, BOULDERS, MONDHAIN, MYSTIK_STAGE, RUINS, THORN_TREES, SHORE_TREES, MUSHROOMS_RARE, THICKETS, SPROUTS, LANTERNS_RARE,
+        return settings(placed, carvers, ORE_MOONSTONE, BOULDERS, MONDHAIN, MYSTIK_STAGE, MOONSTONE_QUARRY, RUINS, THORN_TREES, SHORE_TREES, MUSHROOMS_RARE, THICKETS, SPROUTS, LANTERNS_RARE,
                 BRIARS, LILIES_RARE);
     }
 }

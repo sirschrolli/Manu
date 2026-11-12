@@ -112,6 +112,20 @@ final class FaeModels {
 
     private static final ModelTemplate COCOON = cocoonTemplate();
 
+    /** Hüterstein (0.96): oben, Seiten, unten; darüber leuchten das Zeichen und das Runenband (nicht, wenn er erloschen ist). */
+    private static final TextureSlot GLOW_TOP = TextureSlot.create("glow_top");
+    private static final TextureSlot GLOW_SIDE = TextureSlot.create("glow_side");
+    private static final ModelTemplate KEEPER_STONE_LIT = ExtendedModelTemplateBuilder.builder()
+            .parent(Identifier.withDefaultNamespace("block/block"))
+            .requiredTextureSlot(TextureSlot.TOP).requiredTextureSlot(TextureSlot.SIDE).requiredTextureSlot(TextureSlot.BOTTOM)
+            .requiredTextureSlot(GLOW_TOP).requiredTextureSlot(GLOW_SIDE).requiredTextureSlot(TextureSlot.PARTICLE)
+            .element(e -> e.from(0, 0, 0).to(16, 16, 16).allFaces((dir, face) -> face.uvs(0, 0, 16, 16)
+                    .texture(dir == Direction.UP ? TextureSlot.TOP : dir == Direction.DOWN ? TextureSlot.BOTTOM : TextureSlot.SIDE).cullface(dir)))
+            .element(e -> e.from(0, 0, 0).to(16, 16, 16).lightEmission(15).ambientOcclusion(false)
+                    .allFacesExcept((dir, face) -> face.uvs(0, 0, 16, 16).texture(dir == Direction.UP ? GLOW_TOP : GLOW_SIDE).cullface(dir),
+                            java.util.Set.of(Direction.DOWN)))
+            .build();
+
     private static ModelTemplate cocoonTemplate() {
         ExtendedModelTemplateBuilder builder = ExtendedModelTemplateBuilder.builder()
                 .parent(Identifier.withDefaultNamespace("block/block"))
@@ -155,6 +169,28 @@ final class FaeModels {
         // Gestein
         blocks.createTrivialCube(FaeBlocks.MOSSY_FAESTONE_BRICKS.get());
         ModModelProvider.glowingCube(blocks, FaeBlocks.CHISELED_MOONSTONE.get());
+        // Mondstein (0.96): das Erz im Feenstein (die Steine leuchten), der Block, der Stein, die Rüstung
+        ModModelProvider.ore(blocks, FaeBlocks.MOONSTONE_ORE, FaeBlocks.FAESTONE.base().get(), "moonstone");
+        ModModelProvider.glowingCube(blocks, FaeBlocks.MOONSTONE_BLOCK.get());
+        Block keeper = FaeBlocks.KEEPER_STONE.get();
+        TextureMapping keeperTex = new TextureMapping()
+                .put(TextureSlot.TOP, TextureMapping.getBlockTexture(keeper, "_top"))
+                .put(TextureSlot.SIDE, TextureMapping.getBlockTexture(keeper, "_side"))
+                .put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(keeper, "_bottom"))
+                .put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(keeper, "_side"))
+                .put(GLOW_TOP, TextureMapping.getBlockTexture(keeper, "_top_glow"))
+                .put(GLOW_SIDE, TextureMapping.getBlockTexture(keeper, "_side_glow"));
+        Identifier keeperLit = KEEPER_STONE_LIT.create(keeper, keeperTex, blocks.modelOutput);
+        Identifier keeperDark = ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(keeper, "_dark", keeperTex, blocks.modelOutput);
+        blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(keeper).with(PropertyDispatch.initial(
+                io.github.sirschrolli.kingdomsatwar.block.fae.KeeperStoneBlock.PHASE).generate(phase ->
+                BlockModelGenerators.plainVariant(phase == io.github.sirschrolli.kingdomsatwar.block.fae.KeeperStoneBlock.Phase.DEFEATED
+                        ? keeperDark : keeperLit))));
+        ModModelProvider.flat(items, FaeBlocks.MOONSTONE.get());
+        ModModelProvider.armor(items, io.github.sirschrolli.kingdomsatwar.registry.FaeGear.MOONSTONE_HELMET.get(),
+                io.github.sirschrolli.kingdomsatwar.registry.FaeGear.MOONSTONE_CHESTPLATE.get(),
+                io.github.sirschrolli.kingdomsatwar.registry.FaeGear.MOONSTONE_LEGGINGS.get(),
+                io.github.sirschrolli.kingdomsatwar.registry.FaeGear.MOONSTONE_BOOTS.get());
 
         // Böden: Feengras (getönt), Feenerde, Feenmoos (zufällig gedreht, mit leuchtenden Sporen)
         blocks.createTrivialCube(FaeBlocks.FAE_SOIL.get());

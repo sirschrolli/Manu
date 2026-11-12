@@ -269,6 +269,23 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> MOTH_QUEEN_DEATH = register("entity.moth_queen.death");
     public static final DeferredHolder<SoundEvent, SoundEvent> MOTH_QUEEN_DIVE = register("entity.moth_queen.dive");
     // Malleus, der Glutschmied (0.64)
+    // der Steinhüter (0.96)
+    public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_AMBIENT = register("entity.stone_keeper.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_HURT = register("entity.stone_keeper.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_DEATH = register("entity.stone_keeper.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_STEP = register("entity.stone_keeper.step");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_AWAKEN = register("entity.stone_keeper.awaken");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_ROAR = register("entity.stone_keeper.roar");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_SMASH = register("entity.stone_keeper.smash");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_STOMP = register("entity.stone_keeper.stomp");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_DIG = register("entity.stone_keeper.dig");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_THROW = register("entity.stone_keeper.throw");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_BOULDER = register("entity.stone_keeper.boulder");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_CRYSTAL = register("entity.stone_keeper.crystal");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_BEAM_CHARGE = register("entity.stone_keeper.beam_charge");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_BEAM = register("entity.stone_keeper.beam");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_ARMOR = register("entity.stone_keeper.armor");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_SHATTER = register("entity.stone_keeper.shatter");
     public static final DeferredHolder<SoundEvent, SoundEvent> GLUTSCHMIED_ROAR = register("entity.glutschmied.roar");
     public static final DeferredHolder<SoundEvent, SoundEvent> GLUTSCHMIED_CLANG = register("entity.glutschmied.clang");
     public static final DeferredHolder<SoundEvent, SoundEvent> GLUTSCHMIED_THRUST = register("entity.glutschmied.thrust");

@@ -130,7 +130,10 @@ public final class ModCreativeTabs {
                     .title(Component.translatable("itemGroup.kingdomsatwar.the_fae_realm"))
                     .icon(() -> FaeBlocks.FAE_DUST.toStack())
                     .withTabsBefore(THE_SEA.key())
-                    .displayItems((parameters, output) -> accept(output, FaeBlocks.TAB))
+                    .displayItems((parameters, output) -> {
+                        accept(output, FaeBlocks.TAB);
+                        accept(output, FaeBlocks.EGGS);
+                    })
                     .build());
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> LEGENDS = TABS.register("legends",

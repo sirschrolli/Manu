@@ -36,6 +36,8 @@ import org.jspecify.annotations.Nullable;
  *   Erde Widderhörner, Wasser Flossen), Kamm, Rückenstacheln, Schulterschuppen mit Kralle, ein Drachenschwanz zu den
  *   Beinschienen und Krallen an den Stiefeln;</li>
  *   <li><b>Edelsteinkrone:</b> Zacken mit Perlen und Edelsteine über dem Reif;</li>
+ *   <li><b>Mondstein</b> (seit 0.96): ein Stirnreif mit leuchtender Mondsichel und Mondstein, ein Sternenmantel bis an die Knie,
+ *   Mondsicheln auf den Schultern, Armreife und Gürtelschnalle mit Mondsteinen, Robenschöße und spitze, aufgebogene Schuhe;</li>
  *   <li>die Rüstungen von <b>Minecraft</b>: Leder (Feder an der Kappe, Pelzkragen, Gürtel mit Tasche, Pelzstulpen),
  *   Kettenhemd (Kettenkragen am Helm, Kettenschultern, Kettenschurz), Eisen (Nasenschutz, Grat, Schulterstücke,
  *   Kniebuckel, Schuhkappen), Gold (Strahlenkamm, Rubine, Sonnenscheibe, Schulterstücke), Diamant (Kamm und Schultern
@@ -56,7 +58,7 @@ public class ArmorPartsLayer<S extends HumanoidRenderState, M extends HumanoidMo
             Map.entry("abyssite", "abyssite"), Map.entry("fire_dragon_scale", "fire"), Map.entry("ice_dragon_scale", "ice"),
             Map.entry("lightning_dragon_scale", "lightning"), Map.entry("nature_dragon_scale", "nature"),
             Map.entry("earth_dragon_scale", "earth"), Map.entry("water_dragon_scale", "water"),
-            Map.entry("gemstone_crown", "crown"));
+            Map.entry("gemstone_crown", "crown"), Map.entry("moonstone", "moonstone"));
     /** Die Rüstungen von Minecraft (Ausrüstungs-Asset minecraft:…) → Name ihres Satzes. */
     private static final Map<String, String> VANILLA = Map.of("leather", "leather", "chainmail", "chainmail", "iron", "iron",
             "gold", "gold", "diamond", "diamond", "netherite", "netherite", "copper", "copper", "turtle_scute", "turtle");

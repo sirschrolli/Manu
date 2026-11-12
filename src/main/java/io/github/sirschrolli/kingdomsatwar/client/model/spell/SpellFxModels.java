@@ -65,6 +65,33 @@ public final class SpellFxModels {
         }
     }
 
+    /**
+     * Mondsteinkristalle (seit 0.96): brechen mit einem Ruck aus dem Boden (ein wenig über das Ziel hinaus), stehen still und
+     * versinken wieder; das Geröll bleibt am Fuß.
+     */
+    public static final class Crystal extends Model<SpellFxRenderState> {
+        private final ModelPart crystals;
+        private final ModelPart rubble;
+
+        public Crystal(ModelPart root) {
+            super(root, RenderTypes::entityCutout);
+            this.crystals = root.getChild("crystals");
+            this.rubble = root.getChild("rubble");
+        }
+
+        @Override
+        public void setupAnim(SpellFxRenderState s) {
+            super.setupAnim(s);
+            float p = presence(s, 3.5f, 8.0f, true);
+            this.crystals.y += (1.0f - p) * 40.0f;
+            this.crystals.xRot = (rand(s, 11) - 0.5f) * 0.3f;
+            this.crystals.zRot = (rand(s, 12) - 0.5f) * 0.3f;
+            this.crystals.yRot = rand(s, 13) * Mth.TWO_PI;
+            this.rubble.yRot = rand(s, 14) * Mth.TWO_PI;
+            this.rubble.visible = s.age > 0.5f;
+        }
+    }
+
     /** Steinfaust: schlägt aus dem Boden nach oben, die Faust ballt sich im Aufstieg, dann sinkt der Arm zurück. */
     public static final class Fist extends Model<SpellFxRenderState> {
         private final ModelPart arm;

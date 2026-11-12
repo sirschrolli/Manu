@@ -64,6 +64,8 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         copy(ModTags.Blocks.ORES_NIGHTSTEEL, ModTags.Items.ORES_NIGHTSTEEL);
         copy(ModTags.Blocks.ORES_SOUL_CRYSTAL, ModTags.Items.ORES_SOUL_CRYSTAL);
         copy(ModTags.Blocks.ORES_ABYSSITE, ModTags.Items.ORES_ABYSSITE);
+        copy(ModTags.Blocks.ORES_MOONSTONE, ModTags.Items.ORES_MOONSTONE);
+        copy(ModTags.Blocks.STORAGE_BLOCKS_MOONSTONE, ModTags.Items.STORAGE_BLOCKS_MOONSTONE);
         copy(ModTags.Blocks.STORAGE_BLOCKS_MOONSILVER, ModTags.Items.STORAGE_BLOCKS_MOONSILVER);
         copy(ModTags.Blocks.STORAGE_BLOCKS_NIGHTSTEEL, ModTags.Items.STORAGE_BLOCKS_NIGHTSTEEL);
         copy(ModTags.Blocks.STORAGE_BLOCKS_SOUL_CRYSTAL, ModTags.Items.STORAGE_BLOCKS_SOUL_CRYSTAL);
@@ -229,6 +231,19 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
                 .getResourceKey(net.minecraft.world.item.Items.PHANTOM_MEMBRANE).orElseThrow());
         add(ItemTags.DURABILITY_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_WINGS);
         add(ModTags.Items.REPAIRS_MYSTIC_GEAR, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST);
+        // Mondstein (0.96): Edelstein, repariert die Mondsteinrüstung und den Hüterhammer; die Rüstung lässt sich besetzen
+        add(ModTags.Items.GEMS_MOONSTONE, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOONSTONE);
+        tag(Tags.Items.GEMS).addTag(ModTags.Items.GEMS_MOONSTONE);
+        add(ModTags.Items.REPAIRS_MOONSTONE_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOONSTONE);
+        add(ModTags.Items.REPAIRS_KEEPER_MAUL, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOONSTONE);
+        add(ItemTags.SWORDS, io.github.sirschrolli.kingdomsatwar.registry.FaeGear.KEEPER_MAUL);
+        add(ItemTags.HEAD_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.FaeGear.MOONSTONE_HELMET);
+        add(ItemTags.CHEST_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.FaeGear.MOONSTONE_CHESTPLATE);
+        add(ItemTags.LEG_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.FaeGear.MOONSTONE_LEGGINGS);
+        add(ItemTags.FOOT_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.FaeGear.MOONSTONE_BOOTS);
+        for (var piece : io.github.sirschrolli.kingdomsatwar.registry.FaeGear.moonstoneSet()) {
+            add(ItemTags.TRIMMABLE_ARMOR, piece);
+        }
         add(ModTags.Items.REPAIRS_GLITCH_GEAR, io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.GLITCH_SHARD);
         add(ItemTags.DURABILITY_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.BANNHAMMER,
                 io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.GLITCH_WINGS);
