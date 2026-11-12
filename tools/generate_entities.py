@@ -30,6 +30,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               ice_lance, icicle, ice_prison, phoenix, poison_flower, stone_fist, stone_spike, thorn_vine, moon_crystal, coral_spike,
                               void_maw, shard_warden, distortling, star_ray, warden_shard, shattered_king,
                               shattered_crown, manta_ray, glow_jellyfish, shark, anglerfish, giant_crab, reef_colossus, kraken, mermaid, sea_witch,
+                              soul_shepherd,
                               armor_parts,
                               fairy, mushroomling, thorn_wight, moth_queen, glutschmied, asteria, stone_keeper, keeper_boulder,
                               miss_mystik, light_dove, magic_sword, anni_troll,
@@ -447,6 +448,11 @@ def main():
                 "Geometrie der Meerhexe (seit 0.97): hagere Meerjungfrau mit Tanghaar, treibenden Strähnen, Korallenkrone, Tangumhang, "
                 "Krallen, Hexenstab mit leuchtender Kugel und einem gebänderten Aalschwanz mit Stacheln und Fächerflossen; im Spiel ×1,5.",
                 "sea_witch", sea_witch.PALETTES, preview, same_seed=True)
+    write_model(soul_shepherd, "SoulShepherdGeometry",
+                "Geometrie des Seelenhirten (seit 0.98): hagerer, gebeugter Riese in zerschlissener Kutte mit Runensaum, Schaffell "
+                "über den Schultern, Kapuze mit Widderschädel, gerollten Hörnern und Seelenlicht in den Augen, knochige Arme, "
+                "Hirtenstab mit Haken und Seelenlaterne, Handglocke, Talismane am Strick, drei Irrlichter; im Spiel ×1,5.",
+                "soul_shepherd", soul_shepherd.PALETTES, preview)
     write_model(armor_parts, "ArmorPartsGeometry",
                 "Geometrie der 3D-Teile getragener Rüstungen (seit 0.95): je Rüstungssatz und Platz ein Knochen <satz>_<platz>_<knochen>.",
                 "armor_parts", armor_parts.PALETTES, preview, same_seed=True)

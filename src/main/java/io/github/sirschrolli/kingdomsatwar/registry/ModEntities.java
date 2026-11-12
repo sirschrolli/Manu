@@ -435,6 +435,14 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.sea.InkBoltEntity>> INK_BOLT =
             ENTITIES.registerEntityType("ink_bolt", io.github.sirschrolli.kingdomsatwar.entity.sea.InkBoltEntity::new, MobCategory.MISC,
                     builder -> builder.sized(0.5f, 0.5f).noLootTable().clientTrackingRange(8).updateInterval(1));
+    /** Der Seelenhirte (0.98): steht in Andacht unter seiner Seelenglocke im Seelenpferch des Seelensumpfs (Schattenwelt). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.shadow.SoulShepherdEntity>> SOUL_SHEPHERD =
+            ENTITIES.registerEntityType("soul_shepherd", io.github.sirschrolli.kingdomsatwar.entity.shadow.SoulShepherdEntity::new, MobCategory.MONSTER,
+                    builder -> builder.sized(1.4f, 3.8f).eyeHeight(3.25f).fireImmune().notInPeaceful().clientTrackingRange(16).updateInterval(2));
+    /** Ein Irrlicht (der Seelenhirte). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.shadow.SoulWispEntity>> SOUL_WISP =
+            ENTITIES.registerEntityType("soul_wisp", io.github.sirschrolli.kingdomsatwar.entity.shadow.SoulWispEntity::new, MobCategory.MISC,
+                    builder -> builder.sized(0.5f, 0.5f).noLootTable().clientTrackingRange(8).updateInterval(1));
     /** Der Steinhüter (0.96): kniet am Grund des alten Mondsteinbruchs im Feenreich, bis jemand an den Grund tritt. */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.StoneKeeperEntity>> STONE_KEEPER =
             ENTITIES.registerEntityType("stone_keeper", io.github.sirschrolli.kingdomsatwar.entity.fae.StoneKeeperEntity::new,
@@ -950,6 +958,7 @@ public final class ModEntities {
         event.put(MOTH_QUEEN.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MothQueenEntity.createAttributes().build());
         event.put(STONE_KEEPER.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.StoneKeeperEntity.createAttributes().build());
         event.put(SEA_WITCH.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.SeaWitchEntity.createAttributes().build());
+        event.put(SOUL_SHEPHERD.get(), io.github.sirschrolli.kingdomsatwar.entity.shadow.SoulShepherdEntity.createAttributes().build());
         event.put(MOON_MOTH.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MoonMothEntity.createAttributes().build());
         event.put(GLUTSCHMIED.get(), io.github.sirschrolli.kingdomsatwar.entity.nether.GlutschmiedEntity.createAttributes().build());
         event.put(ASTERIA.get(), io.github.sirschrolli.kingdomsatwar.entity.end.AsteriaEntity.createAttributes().build());

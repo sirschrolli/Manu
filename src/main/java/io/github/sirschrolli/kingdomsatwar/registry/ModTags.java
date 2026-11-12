@@ -250,6 +250,7 @@ public final class ModTags {
         public static final TagKey<Item> REPAIRS_KEEPER_MAUL = mod("repairs_keeper_maul");
         public static final TagKey<Item> REPAIRS_AQUAMARINE_ARMOR = mod("repairs_aquamarine_armor");
         public static final TagKey<Item> REPAIRS_DUSK_ARMOR = mod("repairs_dusk_armor");
+        public static final TagKey<Item> REPAIRS_SHEPHERD_CROOK = mod("repairs_shepherd_crook");
         public static final TagKey<Item> REPAIRS_SEA_WITCH_STAFF = mod("repairs_sea_witch_staff");
         /** Reparieren die Waffen und Rüstungen aus Monsterteilen (0.70). */
         public static final TagKey<Item> REPAIRS_CLAW_BLADE = mod("repairs_claw_blade");
