@@ -185,6 +185,7 @@ public final class ModGameTests {
         VoidGameTests.init();     // meldet die Tests der Leere an
         SeaGameTests.init();      // meldet die Tests des Meeres an
         ReefGameTests.init();     // Meeresgrund, Versunkenes Atoll, Karkinos
+        KrakenGameTests.init();   // seit 0.91: der Kraken und sein Schlund im Urmeer
         FaeGameTests.init();      // das Feenreich, der Mondhain, Noctua
         UrmeerGameTests.init();   // seit 0.89: das Urmeer und die Gezeitentore
         ForgeGameTests.init();    // Malleus, der Glutschmied, und der Glutspeer
@@ -267,6 +268,7 @@ public final class ModGameTests {
         VoidGameTests.register(event, environment);
         SeaGameTests.register(event, environment);
         ReefGameTests.register(event, environment);
+        KrakenGameTests.register(event, environment);
         FaeGameTests.register(event, environment);
         UrmeerGameTests.register(event, environment);
         ForgeGameTests.register(event, environment);

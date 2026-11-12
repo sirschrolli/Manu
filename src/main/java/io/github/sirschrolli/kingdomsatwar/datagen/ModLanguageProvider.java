@@ -666,8 +666,23 @@ public class ModLanguageProvider extends LanguageProvider {
         text("boss.kingdomsatwar.reef", "Karkinos, the Reef Colossus", "Karkinos, der Riffkoloss");
         text("boss.kingdomsatwar.reef.title", "Lord of the Sunken Atoll", "Herr des Versunkenen Atolls");
         text("message.kingdomsatwar.reef_colossus.tide", "Karkinos calls the tide!", "Karkinos ruft die Flut!");
+        // der Kraken und der Krakenschlund (0.91)
+        // (der Name der Kreatur ohne Artikel – sonst hieße es „von Der Kraken getötet“; die Bossleiste sagt „Der Kraken“)
+        creature(ModEntities.KRAKEN, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.KRAKEN_SPAWN_EGG, "Kraken", "Kraken", "Kraken");
+        text("boss.kingdomsatwar.kraken", "The Kraken", "Der Kraken");
+        text("command.kingdomsatwar.kraken.none", "This world has no Primordial Sea with a Kraken's maw.", "Diese Welt hat kein Urmeer mit einem Krakenschlund.");
+        text("command.kingdomsatwar.kraken.at", "The Kraken's maw lies in the Primordial Sea at %s %s %s.", "Der Krakenschlund liegt im Urmeer bei %s %s %s.");
+        text("command.kingdomsatwar.kraken.no_core", "The heart of the maw is missing.", "Das Herz des Schlunds fehlt.");
+        text("command.kingdomsatwar.kraken.awake", "The Kraken is already awake.", "Der Kraken ist schon wach.");
+        text("command.kingdomsatwar.kraken.awakened", "The Kraken rises from the maw.", "Der Kraken steigt aus dem Schlund empor.");
+        text("command.kingdomsatwar.kraken.reset", "The Kraken's maw has been reset.", "Der Krakenschlund wurde zurückgesetzt.");
+        text("boss.kingdomsatwar.kraken.title", "Lord of the Primordial Sea", "Herr des Urmeers");
+        text("kraken.kingdomsatwar.warning", "The water above the maw is eerily still …", "Das Wasser über dem Schlund ist unheimlich still …");
+        text("item.kingdomsatwar.tide_horn.kraken_recalled", "Deep below, something huge begins to stir …",
+                "Tief unten regt sich etwas Gewaltiges …");
         text("atoll.kingdomsatwar.warning", "Something stirs beneath the sand of the lagoon …", "Unter dem Sand der Lagune regt sich etwas …");
         block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.ATOLL_CORE, "Heart of the Atoll", "Herz des Atolls");
+        block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.KRAKEN_CORE, "Heart of the Maw", "Herz des Schlunds");
         // Das Urmeer (0.89)
         text("dimension.kingdomsatwar.urmeer", "The Primordial Sea", "Das Urmeer");
         text("biome.kingdomsatwar.urmeer_deep", "Primordial Expanse", "Urmeer-Weiten");
@@ -1084,9 +1099,10 @@ public class ModLanguageProvider extends LanguageProvider {
                 "Im Wasser und Regen: trifft härter, jeder Treffer schlägt eine Welle");
         text(ModItems.loreKey("tide_spear", 3), "In hand: swim like a dolphin", "In der Hand: schwimmen wie ein Delfin");
         item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_HORN, "Tide Horn", "Gezeitenhorn");
-        lore("tide_horn", "Blow it: the sea answers from the Sunken Atoll", "Hineinblasen: Das Meer antwortet aus Richtung des Versunkenen Atolls");
-        text(ModItems.loreKey("tide_horn", 2), "At a quiet atoll, with a Heart of the Sea: calls Karkinos back",
-                "Im stillen Atoll mit einem Herz des Meeres: ruft Karkinos zurück");
+        lore("tide_horn", "Blow it: the sea answers from the Sunken Atoll – in the Primordial Sea from the Kraken's maw",
+                "Hineinblasen: Das Meer antwortet aus Richtung des Versunkenen Atolls – im Urmeer aus dem Krakenschlund");
+        text(ModItems.loreKey("tide_horn", 2), "With a Heart of the Sea: calls back Karkinos or the Kraken",
+                "Mit einem Herz des Meeres: ruft Karkinos oder den Kraken zurück");
         text("item.kingdomsatwar.tide_horn.direction", "The sea answers from the %s – %s blocks away",
                 "Das Meer antwortet aus dem %s – %s Blöcke entfernt");
         text("item.kingdomsatwar.tide_horn.none", "Only the wind answers.", "Nur der Wind antwortet.");
@@ -1101,6 +1117,14 @@ public class ModLanguageProvider extends LanguageProvider {
                 {"step", "Heavy steps", "Schwere Schritte"}, {"tide", "The tide rises", "Die Flut steigt"},
                 {"lance", "Water crashes down", "Wasser stürzt herab"}}) {
             subtitle("entity.reef_colossus." + e[0], e[1], e[2]);
+        }
+        for (String[] e : new String[][] {{"ambient", "The Kraken gurgles", "Der Kraken gurgelt"}, {"hurt", "The Kraken hurts", "Der Kraken nimmt Schaden"},
+                {"death", "The Kraken dies", "Der Kraken stirbt"}, {"rise", "Something huge rises", "Etwas Gewaltiges steigt empor"},
+                {"roar", "The Kraken roars", "Der Kraken brüllt"}, {"wave", "A great wave crashes", "Eine Flutwelle bricht"},
+                {"sweep", "Tentacles sweep the water", "Arme fegen durchs Wasser"}, {"grab", "A tentacle grabs", "Ein Fangarm packt zu"},
+                {"bite", "The Kraken bites", "Der Kraken beißt zu"}, {"ink", "The Kraken spits ink", "Der Kraken spuckt Tinte"},
+                {"whirl", "A whirlpool roars", "Ein Strudel tost"}, {"slam", "A tentacle slams down", "Ein Fangarm schlägt nieder"}}) {
+            subtitle("entity.kraken." + e[0], e[1], e[2]);
         }
         subtitle("entity.manta_ray.hurt", "Manta Ray hurts", "Mantarochen nimmt Schaden");
         subtitle("entity.manta_ray.death", "Manta Ray dies", "Mantarochen stirbt");

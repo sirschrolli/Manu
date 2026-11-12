@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.90.0 – Angeln.** **Alle Angeln sind jetzt 3D:** Die Angel von Minecraft und die sechs Angeln der Mod sind in der Hand echte Ruten mit Griff, Rollenhalter, Rolle und Kurbel, Ringen und farbigen Wicklungen – die Holzangel mit Bindfaden, die Eisenangel mit Lederwicklung, die Goldangel mit rotem Griff und Rubin, die Drachenangel mit Hörnern und Flossen, die Schattenangel mit leuchtenden Wicklungen, die **glühende Glutangel** und die Sternenangel mit einem Stern an der Spitze. Ruhend hängt an der Schnur ein Schwimmer oder Köder (Goldlöffel, Drachenschuppe, Schattenkristall, Glutperle, Stern) mit Haken; ausgeworfen biegt sich die Spitze, und die Schnur läuft von ihr bis zum Schwimmer. Im Inventar bleibt das gewohnte Bild. **Angeln unter Wasser:** Wer taucht und auswirft, dessen Haken treibt nicht mehr zur Oberfläche – er gleitet ein paar Blöcke durchs Wasser und bleibt dann in der Tiefe stehen. Dort beißt es wie oben, statt Spritzern steigen Bläschen auf, und der Fang landet gleich beim Taucher. **Fünf Seltenheiten:** Gewöhnlich, Ungewöhnlich, Selten, **Mystisch** (bisher „episch“) und **Legendär** – und in **jedem Biom gibt es jetzt jede Seltenheit**: **113 neue Legenden**, eine in jedem Biom und zwei in jedem Biom des Urmeers, etwa der **Kohlentitan** in den Lavaadern der Aschefelder, der **Kristallriese** in den Schmelzwasserseen der Frostgipfel, der **Donnergebieter**, der sich an der Sturmküste nur im Gewitter zeigt, und der **Türkishüter** über den Korallenbänken. Legenden sind riesig, schwer zu drillen, tragen ihren Namen in Gold, funkeln im Inventar und geben drei oder vier starke Wirkungen ohne Nebenwirkung. Das **Urmeer hat jetzt die meisten Fische**: **vierzig Arten in jedem Biom** (72 neue). Zusammen sind es **1893 Arten**. Der Fischer kauft jetzt auch Legenden (40 Bronze).
+> **Testversion 0.91.0 – Der Kraken.** Im Urmeer lauert jetzt **der Kraken**, der Herr des Urmeers – nach Anni dem Troll der stärkste Boss der Mod. Er schläft im **Krakenschlund**: Mitten im offenen Meer senkt sich der Grund zu einem weiten Becken, in dessen Mitte ein Trichter aus Abgrundstein gut siebzig Blöcke in die Tiefe stürzt, gesäumt von Meereslaternen wie Augen; im Becken liegen das Gerippe eines Seedrachens und ein Wrack mit einer Truhe, ringsum ragen zwölf schiefe Brandungsfelsen hoch über das Wasser. Wer den Felsenring betritt, weckt ihn: Er steigt aus der Tiefe empor und kämpft mit acht Armen und zwei Fangarmen – **Tentakelschlag**, **Armfeger**, **Würgegriff** (wer ihn hart genug trifft, befreit die Beute), **Tintenwolke**, **Strudel**, **Ruf der Tiefe** (Haie) und im Zorn die **Flutwelle**. Besiegt lässt er die **Krakenangel** fallen, die stärkste Angel im Wasser – in 3D mit Saugnäpfen, Bronzebeschlägen und einem leuchtenden Auge als Köder. Das Gezeitenhorn zeigt im Urmeer den Weg zum Schlund.
+> In 0.90 kam **das Angeln in 3D**: **Alle Angeln sind jetzt 3D:** Die Angel von Minecraft und die sechs Angeln der Mod sind in der Hand echte Ruten mit Griff, Rollenhalter, Rolle und Kurbel, Ringen und farbigen Wicklungen – die Holzangel mit Bindfaden, die Eisenangel mit Lederwicklung, die Goldangel mit rotem Griff und Rubin, die Drachenangel mit Hörnern und Flossen, die Schattenangel mit leuchtenden Wicklungen, die **glühende Glutangel** und die Sternenangel mit einem Stern an der Spitze. Ruhend hängt an der Schnur ein Schwimmer oder Köder (Goldlöffel, Drachenschuppe, Schattenkristall, Glutperle, Stern) mit Haken; ausgeworfen biegt sich die Spitze, und die Schnur läuft von ihr bis zum Schwimmer. Im Inventar bleibt das gewohnte Bild. **Angeln unter Wasser:** Wer taucht und auswirft, dessen Haken treibt nicht mehr zur Oberfläche – er gleitet ein paar Blöcke durchs Wasser und bleibt dann in der Tiefe stehen. Dort beißt es wie oben, statt Spritzern steigen Bläschen auf, und der Fang landet gleich beim Taucher. **Fünf Seltenheiten:** Gewöhnlich, Ungewöhnlich, Selten, **Mystisch** (bisher „episch“) und **Legendär** – und in **jedem Biom gibt es jetzt jede Seltenheit**: **113 neue Legenden**, eine in jedem Biom und zwei in jedem Biom des Urmeers, etwa der **Kohlentitan** in den Lavaadern der Aschefelder, der **Kristallriese** in den Schmelzwasserseen der Frostgipfel, der **Donnergebieter**, der sich an der Sturmküste nur im Gewitter zeigt, und der **Türkishüter** über den Korallenbänken. Legenden sind riesig, schwer zu drillen, tragen ihren Namen in Gold, funkeln im Inventar und geben drei oder vier starke Wirkungen ohne Nebenwirkung. Das **Urmeer hat jetzt die meisten Fische**: **vierzig Arten in jedem Biom** (72 neue). Zusammen sind es **1893 Arten**. Der Fischer kauft jetzt auch Legenden (40 Bronze).
 > In 0.89 kam **das Urmeer**, eine neue Dimension: ein Meer ohne Küsten, so alt wie die Welt – mit vier Landschaften: die tiefen **Urmeer-Weiten** mit Tangwäldern und Felsnadeln, flache, warme **Korallenbänke**, dunkle **Tiefseegräben** aus Abgrundstein und die **Sturminseln** mit Stränden, Palmen und Klippen. Sein Fels ist der grünblaue **Gezeitenstein**; auf dem Grund liegen Gebeine von Seedrachen, Muschelfelder und Korallenpaläste, im Wasser leben Haie, Mantarochen, Delfine, Anglerfische und Riesenkrabben, und an der Angel warten **80 neue Fischarten**. Der Weg hinein führt durch den **Versunkenen Tempel** auf dem Grund der tiefen Ozeane: In der Mitte des runden Heiligtums mit seinen zwölf Säulen und der halb eingestürzten Kuppel wirbelt das **Gezeitentor** – hineinschwimmen, einen Moment bleiben, und man taucht im Urmeer auf einer Plattform über dem Wasser auf. Eigene Tore baut man aus **Gezeitensteinziegeln** und erweckt sie mit einem **Herz des Meeres**.
 > In 0.88 kamen **Waffen und Werkzeuge in 3D**: Die letzten flachen Waffen und Werkzeuge sind jetzt echte **3D-Modelle** wie die Waffenkammer: die Sätze aus **Stahl**, **Nachtstahl** und **Abyssit** (Schwert, Axt, Spitzhacke, Schaufel, Hacke), **Draconiumschwert** und **-axt** mit goldenen Schneiden und glühenden Adern, die **Mondsilberklinge**, die **Trollkeule** mit Eisenbändern und Nägeln, der **Kommandostab** und der rot-weiße **Vermessungsstab** – 21 Stücke. Sie liegen richtig in der Hand, aus eigener Sicht und von außen (F5); im Inventar bleibt das gewohnte Bild. Dazu sind **89 weitere Gegenstände plastisch**: Barren und Erze, Edelsteine und Splitter, Drachenschuppen, Runen und Zaubertafeln, Siegelsplitter, Münzen, Monsterteile, Hörner und Kronen, Speisen und Getränke – in der Hand, im Rahmen und am Boden haben sie Dicke statt wie Papier zu wirken.
 > In 0.87 kamen **Kampf, Wurf, Zauber und Angeln**: Die **Drachen** finden ihre Gegner seitdem sicher und kämpfen sauber: Eigene Drachen **verteidigen ihren Herrn von sich aus** gegen Monster, die ihn oder sie angreifen, kämpfen am Boden mit gezieltem Biss – auch nach unten und nach oben – und Feueratem, steigen gegen Schützen auf Säulen, gegen Flieger und im Wald in die Luft, kreisen dort, stoßen herab und speien aus der Luft. Sie halten Abstand zu ihrem Herrn, **landen sauber neben ihm** statt auf ihm und fliegen keine weiten Schleifen mehr. Die **Drachen-Bosse** fliegen über Mauern, wenn sie am Boden nicht weiterkommen, und treten beim Drehen auf der Stelle. **Speere, Lanzen und Dreizacke** fliegen jetzt **schnurgerade mit der Spitze voran** – auch im Bogen und beim Wurf aus dem Laufen –, und Glaciaras Eisspeer und Eiszapfen sind echte Modelle aus Eis. **Sieben neue Verzauberungen** gibt es am Zaubertisch und beim Bibliothekar: **Donnerschlag** (ein knisternder Funkenschlag fährt in den Getroffenen), **Giftzahn**, **Standhaft**, **Lebenskraft** (mehr Herzen), **Eulenauge** (Nachtsicht), **Hasenfuß** (höher springen, tiefer fallen) und **Drillmeister** (größere Fangzone beim Angeln). Die **Verzauberungen von Minecraft wirken etwas stärker** – Schärfe, Bann, Nemesis, Harpune, Stärke, Schutz, Effizienz und Köder –, aber nicht übertrieben. Und es gibt **sechs eigene Angeln**: die robuste **Eisenangel**, die glückbringende **Goldangel**, die **Drachenangel**, die alles ein wenig besser kann, die **Schattenangel** für Nacht und Dunkel, die **Glutangel** für die Lava und die **Sternenangel** für das End und die Leere.
@@ -389,6 +390,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Waffen und Werkzeuge in 3D** (0.88): die Sätze aus Stahl, Nachtstahl und Abyssit, Draconiumschwert und -axt, Mondsilberklinge, Trollkeule, Kommandostab und Vermessungsstab als 3D-Modelle (richtig gehalten, auch mit F5); 89 weitere Gegenstände plastisch (Barren, Steine, Schuppen, Runen, Münzen, Monsterteile, Speisen) | ✅ fertig |
 | **Das Urmeer** (0.89): eine Meeresdimension mit vier Biomen (Urmeer-Weiten, Korallenbänke, Tiefseegraben, Sturminseln), Gezeitenstein, Klangwelten, 80 neuen Fischarten und den Bauwerken des Meeres; der Versunkene Tempel in den tiefen Ozeanen mit dem Gezeitentor; eigene Tore aus Gezeitensteinziegeln, mit dem Herz des Meeres erweckt | ✅ fertig |
 | **Angeln** (0.90): alle sieben Angeln in 3D (ruhend mit Schnur, Schwimmer oder Köder und Haken, ausgeworfen mit gebogener Spitze); Angeln unter Wasser; fünf Seltenheiten (Mystisch statt Episch) und in jedem Biom jede davon – 113 Legenden der Biome; das Urmeer mit vierzig Arten je Biom; zusammen 1893 Arten | ✅ fertig |
+| **Der Kraken** (0.91): ein Boss im Urmeer knapp unter Anni dem Troll (sieben Angriffe, Würgegriff mit Befreiung, Haie, Flutwelle, eigene Bossleiste und Klänge); der Krakenschlund mit Trichter, Becken, Wrack, Gerippe und Felsenring; die Krakenangel in 3D als Beute | ✅ fertig |
 | **Der Weg zum Unsterblichen** (0.77): Heldenstufe bis 200, fünf neue Ränge (Mythos, Halbgott, Titan, Sternenwanderer, Unsterblicher) mit Abzeichen und Wahrzeichen, Heldenkraft je Stufe, Talente bis 40 Punkte (Meisterschaft), je 25 Herz- und Manakristalle, das Licht der Unsterblichkeit, Heldenherzen in Schichten | ✅ fertig |
 | **Schrolli greift zur Klinge** (0.76): Nahkampf am Boden – Landung, Beine in goldenen Beinschienen, die Klinge aus Licht mit Lichtspur, sieben Künste der Klinge (Klingenhieb, Lichtsicheln, Sturmlauf, Klingenwirbel, Himmelssturz, Schwingenwehr mit Gegenschlag, Weltenklinge), jetzt 33 Künste; warme, leisere Klänge und Musik | ✅ fertig |
 | **Die Kampfdimensionen** (0.74): Mondbühne, Glutesse, Sternenzelt, Fehlerraum, Thronwelt und Weltenschlund – die sechs großen Bosse ziehen ihre Gegner in ein Abbild ihres Horts unter einem fremden Himmel (Regeln wie in der Arkanen Sphäre, Nachzügler folgen); nach der Niederlage erwacht der Boss unversehrt in seiner ursprünglichen Gestalt; Spawn-Ei des Weltenfressers; `/locate` findet Schlund und Thron | ✅ fertig |
@@ -449,7 +451,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.90.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.91.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -457,7 +459,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.90.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.91.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -1901,6 +1903,7 @@ und ihre Vorteile kommen zu Ködern und Verzauberungen hinzu.
 | **Schattenangel** | Nachtstahlbarren, Mondsilberbarren | 384 | im Dunkeln (nachts, unter Tage, in der Leere): Biss 40 % schneller, Fangzone 10 % größer, +2 Glück |
 | **Glutangel** | Lohenruten, Glutwurmschuppe | 512, verbrennt nicht | in der Lava: der Fisch beißt doppelt so schnell, die Fangzone ist 25 % größer, +1 Glück |
 | **Sternenangel** | Sternsplitter, Stock | 512 | im End und in der Leere: Biss doppelt so schnell, Fangzone 25 % größer; überall +1 Glück |
+| **Krakenangel** (seit 0.91) | kein Rezept – Beute des Kraken; ausgebessert mit Prismarinkristallen | 960, verbrennt nicht | die stärkste im Wasser: Biss 35 % schneller, Fangzone 20 % größer, +2 Glück; unter Wasser und im Urmeer Biss doppelt so schnell, Fangzone 30 % größer, +3 Glück; anderswo ein wenig (Biss 20 %, Zone 10 %, +2 Glück) |
 
 ![Die sechs Angeln: groß, in der Hand und ausgeworfen über Wasser und Lava](docs/bilder/angeln_087.jpg)
 
@@ -2573,6 +2576,49 @@ du dort an, sonst entsteht ein rundes Tor auf einer Plattform. Bricht der Rahmen
 | **Gemeißelter Gezeitenstein** | zwei Gezeitensteinziegel-Stufen übereinander (oder Steinsäge) – eine leuchtende Welle, die sich zur Spirale einrollt |
 
 Treppen, Stufen und Mauern gibt es aus beiden Steinen.
+
+### Der Kraken
+
+![Der Kraken: der Krakenschlund im Urmeer, der Kampf und die Krakenangel](docs/bilder/kraken_091.jpg)
+
+Seit 0.91 lauert im Urmeer **der Kraken**, der Herr des Urmeers – nach Anni dem Troll der stärkste Boss der Mod
+(1.400 Lebenspunkte, Rüstung 15; Anni hat 1.500 und Rüstung 16). Er schläft im **Krakenschlund**, einer Stelle im offenen
+Urmeer, 350 bis 900 Blöcke vom Ursprung entfernt:
+
+- In der Mitte der **Schlund**: ein Trichter aus Abgrundstein, gut siebzig Blöcke unter dem Meeresspiegel; an seinen Wänden
+  glimmen Meereslaternen wie Augen im Dunkeln, ganz unten liegt auf einem Ring aus dunklem Prismarin zwischen Knochen das
+  **Herz des Schlunds**.
+- Ringsum das **Becken**: Abgrundsand, Kies und Gezeitenstein, zum Schlund hin tiefer; darin das **Gerippe eines
+  Seedrachens**, das **Wrack eines Schiffs** mit einer Truhe, Röhrenwürmer und heiße Schlote am Rand des Schlunds,
+  Leuchtalgen, Anemonen, Muscheln und hoher Riesentang.
+- Darum der **Felsenring**: zwölf schiefe Brandungsfelsen aus Gezeitenstein, die aus der Tiefe bis hoch über das Wasser
+  ragen (manche abgebrochen, knapp unter der Oberfläche), zwischen einigen ein Felsbogen.
+
+Wer sich dem Schlund nähert, merkt, wie unheimlich still das Wasser wird. Wer den Felsenring betritt, weckt den Kraken: Er
+steigt aus der Tiefe empor (solange er tief unten ist, kann man ihm nichts anhaben), bricht brüllend durch die Oberfläche,
+und seine Bossleiste erscheint. Er hat einen mächtigen Mantel mit Flossen, leuchtende Augen, einen Schnabel, acht Arme und
+zwei lange Fangarme mit Keulen voller Saugnäpfe:
+
+| Angriff | Was geschieht |
+|---|---|
+| **Tentakelschlag** | ein Fangarm steigt hoch – ein Kreis aus Blasen zeigt, wo er niederfährt (er zielt bis kurz vorher nach) |
+| **Armfeger** | die vier Arme einer Seite fegen von hinten nach vorn über das Wasser und schleudern alle fort |
+| **Würgegriff** | ein Fangarm schnellt vor, packt zu und zieht die Beute zum Schnabel; wer ihn in der Zeit hart genug trifft, befreit sie – sonst beißt er zu und schleudert sie fort |
+| **Tintenwolke** | er spuckt eine Wolke aus Tinte, die blendet und lähmt |
+| **Strudel** | er dreht sich, das Wasser kreist und zieht alles zum Schlund – zuletzt schießt in der Mitte eine Wassersäule empor (unter zwei Dritteln) |
+| **Ruf der Tiefe** | bei zwei Dritteln und bei einem Drittel brüllt er, und Haie kommen aus der Tiefe |
+| **Flutwelle** | im Zorn (unter einem Drittel greift er schneller an): alle Arme schlagen aufs Wasser, und eine Welle läuft als Ring nach außen |
+
+Wer den Felsenring verlässt, den lässt er ziehen und sinkt nach einer Weile zurück in den Schlund. Besiegt erschlafft er,
+die Haie ziehen ab, und er versinkt; er lässt die **Krakenangel** fallen, dazu ein Herz des Meeres, einen Herzkristall,
+Tintenbeutel und Leuchttintenbeutel, Nautilusschalen, Prismarinkristalle, Diamanten, Edelsteine und Goldmünzen. Mit dem
+**Gezeitenhorn** und einem Herz des Meeres in der anderen Hand rufst du ihn über dem Schlund zurück; im übrigen Urmeer zeigt
+das Horn den Weg zum Schlund (Operatoren finden ihn mit `/kaw kraken`).
+
+**Die Krakenangel** ist die stärkste Angel im Wasser: Der Biss kommt 35 % schneller, die Fangzone ist 20 % größer, +2 Glück –
+und unter Wasser und im Urmeer kommt der Biss doppelt so schnell, die Fangzone ist 30 % größer, +3 Glück. Sie hält 960
+Würfe, verbrennt nicht und wird mit Prismarinkristallen ausgebessert. In der Hand ist sie eine Rute aus rotbrauner
+Krakenhaut mit Saugnäpfen, Bronzebeschlägen und türkisen Wicklungen, die leuchten; als Köder hängt ein leuchtendes Auge.
 
 ### Das Feenreich
 
@@ -4051,7 +4097,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.90.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.91.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -4194,13 +4240,14 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      89 weitere Gegenstände plastisch;
    - **0.89 – Das Urmeer** (fertig): eine Meeresdimension mit vier Biomen, der Versunkene Tempel mit dem
      Gezeitentor und eigene Tore aus Gezeitensteinziegeln;
-   - zuletzt **0.90 – Angeln** (fertig): alle Angeln in 3D, Angeln unter Wasser, fünf Seltenheiten und in jedem Biom
-     jede davon (113 Legenden der Biome), das Urmeer mit vierzig Arten je Biom.
+   - **0.90 – Angeln** (fertig): alle Angeln in 3D, Angeln unter Wasser, fünf Seltenheiten und in jedem Biom
+     jede davon (113 Legenden der Biome), das Urmeer mit vierzig Arten je Biom;
+   - zuletzt **0.91 – Der Kraken** (fertig): ein Boss im Krakenschlund des Urmeers, knapp unter Anni dem Troll, mit
+     sieben Angriffen; die Krakenangel als Beute.
 
    Damit ist der Weg der Geschichte vollständig – vom Siegel der sechs Drachen bis zum Weltenfresser im Abgrund.
 
-   **Als Nächstes geplant:** **0.91 – der Kraken**, ein riesiger Boss im Schlund des Urmeers (knapp unter Anni dem Troll),
-   der eine starke Angel fallen lässt; **0.92 – Unter Wasser**: mehrere Meereshölzer mit eigenen Holzsätzen, neue
+   **Als Nächstes geplant:** **0.92 – Unter Wasser**: mehrere Meereshölzer mit eigenen Holzsätzen, neue
    Unterwasser-Biome im Urmeer und Meeresdörfer mit Meerjungfrauen; getragene Rüstungen mit
    3D-Teilen (Stacheln, Hörner, Platten); schönere Bossleisten; neue Bosse, Erze und Bauwerke für alle Dimensionen und
    bessere Klänge.

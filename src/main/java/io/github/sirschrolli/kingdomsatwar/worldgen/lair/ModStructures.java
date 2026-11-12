@@ -76,6 +76,13 @@ public final class ModStructures {
             SUNKEN_ATOLL = TYPES.register("sunken_atoll", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.atoll.AtollStructure.CODEC);
     public static final DeferredHolder<StructurePieceType, StructurePieceType> SUNKEN_ATOLL_PIECE =
             PIECES.register("sunken_atoll", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.atoll.AtollPiece::new);
+    // der Krakenschlund (0.91): einmal im Urmeer, Boss der Kraken
+    public static final DeferredHolder<MapCodec<? extends StructurePlacement>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.kraken.KrakenMawPlacement>>
+            KRAKEN_MAW_PLACEMENT = PLACEMENTS.register("kraken_maw", () -> io.github.sirschrolli.kingdomsatwar.worldgen.kraken.KrakenMawPlacement.CODEC);
+    public static final DeferredHolder<StructureType<?>, StructureType<io.github.sirschrolli.kingdomsatwar.worldgen.kraken.KrakenMawStructure>>
+            KRAKEN_MAW = TYPES.register("kraken_maw", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.kraken.KrakenMawStructure.CODEC);
+    public static final DeferredHolder<StructurePieceType, StructurePieceType> KRAKEN_MAW_PIECE =
+            PIECES.register("kraken_maw", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.kraken.KrakenMawPiece::new);
     public static final DeferredHolder<StructureType<?>, StructureType<io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneStructure>>
             VOID_THRONE = TYPES.register("void_throne", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneStructure.CODEC);
     public static final DeferredHolder<StructurePieceType, StructurePieceType> VOID_THRONE_PIECE =
@@ -174,6 +181,8 @@ public final class ModStructures {
             KingdomsAtWar.id("world_eater_hoard"));
     public static final ResourceKey<Structure> SUNKEN_ATOLL_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("sunken_atoll"));
     public static final ResourceKey<StructureSet> SUNKEN_ATOLL_SET = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("sunken_atoll"));
+    public static final ResourceKey<Structure> KRAKEN_MAW_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("kraken_maw"));
+    public static final ResourceKey<StructureSet> KRAKEN_MAW_SET = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("kraken_maw"));
 
     /** Die Dörfer der Umbrer in der Schattenwelt. */
     public static final ResourceKey<Structure> UMBRER_VILLAGE_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("umbrer_village"));
@@ -261,6 +270,16 @@ public final class ModStructures {
         // im Versunkenen Atoll erscheinen keine Monster von selbst (dort schläft Karkinos)
         context.register(SUNKEN_ATOLL_STRUCTURE, new io.github.sirschrolli.kingdomsatwar.worldgen.atoll.AtollStructure(
                 new Structure.StructureSettings.Builder(biomes.getOrThrow(ModTags.Biomes.HAS_SUNKEN_ATOLL))
+                        .spawnOverrides(java.util.Map.of(
+                                net.minecraft.world.entity.MobCategory.MONSTER, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
+                                        net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
+                                        net.minecraft.util.random.WeightedList.of())))
+                        .generationStep(GenerationStep.Decoration.TOP_LAYER_MODIFICATION)
+                        .terrainAdapation(TerrainAdjustment.NONE)
+                        .build()));
+        // im Krakenschlund erscheinen keine Monster von selbst (dort schläft der Kraken)
+        context.register(KRAKEN_MAW_STRUCTURE, new io.github.sirschrolli.kingdomsatwar.worldgen.kraken.KrakenMawStructure(
+                new Structure.StructureSettings.Builder(biomes.getOrThrow(ModTags.Biomes.HAS_KRAKEN_MAW))
                         .spawnOverrides(java.util.Map.of(
                                 net.minecraft.world.entity.MobCategory.MONSTER, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
                                         net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
@@ -495,6 +514,9 @@ public final class ModStructures {
         context.register(SUNKEN_ATOLL_SET, new StructureSet(structures.getOrThrow(SUNKEN_ATOLL_STRUCTURE),
                 new io.github.sirschrolli.kingdomsatwar.worldgen.atoll.AtollPlacement(450, 1300, biomes.getOrThrow(ModTags.Biomes.HAS_SUNKEN_ATOLL),
                         88_207)));
+        context.register(KRAKEN_MAW_SET, new StructureSet(structures.getOrThrow(KRAKEN_MAW_STRUCTURE),
+                new io.github.sirschrolli.kingdomsatwar.worldgen.kraken.KrakenMawPlacement(350, 900, biomes.getOrThrow(ModTags.Biomes.HAS_KRAKEN_MAW),
+                        91_113)));
         // Magiertürme: Felder von 46 Chunks, mindestens 16 Chunks Abstand; fern von Dörfern, Nestern und dem Siegelkreis
         java.util.List<StructureSet.StructureSelectionEntry> towers = new java.util.ArrayList<>();
         for (DragonType type : DragonType.values()) {

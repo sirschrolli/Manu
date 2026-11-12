@@ -86,6 +86,11 @@ public final class ModGameEvents {
                         .then(Commands.literal("tp").executes(context -> atoll(context.getSource(), "tp")))
                         .then(Commands.literal("awaken").executes(context -> atoll(context.getSource(), "awaken")))
                         .then(Commands.literal("reset").executes(context -> atoll(context.getSource(), "reset"))))
+                .then(Commands.literal("kraken").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .executes(context -> kraken(context.getSource(), ""))
+                        .then(Commands.literal("tp").executes(context -> kraken(context.getSource(), "tp")))
+                        .then(Commands.literal("awaken").executes(context -> kraken(context.getSource(), "awaken")))
+                        .then(Commands.literal("reset").executes(context -> kraken(context.getSource(), "reset"))))
                 .then(Commands.literal("mondhain").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .executes(context -> mondhain(context.getSource(), ""))
                         .then(Commands.literal("tp").executes(context -> mondhain(context.getSource(), "tp")))
@@ -372,6 +377,49 @@ public final class ModGameEvents {
         } else {
             core.reset(overworld);
             source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.atoll.reset"), true);
+        }
+        return 1;
+    }
+
+    /**
+     * {@code /kaw kraken}: Lage des Krakenschlunds im Urmeer (seit 0.91); {@code tp} bringt einen über den Schlund (auch aus
+     * einer anderen Welt), {@code awaken} lässt den Kraken emporsteigen, {@code reset} setzt den Schlund zurück.
+     */
+    private static int kraken(net.minecraft.commands.CommandSourceStack source, String mode) throws
+            com.mojang.brigadier.exceptions.CommandSyntaxException {
+        ServerLevel urmeer = source.getServer().getLevel(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerDimension.LEVEL);
+        BlockPos center = urmeer == null ? null : io.github.sirschrolli.kingdomsatwar.worldgen.kraken.KrakenMawLocator.center(urmeer);
+        if (center == null) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.kraken.none"));
+            return 0;
+        }
+        source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.kraken.at", center.getX(), center.getY(), center.getZ()), false);
+        if (mode.isEmpty()) {
+            return 1;
+        }
+        if (mode.equals("tp")) {
+            ServerPlayer player = source.getPlayerOrException();
+            urmeer.getChunk(center.getX() >> 4, (center.getZ() + 40) >> 4);
+            player.teleportTo(urmeer, center.getX() + 0.5, center.getY() + 12, center.getZ() + 40.5, java.util.Set.of(), 180.0f, 15.0f, true);
+            return 1;
+        }
+        BlockPos corePos = io.github.sirschrolli.kingdomsatwar.worldgen.kraken.KrakenMawLocator.core(center);
+        urmeer.getChunk(corePos.getX() >> 4, corePos.getZ() >> 4);
+        if (!(urmeer.getBlockEntity(corePos) instanceof io.github.sirschrolli.kingdomsatwar.block.sea.KrakenCoreBlockEntity core)) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.kraken.no_core"));
+            return 0;
+        }
+        if (mode.equals("awaken")) {
+            if (core.phase() == io.github.sirschrolli.kingdomsatwar.block.sea.KrakenCoreBlockEntity.Phase.AWAKE) {
+                source.sendFailure(Component.translatable("command.kingdomsatwar.kraken.awake"));
+                return 0;
+            }
+            core.reset(urmeer);
+            core.awaken(urmeer);
+            source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.kraken.awakened"), true);
+        } else {
+            core.reset(urmeer);
+            source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.kraken.reset"), true);
         }
         return 1;
     }

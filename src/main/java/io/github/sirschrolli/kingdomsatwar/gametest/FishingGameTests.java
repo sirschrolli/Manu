@@ -835,8 +835,11 @@ final class FishingGameTests {
                     helper.assertTrue(lang.has(key), "Text fehlt: " + key);
                 }
             }
+            // ein Rezept haben alle außer der Krakenangel (Beute des Kraken, seit 0.91)
+            helper.assertTrue((FishingGameTests.class.getResource("/data/kingdomsatwar/recipe/" + type.id() + ".json") != null) == type.craftable(),
+                    "Rezept stimmt nicht: " + type);
             for (String file : List.of("assets/kingdomsatwar/textures/item/" + type.id() + ".png", "assets/kingdomsatwar/textures/item/" + type.id() + "_cast.png",
-                    "assets/kingdomsatwar/items/" + type.id() + ".json", "data/kingdomsatwar/recipe/" + type.id() + ".json",
+                    "assets/kingdomsatwar/items/" + type.id() + ".json",
                     // seit 0.90 in der Hand in 3D, ruhend und ausgeworfen
                     "assets/kingdomsatwar/models/item/" + type.id() + "_in_hand.json", "assets/kingdomsatwar/models/item/" + type.id() + "_cast_in_hand.json",
                     "assets/kingdomsatwar/textures/item/" + type.id() + "_model.png")) {

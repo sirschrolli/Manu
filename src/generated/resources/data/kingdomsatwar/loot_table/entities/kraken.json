@@ -1,0 +1,241 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": 1
+          },
+          "name": "kingdomsatwar:kraken_fishing_rod"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": 1
+          },
+          "name": "kingdomsatwar:heart_crystal"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": 1
+          },
+          "name": "minecraft:heart_of_the_sea"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 24,
+                "min": 12
+              }
+            },
+            {
+              "type": "minecraft:enchanted_count_increase",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.0
+              },
+              "enchantment": "minecraft:looting"
+            }
+          ],
+          "name": "minecraft:ink_sac"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 12,
+                "min": 6
+              }
+            },
+            {
+              "type": "minecraft:enchanted_count_increase",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.0
+              },
+              "enchantment": "minecraft:looting"
+            }
+          ],
+          "name": "minecraft:glow_ink_sac"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 4,
+                "min": 2
+              }
+            },
+            {
+              "type": "minecraft:enchanted_count_increase",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.0
+              },
+              "enchantment": "minecraft:looting"
+            }
+          ],
+          "name": "minecraft:nautilus_shell"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 20,
+                "min": 10
+              }
+            },
+            {
+              "type": "minecraft:enchanted_count_increase",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.0
+              },
+              "enchantment": "minecraft:looting"
+            }
+          ],
+          "name": "minecraft:prismarine_crystals"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 4,
+                "min": 2
+              }
+            },
+            {
+              "type": "minecraft:enchanted_count_increase",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.0
+              },
+              "enchantment": "minecraft:looting"
+            }
+          ],
+          "name": "minecraft:diamond"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 5,
+                "min": 3
+              }
+            },
+            {
+              "type": "minecraft:enchanted_count_increase",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.0
+              },
+              "enchantment": "minecraft:looting"
+            }
+          ],
+          "name": "kingdomsatwar:gemstone"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 14,
+                "min": 8
+              }
+            },
+            {
+              "type": "minecraft:enchanted_count_increase",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.0
+              },
+              "enchantment": "minecraft:looting"
+            }
+          ],
+          "name": "kingdomsatwar:gold_coin"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "kingdomsatwar:entities/kraken"
+}

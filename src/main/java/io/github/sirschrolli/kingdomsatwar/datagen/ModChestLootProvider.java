@@ -241,6 +241,18 @@ public class ModChestLootProvider implements LootTableSubProvider {
                 .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
                         .add(LootItem.lootTableItem(Items.BOOK).apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
                         .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance(0.5f))));
+        // Krakenschlund (0.91): die Truhe im Wrack – was die Seefahrer bei sich hatten, ehe der Kraken sie holte: Gold, Karten,
+        // Kompass, Rum, Tinte, ein Gezeitenhorn, selten ein Herz des Meeres
+        this.output.accept(io.github.sirschrolli.kingdomsatwar.worldgen.kraken.KrakenMawPiece.CHEST,
+                coins(LootTable.lootTable().withPool(crystals(20, 15)), 3, 9, 3, 7, 0.7f)
+                .withPool(pool(4, 7, item(Items.GOLD_INGOT, 5, 2, 6), item(Items.GOLD_NUGGET, 6, 6, 16), item(Items.EMERALD, 4, 2, 5),
+                        item(Items.INK_SAC, 6, 3, 9), item(Items.GLOW_INK_SAC, 4, 2, 5), item(Items.NAUTILUS_SHELL, 4, 1, 3),
+                        item(Items.COMPASS, 2, 1, 1), item(Items.MAP, 3, 1, 1), item(Items.SPYGLASS, 2, 1, 1),
+                        item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_HORN.get(), 2, 1, 1),
+                        item(ModItems.GEMSTONE.get(), 3, 1, 3), item(Items.HEART_OF_THE_SEA, 1, 1, 1)))
+                .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                        .add(LootItem.lootTableItem(Items.BOOK).apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
+                        .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance(0.6f))));
         // Versunkener Tempel (0.89): die Gaben des Meervolks – Perlmutt, Gold, Gezeitenstein, selten ein Herz des Meeres (für
         // ein eigenes Gezeitentor), ein verzaubertes Buch
         this.output.accept(ModLootTables.SITE_SUNKEN_TEMPLE, coins(LootTable.lootTable().withPool(crystals(15, 12)), 2, 8, 2, 6, 0.5f)

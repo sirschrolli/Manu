@@ -172,6 +172,12 @@ final class SeaModels {
                 TextureMapping.cube(new net.minecraft.client.resources.model.sprite.Material(Identifier.withDefaultNamespace("block/dark_prismarine"))),
                 blocks.modelOutput);
         blocks.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(core, BlockModelGenerators.plainVariant(coreModel)));
+        // Herz des Schlunds (0.91): ganz unten im Krakenschlund, glimmt wie ein Leitfeuer
+        Block krakenCore = SeaBlocks.KRAKEN_CORE.get();
+        Identifier krakenCoreModel = net.minecraft.client.data.models.model.ModelTemplates.CUBE_ALL.create(krakenCore,
+                TextureMapping.cube(new net.minecraft.client.resources.model.sprite.Material(Identifier.withDefaultNamespace("block/conduit"))),
+                blocks.modelOutput);
+        blocks.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(krakenCore, BlockModelGenerators.plainVariant(krakenCoreModel)));
     }
 
     // =====================================================================================

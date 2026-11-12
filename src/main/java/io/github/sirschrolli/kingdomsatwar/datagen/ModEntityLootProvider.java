@@ -388,6 +388,18 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(net.minecraft.world.item.Items.NAUTILUS_SHELL, 1, 3))
                 .withPool(drop(ModItems.GOLD_COIN.get(), 4, 9))
                 .withPool(drop(ModItems.GEMSTONE.get(), 2, 4)));
+        // der Kraken (0.91): die Krakenangel, ein Herzkristall, ein Herz des Meeres, Tinte, Nautilusse und Schätze aus den Wracks
+        this.add(ModEntities.KRAKEN.get(), LootTable.lootTable()
+                .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.FishingItems.rod(io.github.sirschrolli.kingdomsatwar.fishing.RodType.KRAKEN), 1))
+                .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 1))
+                .withPool(exactly(net.minecraft.world.item.Items.HEART_OF_THE_SEA, 1))
+                .withPool(drop(net.minecraft.world.item.Items.INK_SAC, 12, 24))
+                .withPool(drop(net.minecraft.world.item.Items.GLOW_INK_SAC, 6, 12))
+                .withPool(drop(net.minecraft.world.item.Items.NAUTILUS_SHELL, 2, 4))
+                .withPool(drop(net.minecraft.world.item.Items.PRISMARINE_CRYSTALS, 10, 20))
+                .withPool(drop(net.minecraft.world.item.Items.DIAMOND, 2, 4))
+                .withPool(drop(ModItems.GEMSTONE.get(), 3, 5))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 8, 14)));
         // Wesen des Feenreichs: Feen lassen beim Sterben Feenstaub, Pilzlinge Laternenpilze, Dornwichte Stöcke und Dornen
         this.add(ModEntities.FAIRY.get(), LootTable.lootTable()
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST.get(), 0, 1)));

@@ -36,6 +36,7 @@ final class RodModels {
         rod(items, FishingItems.rod(RodType.SHADOW), RodType.SHADOW.id(), RodShapes.SHADOW_FISHING_ROD, RodShapes.SHADOW_FISHING_ROD_CAST);
         rod(items, FishingItems.rod(RodType.GLUT), RodType.GLUT.id(), RodShapes.GLUT_FISHING_ROD, RodShapes.GLUT_FISHING_ROD_CAST);
         rod(items, FishingItems.rod(RodType.STAR), RodType.STAR.id(), RodShapes.STAR_FISHING_ROD, RodShapes.STAR_FISHING_ROD_CAST);
+        rod(items, FishingItems.rod(RodType.KRAKEN), RodType.KRAKEN.id(), RodShapes.KRAKEN_FISHING_ROD, RodShapes.KRAKEN_FISHING_ROD_CAST);
         // die Angel von Minecraft: nur die Modelle (ihre Gegenstandsbeschreibung liegt von Hand unter assets/minecraft/items)
         inHand(items, "fishing_rod", "", RodShapes.FISHING_ROD, Identifier.withDefaultNamespace("item/fishing_rod"));
         inHand(items, "fishing_rod", "_cast", RodShapes.FISHING_ROD_CAST, Identifier.withDefaultNamespace("item/fishing_rod"));

@@ -781,7 +781,8 @@ final class FishingShowcase {
     private static final String[][] RODS_3D = {
             {"holz", "minecraft:fishing_rod"}, {"eisen", "kingdomsatwar:iron_fishing_rod"}, {"gold", "kingdomsatwar:gold_fishing_rod"},
             {"drache", "kingdomsatwar:dragon_fishing_rod"}, {"schatten", "kingdomsatwar:shadow_fishing_rod"},
-            {"glut", "kingdomsatwar:glut_fishing_rod"}, {"sterne", "kingdomsatwar:star_fishing_rod"}};
+            {"glut", "kingdomsatwar:glut_fishing_rod"}, {"sterne", "kingdomsatwar:star_fishing_rod"},
+            {"kraken", "kingdomsatwar:kraken_fishing_rod"}};
 
     private static ItemStack stack(ServerLevel level, String id) {
         return new ItemStack(level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.ITEM)

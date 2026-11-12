@@ -638,6 +638,11 @@ public final class ModEntities {
             ENTITIES.registerEntityType("reef_colossus", io.github.sirschrolli.kingdomsatwar.entity.sea.ReefColossusEntity::new,
                     MobCategory.MONSTER, builder -> builder.sized(5.2f, 4.2f).eyeHeight(3.2f).notInPeaceful().clientTrackingRange(16)
                             .updateInterval(2));
+    /** Der Kraken (seit 0.91): Herr des Urmeers, Boss des Krakenschlunds – ragt turmhoch aus dem Wasser, seine Arme reichen weit. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.sea.KrakenEntity>> KRAKEN =
+            ENTITIES.registerEntityType("kraken", io.github.sirschrolli.kingdomsatwar.entity.sea.KrakenEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(10.0f, 15.0f).eyeHeight(3.5f).notInPeaceful().fireImmune()
+                            .clientTrackingRange(20).updateInterval(2));
     /** Kristallsplitter: Geschoss des Splitterwächters. */
     public static final DeferredHolder<EntityType<?>, EntityType<WardenShardEntity>> WARDEN_SHARD = ENTITIES.registerEntityType("warden_shard",
             WardenShardEntity::new, MobCategory.MISC,
@@ -957,6 +962,7 @@ public final class ModEntities {
         event.put(SCHROLLI.get(), io.github.sirschrolli.kingdomsatwar.entity.creator.SchrolliEntity.createAttributes().build());
         event.put(SERAPHLING.get(), io.github.sirschrolli.kingdomsatwar.entity.creator.SeraphlingEntity.createAttributes().build());
         event.put(REEF_COLOSSUS.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.ReefColossusEntity.createAttributes().build());
+        event.put(KRAKEN.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.KrakenEntity.createAttributes().build());
         event.put(MANTA_RAY.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.MantaRayEntity.createAttributes().build());
         event.put(GLOW_JELLYFISH.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.GlowJellyfishEntity.createAttributes().build());
         event.put(SHARK.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.SharkEntity.createAttributes().build());

@@ -339,6 +339,7 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
                 io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_SCALE);
         add(ModTags.Items.rodRepair(io.github.sirschrolli.kingdomsatwar.fishing.RodType.STAR),
                 io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_SHARD);
+        tag(ModTags.Items.rodRepair(io.github.sirschrolli.kingdomsatwar.fishing.RodType.KRAKEN)).add(vanilla(net.minecraft.world.item.Items.PRISMARINE_CRYSTALS));
         add(ItemTags.OCELOT_FOOD, io.github.sirschrolli.kingdomsatwar.registry.FishingItems.COOKED_FILLET);
     }
 

@@ -5189,6 +5189,241 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.griffin.wings"
   },
+  "entity.kraken.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_ambient1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_ambient2",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_ambient3",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.kraken.ambient"
+  },
+  "entity.kraken.bite": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/ravager/bite1",
+        "pitch": 0.6,
+        "attenuation_distance": 40
+      },
+      {
+        "name": "minecraft:mob/ravager/bite2",
+        "pitch": 0.6,
+        "attenuation_distance": 40
+      },
+      {
+        "name": "minecraft:mob/ravager/bite3",
+        "pitch": 0.6,
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.kraken.bite"
+  },
+  "entity.kraken.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_death1",
+        "attenuation_distance": 80
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.kraken.death"
+  },
+  "entity.kraken.grab": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_grab1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_grab2",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.kraken.grab"
+  },
+  "entity.kraken.hurt": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/squid/hurt1",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:mob/squid/hurt2",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:mob/squid/hurt3",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:mob/squid/hurt4",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:mob/guardian/guardian_hit1",
+        "pitch": 0.55,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:mob/guardian/guardian_hit2",
+        "pitch": 0.55,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:mob/guardian/guardian_hit3",
+        "pitch": 0.55,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:mob/guardian/guardian_hit4",
+        "pitch": 0.55,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.kraken.hurt"
+  },
+  "entity.kraken.ink": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/glow_squid/squirt1",
+        "pitch": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/glow_squid/squirt2",
+        "pitch": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/glow_squid/squirt3",
+        "pitch": 0.5,
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.kraken.ink"
+  },
+  "entity.kraken.rise": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_rise1",
+        "attenuation_distance": 80
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.kraken.rise"
+  },
+  "entity.kraken.roar": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_roar1",
+        "attenuation_distance": 80
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_roar2",
+        "attenuation_distance": 80
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.kraken.roar"
+  },
+  "entity.kraken.slam": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/warden/attack_impact_1",
+        "pitch": 0.6,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/warden/attack_impact_2",
+        "pitch": 0.6,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:liquid/heavy_splash",
+        "pitch": 0.7,
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.kraken.slam"
+  },
+  "entity.kraken.sweep": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_sweep1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_sweep2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.kraken.sweep"
+  },
+  "entity.kraken.wave": {
+    "sounds": [
+      {
+        "name": "minecraft:liquid/heavy_splash",
+        "pitch": 0.5,
+        "attenuation_distance": 64
+      },
+      {
+        "name": "minecraft:mob/dolphin/splash1",
+        "pitch": 0.5,
+        "attenuation_distance": 64
+      },
+      {
+        "name": "minecraft:mob/dolphin/splash2",
+        "pitch": 0.5,
+        "attenuation_distance": 64
+      },
+      {
+        "name": "minecraft:mob/dolphin/splash3",
+        "pitch": 0.5,
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.kraken.wave"
+  },
+  "entity.kraken.whirl": {
+    "sounds": [
+      {
+        "name": "minecraft:ambient/underwater/additions/bubbles1",
+        "pitch": 0.6,
+        "attenuation_distance": 64
+      },
+      {
+        "name": "minecraft:ambient/underwater/additions/bubbles2",
+        "pitch": 0.6,
+        "attenuation_distance": 64
+      },
+      {
+        "name": "minecraft:ambient/underwater/additions/bubbles3",
+        "pitch": 0.6,
+        "attenuation_distance": 64
+      },
+      {
+        "name": "minecraft:ambient/underwater/additions/bubbles4",
+        "pitch": 0.6,
+        "attenuation_distance": 64
+      },
+      {
+        "name": "minecraft:ambient/underwater/additions/bubbles5",
+        "pitch": 0.6,
+        "attenuation_distance": 64
+      },
+      {
+        "name": "minecraft:ambient/underwater/additions/bubbles6",
+        "pitch": 0.6,
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.kraken.whirl"
+  },
   "entity.lindworm.ambient": {
     "sounds": [
       {

@@ -82,8 +82,9 @@ final class SkyWardGameTests {
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 300, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         event.registerTest(LANDING.getId(), new FunctionGameTestInstance(LANDING.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 400, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
+        // die Flieger gleiten bis 16 Blöcke vor den Platz und 30 hoch: Abstand, damit kein Nachbartest den Pfeil aufhält
         event.registerTest(RIDERS.getId(), new FunctionGameTestInstance(RIDERS.key(),
-                new TestData<>(environment, Level.OVERWORLD, ARENA, 300, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
+                new TestData<>(environment, Level.OVERWORLD, ARENA, 300, 0, true, Rotation.NONE, false, 1, 1, true, 20)));
         event.registerTest(INTERCEPT.getId(), new FunctionGameTestInstance(INTERCEPT.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 340, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
     }

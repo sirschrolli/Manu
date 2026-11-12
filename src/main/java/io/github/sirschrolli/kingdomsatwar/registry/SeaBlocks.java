@@ -124,6 +124,15 @@ public final class SeaBlocks {
                     .pushReaction(PushReaction.IMMOVEABLE));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AtollCoreBlockEntity>> ATOLL_CORE_ENTITY =
             ModBlockEntities.BLOCK_ENTITIES.register("atoll_core", () -> new BlockEntityType<>(AtollCoreBlockEntity::new, ATOLL_CORE.get()));
+    // ---------------------------------------------------------------- der Krakenschlund (0.91)
+    /** Herz des Schlunds: ganz unten im Krakenschlund; lässt den Kraken emporsteigen und merkt sich seinen Sieg. Unzerstörbar. */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.sea.KrakenCoreBlock> KRAKEN_CORE = ModBlocks.BLOCKS.registerBlock(
+            "kraken_core", io.github.sirschrolli.kingdomsatwar.block.sea.KrakenCoreBlock::new,
+            p -> p.mapColor(MapColor.COLOR_PURPLE).strength(-1.0f, 3_600_000.0f).noLootTable().sound(SoundType.STONE).lightLevel(s -> 11)
+                    .pushReaction(PushReaction.IMMOVEABLE));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<io.github.sirschrolli.kingdomsatwar.block.sea.KrakenCoreBlockEntity>>
+            KRAKEN_CORE_ENTITY = ModBlockEntities.BLOCK_ENTITIES.register("kraken_core",
+            () -> new BlockEntityType<>(io.github.sirschrolli.kingdomsatwar.block.sea.KrakenCoreBlockEntity::new, KRAKEN_CORE.get()));
     /** Der Gezeiten-Speer, wie er aus dem Hügel in der Lagune ragt (nur Zierde: wer ihn greifen will, weckt den Koloss). */
     public static final DeferredBlock<EmbeddedSpearBlock> EMBEDDED_TIDE_SPEAR = ModBlocks.BLOCKS.registerBlock("embedded_tide_spear",
             EmbeddedSpearBlock::new, p -> p.mapColor(MapColor.COLOR_CYAN).strength(-1.0f, 3_600_000.0f).noLootTable().noOcclusion()
@@ -220,10 +229,11 @@ public final class SeaBlocks {
     public static final DeferredItem<SpawnEggItem> ANGLERFISH_SPAWN_EGG = egg("anglerfish", () -> ModEntities.ANGLERFISH.get());
     public static final DeferredItem<SpawnEggItem> GIANT_CRAB_SPAWN_EGG = egg("giant_crab", () -> ModEntities.GIANT_CRAB.get());
     public static final DeferredItem<SpawnEggItem> REEF_COLOSSUS_SPAWN_EGG = egg("reef_colossus", () -> ModEntities.REEF_COLOSSUS.get());
+    public static final DeferredItem<SpawnEggItem> KRAKEN_SPAWN_EGG = egg("kraken", () -> ModEntities.KRAKEN.get());
 
     public static List<DeferredItem<SpawnEggItem>> spawnEggs() {
         return List.of(MANTA_RAY_SPAWN_EGG, GLOW_JELLYFISH_SPAWN_EGG, SHARK_SPAWN_EGG, ANGLERFISH_SPAWN_EGG, GIANT_CRAB_SPAWN_EGG,
-                REEF_COLOSSUS_SPAWN_EGG);
+                REEF_COLOSSUS_SPAWN_EGG, KRAKEN_SPAWN_EGG);
     }
 
     /** Alle schlichten Gegenstände (flaches Modell). */

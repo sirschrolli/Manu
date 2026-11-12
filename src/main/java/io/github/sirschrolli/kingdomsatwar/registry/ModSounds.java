@@ -221,6 +221,19 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> REEF_COLOSSUS_STEP = register("entity.reef_colossus.step");
     public static final DeferredHolder<SoundEvent, SoundEvent> REEF_COLOSSUS_TIDE = register("entity.reef_colossus.tide");
     public static final DeferredHolder<SoundEvent, SoundEvent> REEF_COLOSSUS_LANCE = register("entity.reef_colossus.lance");
+    // der Kraken (0.91)
+    public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_AMBIENT = register("entity.kraken.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_HURT = register("entity.kraken.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_DEATH = register("entity.kraken.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_RISE = register("entity.kraken.rise");
+    public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_ROAR = register("entity.kraken.roar");
+    public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_WAVE = register("entity.kraken.wave");
+    public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_SWEEP = register("entity.kraken.sweep");
+    public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_GRAB = register("entity.kraken.grab");
+    public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_BITE = register("entity.kraken.bite");
+    public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_INK = register("entity.kraken.ink");
+    public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_WHIRL = register("entity.kraken.whirl");
+    public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_SLAM = register("entity.kraken.slam");
     // Feenreich (0.63)
     public static final DeferredHolder<SoundEvent, SoundEvent> FAE_PORTAL_AMBIENT = register("block.fae_portal.ambient");
     public static final DeferredHolder<SoundEvent, SoundEvent> FAE_PORTAL_LIGHT = register("block.fae_portal.light");

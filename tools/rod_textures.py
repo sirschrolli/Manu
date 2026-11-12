@@ -40,6 +40,12 @@ STARMETAL = st.ramp("#2a3a8a", dark=0.12, light=0.8, cool=270)
 MIDNIGHT = st.ramp("#22306a", dark=0.1, light=0.62, cool=270)
 STARLIGHT = st.fixed("#4a3a10", "#8a6a1a", "#c8a02a", "#f0cc4a", "#ffe680", "#fff4b8", "#fffdf0")
 PALE_GOLD = st.fixed("#5a4a2a", "#8a7444", "#bca468", "#e4d08e", "#f4e6b0", "#fcf4d8", "#ffffff")
+KRAKEN_SKIN = st.ramp("#8e2a36", dark=0.12, light=0.72, cool=330, warm=30)
+SEA_LEATHER = st.ramp("#26404a", dark=0.08, light=0.6, cool=220)
+BRONZE = st.ramp("#b07a3a", dark=0.25, light=0.92, warm=80)
+TEAL = st.fixed("#0a3a44", "#126a78", "#1aa0b0", "#3ad0e0", "#8af6ff", "#d8ffff", "#ffffff")
+SUCKER = st.fixed("#3a1018", "#6a2a32", "#a0605e", "#c88a82", "#e0b0a4", "#f0cec2", "#fff0e8")
+BEAK = st.ramp("#2c1c22", dark=0.06, light=0.5, cool=330)
 
 
 @dataclass
@@ -61,7 +67,8 @@ class Mat:
     gem: tuple | None = None
     spike: tuple | None = None
     tip: tuple | None = None
-    blank_pattern: str = "plain"    # plain, wood, scales, sparkle, blaze, veins
+    accent: tuple | None = None     # Zierde (Saugnäpfe)
+    blank_pattern: str = "plain"    # plain, wood, scales, sparkle, blaze, veins, blotch
     grip_pattern: str = "wrap"      # wrap, cork, string
 
 
@@ -82,6 +89,8 @@ MATS: dict[str, Mat] = {
                             at.EMBER, BLAZE, spike=at.EMBER, blank_pattern="blaze", grip_pattern="wrap"),
     "star_fishing_rod": Mat(STARMETAL, MIDNIGHT, at.GOLD, at.GOLD, MIDNIGHT, at.GOLD, PALE_GOLD, PALE_GOLD, at.GOLD, PALE_GOLD, "star",
                             STARLIGHT, PALE_GOLD, gem=at.MOON, tip=STARLIGHT, blank_pattern="sparkle"),
+    "kraken_fishing_rod": Mat(KRAKEN_SKIN, SEA_LEATHER, BRONZE, BRONZE, SEA_LEATHER, BRONZE, TEAL, TEAL, BEAK, BRONZE, "eye",
+                              TEAL, BEAK, gem=TEAL, accent=SUCKER, blank_pattern="blotch"),
 }
 
 
@@ -108,6 +117,10 @@ def blank(m: Mat):
         elif m.blank_pattern == "veins":
             if x == 0 and y % 6 in (2, 3):
                 return _lv(at.CYAN, 5)
+        elif m.blank_pattern == "blotch":
+            # dunkle Flecken auf der Haut des Kraken
+            if h01(x // 2, y // 3, 71) < 0.3:
+                level -= 1
         elif m.blank_pattern == "blaze":
             level = 5 if x == 0 else 4
             if (y // 2) % 3 == 0:
@@ -189,6 +202,13 @@ def lure(m: Mat):
         if m.lure == "star":
             d = max(abs(x - cx), abs(y - (h - 1) / 2))
             return _lv(a, 6 if d < 1.2 else 5)
+        if m.lure == "eye":
+            # ein leuchtendes Auge mit waagrechter, dunkler Schlitzpupille
+            cy = (h - 1) / 2
+            if abs(y - cy) < 0.6 and abs(x - cx) < 2.1:
+                return _lv(b, 1)
+            d = max(abs(x - cx), abs(y - cy))
+            return _lv(a, 6 if d < 1.2 else 5 if d < 2.2 else 3)
         return _lv(a, 4)
     return f
 
@@ -235,6 +255,8 @@ def atlas(name: str) -> tuple[Image.Image, Image.Image]:
     if m.spike:
         paint(img, R["spike"], at.strand(m.spike, 6.0, 2.5, True, 11))
         paint(img, R["spike_edge"], at.strand(m.spike, 5.0, 2.0, False, 12))
+    if m.accent:
+        paint(img, R["accent"], lambda x, y, w, h: _lv(m.accent, 6 if (x + y) % 3 == 0 else 4 if x < w - 1 else 3))
     if m.tip:
         paint(img, R["tip"], at.glow_fill(m.tip, 5.0))
         paint(img, R["tip_side"], lambda x, y, w, h: _lv(m.tip, 5))

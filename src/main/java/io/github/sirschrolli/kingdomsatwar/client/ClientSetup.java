@@ -140,6 +140,7 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.ANGLERFISH, io.github.sirschrolli.kingdomsatwar.client.model.geom.AnglerfishGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.GIANT_CRAB, io.github.sirschrolli.kingdomsatwar.client.model.geom.GiantCrabGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.REEF_COLOSSUS, io.github.sirschrolli.kingdomsatwar.client.model.geom.ReefColossusGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.KRAKEN, io.github.sirschrolli.kingdomsatwar.client.model.geom.KrakenGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.SHATTERED_CROWN, io.github.sirschrolli.kingdomsatwar.client.model.geom.ShatteredCrownGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.UMBRER, io.github.sirschrolli.kingdomsatwar.client.model.geom.UmbrerGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.MAGE, io.github.sirschrolli.kingdomsatwar.client.model.geom.MageGeometry::createLayer);
@@ -356,6 +357,7 @@ public final class ClientSetup {
         event.registerEntityRenderer(ModEntities.ANGLERFISH.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.sea.AnglerfishRenderer::new);
         event.registerEntityRenderer(ModEntities.GIANT_CRAB.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.sea.GiantCrabRenderer::new);
         event.registerEntityRenderer(ModEntities.REEF_COLOSSUS.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.sea.ReefColossusRenderer::new);
+        event.registerEntityRenderer(ModEntities.KRAKEN.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.sea.KrakenRenderer::new);
         // die Umbrer
         event.registerEntityRenderer(ModEntities.UMBRER.get(),
                 io.github.sirschrolli.kingdomsatwar.client.renderer.umbrer.UmbrerRenderer<io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerEntity>::new);

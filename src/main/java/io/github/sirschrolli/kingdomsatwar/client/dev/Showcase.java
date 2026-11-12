@@ -128,6 +128,7 @@ final class Showcase {
                 case "water" -> WaterShowcase.water(steps);
                 case "sea" -> SeaShowcase.sea(steps);
                 case "atoll" -> AtollShowcase.atoll(steps);
+                case "kraken" -> KrakenShowcase.kraken(steps);
                 case "seafloor" -> AtollShowcase.seafloor(steps);
                 case "golems" -> GolemShowcase.golems(steps);
                 case "rare" -> RareShowcase.rare(steps);

@@ -85,6 +85,7 @@ class Spec:
     glow_line: bool = False         # die Schnur leuchtet (Sterne, Glut)
     glow_lure: bool = False         # der Köder leuchtet
     glow_gem: bool = True
+    suckers: bool = False           # Saugnäpfe an der Unterseite der Rute (Kraken)
     bend_rest: list[float] = field(default_factory=lambda: [0.0, -1.5, -2.5, -4.0])
     bend_cast: list[float] = field(default_factory=lambda: [-1.0, -6.0, -9.0, -12.0])
 
@@ -98,6 +99,8 @@ SPECS: dict[str, Spec] = {
     "SHADOW_FISHING_ROD": Spec("shadow_fishing_rod", lure="crystal", gem=True, glow_wraps=True, glow_lure=True),
     "GLUT_FISHING_ROD": Spec("glut_fishing_rod", lure="ember", blank_base=0.44, fins=True, glow_blank=True, glow_line=True, glow_lure=True),
     "STAR_FISHING_ROD": Spec("star_fishing_rod", lure="star", gem=True, star_tip=True, glow_line=True, glow_lure=True),
+    "KRAKEN_FISHING_ROD": Spec("kraken_fishing_rod", lure="eye", grip_half=0.76, blank_base=0.46, blank_tip=0.18, gem=True, suckers=True,
+                               glow_line=True, glow_lure=True),
 }
 
 X, Z = 8.0, 8.0
@@ -195,6 +198,18 @@ def rod(spec: Spec, cast: bool) -> Shape:
                   rot=(0.0, 0.0, a), pivot=(jx, jy, Z))
         else:
             s.box(jx - 0.24, jy - 0.3, Z - 0.24, jx + 0.24, jy + 0.22, Z + 0.24, "guide", cap="guide", rot=(0.0, 0.0, a), pivot=(jx, jy, Z))
+    if spec.suckers:
+        # Saugnäpfe: kleine helle Polster an der Unterseite, zwischen den Ringen, zur Spitze hin kleiner
+        for i in range(len(pts) - 1):
+            x0, y0, a0 = pts[i]
+            x1, y1, a1 = pts[i + 1]
+            for f in (0.3, 0.62):
+                jx, jy = x0 + (x1 - x0) * f, y0 + (y1 - y0) * f
+                k = (sum(BLANK[:i]) + BLANK[i] * f) / total
+                w = b0 + (b1 - b0) * k
+                size = 0.42 - 0.18 * k
+                s.box(jx + w - 0.08, jy - size / 2, Z - size / 2, jx + w + size * 0.55, jy + size / 2, Z + size / 2, "accent", cap="accent",
+                      rot=(0.0, 0.0, a1), pivot=(jx, jy, Z))
     # der erste Ring gleich über dem Vordergriff
     jx, jy, a = pts[0]
     s.box(jx - b0 - 0.09, jy + 0.6, Z - b0 - 0.09, jx + b0 + 0.09, jy + 1.0, Z + b0 + 0.09, "wrap", cap="wrap", glow=spec.glow_wraps)
@@ -229,6 +244,10 @@ def rod(spec: Spec, cast: bool) -> Shape:
         # eine glühende Perle mit einer kleinen Flamme darüber
         hang(s, tip, tx, bottom + 0.7, 0.85, 0.85, 0.85, "lure", side="lure_top", cap="lure_top", glow=spec.glow_lure)
         hang(s, tip, tx, bottom + 1.35, 0.42, 0.5, 0.42, "lure_top", cap="lure_top", glow=spec.glow_lure)
+    elif spec.lure == "eye":
+        # ein leuchtendes Krakenauge mit schmaler Pupille, darüber ein Wirbel aus Bronze
+        hang(s, tip, tx, bottom + 0.8, 0.95, 0.95, 0.95, "lure", side="lure_top", cap="lure_top", glow=spec.glow_lure)
+        hang(s, tip, tx, bottom + 1.45, 0.36, 0.36, 0.36, "guide", cap="guide")
     elif spec.lure == "star":
         hang(s, tip, tx, bottom + 0.85, 0.95, 0.95, 0.3, "lure", side="lure_top", cap="lure_top", glow=spec.glow_lure)
         hang(s, tip, tx, bottom + 0.85, 0.95, 0.95, 0.26, "lure", side="lure_top", cap="lure_top", glow=spec.glow_lure, turn=45.0)
@@ -261,18 +280,28 @@ def java() -> str:
         " * von x, y, z, bis x, y, z; UV vorn/hinten (u0, v0, u1, v1), UV der Seiten, UV oben/unten; Leuchten (0/1); eigene Drehung",
         " * (Grad um X, Y, Z) und ihr Drehpunkt (x, y, z).",
         " *",
+        " * <p>Jede Form liegt in einer eigenen kleinen Klasse – zusammen wären die Tabellen zu groß für eine (64 KB je Methode).",
+        " *",
         " * <p>ERZEUGT von tools/rod_models.py – nicht von Hand ändern.",
         " */",
         "final class RodShapes {",
         "    private RodShapes() {}",
     ]
-    for const, shape in shapes().items():
+    all_shapes = shapes()
+    out.append("")
+    for const in all_shapes:
+        holder = "".join(w.capitalize() for w in const.lower().split("_"))
+        out.append(f"    static final float[][] {const} = {holder}.PARTS;")
+    for const, shape in all_shapes.items():
+        holder = "".join(w.capitalize() for w in const.lower().split("_"))
         out.append("")
-        out.append(f"    static final float[][] {const} = {{")
+        out.append(f"    private static final class {holder} {{")
+        out.append(f"        static final float[][] PARTS = {{")
         for p in shape.parts:
             vals = [*p.lo, *p.hi, *p.uv, *p.side, *p.cap, 1.0 if p.glow else 0.0, *p.rot, *p.pivot]
-            out.append("            {" + ", ".join(mg._f(v) for v in vals) + "},")
-        out.append("    };")
+            out.append("                {" + ", ".join(mg._f(v) for v in vals) + "},")
+        out.append("        };")
+        out.append("    }")
     out.append("}")
     return "\n".join(out) + "\n"
 

@@ -174,6 +174,8 @@ public final class ModTags {
         public static final TagKey<Biome> HAS_WORLD_EATER_HOARD = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_world_eater_hoard"));
         /** Wo das Versunkene Atoll liegen kann (Meere). */
         public static final TagKey<Biome> HAS_SUNKEN_ATOLL = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_sunken_atoll"));
+        /** Wo der Krakenschlund liegen kann (0.91): das offene, tiefe Urmeer. */
+        public static final TagKey<Biome> HAS_KRAKEN_MAW = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_kraken_maw"));
         /** Wo Dörfer der jeweiligen Bauweise entstehen (Fachwerk, nordisch, Lehm, Pfahlbau). */
         public static final java.util.Map<io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageStyle, TagKey<Biome>> HAS_VILLAGE = villageTags();
         /** Wo die eigenen Bauwerke der Oberwelt stehen können (je Art). */

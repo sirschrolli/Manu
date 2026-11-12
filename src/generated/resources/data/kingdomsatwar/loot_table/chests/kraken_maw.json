@@ -1,0 +1,223 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "kingdomsatwar:heart_crystal",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "name": "kingdomsatwar:mana_crystal",
+          "weight": 15
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 65
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 17,
+              "min": 3
+            }
+          },
+          "name": "kingdomsatwar:bronze_coin"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 6,
+              "min": 2
+            }
+          },
+          "name": "minecraft:gold_ingot",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 16,
+              "min": 6
+            }
+          },
+          "name": "minecraft:gold_nugget",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 5,
+              "min": 2
+            }
+          },
+          "name": "minecraft:emerald",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 9,
+              "min": 3
+            }
+          },
+          "name": "minecraft:ink_sac",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 5,
+              "min": 2
+            }
+          },
+          "name": "minecraft:glow_ink_sac",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 3,
+              "min": 1
+            }
+          },
+          "name": "minecraft:nautilus_shell",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 1,
+              "min": 1
+            }
+          },
+          "name": "minecraft:compass",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 1,
+              "min": 1
+            }
+          },
+          "name": "minecraft:map",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 1,
+              "min": 1
+            }
+          },
+          "name": "minecraft:spyglass",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 1,
+              "min": 1
+            }
+          },
+          "name": "kingdomsatwar:tide_horn",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 3,
+              "min": 1
+            }
+          },
+          "name": "kingdomsatwar:gemstone",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 1,
+              "min": 1
+            }
+          },
+          "name": "minecraft:heart_of_the_sea"
+        }
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 5,
+        "min": 3
+      }
+    },
+    {
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.6
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:enchant_randomly",
+            "options": "#minecraft:on_random_loot"
+          },
+          "name": "minecraft:book"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "kingdomsatwar:chests/kraken_maw"
+}

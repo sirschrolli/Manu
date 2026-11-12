@@ -29,7 +29,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp,
                               ice_lance, icicle, ice_prison, phoenix, poison_flower, stone_fist, stone_spike, thorn_vine,
                               void_maw, shard_warden, distortling, star_ray, warden_shard, shattered_king,
-                              shattered_crown, manta_ray, glow_jellyfish, shark, anglerfish, giant_crab, reef_colossus,
+                              shattered_crown, manta_ray, glow_jellyfish, shark, anglerfish, giant_crab, reef_colossus, kraken,
                               fairy, mushroomling, thorn_wight, moth_queen, glutschmied, asteria,
                               miss_mystik, light_dove, magic_sword, anni_troll,
                               werewolf, mire_shambler, ember_wyrm, ash_wraith, soul_heron, night_ram, rift_hound, chorus_maw,
@@ -416,6 +416,9 @@ def main():
                 "Geometrie von Karkinos, dem Riffkoloss (Panzer mit Stielaugen, Fühlern und Mundplatten, Brecher- und Greifschere "
                 "mit beweglichem Finger, sechs Laufbeine in drei Gliedern, die Tempelkuppel mit Korallen, Tang und dem Gezeiten-Speer; "
                 "im Spiel ×2).", "reef_colossus", reef_colossus.PALETTES, preview)
+    write_model(kraken, "KrakenGeometry",
+                "Geometrie des Kraken (Kopf mit goldenen Augen, hoher Mantel mit Flossen, Schnabel, acht Arme in sechs Gliedern mit "
+                "Saugnäpfen, zwei Fangarme in acht Gliedern mit Keule; im Spiel ×3).", "kraken", kraken.PALETTES, preview)
     # Zauber-Effekte
     write_model(phoenix, "PhoenixGeometry",
                 "Geometrie des Phönix (Geschoss des Feuerzaubers, fliegt nach -Z, Rumpfmitte im Ursprung; Flügel schlagen über "

@@ -322,6 +322,9 @@ final class FishingLang {
         rod(text, "star_fishing_rod", "Star Fishing Rod", "Sternenangel",
                 "In the End and the void: bites twice as fast, much easier reeling", "Im End und in der Leere: Biss doppelt so schnell, Drill viel leichter",
                 "A little luck everywhere", "Überall ein wenig Glück");
+        rod(text, "kraken_fishing_rod", "Kraken Fishing Rod", "Krakenangel",
+                "The strongest in water: fast bites, a large catch zone, much luck", "Die stärkste im Wasser: schneller Biss, große Fangzone, viel Glück",
+                "Under water and in the Primordial Sea even more; cannot burn", "Unter Wasser und im Urmeer noch mehr; verbrennt nicht");
         text.add("itemGroup.kingdomsatwar.fishing", "Kingdoms at War: Fishing", "Kingdoms at War: Angeln");
         text.add("key.kingdomsatwar.fish_book", "Open the fish book", "Fischbuch aufschlagen");
         text.add("gui.kingdomsatwar.fishing.title", "Fish on the line", "Fisch an der Leine");

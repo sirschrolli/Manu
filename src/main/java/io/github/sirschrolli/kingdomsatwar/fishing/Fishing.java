@@ -152,7 +152,7 @@ public final class Fishing {
 
     /** Der Angelplatz dieses Hakens, wie ihn die Angeln der Mod sehen. */
     public static RodType.Place place(FishingHook hook) {
-        return RodType.Place.of(hook.level(), hook.blockPosition(), ((HookAccess) hook).kingdomsatwar$medium());
+        return RodType.Place.of(hook.level(), hook.blockPosition(), ((HookAccess) hook).kingdomsatwar$medium(), deep(hook));
     }
 
     /**
@@ -194,7 +194,7 @@ public final class Fishing {
         RandomSource random = player.getRandom();
         // die Angeln der Mod bringen hier ihr eigenes Glück mit (seit 0.87)
         RodType type = rodType(rod);
-        RodType.Place place = RodType.Place.of(level, hook.blockPosition(), medium);
+        RodType.Place place = RodType.Place.of(level, hook.blockPosition(), medium, deep(hook));
         int luck = Math.max(0, hookLuck + Math.round(player.getLuck()) + (type == null ? 0 : type.luck(place)));
         InteractionHand hand = player.getMainHandItem() == rod ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
         ItemStack baitStack = player.getItemInHand(hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
