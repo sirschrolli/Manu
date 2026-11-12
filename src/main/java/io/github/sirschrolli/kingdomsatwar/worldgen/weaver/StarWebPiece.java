@@ -333,8 +333,27 @@ public class StarWebPiece extends StructurePiece {
 
         // ------------------------------------------------------------------ Kokons, Netze, Gelege, Truhe
 
-        /** Kokons unter den Tauen und unter dem äußeren Ring. */
+        /**
+         * Kokons unter den Tauen und unter dem äußeren Ring: an gut jeder zwölften Stelle und dazu an jedem Tau zwei feste Stellen
+         * (ein Drittel und zwei Drittel des Wegs zum Ankerfels) – so hängen in jedem Netz mindestens ein Dutzend. Jede Säule
+         * entscheidet für sich (die Welt entsteht Chunk für Chunk).
+         */
         private void cocoons() {
+            java.util.Set<Long> fixed = new java.util.HashSet<>();
+            for (int k = 0; k < ANCHORS; k++) {
+                Anchor a = this.anchors[k];
+                double ang = Math.atan2(a.z() - (this.cz + 0.5), a.x() - (this.cx + 0.5));
+                double x0 = this.cx + 0.5 + Math.cos(ang) * (EDGE - 0.3);
+                double z0 = this.cz + 0.5 + Math.sin(ang) * (EDGE - 0.3);
+                double dx = a.x() - x0;
+                double dz = a.z() - z0;
+                double d = Math.sqrt(dx * dx + dz * dz);
+                double x1 = a.x() - dx / d * a.size() * 0.7;
+                double z1 = a.z() - dz / d * a.size() * 0.7;
+                for (double t : new double[] {0.33, 0.66}) {
+                    fixed.add(BlockPos.asLong(Mth.floor(Mth.lerp(t, x0, x1)), 0, Mth.floor(Mth.lerp(t, z0, z1))));
+                }
+            }
             BlockState cocoon = StarWeaver.STAR_COCOON.get().defaultBlockState();
             BlockState silk = StarWeaver.STAR_SILK.get().defaultBlockState();
             int r = REACH;
@@ -344,7 +363,8 @@ public class StarWebPiece extends StructurePiece {
                         continue;
                     }
                     double d = this.dist(x, z);
-                    if (d < DISC + 1.0 || d > ANCHOR_MIN - 3.0 || this.ctx.rand(x, z, 41) > 0.055) {
+                    boolean must = fixed.contains(BlockPos.asLong(x, 0, z));
+                    if (!must && (d < DISC + 1.0 || d > ANCHOR_MIN - 3.0 || this.ctx.rand(x, z, 41) > 0.07)) {
                         continue;
                     }
                     // unter dem untersten Block Sternenseide dieser Säule (am Tau oder am Rand)

@@ -308,7 +308,7 @@ final class StarWeaverGameTests {
             helper.assertTrue(silk > 200, "Zu wenig Sternenseide: " + silk);
             helper.assertTrue(weave > 200, "Zu wenig Sternengewebe: " + weave);
             helper.assertTrue(webs >= 4, "Zu wenig Sternenspinnweben: " + webs);
-            helper.assertTrue(cocoons >= 4, "Zu wenig Kokons: " + cocoons);
+            helper.assertTrue(cocoons >= 8, "Zu wenig Kokons: " + cocoons);
             helper.assertTrue(chests == 1, "Nicht eine Truhe: " + chests);
             helper.assertTrue(stone > 200, "Keine Ankerfelsen: " + stone);
             // die Netzplatte trägt rings um das Gelege
