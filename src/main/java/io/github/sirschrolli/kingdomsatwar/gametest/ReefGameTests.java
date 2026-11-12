@@ -359,6 +359,11 @@ final class ReefGameTests {
             helper.assertTrue("maelstrom".equals(boss.currentAttack()), "Kein Mahlstrom: " + boss.currentAttack());
             helper.assertTrue(knight.getHealth() < before, "Der Mahlstrom trifft nicht");
             knight.setHealth(knight.getMaxHealth());
+            // der Mahlstrom hat das Ziel emporgeworfen: zurück an seinen Platz, damit die Blasen es sicher erreichen
+            BlockPos home = helper.absolutePos(new BlockPos(1, 1, 1));
+            knight.teleportTo(home.getX() + 0.5, home.getY(), home.getZ() + 0.5);
+            knight.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
+            knight.fallDistance = 0.0;
             boss.forceAttack(level, "bubbles", knight, true);
             helper.runAfterDelay(ReefColossusEntity.BUBBLE_BLOW + 12, () -> {
                 helper.assertTrue(knight.hasEffect(net.minecraft.world.effect.MobEffects.LEVITATION), "Die Blasenfalle fängt nicht");

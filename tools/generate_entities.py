@@ -30,6 +30,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               ice_lance, icicle, ice_prison, phoenix, poison_flower, stone_fist, stone_spike, thorn_vine,
                               void_maw, shard_warden, distortling, star_ray, warden_shard, shattered_king,
                               shattered_crown, manta_ray, glow_jellyfish, shark, anglerfish, giant_crab, reef_colossus, kraken, mermaid,
+                              armor_parts,
                               fairy, mushroomling, thorn_wight, moth_queen, glutschmied, asteria,
                               miss_mystik, light_dove, magic_sword, anni_troll,
                               werewolf, mire_shambler, ember_wyrm, ash_wraith, soul_heron, night_ram, rift_hound, chorus_maw,
@@ -422,6 +423,9 @@ def main():
     write_model(mermaid, "MermaidGeometry",
                 "Geometrie des Meervolks (seit 0.93): Meerjungfrauen aller Berufe und Tritonwachen, Zubehör je Beruf; sechs Gestalten.",
                 "mermaid", mermaid.PALETTES, preview, same_seed=True)
+    write_model(armor_parts, "ArmorPartsGeometry",
+                "Geometrie der 3D-Teile getragener Rüstungen (seit 0.95): je Rüstungssatz und Platz ein Knochen <satz>_<platz>_<knochen>.",
+                "armor_parts", armor_parts.PALETTES, preview, same_seed=True)
     # Zauber-Effekte
     write_model(phoenix, "PhoenixGeometry",
                 "Geometrie des Phönix (Geschoss des Feuerzaubers, fliegt nach -Z, Rumpfmitte im Ursprung; Flügel schlagen über "

@@ -64,6 +64,8 @@ public final class ClientSetup {
         io.github.sirschrolli.kingdomsatwar.client.renderer.siege.SiegeRenderers.registerLayers(event);
         event.registerLayerDefinition(io.github.sirschrolli.kingdomsatwar.client.armor.MonsterArmorLayer.LAYER,
                 io.github.sirschrolli.kingdomsatwar.client.armor.MonsterArmorLayer::createLayer);
+        event.registerLayerDefinition(io.github.sirschrolli.kingdomsatwar.client.armor.ArmorPartsLayer.LAYER,
+                io.github.sirschrolli.kingdomsatwar.client.armor.ArmorPartsLayer::createLayer);
         // die Köpfe von Vanilla bekommen die Texturen der eigenen Wesen (die Modelle setzt SkullBlockRendererMixin ein)
         io.github.sirschrolli.kingdomsatwar.client.renderer.OwnHeads.install();
         event.registerLayerDefinition(ModModelLayers.WILD_BOAR, WildBoarGeometry::createLayer);
@@ -164,18 +166,22 @@ public final class ClientSetup {
         io.github.sirschrolli.kingdomsatwar.client.renderer.wild.WildRenderers.replaceShoulderParrots(event);
         // die 3D-Teile der Monsterrüstungen (Spieler und Rüstungsständer)
         var parts = event.getEntityModels().bakeLayer(io.github.sirschrolli.kingdomsatwar.client.armor.MonsterArmorLayer.LAYER);
+        // die 3D-Teile aller übrigen Rüstungen (seit 0.95)
+        var armorParts = event.getEntityModels().bakeLayer(io.github.sirschrolli.kingdomsatwar.client.armor.ArmorPartsLayer.LAYER);
         // die Ausrüstung des Schöpfers: Schwingen aus Federn, Heiligenschein, Räder (seit 0.78)
         var gear = event.getEntityModels().bakeLayer(io.github.sirschrolli.kingdomsatwar.client.creator.CreatorGearLayer.LAYER);
         for (var skin : event.getSkins()) {
             var player = event.getPlayerRenderer(skin);
             if (player != null) {
                 player.addLayer(new io.github.sirschrolli.kingdomsatwar.client.armor.MonsterArmorLayer<>(player, parts));
+                player.addLayer(new io.github.sirschrolli.kingdomsatwar.client.armor.ArmorPartsLayer<>(player, armorParts));
                 player.addLayer(new io.github.sirschrolli.kingdomsatwar.client.creator.CreatorGearLayer<>(player, gear));
             }
         }
         if (event.getRenderer(net.minecraft.world.entity.EntityTypes.ARMOR_STAND)
                 instanceof net.minecraft.client.renderer.entity.ArmorStandRenderer stand) {
             stand.addLayer(new io.github.sirschrolli.kingdomsatwar.client.armor.MonsterArmorLayer<>(stand, parts));
+            stand.addLayer(new io.github.sirschrolli.kingdomsatwar.client.armor.ArmorPartsLayer<>(stand, armorParts));
             stand.addLayer(new io.github.sirschrolli.kingdomsatwar.client.creator.CreatorGearLayer<>(stand, gear));
         }
     }
