@@ -237,7 +237,7 @@ public final class Trading {
     /** Öffnet das Handelsfenster (auf dem Server). */
     public static <T extends LivingEntity & CoinTrader> void open(ServerPlayer player, T trader) {
         trader.setCustomer(player);
-        trader.level().playSound(null, trader.getX(), trader.getY(), trader.getZ(), SoundEvents.VILLAGER_TRADE, SoundSource.NEUTRAL, 0.6f, 1.0f);
+        trader.level().playSound(null, trader.getX(), trader.getY(), trader.getZ(), trader.openSound(), SoundSource.NEUTRAL, 0.6f, 1.0f);
         send(player, trader);
     }
 
@@ -245,7 +245,7 @@ public final class Trading {
         boolean closed = trader.isClosed();
         long remaining = closed ? Math.max(0, trader.closedUntil() - System.currentTimeMillis()) : 0;
         io.github.sirschrolli.kingdomsatwar.network.ModNetwork.send(player, new OpenTradePayload(trader.getId(), trader.skinTexture(),
-                trader.professionKey(), trader.traderName(), offers(player, trader), Math.max(0, limit() - trader.tradesUsed()), remaining,
+                trader.face(), trader.professionKey(), trader.traderName(), offers(player, trader), Math.max(0, limit() - trader.tradesUsed()), remaining,
                 discount(player, trader), trader.givesFreely(player), limit(), (int) (pauseMillis() / 60_000L)));
     }
 
@@ -328,7 +328,7 @@ public final class Trading {
             citizen.recordTrade(limit(), pauseMillis());
         }
         Reputation.add(player, Reputation.TRADE);
-        citizen.level().playSound(null, citizen.getX(), citizen.getY(), citizen.getZ(), SoundEvents.VILLAGER_YES, SoundSource.NEUTRAL, 0.6f, 1.0f);
+        citizen.level().playSound(null, citizen.getX(), citizen.getY(), citizen.getZ(), citizen.agreeSound(), SoundSource.NEUTRAL, 0.6f, 1.0f);
         citizen.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.CHAIN_HIT, SoundSource.PLAYERS, 0.5f, 1.7f);
         if (citizen.isClosed()) {
             player.sendSystemMessage(Component.translatable("message.kingdomsatwar.trade.closing", citizen.getName(),

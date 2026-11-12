@@ -29,7 +29,7 @@ import net.minecraft.util.Mth;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Das Fischbuch (Taste H): ein aufgeschlagener Band in Seeleder, seit 0.90 mit <b>1893 Arten</b>. Am linken Rand die
+ * Das Fischbuch (Taste H): ein aufgeschlagener Band in Seeleder, seit 0.99 mit <b>8369 Arten</b> (1893 seit 0.90). Am linken Rand die
  * Lesezeichen der zehn Kapitel (Flüsse und Seen, das Meer, die Tiefsee, die Höhlen, der Nether, End und Leere, das Feenreich,
  * die Schattenwelt, der Abgrund, die Legenden). Die linke Seite zeigt erst die <b>Gewässer</b> des Kapitels – „Überall“ für die
  * Allerweltsfische und darunter jedes Biom mit seinen eigenen Arten, je mit dem Stand (gefangen / vorhanden) –, nach einem

@@ -85,7 +85,7 @@ public class FishingScreen extends Screen {
         this.species = species;
         this.medium = medium;
         this.known = known;
-        this.fight = new FishFight(species.behavior(), species.difficulty(), zoneBonus, chest, this.random);
+        this.fight = new FishFight(species, zoneBonus, chest, this.random);
     }
 
     /** Die Farbe einer Seltenheit auf Pergament (dunkler als im Tooltip, damit sie lesbar bleibt). */

@@ -16,12 +16,13 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
  * kann, wie lange der Laden noch geschlossen ist (ms), dem Rabatt durch Ansehen, ob alles umsonst ist, und den
  * Einstellungen des Servers (Handel bis zur Pause, Länge der Pause in Minuten).
  */
-public record OpenTradePayload(int entity, String skin, String profession, Component name, List<Trading.Offer> offers, int tradesLeft,
+public record OpenTradePayload(int entity, String skin, io.github.sirschrolli.kingdomsatwar.economy.citizen.TradeFace face, String profession, Component name, List<Trading.Offer> offers, int tradesLeft,
         long closedMillis, int discount, boolean free, int limit, int pauseMinutes) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<OpenTradePayload> TYPE = new CustomPacketPayload.Type<>(KingdomsAtWar.id("open_trade"));
     public static final StreamCodec<RegistryFriendlyByteBuf, OpenTradePayload> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_INT, OpenTradePayload::entity,
             ByteBufCodecs.STRING_UTF8, OpenTradePayload::skin,
+            io.github.sirschrolli.kingdomsatwar.economy.citizen.TradeFace.STREAM_CODEC, OpenTradePayload::face,
             ByteBufCodecs.STRING_UTF8, OpenTradePayload::profession,
             ComponentSerialization.STREAM_CODEC, OpenTradePayload::name,
             Trading.Offer.STREAM_CODEC.apply(ByteBufCodecs.list()), OpenTradePayload::offers,

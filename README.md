@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.98.0 – Der Seelenhirte.** Im **Seelensumpf** der Schattenwelt liegen jetzt **Seelenpferche**: ein runder Pferch auf aufgeschüttetem Grund mitten im Sumpf, umgeben von einem Zaun aus Schattenholz mit **Seelenlaternen** und **Schafsschädeln** auf den Pfosten, vier Feuerschalen mit Seelenfeuer, **Stege auf Stelzen** hinaus über den Sumpf und im Norden die **Hütte des Hirten** mit einer Truhe. In der Mitte hängt unter einem Glockenstuhl die **Seelenglocke** – und vor ihr steht in Andacht **der Seelenhirte**: ein hagerer, gebeugter Riese in zerschlissener Kutte, ein Schaffell über den Schultern, unter der Kapuze ein **Widderschädel** mit gerollten Hörnern und türkis glimmenden Augen, in der Rechten ein **Hirtenstab**, an dessen Haken eine Laterne voll Seelenfeuer hängt, in der Linken eine Handglocke; drei **Irrlichter** kreisen um ihn. Wer ihm zu nahe kommt, weckt ihn: **Hakenzug**, **Laternenschwung**, **Irrlichter**, **Seelenglocke**, **Nebelgang**, ein **Pferch aus Seelenfeuer**, der **Hirtenstoß** und im Zorn der **Seelensturm**; unter halber Kraft läutet er dreimal. Eigene Bossleiste, eigene Klänge. Er hinterlässt den **Hirtenstab** (in 3D, Rechtsklick: eine Kette aus Seelenlicht reißt das Ziel heran); die verstummte Glocke ruft mit einem **Seelenkristall** einen neuen Hirten. Neu ist auch **Dämmerquarz** in der ganzen Schattenwelt (Dämmerquarz, Dämmerquarzblock) und daraus die **Dämmerrüstung** der Schleicher – Monster bemerken dich später, mit dem vollen Satz beim Schleichen kaum noch, du schleichst schneller, landest weich und siehst beim Schleichen im Dunkeln; in 3D mit Kapuze, Halbmaske, Umhang, Quarzschließe, Gürteltaschen und Dolch.
+> **Testversion 0.99.0 – Die Sternenweberin.** In den leeren Weiten der **Leere** hängen jetzt **Sternennetze**: eine runde Netzplatte aus leuchtender **Sternenseide** (acht Speichen, vier Ringe) und **Sternengewebe**, durch das man ins Nichts hinabsieht, am Rand offen; sechs **Ankerfelsen** mit Adern aus Himmelseisen halten das Netz an durchhängenden Tauen, hoch darüber die **Sternenkrone**, an den Tauen und unter dem Rand **Sternenkokons** (zerschlagen geben sie frei, was sich verfing), auf dem größten Anker eine Truhe. In der Mitte liegt das **Sternengelege** – und darüber hängt kopfüber an ihrem Faden **die Sternenweberin**: eine riesige Spinne aus nachtblauem Chitin mit acht Sternenaugen, auf dem Hinterleib eine **Spiralgalaxie**, aus dem Rücken wachsen Kristalle der Leere. Wer ihr zu nahe kommt, weckt sie: **Giftbiss**, **Fangfaden**, **Netzwurf**, **Sternbild**, **Sternschnuppen**, **Umgarnen**, **Brut** (Sternspinnlinge), **Abseilen** und im Zorn die **Spindel**. Eigene Bossleiste, eigene Klänge. Sie hinterlässt den **Sternenbogen** (schwerelose, schnellere Pfeile; im Schleichen ein **Netzpfeil**, der sein Ziel einspinnt); ein **Himmelseisenbarren** im erloschenen Gelege ruft eine neue Weberin. Neu ist auch **Himmelseisen** (Erz in der ganzen Leere, im Kern gefallener Sterne) und daraus die **Rüstung der Sternwandler** – leichter, Sternenschweben, Sternenanker. Außerdem: **Rüstungen ohne offene Stellen** (Kragen, Ellbogen, Masken mit Sehschlitzen), Rüstungs-Effekte wirken **still ohne Symbol** und die Nachtsicht **flackert nicht mehr**, die volle **Taucherausrüstung gibt Wasseratmung**, die **Meerjungfrauen handeln wie alle anderen Händler** (Münzen, gleiches Handelsfenster), **8369 Fischarten** (die meisten im Urmeer), **seltene Fische sind schwerer zu drillen**, und im Urmeer gibt es **keine Lava** und **kein Trockenlegen mit Schwämmen**.
+> In 0.98 kam **der Seelenhirte**: Im **Seelensumpf** der Schattenwelt liegen jetzt **Seelenpferche**: ein runder Pferch auf aufgeschüttetem Grund mitten im Sumpf, umgeben von einem Zaun aus Schattenholz mit **Seelenlaternen** und **Schafsschädeln** auf den Pfosten, vier Feuerschalen mit Seelenfeuer, **Stege auf Stelzen** hinaus über den Sumpf und im Norden die **Hütte des Hirten** mit einer Truhe. In der Mitte hängt unter einem Glockenstuhl die **Seelenglocke** – und vor ihr steht in Andacht **der Seelenhirte**: ein hagerer, gebeugter Riese in zerschlissener Kutte, ein Schaffell über den Schultern, unter der Kapuze ein **Widderschädel** mit gerollten Hörnern und türkis glimmenden Augen, in der Rechten ein **Hirtenstab**, an dessen Haken eine Laterne voll Seelenfeuer hängt, in der Linken eine Handglocke; drei **Irrlichter** kreisen um ihn. Wer ihm zu nahe kommt, weckt ihn: **Hakenzug**, **Laternenschwung**, **Irrlichter**, **Seelenglocke**, **Nebelgang**, ein **Pferch aus Seelenfeuer**, der **Hirtenstoß** und im Zorn der **Seelensturm**; unter halber Kraft läutet er dreimal. Eigene Bossleiste, eigene Klänge. Er hinterlässt den **Hirtenstab** (in 3D, Rechtsklick: eine Kette aus Seelenlicht reißt das Ziel heran); die verstummte Glocke ruft mit einem **Seelenkristall** einen neuen Hirten. Neu ist auch **Dämmerquarz** in der ganzen Schattenwelt (Dämmerquarz, Dämmerquarzblock) und daraus die **Dämmerrüstung** der Schleicher – Monster bemerken dich später, mit dem vollen Satz beim Schleichen kaum noch, du schleichst schneller, landest weich und siehst beim Schleichen im Dunkeln; in 3D mit Kapuze, Halbmaske, Umhang, Quarzschließe, Gürteltaschen und Dolch.
 > In 0.97 kam **die Meerhexe**: Am Grund des Urmeers liegen jetzt **Hexengrotten**: buckelige Kuppeln aus Gezeitenstein in einer **toten Zone**, in der nichts mehr wächst, mit einem Eingang durch die **Rippen eines Wals**, Knochensäulen mit Seelenlaternen, zwei Blasensäulen, Nischen voller Hexenkram, Laternen an Ketten, dem Wrack eines Bootes und zwei Truhen. In der Mitte brodelt der **Hexenkessel** – und über ihm schwebt in Trance **die Meerhexe**, eine verstoßene Meerjungfrau mit einer Krone aus schwarzer Koralle, Haar aus Tang und einem Aalschwanz, gebändert wie ein Feuerfisch. Wer ihr zu nahe kommt, weckt sie: **Tintengeschosse**, **Strudel**, **Sirenengesang** (wegsehen!), **Blasengefängnis**, **Haie**, **Korallenspieße**, **Schwanzhieb**, im Zorn der **Fluch der Tiefe** und eine **Woge aus Tinte**. Eigene Bossleiste, eigene Klänge. Sie hinterlässt den **Hexenstab** (in 3D, Rechtsklick: drei Tintenkugeln, die dem Ziel folgen); den erkalteten Kessel weckt eine **Perle**. Neu ist auch **Aquamarinerz** am Meeresgrund (Aquamarin, Aquamarinblock) und daraus die **Taucherrüstung** – länger atmen, schneller schwimmen und abbauen, mit dem vollen Satz klare Sicht unter Wasser; in 3D mit Taucherhelm und Bullaugen, Luftflaschen, Bleigürtel und Flossen.
 > In 0.96 kam **der Steinhüter**: Im Feenreich liegen jetzt **alte Mondsteinbrüche**: runde Gruben, zwölf Blöcke tief, in drei Stufen abgebaut, mit Rampen an den Wänden, offenen **Adern aus Mondsteinerz**, gemeißelten Lampen, überhängendem Moos mit Leuchtranken, zwei Gerüsten aus Glimmerholz, einem **Kran**, an dessen Kette noch ein behauener Block hängt, und der **Hütte des Vorarbeiters** mit einer Truhe. Am Grund kniet vor dem leuchtenden **Hüterstein** der **Steinhüter** und schläft – ein Riese aus Feenstein mit Lavendelmoos, Mondsteinkristallen und einem pulsierenden Herzen. Wer hinabsteigt, weckt ihn: **Faustschlag**, **Stampfer**, **Felswurf**, **Kristallspur**, **Felssprung** (er folgt dir auf die Terrassen) und im Zorn der **Mondstrahl**; unter halber Kraft wächst ihm ein **Kristallpanzer**, der zerspringt – dann ist er benommen. Eigene Bossleiste, eigene Klänge. Er hinterlässt den **Hüterhammer** (in 3D, Rechtsklick: eine Spur aus Mondsteinkristallen); der erloschene Stein ruft mit einem **Mondstein** einen neuen Hüter. Neu ist auch das **Mondsteinerz** im ganzen Feenreich (Mondstein, Mondsteinblock) und die **Mondsteinrüstung** der Zauberer – Schutz wie Eisen, sehr gut verzauberbar, **mehr Mana** und schnellere Erholung (der volle Satz 80 Mana mehr), in 3D mit Stirnreif, Sternenmantel, Schulterstücken mit Mondsicheln und spitzen Zauberschuhen.
 > In 0.95 kamen **Rüstungen in 3D**: Getragene Rüstungen haben jetzt **echte 3D-Teile passend zu ihrem Material** – an Spielern und auf Rüstungsständern, für **alle Rüstungen der Mod und die von Minecraft**. Die **Stahlrüstung** ist ein Ritter: Kamm und roter **Helmbusch**, Schulterstücke aus drei Platten mit Goldsaum, Ellbogenkacheln, Beintaschen, Kniebuckel und goldene **Sporen**. **Konterit** (leicht und schnell) trägt **Flügel an den Schläfen und Knöcheln**, einen Stirnstein, sichelförmige Schulterstücke und einen **kurzen Umhang**. **Nachtstahl** hat eine **Krone aus Nachtkristallen** und Kristallstacheln auf Schultern, Rücken, Knien und Fersen, deren Spitzen leuchten. **Abyssit** hat zwei große **Hörner** mit leuchtenden Adern, einen Stirnkristall, schwere Schulterstücke und leuchtende Kristalle. Die **Drachenschuppen** tragen die **Hörner ihres Drachen** (Feuer geschwungen mit Glut, Eis aus Kristall, Blitz gezackt, Natur ein **Geweih mit Blättern**, Erde **Widderhörner**, Wasser **Flossen**), Rückenstacheln (Blätter, ein Flossensaum, Steinplatten), Schulterschuppen mit Kralle, Krallen an den Stiefeln und zu den Beinschienen einen **Drachenschwanz** mit der Spitze ihres Elements (eine glühende Flamme, ein Eiskristall, eine Blitzklinge, ein Blatt, eine Steinkeule mit Bernstein, eine Flosse). Die **Edelsteinkrone** bekommt Zacken mit Perlen und Edelsteine. Und die Rüstungen von Minecraft: **Leder** (Feder, Pelzkragen, Gürtel mit Tasche, Pelzstulpen), **Kettenhemd** (Kettenkragen, Kettenschultern, Kettenschurz), **Kupfer** (Helmspitze, Platten mit Grünspan), **Eisen** (Nasenschutz, Schulterstücke, Kniebuckel), **Gold** (Strahlenkamm, Rubine, Sonnenscheibe), **Diamant** (Kamm und Schultern aus Diamantsplittern), **Netherit** (Hörner, schwere Schulterstücke mit Dornen) und der **Schildkrötenpanzer**. Verzauberte Rüstungen schimmern auch an ihren 3D-Teilen.
@@ -405,6 +406,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Der Steinhüter** (0.96): der alte Mondsteinbruch im Feenreich (drei Stufen, Rampen, Erzadern, Lampen, Gerüste, Kran, Hütte mit Truhe); der Steinhüter als Boss (schläft vor dem Hüterstein, sieben Angriffe, Kristallpanzer, Benommenheit, eigene Bossleiste und Klänge, Rückruf mit Mondstein); der Hüterhammer in 3D; Mondsteinerz, Mondstein, Mondsteinblock und die Mondsteinrüstung (mehr Mana, in 3D) | ✅ fertig |
 | **Die Meerhexe** (0.97): die Hexengrotte im Urmeer (Kuppel aus Gezeitenstein in einer toten Zone, Eingang durch die Rippen eines Wals, Knochensäulen, Blasensäulen, Nischen, Wrack, zwei Truhen); die Meerhexe als Boss (schwebt in Trance über ihrem Kessel, acht Angriffe und der Zorn mit der Woge aus Tinte, eigene Bossleiste und Klänge, Rückruf mit einer Perle); der Hexenstab in 3D; Aquamarinerz, Aquamarin, Aquamarinblock und die Taucherrüstung (länger atmen, schneller schwimmen und abbauen, klare Sicht, in 3D) | ✅ fertig |
 | **Der Seelenhirte** (0.98): der Seelenpferch im Seelensumpf der Schattenwelt (runder Pferch mit Zaun, Seelenlaternen und Schafsschädeln, Glockenstuhl mit der Seelenglocke, Feuerschalen, Stege auf Stelzen, Hütte mit Truhe); der Seelenhirte als Boss (steht in Andacht vor seiner Glocke, sieben Angriffe, im Zorn der Seelensturm, eigene Bossleiste und Klänge, Rückruf mit einem Seelenkristall); der Hirtenstab in 3D; Dämmerquarz, Dämmerquarzblock und die Dämmerrüstung (schwerer zu entdecken, schneller schleichen, weiche Landung, Nachtsicht beim Schleichen, in 3D) | ✅ fertig |
+| **Die Sternenweberin** (0.99): das Sternennetz in den leeren Weiten der Leere (Netzplatte aus Sternenseide und Sternengewebe, sechs Ankerfelsen mit Tauen, Sternenkrone, Kokons, Truhe); die Sternenweberin als Boss (hängt in Andacht über ihrem Gelege, acht Angriffe, im Zorn die Spindel, eigene Bossleiste und Klänge, Rückruf mit einem Himmelseisenbarren); der Sternenbogen mit Netzpfeil; Himmelseisen und die Rüstung der Sternwandler; Rüstungen ohne offene Stellen, stille Rüstungs-Effekte, Wasseratmung der Taucherausrüstung; Handel der Meerjungfrauen wie bei allen Händlern; 8369 Fischarten, Drill nach Seltenheit; keine Lava und kein Trockenlegen im Urmeer | ✅ fertig |
 | **Der Weg zum Unsterblichen** (0.77): Heldenstufe bis 200, fünf neue Ränge (Mythos, Halbgott, Titan, Sternenwanderer, Unsterblicher) mit Abzeichen und Wahrzeichen, Heldenkraft je Stufe, Talente bis 40 Punkte (Meisterschaft), je 25 Herz- und Manakristalle, das Licht der Unsterblichkeit, Heldenherzen in Schichten | ✅ fertig |
 | **Schrolli greift zur Klinge** (0.76): Nahkampf am Boden – Landung, Beine in goldenen Beinschienen, die Klinge aus Licht mit Lichtspur, sieben Künste der Klinge (Klingenhieb, Lichtsicheln, Sturmlauf, Klingenwirbel, Himmelssturz, Schwingenwehr mit Gegenschlag, Weltenklinge), jetzt 33 Künste; warme, leisere Klänge und Musik | ✅ fertig |
 | **Die Kampfdimensionen** (0.74): Mondbühne, Glutesse, Sternenzelt, Fehlerraum, Thronwelt und Weltenschlund – die sechs großen Bosse ziehen ihre Gegner in ein Abbild ihres Horts unter einem fremden Himmel (Regeln wie in der Arkanen Sphäre, Nachzügler folgen); nach der Niederlage erwacht der Boss unversehrt in seiner ursprünglichen Gestalt; Spawn-Ei des Weltenfressers; `/locate` findet Schlund und Thron | ✅ fertig |
@@ -465,7 +467,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.98.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.99.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -473,7 +475,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.98.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.99.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -742,6 +744,88 @@ einen Gürtel mit **Taschen** und einem **Dolch**, Knieschützer und Stulpen an 
 
 Dämmerquarzerz, Dämmerquarz, Dämmerquarzblock, die Rüstung, die Seelenglocke, der Hirtenstab und das Spawn-Ei des Seelenhirten
 liegen im Kreativ-Reiter **„Schattenwelt“**.
+
+### Die Sternenweberin und das Sternennetz (seit 0.99)
+
+![Die Sternenweberin in ihrem Sternennetz, ihre Angriffe, der Sternenbogen und die Rüstung der Sternwandler](docs/bilder/sternenweberin.jpg)
+
+Seit 0.99 hängen in den leeren Weiten der **Leere** (im Sternennichts zwischen den Archipelen) **Sternennetze** – frei im
+Nichts, dort, wo kein Bruchstück in das Netz ragt (`/kaw sternennetz` in der Leere findet das nächste, mit `tp`, `awaken` und
+`reset`). Ein Sternennetz ist eine runde **Netzplatte**, gut dreißig Blöcke breit: acht Speichen und vier Ringe aus
+leuchtender **Sternenseide**, dazwischen **Sternengewebe** – man geht darauf wie auf festem Grund und sieht hindurch ins
+Nichts. Am Rand wird das Netz offen (nur noch Speichen und der äußere Ring – Vorsicht!). Sechs **Ankerfelsen** aus
+Leerenstein mit Moos, Kristallen und Adern aus **Himmelseisen** stehen ringsum, sechs durchhängende **Taue** aus Sternenseide
+halten das Netz; hoch über der Mitte schwebt die **Sternenkrone**, ein kleiner Fels, von dem Fäden zu allen Ankern führen. An
+den Tauen und unter dem Rand hängen **Sternenkokons** (zerschlagen geben sie frei, was sich verfing: Knochen, Fäden,
+Sternenseide, mal Pfeile, Münzen, Leerensplitter oder rohes Himmelseisen), in den Ecken spannen sich **Sternenspinnweben**
+(sie halten fest wie Spinnweben; mit Schere oder Behutsamkeit nimmt man sie mit), und auf dem größten Ankerfelsen steht eine
+**Truhe** (Himmelseisen, Leerensplitter, Sternenseide, Sternenstaub, Pfeile – mit etwas Glück ein Teil der Rüstung der
+Sternwandler oder ein verzaubertes Buch).
+
+In der Mitte liegt das **Sternengelege**: sieben Eier auf einem Bett aus Seide, in denen Sternenlicht glimmt. Darüber hängt
+kopfüber an ihrem Faden, sieben Blöcke hoch, **die Sternenweberin** und dreht sich langsam. Als die Welten zerbrachen, fing sie
+die fallenden Sterne in ihrem Netz – seither webt sie aus ihrem Licht neue Sternbilder. Sie ist eine riesige Spinne, gut sechs
+Blöcke von Fuß zu Fuß: der Vorderleib aus nachtblauem, schimmerndem **Chitin** mit silbernen Rändern, vorn **acht Augen wie
+Sterne**, darunter Kieferklauen mit silbernen Giftzähnen und zwei Taster; der Hinterleib groß und rund wie ein Stück
+Nachthimmel, darauf eine **Spiralgalaxie** mit rosaweißem Kern, aus dem Rücken wachsen drei **Kristalle der Leere**, aus den
+Spinnwarzen leuchtet Sternenseide; acht lange Beine mit silbernen Bändern, deren Gelenke im Licht der Sterne leuchten. Wer sich
+dem Netz nähert, hört es von fern („Die Fäden zittern … etwas Riesiges wacht über dieses Netz.“). Wer ihr näher als vierzehn
+Blöcke kommt (oder sie trifft), weckt sie: Ihre Augen flammen auf, der Faden reißt, sie stürzt auf ihr Netz, kreischt und
+richtet sich auf. In Andacht und beim Erwachen ist sie unverwundbar.
+
+Sie steht in der Reihe der Bosse **zwischen Anni dem Troll und dem Zerbrochenen König** (1600 Lebenspunkte, Rüstung 12,
+Zähigkeit 5; Stürze und Wände schaden ihr nicht, ihre Brut auch nicht). Sie läuft über ihr Netz auf ihre Gegner zu und greift
+abwechselnd an; wer sie zu weit fortlockt, dem entkommt sie an einem Faden zurück auf ihr Netz. Findet sie niemanden mehr,
+klettert sie wieder an ihren Faden (geheilt). Eigene Bossleiste (nachtblaues Chitin mit Silbersaum, hinter dem Medaillon
+greifen vier gegliederte Spinnenbeine mit leuchtenden Gelenken, unter der Leiste hängen an Fäden Kokons und Sterne, als Spitze
+ein Stern in einem Knoten aus Sternenseide; die Füllung ist ihr Netz vor dem Nachthimmel), eigene Klänge (das Klicken ihrer
+Mundwerkzeuge über dem gläsernen Summen der Sterne, sirrende Fäden, Sternbilder, fallende Sterne, die Brut).
+
+| Angriff | Was geschieht |
+|---|---|
+| **Giftbiss** | ein Satz nach vorn, die Giftzähne schlagen zu – Schaden und Gift |
+| **Fangfaden** | ein Faden aus Sternenlicht trifft ihr Ziel (bis 22 Blöcke weit) und spult es zu ihren Zähnen – dort beißt sie zu |
+| **Netzwurf** | sie spuckt einen Ballen Sternennetz (im Zorn drei im Fächer): wo er landet, spannen sich Spinnweben, und man klebt fest (sie zerfallen nach einer Weile) |
+| **Sternbild** | um ihr Ziel leuchten nacheinander Sterne auf, ein Faden verbindet sie zu einem Sternbild – dann flammen die Linien auf: wer eine berührt, wird getroffen und leuchtet |
+| **Sternschnuppen** | sie trommelt auf ihr Netz, und die Sterne, die darin hängen, fallen – leuchtende Kreise zeigen, wo |
+| **Umgarnen** | wer ihr zu nahe ist, wird eingesponnen: eine Weile kein Laufen, kein Springen, und die Fäden zehren |
+| **Brut** | ihr Hinterleib pulsiert, und **Sternspinnlinge** krabbeln heraus (höchstens sechs) |
+| **Abseilen** | sie klettert an einem Faden hinauf, hängt kopfüber über ihrem Ziel (ein Kreis am Grund zeigt, wo) und lässt sich fallen |
+| **Die Spindel** (im Zorn) | sie dreht sich, und vier Fäden fegen dicht über das ganze Netz – wer nicht springt, wird getroffen |
+
+Unter halber Kraft kreischt sie auf – die Sterne auf ihrem Rücken flammen, sie wird schneller, und gleich darauf dreht sich
+die Spindel. Besiegt rollt sie die Beine ein und zerfällt zu Sternenstaub; das **Gelege erlischt**. Sie hinterlässt den
+**Sternenbogen**, einen Herzkristall, Himmelseisen, Leerensplitter, Sternenseide, Leerenkristalle, Edelsteine und Goldmünzen.
+Ein **Himmelseisenbarren** im erloschenen Gelege lockt eine neue Weberin – sie lässt sich sofort fallen.
+
+**Der Sternenbogen** (3D in der Hand, gespannt in drei Stufen): ein Bogen aus nachtblauem Chitin, bespannt mit Sternenseide.
+Seine Pfeile fliegen **schwerelos** und schneller als die eines gewöhnlichen Bogens und ziehen eine Spur aus Sternenstaub; wer ihn
+**im Schleichen voll spannt**, schießt einen **Netzpfeil**, der sein Ziel einspinnt (kaum noch beweglich, leuchtend; danach ruht
+der Bogen acht Sekunden). Er lässt sich verzaubern wie jeder Bogen und mit Himmelseisen reparieren.
+
+**Himmelseisen** wächst als Erz in der ganzen Leere (Adern im Leerenstein, im Kern gefallener Sterne) und schimmert; daraus
+werden Barren und ein Block – und die **Rüstung der Sternwandler**: blaustählerne Platten mit Säumen aus Sternsilber, in 3D mit
+Sternenkamm, Kometenflossen, Schulterplatten mit schwebenden Splittern und einem kurzen Kometenmantel. Sie macht **leichter**
+(weniger Schwerkraft), mit dem vollen Satz lässt sich durch Halten der Sprungtaste **schweben** (Sternenschweben), und wer in
+die Leere stürzt, den trägt der **Sternenanker** einmal zurück auf festen Grund.
+
+### Rüstungen, Handel und das Urmeer (seit 0.99)
+
+- **Geschlossene Rüstungen:** Getragene Rüstungen haben keine offenen Stellen mehr – ein Kragen statt des Halsausschnitts,
+  eine Ellbogenkachel statt der Lücke am Arm, und wo das Gesicht frei lag, eine **Maske mit Sehschlitzen** (beim Werwolfspelz
+  mit Bernsteinaugen, bei Glutwurm und Drachenschuppen mit leuchtenden Augen, beim Taucher ein dunkles Glasvisier).
+- **Stille Rüstungs-Effekte:** Was Rüstungen an Effekten geben (Nachtsicht, Feuerschutz, Schnelligkeit, Wasseratmung,
+  sanfter Fall …), wirkt jetzt **ohne Symbol** und ohne Partikel. Die **Nachtsicht flackert nicht mehr** – sie wird rechtzeitig
+  erneuert und endet sofort, wenn man das Teil ablegt; ein Trank darunter bleibt erhalten.
+- **Taucherausrüstung:** Der volle Satz aus Aquamarin gibt jetzt **Wasseratmung** (und unter Wasser wie bisher klare Sicht).
+- **Meerjungfrauen** handeln wie alle anderen Händler (siehe *Das Meervolk*).
+- **8369 Fischarten:** Jedes eigene Biom der Mod hat jetzt einundfünfzig Arten, jedes Biom von Minecraft einunddreißig oder
+  dreiunddreißig, und die meisten leben im **Urmeer** – 518 oder 519 in jedem seiner acht Biome (zusammen 4146).
+- **Drill nach Seltenheit:** Je seltener der Fisch, desto unruhiger ist er im Drill – er überlegt kürzer, schwimmt weitere
+  Wege und schneller, und ab *selten* bricht er ab und zu plötzlich aus.
+- **Die Regeln des Urmeers:** Im Urmeer gibt es **keine Lava** – ein Eimer Lava erlischt zischend (er bleibt voll), auch aus
+  Werfern, und kein Kessel lässt sich mit Lava füllen. Und das Urmeer lässt sich **nicht trockenlegen**: Ein Schwamm saugt
+  sich dort sofort voll, aber das Wasser bleibt.
 
 ### Die Leere
 
@@ -2037,15 +2121,17 @@ gewohnte Bild; gehalten werden sie wie die Angel von Minecraft, damit die Schnur
 ![Angeln 0.90: alle Angeln in 3D, Angeln unter Wasser, die Legenden der Biome im Fischbuch](docs/bilder/angeln_090.jpg)
 
 Geangelt wird wie immer – auswerfen, warten, beim Biss anziehen. Aber seit 0.79 hebt man den Fisch nicht mehr einfach
-heraus: Er wird **gedrillt**. Und es beißt überall etwas anderes: seit 0.92 **2053 Arten** in zehn Kapiteln – in jedem
-Gewässer, jedem Biom und jeder Welt eigene. Wer viel angelt, trägt einen **Fischbeutel**.
+heraus: Er wird **gedrillt**. Und es beißt überall etwas anderes: seit 0.99 **8369 Arten** in zehn Kapiteln (die meisten im
+Urmeer) – in jedem Gewässer, jedem Biom und jeder Welt eigene. Wer viel angelt, trägt einen **Fischbeutel**.
 
 **Der Drill.** Wer beim Biss anzieht, sieht neben der Angel eine Säule – Wasser, Lava oder Sternenhimmel, je nachdem,
 worin der Schwimmer treibt. Darin zieht der Fisch auf und ab, und die grüne **Fangzone** gehört dir: Hältst du die
 Maustaste, steigt sie; lässt du los, sinkt sie – und **jeder Klick** gibt ihr einen kleinen Schubs nach oben, so lässt sie
 sich auch durch Antippen führen (gespielt wird seit 0.83 nur noch mit der Maus). Solange der Fisch in der Fangzone schwimmt und die
 Schnur gespannt ist, füllt sich die Leiste daneben – ist sie voll, ist er gefangen. Schwimmt er hinaus, leert sie sich,
-und ist sie leer, reißt er sich los: Der Haken bleibt dann draußen und wartet auf den nächsten Biss. **Esc** gibt den
+und ist sie leer, reißt er sich los: Der Haken bleibt dann draußen und wartet auf den nächsten Biss. Seit 0.99 gilt:
+**Je seltener der Fisch, desto unruhiger** – ungewöhnliche, seltene, mystische und legendäre Fische überlegen kürzer,
+schwimmen weitere Wege und schneller, und ab *selten* brechen sie ab und zu plötzlich aus. **Esc** gibt den
 Fisch frei.
 
 - **Wer nichts tut, fängt nichts**: Liegt die Fangzone ungehalten am Boden, hängt die Schnur durch, und die Leiste
@@ -2799,15 +2885,18 @@ des Krakenschlunds (`/locate structure kingdomsatwar:sea_village` findet das nä
 und schwimmen sie schnell, liegen sie waagrecht im Wasser wie ein Delfin. Es gibt sie in sechs Gestalten: Koralle, Tang,
 Perle, Lagune, Gold und Tiefsee (mit leuchtenden Augen, Flecken und Flossenrändern); welche häufiger sind, hängt davon ab,
 wo das Dorf liegt. Jede trägt ein Oberteil aus zwei Muscheln, eine Perlenkette, Armreifen und das Zeichen ihres Berufs, und
-sie summen und singen kleine Melodien. Gezahlt wird in **Perlen**: Die Meerjungfrauen geben sie für Fisch, Tang,
-Knochenmehl, Prismarin und Tinte, sie liegen in den Truhen der Dörfer, und in mancher Muschel steckt eine (etwa in jeder achten).
+sie summen und singen kleine Melodien. Seit 0.99 handeln die Meerjungfrauen **wie alle anderen Händler**: im selben
+**Handelsfenster** (mit ihrem Gesicht in der Kopfzeile), gegen **Münzen**, mit Rabatt durch Ansehen und einer Pause nach
+einigen Handeln – danach haben sie neue Waren (andere Korallen, Anemonen, ein anderes Holz, andere Bücher). **Perlen** sind
+jetzt eine Ware: Die Perlentaucherin kauft und verkauft sie; man findet sie in den Truhen der Dörfer und in mancher Muschel
+(etwa in jeder achten).
 
-| Beruf | Zeichen | Kauft (für Perlen) | Verkauft (gegen Perlen) |
+| Beruf | Zeichen | Kauft (für Münzen) | Verkauft (gegen Münzen) |
 |---|---|---|---|
-| **Perlentaucherin** | Stirnband mit Perle, Netzbeutel voller Perlen | Kabeljau, Tropenfische, Haizähne | Perlmutt, Nautilusschalen, einen Schildkrötenpanzer, einmal ein Herz des Meeres (40 Perlen) |
+| **Perlentaucherin** | Stirnband mit Perle, Netzbeutel voller Perlen | Kabeljau, Tropenfische, Haizähne, Perlen | Perlen, Perlmutt, Nautilusschalen, einen Schildkrötenpanzer, ein Herz des Meeres (240 Bronze) |
 | **Korallengärtnerin** | Krone aus Korallenzweigen, Seeanemone im Haar | Knochenmehl, Seetang, Seegras | die Setzlinge aller vier Meereshölzer, Korallenblöcke, Meeresgurken, Riesentang, Seeanemonen |
 | **Muschelbauerin** | Kamm aus einer Jakobsmuschel, Gürtel mit Muschelhammer | Prismarinscherben, Ton | Meereshölzer, Bretter, Türen mit Bullauge, Meeres- und Tiefseelaternen, Prismarin, Gezeitensteinziegel |
-| **Gezeitensängerin** | Seestern im Haar, Muschelhorn an der Hüfte | Tintenbeutel, Leuchttintenbeutel, Leuchtgelee, Prismarinkristalle | Tränke (Unterwasseratmung, Nachtsicht, Heilung), Bücher mit den Verzauberungen des Wassers, einmal einen Aquisitor (32 Perlen) |
+| **Gezeitensängerin** | Seestern im Haar, Muschelhorn an der Hüfte | Tintenbeutel, Leuchttintenbeutel, Leuchtgelee, Prismarinkristalle | Tränke (Unterwasseratmung, Nachtsicht, Heilung), Bücher mit den Verzauberungen des Wassers, einen Aquisitor (180 Bronze) |
 
 **Die Tritonwachen** tragen einen Bronzehelm mit Flossenkamm, einen Schuppenpanzer und einen Dreizack. Sie halten Haie,
 Anglerfische, Ertrunkene und Wächter vom Dorf fern – aus der Nähe mit Stößen, auf Abstand werfen sie den Dreizack – und
@@ -4528,7 +4617,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.98.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.99.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -4688,15 +4777,20 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      Boss, der Hüterhammer, Mondsteinerz und die Mondsteinrüstung der Zauberer;
    - **0.97 – Die Meerhexe** (fertig): die Hexengrotte im Urmeer mit der Meerhexe als Boss, der
      Hexenstab, Aquamarinerz und die Taucherrüstung;
-   - zuletzt **0.98 – Der Seelenhirte** (fertig): der Seelenpferch im Seelensumpf der Schattenwelt mit dem
-     Seelenhirten als Boss, der Hirtenstab, Dämmerquarz und die Dämmerrüstung.
+   - **0.98 – Der Seelenhirte** (fertig): der Seelenpferch im Seelensumpf der Schattenwelt mit dem
+     Seelenhirten als Boss, der Hirtenstab, Dämmerquarz und die Dämmerrüstung;
+   - zuletzt **0.99 – Die Sternenweberin** (fertig): das Sternennetz in der Leere mit der Sternenweberin als
+     Boss, der Sternenbogen, Himmelseisen und die Rüstung der Sternwandler; dazu geschlossene Rüstungen, stille
+     Rüstungs-Effekte, der Münzhandel der Meerjungfrauen, 8369 Fischarten und die Regeln des Urmeers.
 
    Damit ist der Weg der Geschichte vollständig – vom Siegel der sechs Drachen bis zum Weltenfresser im Abgrund.
 
-   **Als Nächstes geplant:** weitere Bosse, Erze und Bauwerke für die anderen Dimensionen und bessere Klänge.
+   **Als Nächstes geplant:** der Kraken schwimmt in seinem Schlund umher und bekommt neue Angriffe; weitere Bosse, Erze und
+   Bauwerke für die anderen Dimensionen und bessere Klänge.
 
    Die Bosse werden in dieser Reihenfolge stärker: Karkinos und Noctua (früh im Spiel) → Steinhüter → Erzmagier → MissMystik →
-   Malleus → Meerhexe → Drachen → Seelenhirte → Asteria → Kraken → Anni der Troll → Zerbrochener König → Weltenfresser →
+   Malleus → Meerhexe → Drachen → Seelenhirte → Asteria → Kraken → Anni der Troll → Sternenweberin → Zerbrochener König →
+   Weltenfresser →
    Schrolli der Schöpfer.
 
 ## Danksagung

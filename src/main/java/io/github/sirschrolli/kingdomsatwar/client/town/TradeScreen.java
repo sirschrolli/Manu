@@ -192,8 +192,15 @@ public class TradeScreen extends Screen {
         // Kopfzeile: Gesicht, Name, Beruf
         Identifier skin = this.skin();
         g.fill(x0 + 10, y0 + 9, x0 + 28, y0 + 27, 0xFF0D1533);
-        g.blit(RenderPipelines.GUI_TEXTURED, skin, x0 + 11, y0 + 10, 8.0f, 8.0f, 16, 16, 8, 8, 128, 64);
-        g.blit(RenderPipelines.GUI_TEXTURED, skin, x0 + 11, y0 + 10, 40.0f, 8.0f, 16, 16, 8, 8, 128, 64);
+        var face = this.data.face();
+        int fs = face.drawSize();
+        int fx = x0 + 11 + (16 - fs) / 2;
+        int fy = y0 + 10 + (16 - fs) / 2;
+        g.blit(RenderPipelines.GUI_TEXTURED, skin, fx, fy, face.u(), face.v(), fs, fs, face.size(), face.size(), face.texWidth(), face.texHeight());
+        if (face.hatU() >= 0) {
+            g.blit(RenderPipelines.GUI_TEXTURED, skin, fx, fy, face.hatU(), face.hatV(), fs, fs, face.size(), face.size(), face.texWidth(),
+                    face.texHeight());
+        }
         g.text(this.font, name.copy().withStyle(ChatFormatting.BOLD), x0 + 33, y0 + 14, TownScreen.GOLD_TEXT, true);
         Component job = Component.translatable(this.data.profession());
         g.text(this.font, job, x0 + WIDTH - 12 - this.font.width(job), y0 + 14, TownScreen.RIBBON_TEXT, true);

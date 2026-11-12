@@ -52,6 +52,7 @@ PHASES = {
     "keeper": (0.5,),                    # unter halber Kraft legt er den Kristallpanzer an
     "sea_witch": (0.5,),                 # unter halber Kraft rast sie vor Zorn
     "soul_shepherd": (0.5,),             # unter halber Kraft läutet er im Zorn
+    "star_weaver": (0.5,),               # unter halber Kraft rast sie
     "moth": (0.5,), "forge": (0.5,), "star": (0.5,), "anni": (0.5,), "anni2": (0.5,),
     "mystic": (0.6, 0.3),                # Zugabe und großes Finale
     "schrolli": (0.7, 0.4),              # erste Gestalt: zweimal schneller
@@ -195,6 +196,13 @@ ELEMENTS = {
                           horn0="#1e160e", horn1="#4a3a26", horn2="#86704f", horn3="#c8b28a",
                           iron0="#121316", iron1="#2b2e35", iron2="#50555f", iron3="#8a919c",
                           bone="#e2d8c0", bone_dark="#8e846e", soul="#2ac8bc", soul_light="#c4fff6", wood="#3e2d1e"),
+    # die Sternenweberin (seit 0.99): nachtblaues Chitin mit Silbersaum; hinter dem Medaillon greifen vier gegliederte
+    # Spinnenbeine nach oben und unten, als Spitze ein Stern in einem Knoten aus Sternenseide; unter der Leiste hängen an Fäden
+    # Kokons und Sterne, über der Oberkante funkeln Sterne. Füllung wie ihr Netz: Nachthimmel, durchzogen von leuchtenden Fäden
+    "star_weaver": dict(m0="#0a0b18", m1="#2c3052", m2="#9ca8d8", acc="#8ad8ff", glow="#effbff", deep="#030616",
+                        f0="#040822", f1="#16246a", f2="#4a7ee0", f3="#eaf6ff",
+                        chitin0="#08091a", chitin1="#1d214b", chitin2="#3f4e86", chitin3="#7286c0",
+                        silk="#d6e4ff", silk_dark="#7486b8", star="#fff4c4", star2="#9ad8ff", nebula="#8048bc"),
 }
 
 OUTLINE = (12, 10, 12, 255)
@@ -2495,6 +2503,123 @@ def post_soul_shepherd(img: Image.Image, pal: dict) -> None:
 
 
 # =============================================================================================
+# Die Sternenweberin (seit 0.99)
+# =============================================================================================
+
+def _weaver_leg(layer: Image.Image, g: dict, pts: list, width: float) -> None:
+    """Ein gegliedertes Spinnenbein durch die Punkte pts (Hüfte, Knie, … Fuß): jedes Glied etwas dünner, oben im Licht,
+    unten im Schatten; die Gelenke leuchten in Sternenlicht, am Fuß eine Kralle."""
+    lp = layer.load()
+    for i in range(len(pts) - 1):
+        (x0, y0), (x1, y1) = pts[i], pts[i + 1]
+        w0 = width * (1.0 - 0.22 * i)
+        w1 = width * (1.0 - 0.22 * (i + 1)) if i + 1 < len(pts) - 1 else 0.55
+        length = math.hypot(x1 - x0, y1 - y0)
+        ax, ay = (x1 - x0) / length, (y1 - y0) / length
+        for y in range(max(0, int(min(y0, y1) - width - 2)), min(FRAME_H, int(max(y0, y1) + width + 3))):
+            for x in range(max(0, int(min(x0, x1) - width - 2)), min(FRAME_W, int(max(x0, x1) + width + 3))):
+                dx, dy = x + 0.5 - x0, y + 0.5 - y0
+                t = (dx * ax + dy * ay) / length
+                if not -0.05 <= t <= 1.05:
+                    continue
+                off = -dx * ay + dy * ax
+                w = w0 + (w1 - w0) * max(0.0, min(1.0, t))
+                if abs(off) > w:
+                    continue
+                s = off / max(w, 0.01)
+                col = g["chitin3"] if s < -0.45 else g["chitin2"] if s < 0.15 else g["chitin1"]
+                if (t * length) % 4.0 < 0.9 and abs(s) < 0.6:          # feine Ringe am Glied
+                    col = mix(col, g["chitin0"], 0.5)
+                lp[x, y] = col
+    for (x, y) in pts[1:-1]:                                            # leuchtende Gelenke
+        for dx, dy in ((0, 0), (1, 0), (0, 1), (1, 1)):
+            lp[int(x) + dx - 1, int(y) + dy - 1] = g["star2"] if (dx, dy) != (0, 0) else g["glow"]
+    fx, fy = pts[-1]                                                    # die Kralle
+    lp[int(fx), int(fy)] = g["m2"]
+
+
+def _weaver_star(px, img, x: int, y: int, r: int, g: dict) -> None:
+    """Ein Stern mit vier langen und vier kurzen Zacken, die Mitte weiß."""
+    for k in range(-r, r + 1):
+        shade = g["star"] if abs(k) < r else g["star2"]
+        put(px, img, x + k, y, shade)
+        put(px, img, x, y + k, shade)
+    if r >= 2:
+        for dx, dy in ((-1, -1), (1, -1), (-1, 1), (1, 1)):
+            put(px, img, x + dx, y + dy, g["star2"])
+    put(px, img, x, y, g["glow"])
+
+
+def deco_star_weaver(img: Image.Image, pal: dict) -> None:
+    """Die Sternenweberin: hinter dem Medaillon greifen vier gegliederte Spinnenbeine nach oben und unten (die Gelenke leuchten);
+    als Spitze ein Knoten aus Sternenseide, in dem ein Stern hängt; unter der Leiste hängen an Fäden eingesponnene Kokons und
+    Sterne. (Die Sterne über der Oberkante folgen in post_star_weaver.)"""
+    g = {k: c(pal, k) for k in pal}
+    legs = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    _weaver_leg(legs, g, [(33.0, 12.0), (45.0, 1.5), (60.0, 7.0), (66.0, 12.5)], 2.1)
+    _weaver_leg(legs, g, [(37.0, 15.0), (56.0, 4.5), (75.0, 11.0), (80.0, 15.0)], 1.9)
+    _weaver_leg(legs, g, [(33.0, 32.0), (45.0, 42.5), (60.0, 37.0), (66.0, 31.5)], 2.1)
+    _weaver_leg(legs, g, [(37.0, 29.0), (56.0, 39.5), (75.0, 33.0), (80.0, 29.0)], 1.9)
+    _outline(legs, OUTLINE)
+    img.alpha_composite(legs)
+    # die Spitze: Fäden laufen von der Leiste zu einem Knoten, in dem ein Stern hängt
+    tip = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    tp = tip.load()
+    cx, cy = 236, 22
+    for (x0, y0) in ((230, 19), (230, 25), (230, 22)):
+        n = 12
+        for k in range(n + 1):
+            t = k / n
+            put(tp, tip, int(round(x0 + (cx - x0) * t)), int(round(y0 + (cy - y0) * t)), g["silk"] if k % 3 else g["silk_dark"])
+    for a in range(0, 360, 45):                                         # der Knoten: kurze Fäden ringsum
+        for r in (4, 5):
+            put(tp, tip, int(round(cx + math.cos(math.radians(a)) * r)), int(round(cy + math.sin(math.radians(a)) * r)), g["silk_dark"])
+    _weaver_star(tp, tip, cx, cy, 3, g)
+    _outline(tip, OUTLINE)
+    img.alpha_composite(tip)
+    # unter der Leiste: Fäden mit Kokons und Sternen
+    px = img.load()
+    bottom = BAR_Y + BAR_H + 2
+    hang = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    hp = hang.load()
+    for i, x0 in enumerate((92, 113, 139, 160, 184, 203, 221)):
+        if any(abs(x0 - (BAR_X + round(BAR_W * f))) < 6 for f in GEMS):
+            continue
+        length = 2 + round(hash01(x0, 941) * 5)
+        for k in range(length):
+            put(hp, hang, x0, bottom + 1 + k, g["silk"] if k % 2 == 0 else g["silk_dark"])
+        y = bottom + 1 + length
+        if i % 2 == 0:                                                  # ein Kokon
+            for dy, half in enumerate((0, 1, 1, 1, 0)):
+                for dx in range(-half, half + 1):
+                    put(hp, hang, x0 + dx, y + dy, g["silk"] if (dx + dy) % 2 == 0 else g["silk_dark"])
+        else:                                                           # ein Stern
+            _weaver_star(hp, hang, x0, y + 2, 2, g)
+    _outline(hang, OUTLINE)
+    hl = hang.load()
+    for y in range(FRAME_H):
+        for x in range(FRAME_W):
+            if hl[x, y][3] and y > bottom:
+                px[x, y] = hl[x, y]
+
+
+def post_star_weaver(img: Image.Image, pal: dict) -> None:
+    """Nach dem Rahmen: kleine Sterne funkeln über der Oberkante, dazwischen ein feiner Faden."""
+    g = {k: c(pal, k) for k in pal}
+    px = img.load()
+    top = BAR_Y - 3
+    for x0 in range(BAR_X + 40, BAR_X + BAR_W - 8, 19):
+        if any(abs(x0 - (BAR_X + round(BAR_W * f))) < 8 for f in GEMS) or hash01(x0, 951) < 0.3:
+            continue
+        y = top - 3 - round(hash01(x0, 953) * 6)
+        r = 2 if hash01(x0, 957) > 0.55 else 1
+        for (dx, dy) in [(k, 0) for k in range(-r - 1, r + 2)] + [(0, k) for k in range(-r - 1, r + 2)]:
+            if px[x0 + dx, y + dy][3] == 0:
+                put(px, img, x0 + dx, y + dy, OUTLINE)
+        _weaver_star(px, img, x0, y, r, g)
+
+
+# =============================================================================================
 # Der Steinhüter (seit 0.96)
 # =============================================================================================
 
@@ -2706,6 +2831,7 @@ BANNER_COLORS = {
     "keeper": dict(trim="#a8d2ff", trim_dark="#4e5a8a", fabric="#141428"),
     "sea_witch": dict(trim="#5ae8b8", trim_dark="#2e4a44", fabric="#06120f"),
     "soul_shepherd": dict(trim="#4fe0d0", trim_dark="#3a3644", fabric="#0a1012"),
+    "star_weaver": dict(trim="#9ad8ff", trim_dark="#2c3052", fabric="#070a1c"),
 }
 
 
@@ -2793,14 +2919,14 @@ def banner_cap(element: str) -> Image.Image:
 
 POST = {"schrolli": post_schrolli, "schrolli_true": post_schrolli, "schrolli_almighty": post_almighty,
         "world_eater": post_world_eater, "kraken": post_kraken, "keeper": post_keeper, "sea_witch": post_sea_witch,
-        "soul_shepherd": post_soul_shepherd}
+        "soul_shepherd": post_soul_shepherd, "star_weaver": post_star_weaver}
 BORDERS = {"world_eater": frame_border_stone, "keeper": frame_border_stone}
 
 
 DECOS = {"schrolli": deco_schrolli, "schrolli_true": deco_schrolli, "schrolli_almighty": deco_almighty,
          "world_eater": deco_world_eater, "anni": deco_anni, "anni2": deco_anni, "mystic": deco_mystic, "star": deco_star, "forge": deco_forge, "moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
          "water": deco_water, "kraken": deco_kraken, "keeper": deco_keeper, "sea_witch": deco_sea_witch,
-         "soul_shepherd": deco_soul_shepherd}
+         "soul_shepherd": deco_soul_shepherd, "star_weaver": deco_star_weaver}
 
 
 def frame(element: str, phases: tuple | None = None) -> Image.Image:
@@ -2940,6 +3066,13 @@ def fill_value(element: str, x: int, y: int) -> float:
         if hash01(x // 2, y // 2, 731) > 0.95:
             return 1.0
         return 0.5 + 0.32 * math.sin(tau * x / 48 + 2.0 * math.sin(tau * y / 12 + tau * x / 96)) + 0.12 * math.sin(tau * x / 24 - tau * y / 9)
+    if element == "star_weaver":
+        # ihr Netz: Nachthimmel mit Nebelschleiern, durchzogen von schrägen, leuchtenden Fäden, dazwischen Sterne
+        if hash01(x, y, 961) > 0.972:
+            return 1.0
+        if (x + 3 * y) % 23 == 0 or (x - 3 * y) % 29 == 0:
+            return 0.86
+        return 0.38 + 0.16 * math.sin(tau * x / 64 + 1.4 * math.sin(tau * y / 9 + tau * x / 128)) + 0.06 * math.sin(tau * x / 16)
     if element == "soul_shepherd":
         # Seelenfeuer: züngelnde Flammen, die nach oben dünner werden, dazwischen helle Funken
         tongue = 0.5 + 0.5 * math.sin(tau * x / 16 + 1.8 * math.sin(tau * x / 64) + 0.5 * math.sin(tau * y / 9 + tau * x / 32))
@@ -3130,14 +3263,15 @@ def portrait(element: str) -> Image.Image:
     mit dunkler Kontur (2 Pixel = 1 Pixel im Spiel), damit er sich vom Grund des Medaillons abhebt."""
     from entitygen.models import (asteria, boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water,
                                   glutschmied, kraken, miss_mystik, moth_queen, reef_colossus, shattered_king, anni_troll,
-                                  schrolli, sea_witch, soul_shepherd, stone_keeper, world_eater)
+                                  schrolli, sea_witch, soul_shepherd, star_weaver, stone_keeper, world_eater)
     from entitygen.paint import paint_model
     from entitygen.preview import render
     mod = {"fire": boss_fire, "ice": boss_ice, "lightning": boss_lightning, "nature": boss_nature, "earth": boss_earth,
            "water": boss_water, "shadow": boss_shadow, "void": shattered_king, "reef": reef_colossus, "moth": moth_queen,
            "forge": glutschmied, "star": asteria, "mystic": miss_mystik, "anni": anni_troll, "anni2": anni_troll,
            "schrolli": schrolli, "schrolli_true": schrolli, "schrolli_almighty": schrolli, "world_eater": world_eater,
-           "kraken": kraken, "keeper": stone_keeper, "sea_witch": sea_witch, "soul_shepherd": soul_shepherd}[element]
+           "kraken": kraken, "keeper": stone_keeper, "sea_witch": sea_witch, "soul_shepherd": soul_shepherd,
+           "star_weaver": star_weaver}[element]
     m = mod.build()
     m.pack()
     variant = "anni_troll_v2" if element == "anni2" else element if element.startswith("schrolli") else next(iter(mod.PALETTES))
@@ -3244,6 +3378,7 @@ def portrait(element: str) -> Image.Image:
             for child in bone.children:
                 strip_shepherd(child)
         strip_shepherd(m.root)
+    # die Sternenweberin (seit 0.99) ganz, schräg von oben: die acht Beine ringsum, der Hinterleib voller Sternennebel
     if element in ("anni", "anni2"):
         # Kopf mit Grinsen, Bildschirmauge, Ohren und Haarschopf (ohne Leib, Arme und Hammer)
         def strip_anni(bone):
@@ -3256,18 +3391,18 @@ def portrait(element: str) -> Image.Image:
                 strip_anni(child)
         strip_anni(m.root)
     zoom = {"kraken": 1.5, "schrolli": 1.0, "schrolli_true": 1.0, "schrolli_almighty": 1.0, "world_eater": 1.35, "nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86, "star": 0.92, "mystic": 0.95,
-            "anni": 1.0, "anni2": 1.0, "keeper": 0.8, "sea_witch": 1.5, "soul_shepherd": 1.12}.get(element, 1.2)
+            "anni": 1.0, "anni2": 1.0, "keeper": 0.8, "sea_witch": 1.5, "soul_shepherd": 1.12, "star_weaver": 0.95}.get(element, 1.2)
     yaw = {"kraken": -20, "schrolli": -22, "schrolli_true": -22, "schrolli_almighty": -22, "world_eater": -6, "water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14, "star": -24, "mystic": -22, "anni": -24,
-           "anni2": -24, "keeper": -20, "sea_witch": -22, "soul_shepherd": -14}.get(element, -42)
-    pitch = {"kraken": -18, "schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2, "keeper": -5, "sea_witch": 2, "soul_shepherd": 4}.get(element, 6)
+           "anni2": -24, "keeper": -20, "sea_witch": -22, "soul_shepherd": -14, "star_weaver": -20}.get(element, -42)
+    pitch = {"kraken": -18, "schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2, "keeper": -5, "sea_witch": 2, "soul_shepherd": 4, "star_weaver": 48}.get(element, 6)
     big = render(m, tex, glow, yaw, pitch, 448, pose=getattr(mod, "FOLD_POSE", None), background=(0, 0, 0, 0), zoom=zoom,
-                 focus=["body"] if element in ("reef", "kraken") else ["helm"] if element == "star" else ["head"])
+                 focus=["body"] if element in ("reef", "kraken", "star_weaver") else ["helm"] if element == "star" else ["head"])
     img = big.resize((64, 64), Image.LANCZOS)
     img = ImageEnhance.Brightness(img).enhance({"kraken": 1.85, "fire": 1.9, "earth": 1.5, "lightning": 1.9, "nature": 1.6, "shadow": 2.4,
                                                  "void": 1.0, "reef": 1.35, "moth": 1.25, "forge": 1.65, "star": 1.15, "mystic": 1.2,
                                                  "anni": 1.45, "anni2": 1.45, "schrolli": 1.5, "schrolli_true": 1.5,
                                                  "schrolli_almighty": 1.45, "world_eater": 2.0, "keeper": 1.3, "sea_witch": 1.35,
-                                                 "soul_shepherd": 1.7}.get(element, 1.4))
+                                                 "soul_shepherd": 1.7, "star_weaver": 2.3}.get(element, 1.4))
     img = ImageEnhance.Color(img).enhance(1.15)
     img = ImageEnhance.Contrast(img).enhance(1.12)
     if element == "schrolli_almighty":

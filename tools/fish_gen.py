@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Die Fische der Biome: 1544 Arten in zwei Wellen. Die erste (seit 0.81, 916 Arten) gibt jedem eigenen Biom der Mod zwölf, jedem
+Die Fische der Biome. Seit 0.99 sind es zusammen mit den 84 von Hand benannten Arten 8369 – die meisten im Urmeer (die sechste
+Welle, siehe WAVE6). Davor: 1544 Arten in zwei Wellen. Die erste (seit 0.81, 916 Arten) gibt jedem eigenen Biom der Mod zwölf, jedem
 Biom von Minecraft sechs oder sieben; die zweite (seit 0.83, 628 Arten) jedem eigenen Biom acht mehr, jedem von Minecraft vier
 oder fünf – mit neuen Gestalten (Dorsch, Hering, Schmerle, Sonnenbarsch, Rotfeuerfisch, Doktorfisch, Lippfisch, Drückerfisch,
 Hammerhai, Sägefisch, Sterngucker, Seeschlange, Anemonenfisch, Knurrhahn, Seeigel, Muschel, Seegurke, Fadenschnecke,
@@ -25,6 +26,7 @@ Aufruf:
 from __future__ import annotations
 
 import colorsys
+import copy
 import hashlib
 import os
 import re
@@ -314,6 +316,35 @@ LEGEND_TITLES = [("König", "King"), ("Kaiser", "Emperor"), ("Fürst", "Lord"), 
                  ("Ahn", "Elder"), ("Titan", "Titan"), ("Riese", "Giant"), ("Gebieter", "Overlord"), ("Monarch", "Monarch"),
                  ("Wächter", "Sentinel"), ("Koloss", "Colossus"), ("Urahn", "Ancestor"), ("Königin", "Queen"), ("Kaiserin", "Empress"),
                  ("Herrin", "Lady"), ("Fürstin", "Princess"), ("Matriarchin", "Matriarch"), ("Patriarch", "Patriarch"), ("Regent", "Regent")]
+
+# Die sechste Welle (seit 0.99): zusammen 8369 Arten, die meisten im Urmeer. Jedes eigene Biom der Mod bekommt dreißig weitere,
+# jedes Biom von Minecraft zwanzig; was bis 8369 fehlt, teilen sich die acht Biome des Urmeers (je 478 oder 479 – dort leben
+# dann 4146 Arten, fast die Hälfte aller). Sie bekommen dafür zwölf neue Vorsilben je Biom. Die Farben
+# streuen weiter (Farbton bis ±30°), so sehen auch die vielen Fische eines Bioms verschieden aus; wo alle Wirkungen ohne die
+# Dauer vergeben sind, unterscheidet sie die Dauer. Ganz hinten berechnet: Alle älteren Arten bleiben, wie sie waren.
+TOTAL = 8369
+NAMED = 84
+WAVE6_OWN = 30
+WAVE6_VANILLA = 20
+SPLIT6 = (0.36, 0.30, 0.21, 0.13)        # gewöhnlich, ungewöhnlich, selten, mystisch (keine neuen Legenden)
+PREFIXES6 = {
+    "kingdomsatwar:urmeer_deep": "Blauwasser/Bluewater Ozean/Ocean Fernsee/Farsea Horizont/Horizon Wander/Roaming Wellenkamm/Wavecrest "
+                                 "Gischt/Spray Salzwind/Saltwind Sturmflut/Stormtide Hochflut/Floodtide Meeres/Marine Wolkenschatten/Cloudshade",
+    "kingdomsatwar:urmeer_reef": "Riff/Reef Lagunenblau/Lagoonblue Sonnenstrahl/Sunbeam Glitzer/Glitter Seegras/Seagrass Korallen/Coral "
+                                 "Fächerriff/Fanreef Wellenspiel/Ripple Tropen/Tropic Pfauen/Peacock Kristallwasser/Clearwater Leuchtriff/Brightreef",
+    "kingdomsatwar:urmeer_trench": "Abgrund/Abyss Dunkel/Dark Schwarz/Black Grabentief/Trenchdeep Stille/Silent Eis/Ice Schatten/Shadow "
+                                   "Lichtlos/Lightless Mitternacht/Midnight Tiefdruck/Deeppress Pech/Pitch Urgraben/Primetrench",
+    "kingdomsatwar:urmeer_isles": "Küsten/Coast Sturm/Storm Riffkamm/Reefcrest Leuchtturm/Lighthouse Sandbank/Sandbar Muschelstrand/Shellbeach "
+                                  "Seewind/Seawind Flut/Flood Ebbe/Ebb Wind/Wind Blitz/Bolt Donner/Thunder",
+    "kingdomsatwar:urmeer_kelp_forest": "Tang/Kelp Waldgrün/Woodgreen Schlingen/Tangle Moos/Moss Laub/Leaf Ranken/Vine Dschungel/Jungle "
+                                        "Schattengrün/Shadegreen Wogenwald/Surgewood Grünschimmer/Greenshimmer Blattwerk/Foliage Farn/Fern",
+    "kingdomsatwar:urmeer_coral_garden": "Rosa/Pink Korallenrot/Coralred Purpur/Purple Lachsrot/Salmonred Blumen/Flower Gärtner/Gardener "
+                                         "Pfirsich/Peach Lavendel/Lavender Orchideen/Orchid Malven/Mallow Kirsch/Cherry Seerosen/Waterlily",
+    "kingdomsatwar:urmeer_pearl_grounds": "Silber/Silver Mond/Moon Kristall/Crystal Diamant/Diamond Spiegel/Mirror Schnee/Snow "
+                                          "Glitzersand/Glittersand Edelstein/Gem Prisma/Prism Mondlicht/Moonlight Elfenbein/Ivory Tau/Dew",
+    "kingdomsatwar:urmeer_glow_depths": "Glüh/Glow Leucht/Luminous Strahlen/Radiant Glimmer/Glimmer Funkel/Twinkle Polarlicht/Aurora "
+                                        "Glimm/Glim Laternen/Lantern Nebel/Nebula Sternen/Star Kometen/Comet Geister/Ghost",
+}
 
 # =============================================================================================
 # Die Biome
@@ -860,12 +891,20 @@ def existing_signatures() -> set:
     out = set()
     for m in re.finditer(r'=\s*add\(b\("(\w+)"(.*?)\)\);|^\s*[A-Z_]+\(b\("(\w+)"(.*?)\)\)[,;]', src, re.S | re.M):
         body = (m.group(2) or m.group(4) or "") + ")"       # die Klammer der letzten Wirkung gehört zum Ende der Konstante
-        eff = [(e.lower(), int(a)) for e, a in re.findall(r'\.eat\(MobEffects\.(\w+),\s*\d+,\s*(\d+)\)', body)]
+        timed = [(e.lower(), int(d), int(a)) for e, d, a in re.findall(r'\.eat\(MobEffects\.(\w+),\s*(\d+),\s*(\d+)\)', body)]
+        eff = [(e, a) for (e, _, a) in timed]
         special = re.search(r'\.special\(Special\.(\w+)\)', body)
-        key = signature(eff, special.group(1).lower() if special else "none")
+        name = special.group(1).lower() if special else "none"
+        key = signature(eff, name)
         if eff or special:
             out.add(key)
+            out.add(full_signature(timed, name))
     return out
+
+
+def full_signature(effects, special: str) -> frozenset:
+    """Die Wirkung samt Dauer (so vergleicht sie auch der Test im Spiel): Wirkung, Stufe, Sekunden und das Besondere."""
+    return frozenset([(e, a, d) for (e, d, a) in effects] + [("special:" + special, 0, 0)])
 
 
 def signature(effects, special: str) -> frozenset:
@@ -1049,6 +1088,58 @@ def pick_forms3(biome: Biome, rng: Rng, taken: set, n: int) -> list:
     return [(biome.media, form) for form in order[:n]]
 
 
+def pick_forms6(biome: Biome, rng: Rng, n: int) -> list:
+    """Die sechste Welle: alle Gestalten des Gewässers reihum (gemischt), in Biomen mit Lava oder Leere anteilig dort."""
+    if biome.media == "VW" or len(biome.media) == 1:
+        groups = [(biome.media, n, biome.pool)]
+    elif biome.media == "WL":
+        w = (n * 3 + 2) // 5
+        groups = [("W", w, biome.pool if biome.pool != "lava" else "ash"), ("L", n - w, "lava")]
+    elif biome.media == "WV":
+        w = (n * 3 + 2) // 5
+        groups = [("W", w, biome.pool), ("V", n - w, "void")]
+    elif biome.media == "WLV":
+        third = n // 3
+        groups = [("W", n - 2 * third, "shadow"), ("L", third, "lava"), ("V", third, "void")]
+    else:
+        raise ValueError(biome.media)
+    out = []
+    for medium, count, pool in groups:
+        forms = []
+        names = POOLS[pool].split() + POOLS2[pool].split()
+        if biome.media == "WLV":
+            names = POOLS["abyss"].split() + POOLS2["abyss"].split() + names
+        for form in names:
+            if form not in forms:
+                forms.append(form)
+        order = []
+        while len(order) < count:
+            order += rng.shuffled(forms)
+        out += [(medium, form) for form in order[:count]]
+    return out
+
+
+def split6(n: int) -> tuple:
+    counts = [max(1, int(round(n * p))) for p in SPLIT6]
+    counts[0] += n - sum(counts)
+    return tuple(counts)
+
+
+def wave6_counts() -> dict:
+    """Wie viele Arten die sechste Welle je Biom bringt (zusammen genau so viele, dass es TOTAL sind)."""
+    old = 916 + 628 + 80 + URMEER_EXTRA * len(biomes(BIOME_TABLE_URMEER)) + 38 * len(biomes(BIOME_TABLE_URMEER2)) \
+        + len(biomes()) + URMEER_LEGENDS * (len(biomes(BIOME_TABLE_URMEER)) + len(biomes(BIOME_TABLE_URMEER2)))
+    counts = {}
+    for biome in biomes():
+        counts[biome.id] = WAVE6_OWN if biome.own else WAVE6_VANILLA
+    sea = biomes(BIOME_TABLE_URMEER) + biomes(BIOME_TABLE_URMEER2)
+    rest = TOTAL - NAMED - old - sum(counts.values())
+    for i, biome in enumerate(sea):
+        counts[biome.id] = rest // len(sea) + (1 if i < rest % len(sea) else 0)
+    assert sum(counts.values()) == TOTAL - NAMED - old
+    return counts
+
+
 def clashes(prefix: str, noun: str) -> bool:
     """Stoßen an der Fuge gleiche Selbstlaute („Pandaaal“) oder drei gleiche Mitlaute („Blatttrilobit“) zusammen?"""
     a, b = prefix.lower(), noun.lower()
@@ -1064,7 +1155,7 @@ def shares(a: str, b: str) -> bool:
     return any(a[i:i + n] in b for i in range(0, max(1, len(a) - n + 1))) if len(a) >= n else a in b
 
 
-def assign_effects(sp: Species, biome: Biome, rng: Rng, used: set) -> None:
+def assign_effects(sp: Species, biome: Biome, rng: Rng, used: set, relaxed: bool = False) -> None:
     good, bad = THEMES[biome.theme]
     good, bad = good.split(), bad.split()
     others = [e for e in GOOD if e not in good]
@@ -1162,9 +1253,13 @@ def assign_effects(sp: Species, biome: Biome, rng: Rng, used: set) -> None:
         if "L" in sp.media and all(e[0] != "fire_resistance" for e in effects) and rng.chance(0.5):
             effects.append(("fire_resistance", 20 + 10 * r, 0))
         key = signature([(e, a) for (e, _, a) in effects], special)
+        full = full_signature(effects, special)
         if key in used:
-            continue
+            # die sechste Welle (seit 0.99): Sind die Wirkungen ohne ihre Dauer alle vergeben, unterscheidet die Dauer
+            if not relaxed or attempt < 120 or full in used:
+                continue
         used.add(key)
+        used.add(full)
         sp.effects = effects
         sp.special = special
         return
@@ -1701,7 +1796,8 @@ def note_legend(sp: Species, rng: Rng) -> tuple:
 # Alles zusammen
 # =============================================================================================
 
-def make(biome: Biome, rng: Rng, k: int, medium: str, form: str, rarity: str, prefixes: list, used: tuple, images: set, wave: int) -> Species:
+def make(biome: Biome, rng: Rng, k: int, medium: str, form: str, rarity: str, prefixes: list, used: tuple, images: set, wave: int,
+         spread: bool = False) -> Species:
     """Eine Art: Name, Größe, Drill, Zeit und Wetter, Wirkung, Bild und Notiz."""
     used_de, used_en, used_ids, used_sig = used
     sp = Species()
@@ -1740,9 +1836,16 @@ def make(biome: Biome, rng: Rng, k: int, medium: str, form: str, rarity: str, pr
                 sp.weather = "RAIN"
     # eigener Zufall je Art: Wie oft hier gewürfelt wird, hängt davon ab, welche Wirkungen schon vergeben sind –
     # das darf die übrigen Eigenschaften (und die Arten danach) nicht verschieben
-    assign_effects(sp, biome, Rng("effects:" + sp.id), used_sig)
+    assign_effects(sp, biome, Rng("effects:" + sp.id), used_sig, relaxed=spread)
+    look = biome
+    if spread:
+        # die sechste Welle: eigene Farben je Art (Farbton, Sättigung, Helligkeit gestreut)
+        tint = Rng("tint:" + sp.id)
+        dh, fs, fv = tint.uni(-30.0, 30.0), tint.uni(0.85, 1.2), tint.uni(0.88, 1.12)
+        look = copy.copy(biome)
+        look.cols = [shift(c, dh, fs, fv) for c in biome.cols]
     for attempt in range(8):
-        img = paint(sp, biome, Rng("paint:%s:%d" % (sp.id, attempt)))
+        img = paint(sp, look, Rng("paint:%s:%d" % (sp.id, attempt)))
         digest = hashlib.md5(img.tobytes()).hexdigest()
         if digest not in images:
             images.add(digest)
@@ -1844,13 +1947,26 @@ def generate() -> list:
         rng = Rng("legend:" + biome.id)
         for k, (medium, form) in enumerate(legend_forms(biome, rng, URMEER_LEGENDS)):
             out.append(make(biome, rng, k, medium, form, "LEGENDARY", biome.prefixes, used, images, 3))
+    # die sechste Welle (seit 0.99): zusammen TOTAL Arten, die meisten im Urmeer – ganz hinten, die älteren bleiben, wie sie waren
+    counts = wave6_counts()
+    for biome in biomes() + biomes(BIOME_TABLE_URMEER) + biomes(BIOME_TABLE_URMEER2):
+        n = counts[biome.id]
+        rng = Rng("fish6:" + biome.id)
+        forms = pick_forms6(biome, rng, n)
+        rarity_of = rarities(forms, split6(n), rng)
+        extra = []
+        for pair in PREFIXES6.get(biome.id, "").split():
+            de, en = pair.split("/")
+            extra.append((de, en.replace("_", " ")))
+        prefixes = rng.shuffled(biome.prefixes + extra)
+        for k, (medium, form) in enumerate(forms):
+            out.append(make(biome, rng, k, medium, form, rarity_of[k], prefixes, used, images, 2, spread=True))
     return out
 
 
 def check(species: list) -> None:
     legends = len(biomes()) + URMEER_LEGENDS * (len(biomes(BIOME_TABLE_URMEER)) + len(biomes(BIOME_TABLE_URMEER2)))
-    assert len(species) == 916 + 628 + 80 + URMEER_EXTRA * len(biomes(BIOME_TABLE_URMEER)) + legends + 38 * len(biomes(BIOME_TABLE_URMEER2)), \
-        len(species)
+    assert len(species) == TOTAL - NAMED, len(species)
     assert sum(1 for s in species if s.rarity == "LEGENDARY") == legends
     # in jedem Biom jede Seltenheit
     by_biome = {}
@@ -1863,7 +1979,7 @@ def check(species: list) -> None:
         if s.rarity == "LEGENDARY":
             assert len(s.effects) >= 3 and all(e[0] in GOOD for e in s.effects), s.id
             assert 0.85 <= s.difficulty <= 0.93, (s.id, s.difficulty)
-    assert len(existing_signatures()) >= 70, len(existing_signatures())    # 80 Arten mit Wirkung; ohne die Dauer gleichen sich einige
+    assert len(existing_signatures()) >= 140, len(existing_signatures())    # 80 Arten mit Wirkung; ohne die Dauer gleichen sich einige
     assert len({s.id for s in species}) == len(species)
     assert len({s.de for s in species}) == len(species)
     assert len({s.en for s in species}) == len(species)

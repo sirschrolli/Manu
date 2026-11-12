@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "kingdomsatwar:block/star_web",
+    "layer1": "kingdomsatwar:block/star_web_emissive"
+  }
+}

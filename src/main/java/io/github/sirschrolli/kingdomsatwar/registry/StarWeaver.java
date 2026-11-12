@@ -45,7 +45,7 @@ public final class StarWeaver {
             UnaryOperator.identity(), VoidBlocks.TAB);
     /** Sternennetz: Spinnweben aus Sternenlicht, die festhalten (gespuckt zerfallen sie nach einer Weile). */
     public static final DeferredBlock<StarWebBlock> STAR_WEB = ModBlocks.blockWithItem("star_web", StarWebBlock::new,
-            p -> p.mapColor(MapColor.WOOL).forceSolidOn().noCollision().requiresCorrectToolForDrops().strength(4.0f).sound(SoundType.COBWEB)
+            p -> p.mapColor(MapColor.WOOL).forceSolidOn().noCollision().strength(2.0f).sound(SoundType.COBWEB)
                     .lightLevel(s -> 5).pushReaction(PushReaction.POPPED),
             UnaryOperator.identity(), VoidBlocks.TAB);
     /** Sternenkokon: was sich im Netz verfing, eingesponnen; zerschlagen gibt er frei, was darin steckt. */

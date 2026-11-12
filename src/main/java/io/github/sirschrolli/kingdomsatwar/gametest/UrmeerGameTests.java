@@ -55,27 +55,28 @@ final class UrmeerGameTests {
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> URMEER_AQUAMARINE =
             ModGameTests.TEST_FUNCTIONS.register("urmeer_aquamarine", () -> UrmeerGameTests::aquamarine);
 
-    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> URMEER_NO_LAVA =
-            ModGameTests.TEST_FUNCTIONS.register("urmeer_no_lava", () -> UrmeerGameTests::noLava);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> URMEER_RULES =
+            ModGameTests.TEST_FUNCTIONS.register("urmeer_rules", () -> UrmeerGameTests::rules);
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : java.util.List.of(URMEER_WORLD, URMEER_TIDE_GATE, URMEER_AQUAMARINE, URMEER_NO_LAVA)) {
+        for (var test : java.util.List.of(URMEER_WORLD, URMEER_TIDE_GATE, URMEER_AQUAMARINE, URMEER_RULES)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 400, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
     }
 
     /**
-     * Keine Lava im Urmeer (seit 0.99): Dort erlischt ein ausgegossener Eimer Lava (der Eimer bleibt voll), anderswo fließt sie
-     * wie gewohnt. Gibt es das Urmeer auf dem Testserver nicht, wird nur die Regel und das Ausgießen in der Oberwelt geprüft.
+     * Die Regeln des Urmeers (seit 0.99): Dort erlischt ein ausgegossener Eimer Lava (der Eimer bleibt voll), anderswo fließt sie
+     * wie gewohnt; ein Schwamm saugt sich dort voll, ohne Wasser wegzunehmen, anderswo legt er trocken wie gewohnt. Gibt es das
+     * Urmeer auf dem Testserver nicht, werden die Regel, das Vollsaugen und die Oberwelt geprüft.
      */
-    private static void noLava(GameTestHelper helper) {
+    private static void rules(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        helper.assertTrue(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerLava.forbidden(UrmeerDimension.LEVEL), "Lava ist im Urmeer erlaubt");
-        helper.assertFalse(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerLava.forbidden(Level.OVERWORLD), "Lava ist in der Oberwelt verboten");
-        helper.assertTrue(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerLava.holdsLava(new net.minecraft.world.item.ItemStack(
+        helper.assertTrue(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerRules.forbidden(UrmeerDimension.LEVEL), "Lava ist im Urmeer erlaubt");
+        helper.assertFalse(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerRules.forbidden(Level.OVERWORLD), "Lava ist in der Oberwelt verboten");
+        helper.assertTrue(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerRules.holdsLava(new net.minecraft.world.item.ItemStack(
                 net.minecraft.world.item.Items.LAVA_BUCKET)), "Ein Lavaeimer enthält keine Lava");
-        helper.assertFalse(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerLava.holdsLava(new net.minecraft.world.item.ItemStack(
+        helper.assertFalse(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerRules.holdsLava(new net.minecraft.world.item.ItemStack(
                 net.minecraft.world.item.Items.WATER_BUCKET)), "Ein Wassereimer enthält Lava");
         var bucket = (net.minecraft.world.item.BucketItem) net.minecraft.world.item.Items.LAVA_BUCKET;
         BlockPos here = helper.absolutePos(new BlockPos(4, 2, 4));
@@ -83,6 +84,22 @@ final class UrmeerGameTests {
                 "In der Oberwelt lässt sich keine Lava mehr ausgießen");
         helper.assertTrue(level.getFluidState(here).is(net.minecraft.tags.FluidTags.LAVA), "Keine Lava in der Oberwelt");
         level.setBlock(here, Blocks.AIR.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
+        // der Schwamm: in der Oberwelt legt er trocken; nach den Regeln des Urmeers saugt er sich voll, das Wasser bleibt
+        BlockPos pool = helper.absolutePos(new BlockPos(2, 1, 6));
+        level.setBlock(pool, Blocks.WATER.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
+        level.setBlock(pool.east(), Blocks.SPONGE.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
+        helper.assertTrue(level.getBlockState(pool.east()).is(Blocks.WET_SPONGE) && !level.getFluidState(pool).is(net.minecraft.tags.FluidTags.WATER),
+                "In der Oberwelt legt der Schwamm nicht mehr trocken");
+        level.setBlock(pool, Blocks.AIR.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
+        level.setBlock(pool.east(), Blocks.SPONGE.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
+        level.setBlock(pool, Blocks.WATER.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+        helper.assertTrue(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerRules.soak(level, pool.east()), "Der Schwamm saugt sich nicht voll");
+        helper.assertTrue(level.getBlockState(pool.east()).is(Blocks.WET_SPONGE) && level.getFluidState(pool).is(net.minecraft.tags.FluidTags.WATER),
+                "Der Schwamm nimmt im Urmeer Wasser weg");
+        level.setBlock(pool.east(), Blocks.SPONGE.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+        level.setBlock(pool, Blocks.AIR.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+        helper.assertFalse(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerRules.soak(level, pool.east()), "Der Schwamm saugt sich ohne Wasser voll");
+        level.setBlock(pool.east(), Blocks.AIR.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
         ServerLevel sea = level.getServer().getLevel(UrmeerDimension.LEVEL);
         if (sea != null) {
             BlockPos up = new BlockPos(0, UrmeerTerrain.SEA_LEVEL + 40, 0);

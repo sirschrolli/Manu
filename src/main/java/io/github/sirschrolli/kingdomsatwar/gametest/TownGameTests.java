@@ -900,7 +900,7 @@ final class TownGameTests {
         helper.assertValueEqual(Trading.trade(owner, merchant.getId(), torch), Trading.Result.CLOSED, "Handel im geschlossenen Laden");
         // das Handelsfenster übers Netz
         RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(io.netty.buffer.Unpooled.buffer(), level.registryAccess());
-        OpenTradePayload payload = new OpenTradePayload(merchant.getId(), merchant.skinTexture(), merchant.professionKey(), merchant.traderName(),
+        OpenTradePayload payload = new OpenTradePayload(merchant.getId(), merchant.skinTexture(), merchant.face(), merchant.professionKey(), merchant.traderName(),
                 Trading.offers(owner, merchant), 0, remaining, 0, false, limit, 180);
         OpenTradePayload.STREAM_CODEC.encode(buf, payload);
         OpenTradePayload copy = OpenTradePayload.STREAM_CODEC.decode(buf);

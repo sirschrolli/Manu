@@ -8,7 +8,8 @@
     "EnchantmentHelperMixin",
     "FishingHookMixin",
     "RangedAttributeMixin",
-    "ServerPlayerMixin"
+    "ServerPlayerMixin",
+    "SpongeBlockMixin"
   ],
   "client": [
     "client.SkullBlockRendererMixin"

@@ -313,6 +313,11 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockTags.DRAGON_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.SeaWitch.WITCH_CAULDRON);
         add(BlockTags.WITHER_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.SeaWitch.WITCH_CAULDRON);
         add(BlockTags.DRAGON_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.SoulShepherd.SOUL_BELL);
+        // das Sternennetz (0.99): das Gelege übersteht alles; Netze lassen sich mit dem Schwert schneller zerschneiden
+        add(BlockTags.DRAGON_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.WEAVER_NEST);
+        add(BlockTags.WITHER_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.WEAVER_NEST);
+        add(BlockTags.SWORD_EFFICIENT, io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_WEB, io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_COCOON);
+        add(BlockTags.WOOL, io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_SILK, io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_WEAVE);
         add(BlockTags.WITHER_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.SoulShepherd.SOUL_BELL);
         add(BlockTags.WITHER_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.GLUT_ANVIL);
         add(BlockTags.DRAGON_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STARSTONE);

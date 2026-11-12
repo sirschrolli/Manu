@@ -453,6 +453,17 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.SHADOW_ESSENCE.get(), 4, 8))
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.MOONSILVER_INGOT.get(), 2, 5))
                 .withPool(drop(ModItems.GOLD_COIN.get(), 4, 9)));
+        // die Sternenweberin (0.99): der Sternenbogen, ein Herzkristall, Himmelseisen, Leerensplitter, Sternenseide und Schätze;
+        // ihre Brut, ihre Netzballen und Pfeile hinterlassen nichts
+        this.add(ModEntities.STAR_WEAVER.get(), LootTable.lootTable()
+                .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_BOW.get(), 1))
+                .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 1))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_INGOT.get(), 4, 8))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_SHARD.get(), 6, 12))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_SILK.get(), 6, 12))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_CRYSTAL.get(), 2, 4))
+                .withPool(drop(ModItems.GEMSTONE.get(), 2, 4))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 4, 9)));
         // Malleus, der Glutschmied: der Glutspeer, ein Herzkristall, Glutklumpen, Netheritschrott und Schätze; seine
         // Glutklumpen zerplatzen ohne Beute
         this.add(ModEntities.GLUTSCHMIED.get(), LootTable.lootTable()

@@ -177,12 +177,12 @@ final class FishingGameTests {
             FishSpecies twin = effects.put(signature.toString(), species);
             helper.assertTrue(twin == null, "Zwei Fische wirken gleich: " + id + " und " + (twin == null ? "" : twin.id()));
         }
-        helper.assertTrue(FishSpecies.count() == 2053 && FishSpecies.NAMED == 84 && custom == 2049 && FishSpecies.legends().size() == 15,
+        helper.assertTrue(FishSpecies.count() == 8369 && FishSpecies.NAMED == 84 && custom == 8365 && FishSpecies.legends().size() == 15,
                 "Zahl der Arten: " + FishSpecies.count() + " / " + FishSpecies.NAMED + " / " + custom + " / " + FishSpecies.legends().size());
 
-        // jedes Biom hat eigene Arten: die Biome der Mod je einundzwanzig, die von Minecraft elf oder dreizehn (seit 0.83 zwei Wellen,
-        // seit 0.90 dazu die Legende des Bioms), die des Urmeers vierzig – nur die Kampfarenen und das leere Nichts nicht (dort angelt
-        // niemand)
+        // jedes Biom hat eigene Arten: die Biome der Mod je einundfünfzig, die von Minecraft einunddreißig oder dreiunddreißig (seit
+        // 0.83 zwei Wellen, seit 0.90 dazu die Legende des Bioms, seit 0.99 dreißig oder zwanzig mehr), die des Urmeers die meisten
+        // (518 oder 519) – nur die Kampfarenen und das leere Nichts nicht (dort angelt niemand)
         java.util.Set<String> arenas = java.util.Set.of("arcane_sphere", "creation", "ember_forge", "error_space", "moon_stage", "star_canopy",
                 "throne_realm", "world_maw");
         java.util.Set<String> known = new java.util.HashSet<>();
@@ -191,10 +191,11 @@ final class FishingGameTests {
             known.add(biome.toString());
             List<FishSpecies> local = FishSpecies.ofBiome(biome.toString());
             if (biome.getNamespace().equals(KingdomsAtWar.MODID)) {
-                int expected = arenas.contains(biome.getPath()) ? 0 : biome.getPath().startsWith("urmeer_") ? 40 : 21;
-                helper.assertTrue(local.size() == expected, "Arten im Biom " + biome + ": " + local.size());
+                int expected = arenas.contains(biome.getPath()) ? 0 : biome.getPath().startsWith("urmeer_") ? 518 : 51;
+                helper.assertTrue(local.size() == expected || biome.getPath().startsWith("urmeer_") && local.size() == expected + 1,
+                        "Arten im Biom " + biome + ": " + local.size());
             } else if (biome.getNamespace().equals("minecraft")) {
-                helper.assertTrue(biome.getPath().equals("the_void") ? local.isEmpty() : local.size() == 11 || local.size() == 13,
+                helper.assertTrue(biome.getPath().equals("the_void") ? local.isEmpty() : local.size() == 31 || local.size() == 33,
                         "Arten im Biom " + biome + ": " + local.size());
             }
             // in jedem Biom gibt es jede Seltenheit: Gewöhnliches, mindestens zwei mystische Fänge (einen aus jeder Welle) und die
@@ -228,7 +229,8 @@ final class FishingGameTests {
             }
         }
         KingdomsAtWar.LOGGER.info("Fang in der Ebene: {} von 4000 aus den {} eigenen Arten", localCatch, seen.size());
-        helper.assertTrue(localCatch > 2000 && localCatch < 3400 && seen.size() == 13, "Fang in der Ebene: " + localCatch + " eigene, " + seen.size() + " Arten");
+        // seit 0.99 leben in der Ebene dreiunddreißig eigene Arten: Sie stellen den größten Teil des Fangs, fast alle zeigen sich
+        helper.assertTrue(localCatch > 2400 && localCatch < 3900 && seen.size() >= 26, "Fang in der Ebene: " + localCatch + " eigene, " + seen.size() + " Arten");
         // in der Lava der Aschefelder nur Lavafische, im Wasser dort keine
         for (Medium medium : new Medium[] {Medium.WATER, Medium.LAVA}) {
             FishSpecies.Spot ash = new FishSpecies.Spot(EnumSet.noneOf(Habitat.class), "kingdomsatwar:ash_fields", medium);
@@ -347,7 +349,7 @@ final class FishingGameTests {
      * und hält oder lässt los, je nachdem, wo die Zone zum Stehen käme.
      */
     private static int[] play(FishSpecies species, long seed, float delay, boolean idle) {
-        FishFight fight = new FishFight(species.behavior(), species.difficulty(), 0.0f, false, RandomSource.create(seed));
+        FishFight fight = new FishFight(species, 0.0f, false, RandomSource.create(seed));
         ArrayDeque<float[]> seen = new ArrayDeque<>();
         int lag = Math.round(delay / FishFight.STEP);
         boolean held = false;
@@ -377,7 +379,7 @@ final class FishingGameTests {
      * Stehen käme.
      */
     private static int[] tap(FishSpecies species, long seed, float delay, float gap) {
-        FishFight fight = new FishFight(species.behavior(), species.difficulty(), 0.0f, false, RandomSource.create(seed));
+        FishFight fight = new FishFight(species, 0.0f, false, RandomSource.create(seed));
         ArrayDeque<float[]> seen = new ArrayDeque<>();
         int lag = Math.round(delay / FishFight.STEP);
         int wait = 0;
@@ -405,9 +407,12 @@ final class FishingGameTests {
     private static void fight(GameTestHelper helper) {
         StringBuilder table = new StringBuilder();
         List<FishSpecies> all = FishSpecies.values();
+        // alle von Hand benannten Arten und eine Stichprobe der Biome (gut 260; der Drill hängt nur an Verhalten, Schwierigkeit und
+        // Seltenheit)
+        int every = Math.max(8, (all.size() - FishSpecies.NAMED) / 260);
+        List<String> problems = new java.util.ArrayList<>();
         for (int n = 0; n < all.size(); n++) {
-            // alle von Hand benannten Arten und jede achte der Biome (der Drill hängt nur an Verhalten und Schwierigkeit)
-            if (n >= FishSpecies.NAMED && n % 8 != 0) {
+            if (n >= FishSpecies.NAMED && n % every != 0) {
                 continue;
             }
             FishSpecies species = all.get(n);
@@ -426,10 +431,12 @@ final class FishingGameTests {
                     fastest = Math.min(fastest, result[2]);
                 }
             }
-            table.append(String.format("%n  %-18s %-9s %.2f  %2d/%d  perfekt %2d", species.id(), species.behavior(), species.difficulty(), wins, runs, perfect));
+            table.append(String.format("%n  %-24s %-9s %-9s %.2f  %2d/%d  perfekt %2d", species.id(), species.rarity(), species.behavior(),
+                    species.difficulty(), wins, runs, perfect));
+            boolean rare = species.rarity().ordinal() >= FishSpecies.Rarity.RARE.ordinal();
             // kein Fang geht schneller, als der Server ihn glaubt
-            if (wins > 0) {
-                helper.assertTrue(fastest / 6 >= FishFight.minTicks(species.difficulty()), "Fang schneller als die Mindestzeit: " + species.id());
+            if (wins > 0 && fastest / 6 < FishFight.minTicks(species.difficulty())) {
+                problems.add("Fang schneller als die Mindestzeit: " + species.id());
             }
             // nur mit Klicks (höchstens sechs in der Sekunde) geht es auch
             if (species.difficulty() <= 0.4f) {
@@ -438,17 +445,58 @@ final class FishingGameTests {
                     taps += tap(species, 2000 + seed, 0.2f, 0.16f)[0] == 1 ? 1 : 0;
                 }
                 table.append(String.format("  geklickt %2d/12", taps));
-                helper.assertTrue(taps >= 10, "Nur mit Klicks nicht zu fangen: " + species.id() + " " + taps + "/12");
+                if (taps < (rare ? 8 : 10)) {
+                    problems.add("Nur mit Klicks nicht zu fangen: " + species.id() + " " + taps + "/12");
+                }
             }
+            // seit 0.99 sind seltene Fische unruhiger: Leichte gewöhnliche und ungewöhnliche fängt ein geübter Angler immer, leichte
+            // seltene fast immer, mystische mindestens jedes dritte Mal, Legenden jedes vierte
             if (species.difficulty() <= 0.5f) {
-                helper.assertTrue(wins == runs, "Leichter Fisch entkommt einem geübten Angler: " + species.id() + " " + wins + "/" + runs);
+                if (rare ? wins < runs * 5 / 6 : wins != runs) {
+                    problems.add("Leichter Fisch entkommt einem geübten Angler: " + species.id() + " " + wins + "/" + runs);
+                }
             } else if (species.rarity() == FishSpecies.Rarity.LEGENDARY) {
-                helper.assertTrue(wins >= runs / 4, "Legende unfangbar: " + species.id() + " " + wins + "/" + runs);
-            } else {
-                helper.assertTrue(wins >= runs / 2, "Fisch zu schwer: " + species.id() + " " + wins + "/" + runs);
+                if (wins < runs / 4) {
+                    problems.add("Legende unfangbar: " + species.id() + " " + wins + "/" + runs);
+                }
+            } else if (species.rarity() == FishSpecies.Rarity.EPIC) {
+                if (wins < runs / 3) {
+                    problems.add("Mystischer Fisch zu schwer: " + species.id() + " " + wins + "/" + runs);
+                }
+            } else if (wins < runs / 2) {
+                problems.add("Fisch zu schwer: " + species.id() + " " + wins + "/" + runs);
             }
         }
         KingdomsAtWar.LOGGER.info("Drill – geübter Angler (0,2 s Verzug), Siege von 24:{}", table);
+        helper.assertTrue(problems.isEmpty(), "Drill: " + problems.size() + " Probleme, etwa " + (problems.isEmpty() ? "" : problems.getFirst()));
+        // je seltener, desto unruhiger (seit 0.99): Bei gleicher Art zu schwimmen und gleicher Schwierigkeit legt ein legendärer
+        // Fisch in zwanzig Sekunden deutlich mehr Weg zurück als ein gewöhnlicher, und jede Seltenheit mehr als die darunter
+        for (FishSpecies.Behavior behavior : FishSpecies.Behavior.values()) {
+            double last = -1.0;
+            double first = 0.0;
+            for (FishSpecies.Rarity rarity : FishSpecies.Rarity.values()) {
+                double path = 0.0;
+                for (int seed = 0; seed < 6; seed++) {
+                    FishFight moving = new FishFight(behavior, 0.5f, rarity, 0.0f, false, RandomSource.create(300 + seed));
+                    float before = moving.fishPos();
+                    for (int i = 0; i < 120 * 20; i++) {
+                        moving.swim();
+                        path += Math.abs(moving.fishPos() - before);
+                        before = moving.fishPos();
+                    }
+                }
+                if (rarity == FishSpecies.Rarity.COMMON) {
+                    first = path;
+                }
+                helper.assertTrue(path > last * 0.97, "Seltenere Fische bewegen sich nicht mehr: " + behavior + " " + rarity + " " + path + " ≤ " + last);
+                last = path;
+            }
+            // Schießer und Launische sind schon von sich aus unruhig – bei ihnen wirkt die Seltenheit schwächer
+            double needed = behavior == FishSpecies.Behavior.DARTER || behavior == FishSpecies.Behavior.MIXED ? 1.1 : 1.3;
+            KingdomsAtWar.LOGGER.info("Drill – Weg in 20 s ({}): gewöhnlich {}, legendär {} (×{})", behavior, String.format("%.1f", first),
+                    String.format("%.1f", last), String.format("%.2f", last / first));
+            helper.assertTrue(last > first * needed, "Legenden sind nicht unruhiger als gewöhnliche Fische: " + behavior + " " + first + " → " + last);
+        }
         // die Fangzone schrumpft mit der Schwierigkeit, Glück des Meeres vergrößert sie
         helper.assertTrue(FishFight.zone(0.2f, 0.0f) > FishFight.zone(0.9f, 0.0f) && FishFight.zone(0.9f, 0.15f) > FishFight.zone(0.9f, 0.0f),
                 "Größe der Fangzone");

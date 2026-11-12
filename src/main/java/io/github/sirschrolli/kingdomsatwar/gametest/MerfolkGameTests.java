@@ -1,6 +1,7 @@
 package io.github.sirschrolli.kingdomsatwar.gametest;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading;
 import io.github.sirschrolli.kingdomsatwar.entity.merfolk.MermaidEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.merfolk.MermaidProfession;
 import io.github.sirschrolli.kingdomsatwar.entity.merfolk.TritonEntity;
@@ -26,13 +27,13 @@ import net.minecraft.gametest.framework.TestData;
 import net.minecraft.gametest.framework.TestEnvironmentDefinition;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
@@ -117,9 +118,11 @@ final class MerfolkGameTests {
     }
 
     /**
-     * Die Tauschangebote: jeder Beruf hat welche, jedes Angebot kostet Perlen oder bringt welche ein; die Perlentaucherin
-     * hat ein Herz des Meeres, die Korallengärtnerin die vier Setzlinge, die Muschelbauerin Meereslaternen, die
-     * Gezeitensängerin einen Aquisitor und Bücher. Dazu Perle, Spawn-Eier und Beute.
+     * Der Handel (seit 0.99 wie bei allen anderen Händlern, gegen Münzen): jeder Beruf hat Angebote, jedes kostet Münzen
+     * oder bringt welche ein; die Perlentaucherin hat ein Herz des Meeres und kauft Perlen, die Korallengärtnerin die vier
+     * Setzlinge, die Muschelbauerin Meereslaternen, die Gezeitensängerin einen Aquisitor und Bücher. Die Angebote bleiben
+     * zwischen Anzeigen und Handeln gleich, ein Handel klappt über {@link Trading}, und die Wache handelt nicht. Dazu Perle,
+     * Spawn-Eier und Beute.
      */
     private static void trades(GameTestHelper helper) {
         pool(helper);
@@ -127,33 +130,66 @@ final class MerfolkGameTests {
         for (MermaidProfession profession : MermaidProfession.TRADERS) {
             traders.add(profession);
             MermaidEntity mermaid = mermaid(helper, new BlockPos(4, 2, 4), profession);
-            var offers = mermaid.getOffers();
+            helper.assertTrue(mermaid instanceof io.github.sirschrolli.kingdomsatwar.economy.citizen.CoinTrader && mermaid.canTrade(),
+                    profession.id() + " handelt nicht gegen Münzen");
+            var offers = mermaid.baseOffers();
             helper.assertFalse(offers.isEmpty(), "Keine Angebote: " + profession.id());
-            for (MerchantOffer offer : offers) {
-                helper.assertTrue(offer.getBaseCostA().is(SeaBlocks.PEARL.get()) || offer.getResult().is(SeaBlocks.PEARL.get()),
-                        profession.id() + " tauscht nicht gegen Perlen: " + offer.getResult());
+            helper.assertTrue(offers.equals(mermaid.baseOffers()) || offers.size() == mermaid.baseOffers().size(),
+                    profession.id() + ": die Angebote wechseln zwischen Anzeigen und Handeln");
+            for (Trading.Offer offer : offers) {
+                helper.assertTrue(offer.giveCoins() > 0 || offer.getCoins() > 0, profession.id() + " handelt ohne Münzen: " + offer.get());
             }
             switch (profession) {
-                case PEARL_DIVER -> helper.assertTrue(offers.stream().anyMatch(o -> o.getResult().is(Items.HEART_OF_THE_SEA)),
-                        "Die Perlentaucherin hat kein Herz des Meeres");
+                case PEARL_DIVER -> {
+                    helper.assertTrue(offers.stream().anyMatch(o -> o.get().is(Items.HEART_OF_THE_SEA)), "Die Perlentaucherin hat kein Herz des Meeres");
+                    helper.assertTrue(offers.stream().anyMatch(o -> o.give().is(SeaBlocks.PEARL.get())), "Die Perlentaucherin kauft keine Perlen");
+                }
                 case CORAL_GARDENER -> {
                     for (SeaWoods.SeaWood wood : SeaWoods.ALL) {
-                        helper.assertTrue(offers.stream().anyMatch(o -> o.getResult().is(wood.sapling.get().asItem())),
+                        helper.assertTrue(offers.stream().anyMatch(o -> o.get().is(wood.sapling.get().asItem())),
                                 "Die Korallengärtnerin hat keinen Setzling: " + wood.name);
                     }
                 }
-                case SHELL_BUILDER -> helper.assertTrue(offers.stream().anyMatch(o -> o.getResult().is(Items.SEA_LANTERN)),
+                case SHELL_BUILDER -> helper.assertTrue(offers.stream().anyMatch(o -> o.get().is(Items.SEA_LANTERN)),
                         "Die Muschelbauerin hat keine Meereslaternen");
                 case TIDE_SINGER -> {
-                    helper.assertTrue(offers.stream().anyMatch(o -> o.getResult().is(Items.CONDUIT)), "Die Gezeitensängerin hat keinen Aquisitor");
-                    helper.assertTrue(offers.stream().anyMatch(o -> o.getResult().is(Items.ENCHANTED_BOOK)), "Die Gezeitensängerin hat keine Bücher");
+                    helper.assertTrue(offers.stream().anyMatch(o -> o.get().is(Items.CONDUIT)), "Die Gezeitensängerin hat keinen Aquisitor");
+                    helper.assertTrue(offers.stream().anyMatch(o -> o.get().is(Items.ENCHANTED_BOOK)), "Die Gezeitensängerin hat keine Bücher");
                 }
                 default -> {
                 }
             }
+            helper.assertTrue(mermaid.face().size() == 14 && mermaid.skinTexture().contains("textures/entity/mermaid/"),
+                    "Das Gesicht im Handelsfenster stimmt nicht: " + mermaid.skinTexture());
+            // ein echter Handel: Kabeljau gegen Münzen bei der Perlentaucherin
+            if (profession == MermaidProfession.PEARL_DIVER) {
+                ServerPlayer player = MageGameTests.survivalPlayer(helper, "test-mermaid-trade", new io.netty.channel.embedded.EmbeddedChannel[1], 0);
+                player.teleportTo(helper.getLevel(), mermaid.getX() + 1.0, mermaid.getY(), mermaid.getZ(), java.util.Set.of(), 0.0f, 0.0f, true);
+                player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+                int index = -1;
+                for (int i = 0; i < offers.size(); i++) {
+                    if (offers.get(i).give().is(Items.COD)) {
+                        index = i;
+                    }
+                }
+                helper.assertTrue(index >= 0, "Die Perlentaucherin kauft keinen Kabeljau");
+                int codBefore = player.getInventory().countItem(Items.COD);
+                player.getInventory().add(new ItemStack(Items.COD, 12));
+                int before = io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player);
+                var result = Trading.trade(player, mermaid.getId(), index);
+                helper.assertTrue(result == Trading.Result.DONE, "Der Handel mit der Meerjungfrau klappt nicht: " + result);
+                helper.assertTrue(io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player) > before, "Keine Münzen für den Kabeljau");
+                helper.assertTrue(player.getInventory().countItem(Items.COD) == codBefore,
+                        "Der Kabeljau ist noch da: " + player.getInventory().countItem(Items.COD) + " statt " + codBefore);
+                helper.assertTrue(mermaid.tradesUsed() == 1, "Der Handel zählt nicht zur Handelsgrenze");
+                helper.getLevel().getServer().getPlayerList().remove(player);
+            }
             mermaid.discard();
         }
         helper.assertTrue(traders.size() == 4, "Nicht vier Berufe zum Tauschen");
+        MermaidEntity guard = mermaid(helper, new BlockPos(4, 2, 4), MermaidProfession.GUARD);
+        helper.assertFalse(guard.canTrade() || !guard.baseOffers().isEmpty(), "Die Wache handelt");
+        guard.discard();
         helper.assertFalse(MermaidProfession.GUARD.wears("top") || !MermaidProfession.GUARD.wears("trident"), "Die Wache trägt nicht ihr Zeug");
         helper.assertTrue(MermaidProfession.PEARL_DIVER.wears("diver_band") && MermaidProfession.PEARL_DIVER.wears("hair_back")
                 && !MermaidProfession.PEARL_DIVER.wears("helmet"), "Die Perlentaucherin trägt das falsche Zubehör");

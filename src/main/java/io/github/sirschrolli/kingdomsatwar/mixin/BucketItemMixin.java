@@ -1,6 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.mixin;
 
-import io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerLava;
+import io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerRules;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * Im Urmeer lässt sich keine Lava ausgießen (seit 0.99, siehe {@link UrmeerLava}): Der Eimer bleibt voll, die Lava erlischt
+ * Im Urmeer lässt sich keine Lava ausgießen (seit 0.99, siehe {@link UrmeerRules}): Der Eimer bleibt voll, die Lava erlischt
  * zischend. Gilt für Spieler und Werfer, denn beide gießen über diese Methode aus.
  */
 @Mixin(BucketItem.class)
@@ -32,8 +32,8 @@ public abstract class BucketItemMixin {
             at = @At("HEAD"), cancellable = true)
     private void kingdomsatwar$noLavaInUrmeer(@Nullable LivingEntity user, Level level, BlockPos pos, @Nullable BlockHitResult hitResult,
             @Nullable ItemStack containerItem, CallbackInfoReturnable<Boolean> cir) {
-        if (this.content.is(FluidTags.LAVA) && UrmeerLava.forbidden(level)) {
-            UrmeerLava.quench(user, level, pos);
+        if (this.content.is(FluidTags.LAVA) && UrmeerRules.forbidden(level)) {
+            UrmeerRules.quench(user, level, pos);
             cir.setReturnValue(false);
         }
     }

@@ -104,6 +104,29 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ_BLOCK.get());
         ore(io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_ORE, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.RAW_SKY_IRON.get());
         dropSelf(io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_BLOCK.get());
+        // das Sternennetz (0.99): Seide und Gewebe wie sie sind; das Netz nur mit Schere oder Behutsamkeit (sonst Faden), gespuckte
+        // Netze zerfallen ohne Beute; der Kokon gibt frei, was darin steckt (mit Behutsamkeit sich selbst); das Gelege nichts
+        dropSelf(io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_SILK.get());
+        dropSelf(io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_WEAVE.get());
+        add(io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_WEB.get(), block -> LootTable.lootTable().withPool(LootPool.lootPool()
+                .setRolls(ContextIntProviders.exactly(1))
+                .when(MatchBlock.blockMatches(this.blocks, block, StatePropertiesPredicate.Builder.properties()
+                        .hasProperty(io.github.sirschrolli.kingdomsatwar.block.voidrealm.StarWebBlock.TEMPORARY, false)))
+                .add(LootItem.lootTableItem(block).when(net.minecraft.core.Holder.direct(new net.minecraft.world.level.storage.loot.predicates.AnyOfCondition.Builder()
+                                .or(this.hasShears()).or(this.hasSilkTouch()).build()))
+                        .otherwise(this.applyExplosionDecay(block, LootItem.lootTableItem(net.minecraft.world.item.Items.STRING))))));
+        add(io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_COCOON.get(), block -> LootTable.lootTable()
+                .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1)).add(LootItem.lootTableItem(block).when(this.hasSilkTouch())))
+                .withPool(LootPool.lootPool().setRolls(ContextIntProviders.between(2, 3)).when(this.doesNotHaveSilkTouch())
+                        .add(counted(net.minecraft.world.item.Items.BONE, 10, 2, 5))
+                        .add(counted(net.minecraft.world.item.Items.STRING, 10, 2, 6))
+                        .add(counted(io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_SILK.get(), 8, 1, 3))
+                        .add(counted(net.minecraft.world.item.Items.ROTTEN_FLESH, 6, 1, 3))
+                        .add(counted(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_SHARD.get(), 6, 1, 2))
+                        .add(counted(net.minecraft.world.item.Items.ARROW, 5, 2, 6))
+                        .add(counted(ModItems.GOLD_COIN.get(), 3, 1, 3))
+                        .add(counted(io.github.sirschrolli.kingdomsatwar.registry.VoidGear.RAW_SKY_IRON.get(), 3, 1, 2))
+                        .add(counted(net.minecraft.world.item.Items.ENDER_PEARL, 2, 1, 1))));
         for (DeferredBlock<? extends Block> block : java.util.List.of(ShadowBlocks.ABYSSITE_ORE, ShadowBlocks.MOONSILVER_BLOCK,
                 ShadowBlocks.NIGHTSTEEL_BLOCK, ShadowBlocks.SOUL_CRYSTAL_BLOCK, ShadowBlocks.ABYSSITE_BLOCK, ShadowBlocks.MOON_LANTERN,
                 ShadowBlocks.SHADOW_SAPLING)) {
@@ -396,6 +419,11 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.GIANT_KELP.get());
         dropOther(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.GIANT_KELP_PLANT.get(),
                 io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.GIANT_KELP.get());
+    }
+
+    /** Ein Gegenstand mit Gewicht und zufälliger Anzahl (für die Kokons des Sternennetzes). */
+    private static LootItem.Builder<?> counted(net.minecraft.world.level.ItemLike item, int weight, int min, int max) {
+        return LootItem.lootTableItem(item).setWeight(weight).apply(SetItemCountFunction.setCount(ContextIntProviders.between(min, max)));
     }
 
     @Override

@@ -283,6 +283,12 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         tag(Tags.Items.INGOTS).addTag(ModTags.Items.INGOTS_SKY_IRON);
         add(ItemTags.BEACON_PAYMENT_ITEMS, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_INGOT);
         add(ModTags.Items.REPAIRS_STARWALKER_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_INGOT);
+        // der Sternenbogen (0.99): ein Bogen wie jeder andere (Verzauberungen, Köcher anderer Mods), mit Himmelseisen zu reparieren
+        add(ModTags.Items.REPAIRS_STAR_BOW, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_INGOT);
+        add(ItemTags.BOW_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_BOW);
+        add(ItemTags.DURABILITY_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_BOW);
+        add(ItemTags.VANISHING_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_BOW);
+        add(Tags.Items.TOOLS_BOW, io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_BOW);
         add(ItemTags.HEAD_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.STARWALKER_HELMET);
         add(ItemTags.CHEST_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.STARWALKER_CHESTPLATE);
         add(ItemTags.LEG_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.STARWALKER_LEGGINGS);

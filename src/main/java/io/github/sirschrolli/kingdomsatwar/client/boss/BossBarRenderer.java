@@ -162,6 +162,10 @@ public final class BossBarRenderer {
         // seines Stabs mit der Laterne; die Füllung züngelndes Seelenfeuer, aus dem Seelen aufsteigen
         STYLES.put("soul_shepherd", style("soul_shepherd", 0x7AE8DC, new float[] {0.5f},
                 new Motes(Drift.SMOKE, 3.0f, 0x8EF0E4, 0x2AC8BC, 0xE0FFFA), new Motes(Drift.EMBER, 1.5f, 0xB8FFF2, 0x4FE0D0)));
+        // die Sternenweberin (Leere, seit 0.99): nachtblaues Chitin mit Silbersaum, vier Spinnenbeine hinter dem Medaillon,
+        // Kokons und Sterne an Fäden; die Füllung ihr Netz vor dem Nachthimmel
+        STYLES.put("star_weaver", style("star_weaver", 0xB8D4FF, new float[] {0.5f},
+                new Motes(Drift.TWINKLE, 4.0f, 0xFFFFFF, 0x9AD8FF, 0xFFF4C4), new Motes(Drift.GLITTER, 1.2f, 0xD6E4FF, 0x8048BC)));
         // Noctua, die Mottenkönigin (Feenreich): Mondsilber mit Mottenflügeln, Füllung aus schimmerndem Flügelstaub
         STYLES.put("moth", style("moth", 0xFFB8E8, new float[] {0.5f}, new Motes(Drift.GLITTER, 4.5f, 0xFFF0FA, 0xFF8AD0, 0x9EE8C8)));
         // Malleus, der Glutschmied: geschwärztes Eisen mit Nieten, glühende Nähte, Hammer und Speer gekreuzt

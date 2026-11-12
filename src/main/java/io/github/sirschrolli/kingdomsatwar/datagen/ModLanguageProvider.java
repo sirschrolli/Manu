@@ -714,6 +714,8 @@ public class ModLanguageProvider extends LanguageProvider {
         text("dimension.kingdomsatwar.urmeer", "The Primordial Sea", "Das Urmeer");
         text("message.kingdomsatwar.urmeer_no_lava", "In the Primordial Sea, lava hisses out at once",
                 "Im Urmeer erlischt die Lava zischend");
+        text("message.kingdomsatwar.urmeer_no_sponge", "The Primordial Sea cannot be drained – the sponge soaks up, but the water stays",
+                "Das Urmeer lässt sich nicht trockenlegen – der Schwamm saugt sich voll, doch das Wasser bleibt");
         text("biome.kingdomsatwar.urmeer_deep", "Primordial Expanse", "Urmeer-Weiten");
         text("biome.kingdomsatwar.urmeer_reef", "Coral Banks", "Korallenbänke");
         text("biome.kingdomsatwar.urmeer_kelp_forest", "Kelp Forest", "Tangwald");
@@ -1017,6 +1019,53 @@ public class ModLanguageProvider extends LanguageProvider {
         text("command.kingdomsatwar.seelenpferch.no_bell", "There is no Soul Bell in this pen.", "In diesem Pferch hängt keine Seelenglocke.");
         text("command.kingdomsatwar.seelenpferch.awakened", "The Soul Shepherd awakens!", "Der Seelenhirte erwacht!");
         text("command.kingdomsatwar.seelenpferch.reset", "The Soul Shepherd sinks back into prayer.", "Der Seelenhirte versinkt wieder in Andacht.");
+        // die Sternenweberin und das Sternennetz (0.99)
+        creature(ModEntities.STAR_WEAVER, io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_WEAVER_SPAWN_EGG, "Star Weaver", "Sternenweberin", "Sternenweberin");
+        add(ModEntities.STAR_SPIDERLING.get(), pick("Star Spiderling", "Sternspinnling"));
+        add(ModEntities.STAR_WEB_SHOT.get(), pick("Ball of Star Web", "Netzballen"));
+        add(ModEntities.STAR_ARROW.get(), pick("Star Arrow", "Sternenpfeil"));
+        text("boss.kingdomsatwar.star_weaver", "The Star Weaver", "Die Sternenweberin");
+        text("boss.kingdomsatwar.star_weaver.named", "%s", "%s");
+        text("boss.kingdomsatwar.star_weaver.title", "Spinner of the Void, Keeper of the Fallen Stars",
+                "Spinnerin der Leere, Hüterin der gefallenen Sterne");
+        block(io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_SILK, "Star Silk", "Sternenseide");
+        block(io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_WEAVE, "Star Weave", "Sternengewebe");
+        block(io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_WEB, "Star Cobweb", "Sternenspinnwebe");
+        block(io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_COCOON, "Star Cocoon", "Sternenkokon");
+        block(io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.WEAVER_NEST, "Weaver's Clutch", "Sternengelege");
+        item(io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_BOW, "Star Bow", "Sternenbogen");
+        lore("star_bow", "The bow of the Star Weaver – night-blue chitin, strung with star silk",
+                "Der Bogen der Sternenweberin – nachtblaues Chitin, bespannt mit Sternenseide");
+        text(ModItems.loreKey("star_bow", 2), "Arrows fly weightless; drawn while sneaking, a web arrow that binds its target",
+                "Pfeile fliegen schwerelos; im Schleichen gespannt ein Netzpfeil, der sein Ziel fesselt");
+        text(ModItems.loreKey("star_bow", 3), "Repair with Sky Iron", "Mit Himmelseisen reparieren");
+        text("block.kingdomsatwar.weaver_nest.hint", "Seven eggs glimmer with starlight … and high above, something hangs motionless in the web. Come closer, if you dare.",
+                "Sieben Eier glimmen im Sternenlicht … und hoch darüber hängt etwas reglos im Netz. Komm näher, wenn du dich traust.");
+        text("block.kingdomsatwar.weaver_nest.awake", "The Star Weaver is awake!", "Die Sternenweberin ist erwacht!");
+        text("block.kingdomsatwar.weaver_nest.defeated", "The eggs have gone cold. A Sky Iron Ingot laid in the clutch would wake the Weaver again.",
+                "Die Eier sind erkaltet. Ein Himmelseisenbarren im Gelege würde die Weberin wieder wecken.");
+        text("block.kingdomsatwar.weaver_nest.warning", "The threads tremble … something huge is watching over this web.",
+                "Die Fäden zittern … etwas Riesiges wacht über dieses Netz.");
+        text("block.kingdomsatwar.weaver_nest.peaceful", "The web lies still (the world is set to Peaceful).",
+                "Das Netz liegt still (die Welt steht auf „Friedlich“).");
+        text("message.kingdomsatwar.star_weaver.fury", "The Star Weaver shrieks – the stars tremble!", "Die Sternenweberin kreischt – die Sterne erzittern!");
+        for (String[] e : new String[][] {{"ambient", "Star Weaver clicks", "Sternenweberin klickt"},
+                {"hurt", "Star Weaver hisses", "Sternenweberin zischt"}, {"death", "Star Weaver fades", "Sternenweberin erlischt"},
+                {"step", "Legs tap on threads", "Beine tippen auf Fäden"}, {"awaken", "Star Weaver awakens", "Sternenweberin erwacht"},
+                {"thread", "Thread whirs", "Faden sirrt"}, {"web", "Web ball splats", "Netzballen klatscht"},
+                {"constellation", "Stars light up", "Sterne leuchten auf"}, {"starfall", "Stars fall", "Sterne fallen"},
+                {"cocoon", "Threads wrap tight", "Fäden umwickeln"}, {"brood", "Brood hatches", "Brut schlüpft"},
+                {"drop", "Star Weaver drops", "Sternenweberin stürzt herab"}, {"bite", "Star Weaver bites", "Sternenweberin beißt"},
+                {"spindle", "Threads whirl", "Fäden wirbeln"}, {"fury", "Star Weaver shrieks", "Sternenweberin kreischt"},
+                {"spiderling", "Star spiderling chirps", "Sternspinnling zirpt"}}) {
+            subtitle("entity.star_weaver." + e[0], e[1], e[2]);
+        }
+        text("command.kingdomsatwar.sternennetz.where", "Nearest Star Web: %s (%s blocks)", "Nächstes Sternennetz: %s (%s Blöcke)");
+        text("command.kingdomsatwar.sternennetz.not_void", "Star webs only exist in the Void.", "Sternennetze gibt es nur in der Leere.");
+        text("command.kingdomsatwar.sternennetz.none", "No Star Web nearby.", "Kein Sternennetz in der Nähe.");
+        text("command.kingdomsatwar.sternennetz.no_nest", "There is no clutch in this web.", "In diesem Netz liegt kein Gelege.");
+        text("command.kingdomsatwar.sternennetz.awakened", "The Star Weaver awakens!", "Die Sternenweberin erwacht!");
+        text("command.kingdomsatwar.sternennetz.reset", "The Star Weaver sinks back into her vigil.", "Die Sternenweberin versinkt wieder in Andacht.");
         text("command.kingdomsatwar.hexengrotte.where", "Nearest Witch's Grotto: %s (%s blocks)", "Nächste Hexengrotte: %s (%s Blöcke)");
         text("command.kingdomsatwar.hexengrotte.not_sea", "Witch's grottos only exist in the Primordial Sea.", "Hexengrotten gibt es nur im Urmeer.");
         text("command.kingdomsatwar.hexengrotte.none", "No Witch's Grotto nearby.", "Keine Hexengrotte in der Nähe.");

@@ -40,11 +40,11 @@ import net.minecraft.world.item.Items;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Die Fische des Angelns: <b>2053 Arten</b> (seit 0.92; 1893 seit 0.90, 1708 seit 0.89, 1628 seit 0.83, 1000 seit 0.81). 84 sind von Hand benannt –
- * die Allerweltsfische der Gewässer, die Fische von Minecraft (als ihre eigenen Gegenstände, mit ihrer gewohnten Wirkung) und
- * die fünfzehn Legenden aller Welten –, 1809 gehören einem Biom: einundzwanzig in jedem eigenen Biom der Mod, elf oder dreizehn
- * in jedem Biom von Minecraft, auch in den Höhlen, in der Lava des Nethers und in der Leere des Ends, und vierzig in jedem Biom
- * des Urmeers. In jedem Biom gibt es jede Seltenheit – gewöhnlich, ungewöhnlich, selten, mystisch und legendär (die Legende
+ * Die Fische des Angelns: <b>8369 Arten</b> (seit 0.99; 2053 seit 0.92, 1893 seit 0.90, 1708 seit 0.89, 1628 seit 0.83, 1000 seit
+ * 0.81). 84 sind von Hand benannt – die Allerweltsfische der Gewässer, die Fische von Minecraft (als ihre eigenen Gegenstände,
+ * mit ihrer gewohnten Wirkung) und die fünfzehn Legenden aller Welten –, 8285 gehören einem Biom: einundfünfzig in jedem eigenen
+ * Biom der Mod, einunddreißig oder dreiunddreißig in jedem Biom von Minecraft, auch in den Höhlen, in der Lava des Nethers und
+ * in der Leere des Ends, und die meisten im Urmeer: 518 oder 519 in jedem seiner acht Biome (4146, fast die Hälfte aller). In jedem Biom gibt es jede Seltenheit – gewöhnlich, ungewöhnlich, selten, mystisch und legendär (die Legende
  * des Bioms; im Urmeer zwei). {@code tools/fish_gen.py} berechnet sie in Wellen; diese Klasse liest sie beim Laden aus
  * {@code data/kingdomsatwar/fishing/species.tsv}.
  *

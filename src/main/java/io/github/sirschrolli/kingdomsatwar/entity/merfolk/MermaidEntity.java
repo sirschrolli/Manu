@@ -1,5 +1,9 @@
 package io.github.sirschrolli.kingdomsatwar.entity.merfolk;
 
+import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.economy.citizen.CoinTrader;
+import io.github.sirschrolli.kingdomsatwar.economy.citizen.TradeFace;
+import io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading;
 import io.github.sirschrolli.kingdomsatwar.registry.ModSounds;
 import io.github.sirschrolli.kingdomsatwar.registry.ModTags;
 import net.minecraft.core.BlockPos;
@@ -8,7 +12,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import java.util.List;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.DifficultyInstance;
@@ -18,7 +24,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.SpawnGroupData;
@@ -40,9 +45,9 @@ import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.entity.npc.villager.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.item.trading.MerchantOffer;
-import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.PathType;
@@ -53,19 +58,26 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * Eine Meerjungfrau (seit 0.93): lebt in den Meeresdörfern des Urmeers, schwimmt (wassertretend aufrecht, schnell
- * waagrecht wie ein Delfin), geht ihrem Beruf nach und tauscht gegen Perlen. Vor Haien, Ertrunkenen und dem Kraken
- * weicht sie zurück; wer sie angreift, bekommt es mit den Tritonwachen zu tun. Sie atmet unter Wasser.
+ * waagrecht wie ein Delfin), geht ihrem Beruf nach und handelt – seit 0.99 wie alle anderen Händler gegen Münzen, im
+ * selben Handelsfenster (siehe {@link MermaidTrades}). Vor Haien, Ertrunkenen und dem Kraken weicht sie zurück; wer sie
+ * angreift, bekommt es mit den Tritonwachen zu tun. Sie atmet unter Wasser.
  */
-public class MermaidEntity extends AbstractVillager implements MerfolkLike {
+public class MermaidEntity extends AbstractVillager implements MerfolkLike, CoinTrader {
     private static final EntityDataAccessor<Integer> DATA_PROFESSION = SynchedEntityData.defineId(MermaidEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(MermaidEntity.class, EntityDataSerializers.INT);
     /** Handelt gerade (für die Haltung im Modell, auch auf dem Client bekannt). */
     private static final EntityDataAccessor<Boolean> DATA_TRADING = SynchedEntityData.defineId(MermaidEntity.class, EntityDataSerializers.BOOLEAN);
-    /** So oft (Ticks) füllen sich die Angebote wieder auf. */
-    private static final int RESTOCK_INTERVAL = 6000;
+    /** Die Haut der Meerjungfrauen: Gesicht (doppelte Auflösung) bei 24/14, 14 Pixel im Quadrat, auf 256 × 256. */
+    private static final TradeFace FACE = new TradeFace(24, 14, 14, 256, 256, -1, -1, 14);
 
     public final Merfolk.SwimMotion motion = new Merfolk.SwimMotion();
-    private int restockCooldown = RESTOCK_INTERVAL;
+    /** Ihr Vorrat: welche Waren sie gerade hat (wechselt nach jeder Pause). */
+    private long tradeSeed;
+    private int stock;
+    private int tradesUsed;
+    private long closedUntil;
+    private @Nullable Player customer;
+    private int customerTicks;
     private boolean professionChosen;
     private boolean lookChosen;
 
@@ -151,7 +163,6 @@ public class MermaidEntity extends AbstractVillager implements MerfolkLike {
     public void setProfession(MermaidProfession profession) {
         this.entityData.set(DATA_PROFESSION, profession.ordinal());
         this.professionChosen = true;
-        this.offers = null;
     }
 
     @Override
@@ -193,28 +204,116 @@ public class MermaidEntity extends AbstractVillager implements MerfolkLike {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (stack.getItem() instanceof SpawnEggItem || !this.isAlive() || this.isTrading()) {
-            return super.mobInteract(player, hand);
+        if (stack.is(Items.NAME_TAG) || stack.is(Items.LEAD) || stack.getItem() instanceof SpawnEggItem || !this.isAlive()) {
+            return InteractionResult.PASS;
         }
-        if (hand == InteractionHand.MAIN_HAND) {
-            player.awardStat(Stats.TALKED_TO_VILLAGER);
-        }
-        if (!this.level().isClientSide()) {
-            if (this.getOffers().isEmpty()) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            if (hand == InteractionHand.MAIN_HAND) {
+                player.awardStat(Stats.TALKED_TO_VILLAGER);
+            }
+            if (!this.canTrade()) {
                 this.setUnhappyCounter(40);
                 this.makeSound(ModSounds.MERMAID_NO.get());
                 return InteractionResult.CONSUME;
             }
-            this.setTradingPlayer(player);
-            this.openTradingScreen(player, this.getDisplayName(), 1);
+            Trading.open(serverPlayer, this);
         }
-        return InteractionResult.SUCCESS_SERVER;
+        return InteractionResult.SUCCESS;
+    }
+
+    /** Die Angebote laufen über {@link Trading} (Münzen); der Händlerbildschirm von Minecraft bleibt leer. */
+    @Override
+    protected void updateTrades(ServerLevel level) {
     }
 
     @Override
-    protected void updateTrades(ServerLevel level) {
-        MerchantOffers offers = this.getOffers();
-        offers.addAll(MermaidTrades.create(this.profession(), level, this.random));
+    public boolean canTrade() {
+        return this.profession() != MermaidProfession.GUARD;
+    }
+
+    @Override
+    public List<Trading.Offer> baseOffers() {
+        if (this.tradeSeed == 0L) {
+            this.tradeSeed = this.random.nextLong() | 1L;
+        }
+        return MermaidTrades.offers(this.profession(), this.registryAccess(), this.tradeSeed * 31L + this.stock);
+    }
+
+    @Override
+    public int tradesUsed() {
+        return this.tradesUsed;
+    }
+
+    @Override
+    public long closedUntil() {
+        return this.closedUntil;
+    }
+
+    /** Nach der Pause hat sie wieder Waren – andere Korallen, Anemonen, anderes Holz, andere Bücher. */
+    @Override
+    public boolean isClosed() {
+        if (this.closedUntil > 0 && System.currentTimeMillis() >= this.closedUntil) {
+            this.closedUntil = 0;
+            this.tradesUsed = 0;
+            this.stock++;
+            if (this.level() instanceof ServerLevel serverLevel) {
+                serverLevel.sendParticles(ParticleTypes.BUBBLE_POP, this.getX(), this.getY(1.0), this.getZ(), 10, 0.3, 0.4, 0.3, 0.02);
+            }
+        }
+        return this.closedUntil > 0;
+    }
+
+    @Override
+    public void recordTrade(int limit, long pauseMillis) {
+        this.tradesUsed++;
+        if (this.tradesUsed >= limit) {
+            this.closedUntil = System.currentTimeMillis() + pauseMillis;
+        }
+    }
+
+    @Override
+    public @Nullable Player getCustomer() {
+        return this.customer;
+    }
+
+    /** Solange jemand handelt, schwimmt sie nicht davon und schaut ihn an. */
+    @Override
+    public void setCustomer(@Nullable Player customer) {
+        this.customer = customer;
+        this.customerTicks = customer == null ? 0 : 400;
+        this.setTradingPlayer(customer);
+    }
+
+    @Override
+    public String skinTexture() {
+        return KingdomsAtWar.id("textures/entity/mermaid/" + this.look().id() + ".png").toString();
+    }
+
+    @Override
+    public TradeFace face() {
+        return FACE;
+    }
+
+    @Override
+    public SoundEvent openSound() {
+        return ModSounds.MERMAID_TRADE.get();
+    }
+
+    @Override
+    public SoundEvent agreeSound() {
+        return ModSounds.MERMAID_YES.get();
+    }
+
+    @Override
+    public String professionKey() {
+        return this.getType().getDescriptionId() + "." + this.profession().id();
+    }
+
+    /** Im Handelsfenster: ihr Name (Namensschild) oder „Meerjungfrau“; der Beruf steht rechts daneben. */
+    @Override
+    public Component traderName() {
+        Component custom = this.getCustomName();
+        return custom != null ? custom : Component.translatable(this.getType().getDescriptionId());
     }
 
     @Override
@@ -232,10 +331,6 @@ public class MermaidEntity extends AbstractVillager implements MerfolkLike {
 
     @Override
     protected void rewardTradeXp(MerchantOffer offer) {
-        if (offer.shouldRewardExp()) {
-            int xp = 3 + this.random.nextInt(4);
-            this.level().addFreshEntity(new ExperienceOrb(this.level(), this.getX(), this.getY() + 0.5, this.getZ(), xp));
-        }
     }
 
     @Override
@@ -253,21 +348,8 @@ public class MermaidEntity extends AbstractVillager implements MerfolkLike {
             this.motion.tick(this);
             return;
         }
-        // die Angebote füllen sich von Zeit zu Zeit wieder auf (nicht mitten im Handel)
-        if (!this.isTrading() && --this.restockCooldown <= 0) {
-            this.restockCooldown = RESTOCK_INTERVAL + this.random.nextInt(2400);
-            if (this.offers != null) {
-                boolean restocked = false;
-                for (MerchantOffer offer : this.offers) {
-                    if (offer.getUses() > 0) {
-                        offer.resetUses();
-                        restocked = true;
-                    }
-                }
-                if (restocked && this.level() instanceof ServerLevel serverLevel) {
-                    serverLevel.sendParticles(ParticleTypes.BUBBLE_POP, this.getX(), this.getY(1.0), this.getZ(), 10, 0.3, 0.4, 0.3, 0.02);
-                }
-            }
+        if (this.customer != null && (--this.customerTicks <= 0 || !this.customer.isAlive() || this.customer.distanceToSqr(this) > 64.0)) {
+            this.setCustomer(null);
         }
     }
 
@@ -308,7 +390,10 @@ public class MermaidEntity extends AbstractVillager implements MerfolkLike {
         super.addAdditionalSaveData(output);
         output.putString("profession", this.profession().id());
         output.putString("look", this.look().id());
-        output.putInt("restock", this.restockCooldown);
+        output.putLong("TradeSeed", this.tradeSeed);
+        output.putInt("Stock", this.stock);
+        output.putInt("TradesUsed", this.tradesUsed);
+        output.putLong("ClosedUntil", this.closedUntil);
     }
 
     @Override
@@ -324,7 +409,10 @@ public class MermaidEntity extends AbstractVillager implements MerfolkLike {
             this.entityData.set(DATA_LOOK, MermaidLook.byName(look).ordinal());
             this.lookChosen = true;
         }
-        this.restockCooldown = input.getIntOr("restock", RESTOCK_INTERVAL);
+        this.tradeSeed = input.getLongOr("TradeSeed", 0L);
+        this.stock = input.getIntOr("Stock", 0);
+        this.tradesUsed = input.getIntOr("TradesUsed", 0);
+        this.closedUntil = input.getLongOr("ClosedUntil", 0L);
     }
 
     @Override

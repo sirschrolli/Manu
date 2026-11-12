@@ -6,7 +6,8 @@ import net.minecraft.world.entity.player.Player;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Wer gegen Münzen handelt: die Bürger der eigenen Stadt und die Dorfbewohner. Das Handelsfenster, die Preise mit
+ * Wer gegen Münzen handelt: die Bürger der eigenen Stadt, die Dorfbewohner, der fahrende Händler und (seit 0.99) die
+ * Meerjungfrauen. Das Handelsfenster, die Preise mit
  * Rabatt durch Ansehen und die Handelsgrenze in Echtzeit sind für beide gleich (siehe {@link Trading}).
  */
 public interface CoinTrader {
@@ -38,6 +39,21 @@ public interface CoinTrader {
 
     /** Hauttextur (für das Gesicht im Handelsfenster), z. B. {@code kingdomsatwar:textures/entity/villager/baker_1.png}. */
     String skinTexture();
+
+    /** Wo in der Haut das Gesicht liegt (seit 0.99; die Meerjungfrauen haben eine andere Haut als die Menschen). */
+    default TradeFace face() {
+        return TradeFace.HUMAN;
+    }
+
+    /** Der Laut beim Öffnen des Handelsfensters. */
+    default net.minecraft.sounds.SoundEvent openSound() {
+        return net.minecraft.sounds.SoundEvents.VILLAGER_TRADE;
+    }
+
+    /** Der Laut nach einem Handel. */
+    default net.minecraft.sounds.SoundEvent agreeSound() {
+        return net.minecraft.sounds.SoundEvents.VILLAGER_YES;
+    }
 
     /** Übersetzungsschlüssel des Berufs. */
     String professionKey();

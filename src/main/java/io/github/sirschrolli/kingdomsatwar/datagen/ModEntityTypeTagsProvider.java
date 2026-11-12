@@ -133,6 +133,8 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
         this.tag(EntityTypeTags.AXOLOTL_ALWAYS_HOSTILES).add(ModEntities.DROWNED.key());
         this.tag(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES).add(ModEntities.STRAY.key());
         this.tag(EntityTypeTags.ARTHROPOD).add(ModEntities.SPIDER.key()).add(ModEntities.CAVE_SPIDER.key()).add(ModEntities.SILVERFISH.key());
+        // die Sternenweberin und ihre Brut (0.99): Spinnen – Nemesis der Gliederfüßer wirkt
+        this.tag(EntityTypeTags.ARTHROPOD).add(ModEntities.STAR_WEAVER.key()).add(ModEntities.STAR_SPIDERLING.key());
         this.tag(EntityTypeTags.DISMOUNTS_UNDERWATER).add(ModEntities.SPIDER.key()).add(ModEntities.ZOMBIE_HORSE.key());
         this.tag(EntityTypeTags.FROG_FOOD).add(ModEntities.SLIME.key());
         this.tag(EntityTypeTags.IMMUNE_TO_OOZING).add(ModEntities.SLIME.key());

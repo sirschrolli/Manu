@@ -1,0 +1,87 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "minecraft:select",
+      "cases": [
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "kingdomsatwar:item/star_bow"
+          },
+          "when": "gui"
+        }
+      ],
+      "fallback": {
+        "type": "minecraft:model",
+        "model": "kingdomsatwar:item/relief/star_bow"
+      },
+      "property": "minecraft:display_context"
+    },
+    "on_true": {
+      "type": "minecraft:range_dispatch",
+      "entries": [
+        {
+          "model": {
+            "type": "minecraft:select",
+            "cases": [
+              {
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "kingdomsatwar:item/star_bow_pulling_1"
+                },
+                "when": "gui"
+              }
+            ],
+            "fallback": {
+              "type": "minecraft:model",
+              "model": "kingdomsatwar:item/relief/star_bow_pulling_1"
+            },
+            "property": "minecraft:display_context"
+          },
+          "threshold": 0.65
+        },
+        {
+          "model": {
+            "type": "minecraft:select",
+            "cases": [
+              {
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "kingdomsatwar:item/star_bow_pulling_2"
+                },
+                "when": "gui"
+              }
+            ],
+            "fallback": {
+              "type": "minecraft:model",
+              "model": "kingdomsatwar:item/relief/star_bow_pulling_2"
+            },
+            "property": "minecraft:display_context"
+          },
+          "threshold": 0.9
+        }
+      ],
+      "fallback": {
+        "type": "minecraft:select",
+        "cases": [
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "kingdomsatwar:item/star_bow_pulling_0"
+            },
+            "when": "gui"
+          }
+        ],
+        "fallback": {
+          "type": "minecraft:model",
+          "model": "kingdomsatwar:item/relief/star_bow_pulling_0"
+        },
+        "property": "minecraft:display_context"
+      },
+      "property": "minecraft:use_duration",
+      "scale": 0.05
+    },
+    "property": "minecraft:using_item"
+  }
+}

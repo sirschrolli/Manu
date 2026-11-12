@@ -11,6 +11,10 @@ import net.minecraft.util.RandomSource;
  * Zone, füllt sich die Leiste – sonst leert sie sich. Voll: gefangen. Leer: entkommen (der Haken bleibt im Wasser). Liegt
  * die Zone ungehalten am Boden, hängt die Schnur durch und nichts füllt sich: Wer nichts tut, fängt nichts.
  *
+ * <p>Seit 0.99 zählt auch die <b>Seltenheit</b> ({@link #agility}): Je seltener der Fisch, desto unruhiger ist er – er
+ * überlegt kürzer, schwimmt weitere Wege, schneller und bricht ab und zu plötzlich aus (ab selten). Gewöhnliche Fische
+ * verhalten sich wie bisher.
+ *
  * <p>Wer den Fisch keinen Augenblick aus der Zone lässt, fängt <b>perfekt</b> – das Tier ist dann größer. Manchmal treibt eine
  * <b>Truhe</b> in der Säule: Wer die Zone lange genug über ihr hält, hebt mit dem Fisch einen Schatz.
  *
@@ -36,6 +40,20 @@ public final class FishFight {
     /** Der Fisch zählt noch als gehalten, wenn er so weit (Anteil der Säule) über den Rand der Zone ragt. */
     private static final float EDGE = 0.012f;
 
+    /**
+     * Wie unruhig ein Fisch dieser Seltenheit im Drill ist (seit 0.99): 0 bei gewöhnlichen (wie bisher), 0,3 ungewöhnlich,
+     * 0,55 selten, 0,8 mystisch, 1 legendär.
+     */
+    public static float agility(FishSpecies.Rarity rarity) {
+        return switch (rarity) {
+            case COMMON -> 0.0f;
+            case UNCOMMON -> 0.3f;
+            case RARE -> 0.55f;
+            case EPIC -> 0.8f;
+            case LEGENDARY -> 1.0f;
+        };
+    }
+
     /** Sekunden mit dem Fisch in der Zone, bis die leere Leiste voll wäre. */
     public static float catchSeconds(float difficulty) {
         return 3.4f + 3.2f * difficulty;
@@ -58,6 +76,12 @@ public final class FishFight {
 
     private final FishSpecies.Behavior base;
     private final float difficulty;
+    /** Wie unruhig er ist (0 gewöhnlich … 1 legendär, seit 0.99). */
+    private final float agility;
+    /** Sekunden bis zum nächsten möglichen Ausbruch. */
+    private float burstIn;
+    /** Wie lange der Ausbruch noch dauert (Sekunden). */
+    private float bursting;
     private final RandomSource random;
     private final float zoneSize;
     private final boolean hasChest;
@@ -87,6 +111,16 @@ public final class FishFight {
     private int kicks;
 
     public FishFight(FishSpecies.Behavior behavior, float difficulty, float zoneBonus, boolean chest, RandomSource random) {
+        this(behavior, difficulty, FishSpecies.Rarity.COMMON, zoneBonus, chest, random);
+    }
+
+    public FishFight(FishSpecies species, float zoneBonus, boolean chest, RandomSource random) {
+        this(species.behavior(), species.difficulty(), species.rarity(), zoneBonus, chest, random);
+    }
+
+    public FishFight(FishSpecies.Behavior behavior, float difficulty, FishSpecies.Rarity rarity, float zoneBonus, boolean chest, RandomSource random) {
+        this.agility = agility(rarity);
+        this.burstIn = 1.6f + random.nextFloat() * 1.4f;
         this.base = behavior;
         this.behavior = behavior == FishSpecies.Behavior.MIXED ? FishSpecies.Behavior.STEADY : behavior;
         this.difficulty = difficulty;
@@ -183,8 +217,11 @@ public final class FishFight {
         this.retarget -= STEP;
         this.behaviorTime -= STEP;
         float d = this.difficulty;
-        // schwierige Fische überlegen kürzer
-        float pace = 1.25f - 0.6f * d;
+        // je seltener, desto unruhiger – bei ohnehin schweren Fischen etwas weniger (sonst wären sie kaum noch zu halten)
+        float a = this.agility * (1.0f - 0.5f * d) * (this.base == FishSpecies.Behavior.MIXED ? 0.6f : 1.0f);
+        // schwierige Fische überlegen kürzer, seltene noch einmal kürzer (seit 0.99)
+        float pace = (1.25f - 0.6f * d) * (1.0f - 0.3f * a);
+        float range = 1.0f + 0.55f * a;
         if (this.base == FishSpecies.Behavior.MIXED && this.behaviorTime <= 0.0f) {
             FishSpecies.Behavior[] moods = {FishSpecies.Behavior.STEADY, FishSpecies.Behavior.FLOATER, FishSpecies.Behavior.SINKER,
                     FishSpecies.Behavior.JITTER, FishSpecies.Behavior.DARTER};
@@ -199,29 +236,30 @@ public final class FishFight {
         switch (this.behavior) {
             case CALM -> {
                 if (this.retarget <= 0.0f) {
-                    float step = between(0.10f, 0.30f) * (this.random.nextBoolean() ? 1.0f : -1.0f);
+                    float step = between(0.10f, 0.30f) * range * (this.random.nextBoolean() ? 1.0f : -1.0f);
                     float target = this.fishPos + step;
                     this.fishTarget = target < 0.04f || target > 0.96f ? this.fishPos - step : target;
                     this.retarget = between(1.4f, 2.8f) * pace;
                 }
-                stiffness = 6.0f + 6.0f * d;
-                maxSpeed = 0.22f + 0.35f * d;
+                stiffness = (6.0f + 6.0f * d) * (1.0f + 0.5f * a);
+                maxSpeed = (0.22f + 0.35f * d) * (1.0f + 0.5f * a);
             }
             case FLOATER -> {
                 if (this.retarget <= 0.0f) {
-                    this.fishTarget = this.random.nextFloat() < 0.78f ? between(0.5f, 0.96f) : between(0.12f, 0.5f);
+                    // seltene wechseln öfter auf die andere Seite der Säule
+                    this.fishTarget = this.random.nextFloat() < 0.78f - 0.18f * a ? between(0.5f, 0.96f) : between(0.12f, 0.5f);
                     this.retarget = between(0.9f, 1.8f) * pace;
                 }
-                stiffness = 9.0f + 9.0f * d;
-                maxSpeed = 0.35f + 0.55f * d;
+                stiffness = (9.0f + 9.0f * d) * (1.0f + 0.4f * a);
+                maxSpeed = (0.35f + 0.55f * d) * (1.0f + 0.4f * a);
             }
             case SINKER -> {
                 if (this.retarget <= 0.0f) {
-                    this.fishTarget = this.random.nextFloat() < 0.78f ? between(0.04f, 0.5f) : between(0.5f, 0.88f);
+                    this.fishTarget = this.random.nextFloat() < 0.78f - 0.18f * a ? between(0.04f, 0.5f) : between(0.5f, 0.88f);
                     this.retarget = between(0.9f, 1.8f) * pace;
                 }
-                stiffness = 9.0f + 9.0f * d;
-                maxSpeed = 0.35f + 0.55f * d;
+                stiffness = (9.0f + 9.0f * d) * (1.0f + 0.4f * a);
+                maxSpeed = (0.35f + 0.55f * d) * (1.0f + 0.4f * a);
             }
             case JITTER -> {
                 this.centerTime -= STEP;
@@ -230,21 +268,22 @@ public final class FishFight {
                     this.centerTime = between(1.8f, 3.4f) * pace;
                 }
                 if (this.retarget <= 0.0f) {
-                    this.fishTarget = this.center + between(-1.0f, 1.0f) * Math.min(0.05f + 0.05f * d, this.zoneSize * 0.33f);
+                    this.fishTarget = this.center + between(-1.0f, 1.0f) * Math.min((0.05f + 0.05f * d) * range, this.zoneSize * (0.33f + 0.1f * a));
                     this.retarget = between(0.14f, 0.3f);
                 }
                 stiffness = 38.0f + 30.0f * d;
-                maxSpeed = 0.45f + 0.6f * d;
+                maxSpeed = (0.45f + 0.6f * d) * (1.0f + 0.4f * a);
             }
             case DARTER -> {
                 if (this.retarget <= 0.0f) {
                     if (this.dashing) {
                         // nach dem Schuss steht er still – schwierige Fische schießen manchmal gleich noch einmal
                         this.dashing = false;
-                        this.retarget = this.random.nextFloat() < 0.3f * d ? 0.1f : between(1.0f, 1.9f) * (1.1f - 0.1f * d);
+                        // Schießer schießen ohnehin – bei ihnen wirkt die Seltenheit nur halb
+                        this.retarget = this.random.nextFloat() < 0.3f * d + 0.1f * a ? 0.1f : between(1.0f, 1.9f) * (1.1f - 0.1f * d) * (1.0f - 0.15f * a);
                     } else {
                         this.dashing = true;
-                        float distance = between(0.22f, 0.26f + 0.22f * d);
+                        float distance = between(0.22f, 0.26f + 0.22f * d) + 0.04f * a;
                         boolean up = this.random.nextBoolean();
                         if (this.fishPos + distance > 0.95f) {
                             up = false;
@@ -258,17 +297,34 @@ public final class FishFight {
                     }
                 }
                 stiffness = this.dashing ? 30.0f + 30.0f * d : 18.0f;
-                maxSpeed = this.dashing ? 0.7f + 0.6f * d : 0.12f;
+                maxSpeed = this.dashing ? (0.7f + 0.6f * d) * (1.0f + 0.15f * a) : 0.12f + 0.06f * a;
             }
             default -> {
                 if (this.retarget <= 0.0f) {
-                    float step = between(0.15f, 0.45f) * (this.random.nextBoolean() ? 1.0f : -1.0f);
+                    float step = between(0.15f, 0.45f) * range * (this.random.nextBoolean() ? 1.0f : -1.0f);
                     float target = this.fishPos + step;
                     this.fishTarget = target < 0.05f || target > 0.95f ? this.fishPos - step : target;
                     this.retarget = between(1.0f, 2.0f) * pace;
                 }
-                stiffness = 9.0f + 9.0f * d;
-                maxSpeed = 0.35f + 0.55f * d;
+                stiffness = (9.0f + 9.0f * d) * (1.0f + 0.4f * a);
+                maxSpeed = (0.35f + 0.55f * d) * (1.0f + 0.4f * a);
+            }
+        }
+        // seltene Fische brechen ab und zu plötzlich aus (seit 0.99): ein kurzer Schuss nach oben oder unten, Legenden öfter
+        if (a >= 0.4f && this.behavior != FishSpecies.Behavior.DARTER) {
+            this.burstIn -= STEP;
+            if (this.bursting > 0.0f) {
+                this.bursting -= STEP;
+                stiffness = Math.max(stiffness, 34.0f + 20.0f * a);
+                maxSpeed = Math.max(maxSpeed, 0.75f + 0.45f * a);
+            } else if (this.burstIn <= 0.0f && !this.dashing) {
+                this.burstIn = between(2.4f, 4.2f) * (1.45f - 0.6f * a);
+                float distance = between(0.18f, 0.26f) + 0.08f * a;
+                boolean up = this.fishPos + distance <= 0.95f && (this.fishPos - distance < 0.05f || this.random.nextBoolean());
+                this.fishTarget = this.fishPos + (up ? distance : -distance);
+                this.retarget = Math.max(this.retarget, between(0.5f, 0.8f));
+                this.bursting = 0.42f;
+                this.dart = 1.0f;
             }
         }
         this.fishTarget = Mth.clamp(this.fishTarget, 0.03f, 0.97f);
@@ -352,6 +408,13 @@ public final class FishFight {
     /** Gerade losgeschossen (1, klingt in knapp einer halben Sekunde ab)? Für Spritzer und Ruck. */
     public float dart() {
         return this.dart;
+    }
+
+    /** Nur für Vorführungen und Prüfungen: Der Fisch schwimmt einen Zeitschritt, sonst geschieht nichts (die Leiste bleibt). */
+    public void swim() {
+        this.time += STEP;
+        this.dart = Math.max(0.0f, this.dart - STEP * 2.5f);
+        this.moveFish();
     }
 
     /** Nur für Vorführungen und Prüfungen: den Stand setzen. */

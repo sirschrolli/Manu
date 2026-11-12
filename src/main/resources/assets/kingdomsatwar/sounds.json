@@ -9029,6 +9029,238 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.star_ray.hurt"
   },
+  "entity.star_weaver.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_ambient1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_ambient2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_ambient3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.star_weaver.ambient"
+  },
+  "entity.star_weaver.awaken": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_awaken1",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.star_weaver.awaken"
+  },
+  "entity.star_weaver.bite": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_bite1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_bite2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_bite3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.star_weaver.bite"
+  },
+  "entity.star_weaver.brood": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_brood1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_brood2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.star_weaver.brood"
+  },
+  "entity.star_weaver.cocoon": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_cocoon1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_cocoon2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.star_weaver.cocoon"
+  },
+  "entity.star_weaver.constellation": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_constellation1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_constellation2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.star_weaver.constellation"
+  },
+  "entity.star_weaver.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_death1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.star_weaver.death"
+  },
+  "entity.star_weaver.drop": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_drop1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_drop2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.star_weaver.drop"
+  },
+  "entity.star_weaver.fury": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_fury1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.star_weaver.fury"
+  },
+  "entity.star_weaver.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_hurt1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_hurt2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_hurt3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.star_weaver.hurt"
+  },
+  "entity.star_weaver.spiderling": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_spiderling1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_spiderling2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_spiderling3",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_spiderling4",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.star_weaver.spiderling"
+  },
+  "entity.star_weaver.spindle": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_spindle1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_spindle2",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.star_weaver.spindle"
+  },
+  "entity.star_weaver.starfall": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_starfall1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_starfall2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.star_weaver.starfall"
+  },
+  "entity.star_weaver.step": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_step1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_step2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_step3",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_step4",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.star_weaver.step"
+  },
+  "entity.star_weaver.thread": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_thread1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_thread2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_thread3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.star_weaver.thread"
+  },
+  "entity.star_weaver.web": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_web1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_web2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_weaver_web3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.star_weaver.web"
+  },
   "entity.stone_keeper.ambient": {
     "sounds": [
       {
