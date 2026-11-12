@@ -182,7 +182,7 @@ final class StarGameTests {
                             "Unter halber Kraft beginnt keine Supernova: " + asteria.currentAttack());
                     asteria.setInvulnerableTime(0);
                     asteria.setHealth(1.0f);
-                    asteria.hurtServer(level, level.damageSources().generic(), 50.0f);
+                    BossLootGameTests.firstVictory(helper, asteria, 50.0f);
                     helper.assertTrue(asteria.isDeadOrDying(), "Asteria fällt nicht");
                     helper.assertTrue(stone.phase() == StarstoneBlockEntity.Phase.DEFEATED, "Der Stein merkt den Sieg nicht");
                     helper.assertTrue(level.getBlockState(pos).getValue(StarstoneBlock.PHASE) == StarstoneBlock.Phase.DIM, "Der Stein erlischt nicht");

@@ -234,18 +234,11 @@ final class SeaModels {
                         io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.id("item/tide_spear_model_glow")))
                 .put(TextureSlot.PARTICLE, new net.minecraft.client.resources.model.sprite.Material(
                         io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.id("item/tide_spear")));
-        ExtendedModelTemplateBuilder hand = ExtendedModelTemplateBuilder.builder()
+        // gehalten wie die Speere von Minecraft: auf die Mitte gesetzt und auf ihre Länge gebracht (SpearHold)
+        ExtendedModelTemplateBuilder hand = SpearHold.hold(ExtendedModelTemplateBuilder.builder()
                 .requiredTextureSlot(SPEAR).requiredTextureSlot(SPEAR_GLOW).requiredTextureSlot(TextureSlot.PARTICLE)
-                .guiLight(net.minecraft.client.resources.model.UnbakedModel.GuiLight.FRONT)
-                .transform(net.minecraft.world.item.ItemDisplayContext.FIRST_PERSON_RIGHT_HAND,
-                        t -> t.rotation(-20, 90, -35).translation(3.13f, 2.0f, 0.13f).scale(1.36f, 1.36f, 0.68f))
-                .transform(net.minecraft.world.item.ItemDisplayContext.FIRST_PERSON_LEFT_HAND,
-                        t -> t.rotation(-20, -90, 35).translation(3.13f, 2.0f, 0.13f).scale(1.36f, 1.36f, 0.68f))
-                .transform(net.minecraft.world.item.ItemDisplayContext.THIRD_PERSON_RIGHT_HAND,
-                        t -> t.rotation(5, 270, -40).translation(0, 2, 2).scale(1.7f, 1.7f, 0.85f))
-                .transform(net.minecraft.world.item.ItemDisplayContext.THIRD_PERSON_LEFT_HAND,
-                        t -> t.rotation(5, -270, 40).translation(0, 2, 2).scale(1.7f, 1.7f, 0.85f));
-        spearElements(hand, 0.0f, new float[] {8, 8, 8}, new float[] {0, 0, 45});
+                .guiLight(net.minecraft.client.resources.model.UnbakedModel.GuiLight.FRONT), SPEAR_PARTS);
+        spearElements(hand, SpearHold.lift(SPEAR_PARTS), new float[] {8, 8, 8}, new float[] {0, 0, 45});
         Identifier inHand = hand.build().create(net.minecraft.client.data.models.model.ModelLocationUtils.getModelLocation(spear, "_in_hand"),
                 spearTextures, items.modelOutput);
         net.minecraft.client.renderer.item.ItemModel.Unbaked flat = net.minecraft.client.data.models.model.ItemModelUtils.plainModel(

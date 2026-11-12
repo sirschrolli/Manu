@@ -1456,6 +1456,17 @@ public class ReefColossusEntity extends Monster implements io.github.sirschrolli
                 level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.PRISMARINE_BRICKS.defaultBlockState()),
                         this.getX(), this.getY() + 3.2, this.getZ(), 10, 1.6, 1.0, 1.6, 0.1);
             }
+            if (this.deathTime == 55 && this.hasSpear() && !io.github.sirschrolli.kingdomsatwar.entity.boss.BossLoot.signatureDrops(this)) {
+                // nach dem ersten eigenen Sieg nur noch selten: sonst zerspringt der Speer in der Kuppel zu Aquamarinsplittern
+                this.entityData.set(DATA_SPEAR, false);
+                Vec3 tip = spearTip(this.position(), this.yBodyRot);
+                level.sendParticles(ModParticles.SEA_GLOW.get(), tip.x, tip.y, tip.z, 80, 0.8, 0.8, 0.8, 0.2);
+                level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.PRISMARINE.defaultBlockState()), tip.x, tip.y,
+                        tip.z, 70, 0.8, 0.8, 0.8, 0.25);
+                level.playSound(null, BlockPos.containing(tip), net.minecraft.sounds.SoundEvents.AMETHYST_CLUSTER_BREAK, SoundSource.HOSTILE,
+                        3.0f, 0.7f);
+                level.playSound(null, BlockPos.containing(tip), ModSounds.REEF_COLOSSUS_TIDE.get(), SoundSource.HOSTILE, 2.0f, 0.8f);
+            }
             if (this.deathTime == 55 && this.hasSpear()) {
                 // der Gezeiten-Speer bricht aus der Kuppel und fliegt empor
                 this.entityData.set(DATA_SPEAR, false);

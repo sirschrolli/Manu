@@ -2,6 +2,21 @@
   "type": "minecraft:entity",
   "pools": [
     {
+      "condition": {
+        "type": "minecraft:entity_properties",
+        "entity": "attacking_player",
+        "predicate": {
+          "minecraft:type_specific/player": {
+            "stats": [
+              {
+                "type": "minecraft:killed",
+                "stat": "kingdomsatwar:reef_colossus",
+                "value": 1
+              }
+            ]
+          }
+        }
+      },
       "entries": [
         {
           "type": "minecraft:item",
@@ -15,6 +30,21 @@
       "rolls": 1
     },
     {
+      "condition": {
+        "type": "minecraft:entity_properties",
+        "entity": "attacking_player",
+        "predicate": {
+          "minecraft:type_specific/player": {
+            "stats": [
+              {
+                "type": "minecraft:killed",
+                "stat": "kingdomsatwar:reef_colossus",
+                "value": 1
+              }
+            ]
+          }
+        }
+      },
       "entries": [
         {
           "type": "minecraft:item",
@@ -28,6 +58,21 @@
       "rolls": 1
     },
     {
+      "condition": {
+        "type": "minecraft:entity_properties",
+        "entity": "attacking_player",
+        "predicate": {
+          "minecraft:type_specific/player": {
+            "stats": [
+              {
+                "type": "minecraft:killed",
+                "stat": "kingdomsatwar:reef_colossus",
+                "value": 1
+              }
+            ]
+          }
+        }
+      },
       "entries": [
         {
           "type": "minecraft:item",
@@ -49,8 +94,8 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 2,
-                "min": 1
+                "max": 1,
+                "min": 0
               }
             },
             {
@@ -64,6 +109,34 @@
             }
           ],
           "name": "kingdomsatwar:crab_claw"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 4,
+                "min": 2
+              }
+            },
+            {
+              "type": "minecraft:enchanted_count_increase",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.0
+              },
+              "enchantment": "minecraft:looting"
+            }
+          ],
+          "name": "kingdomsatwar:crab_meat"
         }
       ],
       "rolls": 1
@@ -91,34 +164,6 @@
               "enchantment": "minecraft:looting"
             }
           ],
-          "name": "kingdomsatwar:crab_meat"
-        }
-      ],
-      "rolls": 1
-    },
-    {
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "modifier": [
-            {
-              "type": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 16,
-                "min": 8
-              }
-            },
-            {
-              "type": "minecraft:enchanted_count_increase",
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 1.0,
-                "min": 0.0
-              },
-              "enchantment": "minecraft:looting"
-            }
-          ],
           "name": "minecraft:prismarine_crystals"
         }
       ],
@@ -133,8 +178,8 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 3,
-                "min": 1
+                "max": 1,
+                "min": 0
               }
             },
             {
@@ -161,8 +206,8 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 9,
-                "min": 4
+                "max": 5,
+                "min": 2
               }
             },
             {
@@ -189,8 +234,8 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 4,
-                "min": 2
+                "max": 2,
+                "min": 0
               }
             },
             {

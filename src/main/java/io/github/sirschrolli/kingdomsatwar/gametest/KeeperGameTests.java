@@ -388,7 +388,7 @@ final class KeeperGameTests {
         keeper.setInvulnerableTime(0);
         keeper.damageCooldownTime = 0;
         keeper.setHealth(1.0f);
-        keeper.hurtServer(level, level.damageSources().generic(), 50.0f);
+        BossLootGameTests.firstVictory(helper, keeper, 50.0f);
         helper.assertTrue(keeper.isDeadOrDying(), "Der Hüter fällt nicht");
         helper.assertTrue(stone.phase() == KeeperStoneBlock.Phase.DEFEATED, "Der Stein merkt den Sieg nicht");
         helper.assertTrue(level.getBlockState(o).getValue(KeeperStoneBlock.PHASE) == KeeperStoneBlock.Phase.DEFEATED, "Der Stein erlischt nicht");

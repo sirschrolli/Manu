@@ -2244,24 +2244,20 @@
   "block.dragon_egg.crack": {
     "sounds": [
       {
-        "name": "minecraft:mob/turtle/egg/egg_crack1",
-        "pitch": 0.7
+        "name": "kingdomsatwar:entity/dragon/egg_crack1",
+        "attenuation_distance": 16
       },
       {
-        "name": "minecraft:mob/turtle/egg/egg_crack2",
-        "pitch": 0.7
+        "name": "kingdomsatwar:entity/dragon/egg_crack2",
+        "attenuation_distance": 16
       },
       {
-        "name": "minecraft:mob/turtle/egg/egg_crack3",
-        "pitch": 0.7
+        "name": "kingdomsatwar:entity/dragon/egg_crack3",
+        "attenuation_distance": 16
       },
       {
-        "name": "minecraft:mob/turtle/egg/egg_crack4",
-        "pitch": 0.7
-      },
-      {
-        "name": "minecraft:mob/turtle/egg/egg_crack5",
-        "pitch": 0.7
+        "name": "kingdomsatwar:entity/dragon/egg_crack4",
+        "attenuation_distance": 16
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.block.dragon_egg.crack"
@@ -2269,12 +2265,12 @@
   "block.dragon_egg.hatch": {
     "sounds": [
       {
-        "name": "minecraft:mob/turtle/egg/egg_break1",
-        "pitch": 0.65
+        "name": "kingdomsatwar:entity/dragon/egg_hatch1",
+        "attenuation_distance": 24
       },
       {
-        "name": "minecraft:mob/turtle/egg/egg_break2",
-        "pitch": 0.65
+        "name": "kingdomsatwar:entity/dragon/egg_hatch2",
+        "attenuation_distance": 24
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.block.dragon_egg.hatch"
@@ -3222,36 +3218,20 @@
   "entity.cave_troll.ambient": {
     "sounds": [
       {
-        "name": "minecraft:mob/ravager/idle1",
-        "pitch": 0.65
+        "name": "kingdomsatwar:entity/beast/cave_troll_ambient1",
+        "attenuation_distance": 24
       },
       {
-        "name": "minecraft:mob/ravager/idle2",
-        "pitch": 0.65
+        "name": "kingdomsatwar:entity/beast/cave_troll_ambient2",
+        "attenuation_distance": 24
       },
       {
-        "name": "minecraft:mob/ravager/idle3",
-        "pitch": 0.65
+        "name": "kingdomsatwar:entity/beast/cave_troll_ambient3",
+        "attenuation_distance": 24
       },
       {
-        "name": "minecraft:mob/ravager/idle4",
-        "pitch": 0.65
-      },
-      {
-        "name": "minecraft:mob/ravager/idle5",
-        "pitch": 0.65
-      },
-      {
-        "name": "minecraft:mob/ravager/idle6",
-        "pitch": 0.65
-      },
-      {
-        "name": "minecraft:mob/ravager/idle7",
-        "pitch": 0.65
-      },
-      {
-        "name": "minecraft:mob/ravager/idle8",
-        "pitch": 0.65
+        "name": "kingdomsatwar:entity/beast/cave_troll_ambient4",
+        "attenuation_distance": 24
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.cave_troll.ambient"
@@ -3259,16 +3239,12 @@
   "entity.cave_troll.death": {
     "sounds": [
       {
-        "name": "minecraft:mob/ravager/death1",
-        "pitch": 0.6
+        "name": "kingdomsatwar:entity/beast/cave_troll_death1",
+        "attenuation_distance": 32
       },
       {
-        "name": "minecraft:mob/ravager/death2",
-        "pitch": 0.6
-      },
-      {
-        "name": "minecraft:mob/ravager/death3",
-        "pitch": 0.6
+        "name": "kingdomsatwar:entity/beast/cave_troll_death2",
+        "attenuation_distance": 32
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.cave_troll.death"
@@ -3276,20 +3252,20 @@
   "entity.cave_troll.hurt": {
     "sounds": [
       {
-        "name": "minecraft:mob/ravager/hurt1",
-        "pitch": 0.7
+        "name": "kingdomsatwar:entity/beast/cave_troll_hurt1",
+        "attenuation_distance": 24
       },
       {
-        "name": "minecraft:mob/ravager/hurt2",
-        "pitch": 0.7
+        "name": "kingdomsatwar:entity/beast/cave_troll_hurt2",
+        "attenuation_distance": 24
       },
       {
-        "name": "minecraft:mob/ravager/hurt3",
-        "pitch": 0.7
+        "name": "kingdomsatwar:entity/beast/cave_troll_hurt3",
+        "attenuation_distance": 24
       },
       {
-        "name": "minecraft:mob/ravager/hurt4",
-        "pitch": 0.7
+        "name": "kingdomsatwar:entity/beast/cave_troll_hurt4",
+        "attenuation_distance": 24
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.cave_troll.hurt"
@@ -3297,24 +3273,16 @@
   "entity.cave_troll.petrify": {
     "sounds": [
       {
-        "name": "minecraft:dig/stone1",
-        "pitch": 0.7,
-        "volume": 0.8
+        "name": "kingdomsatwar:entity/beast/cave_troll_petrify1",
+        "attenuation_distance": 24
       },
       {
-        "name": "minecraft:dig/stone2",
-        "pitch": 0.7,
-        "volume": 0.8
+        "name": "kingdomsatwar:entity/beast/cave_troll_petrify2",
+        "attenuation_distance": 24
       },
       {
-        "name": "minecraft:dig/stone3",
-        "pitch": 0.7,
-        "volume": 0.8
-      },
-      {
-        "name": "minecraft:dig/stone4",
-        "pitch": 0.7,
-        "volume": 0.8
+        "name": "kingdomsatwar:entity/beast/cave_troll_petrify3",
+        "attenuation_distance": 24
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.cave_troll.petrify"
@@ -3322,26 +3290,16 @@
   "entity.cave_troll.smash": {
     "sounds": [
       {
-        "name": "minecraft:mob/ravager/bite1",
-        "pitch": 0.6
+        "name": "kingdomsatwar:entity/beast/cave_troll_smash1",
+        "attenuation_distance": 24
       },
       {
-        "name": "minecraft:mob/ravager/bite2",
-        "pitch": 0.6
+        "name": "kingdomsatwar:entity/beast/cave_troll_smash2",
+        "attenuation_distance": 24
       },
       {
-        "name": "minecraft:mob/ravager/bite3",
-        "pitch": 0.6
-      },
-      {
-        "name": "minecraft:mob/zoglin/attack1",
-        "pitch": 0.6,
-        "volume": 0.8
-      },
-      {
-        "name": "minecraft:mob/zoglin/attack2",
-        "pitch": 0.6,
-        "volume": 0.8
+        "name": "kingdomsatwar:entity/beast/cave_troll_smash3",
+        "attenuation_distance": 24
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.cave_troll.smash"
@@ -3349,29 +3307,20 @@
   "entity.cave_troll.step": {
     "sounds": [
       {
-        "name": "minecraft:mob/ravager/step1",
-        "pitch": 0.6,
-        "volume": 0.9
+        "name": "kingdomsatwar:entity/beast/cave_troll_step1",
+        "attenuation_distance": 16
       },
       {
-        "name": "minecraft:mob/ravager/step2",
-        "pitch": 0.6,
-        "volume": 0.9
+        "name": "kingdomsatwar:entity/beast/cave_troll_step2",
+        "attenuation_distance": 16
       },
       {
-        "name": "minecraft:mob/ravager/step3",
-        "pitch": 0.6,
-        "volume": 0.9
+        "name": "kingdomsatwar:entity/beast/cave_troll_step3",
+        "attenuation_distance": 16
       },
       {
-        "name": "minecraft:mob/ravager/step4",
-        "pitch": 0.6,
-        "volume": 0.9
-      },
-      {
-        "name": "minecraft:mob/ravager/step5",
-        "pitch": 0.6,
-        "volume": 0.9
+        "name": "kingdomsatwar:entity/beast/cave_troll_step4",
+        "attenuation_distance": 16
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.cave_troll.step"
@@ -3691,44 +3640,20 @@
   "entity.dragon.ambient": {
     "sounds": [
       {
-        "name": "minecraft:mob/enderdragon/growl1",
-        "pitch": 1.15,
-        "volume": 0.35
+        "name": "kingdomsatwar:entity/dragon/ambient1",
+        "attenuation_distance": 32
       },
       {
-        "name": "minecraft:mob/enderdragon/growl2",
-        "pitch": 1.15,
-        "volume": 0.35
+        "name": "kingdomsatwar:entity/dragon/ambient2",
+        "attenuation_distance": 32
       },
       {
-        "name": "minecraft:mob/enderdragon/growl3",
-        "pitch": 1.15,
-        "volume": 0.35
+        "name": "kingdomsatwar:entity/dragon/ambient3",
+        "attenuation_distance": 32
       },
       {
-        "name": "minecraft:mob/enderdragon/growl4",
-        "pitch": 1.15,
-        "volume": 0.35
-      },
-      {
-        "name": "minecraft:mob/ravager/idle1",
-        "pitch": 0.7,
-        "volume": 0.9
-      },
-      {
-        "name": "minecraft:mob/ravager/idle2",
-        "pitch": 0.7,
-        "volume": 0.9
-      },
-      {
-        "name": "minecraft:mob/ravager/idle3",
-        "pitch": 0.7,
-        "volume": 0.9
-      },
-      {
-        "name": "minecraft:mob/ravager/idle4",
-        "pitch": 0.7,
-        "volume": 0.9
+        "name": "kingdomsatwar:entity/dragon/ambient4",
+        "attenuation_distance": 32
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.dragon.ambient"
@@ -3736,44 +3661,20 @@
   "entity.dragon.baby_ambient": {
     "sounds": [
       {
-        "name": "minecraft:mob/sniffer/happy1",
-        "pitch": 0.95,
-        "volume": 0.55
+        "name": "kingdomsatwar:entity/dragon/baby_ambient1",
+        "attenuation_distance": 16
       },
       {
-        "name": "minecraft:mob/sniffer/happy2",
-        "pitch": 0.95,
-        "volume": 0.55
+        "name": "kingdomsatwar:entity/dragon/baby_ambient2",
+        "attenuation_distance": 16
       },
       {
-        "name": "minecraft:mob/sniffer/happy3",
-        "pitch": 0.95,
-        "volume": 0.55
+        "name": "kingdomsatwar:entity/dragon/baby_ambient3",
+        "attenuation_distance": 16
       },
       {
-        "name": "minecraft:mob/sniffer/happy4",
-        "pitch": 0.95,
-        "volume": 0.55
-      },
-      {
-        "name": "minecraft:mob/sniffer/happy5",
-        "pitch": 0.95,
-        "volume": 0.55
-      },
-      {
-        "name": "minecraft:mob/hoglin/idle2",
-        "pitch": 1.1,
-        "volume": 0.45
-      },
-      {
-        "name": "minecraft:mob/hoglin/idle3",
-        "pitch": 1.1,
-        "volume": 0.45
-      },
-      {
-        "name": "minecraft:mob/hoglin/idle4",
-        "pitch": 1.1,
-        "volume": 0.45
+        "name": "kingdomsatwar:entity/dragon/baby_ambient4",
+        "attenuation_distance": 16
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.dragon.baby_ambient"
@@ -3781,26 +3682,16 @@
   "entity.dragon.bite": {
     "sounds": [
       {
-        "name": "minecraft:mob/ravager/bite1",
-        "pitch": 1.05
+        "name": "kingdomsatwar:entity/dragon/bite1",
+        "attenuation_distance": 24
       },
       {
-        "name": "minecraft:mob/ravager/bite2",
-        "pitch": 1.05
+        "name": "kingdomsatwar:entity/dragon/bite2",
+        "attenuation_distance": 24
       },
       {
-        "name": "minecraft:mob/ravager/bite3",
-        "pitch": 1.05
-      },
-      {
-        "name": "minecraft:mob/hoglin/attack1",
-        "pitch": 0.9,
-        "volume": 0.8
-      },
-      {
-        "name": "minecraft:mob/hoglin/attack2",
-        "pitch": 0.9,
-        "volume": 0.8
+        "name": "kingdomsatwar:entity/dragon/bite3",
+        "attenuation_distance": 24
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.dragon.bite"
@@ -3808,30 +3699,16 @@
   "entity.dragon.breath.earth": {
     "sounds": [
       {
-        "name": "minecraft:dig/gravel1",
-        "pitch": 0.5
+        "name": "kingdomsatwar:entity/dragon/breath_earth1",
+        "attenuation_distance": 48
       },
       {
-        "name": "minecraft:dig/gravel2",
-        "pitch": 0.5
+        "name": "kingdomsatwar:entity/dragon/breath_earth2",
+        "attenuation_distance": 48
       },
       {
-        "name": "minecraft:dig/gravel3",
-        "pitch": 0.5
-      },
-      {
-        "name": "minecraft:dig/gravel4",
-        "pitch": 0.5
-      },
-      {
-        "name": "minecraft:mob/goat/impact1",
-        "pitch": 0.6,
-        "volume": 0.8
-      },
-      {
-        "name": "minecraft:mob/goat/impact2",
-        "pitch": 0.6,
-        "volume": 0.8
+        "name": "kingdomsatwar:entity/dragon/breath_earth3",
+        "attenuation_distance": 48
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.dragon.breath.earth"
@@ -3839,25 +3716,16 @@
   "entity.dragon.breath.fire": {
     "sounds": [
       {
-        "name": "minecraft:mob/blaze/breathe1",
-        "pitch": 0.55
+        "name": "kingdomsatwar:entity/dragon/breath_fire1",
+        "attenuation_distance": 48
       },
       {
-        "name": "minecraft:mob/blaze/breathe2",
-        "pitch": 0.55
+        "name": "kingdomsatwar:entity/dragon/breath_fire2",
+        "attenuation_distance": 48
       },
       {
-        "name": "minecraft:mob/blaze/breathe3",
-        "pitch": 0.55
-      },
-      {
-        "name": "minecraft:mob/blaze/breathe4",
-        "pitch": 0.55
-      },
-      {
-        "name": "minecraft:mob/ghast/fireball4",
-        "pitch": 0.6,
-        "volume": 0.8
+        "name": "kingdomsatwar:entity/dragon/breath_fire3",
+        "attenuation_distance": 48
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.dragon.breath.fire"
@@ -3865,28 +3733,16 @@
   "entity.dragon.breath.ice": {
     "sounds": [
       {
-        "name": "minecraft:mob/breeze/wind_burst1",
-        "pitch": 0.8
+        "name": "kingdomsatwar:entity/dragon/breath_ice1",
+        "attenuation_distance": 48
       },
       {
-        "name": "minecraft:mob/breeze/wind_burst2",
-        "pitch": 0.8
+        "name": "kingdomsatwar:entity/dragon/breath_ice2",
+        "attenuation_distance": 48
       },
       {
-        "name": "minecraft:mob/breeze/wind_burst3",
-        "pitch": 0.8
-      },
-      {
-        "name": "minecraft:block/powder_snow/break1",
-        "pitch": 0.6
-      },
-      {
-        "name": "minecraft:block/powder_snow/break2",
-        "pitch": 0.6
-      },
-      {
-        "name": "minecraft:block/powder_snow/break3",
-        "pitch": 0.6
+        "name": "kingdomsatwar:entity/dragon/breath_ice3",
+        "attenuation_distance": 48
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.dragon.breath.ice"
@@ -3894,34 +3750,16 @@
   "entity.dragon.breath.lightning": {
     "sounds": [
       {
-        "name": "minecraft:mob/warden/sonic_charge1",
-        "pitch": 1.7,
-        "volume": 0.8
+        "name": "kingdomsatwar:entity/dragon/breath_lightning1",
+        "attenuation_distance": 48
       },
       {
-        "name": "minecraft:mob/warden/sonic_charge2",
-        "pitch": 1.7,
-        "volume": 0.8
+        "name": "kingdomsatwar:entity/dragon/breath_lightning2",
+        "attenuation_distance": 48
       },
       {
-        "name": "minecraft:mob/warden/sonic_charge3",
-        "pitch": 1.7,
-        "volume": 0.8
-      },
-      {
-        "name": "minecraft:mob/warden/sonic_charge4",
-        "pitch": 1.7,
-        "volume": 0.8
-      },
-      {
-        "name": "minecraft:item/trident/thunder1",
-        "pitch": 1.3,
-        "volume": 0.5
-      },
-      {
-        "name": "minecraft:item/trident/thunder2",
-        "pitch": 1.3,
-        "volume": 0.5
+        "name": "kingdomsatwar:entity/dragon/breath_lightning3",
+        "attenuation_distance": 48
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.dragon.breath.lightning"
@@ -3929,32 +3767,16 @@
   "entity.dragon.breath.nature": {
     "sounds": [
       {
-        "name": "minecraft:mob/breeze/wind_burst1",
-        "volume": 0.8
+        "name": "kingdomsatwar:entity/dragon/breath_nature1",
+        "attenuation_distance": 48
       },
       {
-        "name": "minecraft:mob/breeze/wind_burst2",
-        "volume": 0.8
+        "name": "kingdomsatwar:entity/dragon/breath_nature2",
+        "attenuation_distance": 48
       },
       {
-        "name": "minecraft:mob/breeze/wind_burst3",
-        "volume": 0.8
-      },
-      {
-        "name": "minecraft:block/chorus_flower/grow1",
-        "pitch": 0.7
-      },
-      {
-        "name": "minecraft:block/chorus_flower/grow2",
-        "pitch": 0.7
-      },
-      {
-        "name": "minecraft:block/chorus_flower/grow3",
-        "pitch": 0.7
-      },
-      {
-        "name": "minecraft:block/chorus_flower/grow4",
-        "pitch": 0.7
+        "name": "kingdomsatwar:entity/dragon/breath_nature3",
+        "attenuation_distance": 48
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.dragon.breath.nature"
@@ -3962,20 +3784,16 @@
   "entity.dragon.breath.water": {
     "sounds": [
       {
-        "name": "minecraft:liquid/heavy_splash",
-        "pitch": 1.1
+        "name": "kingdomsatwar:entity/dragon/breath_water1",
+        "attenuation_distance": 48
       },
       {
-        "name": "minecraft:mob/glow_squid/squirt1",
-        "pitch": 0.6
+        "name": "kingdomsatwar:entity/dragon/breath_water2",
+        "attenuation_distance": 48
       },
       {
-        "name": "minecraft:mob/glow_squid/squirt2",
-        "pitch": 0.6
-      },
-      {
-        "name": "minecraft:mob/glow_squid/squirt3",
-        "pitch": 0.6
+        "name": "kingdomsatwar:entity/dragon/breath_water3",
+        "attenuation_distance": 48
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.dragon.breath.water"
@@ -3983,16 +3801,12 @@
   "entity.dragon.death": {
     "sounds": [
       {
-        "name": "minecraft:mob/ravager/death1",
-        "pitch": 0.7
+        "name": "kingdomsatwar:entity/dragon/death1",
+        "attenuation_distance": 64
       },
       {
-        "name": "minecraft:mob/ravager/death2",
-        "pitch": 0.7
-      },
-      {
-        "name": "minecraft:mob/ravager/death3",
-        "pitch": 0.7
+        "name": "kingdomsatwar:entity/dragon/death2",
+        "attenuation_distance": 64
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.dragon.death"
@@ -4000,34 +3814,16 @@
   "entity.dragon.eat": {
     "sounds": [
       {
-        "name": "minecraft:mob/sniffer/eat1",
-        "pitch": 1.1,
-        "volume": 0.8
+        "name": "kingdomsatwar:entity/dragon/eat1",
+        "attenuation_distance": 16
       },
       {
-        "name": "minecraft:mob/sniffer/eat2",
-        "pitch": 1.1,
-        "volume": 0.8
+        "name": "kingdomsatwar:entity/dragon/eat2",
+        "attenuation_distance": 16
       },
       {
-        "name": "minecraft:mob/sniffer/eat3",
-        "pitch": 1.1,
-        "volume": 0.8
-      },
-      {
-        "name": "minecraft:random/eat1",
-        "pitch": 0.8,
-        "volume": 0.6
-      },
-      {
-        "name": "minecraft:random/eat2",
-        "pitch": 0.8,
-        "volume": 0.6
-      },
-      {
-        "name": "minecraft:random/eat3",
-        "pitch": 0.8,
-        "volume": 0.6
+        "name": "kingdomsatwar:entity/dragon/eat3",
+        "attenuation_distance": 16
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.dragon.eat"
@@ -4035,34 +3831,20 @@
   "entity.dragon.flap": {
     "sounds": [
       {
-        "name": "minecraft:mob/enderdragon/wings1",
-        "pitch": 1.2,
-        "volume": 0.45
+        "name": "kingdomsatwar:entity/dragon/flap1",
+        "attenuation_distance": 48
       },
       {
-        "name": "minecraft:mob/enderdragon/wings2",
-        "pitch": 1.2,
-        "volume": 0.45
+        "name": "kingdomsatwar:entity/dragon/flap2",
+        "attenuation_distance": 48
       },
       {
-        "name": "minecraft:mob/enderdragon/wings3",
-        "pitch": 1.2,
-        "volume": 0.45
+        "name": "kingdomsatwar:entity/dragon/flap3",
+        "attenuation_distance": 48
       },
       {
-        "name": "minecraft:mob/enderdragon/wings4",
-        "pitch": 1.2,
-        "volume": 0.45
-      },
-      {
-        "name": "minecraft:mob/enderdragon/wings5",
-        "pitch": 1.2,
-        "volume": 0.45
-      },
-      {
-        "name": "minecraft:mob/enderdragon/wings6",
-        "pitch": 1.2,
-        "volume": 0.45
+        "name": "kingdomsatwar:entity/dragon/flap4",
+        "attenuation_distance": 48
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.dragon.flap"
@@ -4070,9 +3852,8 @@
   "entity.dragon.grow": {
     "sounds": [
       {
-        "name": "minecraft:random/levelup",
-        "pitch": 0.75,
-        "volume": 0.7
+        "name": "kingdomsatwar:entity/dragon/grow1",
+        "attenuation_distance": 24
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.dragon.grow"
@@ -4080,44 +3861,20 @@
   "entity.dragon.hurt": {
     "sounds": [
       {
-        "name": "minecraft:mob/enderdragon/hit1",
-        "pitch": 1.15,
-        "volume": 0.55
+        "name": "kingdomsatwar:entity/dragon/hurt1",
+        "attenuation_distance": 32
       },
       {
-        "name": "minecraft:mob/enderdragon/hit2",
-        "pitch": 1.15,
-        "volume": 0.55
+        "name": "kingdomsatwar:entity/dragon/hurt2",
+        "attenuation_distance": 32
       },
       {
-        "name": "minecraft:mob/enderdragon/hit3",
-        "pitch": 1.15,
-        "volume": 0.55
+        "name": "kingdomsatwar:entity/dragon/hurt3",
+        "attenuation_distance": 32
       },
       {
-        "name": "minecraft:mob/enderdragon/hit4",
-        "pitch": 1.15,
-        "volume": 0.55
-      },
-      {
-        "name": "minecraft:mob/ravager/hurt1",
-        "pitch": 0.85,
-        "volume": 0.8
-      },
-      {
-        "name": "minecraft:mob/ravager/hurt2",
-        "pitch": 0.85,
-        "volume": 0.8
-      },
-      {
-        "name": "minecraft:mob/ravager/hurt3",
-        "pitch": 0.85,
-        "volume": 0.8
-      },
-      {
-        "name": "minecraft:mob/ravager/hurt4",
-        "pitch": 0.85,
-        "volume": 0.8
+        "name": "kingdomsatwar:entity/dragon/hurt4",
+        "attenuation_distance": 32
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.dragon.hurt"
@@ -4125,36 +3882,20 @@
   "entity.dragon.roar": {
     "sounds": [
       {
-        "name": "minecraft:mob/ravager/roar1",
-        "pitch": 0.8,
-        "attenuation_distance": 48
+        "name": "kingdomsatwar:entity/dragon/roar1",
+        "attenuation_distance": 96
       },
       {
-        "name": "minecraft:mob/ravager/roar2",
-        "pitch": 0.8,
-        "attenuation_distance": 48
+        "name": "kingdomsatwar:entity/dragon/roar2",
+        "attenuation_distance": 96
       },
       {
-        "name": "minecraft:mob/ravager/roar3",
-        "pitch": 0.8,
-        "attenuation_distance": 48
+        "name": "kingdomsatwar:entity/dragon/roar3",
+        "attenuation_distance": 96
       },
       {
-        "name": "minecraft:mob/ravager/roar4",
-        "pitch": 0.8,
-        "attenuation_distance": 48
-      },
-      {
-        "name": "minecraft:mob/enderdragon/growl1",
-        "pitch": 0.95,
-        "volume": 0.7,
-        "attenuation_distance": 48
-      },
-      {
-        "name": "minecraft:mob/enderdragon/growl2",
-        "pitch": 0.95,
-        "volume": 0.7,
-        "attenuation_distance": 48
+        "name": "kingdomsatwar:entity/dragon/roar4",
+        "attenuation_distance": 96
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.dragon.roar"
@@ -4162,53 +3903,20 @@
   "entity.dragon.step": {
     "sounds": [
       {
-        "name": "minecraft:mob/sniffer/step1",
-        "volume": 0.7
+        "name": "kingdomsatwar:entity/dragon/step1",
+        "attenuation_distance": 24
       },
       {
-        "name": "minecraft:mob/sniffer/step2",
-        "volume": 0.7
+        "name": "kingdomsatwar:entity/dragon/step2",
+        "attenuation_distance": 24
       },
       {
-        "name": "minecraft:mob/sniffer/step3",
-        "volume": 0.7
+        "name": "kingdomsatwar:entity/dragon/step3",
+        "attenuation_distance": 24
       },
       {
-        "name": "minecraft:mob/sniffer/step4",
-        "volume": 0.7
-      },
-      {
-        "name": "minecraft:mob/sniffer/step5",
-        "volume": 0.7
-      },
-      {
-        "name": "minecraft:mob/sniffer/step6",
-        "volume": 0.7
-      },
-      {
-        "name": "minecraft:mob/ravager/step1",
-        "pitch": 0.9,
-        "volume": 0.5
-      },
-      {
-        "name": "minecraft:mob/ravager/step2",
-        "pitch": 0.9,
-        "volume": 0.5
-      },
-      {
-        "name": "minecraft:mob/ravager/step3",
-        "pitch": 0.9,
-        "volume": 0.5
-      },
-      {
-        "name": "minecraft:mob/ravager/step4",
-        "pitch": 0.9,
-        "volume": 0.5
-      },
-      {
-        "name": "minecraft:mob/ravager/step5",
-        "pitch": 0.9,
-        "volume": 0.5
+        "name": "kingdomsatwar:entity/dragon/step4",
+        "attenuation_distance": 24
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.dragon.step"
@@ -5472,18 +5180,15 @@
   "entity.kraken.bite": {
     "sounds": [
       {
-        "name": "minecraft:mob/ravager/bite1",
-        "pitch": 0.6,
+        "name": "kingdomsatwar:entity/sea/kraken_bite1",
         "attenuation_distance": 40
       },
       {
-        "name": "minecraft:mob/ravager/bite2",
-        "pitch": 0.6,
+        "name": "kingdomsatwar:entity/sea/kraken_bite2",
         "attenuation_distance": 40
       },
       {
-        "name": "minecraft:mob/ravager/bite3",
-        "pitch": 0.6,
+        "name": "kingdomsatwar:entity/sea/kraken_bite3",
         "attenuation_distance": 40
       }
     ],
@@ -5570,40 +5275,20 @@
   "entity.kraken.hurt": {
     "sounds": [
       {
-        "name": "minecraft:mob/squid/hurt1",
-        "pitch": 0.5
+        "name": "kingdomsatwar:entity/sea/kraken_hurt1",
+        "attenuation_distance": 48
       },
       {
-        "name": "minecraft:mob/squid/hurt2",
-        "pitch": 0.5
+        "name": "kingdomsatwar:entity/sea/kraken_hurt2",
+        "attenuation_distance": 48
       },
       {
-        "name": "minecraft:mob/squid/hurt3",
-        "pitch": 0.5
+        "name": "kingdomsatwar:entity/sea/kraken_hurt3",
+        "attenuation_distance": 48
       },
       {
-        "name": "minecraft:mob/squid/hurt4",
-        "pitch": 0.5
-      },
-      {
-        "name": "minecraft:mob/guardian/guardian_hit1",
-        "pitch": 0.55,
-        "volume": 0.8
-      },
-      {
-        "name": "minecraft:mob/guardian/guardian_hit2",
-        "pitch": 0.55,
-        "volume": 0.8
-      },
-      {
-        "name": "minecraft:mob/guardian/guardian_hit3",
-        "pitch": 0.55,
-        "volume": 0.8
-      },
-      {
-        "name": "minecraft:mob/guardian/guardian_hit4",
-        "pitch": 0.55,
-        "volume": 0.8
+        "name": "kingdomsatwar:entity/sea/kraken_hurt4",
+        "attenuation_distance": 48
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.kraken.hurt"
@@ -5611,19 +5296,16 @@
   "entity.kraken.ink": {
     "sounds": [
       {
-        "name": "minecraft:mob/glow_squid/squirt1",
-        "pitch": 0.5,
-        "attenuation_distance": 48
+        "name": "kingdomsatwar:entity/sea/kraken_ink1",
+        "attenuation_distance": 32
       },
       {
-        "name": "minecraft:mob/glow_squid/squirt2",
-        "pitch": 0.5,
-        "attenuation_distance": 48
+        "name": "kingdomsatwar:entity/sea/kraken_ink2",
+        "attenuation_distance": 32
       },
       {
-        "name": "minecraft:mob/glow_squid/squirt3",
-        "pitch": 0.5,
-        "attenuation_distance": 48
+        "name": "kingdomsatwar:entity/sea/kraken_ink3",
+        "attenuation_distance": 32
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.kraken.ink"
@@ -5653,19 +5335,16 @@
   "entity.kraken.slam": {
     "sounds": [
       {
-        "name": "minecraft:mob/warden/attack_impact_1",
-        "pitch": 0.6,
-        "attenuation_distance": 48
+        "name": "kingdomsatwar:entity/sea/kraken_slam1",
+        "attenuation_distance": 64
       },
       {
-        "name": "minecraft:mob/warden/attack_impact_2",
-        "pitch": 0.6,
-        "attenuation_distance": 48
+        "name": "kingdomsatwar:entity/sea/kraken_slam2",
+        "attenuation_distance": 64
       },
       {
-        "name": "minecraft:liquid/heavy_splash",
-        "pitch": 0.7,
-        "attenuation_distance": 48
+        "name": "kingdomsatwar:entity/sea/kraken_slam3",
+        "attenuation_distance": 64
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.kraken.slam"
@@ -5716,23 +5395,15 @@
   "entity.kraken.wave": {
     "sounds": [
       {
-        "name": "minecraft:liquid/heavy_splash",
-        "pitch": 0.5,
+        "name": "kingdomsatwar:entity/sea/kraken_wave1",
         "attenuation_distance": 64
       },
       {
-        "name": "minecraft:mob/dolphin/splash1",
-        "pitch": 0.5,
+        "name": "kingdomsatwar:entity/sea/kraken_wave2",
         "attenuation_distance": 64
       },
       {
-        "name": "minecraft:mob/dolphin/splash2",
-        "pitch": 0.5,
-        "attenuation_distance": 64
-      },
-      {
-        "name": "minecraft:mob/dolphin/splash3",
-        "pitch": 0.5,
+        "name": "kingdomsatwar:entity/sea/kraken_wave3",
         "attenuation_distance": 64
       }
     ],
@@ -5741,34 +5412,16 @@
   "entity.kraken.whirl": {
     "sounds": [
       {
-        "name": "minecraft:ambient/underwater/additions/bubbles1",
-        "pitch": 0.6,
-        "attenuation_distance": 64
+        "name": "kingdomsatwar:entity/sea/kraken_whirl1",
+        "attenuation_distance": 48
       },
       {
-        "name": "minecraft:ambient/underwater/additions/bubbles2",
-        "pitch": 0.6,
-        "attenuation_distance": 64
+        "name": "kingdomsatwar:entity/sea/kraken_whirl2",
+        "attenuation_distance": 48
       },
       {
-        "name": "minecraft:ambient/underwater/additions/bubbles3",
-        "pitch": 0.6,
-        "attenuation_distance": 64
-      },
-      {
-        "name": "minecraft:ambient/underwater/additions/bubbles4",
-        "pitch": 0.6,
-        "attenuation_distance": 64
-      },
-      {
-        "name": "minecraft:ambient/underwater/additions/bubbles5",
-        "pitch": 0.6,
-        "attenuation_distance": 64
-      },
-      {
-        "name": "minecraft:ambient/underwater/additions/bubbles6",
-        "pitch": 0.6,
-        "attenuation_distance": 64
+        "name": "kingdomsatwar:entity/sea/kraken_whirl3",
+        "attenuation_distance": 48
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.kraken.whirl"
@@ -5776,36 +5429,20 @@
   "entity.lindworm.ambient": {
     "sounds": [
       {
-        "name": "minecraft:mob/cat/hiss1",
-        "pitch": 0.55
+        "name": "kingdomsatwar:entity/beast/lindworm_ambient1",
+        "attenuation_distance": 20
       },
       {
-        "name": "minecraft:mob/cat/hiss2",
-        "pitch": 0.55
+        "name": "kingdomsatwar:entity/beast/lindworm_ambient2",
+        "attenuation_distance": 20
       },
       {
-        "name": "minecraft:mob/cat/hiss3",
-        "pitch": 0.55
+        "name": "kingdomsatwar:entity/beast/lindworm_ambient3",
+        "attenuation_distance": 20
       },
       {
-        "name": "minecraft:mob/enderdragon/growl1",
-        "pitch": 1.4,
-        "volume": 0.25
-      },
-      {
-        "name": "minecraft:mob/enderdragon/growl2",
-        "pitch": 1.4,
-        "volume": 0.25
-      },
-      {
-        "name": "minecraft:mob/enderdragon/growl3",
-        "pitch": 1.4,
-        "volume": 0.25
-      },
-      {
-        "name": "minecraft:mob/enderdragon/growl4",
-        "pitch": 1.4,
-        "volume": 0.25
+        "name": "kingdomsatwar:entity/beast/lindworm_ambient4",
+        "attenuation_distance": 20
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.lindworm.ambient"
@@ -5813,16 +5450,16 @@
   "entity.lindworm.bite": {
     "sounds": [
       {
-        "name": "minecraft:mob/ravager/bite1",
-        "pitch": 0.9
+        "name": "kingdomsatwar:entity/beast/lindworm_bite1",
+        "attenuation_distance": 20
       },
       {
-        "name": "minecraft:mob/ravager/bite2",
-        "pitch": 0.9
+        "name": "kingdomsatwar:entity/beast/lindworm_bite2",
+        "attenuation_distance": 20
       },
       {
-        "name": "minecraft:mob/ravager/bite3",
-        "pitch": 0.9
+        "name": "kingdomsatwar:entity/beast/lindworm_bite3",
+        "attenuation_distance": 20
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.lindworm.bite"
@@ -5830,36 +5467,12 @@
   "entity.lindworm.death": {
     "sounds": [
       {
-        "name": "minecraft:mob/ravager/death1",
-        "pitch": 0.85
+        "name": "kingdomsatwar:entity/beast/lindworm_death1",
+        "attenuation_distance": 24
       },
       {
-        "name": "minecraft:mob/ravager/death2",
-        "pitch": 0.85
-      },
-      {
-        "name": "minecraft:mob/ravager/death3",
-        "pitch": 0.85
-      },
-      {
-        "name": "minecraft:mob/enderdragon/growl1",
-        "pitch": 0.9,
-        "volume": 0.4
-      },
-      {
-        "name": "minecraft:mob/enderdragon/growl2",
-        "pitch": 0.9,
-        "volume": 0.4
-      },
-      {
-        "name": "minecraft:mob/enderdragon/growl3",
-        "pitch": 0.9,
-        "volume": 0.4
-      },
-      {
-        "name": "minecraft:mob/enderdragon/growl4",
-        "pitch": 0.9,
-        "volume": 0.4
+        "name": "kingdomsatwar:entity/beast/lindworm_death2",
+        "attenuation_distance": 24
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.lindworm.death"
@@ -5867,20 +5480,20 @@
   "entity.lindworm.hurt": {
     "sounds": [
       {
-        "name": "minecraft:mob/hoglin/hurt1",
-        "pitch": 0.7
+        "name": "kingdomsatwar:entity/beast/lindworm_hurt1",
+        "attenuation_distance": 20
       },
       {
-        "name": "minecraft:mob/hoglin/hurt2",
-        "pitch": 0.7
+        "name": "kingdomsatwar:entity/beast/lindworm_hurt2",
+        "attenuation_distance": 20
       },
       {
-        "name": "minecraft:mob/hoglin/hurt3",
-        "pitch": 0.7
+        "name": "kingdomsatwar:entity/beast/lindworm_hurt3",
+        "attenuation_distance": 20
       },
       {
-        "name": "minecraft:mob/hoglin/hurt4",
-        "pitch": 0.7
+        "name": "kingdomsatwar:entity/beast/lindworm_hurt4",
+        "attenuation_distance": 20
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.lindworm.hurt"
@@ -5888,54 +5501,20 @@
   "entity.lindworm.slither": {
     "sounds": [
       {
-        "name": "minecraft:step/sand1",
-        "pitch": 0.6,
-        "volume": 0.5
+        "name": "kingdomsatwar:entity/beast/lindworm_slither1",
+        "attenuation_distance": 12
       },
       {
-        "name": "minecraft:step/sand2",
-        "pitch": 0.6,
-        "volume": 0.5
+        "name": "kingdomsatwar:entity/beast/lindworm_slither2",
+        "attenuation_distance": 12
       },
       {
-        "name": "minecraft:step/sand3",
-        "pitch": 0.6,
-        "volume": 0.5
+        "name": "kingdomsatwar:entity/beast/lindworm_slither3",
+        "attenuation_distance": 12
       },
       {
-        "name": "minecraft:step/sand4",
-        "pitch": 0.6,
-        "volume": 0.5
-      },
-      {
-        "name": "minecraft:step/sand5",
-        "pitch": 0.6,
-        "volume": 0.5
-      },
-      {
-        "name": "minecraft:mob/turtle/walk1",
-        "pitch": 0.5,
-        "volume": 0.4
-      },
-      {
-        "name": "minecraft:mob/turtle/walk2",
-        "pitch": 0.5,
-        "volume": 0.4
-      },
-      {
-        "name": "minecraft:mob/turtle/walk3",
-        "pitch": 0.5,
-        "volume": 0.4
-      },
-      {
-        "name": "minecraft:mob/turtle/walk4",
-        "pitch": 0.5,
-        "volume": 0.4
-      },
-      {
-        "name": "minecraft:mob/turtle/walk5",
-        "pitch": 0.5,
-        "volume": 0.4
+        "name": "kingdomsatwar:entity/beast/lindworm_slither4",
+        "attenuation_distance": 12
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.lindworm.slither"
@@ -6950,39 +6529,16 @@
   "entity.nyxar.breath": {
     "sounds": [
       {
-        "name": "minecraft:mob/warden/sonic_charge1",
-        "pitch": 0.6,
-        "volume": 0.9
+        "name": "kingdomsatwar:entity/shadow/nyxar_breath1",
+        "attenuation_distance": 64
       },
       {
-        "name": "minecraft:mob/warden/sonic_charge2",
-        "pitch": 0.6,
-        "volume": 0.9
+        "name": "kingdomsatwar:entity/shadow/nyxar_breath2",
+        "attenuation_distance": 64
       },
       {
-        "name": "minecraft:mob/warden/sonic_charge3",
-        "pitch": 0.6,
-        "volume": 0.9
-      },
-      {
-        "name": "minecraft:mob/warden/sonic_charge4",
-        "pitch": 0.6,
-        "volume": 0.9
-      },
-      {
-        "name": "minecraft:mob/ghast/moan1",
-        "pitch": 0.45,
-        "volume": 0.6
-      },
-      {
-        "name": "minecraft:mob/ghast/moan2",
-        "pitch": 0.45,
-        "volume": 0.6
-      },
-      {
-        "name": "minecraft:mob/ghast/moan3",
-        "pitch": 0.45,
-        "volume": 0.6
+        "name": "kingdomsatwar:entity/shadow/nyxar_breath3",
+        "attenuation_distance": 64
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.nyxar.breath"
@@ -6990,19 +6546,16 @@
   "entity.nyxar.shriek": {
     "sounds": [
       {
-        "name": "minecraft:mob/ghast/scream1",
-        "pitch": 0.4,
-        "volume": 1.0
+        "name": "kingdomsatwar:entity/shadow/nyxar_shriek1",
+        "attenuation_distance": 96
       },
       {
-        "name": "minecraft:mob/ghast/scream2",
-        "pitch": 0.4,
-        "volume": 1.0
+        "name": "kingdomsatwar:entity/shadow/nyxar_shriek2",
+        "attenuation_distance": 96
       },
       {
-        "name": "minecraft:mob/ghast/scream3",
-        "pitch": 0.4,
-        "volume": 1.0
+        "name": "kingdomsatwar:entity/shadow/nyxar_shriek3",
+        "attenuation_distance": 96
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.nyxar.shriek"
@@ -7367,19 +6920,16 @@
   "entity.reef_colossus.burrow": {
     "sounds": [
       {
-        "name": "minecraft:mob/warden/dig",
-        "pitch": 1.1,
-        "attenuation_distance": 40
+        "name": "kingdomsatwar:entity/sea/reef_colossus_burrow1",
+        "attenuation_distance": 32
       },
       {
-        "name": "minecraft:mob/sniffer/longdig1",
-        "pitch": 0.7,
-        "attenuation_distance": 40
+        "name": "kingdomsatwar:entity/sea/reef_colossus_burrow2",
+        "attenuation_distance": 32
       },
       {
-        "name": "minecraft:mob/sniffer/longdig2",
-        "pitch": 0.7,
-        "attenuation_distance": 40
+        "name": "kingdomsatwar:entity/sea/reef_colossus_burrow3",
+        "attenuation_distance": 32
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.reef_colossus.burrow"
@@ -7413,9 +6963,12 @@
   "entity.reef_colossus.erupt": {
     "sounds": [
       {
-        "name": "minecraft:mob/warden/emerge",
-        "pitch": 1.2,
-        "attenuation_distance": 48
+        "name": "kingdomsatwar:entity/sea/reef_colossus_erupt1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/reef_colossus_erupt2",
+        "attenuation_distance": 64
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.reef_colossus.erupt"
@@ -7423,40 +6976,20 @@
   "entity.reef_colossus.hurt": {
     "sounds": [
       {
-        "name": "minecraft:mob/turtle/hurt1",
-        "pitch": 0.5
+        "name": "kingdomsatwar:entity/sea/reef_colossus_hurt1",
+        "attenuation_distance": 32
       },
       {
-        "name": "minecraft:mob/turtle/hurt2",
-        "pitch": 0.5
+        "name": "kingdomsatwar:entity/sea/reef_colossus_hurt2",
+        "attenuation_distance": 32
       },
       {
-        "name": "minecraft:mob/turtle/hurt3",
-        "pitch": 0.5
+        "name": "kingdomsatwar:entity/sea/reef_colossus_hurt3",
+        "attenuation_distance": 32
       },
       {
-        "name": "minecraft:mob/turtle/hurt4",
-        "pitch": 0.5
-      },
-      {
-        "name": "minecraft:block/basalt/break1",
-        "pitch": 0.6,
-        "volume": 0.8
-      },
-      {
-        "name": "minecraft:block/basalt/break2",
-        "pitch": 0.6,
-        "volume": 0.8
-      },
-      {
-        "name": "minecraft:block/basalt/break3",
-        "pitch": 0.6,
-        "volume": 0.8
-      },
-      {
-        "name": "minecraft:block/basalt/break4",
-        "pitch": 0.6,
-        "volume": 0.8
+        "name": "kingdomsatwar:entity/sea/reef_colossus_hurt4",
+        "attenuation_distance": 32
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.reef_colossus.hurt"
@@ -7477,21 +7010,16 @@
   "entity.reef_colossus.lance": {
     "sounds": [
       {
-        "name": "minecraft:liquid/heavy_splash",
-        "pitch": 0.8,
-        "attenuation_distance": 40
+        "name": "kingdomsatwar:entity/sea/reef_colossus_lance1",
+        "attenuation_distance": 48
       },
       {
-        "name": "minecraft:item/trident/thunder1",
-        "pitch": 1.4,
-        "volume": 0.5,
-        "attenuation_distance": 40
+        "name": "kingdomsatwar:entity/sea/reef_colossus_lance2",
+        "attenuation_distance": 48
       },
       {
-        "name": "minecraft:item/trident/thunder2",
-        "pitch": 1.4,
-        "volume": 0.5,
-        "attenuation_distance": 40
+        "name": "kingdomsatwar:entity/sea/reef_colossus_lance3",
+        "attenuation_distance": 48
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.reef_colossus.lance"
@@ -7525,14 +7053,16 @@
   "entity.reef_colossus.slam": {
     "sounds": [
       {
-        "name": "minecraft:mob/warden/attack_impact_1",
-        "pitch": 0.75,
-        "attenuation_distance": 40
+        "name": "kingdomsatwar:entity/sea/reef_colossus_slam1",
+        "attenuation_distance": 48
       },
       {
-        "name": "minecraft:mob/warden/attack_impact_2",
-        "pitch": 0.75,
-        "attenuation_distance": 40
+        "name": "kingdomsatwar:entity/sea/reef_colossus_slam2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/reef_colossus_slam3",
+        "attenuation_distance": 48
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.reef_colossus.slam"
@@ -7540,24 +7070,20 @@
   "entity.reef_colossus.step": {
     "sounds": [
       {
-        "name": "minecraft:mob/ravager/step1",
-        "pitch": 0.75,
-        "volume": 0.8
+        "name": "kingdomsatwar:entity/sea/reef_colossus_step1",
+        "attenuation_distance": 24
       },
       {
-        "name": "minecraft:mob/ravager/step2",
-        "pitch": 0.75,
-        "volume": 0.8
+        "name": "kingdomsatwar:entity/sea/reef_colossus_step2",
+        "attenuation_distance": 24
       },
       {
-        "name": "minecraft:mob/ravager/step3",
-        "pitch": 0.75,
-        "volume": 0.8
+        "name": "kingdomsatwar:entity/sea/reef_colossus_step3",
+        "attenuation_distance": 24
       },
       {
-        "name": "minecraft:mob/ravager/step4",
-        "pitch": 0.75,
-        "volume": 0.8
+        "name": "kingdomsatwar:entity/sea/reef_colossus_step4",
+        "attenuation_distance": 24
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.reef_colossus.step"
@@ -7565,8 +7091,11 @@
   "entity.reef_colossus.tide": {
     "sounds": [
       {
-        "name": "minecraft:mob/guardian/curse",
-        "pitch": 0.7,
+        "name": "kingdomsatwar:entity/sea/reef_colossus_tide1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/reef_colossus_tide2",
         "attenuation_distance": 64
       }
     ],

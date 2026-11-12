@@ -236,6 +236,7 @@ public final class ModGameTests {
         WarGameTests.init();       // Krieg der Königreiche: Stammburgen und ihre Besatzung
         RulesGameTests.init();     // Regeln: Mod-Sperre, Koordinaten, Härte, Verzauberungen
         KawCommandGameTests.init(); // /kaw: Dimensionen, Bosse, Bauwerke, Landeplätze, Reisen per Klick
+        BossLootGameTests.init(); // Beute der Bosse, die mehrfach kommen: Sonderstück beim ersten Sieg sicher, danach selten
         ArenaGameTests.init();     // die Arkane Sphäre: Arena, Bauverbot, Kampf
         SpellGameTests.init();     // Meisterzauber und Fähigkeiten der Erzmagier, der Aetherit-Stab
         SiegeGameTests.init();     // Belagerungswaffen und ihre Mannschaften
@@ -314,6 +315,7 @@ public final class ModGameTests {
         WarGameTests.register(event, environment);
         RulesGameTests.register(event, environment);
         KawCommandGameTests.register(event, environment);
+        BossLootGameTests.register(event, environment);
         ArenaGameTests.register(event, environment);
         SpellGameTests.register(event, environment);
         SiegeGameTests.register(event, environment);

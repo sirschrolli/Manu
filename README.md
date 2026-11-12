@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Version 1.1.2 – Der Stundenwächter.** Im **Abgrund** treiben jetzt **Uhrtürme**: In einem leer gefegten Auge des Chaos schwebt ein **großes Zifferblatt** – gut dreißig Blöcke breit, mit römischen Ziffern, Zeigern aus **Uhrbronze** und **Chronit** an jeder Stunde –, im Norden der **Turm** mit Zifferblättern auf allen Seiten, einer Treppe um den hohlen Kern, in dem das große Pendel hängt, der **Uhrwerkkammer** und der **Glockenstube** (je eine Truhe), ringsum schweben riesige **Zahnräder**. In der Nabe des Zifferblatts sitzt das **Uhrwerkherz**, und darüber steht erstarrt – eine Minute vor zwölf – **der Stundenwächter**: ein Ritter aus Uhrbronze, so groß wie zwei Männer, ein Zifferblatt als Heiligenschein, zwei Klingen wie Zeiger. Wer ihm zu nahe kommt, setzt seine Zeiger in Gang: **Zeigerhieb**, **Stundenschlag** (ein Glockenschlag rollt als Ring davon – springen!), **Zahnradwurf**, **Zeitstopp** (wer ihn ansieht, erstarrt – wer wegschaut, nicht), **Pendelschwung**, **Sanduhr**, **Zeitsprung**, **Rückspulen** (er heilt – wer ihn dabei hart trifft, bringt ihn ins Taumeln) und unter halber Kraft **die Zwölfte Stunde** mit zwölf Glockenschlägen. Eigene Bossleiste, eigene Klänge. Er hinterlässt den **Minutenzeiger** (jeder zwölfte Treffer schlägt die Stunde, Rechtsklick: Zeitsprung); Chronit im stillstehenden Herzen weckt einen neuen Wächter. Neu ist auch **Chronit** (gerinnt an den Weltennähten des Abgrunds) und daraus die **Rüstung der Zeitwächter** – Die Zeit stockt, und mit dem vollen Satz eine **Zweite Chance**: Ein tödlicher Treffer spult die Zeit drei Sekunden zurück. Seit 1.1.1 hängt die Schnur der Angeln in 3D auch von außen gesehen (bei anderen Spielern und in der Ansicht mit F5) an der Rutenspitze statt in der Luft. Seit 1.1.2 ist **`/kaw` nach Art geordnet**: `/kaw dim` zeigt nur die Dimensionen (jetzt auch Abgrund, Urmeer und Feenreich), `/kaw boss` nur die Bosse (finden, hinreisen, wecken, zurücksetzen), `/kaw structure` nur die Bauwerke (alle 60) – und die **Koordinaten lassen sich anklicken**: Man reist sofort hin, auch in eine andere Dimension.
+> **Version 1.1.3 – Beute, Speere, Schnur und neue Stimmen.** **Bosse, die mehrfach kommen** (die man neu weckt, zurückruft oder in jedem ihrer Bauwerke findet) geben ihr **Sonderstück** – Waffe, Schwingen, Zylinder, Angel – und ihren **Herzkristall** nur beim **ersten eigenen Sieg** sicher; danach fällt das Sonderstück nur noch in einem von fünf Kämpfen, Kristalle gar nicht mehr, und die übrige Beute ist kleiner. Bosse mit **eigener Rüstung** (Steinhüter, Meerhexe, Seelenhirte, Sternenweberin, Stundenwächter) lassen außer ihrem Sonderstück nur noch den **Werkstoff ihrer Rüstung** fallen – etwa genug für ein Teil je Sieg. Die Erfahrung bleibt, wie sie war. Die **Speere** der Mod liegen jetzt so in der Hand wie die Speere von Minecraft: in ihrer Länge und in der Mitte gegriffen – sie ragen nicht mehr weit über den Kopf, und aus der eigenen Sicht ist die Spitze ganz im Bild. Die **Angelschnur** beginnt in jeder Sicht genau an der Rutenspitze – aus der eigenen Sicht auch bei anderem Bildformat und Sichtfeld, von außen auch beim Gehen, Schleichen und mit der Angel in der linken Hand. Und **eigene Klänge** statt geliehener: Drachen (Stimme, Schwingen, Schritte, Biss, Atem aller sechs Elemente, das Ei), Kraken (Schnabel, Schmerz, Tinte, Tentakelschlag, Woge, Strudel), Karkinos (Graben, Ausbruch, Panzer, Gezeitenlanze, Scherenschlag, Schritte, Gezeitenkraft), Nyxar (Schattenatem, Schrei), der Höhlentroll (Grummeln, Grunzen, Tod, Versteinern, Keulenschlag, Schritte) und der Lindwurm (Zischen, Biss, Schrei, Tod, Schuppengleiten).
+> In 1.1 kam **der Stundenwächter**: Im **Abgrund** treiben jetzt **Uhrtürme**: In einem leer gefegten Auge des Chaos schwebt ein **großes Zifferblatt** – gut dreißig Blöcke breit, mit römischen Ziffern, Zeigern aus **Uhrbronze** und **Chronit** an jeder Stunde –, im Norden der **Turm** mit Zifferblättern auf allen Seiten, einer Treppe um den hohlen Kern, in dem das große Pendel hängt, der **Uhrwerkkammer** und der **Glockenstube** (je eine Truhe), ringsum schweben riesige **Zahnräder**. In der Nabe des Zifferblatts sitzt das **Uhrwerkherz**, und darüber steht erstarrt – eine Minute vor zwölf – **der Stundenwächter**: ein Ritter aus Uhrbronze, so groß wie zwei Männer, ein Zifferblatt als Heiligenschein, zwei Klingen wie Zeiger. Wer ihm zu nahe kommt, setzt seine Zeiger in Gang: **Zeigerhieb**, **Stundenschlag** (ein Glockenschlag rollt als Ring davon – springen!), **Zahnradwurf**, **Zeitstopp** (wer ihn ansieht, erstarrt – wer wegschaut, nicht), **Pendelschwung**, **Sanduhr**, **Zeitsprung**, **Rückspulen** (er heilt – wer ihn dabei hart trifft, bringt ihn ins Taumeln) und unter halber Kraft **die Zwölfte Stunde** mit zwölf Glockenschlägen. Eigene Bossleiste, eigene Klänge. Er hinterlässt den **Minutenzeiger** (jeder zwölfte Treffer schlägt die Stunde, Rechtsklick: Zeitsprung); Chronit im stillstehenden Herzen weckt einen neuen Wächter. Neu ist auch **Chronit** (gerinnt an den Weltennähten des Abgrunds) und daraus die **Rüstung der Zeitwächter** – Die Zeit stockt, und mit dem vollen Satz eine **Zweite Chance**: Ein tödlicher Treffer spult die Zeit drei Sekunden zurück. Seit 1.1.1 hängt die Schnur der Angeln in 3D auch von außen gesehen (bei anderen Spielern und in der Ansicht mit F5) an der Rutenspitze statt in der Luft. Seit 1.1.2 ist **`/kaw` nach Art geordnet**: `/kaw dim` zeigt nur die Dimensionen (jetzt auch Abgrund, Urmeer und Feenreich), `/kaw boss` nur die Bosse (finden, hinreisen, wecken, zurücksetzen), `/kaw structure` nur die Bauwerke (alle 60) – und die **Koordinaten lassen sich anklicken**: Man reist sofort hin, auch in eine andere Dimension.
 > In 1.0.0 erwachte **der Kraken**: Der Herr des Urmeers bleibt nicht mehr an seinem Platz: **Der Kraken schwimmt** jetzt schwer und träge durch sein Becken, zieht Kreise um seine Feinde (nie über den Felsenring hinaus), wechselt dabei die Richtung, neigt den Kopf in die Fahrt, schiebt eine **Bugwelle** vor sich her und zieht **Kielwasser** hinter sich; seine Arme strömen nach hinten und rudern im Takt. Und er hat **vier neue Angriffe**: den **Rammstoß** (er saugt Wasser in den Mantel, Warnkreise zeigen die Bahn – dann schießt er mit einem Wasserstrahl quer durchs Becken und überrollt, wer im Weg ist), den **Ausbruch aus der Tiefe** (er taucht ab und ist dann unverwundbar, nur Blasen und ein dunkler Schatten verraten, wo er schwimmt; unter seinem Ziel steigt ein Ring aus Blasen auf – dann bricht er hoch aus dem Wasser und schleudert alles empor), das **Geysirfeld** (rings um seine Feinde brodelt es, dann schießen Geysire empor – ab zwei Dritteln gleich zweimal) und den **Tentakelkäfig** (sieben Arme brechen rings um sein Ziel aus dem Wasser, kreisen und ziehen sich zusammen, wer sie berührt, wird zurückgestoßen; wer die Lücke nicht findet, wird zermalmt – ein harter Schlag trennt einen Arm ab, und der Kraken spürt es). Dazu sechs neue Klänge.
 > In 0.99 kam **die Sternenweberin**: In den leeren Weiten der **Leere** hängen jetzt **Sternennetze**: eine runde Netzplatte aus leuchtender **Sternenseide** (acht Speichen, vier Ringe) und **Sternengewebe**, durch das man ins Nichts hinabsieht, am Rand offen; sechs **Ankerfelsen** mit Adern aus Himmelseisen halten das Netz an durchhängenden Tauen, hoch darüber die **Sternenkrone**, an den Tauen und unter dem Rand **Sternenkokons** (zerschlagen geben sie frei, was sich verfing), auf dem größten Anker eine Truhe. In der Mitte liegt das **Sternengelege** – und darüber hängt kopfüber an ihrem Faden **die Sternenweberin**: eine riesige Spinne aus nachtblauem Chitin mit acht Sternenaugen, auf dem Hinterleib eine **Spiralgalaxie**, aus dem Rücken wachsen Kristalle der Leere. Wer ihr zu nahe kommt, weckt sie: **Giftbiss**, **Fangfaden**, **Netzwurf**, **Sternbild**, **Sternschnuppen**, **Umgarnen**, **Brut** (Sternspinnlinge), **Abseilen** und im Zorn die **Spindel**. Eigene Bossleiste, eigene Klänge. Sie hinterlässt den **Sternenbogen** (schwerelose, schnellere Pfeile; im Schleichen ein **Netzpfeil**, der sein Ziel einspinnt); ein **Himmelseisenbarren** im erloschenen Gelege ruft eine neue Weberin. Neu ist auch **Himmelseisen** (Erz in der ganzen Leere, im Kern gefallener Sterne) und daraus die **Rüstung der Sternwandler** – leichter, Sternenschweben, Sternenanker. Außerdem: **Rüstungen ohne offene Stellen** (Kragen, Ellbogen, Masken mit Sehschlitzen), Rüstungs-Effekte wirken **still ohne Symbol** und die Nachtsicht **flackert nicht mehr**, die volle **Taucherausrüstung gibt Wasseratmung**, die **Meerjungfrauen handeln wie alle anderen Händler** (Münzen, gleiches Handelsfenster), **8369 Fischarten** (die meisten im Urmeer), **seltene Fische sind schwerer zu drillen**, und im Urmeer gibt es **keine Lava** und **kein Trockenlegen mit Schwämmen**.
 > In 0.98 kam **der Seelenhirte**: Im **Seelensumpf** der Schattenwelt liegen jetzt **Seelenpferche**: ein runder Pferch auf aufgeschüttetem Grund mitten im Sumpf, umgeben von einem Zaun aus Schattenholz mit **Seelenlaternen** und **Schafsschädeln** auf den Pfosten, vier Feuerschalen mit Seelenfeuer, **Stege auf Stelzen** hinaus über den Sumpf und im Norden die **Hütte des Hirten** mit einer Truhe. In der Mitte hängt unter einem Glockenstuhl die **Seelenglocke** – und vor ihr steht in Andacht **der Seelenhirte**: ein hagerer, gebeugter Riese in zerschlissener Kutte, ein Schaffell über den Schultern, unter der Kapuze ein **Widderschädel** mit gerollten Hörnern und türkis glimmenden Augen, in der Rechten ein **Hirtenstab**, an dessen Haken eine Laterne voll Seelenfeuer hängt, in der Linken eine Handglocke; drei **Irrlichter** kreisen um ihn. Wer ihm zu nahe kommt, weckt ihn: **Hakenzug**, **Laternenschwung**, **Irrlichter**, **Seelenglocke**, **Nebelgang**, ein **Pferch aus Seelenfeuer**, der **Hirtenstoß** und im Zorn der **Seelensturm**; unter halber Kraft läutet er dreimal. Eigene Bossleiste, eigene Klänge. Er hinterlässt den **Hirtenstab** (in 3D, Rechtsklick: eine Kette aus Seelenlicht reißt das Ziel heran); die verstummte Glocke ruft mit einem **Seelenkristall** einen neuen Hirten. Neu ist auch **Dämmerquarz** in der ganzen Schattenwelt (Dämmerquarz, Dämmerquarzblock) und daraus die **Dämmerrüstung** der Schleicher – Monster bemerken dich später, mit dem vollen Satz beim Schleichen kaum noch, du schleichst schneller, landest weich und siehst beim Schleichen im Dunkeln; in 3D mit Kapuze, Halbmaske, Umhang, Quarzschließe, Gürteltaschen und Dolch.
@@ -471,7 +472,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.1.2.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.1.3.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -479,7 +480,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-1.1.2.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-1.1.3.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -713,8 +714,8 @@ Unter halber Kraft wirft er den Schädel zurück, reißt das Maul auf – und **
 nacheinander über den Grund. Danach ist er schneller, mehr Irrlichter folgen ihm, und der Seelensturm kommt hinzu. Findet er
 niemanden mehr, kehrt er zu seiner Glocke zurück und versinkt nach einer Weile wieder in Andacht – geheilt und ohne Zorn.
 Besiegt sinkt er in die Knie, der Schädel fällt, die Laterne erlischt – und er **zerfällt zu Nebel**, die Seelen steigen frei
-auf. Er hinterlässt den **Hirtenstab**, einen **Herzkristall**, Dämmerquarz, Seelenkristalle, Schattenessenz, Mondsilber und
-Münzen. Die Glocke **verstummt** (das Seelenfeuer in ihr erlischt) – ein **Seelenkristall** an ihr (Rechtsklick) ruft ihn zurück,
+auf. Er hinterlässt den **Hirtenstab** und einen **Herzkristall** (beides sicher nur beim ersten eigenen Sieg, danach den
+Stab nur noch selten) und Dämmerquarz für etwa ein Teil der Dämmerrüstung. Die Glocke **verstummt** (das Seelenfeuer in ihr erlischt) – ein **Seelenkristall** an ihr (Rechtsklick) ruft ihn zurück,
 und er erwacht sofort.
 
 **Der Hirtenstab** – Sumpfeiche mit eisernem Fuß und Strick am Griff, oben der eiserne Haken mit der Laterne voll Seelenfeuer
@@ -799,7 +800,8 @@ Mundwerkzeuge über dem gläsernen Summen der Sterne, sirrende Fäden, Sternbild
 
 Unter halber Kraft kreischt sie auf – die Sterne auf ihrem Rücken flammen, sie wird schneller, und gleich darauf dreht sich
 die Spindel. Besiegt rollt sie die Beine ein und zerfällt zu Sternenstaub; das **Gelege erlischt**. Sie hinterlässt den
-**Sternenbogen**, einen Herzkristall, Himmelseisen, Leerensplitter, Sternenseide, Leerenkristalle, Edelsteine und Goldmünzen.
+**Sternenbogen** und einen Herzkristall (beides sicher nur beim ersten eigenen Sieg, danach den Bogen nur noch selten) und
+Himmelseisen für etwa ein Teil der Sternenwandlerrüstung, manchmal einen Leerensplitter.
 Ein **Himmelseisenbarren** im erloschenen Gelege lockt eine neue Weberin – sie lässt sich sofort fallen.
 
 **Der Sternenbogen** (3D in der Hand, gespannt in drei Stufen): ein Bogen aus nachtblauem Chitin, bespannt mit Sternenseide.
@@ -1085,8 +1087,9 @@ diese Angriffe:
 
 Fortgelockt springt er zurück auf sein Zifferblatt; findet er niemanden mehr, kehrt er auf das Herz zurück und erstarrt
 wieder (geheilt). Besiegt sinkt er auf die Knie, sein Uhrwerk läuft aus, die Zeiger fallen – dann zerspringt er in
-Zahnräder. Er lässt den **Minutenzeiger**, einen **Herzkristall**, Chronit, Uhrbronze, Uhrwerk, Edelsteine und Münzen
-fallen (und wie jeder Boss immer gleich viel Erfahrung). Das Herz bleibt stehen; legt man **Chronit** hinein, zieht es sich
+Zahnräder. Er lässt den **Minutenzeiger** und einen **Herzkristall** fallen (beides sicher nur beim ersten eigenen Sieg,
+danach den Zeiger nur noch selten), dazu Chronit für etwa ein Teil der Zeitwächterrüstung (und wie jeder Boss immer gleich
+viel Erfahrung). Das Herz bleibt stehen; legt man **Chronit** hinein, zieht es sich
 wieder auf, und ein neuer Wächter erwacht.
 
 **Der Minutenzeiger** – ein Schwert aus Uhrbronze und Chronit, stärker als Netherit, verbrennt nicht, mit Chronit
@@ -2796,8 +2799,9 @@ wagt. Er hat eine eigene Bossleiste mit Korallenriff und Lagunenlicht und eigene
 | **Blasenfalle** (seit 0.68) | er bläst schillernde Blasen, die zu bis zu drei Gegnern schweben und sie einschließen: Gefangene schweben hilflos empor, kommen kaum vom Fleck und verlieren Luft – bis die Blase platzt |
 
 Wer die Lagune verlässt, den lässt er ziehen und gräbt sich nach einer Weile wieder ein. Besiegt bricht der
-**Gezeiten-Speer** aus seiner Kuppel und fällt leuchtend in den Sand; dazu das Herz des Meeres, ein Herzkristall,
-Prismarin, Gold und ein Gezeitenhorn. Mit dem Gezeitenhorn und einem Herz des Meeres in der anderen Hand rufst du ihn in
+**Gezeiten-Speer** aus seiner Kuppel und fällt leuchtend in den Sand (sicher beim ersten eigenen Sieg, danach nur noch
+selten – sonst zerspringt er in der Kuppel); beim ersten Sieg dazu das Herz des Meeres, ein Herzkristall und ein
+Gezeitenhorn, jedes Mal etwas Prismarin, Krabbenfleisch und Gold. Mit dem Gezeitenhorn und einem Herz des Meeres in der anderen Hand rufst du ihn in
 der Lagune zurück, um noch einmal gegen ihn zu kämpfen.
 
 **Der Gezeiten-Speer** ist die erste eigene **3D-Waffe** der Mod: ein Speer wie die Speere von Minecraft (Stoß und
@@ -2918,8 +2922,9 @@ Bewegung heraus greift er an.
 ![Der Kraken schwimmt und kämpft mit seinen neuen Angriffen](docs/bilder/kraken_100.jpg)
 
 Wer den Felsenring verlässt, den lässt er ziehen und sinkt nach einer Weile zurück in den Schlund. Besiegt erschlafft er,
-die Haie ziehen ab, und er versinkt; er lässt die **Krakenangel** fallen, dazu ein Herz des Meeres, einen Herzkristall,
-Tintenbeutel und Leuchttintenbeutel, Nautilusschalen, Prismarinkristalle, Diamanten, Edelsteine und Goldmünzen. Mit dem
+die Haie ziehen ab, und er versinkt; er lässt die **Krakenangel** fallen (sicher beim ersten eigenen Sieg, danach nur noch
+selten), beim ersten Sieg dazu ein Herz des Meeres und einen Herzkristall, jedes Mal Tintenbeutel und Leuchttintenbeutel,
+Nautilusschalen, Prismarinkristalle, Edelsteine, Goldmünzen und manchmal Diamanten. Mit dem
 **Gezeitenhorn** und einem Herz des Meeres in der anderen Hand rufst du ihn über dem Schlund zurück; im übrigen Urmeer zeigt
 das Horn den Weg zum Schlund (mit Cheats findet man ihn mit `/kaw structure krakenschlund` oder `/kaw boss kraken`).
 
@@ -3045,8 +3050,9 @@ Korallengabel mit einer leuchtenden Kugel; die Füllung wirbelt meergrün wie ih
 Unter halber Kraft schreit sie **vor Zorn**: Drei Ringe aus Tinte laufen als **Woge** von ihr fort, stoßen alle weg und
 verdunkeln das Wasser – danach ist sie schneller und wütender, und eine Spur aus Tinte zieht hinter ihr her. Findet sie
 niemanden mehr, kehrt sie über ihren Kessel zurück und versinkt nach einer Weile wieder in Trance – geheilt und ohne Zorn.
-Besiegt sinkt sie, das Licht in ihr erlischt, und sie **zerfließt zu Tinte**. Sie hinterlässt den **Hexenstab**, einen
-**Herzkristall**, Aquamarin, Perlen, Leuchttinte, Nautilusschalen und Münzen. Der Kessel **erkaltet** – eine **Perle**
+Besiegt sinkt sie, das Licht in ihr erlischt, und sie **zerfließt zu Tinte**. Sie hinterlässt den **Hexenstab** und einen
+**Herzkristall** (beides sicher nur beim ersten eigenen Sieg, danach den Stab nur noch selten) und Aquamarin für etwa ein
+Teil der Aquamarinrüstung, manchmal eine Perle. Der Kessel **erkaltet** – eine **Perle**
 darauf (Rechtsklick) ruft sie zurück, und sie erwacht sofort.
 
 **Der Hexenstab** – Treibholz, oben drei Zinken aus schwarzer Koralle um eine leuchtende Kugel (in der Hand in 3D):
@@ -3144,7 +3150,8 @@ Gegner hoch in der Luft:
 | **Raserei** | unter halber Kraft wird sie schneller, ruft mehr Falter und schickt mehr Strahlen |
 
 Wer ihre Lichtung verlässt, den lässt sie ziehen; ohne Gegner heilt sie sich langsam. Besiegt hinterlässt sie die
-**Feen-Elytren**, dazu viel Feenstaub, Mottenseide, gemeißelten Mondstein, einen **Herzkristall**, Edelsteine und Gold.
+**Feen-Elytren** (sicher beim ersten eigenen Sieg, danach nur noch selten), beim ersten Sieg einen **Herzkristall**, dazu
+Feenstaub, Mottenseide, etwas Gold und manchmal Edelsteine.
 Auf dem Altar spinnt sich danach ein neuer Kokon – du (oder deine Freunde) könnt sie noch einmal herausfordern.
 
 **Die Feen-Elytren** sind die Flügel der Mottenkönigin – und am Rücken siehst du sie als echte Mottenflügel mit
@@ -3190,8 +3197,9 @@ Klänge.
 
 Er bleibt auf seinem Dach (stürzt er hinunter, kehrt er in einer Flammensäule zurück). Findet er niemanden mehr, kehrt
 er an den Amboss zurück, legt den Speer darauf und schmiedet weiter – geheilt. Im Tod sinkt er auf die Knie, Glut und
-Rauch steigen aus ihm auf, bis die Esse in seiner Brust erlischt. Er hinterlässt den **Glutspeer**, einen
-**Herzkristall**, **Glutklumpen** (Brennstoff wie eine Lohenrute), Netheritschrott, Gold, Edelsteine und Münzen. Der
+Rauch steigen aus ihm auf, bis die Esse in seiner Brust erlischt. Er hinterlässt den **Glutspeer** (sicher beim ersten
+eigenen Sieg, danach nur noch selten), beim ersten Sieg einen **Herzkristall**, dazu **Glutklumpen** (Brennstoff wie eine
+Lohenrute), Gold, Münzen und manchmal Netheritschrott. Der
 Amboss **erkaltet** – legst du einen **Netheritbarren** darauf (Rechtsklick), facht sich die Esse neu an, und Malleus
 kehrt zurück.
 
@@ -3241,8 +3249,8 @@ die Schwingen des Rochens und die Lanze), eigene Klänge.
 
 Findet sie niemanden mehr, steigt sie nach einer halben Minute in einer Lichtsäule in den Himmel zurück (und kommt
 geheilt wieder). Im Tod sinkt sie in einer langsamen Spirale hinab und vergeht in Sternenlicht. Sie hinterlässt die
-**Sternenlanze**, die **Sternenschwingen**, einen **Herzkristall**, **Sternsplitter**, Enderperlen, Chorusfrüchte, Gold,
-Edelsteine und Münzen. Der Sternstein **erlischt** – hältst du einen **Endkristall** daran (Rechtsklick), entzündet er
+**Sternenlanze** und die **Sternenschwingen** (sicher beim ersten eigenen Sieg, danach nur noch selten), beim ersten Sieg
+einen **Herzkristall**, dazu **Sternsplitter**, Enderperlen, Chorusfrüchte, Gold, Edelsteine und Münzen. Der Sternstein **erlischt** – hältst du einen **Endkristall** daran (Rechtsklick), entzündet er
 sich neu, und Asteria kehrt zurück.
 
 **Die Sternenlanze** – Asterias Lanze: ein silberner Schaft mit goldener Wendel, violette Griffwicklung, Brechscheibe,
@@ -3305,8 +3313,9 @@ Karten), eigene Klänge und Melodien.
 Unter 60 % ihrer Kraft gibt sie eine **Zugabe** („Zugabe! Zugabe!“): Sie schimmert rosa, wird schneller, wirft mehr
 Karten, ruft mehr Tauben und zeigt das Rampenlicht. Findet sie niemanden mehr, verbeugt sie sich nach einer halben Minute
 und verschwindet in ihrem Zylinder (und kommt geheilt wieder). Besiegt verbeugt sie sich ein letztes Mal, das Publikum
-applaudiert, und sie vergeht in einem Regen aus Konfetti. Sie hinterlässt das **Kartendeck der Mystik**, den **Zylinder der
-Mystik**, einen **Herzkristall**, Feenstaub, Amethyst, Gold, Edelsteine und Münzen. Der Zylinder ist dann **leer** – streust
+applaudiert, und sie vergeht in einem Regen aus Konfetti. Sie hinterlässt das **Kartendeck der Mystik** und den **Zylinder der
+Mystik** (sicher beim ersten eigenen Sieg, danach nur noch selten), beim ersten Sieg einen **Herzkristall**, dazu Feenstaub,
+Amethyst, Gold, Münzen und manchmal Edelsteine. Der Zylinder ist dann **leer** – streust
 du eine Prise **Feenstaub** hinein (Rechtsklick), kehrt sie zurück.
 
 **Das Kartendeck der Mystik** – MissMystiks eigene Zauberkarten; in der Hand ein Fächer aus fünf Karten:
@@ -3373,8 +3382,9 @@ Füllung aus milchigem Mondstein mit wanderndem Schimmer, im Medaillon sein Bild
 
 Unter halber Kraft ist er **zornig**: schneller, kürzere Pausen, härtere Schläge. Findet er niemanden mehr, kehrt er an seinen
 Platz zurück und kniet nach einer Weile wieder nieder – geheilt und ohne Panzer. Besiegt sinkt er auf die Knie, das Licht in
-ihm erlischt, und er zerfällt zu Geröll. Er hinterlässt den **Hüterhammer**, einen **Herzkristall**, Mondstein,
-Mondsteinblöcke, gemeißelten Mondstein, Feenstaub, Edelsteine und Münzen. Der Hüterstein **erlischt** – ein **Mondstein**
+ihm erlischt, und er zerfällt zu Geröll. Er hinterlässt den **Hüterhammer** und einen **Herzkristall** (beides sicher nur
+beim ersten eigenen Sieg, danach den Hammer nur noch selten) und Mondstein für etwa ein Teil der Mondsteinrüstung, dazu
+etwas Feenstaub. Der Hüterstein **erlischt** – ein **Mondstein**
 darauf (Rechtsklick) ruft einen neuen Hüter, der sich sofort aus dem Geröll erhebt.
 
 **Der Hüterhammer** – die Waffe des Steinhüters: ein Kopf aus Feenstein, mit Mondstein gebunden, an einem Stiel aus
@@ -3459,8 +3469,8 @@ blauen zugleich eine zweite rote Zeile (gegenläufig) – und er beherrscht den 
 
 Findet Anni niemanden mehr, zerfällt er nach einer halben Minute in Pixel („Anni hat die Verbindung verloren.“) und
 kehrt in den Kern zurück. Besiegt (ein zweites Mal) erstarrt er, flackert und zerfällt in Pixel – **GAME OVER**. Er
-hinterlässt den **Bannhammer**, die **Fehlerflügel**, einen **Herzkristall**, Fehlersplitter, Fehlerblöcke, Redstone,
-Diamanten, Edelsteine und Münzen. Der Kern ist dann **abgestürzt** – ein **Redstoneblock** (Rechtsklick auf den Kern)
+hinterlässt den **Bannhammer** und die **Fehlerflügel** (sicher beim ersten eigenen Sieg, danach nur noch selten), beim
+ersten Sieg einen **Herzkristall**, dazu Fehlersplitter, Fehlerblöcke, Redstone, Edelsteine, Münzen und manchmal Diamanten. Der Kern ist dann **abgestürzt** – ein **Redstoneblock** (Rechtsklick auf den Kern)
 startet ihn neu, und Anni wird sofort wieder geladen.
 
 **Der Bannhammer** – Annis Hammer; in der Hand ein echtes 3D-Modell mit Lappen am Stiel, Eisenbändern und schwebenden
@@ -4295,8 +4305,9 @@ Sechs Erzmagier hüten die Zaubertafeln der Elemente – jeder in seinem eigenen
 - Auch mitten im Getümmel bleibt die Sicht frei: Einschläge werfen ihre Funken, Splitter und Wolken nicht direkt vor
   die Augen dessen, den sie treffen, und Schwächungen durch Bosse (wie auch die Wirkungen eigener Zauber) zeigen sich
   als Zeichen in der Anzeige statt als Wirbel vor den Augen – das gilt ebenso im Kampf gegen die Drachen.
-- Besiegt lässt er seine **Zaubertafel**, Goldmünzen, Aetherit und ein verzaubertes Buch fallen; die Truhe im Sanktum
-  hält weiteren Schatz bereit.
+- Besiegt lässt er seine **Zaubertafel** fallen (sicher beim ersten eigenen Sieg über diesen Magier, danach nur noch
+  selten), beim ersten Sieg einen Manakristall, dazu Goldmünzen, Aetherit und manchmal ein verzaubertes Buch; die Truhe im
+  Sanktum hält weiteren Schatz bereit.
 
 ![Kampf gegen die Erzmagier](docs/bilder/erzmagier.jpg)
 
@@ -4539,8 +4550,10 @@ Funke glüht weiter im Altar, und man kann es erneut wagen.
 **Sein Ende.** Besiegt (ein drittes Mal) brechen Risse aus Licht aus ihm, die Räder lösen sich, er sinkt langsam herab und
 spricht ein letztes Mal („So geht … und erschafft … eure eigene Welt.“); dann steigt eine Säule aus Licht in den Himmel, ein
 gleißender Blitz – und er ist fort. Vor dem Thron liegt seine Beute: der **Speer des Schöpfers**, seine **Schwingen**, sein
-**Heiligenschein**, die **Räder**, die um ihn kreisten, drei Herzkristalle, drei Manakristalle, zwei Nethersterne, zwei verzauberte goldene Äpfel, ein Totem der
-Unsterblichkeit, zwei verzauberte Bücher, Netheritbarren, Diamant- und Goldblöcke, Edelsteine und Goldmünzen – dazu 1.000
+**Heiligenschein**, die **Räder**, die um ihn kreisten (alles sicher beim ersten eigenen Sieg, bei jedem neuen Funken nur noch
+selten), beim ersten Sieg drei Herzkristalle, drei Manakristalle, zwei verzauberte goldene Äpfel und ein Totem der
+Unsterblichkeit, jedes Mal Nethersterne, verzauberte Bücher, Netheritbarren, Diamant- und Goldblöcke, Edelsteine und
+Goldmünzen (beim ersten Sieg doppelt so viel) – dazu 1.000
 Erfahrungspunkte; wie bei allen Kampfdimensionen landet alles am Altar, sobald man zurückkehrt. Der Funke ist verglüht.
 Und jeder, der dabei war, wird **Gottbezwinger**: Der Titel erscheint groß auf dem Bildschirm, alle erfahren davon, und er
 steht fortan in Violett vor dem Namen – über dem Kopf, im Chat und in der Spielerliste (er ersetzt den „Weltenretter“).
@@ -4701,7 +4714,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.1.2.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.1.3.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |

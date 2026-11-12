@@ -849,7 +849,7 @@ final class ClockTowerGameTests {
         BlockPos heartPos = ClockTowerPiece.heart(c);
         AABB around = AABB.of(ClockTowerPiece.makeBox(c));
         warden.forceAttack(HourWardenEntity.Attack.NONE);
-        warden.hurtServer(level, level.damageSources().genericKill(), Float.MAX_VALUE);
+        BossLootGameTests.firstVictory(helper, warden, Float.MAX_VALUE);
         helper.assertTrue(warden.isDeadOrDying(), "Der Wächter stirbt nicht");
         helper.runAfterDelay(HourWardenEntity.DEATH_TICKS + 6, () -> {
             helper.assertTrue(warden.isRemoved(), "Der Wächter zerspringt nicht");

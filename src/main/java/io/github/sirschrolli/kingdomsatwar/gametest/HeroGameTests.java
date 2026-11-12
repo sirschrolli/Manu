@@ -287,9 +287,20 @@ final class HeroGameTests {
             }
             int[] nyxar = count(table(level, ModEntities.NYXAR.get()), death, 1);
             helper.assertTrue(nyxar[0] == 2 && nyxar[1] == 1, "Nyxar lässt nicht zwei Herz- und einen Manakristall fallen: " + nyxar[0] + "/" + nyxar[1]);
+            // die Erzmagier (in jedem ihrer Türme einer): der Manakristall nur beim ersten eigenen Sieg (seit 1.1.3)
             for (var mage : ModEntities.MAGES.values()) {
-                int[] loot = count(table(level, mage.get()), death, 1);
-                helper.assertTrue(loot[0] == 0 && loot[1] == 1, mage.getId() + " lässt nicht genau einen Manakristall fallen: " + loot[0] + "/" + loot[1]);
+                victim.getStats().setValue(victim, net.minecraft.stats.Stats.ENTITY_KILLED.get(mage.get()), 1);
+                LootParams first = new LootParams.Builder(level)
+                        .withParameter(LootContextParams.THIS_ENTITY, victim)
+                        .withParameter(LootContextParams.ORIGIN, victim.position())
+                        .withParameter(LootContextParams.DAMAGE_SOURCE, level.damageSources().generic())
+                        .withParameter(LootContextParams.LAST_DAMAGE_PLAYER, victim)
+                        .create(LootContextParamSets.ENTITY);
+                int[] loot = count(table(level, mage.get()), first, 1);
+                helper.assertTrue(loot[0] == 0 && loot[1] == 1, mage.getId() + " lässt beim ersten Sieg nicht genau einen Manakristall fallen: "
+                        + loot[0] + "/" + loot[1]);
+                int[] again = count(table(level, mage.get()), death, 1);
+                helper.assertTrue(again[0] == 0 && again[1] == 0, mage.getId() + " lässt danach noch Kristalle fallen: " + again[0] + "/" + again[1]);
             }
         } finally {
             level.getServer().getPlayerList().remove(victim);

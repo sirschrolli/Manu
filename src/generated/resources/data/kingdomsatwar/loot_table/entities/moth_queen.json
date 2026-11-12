@@ -2,19 +2,81 @@
   "type": "minecraft:entity",
   "pools": [
     {
+      "condition": {
+        "type": "minecraft:entity_properties",
+        "entity": "attacking_player",
+        "predicate": {
+          "minecraft:type_specific/player": {
+            "stats": [
+              {
+                "type": "minecraft:killed",
+                "stat": "kingdomsatwar:moth_queen",
+                "value": 1
+              }
+            ]
+          }
+        }
+      },
       "entries": [
         {
           "type": "minecraft:item",
-          "modifier": {
-            "type": "minecraft:set_count",
-            "count": 1
-          },
           "name": "kingdomsatwar:fae_elytra"
         }
       ],
       "rolls": 1
     },
     {
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:inverted",
+            "term": {
+              "type": "minecraft:entity_properties",
+              "entity": "attacking_player",
+              "predicate": {
+                "minecraft:type_specific/player": {
+                  "stats": [
+                    {
+                      "type": "minecraft:killed",
+                      "stat": "kingdomsatwar:moth_queen",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "type": "minecraft:random_chance",
+            "chance": 0.2
+          }
+        ]
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "kingdomsatwar:fae_elytra"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:entity_properties",
+        "entity": "attacking_player",
+        "predicate": {
+          "minecraft:type_specific/player": {
+            "stats": [
+              {
+                "type": "minecraft:killed",
+                "stat": "kingdomsatwar:moth_queen",
+                "value": 1
+              }
+            ]
+          }
+        }
+      },
       "entries": [
         {
           "type": "minecraft:item",
@@ -23,34 +85,6 @@
             "count": 1
           },
           "name": "kingdomsatwar:heart_crystal"
-        }
-      ],
-      "rolls": 1
-    },
-    {
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "modifier": [
-            {
-              "type": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 16,
-                "min": 8
-              }
-            },
-            {
-              "type": "minecraft:enchanted_count_increase",
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 1.0,
-                "min": 0.0
-              },
-              "enchantment": "minecraft:looting"
-            }
-          ],
-          "name": "kingdomsatwar:fae_dust"
         }
       ],
       "rolls": 1
@@ -78,7 +112,7 @@
               "enchantment": "minecraft:looting"
             }
           ],
-          "name": "kingdomsatwar:moth_silk"
+          "name": "kingdomsatwar:fae_dust"
         }
       ],
       "rolls": 1
@@ -106,7 +140,7 @@
               "enchantment": "minecraft:looting"
             }
           ],
-          "name": "kingdomsatwar:chiseled_moonstone"
+          "name": "kingdomsatwar:moth_silk"
         }
       ],
       "rolls": 1
@@ -120,8 +154,8 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 4,
-                "min": 2
+                "max": 2,
+                "min": 0
               }
             },
             {
@@ -148,8 +182,8 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 9,
-                "min": 4
+                "max": 5,
+                "min": 2
               }
             },
             {

@@ -385,7 +385,7 @@ final class SeaWitchGameTests {
         BlockPos cauldronPos = WitchGrottoPiece.cauldron(o);
         AABB around = new AABB(o).inflate(40, 24, 40);
         witch.forceAttack(SeaWitchEntity.Attack.NONE);
-        witch.hurtServer(level, level.damageSources().genericKill(), Float.MAX_VALUE);
+        BossLootGameTests.firstVictory(helper, witch, Float.MAX_VALUE);
         helper.assertTrue(witch.isDeadOrDying(), "Die Hexe stirbt nicht");
         helper.runAfterDelay(SeaWitchEntity.DEATH_TICKS + 6, () -> {
             helper.assertTrue(witch.isRemoved(), "Die Hexe zerfließt nicht");

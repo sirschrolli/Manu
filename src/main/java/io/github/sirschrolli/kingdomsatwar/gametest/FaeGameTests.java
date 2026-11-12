@@ -495,7 +495,7 @@ final class FaeGameTests {
                     helper.assertTrue(queen.currentAttack() != MothQueenEntity.Attack.STUNNED, "Sie bleibt benommen");
                     queen.setInvulnerableTime(0);
                     queen.setHealth(1.0f);
-                    queen.hurtServer(level, level.damageSources().generic(), 50.0f);
+                    BossLootGameTests.firstVictory(helper, queen, 50.0f);
                     helper.assertTrue(queen.isDeadOrDying(), "Noctua fällt nicht");
                     helper.runAfterDelay(25, () -> {
                         AABB area = new AABB(home).inflate(40);

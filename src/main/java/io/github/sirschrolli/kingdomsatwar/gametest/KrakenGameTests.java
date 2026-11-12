@@ -355,7 +355,7 @@ final class KrakenGameTests {
                     helper.assertTrue(kraken.isEnraged(), "Schwer verletzt wird der Kraken nicht wütend");
                     kraken.setHealth(1.0f);
                     kraken.setInvulnerableTime(0);
-                    kraken.hurtServer(level, level.damageSources().generic(), 50.0f);
+                    BossLootGameTests.firstVictory(helper, kraken, 50.0f);
                     helper.assertTrue(kraken.isDeadOrDying(), "Der Kraken fällt nicht");
                 })
                 .thenExecuteAfter(KrakenEntity.DEATH_TICKS + 8, () -> {

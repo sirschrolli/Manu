@@ -205,7 +205,7 @@ final class MystikGameTests {
                         helper.assertTrue(mystik.currentAttack() == MissMystikEntity.Attack.FINALE, "Unter 30 % kein Finale: " + mystik.currentAttack());
                         mystik.setInvulnerableTime(0);
                         mystik.setHealth(1.0f);
-                        mystik.hurtServer(level, level.damageSources().generic(), 50.0f);
+                        BossLootGameTests.firstVictory(helper, mystik, 50.0f);
                         helper.assertTrue(mystik.isDeadOrDying(), "MissMystik fällt nicht");
                         helper.assertTrue(hat.phase() == StageHatBlockEntity.Phase.EMPTY, "Der Zylinder merkt den Sieg nicht");
                         helper.assertTrue(level.getBlockState(pos).getValue(StageHatBlock.PHASE) == StageHatBlock.Phase.EMPTY, "Der Hut ist nicht leer");

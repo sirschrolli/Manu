@@ -1,6 +1,7 @@
 package io.github.sirschrolli.kingdomsatwar.datagen;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.client.renderer.RodTip;
 import io.github.sirschrolli.kingdomsatwar.fishing.RodType;
 import io.github.sirschrolli.kingdomsatwar.registry.FishingItems;
 import net.minecraft.client.data.models.ItemModelGenerators;
@@ -57,14 +58,20 @@ final class RodModels {
                 .put(MonsterGearModels.MODEL, new Material(KingdomsAtWar.id("item/" + name + "_model")))
                 .put(MonsterGearModels.MODEL_GLOW, new Material(KingdomsAtWar.id("item/" + name + "_model_glow")))
                 .put(TextureSlot.PARTICLE, new Material(particle));
-        // gehalten wie die Angel von Minecraft ("handheld_rod")
+        // gehalten wie die Angel von Minecraft ("handheld_rod"); dieselben Werte nutzt RodTip für die Schnur an der Spitze
+        float[] tr = RodTip.THIRD_ROTATION;
+        float[] tt = RodTip.THIRD_TRANSLATION;
+        float ts = RodTip.THIRD_SCALE;
+        float[] fr = RodTip.FIRST_ROTATION;
+        float[] ft = RodTip.FIRST_TRANSLATION;
+        float fs = RodTip.FIRST_SCALE;
         ExtendedModelTemplateBuilder hand = ExtendedModelTemplateBuilder.builder()
                 .requiredTextureSlot(MonsterGearModels.MODEL).requiredTextureSlot(MonsterGearModels.MODEL_GLOW).requiredTextureSlot(TextureSlot.PARTICLE)
                 .guiLight(net.minecraft.client.resources.model.UnbakedModel.GuiLight.FRONT)
-                .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, t -> t.rotation(0, 90, 55).translation(0, 4.0f, 2.5f).scale(0.85f, 0.85f, 0.85f))
-                .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND, t -> t.rotation(0, -90, -55).translation(0, 4.0f, 2.5f).scale(0.85f, 0.85f, 0.85f))
-                .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, t -> t.rotation(0, 90, 25).translation(0, 1.6f, 0.8f).scale(0.68f, 0.68f, 0.68f))
-                .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND, t -> t.rotation(0, -90, -25).translation(0, 1.6f, 0.8f).scale(0.68f, 0.68f, 0.68f));
+                .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, t -> t.rotation(tr[0], tr[1], tr[2]).translation(tt[0], tt[1], tt[2]).scale(ts, ts, ts))
+                .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND, t -> t.rotation(tr[0], -tr[1], -tr[2]).translation(tt[0], tt[1], tt[2]).scale(ts, ts, ts))
+                .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, t -> t.rotation(fr[0], fr[1], fr[2]).translation(ft[0], ft[1], ft[2]).scale(fs, fs, fs))
+                .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND, t -> t.rotation(fr[0], -fr[1], -fr[2]).translation(ft[0], ft[1], ft[2]).scale(fs, fs, fs));
         MonsterGearModels.addParts(hand, parts);
         return hand.build().create(KingdomsAtWar.id("item/" + name + suffix + "_in_hand"), textures, items.modelOutput);
     }

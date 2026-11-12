@@ -162,21 +162,15 @@ final class AbyssModels {
                 .put(SPEAR, new Material(io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.id("item/world_spear_model")))
                 .put(SPEAR_GLOW, new Material(io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.id("item/world_spear_model_glow")))
                 .put(TextureSlot.PARTICLE, new Material(io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.id("item/world_spear")));
-        ExtendedModelTemplateBuilder hand = ExtendedModelTemplateBuilder.builder()
+        // gehalten wie die Speere von Minecraft: auf die Mitte gesetzt und auf ihre Länge gebracht (SpearHold)
+        ExtendedModelTemplateBuilder hand = SpearHold.hold(ExtendedModelTemplateBuilder.builder()
                 .requiredTextureSlot(SPEAR).requiredTextureSlot(SPEAR_GLOW).requiredTextureSlot(TextureSlot.PARTICLE)
-                .guiLight(net.minecraft.client.resources.model.UnbakedModel.GuiLight.FRONT)
-                .transform(net.minecraft.world.item.ItemDisplayContext.FIRST_PERSON_RIGHT_HAND,
-                        t -> t.rotation(-20, 90, -35).translation(3.13f, 2.0f, 0.13f).scale(1.3f, 1.3f, 0.65f))
-                .transform(net.minecraft.world.item.ItemDisplayContext.FIRST_PERSON_LEFT_HAND,
-                        t -> t.rotation(-20, -90, 35).translation(3.13f, 2.0f, 0.13f).scale(1.3f, 1.3f, 0.65f))
-                .transform(net.minecraft.world.item.ItemDisplayContext.THIRD_PERSON_RIGHT_HAND,
-                        t -> t.rotation(5, 270, -40).translation(0, 2, 2).scale(1.62f, 1.62f, 0.81f))
-                .transform(net.minecraft.world.item.ItemDisplayContext.THIRD_PERSON_LEFT_HAND,
-                        t -> t.rotation(5, -270, 40).translation(0, 2, 2).scale(1.62f, 1.62f, 0.81f));
+                .guiLight(net.minecraft.client.resources.model.UnbakedModel.GuiLight.FRONT), SPEAR_PARTS);
+        float lift = SpearHold.lift(SPEAR_PARTS);
         for (float[] p : SPEAR_PARTS) {
             boolean glow = p[10] > 0;
             hand.element(e -> {
-                e.from(p[0], p[1], p[2]).to(p[3], p[4], p[5]);
+                e.from(p[0], p[1] + lift, p[2]).to(p[3], p[4] + lift, p[5]);
                 e.allFaces((direction, face) -> {
                     face.texture(glow ? SPEAR_GLOW : SPEAR);
                     if (direction.getAxis() == Direction.Axis.Y) {

@@ -2,6 +2,21 @@
   "type": "minecraft:entity",
   "pools": [
     {
+      "condition": {
+        "type": "minecraft:entity_properties",
+        "entity": "attacking_player",
+        "predicate": {
+          "minecraft:type_specific/player": {
+            "stats": [
+              {
+                "type": "minecraft:killed",
+                "stat": "kingdomsatwar:water_mage",
+                "value": 1
+              }
+            ]
+          }
+        }
+      },
       "entries": [
         {
           "type": "minecraft:item",
@@ -11,6 +26,57 @@
       "rolls": 1
     },
     {
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:inverted",
+            "term": {
+              "type": "minecraft:entity_properties",
+              "entity": "attacking_player",
+              "predicate": {
+                "minecraft:type_specific/player": {
+                  "stats": [
+                    {
+                      "type": "minecraft:killed",
+                      "stat": "kingdomsatwar:water_mage",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "type": "minecraft:random_chance",
+            "chance": 0.2
+          }
+        ]
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "kingdomsatwar:water_spell_tablet"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:entity_properties",
+        "entity": "attacking_player",
+        "predicate": {
+          "minecraft:type_specific/player": {
+            "stats": [
+              {
+                "type": "minecraft:killed",
+                "stat": "kingdomsatwar:water_mage",
+                "value": 1
+              }
+            ]
+          }
+        }
+      },
       "entries": [
         {
           "type": "minecraft:item",
@@ -32,8 +98,8 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 6,
-                "min": 3
+                "max": 4,
+                "min": 2
               }
             },
             {
@@ -60,8 +126,8 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 5,
-                "min": 2
+                "max": 3,
+                "min": 1
               }
             },
             {
@@ -88,16 +154,20 @@
             "options": "#kingdomsatwar:loot/arcane"
           },
           "name": "minecraft:book",
-          "weight": 50
+          "weight": 25
         },
         {
           "type": "minecraft:empty",
-          "weight": 50
+          "weight": 75
         }
       ],
       "rolls": 1
     },
     {
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.5
+      },
       "entries": [
         {
           "type": "minecraft:item",

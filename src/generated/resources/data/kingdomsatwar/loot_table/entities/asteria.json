@@ -2,32 +2,141 @@
   "type": "minecraft:entity",
   "pools": [
     {
+      "condition": {
+        "type": "minecraft:entity_properties",
+        "entity": "attacking_player",
+        "predicate": {
+          "minecraft:type_specific/player": {
+            "stats": [
+              {
+                "type": "minecraft:killed",
+                "stat": "kingdomsatwar:asteria",
+                "value": 1
+              }
+            ]
+          }
+        }
+      },
       "entries": [
         {
           "type": "minecraft:item",
-          "modifier": {
-            "type": "minecraft:set_count",
-            "count": 1
-          },
           "name": "kingdomsatwar:star_lance"
         }
       ],
       "rolls": 1
     },
     {
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:inverted",
+            "term": {
+              "type": "minecraft:entity_properties",
+              "entity": "attacking_player",
+              "predicate": {
+                "minecraft:type_specific/player": {
+                  "stats": [
+                    {
+                      "type": "minecraft:killed",
+                      "stat": "kingdomsatwar:asteria",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "type": "minecraft:random_chance",
+            "chance": 0.2
+          }
+        ]
+      },
       "entries": [
         {
           "type": "minecraft:item",
-          "modifier": {
-            "type": "minecraft:set_count",
-            "count": 1
-          },
+          "name": "kingdomsatwar:star_lance"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:entity_properties",
+        "entity": "attacking_player",
+        "predicate": {
+          "minecraft:type_specific/player": {
+            "stats": [
+              {
+                "type": "minecraft:killed",
+                "stat": "kingdomsatwar:asteria",
+                "value": 1
+              }
+            ]
+          }
+        }
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
           "name": "kingdomsatwar:star_wings"
         }
       ],
       "rolls": 1
     },
     {
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:inverted",
+            "term": {
+              "type": "minecraft:entity_properties",
+              "entity": "attacking_player",
+              "predicate": {
+                "minecraft:type_specific/player": {
+                  "stats": [
+                    {
+                      "type": "minecraft:killed",
+                      "stat": "kingdomsatwar:asteria",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "type": "minecraft:random_chance",
+            "chance": 0.2
+          }
+        ]
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "kingdomsatwar:star_wings"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:entity_properties",
+        "entity": "attacking_player",
+        "predicate": {
+          "minecraft:type_specific/player": {
+            "stats": [
+              {
+                "type": "minecraft:killed",
+                "stat": "kingdomsatwar:asteria",
+                "value": 1
+              }
+            ]
+          }
+        }
+      },
       "entries": [
         {
           "type": "minecraft:item",
@@ -36,34 +145,6 @@
             "count": 1
           },
           "name": "kingdomsatwar:heart_crystal"
-        }
-      ],
-      "rolls": 1
-    },
-    {
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "modifier": [
-            {
-              "type": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 8,
-                "min": 4
-              }
-            },
-            {
-              "type": "minecraft:enchanted_count_increase",
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 1.0,
-                "min": 0.0
-              },
-              "enchantment": "minecraft:looting"
-            }
-          ],
-          "name": "kingdomsatwar:star_shard"
         }
       ],
       "rolls": 1
@@ -91,6 +172,34 @@
               "enchantment": "minecraft:looting"
             }
           ],
+          "name": "kingdomsatwar:star_shard"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2,
+                "min": 1
+              }
+            },
+            {
+              "type": "minecraft:enchanted_count_increase",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.0
+              },
+              "enchantment": "minecraft:looting"
+            }
+          ],
           "name": "minecraft:ender_pearl"
         }
       ],
@@ -105,8 +214,8 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 5,
-                "min": 2
+                "max": 3,
+                "min": 1
               }
             },
             {
@@ -133,8 +242,8 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 8,
-                "min": 4
+                "max": 4,
+                "min": 2
               }
             },
             {
@@ -161,8 +270,8 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 5,
-                "min": 3
+                "max": 2,
+                "min": 1
               }
             },
             {
@@ -189,8 +298,8 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 12,
-                "min": 6
+                "max": 6,
+                "min": 3
               }
             },
             {

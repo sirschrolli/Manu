@@ -574,7 +574,7 @@ final class StarWeaverGameTests {
         BlockPos nestPos = io.github.sirschrolli.kingdomsatwar.worldgen.weaver.StarWebPiece.nest(o);
         var around = new net.minecraft.world.phys.AABB(o).inflate(40, 30, 40);
         weaver.forceAttack(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarWeaverEntity.Attack.NONE);
-        weaver.hurtServer(level, level.damageSources().genericKill(), Float.MAX_VALUE);
+        BossLootGameTests.firstVictory(helper, weaver, Float.MAX_VALUE);
         helper.assertTrue(weaver.isDeadOrDying(), "Die Weberin stirbt nicht");
         helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarWeaverEntity.DEATH_TICKS + 6, () -> {
             helper.assertTrue(weaver.isRemoved(), "Die Weberin zerfällt nicht");

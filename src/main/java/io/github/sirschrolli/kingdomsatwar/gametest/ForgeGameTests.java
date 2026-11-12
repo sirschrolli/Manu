@@ -163,7 +163,7 @@ final class ForgeGameTests {
             helper.assertTrue(smith.isStoked(), "Unter halber Kraft wird er nicht weißglühend");
             smith.setInvulnerableTime(0);
             smith.setHealth(1.0f);
-            smith.hurtServer(level, level.damageSources().generic(), 50.0f);
+            BossLootGameTests.firstVictory(helper, smith, 50.0f);
             helper.assertTrue(smith.isDeadOrDying(), "Malleus fällt nicht");
             helper.assertTrue(forge.phase() == GlutAnvilBlockEntity.Phase.DEFEATED, "Der Amboss merkt den Sieg nicht");
             helper.assertTrue(level.getBlockState(pos).getValue(GlutAnvilBlock.PHASE) == GlutAnvilBlock.Phase.COLD, "Der Amboss erkaltet nicht");

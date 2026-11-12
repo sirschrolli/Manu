@@ -300,6 +300,8 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
     private boolean ascended;
     /** Ist er schon (oder gerade) zum Allmächtigen geworden? Dann stirbt er beim nächsten Mal wirklich. */
     private boolean transcended;
+    /** Wer ihn zuletzt traf, als er fiel (für die Beute am Ende der Todesfolge). */
+    private java.util.@Nullable UUID victor;
     /** Das Gericht der Sonne (bei zwei Dritteln und einem Viertel) – schon geschehen? */
     boolean solarDone;
     boolean solarDone2;
@@ -1807,6 +1809,9 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
             this.begin(first ? Attack.ASCEND : Attack.TRANSCEND);
             return;
         }
+        // wer ihn zuletzt traf: für die Beute (Sonderstücke und Kristalle beim ersten eigenen Sieg, siehe BossLoot)
+        Player lastPlayer = this.getLastHurtByPlayer();
+        this.victor = lastPlayer != null ? lastPlayer.getUUID() : null;
         super.die(source);
         if (this.level() instanceof ServerLevel level) {
             this.clearArtState();
@@ -1881,11 +1886,13 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         Vec3 spot = this.lootSpot(level);
         ResourceKey<LootTable> key = this.getType().getDefaultLootTable().orElse(null);
         if (key != null) {
+            ServerPlayer victor = this.victor != null ? level.getServer().getPlayerList().getPlayer(this.victor) : null;
             LootParams params = new LootParams.Builder(level)
                     .withParameter(LootContextParams.THIS_ENTITY, this)
                     .withParameter(LootContextParams.ORIGIN, spot)
                     .withParameter(LootContextParams.DAMAGE_SOURCE, this.getLastDamageSource() != null ? this.getLastDamageSource()
                             : this.damageSources().generic())
+                    .withOptionalParameter(LootContextParams.LAST_DAMAGE_PLAYER, victor)
                     .create(LootContextParamSets.ENTITY);
             for (ItemStack stack : level.getServer().reloadableRegistries().getLootTable(key).getRandomItems(params)) {
                 ItemEntity item = new ItemEntity(level, spot.x + (this.random.nextDouble() - 0.5) * 2.0, spot.y, spot.z + (this.random.nextDouble() - 0.5) * 2.0,

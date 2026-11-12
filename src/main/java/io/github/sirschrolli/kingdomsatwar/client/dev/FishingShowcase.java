@@ -12,6 +12,7 @@ import io.github.sirschrolli.kingdomsatwar.registry.FishingItems;
 import io.github.sirschrolli.kingdomsatwar.registry.ModAttachments;
 import java.util.Deque;
 import java.util.Set;
+import net.minecraft.client.CameraType;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -1184,6 +1185,113 @@ final class FishingShowcase {
             }
         }
         steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON)));
+    }
+
+    /**
+     * Die Schnur an der Rutenspitze, genau nachgerechnet ({@code angel_schnur2}, 1.1.3): Eisenangel, Sternenangel und die Angel
+     * von Minecraft – aus der eigenen Sicht (auch gleich nach dem Auswerfen), von der Seite, von vorn, im Gehen, beim Schleichen
+     * und mit der Angel in der linken Hand. Mit {@code W=1280 H=960} auch im Seitenverhältnis 4:3.
+     */
+    static void line2(Deque<Step> steps) {
+        steps.add(Step.once(minecraft -> ShowcaseRunner.hideHand = false));
+        for (String command : new String[] {"gamerule advance_time false", "time set 6000", "weather clear", "gamerule spawn_mobs false",
+                "kill @e[type=!minecraft:player]", "clear", "effect clear @s", "gamemode survival"}) {
+            steps.add(Step.command(command));
+        }
+        BlockPos[] top = new BlockPos[1];
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            ServerLevel level = any.getServer().overworld();
+            player.getAbilities().invulnerable = true;
+            player.onUpdateAbilities();
+            player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.CAMERA_DISTANCE).setBaseValue(2.6);
+            BlockPos at = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, new BlockPos(0, 0, 0));
+            for (int x = -14; x <= 14; x++) {
+                for (int z = -14; z <= 14; z++) {
+                    for (int y = -3; y <= 6; y++) {
+                        BlockPos pos = at.offset(x, y, z);
+                        boolean pond = z >= 3 && z <= 13 && Math.abs(x) <= 10;
+                        if (y > 0) {
+                            level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                        } else if (pond && y >= -2) {
+                            level.setBlockAndUpdate(pos, Blocks.WATER.defaultBlockState());
+                        } else {
+                            level.setBlockAndUpdate(pos, (y < 0 ? Blocks.STONE : Blocks.GRASS_BLOCK).defaultBlockState());
+                        }
+                    }
+                }
+            }
+            top[0] = at;
+        }));
+        steps.add(Step.until(() -> top[0] != null, 200));
+        steps.add(Step.hud(true));
+        boolean squareOnly = net.minecraft.client.Minecraft.getInstance().getWindow().getWidth() * 3
+                < net.minecraft.client.Minecraft.getInstance().getWindow().getHeight() * 4 + 10;
+        for (String rod : new String[] {"iron", "star", "vanilla"}) {
+            // {Name, Ansicht, Blick (Grad), Neigung, Hand (true = links), Taste (0 nichts, 1 gehen, 2 schleichen, 3 auswerfen)}
+            for (Object[] view : new Object[][] {{"ich", CameraType.FIRST_PERSON, 0.0f, 25.0f, false, 0},
+                    {"ich_auswurf", CameraType.FIRST_PERSON, 0.0f, 25.0f, false, 3},
+                    {"seite", CameraType.THIRD_PERSON_BACK, -60.0f, 10.0f, false, 0},
+                    {"vorn", CameraType.THIRD_PERSON_FRONT, 60.0f, -15.0f, false, 0},
+                    {"gehen", CameraType.THIRD_PERSON_BACK, -60.0f, 10.0f, false, 1},
+                    {"schleichen", CameraType.THIRD_PERSON_FRONT, 60.0f, -15.0f, false, 2},
+                    {"links_vorn", CameraType.THIRD_PERSON_FRONT, 30.0f, -15.0f, true, 0},
+                    {"links_ich", CameraType.FIRST_PERSON, -20.0f, 25.0f, true, 0}}) {
+                CameraType camera = (CameraType) view[1];
+                if (squareOnly && camera != CameraType.FIRST_PERSON) {
+                    continue;
+                }
+                float yaw = (Float) view[2];
+                float pitch = (Float) view[3];
+                boolean left = (Boolean) view[4];
+                int key = (Integer) view[5];
+                steps.add(Step.server(any -> {
+                    ServerPlayer player = player(any);
+                    if (player.fishing != null) {
+                        player.fishing.discard();
+                    }
+                    BlockPos at = top[0];
+                    player.teleportTo(player.level(), at.getX() + 0.5, at.getY() + 1.0, at.getZ() + 0.5, Set.of(), yaw, pitch, true);
+                    player.setYBodyRot(yaw);
+                    player.setYHeadRot(yaw);
+                    ItemStack stack = switch (rod) {
+                        case "vanilla" -> new ItemStack(Items.FISHING_ROD);
+                        case "star" -> new ItemStack(FishingItems.rod(io.github.sirschrolli.kingdomsatwar.fishing.RodType.STAR));
+                        default -> new ItemStack(FishingItems.rod(io.github.sirschrolli.kingdomsatwar.fishing.RodType.IRON));
+                    };
+                    player.setItemInHand(InteractionHand.MAIN_HAND, left ? ItemStack.EMPTY : stack);
+                    player.setItemInHand(InteractionHand.OFF_HAND, left ? stack : ItemStack.EMPTY);
+                }));
+                steps.add(Step.once(minecraft -> minecraft.options.setCameraType(camera)));
+                steps.add(Step.waitTicks(30));
+                if (key == 3) {
+                    // richtig auswerfen (Rechtsklick): die Hand holt aus und senkt sich kurz
+                    steps.add(Step.once(minecraft -> minecraft.options.keyUse.setDown(true)));
+                    steps.add(Step.waitTicks(1));
+                    steps.add(Step.once(minecraft -> minecraft.options.keyUse.setDown(false)));
+                    steps.add(Step.screenshot("schnur2_" + rod + "_" + view[0]));
+                    steps.add(Step.waitTicks(30));
+                    continue;
+                }
+                steps.add(cast(left ? -0.4 : 0.3, 0.2, 6.0));
+                if (key == 1) {
+                    steps.add(Step.once(minecraft -> minecraft.options.keyUp.setDown(true)));
+                    steps.add(Step.waitTicks(7));
+                } else if (key == 2) {
+                    steps.add(Step.once(minecraft -> minecraft.options.keyShift.setDown(true)));
+                    steps.add(Step.waitTicks(10));
+                } else {
+                    steps.add(Step.waitTicks(25));
+                }
+                steps.add(Step.screenshot("schnur2_" + rod + "_" + view[0]));
+                steps.add(Step.once(minecraft -> {
+                    minecraft.options.keyUp.setDown(false);
+                    minecraft.options.keyShift.setDown(false);
+                }));
+            }
+        }
+        steps.add(Step.once(minecraft -> minecraft.options.setCameraType(CameraType.FIRST_PERSON)));
+        steps.add(Step.quit());
     }
 
     static void rods(Deque<Step> steps) {

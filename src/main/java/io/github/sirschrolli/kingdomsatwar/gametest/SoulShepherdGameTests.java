@@ -478,7 +478,7 @@ final class SoulShepherdGameTests {
         BlockPos bellPos = SoulPenPiece.bell(o);
         AABB around = new AABB(o).inflate(40, 24, 40);
         shepherd.forceAttack(SoulShepherdEntity.Attack.NONE);
-        shepherd.hurtServer(level, level.damageSources().genericKill(), Float.MAX_VALUE);
+        BossLootGameTests.firstVictory(helper, shepherd, Float.MAX_VALUE);
         helper.assertTrue(shepherd.isDeadOrDying(), "Der Hirte stirbt nicht");
         helper.runAfterDelay(SoulShepherdEntity.DEATH_TICKS + 6, () -> {
             helper.assertTrue(shepherd.isRemoved(), "Der Hirte zerfällt nicht");

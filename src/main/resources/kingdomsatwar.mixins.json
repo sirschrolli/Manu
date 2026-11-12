@@ -12,7 +12,10 @@
     "SpongeBlockMixin"
   ],
   "client": [
+    "client.CameraAccess",
+    "client.FirstPersonHandsAccess",
     "client.FishingHookRendererMixin",
+    "client.LivingEntityRendererInvoker",
     "client.SkullBlockRendererMixin"
   ],
   "injectors": {
