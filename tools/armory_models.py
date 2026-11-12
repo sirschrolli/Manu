@@ -90,6 +90,20 @@ REGIONS: dict[str, dict[str, UV]] = {
         "cord": (15, 0, 16, 6),         # die Schnur des Talismans
         "bone": (8, 4, 10, 8),          # ein Knochen als Talisman
     },
+    "minute_hand": {
+        "grip": (0, 0, 2, 6),           # dunkles Leder, gewickelt
+        "brass": (2, 0, 4, 3),          # Messing (Knauf, Parierstange, Klingenwurzel)
+        "brass_top": (2, 3, 4, 5),
+        "gem": (4, 0, 5, 1),            # Chronit im Knauf (leuchtet)
+        "guard": (4, 1, 12, 3),         # die Parierstange von vorn (graviert)
+        "gear": (12, 0, 14, 2),         # kleine Zahnräder an den Enden der Parierstange
+        "blade": (0, 6, 2, 13),         # die breite Klingenwurzel: gebläuter Stahl, Messingseele
+        "blade_side": (2, 6, 3, 13),
+        "ring": (4, 4, 8, 8),           # das durchbrochene Ornament (Ring mit Chronit)
+        "narrow": (3, 6, 4, 16),        # die lange, schmale Klinge
+        "tip": (8, 4, 12, 10),          # die Rautenspitze: Spitze oben
+        "core": (12, 4, 13, 16),        # die Chronitader in der Klinge (leuchtet)
+    },
     "draconium_warhammer": {
         "handle": (0, 0, 2, 16),        # dunkles Holz mit Draconiumbändern
         "wrap": (2, 0, 4, 6),           # Schuppenleder
@@ -349,6 +363,26 @@ def shepherd_crook() -> Shape:
     return s
 
 
+def minute_hand() -> Shape:
+    """Der Minutenzeiger (1.01): der lange Zeiger der großen Uhr als Klinge – ein Messingknauf mit Chronit, ein umwickelter
+    Griff, eine gravierte Parierstange mit zwei kleinen Zahnrädern, eine breite Klingenwurzel mit durchbrochenem Ringornament,
+    dann die lange, schmale Klinge aus gebläutem Stahl mit leuchtender Chronitader und oben die durchbrochene Rautenspitze."""
+    s = Shape(REGIONS["minute_hand"])
+    s.box(7.2, -8.4, 7.2, 8.8, -6.9, 8.8, "brass", cap="brass_top")
+    s.box(7.55, -8.9, 7.55, 8.45, -8.4, 8.45, "gem", glow=True)
+    s.box(7.4, -6.9, 7.4, 8.6, -1.6, 8.6, "grip", cap="brass_top")
+    plate(s, 4.8, -1.6, 11.2, -0.5, 7.35, 8.65, "guard", (4.8, -1.6, 11.2, -0.5), side="brass", cap="brass_top")
+    s.box(3.4, -2.1, 7.75, 5.0, -0.0, 8.25, "gear", side="brass", cap="brass_top")
+    s.box(11.0, -2.1, 7.75, 12.6, -0.0, 8.25, "gear", side="brass", cap="brass_top")
+    s.box(7.0, -0.5, 7.55, 9.0, 1.0, 8.45, "brass", cap="brass_top")
+    s.box(7.1, 1.0, 7.7, 8.9, 8.2, 8.3, "blade", side="blade_side", cap="blade_side")
+    s.box(6.3, 3.6, 7.62, 9.7, 7.0, 8.38, "ring", side="brass", cap="brass_top")
+    s.box(7.4, 8.2, 7.76, 8.6, 19.2, 8.24, "narrow", side="blade_side", cap="blade_side")
+    s.box(6.2, 19.2, 7.76, 9.8, 24.0, 8.24, "tip", side="blade_side", cap="blade_side")
+    s.box(7.86, 1.2, 7.66, 8.14, 19.4, 8.34, "core", glow=True)
+    return s
+
+
 def nightsteel_dagger() -> Shape:
     """Nachtstahl-Dolch: ein Knauf mit Mondstein, der umwickelte Griff, eine geschwungene Parierstange und die kurze, breite
     Klinge mit violett glühender Hohlkehle."""
@@ -504,6 +538,7 @@ ITEMS = {
     "KEEPER_MAUL": ("keeper_maul", keeper_maul),
     "SEA_WITCH_STAFF": ("sea_witch_staff", sea_witch_staff),
     "SHEPHERD_CROOK": ("shepherd_crook", shepherd_crook),
+    "MINUTE_HAND": ("minute_hand", minute_hand),
     "NIGHTSTEEL_DAGGER": ("nightsteel_dagger", nightsteel_dagger),
     "ABYSSITE_GREATSWORD": ("abyssite_greatsword", abyssite_greatsword),
     "STEEL_DOUBLE_AXE": ("steel_double_axe", steel_double_axe),

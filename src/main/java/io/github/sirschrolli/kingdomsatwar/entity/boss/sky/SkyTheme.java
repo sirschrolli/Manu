@@ -47,7 +47,9 @@ public enum SkyTheme {
     /** Schrolli: Fesseln aus Licht – der Getroffene ist geschwächt und leuchtet. */
     CREATOR(3, 0xFFD24A, 0xFFF8DC, () -> ModParticles.DIVINE_SPARK.get()),
     /** Der Steinhüter (0.96): Mondstein umschließt den Getroffenen – er ist schwer und langsam. */
-    KEEPER(1, 0x9ED0FF, 0xF2FAFF, () -> ModParticles.FAE_SPARK.get());
+    KEEPER(1, 0x9ED0FF, 0xF2FAFF, () -> ModParticles.FAE_SPARK.get()),
+    /** Der Stundenwächter (1.01): die Zeit stockt um den Getroffenen – langsam in Schritt und Schlag, und sie zieht ihn zurück. */
+    TIME(2, 0xFFB347, 0xFFE7A0, () -> ParticleTypes.WAX_ON);
 
     private static final SkyTheme[] VALUES = values();
 

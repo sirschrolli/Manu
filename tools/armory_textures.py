@@ -41,6 +41,10 @@ VIOLET = st.fixed("#2a0c4a", "#4a1a7a", "#7a32b8", "#a85cf0", "#c88aff", "#e4c0f
 MOON = st.fixed("#2a3a5a", "#4a6a9a", "#7aa0d0", "#a8c8f0", "#cfe4ff", "#ecf6ff", "#ffffff")
 MAGENTA = st.fixed("#3a0632", "#6a0c5a", "#a01a8a", "#d02ab4", "#f05ad8", "#ff9cee", "#ffe0fa")
 CYAN = st.fixed("#06303a", "#0c5a6a", "#16909e", "#2ac8d0", "#6af0f0", "#b8fffa", "#f0ffff")
+# der Minutenzeiger (1.01): gebläuter Stahl, Uhrmessing, Chronit
+BLUED = st.fixed("#0a0e2a", "#141c48", "#20306e", "#2e4896", "#4566b8", "#7290dc", "#b4c8f6")
+CLOCK_BRASS = st.ramp("#d0a040", dark=0.28, light=0.96, warm=90)
+CHRONIT_GLOW = st.fixed("#6a2c06", "#a2480c", "#d26a16", "#f08f24", "#ffb347", "#ffd27e", "#fff0c4")
 
 
 # =============================================================================
@@ -383,6 +387,71 @@ def shepherd_crook_atlas():
     return img, glow
 
 
+def minute_hand_atlas():
+    R = _regions("minute_hand")
+    img, glow = _blank()
+    paint(img, R["grip"], wrap(DARK_LEATHER))
+    paint(img, R["brass"], metal(CLOCK_BRASS, 4.0))
+    paint(img, R["brass_top"], top(CLOCK_BRASS))
+    paint(img, R["gem"], glow_fill(CHRONIT_GLOW))
+    paint(glow, R["gem"], glow_fill(CHRONIT_GLOW))
+
+    def guard(x, y, w, h):
+        if y == 0:
+            return _lv(CLOCK_BRASS, 6)
+        if y == h - 1:
+            return _lv(CLOCK_BRASS, 2)
+        cx = (w - 1) / 2
+        if abs(x - cx) < 1.0:
+            return _lv(CHRONIT_GLOW, 4)                                      # ein Chronit in der Mitte
+        return _lv(CLOCK_BRASS, 4 if (x // 2) % 2 else 5)                    # graviert
+    paint(img, R["guard"], guard)
+
+    def gear(x, y, w, h):
+        dx, dy = x - (w - 1) / 2, y - (h - 1) / 2
+        r = math.hypot(dx, dy) / (w / 2)
+        a = math.atan2(dy, dx)
+        if r > 1.0 or (r > 0.72 and math.cos(a * 6) < 0.0):
+            return None
+        return _lv(CLOCK_BRASS, 5 if dy < 0 else 3) if r > 0.3 else _lv(CHRONIT_GLOW, 5)
+    paint(img, R["gear"], gear)
+
+    def blued(x, y, w, h):
+        u = x / max(1, w - 1)
+        if abs(u - 0.5) < 0.2:
+            return _lv(CLOCK_BRASS, 4)                                       # die Messingseele
+        return _lv(BLUED, 6 if u < 0.15 or u > 0.85 else 4 if u < 0.5 else 3)
+    paint(img, R["blade"], blued)
+    paint(img, R["blade_side"], lambda x, y, w, h: _lv(BLUED, 5))
+    paint(img, R["narrow"], lambda x, y, w, h: _lv(BLUED, 5 if x == 0 else 3))
+
+    def ring(x, y, w, h):
+        dx, dy = x - (w - 1) / 2, y - (h - 1) / 2
+        r = math.hypot(dx, dy) / (w / 2)
+        if r > 1.0 or 0.42 < r < 0.62:
+            return None                                                      # durchbrochen
+        if r <= 0.42:
+            return _lv(CHRONIT_GLOW, 5)
+        return _lv(CLOCK_BRASS, 5 if dy < 0 else 3)
+    paint(img, R["ring"], ring)
+    paint(glow, R["ring"], lambda x, y, w, h: ring(x, y, w, h) if math.hypot(x - (w - 1) / 2, y - (h - 1) / 2) / (w / 2) <= 0.42 else None)
+
+    def tip(x, y, w, h):
+        # eine Raute (Spitze oben), innen durchbrochen
+        t = y / max(1, h - 1)
+        half = (w / 2) * (t / 0.55 if t < 0.55 else 1.0 - (t - 0.55) / 0.45 * 0.7)
+        d = abs(x - (w - 1) / 2)
+        if d > half:
+            return None
+        if d < half - 1.6 and 0.3 < t < 0.75:
+            return None
+        return _lv(BLUED, 6 if d > half - 0.8 else 4)
+    paint(img, R["tip"], tip)
+    paint(img, R["core"], glow_strand(CHRONIT_GLOW))
+    paint(glow, R["core"], glow_strand(CHRONIT_GLOW))
+    return img, glow
+
+
 def nightsteel_dagger_atlas():
     R = _regions("nightsteel_dagger")
     img, glow = _blank()
@@ -573,6 +642,7 @@ ATLASES = {
     "keeper_maul": keeper_maul_atlas,
     "sea_witch_staff": sea_witch_staff_atlas,
     "shepherd_crook": shepherd_crook_atlas,
+    "minute_hand": minute_hand_atlas,
 }
 
 
@@ -881,10 +951,43 @@ def shepherd_crook_icon() -> Image.Image:
     return s.outline(prefer=("E", "C", "A", "F")).image({"A": SWAMP_OAK, "C": DARK_IRON, "E": SOUL_FIRE, "F": ROPE})
 
 
+def minute_hand_icon() -> Image.Image:
+    """Der Minutenzeiger im Inventar: schräg wie ein Schwert, unten links der Messingknauf mit Chronit und der Griff, die
+    Parierstange mit zwei Zahnrädern, die gebläute Klinge mit leuchtender Ader, kurz vor der Spitze die durchbrochene Raute."""
+    s = st.Spr(16, 16)
+    # Griff (F) und Knauf (C mit E)
+    s.set(1, 14, ("C", 4))
+    s.set(2, 14, ("C", 3))
+    s.set(1, 13, ("C", 5))
+    s.set(2, 13, ("E", 6))
+    for k in range(3):
+        s.set(3 + k, 12 - k, ("F", 4 if k % 2 else 3))
+    # Parierstange (C) quer
+    for (x, y, lvl) in ((3, 9, 5), (4, 10, 4), (6, 12, 3), (7, 13, 2), (5, 11, 6)):
+        s.set(x, y, ("C", lvl))
+    s.set(2, 8, ("C", 5))
+    s.set(8, 14, ("C", 3))
+    # die Klinge (B gebläut) mit Ader (E)
+    for k in range(9):
+        x, y = 6 + k, 9 - k
+        if y < 0:
+            break
+        s.set(x, y, ("E", 5 if k % 2 else 4) if k < 6 else ("B", 4))
+        s.set(x - 1, y, ("B", 5))
+        if k < 3:
+            s.set(x + 1, y + 1, ("B", 3))
+    # die Raute vor der Spitze
+    for (x, y, lvl) in ((12, 1, 5), (13, 2, 3), (11, 2, 4), (12, 3, 4), (14, 0, 6), (13, 1, 5)):
+        s.set(x, y, ("B", lvl))
+    s.set(12, 2, None)
+    return s.outline(prefer=("E", "C", "B", "F")).image({"B": BLUED, "C": CLOCK_BRASS, "E": CHRONIT_GLOW, "F": DARK_LEATHER})
+
+
 ICONS = {name: (lambda n=name: icon(n)) for name in ICON_ART}
 ICONS["keeper_maul"] = keeper_maul_icon
 ICONS["sea_witch_staff"] = lambda: sea_witch_staff_icon()
 ICONS["shepherd_crook"] = lambda: shepherd_crook_icon()
+ICONS["minute_hand"] = lambda: minute_hand_icon()
 
 
 def build(put) -> None:

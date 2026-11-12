@@ -158,6 +158,9 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.SEA_WITCH, io.github.sirschrolli.kingdomsatwar.client.model.geom.SeaWitchGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.SOUL_SHEPHERD, io.github.sirschrolli.kingdomsatwar.client.model.geom.SoulShepherdGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.STAR_WEAVER, io.github.sirschrolli.kingdomsatwar.client.model.geom.StarWeaverGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.HOUR_WARDEN, io.github.sirschrolli.kingdomsatwar.client.model.geom.HourWardenGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.CLOCK_GEAR, io.github.sirschrolli.kingdomsatwar.client.model.geom.ClockGearGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.CLOCK_PENDULUM, io.github.sirschrolli.kingdomsatwar.client.model.geom.ClockPendulumGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.KEEPER_BOULDER, io.github.sirschrolli.kingdomsatwar.client.model.geom.KeeperBoulderGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.STONE_FIST, io.github.sirschrolli.kingdomsatwar.client.model.geom.StoneFistGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.THORN_VINE, io.github.sirschrolli.kingdomsatwar.client.model.geom.ThornVineGeometry::createLayer);
@@ -251,6 +254,9 @@ public final class ClientSetup {
         event.registerEntityRenderer(ModEntities.SOUL_SHEPHERD.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.shadow.SoulShepherdRenderer::new);
         event.registerEntityRenderer(ModEntities.SOUL_WISP.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.shadow.SoulWispRenderer::new);
         event.registerEntityRenderer(ModEntities.STAR_WEAVER.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.voidrealm.StarWeaverRenderer::new);
+        event.registerEntityRenderer(ModEntities.HOUR_WARDEN.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.abyss.HourWardenRenderer::new);
+        event.registerEntityRenderer(ModEntities.CLOCK_GEAR.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.abyss.ClockGearRenderer::new);
+        event.registerEntityRenderer(ModEntities.CLOCK_PENDULUM.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.abyss.ClockPendulumRenderer::new);
         event.registerEntityRenderer(ModEntities.STAR_SPIDERLING.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.voidrealm.StarSpiderlingRenderer::new);
         event.registerEntityRenderer(ModEntities.STAR_WEB_SHOT.get(), context -> new net.minecraft.client.renderer.entity.ThrownItemRenderer<>(context, 1.4f, true));
         event.registerEntityRenderer(ModEntities.STAR_ARROW.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.voidrealm.StarArrowRenderer::new);

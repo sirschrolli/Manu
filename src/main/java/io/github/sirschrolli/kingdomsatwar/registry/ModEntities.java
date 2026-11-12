@@ -447,6 +447,18 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarSpiderlingEntity>> STAR_SPIDERLING =
             ENTITIES.registerEntityType("star_spiderling", io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarSpiderlingEntity::new, MobCategory.MONSTER,
                     builder -> builder.sized(0.9f, 0.5f).eyeHeight(0.35f).noLootTable().clientTrackingRange(10));
+    /** Der Stundenwächter (1.01): steht erstarrt über dem Uhrwerkherz in der Mitte des großen Zifferblatts am Uhrturm (Abgrund). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.abyss.HourWardenEntity>> HOUR_WARDEN =
+            ENTITIES.registerEntityType("hour_warden", io.github.sirschrolli.kingdomsatwar.entity.abyss.HourWardenEntity::new, MobCategory.MONSTER,
+                    builder -> builder.sized(1.6f, 4.3f).eyeHeight(3.8f).fireImmune().notInPeaceful().clientTrackingRange(16).updateInterval(2));
+    /** Ein Zahnrad des Stundenwächters (rollt über das Zifferblatt). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.abyss.ClockGearEntity>> CLOCK_GEAR =
+            ENTITIES.registerEntityType("clock_gear", io.github.sirschrolli.kingdomsatwar.entity.abyss.ClockGearEntity::new, MobCategory.MISC,
+                    builder -> builder.sized(1.3f, 1.3f).noLootTable().fireImmune().clientTrackingRange(10).updateInterval(1));
+    /** Das Pendel des Stundenwächters (schwingt aus der Höhe über das Zifferblatt). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.abyss.ClockPendulumEntity>> CLOCK_PENDULUM =
+            ENTITIES.registerEntityType("clock_pendulum", io.github.sirschrolli.kingdomsatwar.entity.abyss.ClockPendulumEntity::new, MobCategory.MISC,
+                    builder -> builder.sized(1.0f, 1.0f).noLootTable().fireImmune().clientTrackingRange(12).updateInterval(1));
     /** Ein Ballen Sternennetz (gespuckt von der Sternenweberin). */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarWebShotEntity>> STAR_WEB_SHOT =
             ENTITIES.registerEntityType("star_web_shot", io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarWebShotEntity::new, MobCategory.MISC,
@@ -980,6 +992,7 @@ public final class ModEntities {
         event.put(SEA_WITCH.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.SeaWitchEntity.createAttributes().build());
         event.put(SOUL_SHEPHERD.get(), io.github.sirschrolli.kingdomsatwar.entity.shadow.SoulShepherdEntity.createAttributes().build());
         event.put(STAR_WEAVER.get(), io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarWeaverEntity.createAttributes().build());
+        event.put(HOUR_WARDEN.get(), io.github.sirschrolli.kingdomsatwar.entity.abyss.HourWardenEntity.createAttributes().build());
         event.put(STAR_SPIDERLING.get(), io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarSpiderlingEntity.createAttributes().build());
         event.put(MOON_MOTH.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MoonMothEntity.createAttributes().build());
         event.put(GLUTSCHMIED.get(), io.github.sirschrolli.kingdomsatwar.entity.nether.GlutschmiedEntity.createAttributes().build());

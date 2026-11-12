@@ -330,6 +330,29 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WEAVER_SPINDLE = register("entity.star_weaver.spindle");
     public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WEAVER_FURY = register("entity.star_weaver.fury");
     public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WEAVER_SPIDERLING = register("entity.star_weaver.spiderling");
+    // der Stundenwächter (seit 1.01)
+    public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_AMBIENT = register("entity.hour_warden.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_HURT = register("entity.hour_warden.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_DEATH = register("entity.hour_warden.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_STEP = register("entity.hour_warden.step");
+    public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_AWAKEN = register("entity.hour_warden.awaken");
+    public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_SWEEP = register("entity.hour_warden.sweep");
+    public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_STRIKE = register("entity.hour_warden.strike");
+    public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_GEARS = register("entity.hour_warden.gears");
+    public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_GEAR_HIT = register("entity.hour_warden.gear_hit");
+    public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_TIME_STOP = register("entity.hour_warden.time_stop");
+    public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_FROZEN = register("entity.hour_warden.frozen");
+    public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_PENDULUM = register("entity.hour_warden.pendulum");
+    public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_HOURGLASS = register("entity.hour_warden.hourglass");
+    public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_HOURGLASS_BURST = register("entity.hour_warden.hourglass_burst");
+    public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_BLINK = register("entity.hour_warden.blink");
+    public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_REWIND = register("entity.hour_warden.rewind");
+    public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_STAGGER = register("entity.hour_warden.stagger");
+    public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_FURY = register("entity.hour_warden.fury");
+    public static final DeferredHolder<SoundEvent, SoundEvent> HOUR_WARDEN_TOLL = register("entity.hour_warden.toll");
+    // der Minutenzeiger (seit 1.01)
+    public static final DeferredHolder<SoundEvent, SoundEvent> MINUTE_HAND_HOUR = register("item.minute_hand.hour");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MINUTE_HAND_JUMP = register("item.minute_hand.jump");
     public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_AMBIENT = register("entity.stone_keeper.ambient");
     public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_HURT = register("entity.stone_keeper.hurt");
     public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_DEATH = register("entity.stone_keeper.death");

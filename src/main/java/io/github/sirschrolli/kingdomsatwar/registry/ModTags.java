@@ -196,6 +196,8 @@ public final class ModTags {
         public static final TagKey<Biome> HAS_WITCH_GROTTO = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_witch_grotto"));
         public static final TagKey<Biome> HAS_SOUL_PEN = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_soul_pen"));
         public static final TagKey<Biome> HAS_STAR_WEB = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_star_web"));
+        /** Wo der Uhrturm (seit 1.01) treiben kann: alle Biome des Abgrunds. */
+        public static final TagKey<Biome> HAS_CLOCK_TOWER = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_clock_tower"));
         /** Wo Dörfer der jeweiligen Bauweise entstehen (Fachwerk, nordisch, Lehm, Pfahlbau). */
         public static final java.util.Map<io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageStyle, TagKey<Biome>> HAS_VILLAGE = villageTags();
         /** Wo die eigenen Bauwerke der Oberwelt stehen können (je Art). */
@@ -259,6 +261,7 @@ public final class ModTags {
         public static final TagKey<Item> REPAIRS_DUSK_ARMOR = mod("repairs_dusk_armor");
         public static final TagKey<Item> REPAIRS_STARWALKER_ARMOR = mod("repairs_starwalker_armor");
         public static final TagKey<Item> REPAIRS_TIMEWARDEN_ARMOR = mod("repairs_timewarden_armor");
+        public static final TagKey<Item> REPAIRS_MINUTE_HAND = mod("repairs_minute_hand");
         public static final TagKey<Item> REPAIRS_STAR_BOW = mod("repairs_star_bow");
         public static final TagKey<Item> REPAIRS_SHEPHERD_CROOK = mod("repairs_shepherd_crook");
         public static final TagKey<Item> REPAIRS_SEA_WITCH_STAFF = mod("repairs_sea_witch_staff");

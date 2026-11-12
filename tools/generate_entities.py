@@ -32,6 +32,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               shattered_crown, manta_ray, glow_jellyfish, shark, anglerfish, giant_crab, reef_colossus, kraken, mermaid, sea_witch,
                               soul_shepherd,
                               star_weaver,
+                              hour_warden, clock_gear, clock_pendulum,
                               armor_parts,
                               fairy, mushroomling, thorn_wight, moth_queen, glutschmied, asteria, stone_keeper, keeper_boulder,
                               miss_mystik, light_dove, magic_sword, anni_troll,
@@ -459,6 +460,19 @@ def main():
                 "Kieferklauen mit Giftzähnen und Tastern, ein Hinterleib wie Nachthimmel mit Spiralgalaxie, drei Kristalle der Leere, "
                 "Spinnwarzen, acht Beine aus Hüfte, Schenkel, Schiene und Fuß mit leuchtenden Gelenken; im Spiel ×2.",
                 "star_weaver", star_weaver.PALETTES, preview)
+    write_model(hour_warden, "HourWardenGeometry",
+                "Geometrie des Stundenwächters (seit 1.01): Ritter aus Uhrbronze über geschwärztem Stahl, Uhrwerkfenster mit zwei "
+                "Zahnrädern in der Brust, Topfhelm mit T-Sehschlitz und Zeigerkamm, ein Zifferblatt wie ein Heiligenschein hinter dem "
+                "Kopf mit gebläuten Zeigern, Schulterstücke mit Zahnrädern, Minutenzeiger und Stundenzeiger als Klingen, Pendel und "
+                "zwei Uhrgewichte am Gürtel, drei kreisende Zahnräder; im Spiel ×1,6.",
+                "hour_warden", hour_warden.PALETTES, preview)
+    write_model(clock_gear, "ClockGearGeometry",
+                "Geometrie eines Zahnrads des Stundenwächters (seit 1.01): zwei Scheiben mit zwölf Zähnen und fünf Fenstern, dazwischen "
+                "die Nabe mit Chronit; rollt entlang -z, dreht sich um x.", "clock_gear", clock_gear.PALETTES, preview)
+    write_model(clock_pendulum, "ClockPendulumGeometry",
+                "Geometrie des Pendels des Stundenwächters (seit 1.01): ein Stück der Stange (ein Block, nach unten), das Lager (ein "
+                "Zahnrad quer zu x) und die Klinge – eine Pendelscheibe mit Stundenmarken und eine Sichel aus gebläutem Stahl.",
+                "clock_pendulum", clock_pendulum.PALETTES, preview)
     write_model(armor_parts, "ArmorPartsGeometry",
                 "Geometrie der 3D-Teile getragener Rüstungen (seit 0.95): je Rüstungssatz und Platz ein Knochen <satz>_<platz>_<knochen>.",
                 "armor_parts", armor_parts.PALETTES, preview, same_seed=True)
