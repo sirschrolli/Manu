@@ -1112,6 +1112,80 @@ final class FishingShowcase {
      * Die Angeln ({@code angeln_ruten}): alle sechs groß vor einer Bretterwand, einige in der Hand und ausgeworfen über Wasser
      * und Lava; dazu Donnerschlag (der Funkenschlag) und Eulenauge (eine dunkle Kammer ohne und mit dem Helm).
      */
+    /**
+     * Die Schnur an der Rutenspitze ({@code angel_schnur}): die Eisenangel und die Angel von Minecraft, ausgeworfen auf einen
+     * Teich – aus der eigenen Sicht, von hinten, von vorn und von der Seite (mit einem zweiten Blick: ein Rüstungsständer hält
+     * die Kamera nicht, also dreht sich der Angler).
+     */
+    static void line(Deque<Step> steps) {
+        steps.add(Step.once(minecraft -> ShowcaseRunner.hideHand = false));
+        for (String command : new String[] {"gamerule advance_time false", "time set 6000", "weather clear", "gamerule spawn_mobs false",
+                "kill @e[type=!minecraft:player]", "clear", "effect clear @s", "gamemode survival"}) {
+            steps.add(Step.command(command));
+        }
+        BlockPos[] top = new BlockPos[1];
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            ServerLevel level = any.getServer().overworld();
+            player.getAbilities().invulnerable = true;
+            player.onUpdateAbilities();
+            BlockPos at = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, new BlockPos(0, 0, 0));
+            for (int x = -12; x <= 12; x++) {
+                for (int z = -12; z <= 12; z++) {
+                    for (int y = -3; y <= 6; y++) {
+                        BlockPos pos = at.offset(x, y, z);
+                        boolean pond = z >= 3 && z <= 11 && Math.abs(x) <= 8;
+                        if (y > 0) {
+                            level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                        } else if (pond && y >= -2) {
+                            level.setBlockAndUpdate(pos, Blocks.WATER.defaultBlockState());
+                        } else {
+                            level.setBlockAndUpdate(pos, (y < 0 ? Blocks.STONE : Blocks.GRASS_BLOCK).defaultBlockState());
+                        }
+                    }
+                }
+            }
+            top[0] = at;
+        }));
+        steps.add(Step.until(() -> top[0] != null, 200));
+        steps.add(Step.once(minecraft -> {
+            if (minecraft.gui.hud.isHidden()) {
+                minecraft.gui.hud.toggle();
+            }
+        }));
+        for (String rod : new String[] {"iron", "vanilla"}) {
+            // {Name, Ansicht, Blick (Grad), Neigung, ausgeworfen}
+            for (Object[] view : new Object[][] {{"ich", net.minecraft.client.CameraType.FIRST_PERSON, 0.0f, 25.0f, true},
+                    {"seite", net.minecraft.client.CameraType.THIRD_PERSON_BACK, -60.0f, 10.0f, true},
+                    {"himmel", net.minecraft.client.CameraType.THIRD_PERSON_BACK, -75.0f, -20.0f, true},
+                    {"himmel_ruhend", net.minecraft.client.CameraType.THIRD_PERSON_BACK, -75.0f, -20.0f, false},
+                    {"vorn", net.minecraft.client.CameraType.THIRD_PERSON_FRONT, 60.0f, -15.0f, true}}) {
+                net.minecraft.client.CameraType camera = (net.minecraft.client.CameraType) view[1];
+                float yaw = (Float) view[2];
+                float pitch = (Float) view[3];
+                steps.add(Step.server(any -> {
+                    ServerPlayer player = player(any);
+                    if (player.fishing != null) {
+                        player.fishing.discard();
+                    }
+                    BlockPos at = top[0];
+                    player.teleportTo(player.level(), at.getX() + 0.5, at.getY() + 1.0, at.getZ() + 0.5, Set.of(), yaw, pitch, true);
+                    player.setYBodyRot(yaw);
+                    player.setYHeadRot(yaw);
+                    player.setItemInHand(InteractionHand.MAIN_HAND, rod.equals("vanilla") ? new ItemStack(Items.FISHING_ROD)
+                            : new ItemStack(FishingItems.rod(io.github.sirschrolli.kingdomsatwar.fishing.RodType.IRON)));
+                }));
+                steps.add(Step.once(minecraft -> minecraft.options.setCameraType(camera)));
+                if ((Boolean) view[4]) {
+                    steps.add(cast(0.3, 0.2, 6.0));
+                }
+                steps.add(Step.waitTicks(30));
+                steps.add(Step.screenshot("schnur_" + rod + "_" + view[0]));
+            }
+        }
+        steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON)));
+    }
+
     static void rods(Deque<Step> steps) {
         steps.add(Step.once(minecraft -> ShowcaseRunner.hideHand = false));
         for (String command : new String[] {"gamerule advance_time false", "time set 6000", "weather clear", "gamerule spawn_mobs false",

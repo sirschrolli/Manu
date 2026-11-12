@@ -12,6 +12,7 @@
     "SpongeBlockMixin"
   ],
   "client": [
+    "client.FishingHookRendererMixin",
     "client.SkullBlockRendererMixin"
   ],
   "injectors": {
