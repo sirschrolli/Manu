@@ -166,6 +166,10 @@ public final class BossBarRenderer {
         // Kokons und Sterne an Fäden; die Füllung ihr Netz vor dem Nachthimmel
         STYLES.put("star_weaver", style("star_weaver", 0xB8D4FF, new float[] {0.5f},
                 new Motes(Drift.TWINKLE, 4.0f, 0xFFFFFF, 0x9AD8FF, 0xFFF4C4), new Motes(Drift.GLITTER, 1.2f, 0xD6E4FF, 0x8048BC)));
+        // der Stundenwächter (Abgrund, seit 1.01): Uhrbronze mit Messingsaum, ein Zahnkranz um das Medaillon, Zahnräder über der
+        // Leiste, Uhrgewichte darunter, als Spitze ein gebläuter Minutenzeiger; die Füllung glühendes Bernstein mit Minutenbahn
+        STYLES.put("hour_warden", style("hour_warden", 0xFFC86A, new float[] {0.5f},
+                new Motes(Drift.GLITTER, 3.5f, 0xFFF0C4, 0xFFB347, 0xDEB44A), new Motes(Drift.DUST, 1.2f, 0xC8964A, 0x8C561E)));
         // Noctua, die Mottenkönigin (Feenreich): Mondsilber mit Mottenflügeln, Füllung aus schimmerndem Flügelstaub
         STYLES.put("moth", style("moth", 0xFFB8E8, new float[] {0.5f}, new Motes(Drift.GLITTER, 4.5f, 0xFFF0FA, 0xFF8AD0, 0x9EE8C8)));
         // Malleus, der Glutschmied: geschwärztes Eisen mit Nieten, glühende Nähte, Hammer und Speer gekreuzt

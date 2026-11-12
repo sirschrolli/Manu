@@ -43,7 +43,49 @@ final class AbyssModels {
                 .build();
     }
 
+    /** Das Uhrwerkherz: oben ein Zifferblatt, an den Seiten Uhrwerk, darüber (nur oben) eine Leuchtebene je Phase. */
+    private static final TextureSlot HEART_GLOW = TextureSlot.create("glow");
+    private static final ModelTemplate CLOCK_HEART = ExtendedModelTemplateBuilder.builder()
+            .parent(Identifier.withDefaultNamespace("block/block"))
+            .requiredTextureSlot(TextureSlot.TOP)
+            .requiredTextureSlot(TextureSlot.SIDE)
+            .requiredTextureSlot(TextureSlot.BOTTOM)
+            .requiredTextureSlot(HEART_GLOW)
+            .requiredTextureSlot(TextureSlot.PARTICLE)
+            .element(element -> element.from(0, 0, 0).to(16, 16, 16)
+                    .allFaces((direction, face) -> face.uvs(0, 0, 16, 16).texture(direction == Direction.UP ? TextureSlot.TOP
+                            : direction == Direction.DOWN ? TextureSlot.BOTTOM : TextureSlot.SIDE).cullface(direction)))
+            .element(element -> element.from(0, 0, 0).to(16, 16, 16).lightEmission(15).ambientOcclusion(false)
+                    .face(Direction.UP, face -> face.uvs(0, 0, 16, 16).texture(HEART_GLOW).cullface(Direction.UP)))
+            .build();
+
+    /** Der Uhrturm (1.01): Uhrwerk, Zifferblatt, das Uhrwerkherz (je Phase), der Minutenzeiger, das Spawn-Ei. */
+    private static void clockTower(BlockModelGenerators blocks, ItemModelGenerators items) {
+        blocks.createTrivialCube(io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCKWORK.get());
+        blocks.createTrivialCube(io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCK_FACE.get());
+        Block heart = io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCK_HEART.get();
+        Material side = TextureMapping.getBlockTexture(heart, "_side");
+        TextureMapping base = new TextureMapping().put(TextureSlot.TOP, TextureMapping.getBlockTexture(heart, "_top")).put(TextureSlot.SIDE, side)
+                .put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCK_BRONZE.base().get()))
+                .put(TextureSlot.PARTICLE, side);
+        Identifier sleeping = CLOCK_HEART.create(heart, base.copyAndUpdate(HEART_GLOW, TextureMapping.getBlockTexture(heart, "_glow_sleeping")),
+                blocks.modelOutput);
+        Identifier awake = CLOCK_HEART.createWithSuffix(heart, "_awake", base.copyAndUpdate(HEART_GLOW, TextureMapping.getBlockTexture(heart, "_glow_awake")),
+                blocks.modelOutput);
+        Identifier defeated = CLOCK_HEART.createWithSuffix(heart, "_defeated", base.copyAndUpdate(TextureSlot.TOP, TextureMapping.getBlockTexture(heart,
+                "_top_defeated")).copyAndUpdate(HEART_GLOW, TextureMapping.getBlockTexture(heart, "_glow_defeated")), blocks.modelOutput);
+        blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(heart).with(PropertyDispatch.initial(
+                io.github.sirschrolli.kingdomsatwar.block.abyss.ClockHeartBlock.PHASE)
+                .select(io.github.sirschrolli.kingdomsatwar.block.abyss.ClockHeartBlock.Phase.SLEEPING, BlockModelGenerators.plainVariant(sleeping))
+                .select(io.github.sirschrolli.kingdomsatwar.block.abyss.ClockHeartBlock.Phase.AWAKE, BlockModelGenerators.plainVariant(awake))
+                .select(io.github.sirschrolli.kingdomsatwar.block.abyss.ClockHeartBlock.Phase.DEFEATED, BlockModelGenerators.plainVariant(defeated))));
+        ModModelProvider.flat(items, io.github.sirschrolli.kingdomsatwar.registry.ClockTower.HOUR_WARDEN_SPAWN_EGG.get());
+        MonsterGearModels.weapon(items, io.github.sirschrolli.kingdomsatwar.registry.ClockTower.MINUTE_HAND.get(), "minute_hand",
+                ArmoryShapes.MINUTE_HAND, 0.5f, 3.2f);
+    }
+
     static void register(BlockModelGenerators blocks, ItemModelGenerators items) {
+        clockTower(blocks, items);
         blocks.createTrivialCube(AbyssBlocks.CRACKED_CHAOS_STONE_BRICKS.get());
         ModModelProvider.glowingCube(blocks, AbyssBlocks.CHISELED_CHAOS_STONE.get());
         ModModelProvider.glowingCube(blocks, AbyssBlocks.WORLD_SEAM.get());

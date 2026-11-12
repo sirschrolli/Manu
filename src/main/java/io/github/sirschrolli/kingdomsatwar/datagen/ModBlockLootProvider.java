@@ -106,6 +106,9 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_BLOCK.get());
         ore(io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_ORE, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT.get());
         dropSelf(io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_BLOCK.get());
+        // der Uhrturm (1.01)
+        dropSelf(io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCKWORK.get());
+        dropSelf(io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCK_FACE.get());
         // das Sternennetz (0.99): Seide und Gewebe wie sie sind; das Netz nur mit Schere oder Behutsamkeit (sonst Faden), gespuckte
         // Netze zerfallen ohne Beute; der Kokon gibt frei, was darin steckt (mit Behutsamkeit sich selbst); das Gelege nichts
         dropSelf(io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_SILK.get());

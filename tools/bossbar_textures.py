@@ -53,6 +53,7 @@ PHASES = {
     "sea_witch": (0.5,),                 # unter halber Kraft rast sie vor Zorn
     "soul_shepherd": (0.5,),             # unter halber Kraft läutet er im Zorn
     "star_weaver": (0.5,),               # unter halber Kraft rast sie
+    "hour_warden": (0.5,),               # unter halber Kraft schlägt die Zwölfte Stunde
     "moth": (0.5,), "forge": (0.5,), "star": (0.5,), "anni": (0.5,), "anni2": (0.5,),
     "mystic": (0.6, 0.3),                # Zugabe und großes Finale
     "schrolli": (0.7, 0.4),              # erste Gestalt: zweimal schneller
@@ -203,6 +204,13 @@ ELEMENTS = {
                         f0="#040822", f1="#16246a", f2="#4a7ee0", f3="#eaf6ff",
                         chitin0="#08091a", chitin1="#1d214b", chitin2="#3f4e86", chitin3="#7286c0",
                         silk="#d6e4ff", silk_dark="#7486b8", star="#fff4c4", star2="#9ad8ff", nebula="#8048bc"),
+    # der Stundenwächter (seit 1.01): Uhrbronze mit Messingsaum; hinter dem Medaillon ein Ring aus Zahnradzähnen, über der
+    # Oberkante greifen Zahnräder ineinander, als Spitze ein gebläuter Minutenzeiger mit Rautenspitze, unter der Leiste hängen
+    # an Ketten Uhrgewichte und ein Pendel. Füllung wie sein Uhrwerk: glühendes Bernstein mit einer Minutenbahn
+    "hour_warden": dict(m0="#1e1006", m1="#6c4016", m2="#e8bc62", acc="#ffb347", glow="#fff0c4", deep="#120802",
+                        f0="#2a1004", f1="#8a3a08", f2="#ffb347", f3="#fff0c4",
+                        brass0="#5a3c0e", brass1="#a07420", brass2="#deb44a", brass3="#fff0b8",
+                        blued0="#0b1030", blued1="#283a86", blued2="#7e96dc", enamel="#ebe1ca", ink="#1f233a"),
 }
 
 OUTLINE = (12, 10, 12, 255)
@@ -2620,6 +2628,114 @@ def post_star_weaver(img: Image.Image, pal: dict) -> None:
 
 
 # =============================================================================================
+# Der Stundenwächter (seit 1.01)
+# =============================================================================================
+
+def _clock_gear(layer: Image.Image, g: dict, cx: float, cy: float, r: float, teeth: int, turn: float) -> None:
+    """Ein Zahnrad von vorn: Zähne, Kranz, vier Speichen, Nabe mit Bernstein (Licht von oben links)."""
+    lp = layer.load()
+    for y in range(int(cy - r - 2), int(cy + r + 3)):
+        for x in range(int(cx - r - 2), int(cx + r + 3)):
+            dx, dy = x + 0.5 - cx, y + 0.5 - cy
+            d = math.hypot(dx, dy)
+            if d > r:
+                continue
+            a = math.atan2(dy, dx) - turn
+            root = r - 1.3
+            if d > root:
+                k = (a / math.tau * teeth) % 1.0
+                if abs(k - 0.5) > 0.25:
+                    continue
+            lit = -(dx + dy) / max(0.5, d) * 0.5
+            if d < 1.2:
+                col = g["acc"] if d < 0.8 else g["brass1"]
+            elif d > root - 1.0:
+                col = mix(g["brass1"], g["brass3"], 0.35 + 0.4 * lit) if d > root else mix(g["brass0"], g["brass2"], 0.45 + 0.4 * lit)
+            else:
+                spoke = any(abs(math.sin(a - i * math.pi / 2)) * d < 0.7 and math.cos(a - i * math.pi / 2) > 0 for i in range(4))
+                if not spoke:
+                    continue
+                col = mix(g["brass0"], g["brass2"], 0.4 + 0.3 * lit)
+            put(lp, layer, x, y, col)
+
+
+def deco_hour_warden(img: Image.Image, pal: dict) -> None:
+    """Der Stundenwächter: hinter dem Medaillon ein Kranz aus zwölf Zähnen (wie ein Zahnrad, die vier Hauptstunden in Bernstein);
+    über der Oberkante greifen Zahnräder ineinander; als Spitze ein gebläuter Minutenzeiger mit durchbrochener Raute; unter der
+    Leiste hängen an Ketten Uhrgewichte und in der Mitte ein Pendel mit Bernsteinscheibe."""
+    g = {k: c(pal, k) for k in pal}
+    # der Zahnkranz hinter dem Medaillon
+    ring = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    rp = ring.load()
+    for k in range(12):
+        a = k * math.tau / 12 - math.pi / 2
+        for dr in (0.0, 1.0, 2.0):
+            for dw in (-1.0, 0.0, 1.0):
+                x = EMB_X + math.cos(a) * (EMB_R + 0.8 + dr) - math.sin(a) * dw
+                y = EMB_Y + math.sin(a) * (EMB_R + 0.8 + dr) + math.cos(a) * dw
+                main = k % 3 == 0
+                col = (g["acc"] if dr < 2.0 else g["glow"]) if main else (g["brass2"] if dw < 0 else g["brass1"])
+                put(rp, ring, int(round(x - 0.5)), int(round(y - 0.5)), col)
+    _outline(ring, OUTLINE)
+    img.alpha_composite(ring)
+    # Zahnräder über der Oberkante
+    gears = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    for (gx, gy, r, teeth, turn) in ((70.0, 10.0, 5.6, 10, 0.2), (80.5, 8.0, 3.6, 7, 0.5), (205.0, 10.5, 4.8, 9, 0.1),
+                                     (214.0, 8.5, 3.2, 6, 0.7)):
+        if any(abs(gx - (BAR_X + round(BAR_W * f))) < 9 for f in GEMS):
+            continue
+        _clock_gear(gears, g, gx, gy, r, teeth, turn)
+    _outline(gears, OUTLINE)
+    img.alpha_composite(gears)
+    # die Spitze: ein gebläuter Minutenzeiger (Schaft, durchbrochene Raute, Spitze) – nach rechts
+    tip = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    tp = tip.load()
+    for x in range(230, 240):
+        t = (x - 230) / 9.0
+        half = 0.7 if t < 0.15 else max(0.5, 3.4 * (1.0 - abs(t - 0.5) / 0.5))
+        for y in range(17, 29):
+            d = abs(y + 0.5 - 22.5)
+            if d > half:
+                continue
+            if 0.35 < t < 0.65 and d < half - 1.4:
+                continue                                                # durchbrochen
+            put(tp, tip, x, y, g["blued2"] if y < 22 else g["blued1"] if d > 0.6 else g["brass2"])
+    _outline(tip, OUTLINE)
+    img.alpha_composite(tip)
+    # unter der Leiste: Ketten mit Uhrgewichten, in der Mitte das Pendel
+    px = img.load()
+    bottom = BAR_Y + BAR_H + 2
+    hang = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    hp = hang.load()
+    for i, x0 in enumerate((96, 120, 162, 186, 212)):
+        if any(abs(x0 - (BAR_X + round(BAR_W * f))) < 6 for f in GEMS):
+            continue
+        length = 2 + round(hash01(x0, 1201) * 4)
+        for k in range(length):
+            put(hp, hang, x0, bottom + 1 + k, g["brass2"] if k % 2 == 0 else g["brass0"])
+        y = bottom + 1 + length
+        for dy, half in enumerate((1, 1, 1, 1, 0)):                     # ein Uhrgewicht wie ein Tannenzapfen
+            for dx in range(-half, half + 1):
+                put(hp, hang, x0 + dx, y + dy, g["brass2"] if (dx + dy) % 2 == 0 else g["brass1"])
+    # das Pendel (in der Mitte der Leiste)
+    px0 = BAR_X + BAR_W // 2 + 3
+    if not any(abs(px0 - (BAR_X + round(BAR_W * f))) < 6 for f in GEMS):
+        for k in range(5):
+            put(hp, hang, px0, bottom + 1 + k, g["brass1"])
+        for dy in range(-2, 3):
+            for dx in range(-2, 3):
+                if abs(dx) + abs(dy) <= 3:
+                    d = abs(dx) + abs(dy)
+                    put(hp, hang, px0 + dx, bottom + 8 + dy, g["glow"] if d == 0 else g["acc"] if d < 3 else g["brass2"])
+    _outline(hang, OUTLINE)
+    hl = hang.load()
+    for y in range(FRAME_H):
+        for x in range(FRAME_W):
+            if hl[x, y][3] and y > bottom:
+                px[x, y] = hl[x, y]
+
+
+# =============================================================================================
 # Der Steinhüter (seit 0.96)
 # =============================================================================================
 
@@ -2832,6 +2948,7 @@ BANNER_COLORS = {
     "sea_witch": dict(trim="#5ae8b8", trim_dark="#2e4a44", fabric="#06120f"),
     "soul_shepherd": dict(trim="#4fe0d0", trim_dark="#3a3644", fabric="#0a1012"),
     "star_weaver": dict(trim="#9ad8ff", trim_dark="#2c3052", fabric="#070a1c"),
+    "hour_warden": dict(trim="#e8bc62", trim_dark="#6c4016", fabric="#140a04"),
 }
 
 
@@ -2926,7 +3043,7 @@ BORDERS = {"world_eater": frame_border_stone, "keeper": frame_border_stone}
 DECOS = {"schrolli": deco_schrolli, "schrolli_true": deco_schrolli, "schrolli_almighty": deco_almighty,
          "world_eater": deco_world_eater, "anni": deco_anni, "anni2": deco_anni, "mystic": deco_mystic, "star": deco_star, "forge": deco_forge, "moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
          "water": deco_water, "kraken": deco_kraken, "keeper": deco_keeper, "sea_witch": deco_sea_witch,
-         "soul_shepherd": deco_soul_shepherd, "star_weaver": deco_star_weaver}
+         "soul_shepherd": deco_soul_shepherd, "star_weaver": deco_star_weaver, "hour_warden": deco_hour_warden}
 
 
 def frame(element: str, phases: tuple | None = None) -> Image.Image:
@@ -3073,6 +3190,14 @@ def fill_value(element: str, x: int, y: int) -> float:
         if (x + 3 * y) % 23 == 0 or (x - 3 * y) % 29 == 0:
             return 0.86
         return 0.38 + 0.16 * math.sin(tau * x / 64 + 1.4 * math.sin(tau * y / 9 + tau * x / 128)) + 0.06 * math.sin(tau * x / 16)
+    if element == "hour_warden":
+        # sein Uhrwerk: glühendes Bernstein in sanften Wellen, darin eine Minutenbahn (alle sechs Pixel ein heller Strich, jeder
+        # fünfte länger) und ab und zu ein Funke
+        if x % 6 == 0 and (y <= 2 or (x % 30 == 0 and y <= 4)):
+            return 0.95
+        if hash01(x, y, 1207) > 0.975:
+            return 1.0
+        return 0.48 + 0.2 * math.sin(tau * x / 64 + 1.2 * math.sin(tau * y / 9 + tau * x / 128)) + 0.08 * math.sin(tau * x / 16)
     if element == "soul_shepherd":
         # Seelenfeuer: züngelnde Flammen, die nach oben dünner werden, dazwischen helle Funken
         tongue = 0.5 + 0.5 * math.sin(tau * x / 16 + 1.8 * math.sin(tau * x / 64) + 0.5 * math.sin(tau * y / 9 + tau * x / 32))
@@ -3263,7 +3388,7 @@ def portrait(element: str) -> Image.Image:
     mit dunkler Kontur (2 Pixel = 1 Pixel im Spiel), damit er sich vom Grund des Medaillons abhebt."""
     from entitygen.models import (asteria, boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water,
                                   glutschmied, kraken, miss_mystik, moth_queen, reef_colossus, shattered_king, anni_troll,
-                                  schrolli, sea_witch, soul_shepherd, star_weaver, stone_keeper, world_eater)
+                                  schrolli, sea_witch, soul_shepherd, star_weaver, stone_keeper, world_eater, hour_warden)
     from entitygen.paint import paint_model
     from entitygen.preview import render
     mod = {"fire": boss_fire, "ice": boss_ice, "lightning": boss_lightning, "nature": boss_nature, "earth": boss_earth,
@@ -3271,7 +3396,7 @@ def portrait(element: str) -> Image.Image:
            "forge": glutschmied, "star": asteria, "mystic": miss_mystik, "anni": anni_troll, "anni2": anni_troll,
            "schrolli": schrolli, "schrolli_true": schrolli, "schrolli_almighty": schrolli, "world_eater": world_eater,
            "kraken": kraken, "keeper": stone_keeper, "sea_witch": sea_witch, "soul_shepherd": soul_shepherd,
-           "star_weaver": star_weaver}[element]
+           "star_weaver": star_weaver, "hour_warden": hour_warden}[element]
     m = mod.build()
     m.pack()
     variant = "anni_troll_v2" if element == "anni2" else element if element.startswith("schrolli") else next(iter(mod.PALETTES))
@@ -3379,6 +3504,15 @@ def portrait(element: str) -> Image.Image:
                 strip_shepherd(child)
         strip_shepherd(m.root)
     # die Sternenweberin (seit 0.99) ganz, schräg von oben: die acht Beine ringsum, der Hinterleib voller Sternennebel
+    if element == "hour_warden":
+        # der Helm mit den glühenden Augen vor dem Zifferblatt (ohne Arme, Klingen, Beine und kreisende Zahnräder)
+        def strip_warden(bone):
+            if bone.name.startswith(("arm_", "fore_", "minute_blade", "hour_blade", "leg_", "shin_", "knee_gear", "hips", "tasset",
+                                     "pendulum", "weight_", "orbit_")):
+                bone.cubes.clear()
+            for child in bone.children:
+                strip_warden(child)
+        strip_warden(m.root)
     if element in ("anni", "anni2"):
         # Kopf mit Grinsen, Bildschirmauge, Ohren und Haarschopf (ohne Leib, Arme und Hammer)
         def strip_anni(bone):
@@ -3391,10 +3525,10 @@ def portrait(element: str) -> Image.Image:
                 strip_anni(child)
         strip_anni(m.root)
     zoom = {"kraken": 1.5, "schrolli": 1.0, "schrolli_true": 1.0, "schrolli_almighty": 1.0, "world_eater": 1.35, "nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86, "star": 0.92, "mystic": 0.95,
-            "anni": 1.0, "anni2": 1.0, "keeper": 0.8, "sea_witch": 1.5, "soul_shepherd": 1.12, "star_weaver": 0.95}.get(element, 1.2)
+            "anni": 1.0, "anni2": 1.0, "keeper": 0.8, "sea_witch": 1.5, "soul_shepherd": 1.12, "star_weaver": 0.95, "hour_warden": 0.9}.get(element, 1.2)
     yaw = {"kraken": -20, "schrolli": -22, "schrolli_true": -22, "schrolli_almighty": -22, "world_eater": -6, "water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14, "star": -24, "mystic": -22, "anni": -24,
-           "anni2": -24, "keeper": -20, "sea_witch": -22, "soul_shepherd": -14, "star_weaver": -20}.get(element, -42)
-    pitch = {"kraken": -18, "schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2, "keeper": -5, "sea_witch": 2, "soul_shepherd": 4, "star_weaver": 48}.get(element, 6)
+           "anni2": -24, "keeper": -20, "sea_witch": -22, "soul_shepherd": -14, "star_weaver": -20, "hour_warden": -16}.get(element, -42)
+    pitch = {"kraken": -18, "schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2, "keeper": -5, "sea_witch": 2, "soul_shepherd": 4, "star_weaver": 48, "hour_warden": 4}.get(element, 6)
     big = render(m, tex, glow, yaw, pitch, 448, pose=getattr(mod, "FOLD_POSE", None), background=(0, 0, 0, 0), zoom=zoom,
                  focus=["body"] if element in ("reef", "kraken", "star_weaver") else ["helm"] if element == "star" else ["head"])
     img = big.resize((64, 64), Image.LANCZOS)
@@ -3402,7 +3536,7 @@ def portrait(element: str) -> Image.Image:
                                                  "void": 1.0, "reef": 1.35, "moth": 1.25, "forge": 1.65, "star": 1.15, "mystic": 1.2,
                                                  "anni": 1.45, "anni2": 1.45, "schrolli": 1.5, "schrolli_true": 1.5,
                                                  "schrolli_almighty": 1.45, "world_eater": 2.0, "keeper": 1.3, "sea_witch": 1.35,
-                                                 "soul_shepherd": 1.7, "star_weaver": 2.3}.get(element, 1.4))
+                                                 "soul_shepherd": 1.7, "star_weaver": 2.3, "hour_warden": 1.6}.get(element, 1.4))
     img = ImageEnhance.Color(img).enhance(1.15)
     img = ImageEnhance.Contrast(img).enhance(1.12)
     if element == "schrolli_almighty":

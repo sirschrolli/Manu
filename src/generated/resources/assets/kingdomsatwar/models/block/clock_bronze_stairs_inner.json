@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "kingdomsatwar:block/clock_bronze",
+    "side": "kingdomsatwar:block/clock_bronze",
+    "top": "kingdomsatwar:block/clock_bronze"
+  }
+}

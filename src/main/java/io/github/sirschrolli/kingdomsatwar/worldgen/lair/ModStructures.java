@@ -100,6 +100,11 @@ public final class ModStructures {
             STAR_WEB = TYPES.register("star_web", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.weaver.StarWebStructure.CODEC);
     public static final DeferredHolder<StructurePieceType, StructurePieceType> STAR_WEB_PIECE =
             PIECES.register("star_web", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.weaver.StarWebPiece::new);
+    /** Der Uhrturm (seit 1.01): frei schwebend im Abgrund, mit dem großen Zifferblatt und dem Stundenwächter. */
+    public static final DeferredHolder<StructureType<?>, StructureType<io.github.sirschrolli.kingdomsatwar.worldgen.clock.ClockTowerStructure>>
+            CLOCK_TOWER = TYPES.register("clock_tower", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.clock.ClockTowerStructure.CODEC);
+    public static final DeferredHolder<StructurePieceType, StructurePieceType> CLOCK_TOWER_PIECE =
+            PIECES.register("clock_tower", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.clock.ClockTowerPiece::new);
     public static final DeferredHolder<StructurePieceType, StructurePieceType> SEA_VILLAGE_PIECE =
             PIECES.register("sea_village", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.merfolk.SeaVillagePiece::new);
     public static final DeferredHolder<StructureType<?>, StructureType<io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneStructure>>
@@ -210,6 +215,8 @@ public final class ModStructures {
     public static final ResourceKey<StructureSet> SOUL_PENS = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("soul_pens"));
     public static final ResourceKey<Structure> STAR_WEB_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("star_web"));
     public static final ResourceKey<StructureSet> STAR_WEBS = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("star_webs"));
+    public static final ResourceKey<Structure> CLOCK_TOWER_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("clock_tower"));
+    public static final ResourceKey<StructureSet> CLOCK_TOWERS = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("clock_towers"));
 
     /** Die Dörfer der Umbrer in der Schattenwelt. */
     public static final ResourceKey<Structure> UMBRER_VILLAGE_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("umbrer_village"));
@@ -337,6 +344,16 @@ public final class ModStructures {
         // die Sternennetze (0.99): frei schwebend; auf dem Netz entstehen keine Monster
         context.register(STAR_WEB_STRUCTURE, new io.github.sirschrolli.kingdomsatwar.worldgen.weaver.StarWebStructure(
                 new Structure.StructureSettings.Builder(biomes.getOrThrow(ModTags.Biomes.HAS_STAR_WEB))
+                        .spawnOverrides(java.util.Map.of(
+                                net.minecraft.world.entity.MobCategory.MONSTER, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
+                                        net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
+                                        net.minecraft.util.random.WeightedList.of())))
+                        .generationStep(GenerationStep.Decoration.TOP_LAYER_MODIFICATION)
+                        .terrainAdapation(TerrainAdjustment.NONE)
+                        .build()));
+        // die Uhrtürme (1.01): frei schwebend im Abgrund; auf dem Zifferblatt und im Turm entstehen keine Monster
+        context.register(CLOCK_TOWER_STRUCTURE, new io.github.sirschrolli.kingdomsatwar.worldgen.clock.ClockTowerStructure(
+                new Structure.StructureSettings.Builder(biomes.getOrThrow(ModTags.Biomes.HAS_CLOCK_TOWER))
                         .spawnOverrides(java.util.Map.of(
                                 net.minecraft.world.entity.MobCategory.MONSTER, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
                                         net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
@@ -605,6 +622,13 @@ public final class ModStructures {
                         1.0f, 63_401_877, java.util.Optional.of(new net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement
                                 .ExclusionZone(context.lookup(Registries.STRUCTURE_SET).getOrThrow(VOID_THRONE_SET), 12)),
                         20, 8, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR)));
+        // Uhrtürme (1.01): Felder von 24 Chunks, mindestens 10 Chunks Abstand, 12 Chunks fern des Schlunds der Welten
+        context.register(CLOCK_TOWERS, new StructureSet(structures.getOrThrow(CLOCK_TOWER_STRUCTURE),
+                new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(net.minecraft.core.Vec3i.ZERO,
+                        net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement.FrequencyReductionMethod.DEFAULT,
+                        1.0f, 71_203_331, java.util.Optional.of(new net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement
+                                .ExclusionZone(context.lookup(Registries.STRUCTURE_SET).getOrThrow(WORLD_EATER_HOARD_SET), 12)),
+                        24, 10, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR)));
         // Meeresdörfer: Felder von 22 Chunks, mindestens 9 Chunks Abstand, 7 Chunks fern des Krakenschlunds
         context.register(SEA_VILLAGES, new StructureSet(structures.getOrThrow(SEA_VILLAGE_STRUCTURE),
                 new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(net.minecraft.core.Vec3i.ZERO,

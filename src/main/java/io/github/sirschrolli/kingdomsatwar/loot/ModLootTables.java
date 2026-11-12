@@ -50,6 +50,7 @@ public final class ModLootTables {
     /** Die Truhe in der Hütte des Seelenhirten (0.98). */
     public static final ResourceKey<LootTable> SOUL_PEN_CHEST = ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/soul_pen"));
     public static final ResourceKey<LootTable> STAR_WEB_CHEST = ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/star_web"));
+    public static final ResourceKey<LootTable> CLOCK_TOWER_CHEST = ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/clock_tower"));
     public static final ResourceKey<LootTable> MOON_TEMPLE_CRYPT = ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/moon_temple_crypt"));
     public static final ResourceKey<LootTable> CRYSTAL_MINE_CHEST = ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/crystal_mine"));
     public static final ResourceKey<LootTable> LIGHTHOUSE_CHEST = ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/lighthouse"));

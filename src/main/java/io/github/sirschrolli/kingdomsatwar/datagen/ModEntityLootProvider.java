@@ -464,6 +464,16 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_CRYSTAL.get(), 2, 4))
                 .withPool(drop(ModItems.GEMSTONE.get(), 2, 4))
                 .withPool(drop(ModItems.GOLD_COIN.get(), 4, 9)));
+        // der Stundenwächter (1.01): der Minutenzeiger, ein Herzkristall, Chronit, Uhrbronze, Uhrwerk und Schätze; seine Zahnräder
+        // und das Pendel hinterlassen nichts
+        this.add(ModEntities.HOUR_WARDEN.get(), LootTable.lootTable()
+                .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.ClockTower.MINUTE_HAND.get(), 1))
+                .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 1))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT.get(), 4, 8))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCK_BRONZE.base().get(), 6, 12))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCKWORK.get(), 2, 4))
+                .withPool(drop(ModItems.GEMSTONE.get(), 2, 4))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 5, 10)));
         // Malleus, der Glutschmied: der Glutspeer, ein Herzkristall, Glutklumpen, Netheritschrott und Schätze; seine
         // Glutklumpen zerplatzen ohne Beute
         this.add(ModEntities.GLUTSCHMIED.get(), LootTable.lootTable()

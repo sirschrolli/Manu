@@ -1083,6 +1083,61 @@ public class ModLanguageProvider extends LanguageProvider {
                 {"spiderling", "Star spiderling chirps", "Sternspinnling zirpt"}}) {
             subtitle("entity.star_weaver." + e[0], e[1], e[2]);
         }
+        // der Uhrturm und der Stundenwächter (1.01)
+        creature(ModEntities.HOUR_WARDEN, io.github.sirschrolli.kingdomsatwar.registry.ClockTower.HOUR_WARDEN_SPAWN_EGG, "Hour Warden", "Stundenwächter",
+                "Stundenwächter");
+        add(ModEntities.CLOCK_GEAR.get(), pick("Clockwork Gear", "Zahnrad"));
+        add(ModEntities.CLOCK_PENDULUM.get(), pick("Great Pendulum", "Großes Pendel"));
+        text("boss.kingdomsatwar.hour_warden", "The Hour Warden", "Der Stundenwächter");
+        text("boss.kingdomsatwar.hour_warden.named", "%s", "%s");
+        text("boss.kingdomsatwar.hour_warden.title", "Keeper of the Last Minute", "Hüter der letzten Minute");
+        set("clock_bronze", "clock_bronze", "Clock Bronze", "Uhrbronze", "Clock Bronze", "Uhrbronze");
+        block(io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCKWORK, "Clockwork", "Uhrwerk");
+        block(io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCK_FACE, "Clock Face", "Zifferblatt");
+        block(io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCK_HEART, "Clockwork Heart", "Uhrwerkherz");
+        item(io.github.sirschrolli.kingdomsatwar.registry.ClockTower.MINUTE_HAND, "Minute Hand", "Minutenzeiger");
+        lore("minute_hand", "The long hand of the great clock – blued steel around a vein of Chronit",
+                "Der lange Zeiger der großen Uhr – gebläuter Stahl um eine Ader aus Chronit");
+        text(ModItems.loreKey("minute_hand", 2), "Every twelfth hit strikes the hour; right-click: a Time Leap forward",
+                "Jeder zwölfte Treffer schlägt die Stunde; Rechtsklick: ein Zeitsprung nach vorn");
+        text(ModItems.loreKey("minute_hand", 3), "Repair with Chronit", "Mit Chronit reparieren");
+        text("item.kingdomsatwar.minute_hand.ready", "The hand stands at a minute to the hour …", "Der Zeiger steht eine Minute vor der vollen Stunde …");
+        text("block.kingdomsatwar.clock_heart.hint", "Deep inside, a heart of brass is ticking … and above it stands a knight of bronze, frozen at a minute to midnight. Come closer, if you dare.",
+                "Tief drinnen tickt ein Herz aus Messing … und darüber steht ein Ritter aus Bronze, erstarrt eine Minute vor Mitternacht. Komm näher, wenn du dich traust.");
+        text("block.kingdomsatwar.clock_heart.awake", "The Hour Warden is awake!", "Der Stundenwächter ist erwacht!");
+        text("block.kingdomsatwar.clock_heart.defeated", "The heart has stopped. A piece of Chronit laid into it would wind it up – and wake a new Warden.",
+                "Das Herz steht still. Ein Chronit darin würde es wieder aufziehen – und einen neuen Wächter wecken.");
+        text("block.kingdomsatwar.clock_heart.warning", "Somewhere a clock is ticking that should have stopped long ago …",
+                "Irgendwo tickt eine Uhr, die längst stehen sollte …");
+        text("block.kingdomsatwar.clock_heart.peaceful", "The heart lies still (the world is set to Peaceful).",
+                "Das Herz steht still (die Welt steht auf „Friedlich“).");
+        text("message.kingdomsatwar.hour_warden.stop_warning", "The Hour Warden raises his hand – the clock ticks faster … look away!",
+                "Der Stundenwächter hebt die Hand – die Uhr tickt schneller … schau weg!");
+        text("message.kingdomsatwar.hour_warden.frozen", "Time stands still around you!", "Die Zeit steht um dich still!");
+        text("message.kingdomsatwar.hour_warden.rewind", "The Hour Warden kneels and turns his time back – strike him hard!",
+                "Der Stundenwächter kniet nieder und dreht seine Zeit zurück – triff ihn hart!");
+        text("message.kingdomsatwar.hour_warden.stagger", "His clockwork skips a beat – he staggers!", "Sein Uhrwerk springt aus dem Takt – er taumelt!");
+        text("message.kingdomsatwar.hour_warden.fury", "The Twelfth Hour! The great bell begins to toll …", "Die Zwölfte Stunde! Die große Glocke beginnt zu schlagen …");
+        for (String[] e : new String[][] {{"ambient", "Clockwork ticks", "Uhrwerk tickt"}, {"hurt", "Bronze clangs", "Bronze klirrt"},
+                {"death", "Clockwork winds down", "Uhrwerk läuft aus"}, {"step", "Heavy bronze steps", "Schwere Bronzeschritte"},
+                {"awaken", "A clock starts ticking", "Eine Uhr setzt sich in Gang"}, {"sweep", "Blade sweeps", "Klinge fegt"},
+                {"strike", "The hour strikes", "Die Stunde schlägt"}, {"gears", "Gears whir", "Zahnräder surren"},
+                {"gear_hit", "Gear clangs", "Zahnrad klirrt"}, {"time_stop", "Time stops", "Die Zeit steht still"},
+                {"frozen", "Frozen in time", "In der Zeit erstarrt"}, {"pendulum", "Pendulum swings", "Pendel schwingt"},
+                {"hourglass", "Sand pours", "Sand rinnt"}, {"hourglass_burst", "Hourglass bursts", "Sanduhr birst"},
+                {"blink", "Time Leap", "Zeitsprung"}, {"rewind", "Clockwork turns back", "Uhrwerk läuft rückwärts"},
+                {"stagger", "Spring snaps", "Feder springt"}, {"fury", "The Twelfth Hour", "Die Zwölfte Stunde"},
+                {"toll", "Great bell tolls", "Große Glocke schlägt"}}) {
+            subtitle("entity.hour_warden." + e[0], e[1], e[2]);
+        }
+        subtitle("item.minute_hand.hour", "The hour strikes", "Die Stunde schlägt");
+        subtitle("item.minute_hand.jump", "Time Leap", "Zeitsprung");
+        text("command.kingdomsatwar.uhrturm.where", "Nearest Clock Tower: %s (%s blocks)", "Nächster Uhrturm: %s (%s Blöcke)");
+        text("command.kingdomsatwar.uhrturm.not_abyss", "Clock towers only exist in the Abyss.", "Uhrtürme gibt es nur im Abgrund.");
+        text("command.kingdomsatwar.uhrturm.none", "No Clock Tower nearby.", "Kein Uhrturm in der Nähe.");
+        text("command.kingdomsatwar.uhrturm.no_heart", "There is no Clockwork Heart in this dial.", "In diesem Zifferblatt sitzt kein Uhrwerkherz.");
+        text("command.kingdomsatwar.uhrturm.awakened", "The Hour Warden awakens!", "Der Stundenwächter erwacht!");
+        text("command.kingdomsatwar.uhrturm.reset", "The Hour Warden freezes again.", "Der Stundenwächter erstarrt wieder.");
         text("command.kingdomsatwar.sternennetz.where", "Nearest Star Web: %s (%s blocks)", "Nächstes Sternennetz: %s (%s Blöcke)");
         text("command.kingdomsatwar.sternennetz.not_void", "Star webs only exist in the Void.", "Sternennetze gibt es nur in der Leere.");
         text("command.kingdomsatwar.sternennetz.none", "No Star Web nearby.", "Kein Sternennetz in der Nähe.");

@@ -702,6 +702,18 @@ public class ModRecipeProvider extends RecipeProvider {
         storage(chronit, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_BLOCK.get());
         smeltOre(chronit, 1.4f, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_ORE.get());
         this.timewardenArmor(chronit);
+        // der Uhrturm (1.01): Uhrbronze aus Kupfer und Gold, Uhrwerk aus Uhrbronze und Chronit, Zifferblatt aus Kalzit und Knochenmehl
+        ItemLike clockBronze = io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCK_BRONZE.base().get();
+        shaped(RecipeCategory.BUILDING_BLOCKS, clockBronze, 4).pattern("CGC").pattern("GCG").pattern("CGC")
+                .define('C', net.minecraft.world.item.Items.COPPER_INGOT).define('G', net.minecraft.world.item.Items.GOLD_NUGGET)
+                .unlockedBy(getHasName(net.minecraft.world.item.Items.COPPER_INGOT), has(net.minecraft.world.item.Items.COPPER_INGOT))
+                .save(output, key("clock_bronze"));
+        shaped(RecipeCategory.BUILDING_BLOCKS, io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCKWORK.get(), 4).pattern(" B ").pattern("BCB")
+                .pattern(" B ").define('B', clockBronze).define('C', chronit).unlockedBy(getHasName(chronit), has(chronit)).save(output, key("clockwork"));
+        shaped(RecipeCategory.BUILDING_BLOCKS, io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCK_FACE.get(), 4).pattern("KK").pattern("KK")
+                .define('K', net.minecraft.world.item.Items.CALCITE)
+                .unlockedBy(getHasName(net.minecraft.world.item.Items.CALCITE), has(net.minecraft.world.item.Items.CALCITE))
+                .save(output, key("clock_face"));
         ItemLike faestone = FaeBlocks.FAESTONE.base().get();
         ItemLike faeBricks = FaeBlocks.FAESTONE_BRICKS.base().get();
         shaped(RecipeCategory.BUILDING_BLOCKS, faeBricks, 4)

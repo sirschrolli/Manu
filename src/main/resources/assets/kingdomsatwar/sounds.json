@@ -5189,6 +5189,269 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.griffin.wings"
   },
+  "entity.hour_warden.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_ambient1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_ambient2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_ambient3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.hour_warden.ambient"
+  },
+  "entity.hour_warden.awaken": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_awaken1",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.hour_warden.awaken"
+  },
+  "entity.hour_warden.blink": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_blink1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_blink2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_blink3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.hour_warden.blink"
+  },
+  "entity.hour_warden.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_death1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.hour_warden.death"
+  },
+  "entity.hour_warden.frozen": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_frozen1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_frozen2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.hour_warden.frozen"
+  },
+  "entity.hour_warden.fury": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_fury1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.hour_warden.fury"
+  },
+  "entity.hour_warden.gear_hit": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_gear_hit1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_gear_hit2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_gear_hit3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.hour_warden.gear_hit"
+  },
+  "entity.hour_warden.gears": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_gears1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_gears2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_gears3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.hour_warden.gears"
+  },
+  "entity.hour_warden.hourglass": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_hourglass1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_hourglass2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.hour_warden.hourglass"
+  },
+  "entity.hour_warden.hourglass_burst": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_hourglass_burst1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_hourglass_burst2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.hour_warden.hourglass_burst"
+  },
+  "entity.hour_warden.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_hurt1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_hurt2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_hurt3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.hour_warden.hurt"
+  },
+  "entity.hour_warden.pendulum": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_pendulum1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_pendulum2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.hour_warden.pendulum"
+  },
+  "entity.hour_warden.rewind": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_rewind1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_rewind2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.hour_warden.rewind"
+  },
+  "entity.hour_warden.stagger": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_stagger1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_stagger2",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.hour_warden.stagger"
+  },
+  "entity.hour_warden.step": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_step1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_step2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_step3",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_step4",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.hour_warden.step"
+  },
+  "entity.hour_warden.strike": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_strike1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_strike2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.hour_warden.strike"
+  },
+  "entity.hour_warden.sweep": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_sweep1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_sweep2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_sweep3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.hour_warden.sweep"
+  },
+  "entity.hour_warden.time_stop": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_time_stop1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.hour_warden.time_stop"
+  },
+  "entity.hour_warden.toll": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_toll1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:entity/abyss/hour_warden_toll2",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.hour_warden.toll"
+  },
   "entity.kraken.ambient": {
     "sounds": [
       {
@@ -10616,6 +10879,32 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.item.glitch_wings.blink"
+  },
+  "item.minute_hand.hour": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:item/minute_hand_hour1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:item/minute_hand_hour2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.item.minute_hand.hour"
+  },
+  "item.minute_hand.jump": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:item/minute_hand_jump1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:item/minute_hand_jump2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.item.minute_hand.jump"
   },
   "item.mystic_deck.throw": {
     "sounds": [

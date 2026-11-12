@@ -115,6 +115,11 @@ public final class ModGameEvents {
                         .then(Commands.literal("tp").executes(context -> starWeb(context.getSource(), "tp")))
                         .then(Commands.literal("awaken").executes(context -> starWeb(context.getSource(), "awaken")))
                         .then(Commands.literal("reset").executes(context -> starWeb(context.getSource(), "reset"))))
+                .then(Commands.literal("uhrturm").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .executes(context -> clockTower(context.getSource(), ""))
+                        .then(Commands.literal("tp").executes(context -> clockTower(context.getSource(), "tp")))
+                        .then(Commands.literal("awaken").executes(context -> clockTower(context.getSource(), "awaken")))
+                        .then(Commands.literal("reset").executes(context -> clockTower(context.getSource(), "reset"))))
                 .then(Commands.literal("mondsteinbruch").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .executes(context -> moonstoneQuarry(context.getSource(), ""))
                         .then(Commands.literal("tp").executes(context -> moonstoneQuarry(context.getSource(), "tp")))
@@ -814,6 +819,80 @@ public final class ModGameEvents {
         }
         source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.sternennetz.awakened"), true);
         return weaver != null ? 1 : 0;
+    }
+
+    /**
+     * {@code /kaw uhrturm}: Lage des nächsten Uhrturms im Abgrund; {@code tp} bringt einen auf den Südrand des Zifferblatts (auch
+     * aus einer anderen Welt), {@code awaken} weckt den Stundenwächter (oder zieht einen neuen auf), {@code reset} lässt ihn
+     * wieder erstarren (das Herz tickt wieder).
+     */
+    private static int clockTower(net.minecraft.commands.CommandSourceStack source, String mode) throws
+            com.mojang.brigadier.exceptions.CommandSyntaxException {
+        ServerLevel realm = source.getServer().getLevel(io.github.sirschrolli.kingdomsatwar.abyss.AbyssGate.THE_ABYSS);
+        if (realm == null || (source.getLevel() != realm && mode.isEmpty())) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.uhrturm.not_abyss"));
+            return 0;
+        }
+        BlockPos from = source.getLevel() == realm ? BlockPos.containing(source.getPosition()) : BlockPos.ZERO;
+        var structure = realm.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .get(io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.CLOCK_TOWER_STRUCTURE);
+        var found = structure.isEmpty() ? null : realm.getChunkSource().getGenerator().findNearestMapStructure(realm,
+                net.minecraft.core.HolderSet.direct(structure.get()), from, 100, false);
+        if (found == null) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.uhrturm.none"));
+            return 0;
+        }
+        BlockPos corner = found.getFirst();
+        BlockPos center = null;
+        var start = realm.getChunk(corner.getX() >> 4, corner.getZ() >> 4).getStartForStructure(structure.get().value());
+        if (start != null) {
+            for (var piece : start.getPieces()) {
+                if (piece instanceof io.github.sirschrolli.kingdomsatwar.worldgen.clock.ClockTowerPiece tower) {
+                    center = tower.center();
+                }
+            }
+        }
+        if (center == null) {
+            center = new BlockPos((corner.getX() & ~15) + 8, io.github.sirschrolli.kingdomsatwar.worldgen.clock.ClockTowerStructure.HEIGHTS[0],
+                    (corner.getZ() & ~15) + 8);
+        }
+        BlockPos c = center;
+        int distance = (int) Math.sqrt(Math.pow(c.getX() - from.getX(), 2) + Math.pow(c.getZ() - from.getZ(), 2));
+        Component where = Component.literal(c.getX() + ", " + c.getY() + ", " + c.getZ()).withStyle(net.minecraft.ChatFormatting.GOLD);
+        source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.uhrturm.where", where, distance), false);
+        if (mode.isEmpty()) {
+            return 1;
+        }
+        for (int dx = -3; dx <= 3; dx++) {
+            for (int dz = -3; dz <= 3; dz++) {
+                realm.getChunk((c.getX() >> 4) + dx, (c.getZ() >> 4) + dz);
+            }
+        }
+        if (mode.equals("tp")) {
+            ServerPlayer player = source.getPlayerOrException();
+            // auf den Südrand des Zifferblatts, mit Blick zum Turm
+            player.teleportTo(realm, c.getX() + 0.5, c.getY(), c.getZ() + 0.5 + io.github.sirschrolli.kingdomsatwar.worldgen.clock.ClockTowerPiece.DIAL - 1.5,
+                    java.util.Set.of(), 180.0f, 5.0f, true);
+            return 1;
+        }
+        BlockPos heart = io.github.sirschrolli.kingdomsatwar.worldgen.clock.ClockTowerPiece.heart(c);
+        if (!(realm.getBlockEntity(heart) instanceof io.github.sirschrolli.kingdomsatwar.block.abyss.ClockHeartBlockEntity be)) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.uhrturm.no_heart"));
+            return 0;
+        }
+        if (mode.equals("reset")) {
+            be.reset(realm);
+            source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.uhrturm.reset"), true);
+            return 1;
+        }
+        io.github.sirschrolli.kingdomsatwar.entity.abyss.HourWardenEntity warden = be.warden(realm);
+        if (warden == null) {
+            warden = be.spawn(realm, true);
+        } else {
+            warden.awaken();
+        }
+        source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.uhrturm.awakened"), true);
+        return warden != null ? 1 : 0;
     }
 
     private static @org.jspecify.annotations.Nullable BlockPos findSoulBell(ServerLevel level, int x, int z) {

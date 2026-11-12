@@ -290,6 +290,9 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         tag(Tags.Items.GEMS).addTag(ModTags.Items.GEMS_CHRONIT);
         add(ItemTags.BEACON_PAYMENT_ITEMS, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT);
         add(ModTags.Items.REPAIRS_TIMEWARDEN_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT);
+        // der Minutenzeiger (1.01): ein Schwert, mit Chronit auszubessern
+        add(ModTags.Items.REPAIRS_MINUTE_HAND, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT);
+        add(ItemTags.SWORDS, io.github.sirschrolli.kingdomsatwar.registry.ClockTower.MINUTE_HAND);
         add(ItemTags.HEAD_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_HELMET);
         add(ItemTags.CHEST_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_CHESTPLATE);
         add(ItemTags.LEG_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_LEGGINGS);
