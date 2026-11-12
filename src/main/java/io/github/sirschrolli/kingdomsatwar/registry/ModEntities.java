@@ -684,6 +684,10 @@ public final class ModEntities {
             ENTITIES.registerEntityType("kraken", io.github.sirschrolli.kingdomsatwar.entity.sea.KrakenEntity::new,
                     MobCategory.MONSTER, builder -> builder.sized(10.0f, 15.0f).eyeHeight(3.5f).notInPeaceful().fireImmune()
                             .clientTrackingRange(20).updateInterval(2));
+    /** Ein Arm des Kraken, der beim Tentakelkäfig aus dem Wasser bricht (seit 1.00). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.sea.KrakenTentacleEntity>> KRAKEN_TENTACLE =
+            ENTITIES.registerEntityType("kraken_tentacle", io.github.sirschrolli.kingdomsatwar.entity.sea.KrakenTentacleEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(1.4f, 7.0f).noLootTable().fireImmune().clientTrackingRange(10).updateInterval(1));
     /** Kristallsplitter: Geschoss des Splitterwächters. */
     public static final DeferredHolder<EntityType<?>, EntityType<WardenShardEntity>> WARDEN_SHARD = ENTITIES.registerEntityType("warden_shard",
             WardenShardEntity::new, MobCategory.MISC,

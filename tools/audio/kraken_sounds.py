@@ -178,6 +178,132 @@ def death(seed: int) -> np.ndarray:
     return y
 
 
+def soften(y: np.ndarray, tail: float, lowpass: float | None = None) -> np.ndarray:
+    """Weiches Ende (die letzten {@code tail} Sekunden klingen ganz aus) und, wenn gewünscht, keine schrillen Höhen."""
+    if lowpass is not None:
+        y = filt(y, "low", lowpass, SR, 2)
+    k = int(tail * SR)
+    if 0 < k < len(y):
+        y = y.copy()
+        y[-k:] *= np.cos(np.linspace(0.0, np.pi / 2.0, k)) ** 2
+    return y
+
+
+def swim(seed: int) -> np.ndarray:
+    """Ein Ruderschlag seiner Arme (seit 1.00): ein tiefes, weiches Wummern verdrängten Wassers, ein Rauschen, ein paar Blasen."""
+    r = rng(seed)
+    dur = 1.5
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    env = np.sin(np.pi * np.clip(t / dur, 0, 1)) ** 2
+    whoosh = moving_resonator(r.standard_normal(n), 170.0 + 520.0 * np.sin(np.pi * t / dur) ** 2, 1.4) * env
+    thump = tone(np.full(n, r.uniform(30, 38)), env_ad(n, SR, 0.12, 0.9), SR, harmonics=((1, 1.0), (2, 0.4))) * 0.8
+    y = whoosh * 0.9 + thump + filt(r.standard_normal(n), "low", 110, SR, 2) * env * 1.3
+    bubbles(y, r, 7, 140, 380, 0.35, dur - 0.2, 0.1, seed)
+    return y
+
+
+def charge(seed: int) -> np.ndarray:
+    """Der Rammstoß (seit 1.00): er saugt Wasser in den Mantel – ein tiefes, gurgelndes Ziehen, das anschwillt –, dann schießt
+    es als Strahl heraus: ein gewaltiges Brausen, darunter ein Grollen, dahinter Blasen."""
+    r = rng(seed)
+    dur = 2.6
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    y = np.zeros(n)
+    # einsaugen (bis 1,1 s): Rauschen durch eine steigende Resonanz, gurgelnd
+    k = np.clip(t / 1.1, 0.0, 1.0)
+    suck_env = (k ** 1.8) * (t < 1.15)
+    suck = moving_resonator(r.standard_normal(n), 120.0 + 700.0 * k ** 1.5, 3.0) * suck_env
+    y += suck * 1.1
+    y += tone(28 + 20 * k, suck_env * 0.6, SR, harmonics=((1, 1.0), (2, 0.5), (3, 0.25))) * 0.6
+    # der Strahl
+    jet = np.zeros(n)
+    mix_at(jet, gush(r, 1.5, 90, 5000, 0.02, 0.6) * 2.6, 1.1, 1.0)
+    mix_at(jet, filt(r.standard_normal(int(1.4 * SR)), "low", 140, SR, 3) * env_ad(int(1.4 * SR), SR, 0.03, 1.0) * 3.2, 1.1, 1.0)
+    y += jet
+    bubbles(y, r, 40, 90, 520, 1.15, dur - 0.2, 0.18, seed)
+    return soften(y, 0.6, 6000)
+
+
+def dive(seed: int) -> np.ndarray:
+    """Er taucht ab (seit 1.00): ein schwerer Schwall, der nach unten zieht, Gurgeln, aufsteigende Blasen, ein Grollen, das in
+    der Tiefe verklingt."""
+    r = rng(seed)
+    dur = 2.6
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    y = np.zeros(n)
+    mix_at(y, gush(r, 1.0, 120, 3200, 0.05, 0.35) * 1.8, 0.0, 1.0)
+    fall = 1.0 - 0.6 * np.clip(t / dur, 0, 1)
+    env = env_asr(n, SR, 0.2, 1.6)
+    y += moving_resonator(r.standard_normal(n), 420.0 * fall + 80.0, 4.0) * env * 0.8
+    y += tone(36 * fall, env * 0.8, SR, harmonics=((1, 1.0), (2, 0.4), (3, 0.2))) * 0.7
+    y += filt(r.standard_normal(n), "low", 100, SR, 3) * env * 1.6
+    bubbles(y, r, 45, 70, 420, 0.2, dur - 0.2, 0.2, seed + 3)
+    return y
+
+
+def breach(seed: int) -> np.ndarray:
+    """Er bricht aus der Tiefe hervor (seit 1.00): ein kurzes, anschwellendes Grollen, dann ein gewaltiger Ausbruch aus Wasser
+    und ein nasses Brüllen; zuletzt prasselt die Gischt zurück aufs Meer."""
+    r = rng(seed)
+    dur = 3.6
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    y = np.zeros(n)
+    swell = np.clip(t / 0.45, 0, 1) ** 2 * (t < 0.5)
+    y += filt(r.standard_normal(n), "low", 160, SR, 3) * swell * 2.5
+    mix_at(y, gush(r, 1.8, 80, 6000, 0.01, 0.55) * 3.0, 0.45, 1.0)
+    rn = int(2.6 * SR)
+    rt = np.arange(rn) / SR
+    renv = env_asr(rn, SR, 0.08, 1.2)
+    body = wet_formants(r.standard_normal(rn), rt, ((140, 4.0, 1.0, 0.5), (320, 5.0, 0.8, 0.7), (680, 6.5, 0.35, 0.9)), r)
+    roar_part = body * renv * 0.5 + tone(r.uniform(36, 44) * (1.0 - 0.12 * rt / 2.6), renv, SR,
+                                        harmonics=((1, 1.0), (2, 0.6), (3, 0.3), (4, 0.15))) * 0.6
+    mix_at(y, roar_part, 0.5, 1.0)
+    # die Gischt prasselt zurück
+    rain = filt(r.standard_normal(n), "band", [1500, 7000], SR, 2) * np.clip((t - 1.2) / 0.3, 0, 1) * np.exp(-np.clip(t - 1.5, 0, None) * 1.4)
+    y += rain * 0.5
+    bubbles(y, r, 30, 90, 400, 0.6, dur - 0.3, 0.16, seed + 9)
+    return soften(y, 1.0, 6500)
+
+
+def geyser(seed: int) -> np.ndarray:
+    """Ein Geysir (seit 1.00): ein Zischen, das sich in einem Atemzug aufbaut, dann schießt die Säule empor – Brausen und
+    Rauschen – und fällt prasselnd zurück."""
+    r = rng(seed)
+    dur = 2.0
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    y = np.zeros(n)
+    hiss_env = np.clip(t / 0.25, 0, 1) ** 2 * np.exp(-np.clip(t - 0.25, 0, None) * 1.6)
+    y += filt(r.standard_normal(n), "band", [2500, 9000], SR, 2) * hiss_env * 0.7
+    mix_at(y, gush(r, 1.4, 150, 5500, 0.015, 0.5) * 2.2, 0.18, 1.0)
+    y += filt(r.standard_normal(n), "low", 130, SR, 3) * np.clip((t - 0.15) / 0.05, 0, 1) * np.exp(-np.clip(t - 0.2, 0, None) * 2.5) * 2.4
+    rain = filt(r.standard_normal(n), "band", [1200, 6500], SR, 2) * np.clip((t - 0.7) / 0.2, 0, 1) * np.exp(-np.clip(t - 0.9, 0, None) * 2.2)
+    y += rain * 0.45
+    return soften(y, 0.7, 7000)
+
+
+def tentacle(seed: int) -> np.ndarray:
+    """Arme brechen aus dem Wasser (seit 1.00): mehrere Schwälle kurz nacheinander, das nasse Schmatzen der Saugnäpfe, ein
+    tiefes Grollen darunter."""
+    r = rng(seed)
+    dur = 1.9
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    y = filt(r.standard_normal(n), "low", 120, SR, 3) * env_asr(n, SR, 0.1, 1.0) * 1.4
+    at = 0.0
+    for i in range(5):
+        mix_at(y, gush(r, 0.7, 160, 3800, 0.01, 0.22) * r.uniform(1.0, 1.7), at, 1.0)
+        mix_at(y, squelch(r, r.uniform(0.2, 0.34)), at + r.uniform(0.08, 0.2), r.uniform(0.35, 0.55))
+        at += r.uniform(0.09, 0.2)
+    for i in range(6):
+        mix_at(y, click(r, r.uniform(600, 1200), 4.0, body=0.6), r.uniform(0.4, 1.4), 0.3)
+    return soften(y, 0.5, 7000)
+
+
 # Name: (Funktion, Varianten, Raum (Nachhall s, Anteil), Ziel-Pegel dBFS)
 SYNTH = {
     "kraken_roar": (roar, 2, (2.2, 0.35), -12.0),
@@ -186,6 +312,12 @@ SYNTH = {
     "kraken_grab": (grab, 2, (0.8, 0.2), -14.0),
     "kraken_sweep": (sweep, 2, (1.0, 0.25), -15.0),
     "kraken_death": (death, 1, (2.4, 0.35), -12.0),
+    "kraken_swim": (swim, 3, (1.0, 0.25), -19.0),
+    "kraken_charge": (charge, 2, (1.4, 0.3), -12.0),
+    "kraken_dive": (dive, 2, (1.6, 0.3), -13.0),
+    "kraken_breach": (breach, 2, (2.0, 0.35), -11.0),
+    "kraken_geyser": (geyser, 3, (1.2, 0.3), -13.0),
+    "kraken_tentacle": (tentacle, 2, (1.2, 0.25), -13.0),
 }
 
 
@@ -216,6 +348,12 @@ EVENTS = {
     "entity.kraken.whirl": ([v(f"ambient/underwater/additions/bubbles{i}", 0.6, 1.0, 64) for i in range(1, 7)], None),
     "entity.kraken.slam": ([v("mob/warden/attack_impact_1", 0.6, 1.0, 48), v("mob/warden/attack_impact_2", 0.6, 1.0, 48),
                             v("liquid/heavy_splash", 0.7, 1.0, 48)], None),
+    "entity.kraken.swim": (["kraken_swim"], 40),
+    "entity.kraken.charge": (["kraken_charge"], 64),
+    "entity.kraken.dive": (["kraken_dive"], 64),
+    "entity.kraken.breach": (["kraken_breach"], 80),
+    "entity.kraken.geyser": (["kraken_geyser"], 48),
+    "entity.kraken.tentacle": (["kraken_tentacle"], 48),
 }
 
 

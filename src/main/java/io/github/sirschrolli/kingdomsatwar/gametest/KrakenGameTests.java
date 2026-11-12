@@ -6,6 +6,7 @@ import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.block.sea.KrakenCoreBlockEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.glitch.AnniTrollEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.sea.KrakenEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.sea.KrakenTentacleEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.sea.SharkEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
 import io.github.sirschrolli.kingdomsatwar.fishing.Medium;
@@ -68,6 +69,8 @@ final class KrakenGameTests {
             ModGameTests.TEST_FUNCTIONS.register("kraken_fight", () -> KrakenGameTests::krakenFight);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> KRAKEN_MAW =
             ModGameTests.TEST_FUNCTIONS.register("kraken_maw", () -> KrakenGameTests::krakenMaw);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> KRAKEN_SWIM =
+            ModGameTests.TEST_FUNCTIONS.register("kraken_swim", () -> KrakenGameTests::krakenSwim);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> KRAKEN_ROD =
             ModGameTests.TEST_FUNCTIONS.register("kraken_rod", () -> KrakenGameTests::krakenRod);
 
@@ -84,7 +87,10 @@ final class KrakenGameTests {
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 16)));
         // seine Angriffe reichen weit (Flutwelle 30 Blöcke) – Abstand zu den anderen Tests; und der Kampf dauert
         event.registerTest(KRAKEN_FIGHT.getId(), new FunctionGameTestInstance(KRAKEN_FIGHT.key(),
-                new TestData<>(environment, Level.OVERWORLD, ARENA, 1600, 0, true, Rotation.NONE, false, 1, 1, true, 40)));
+                new TestData<>(environment, Level.OVERWORLD, ARENA, 2600, 0, true, Rotation.NONE, false, 1, 1, true, 40)));
+        // er schwimmt bis zu 18 Blöcke um die Mitte – Abstand zu den anderen Tests
+        event.registerTest(KRAKEN_SWIM.getId(), new FunctionGameTestInstance(KRAKEN_SWIM.key(),
+                new TestData<>(environment, Level.OVERWORLD, ARENA, 400, 0, true, Rotation.NONE, false, 1, 1, true, 30)));
     }
 
     private static JsonObject lang(String name) {
@@ -92,6 +98,15 @@ final class KrakenGameTests {
             return in == null ? new JsonObject() : JsonParser.parseReader(new InputStreamReader(in, StandardCharsets.UTF_8)).getAsJsonObject();
         } catch (java.io.IOException e) {
             return new JsonObject();
+        }
+    }
+
+    /** Hält die Chunks um {@code c} geladen (der Kraken schwimmt weit über den Testplatz hinaus) – oder gibt sie wieder frei. */
+    private static void forceArea(ServerLevel level, BlockPos c, int blocks, boolean on) {
+        for (int cx = (c.getX() - blocks) >> 4; cx <= (c.getX() + blocks) >> 4; cx++) {
+            for (int cz = (c.getZ() - blocks) >> 4; cz <= (c.getZ() + blocks) >> 4; cz++) {
+                level.setChunkForced(cx, cz, on);
+            }
         }
     }
 
@@ -138,6 +153,7 @@ final class KrakenGameTests {
         // beide auf dem Platz (dessen Chunks sicher geladen sind)
         BlockPos center = helper.absolutePos(new BlockPos(4, 1, 8));
         BlockPos corePos = helper.absolutePos(new BlockPos(4, -3, 8));
+        forceArea(level, center, 24, true);
         level.setBlock(corePos, SeaBlocks.KRAKEN_CORE.get().defaultBlockState(), Block.UPDATE_ALL);
         if (!(level.getBlockEntity(corePos) instanceof KrakenCoreBlockEntity core)) {
             helper.fail("Das Herz des Schlunds hat keine Blockentität");
@@ -165,6 +181,7 @@ final class KrakenGameTests {
         knight.getAttribute(Attributes.MAX_HEALTH).setBaseValue(1000.0);
         reset(helper, knight);
         float[] hp = new float[1];
+        net.minecraft.world.phys.Vec3[] start = new net.minecraft.world.phys.Vec3[1];
         helper.startSequence()
                 .thenExecuteAfter(KrakenEntity.RISE_TICKS + 4, () -> {
                     helper.assertFalse(kraken.isRising(), "Der Kraken steigt nicht ganz empor");
@@ -238,6 +255,99 @@ final class KrakenGameTests {
                 })
                 .thenExecuteAfter(KrakenEntity.WAVE_SLAM + 10, () -> helper.assertTrue(knight.getHealth() < hp[0], "Die Flutwelle trifft nicht"))
                 .thenExecuteAfter(KrakenEntity.WAVE_TICKS - KrakenEntity.WAVE_SLAM, () -> {
+                    // Rammstoß: er schießt durch den Ritter hindurch
+                    reset(helper, knight);
+                    hp[0] = knight.getHealth();
+                    start[0] = kraken.position();
+                    kraken.forceAttack(level, "charge", knight, true);
+                })
+                .thenExecuteAfter(KrakenEntity.CHARGE_WINDUP - 2, () ->
+                        helper.assertTrue(kraken.position().distanceTo(start[0]) < 1.0, "Beim Ausholen zum Rammstoß schwimmt er schon los"))
+                .thenExecuteAfter(KrakenEntity.CHARGE_DASH + 4, () -> {
+                    double moved = kraken.position().distanceTo(start[0]);
+                    helper.assertTrue(moved > 8.0, "Der Rammstoß trägt ihn nicht weit: " + moved);
+                    helper.assertTrue(knight.getHealth() < hp[0], "Der Rammstoß trifft nicht (Ritter " + knight.position() + ", Kraken "
+                            + kraken.position() + ")");
+                })
+                .thenExecuteAfter(KrakenEntity.CHARGE_TICKS - KrakenEntity.CHARGE_WINDUP - KrakenEntity.CHARGE_DASH, () -> {
+                    helper.assertTrue("none".equals(kraken.currentAttack()), "Der Rammstoß endet nicht: " + kraken.currentAttack());
+                    // Ausbruch aus der Tiefe: abtauchen (unverwundbar), unter Wasser zum Ziel, hervorbrechen
+                    kraken.debugReturnHome();
+                    reset(helper, knight);
+                    hp[0] = knight.getHealth();
+                    kraken.forceAttack(level, "breach", knight, true);
+                })
+                .thenExecuteAfter(KrakenEntity.BREACH_DIVE + 6, () -> {
+                    helper.assertTrue(kraken.sink() > 0.9f, "Er taucht nicht ab: " + kraken.sink());
+                    helper.assertTrue(kraken.isInvulnerableTo(level, level.damageSources().generic()), "Abgetaucht ist er verwundbar");
+                    helper.assertFalse(kraken.isPickable(), "Abgetaucht kann man ihn treffen");
+                })
+                .thenExecuteAfter(KrakenEntity.BREACH_WARN - KrakenEntity.BREACH_DIVE - 6, () -> {
+                    double d = Math.sqrt(Math.pow(kraken.getX() - knight.getX(), 2) + Math.pow(kraken.getZ() - knight.getZ(), 2));
+                    helper.assertTrue(d < 3.0, "Unter Wasser schwimmt er nicht zum Ziel: " + d);
+                })
+                .thenExecuteAfter(KrakenEntity.BREACH_ERUPT - KrakenEntity.BREACH_WARN + 3, () -> {
+                    helper.assertTrue(knight.getHealth() < hp[0] - 15.0f, "Der Ausbruch trifft nicht: " + (hp[0] - knight.getHealth()));
+                    helper.assertTrue(kraken.sink() < 0.0f, "Er bricht nicht über das Wasser hinaus: " + kraken.sink());
+                    helper.assertFalse(kraken.isInvulnerableTo(level, level.damageSources().generic()), "Nach dem Ausbruch bleibt er unverwundbar");
+                })
+                .thenExecuteAfter(KrakenEntity.BREACH_TICKS - KrakenEntity.BREACH_ERUPT - 3, () -> {
+                    helper.assertTrue("none".equals(kraken.currentAttack()) && Math.abs(kraken.sink()) < 0.01f,
+                            "Nach dem Ausbruch kommt er nicht zur Ruhe: " + kraken.currentAttack() + " " + kraken.sink());
+                    // Geysirfeld: zwei Felder nacheinander, das erste genau unter dem Ziel
+                    kraken.debugReturnHome();
+                    reset(helper, knight);
+                    hp[0] = knight.getHealth();
+                    kraken.forceAttack(level, "geyser", knight, true);
+                })
+                .thenExecuteAfter(KrakenEntity.GEYSER_FIRST + KrakenEntity.GEYSER_WARN - 4, () ->
+                        helper.assertTrue(knight.getHealth() >= hp[0], "Der Geysir trifft vor der Zeit"))
+                .thenExecuteAfter(6, () -> {
+                    helper.assertTrue(knight.getHealth() < hp[0], "Der Geysir trifft nicht");
+                    reset(helper, knight);
+                    hp[0] = knight.getHealth();
+                })
+                .thenExecuteAfter(KrakenEntity.GEYSER_SECOND - KrakenEntity.GEYSER_FIRST + 2, () ->
+                        helper.assertTrue(knight.getHealth() < hp[0], "Das zweite Geysirfeld trifft nicht"))
+                .thenExecuteAfter(KrakenEntity.GEYSER_TICKS - KrakenEntity.GEYSER_SECOND - KrakenEntity.GEYSER_WARN, () -> {
+                    // Tentakelkäfig: sieben Arme um den Ritter, sie ziehen sich zusammen und schlagen zu
+                    reset(helper, knight);
+                    kraken.forceAttack(level, "cage", knight, true);
+                })
+                .thenExecuteAfter(KrakenEntity.CAGE_SPAWN + KrakenTentacleEntity.RISE, () -> {
+                    List<KrakenTentacleEntity> arms = level.getEntitiesOfClass(KrakenTentacleEntity.class, knight.getBoundingBox().inflate(14.0),
+                            Entity::isAlive);
+                    helper.assertTrue(arms.size() == KrakenEntity.CAGE_ARMS - 1, "Der Käfig hat nicht sieben Arme: " + arms.size());
+                    for (KrakenTentacleEntity arm : arms) {
+                        double r = Math.sqrt(Math.pow(arm.getX() - knight.getX(), 2) + Math.pow(arm.getZ() - knight.getZ(), 2));
+                        helper.assertTrue(r > KrakenTentacleEntity.END_RADIUS + 1.0 && r < KrakenEntity.CAGE_RADIUS + 0.5,
+                                "Ein Arm steht nicht im Kreis um das Ziel: " + r);
+                    }
+                    // ein harter Schlag trennt einen Arm ab – der Kraken spürt es
+                    float krakenBefore = kraken.getHealth();
+                    KrakenTentacleEntity cut = arms.get(0);
+                    cut.hurtServer(level, level.damageSources().generic(), KrakenTentacleEntity.CUT_DAMAGE + 4.0f);
+                    helper.assertTrue(cut.isCut(), "Ein harter Schlag trennt den Arm nicht ab");
+                    helper.assertTrue(kraken.getHealth() < krakenBefore, "Der Kraken spürt den abgeschlagenen Arm nicht");
+                    reset(helper, knight);
+                    hp[0] = knight.getHealth();
+                })
+                .thenExecuteAfter(KrakenTentacleEntity.CLOSE_TO - KrakenTentacleEntity.RISE, () -> {
+                    for (KrakenTentacleEntity arm : level.getEntitiesOfClass(KrakenTentacleEntity.class, knight.getBoundingBox().inflate(14.0),
+                            a -> a.isAlive() && !a.isCut())) {
+                        double r = Math.sqrt(Math.pow(arm.getX() - arm.cageCenter().x, 2) + Math.pow(arm.getZ() - arm.cageCenter().z, 2));
+                        helper.assertTrue(r < KrakenTentacleEntity.END_RADIUS + 0.5, "Der Käfig zieht sich nicht zusammen: " + r);
+                    }
+                    reset(helper, knight);
+                    hp[0] = knight.getHealth();
+                })
+                .thenExecuteAfter(KrakenTentacleEntity.SLAM - KrakenTentacleEntity.CLOSE_TO + 2, () ->
+                        helper.assertTrue(knight.getHealth() < hp[0] - 10.0f, "Der Käfig zermalmt nicht: " + (hp[0] - knight.getHealth())))
+                .thenExecuteAfter(KrakenEntity.CAGE_TICKS - KrakenEntity.CAGE_SPAWN - KrakenTentacleEntity.SLAM, () -> {
+                    helper.assertTrue("none".equals(kraken.currentAttack()), "Der Käfig endet nicht: " + kraken.currentAttack());
+                    helper.assertTrue(level.getEntitiesOfClass(KrakenTentacleEntity.class, knight.getBoundingBox().inflate(20.0), Entity::isAlive).isEmpty(),
+                            "Die Arme des Käfigs bleiben");
+                    kraken.debugReturnHome();
                     // schwer verletzt: Wut
                     kraken.setHealth(kraken.getMaxHealth() * 0.3f);
                 })
@@ -262,9 +372,71 @@ final class KrakenGameTests {
                     core.reset(level);
                     helper.assertTrue(core.phase() == KrakenCoreBlockEntity.Phase.DORMANT, "Der Schlund schläft nach dem Zurücksetzen nicht");
                 })
-                .thenExecuteAfter(1, () -> helper.assertTrue(level.getEntitiesOfClass(KrakenEntity.class, new AABB(center).inflate(40.0),
-                        Entity::isAlive).isEmpty(), "Nach dem Zurücksetzen bleibt ein Kraken"))
+                .thenExecuteAfter(1, () -> {
+                    helper.assertTrue(level.getEntitiesOfClass(KrakenEntity.class, new AABB(center).inflate(40.0), Entity::isAlive).isEmpty(),
+                            "Nach dem Zurücksetzen bleibt ein Kraken");
+                    forceArea(level, center, 24, false);
+                })
                 .thenSucceed();
+    }
+
+    /**
+     * Er schwimmt (seit 1.00): um sein Ziel herum, aber nie weiter als {@link KrakenEntity#SWIM_RADIUS} Blöcke von der Mitte,
+     * nicht schneller als {@link KrakenEntity#SWIM_SPEED}, den Blick in Fahrtrichtung; auf Befehl schwimmend greift er nicht an.
+     */
+    private static void krakenSwim(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        for (int x = 0; x < 9; x++) {
+            for (int z = 0; z < 9; z++) {
+                helper.setBlock(x, 0, z, ModBlocks.ABYSSAL_SAND.get());
+            }
+        }
+        BlockPos center = helper.absolutePos(new BlockPos(4, 1, 4));
+        forceArea(level, center, 26, true);
+        KrakenEntity kraken = ModEntities.KRAKEN.get().create(level, net.minecraft.world.entity.EntitySpawnReason.MOB_SUMMONED);
+        if (kraken == null) {
+            helper.fail("Kein Kraken");
+            return;
+        }
+        kraken.snapTo(center.getX() + 0.5, center.getY(), center.getZ() + 0.5, 0.0f, 0.0f);
+        kraken.bindTo(center, null);
+        level.addFreshEntity(kraken);
+        var knight = helper.spawnWithNoFreeWill(ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get(), new BlockPos(1, 1, 1));
+        knight.setNoAi(true);
+        kraken.forceSwim(knight, true);
+        double[] most = new double[2];
+        int[] count = new int[2];
+        net.minecraft.world.phys.Vec3 c = net.minecraft.world.phys.Vec3.atBottomCenterOf(center);
+        helper.onEachTick(() -> {
+            if (!kraken.isAlive()) {
+                return;
+            }
+            double r = Math.sqrt(Math.pow(kraken.getX() - c.x, 2) + Math.pow(kraken.getZ() - c.z, 2));
+            most[0] = Math.max(most[0], r);
+            double speed = kraken.swimSpeed();
+            most[1] = Math.max(most[1], speed);
+            double dx = kraken.getX() - kraken.xo;
+            double dz = kraken.getZ() - kraken.zo;
+            if (speed > 0.09 && dx * dx + dz * dz > 0.005) {
+                count[0]++;
+                float moveYaw = -((float) net.minecraft.util.Mth.atan2(dx, dz)) * net.minecraft.util.Mth.RAD_TO_DEG;
+                if (Math.abs(net.minecraft.util.Mth.wrapDegrees(moveYaw - kraken.getYRot())) < 40.0f) {
+                    count[1]++;
+                }
+            }
+        });
+        helper.runAfterDelay(300, () -> {
+            helper.assertTrue(most[0] > 5.0, "Der Kraken schwimmt nicht umher: höchstens " + most[0] + " Blöcke von der Mitte");
+            helper.assertTrue(most[0] <= KrakenEntity.SWIM_RADIUS + 0.01, "Der Kraken schwimmt über seinen Bereich hinaus: " + most[0]);
+            helper.assertTrue(most[1] > KrakenEntity.SWIM_SPEED * 0.7 && most[1] <= KrakenEntity.SWIM_SPEED + 0.005,
+                    "Falsches Tempo: " + most[1]);
+            helper.assertTrue(count[0] > 60, "Der Kraken macht kaum Fahrt: " + count[0]);
+            helper.assertTrue(count[1] >= count[0] * 0.75, "Der Kraken schwimmt seitwärts: " + count[1] + "/" + count[0]);
+            helper.assertTrue("none".equals(kraken.currentAttack()), "Beim Schwimmen auf Befehl greift er an: " + kraken.currentAttack());
+            kraken.discard();
+            forceArea(level, center, 26, false);
+            helper.succeed();
+        });
     }
 
     /**
@@ -352,7 +524,7 @@ final class KrakenGameTests {
         for (JsonObject lang : List.of(lang("de_de"), lang("en_us"))) {
             for (String key : List.of("entity.kingdomsatwar.kraken", "boss.kingdomsatwar.kraken", "boss.kingdomsatwar.kraken.title",
                     "kraken.kingdomsatwar.warning", "item.kingdomsatwar.tide_horn.kraken_recalled", "block.kingdomsatwar.kraken_core",
-                    "item.kingdomsatwar.kraken_spawn_egg", "item.kingdomsatwar.kraken_fishing_rod")) {
+                    "item.kingdomsatwar.kraken_spawn_egg", "item.kingdomsatwar.kraken_fishing_rod", "entity.kingdomsatwar.kraken_tentacle")) {
                 helper.assertTrue(lang.has(key), "Text fehlt: " + key);
             }
         }
@@ -364,12 +536,14 @@ final class KrakenGameTests {
             sounds = new JsonObject();
         }
         JsonObject german = lang("de_de");
-        for (String event : List.of("ambient", "hurt", "death", "rise", "roar", "wave", "sweep", "grab", "bite", "ink", "whirl", "slam")) {
+        for (String event : List.of("ambient", "hurt", "death", "rise", "roar", "wave", "sweep", "grab", "bite", "ink", "whirl", "slam", "swim", "charge",
+                "dive", "breach", "geyser", "tentacle")) {
             String key = "entity.kraken." + event;
             helper.assertTrue(sounds.has(key), "Klang fehlt: " + key);
             helper.assertTrue(german.has("subtitles.kingdomsatwar." + key), "Untertitel fehlt: " + key);
         }
-        for (String file : List.of("kraken_roar1", "kraken_roar2", "kraken_ambient1", "kraken_rise1", "kraken_grab1", "kraken_sweep1", "kraken_death1")) {
+        for (String file : List.of("kraken_roar1", "kraken_roar2", "kraken_ambient1", "kraken_rise1", "kraken_grab1", "kraken_sweep1", "kraken_death1",
+                "kraken_swim1", "kraken_charge1", "kraken_dive1", "kraken_breach1", "kraken_geyser1", "kraken_tentacle1")) {
             helper.assertTrue(KrakenGameTests.class.getResource("/assets/kingdomsatwar/sounds/entity/sea/" + file + ".ogg") != null,
                     "Aufnahme fehlt: " + file);
         }

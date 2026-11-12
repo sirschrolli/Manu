@@ -244,6 +244,13 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_INK = register("entity.kraken.ink");
     public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_WHIRL = register("entity.kraken.whirl");
     public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_SLAM = register("entity.kraken.slam");
+    // seit 1.00: er schwimmt, rammt, taucht ab und bricht hervor, lässt Geysire steigen und Arme aus dem Wasser brechen
+    public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_SWIM = register("entity.kraken.swim");
+    public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_CHARGE = register("entity.kraken.charge");
+    public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_DIVE = register("entity.kraken.dive");
+    public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_BREACH = register("entity.kraken.breach");
+    public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_GEYSER = register("entity.kraken.geyser");
+    public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_TENTACLE = register("entity.kraken.tentacle");
     // Feenreich (0.63)
     public static final DeferredHolder<SoundEvent, SoundEvent> FAE_PORTAL_AMBIENT = register("block.fae_portal.ambient");
     public static final DeferredHolder<SoundEvent, SoundEvent> FAE_PORTAL_LIGHT = register("block.fae_portal.light");

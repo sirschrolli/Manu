@@ -18,6 +18,18 @@ import net.minecraft.util.Mth;
  *     <li><b>Flutwelle:</b> alle Arme steigen empor und schlagen zugleich aufs Wasser;</li>
  *     <li><b>Brüllen</b> (beim Erwachen und in der Raserei): Arme weit gespreizt und erhoben, der Schnabel weit offen.</li>
  * </ul>
+ * Seit 1.00 schwimmt er: der Kopf neigt sich in die Fahrt, der Mantel weht zurück, die Arme strömen nach hinten und rudern im
+ * Takt (vorziehen über dem Wasser, kraftvoll zurück darunter), die Flossen schlagen. Dazu:
+ * <ul>
+ *     <li><b>Rammstoß:</b> er bäumt sich auf, bläht den Mantel, spreizt die Arme – und schießt vor, den Kopf voran, der Mantel
+ *     presst sich zusammen, die Arme liegen flach nach hinten, die Fangarme stoßen nach vorn;</li>
+ *     <li><b>Abtauchen:</b> die Arme heben sich, während er versinkt (das Versinken übernimmt der Renderer);</li>
+ *     <li><b>Ausbruch:</b> er schnellt empor, Arme und Fangarme fliegen auseinander, der Schnabel reißt auf – dann krachen die
+ *     Arme aufs Wasser;</li>
+ *     <li><b>Geysirfeld:</b> die vorderen Arme heben sich und klatschen aufs Wasser, danach bebt er mit erhobenen Armen;</li>
+ *     <li><b>Tentakelkäfig:</b> die Fangarme stoßen tief ins Wasser, die Arme spannen sich – und reißen zurück, wenn der Käfig
+ *     zuschlägt.</li>
+ * </ul>
  * Im Tod erschlaffen die Arme, er sinkt zurück in den Schlund (das Versinken übernimmt der Renderer).
  */
 public class KrakenModel extends EntityModel<KrakenRenderState> {
@@ -97,6 +109,7 @@ public class KrakenModel extends EntityModel<KrakenRenderState> {
             }
         }
 
+        this.swim(state.swim, t, rage);
         this.slam(state.slamLeft, t, 0);
         this.slam(state.slamRight, t, 1);
         this.sweep(state.sweepLeft, t, true);
@@ -106,6 +119,11 @@ public class KrakenModel extends EntityModel<KrakenRenderState> {
         this.whirl(state.whirl, t);
         this.wave(state.wave, t);
         this.roar(state.roar, t);
+        this.charge(state.charge, t);
+        this.dive(state.dive, t);
+        this.breach(state.breach, t);
+        this.geyser(state.geyser, t);
+        this.cage(state.cage, t);
 
         if (state.deathTime > 0.0f) {
             // Tod: die Arme erschlaffen und sinken, der Mantel kippt nach hinten
@@ -259,5 +277,193 @@ public class KrakenModel extends EntityModel<KrakenRenderState> {
         this.beak.y += 2.2f * a;
         this.mantle.zRot += Mth.sin(t * 1.3f) * 0.05f * a;
         this.body.xRot -= 0.15f * a;
+    }
+
+    /** Gierwinkel des Arms {@code i} in der Ruhelage (0 vorn; die Arme 0 bis 3 sitzen rechts, 4 bis 7 links). */
+    private static float armYaw(int i) {
+        return 0.3927f + i * 0.7854f;
+    }
+
+    /** In diese Richtung (Vorzeichen des Gierwinkels) streicht Arm {@code i} nach hinten. */
+    private static float backward(int i) {
+        return i < 4 ? 1.0f : -1.0f;
+    }
+
+    /**
+     * Schwimmen ({@code s}: 0 ruhig, 1 volle Fahrt): der Kopf neigt sich in die Fahrt, der Mantel weht zurück und pumpt im Takt,
+     * die Arme strömen nach hinten und rudern (vorziehen hoch, zurück tief), die Flossen schlagen kräftiger.
+     */
+    private void swim(float s, float t, float rage) {
+        if (s < 0.01f) {
+            return;
+        }
+        s = Math.min(s, 1.3f);
+        float phase = t * 0.185f * rage;
+        float stroke = Mth.sin(phase);
+        float lift = Mth.cos(phase);
+        this.body.xRot += 0.16f * s;
+        this.body.y += stroke * 0.7f * s;
+        this.mantle.xRot -= 0.22f * s;
+        float pump = Math.max(0.0f, stroke) * 0.06f * s;
+        this.mantle.xScale -= pump;
+        this.mantle.zScale -= pump;
+        this.mantle.yScale += pump * 0.6f;
+        this.finL.zRot += Mth.sin(t * 0.32f) * 0.3f * s;
+        this.finR.zRot -= Mth.sin(t * 0.32f) * 0.3f * s;
+        for (int i = 0; i < ARMS; i++) {
+            ModelPart[] arm = this.arms[i];
+            float front = Mth.cos(armYaw(i));
+            float back = backward(i);
+            // nach hinten strömen (die vorderen Arme weiter), dazu der Ruderschlag
+            arm[0].yRot += back * s * (0.2f + 0.24f * (1.0f + front) * 0.5f + 0.22f * stroke);
+            arm[0].xRot += s * (-0.16f + 0.12f * lift);
+            for (int k = 1; k < ARM_PARTS; k++) {
+                arm[k].xRot += s * (0.05f + 0.03f * lift);
+                arm[k].yRot += back * s * 0.03f * Mth.sin(phase - k * 0.6f);
+            }
+        }
+        for (ModelPart[] tentacle : this.tentacles) {
+            tentacle[0].xRot += 0.25f * s;
+            for (int k = 1; k <= TENTACLE_PARTS; k++) {
+                tentacle[k].xRot += 0.03f * s * Mth.sin(phase - k * 0.5f);
+            }
+        }
+    }
+
+    /** Rammstoß: aufbäumen, Mantel blähen, Arme spreizen – dann vorschießen, Mantel gepresst, Arme flach nach hinten. */
+    private void charge(net.minecraft.world.entity.AnimationState anim, float t) {
+        float s = Anim.seconds(anim, t);
+        if (s < 0.0f || s > 3.3f) {
+            return;
+        }
+        float wind = Anim.bump(s, 0.9f, 1.15f, 1.35f);
+        float dash = Anim.bump(s - 1.15f, 0.15f, 0.8f, 1.9f);
+        this.body.xRot += -0.28f * wind + 0.42f * dash;
+        this.mantle.xRot -= 0.3f * dash;
+        float puff = 0.1f * wind - 0.16f * dash;
+        this.mantle.xScale += puff;
+        this.mantle.zScale += puff;
+        this.mantle.yScale -= puff * 0.6f;
+        this.beak.y += 1.4f * wind;
+        for (int i = 0; i < ARMS; i++) {
+            ModelPart[] arm = this.arms[i];
+            float back = backward(i);
+            arm[0].xRot += -0.55f * wind - 0.32f * dash;
+            arm[0].yRot += back * (-0.25f * wind + 0.85f * dash);
+            for (int k = 1; k < ARM_PARTS; k++) {
+                arm[k].xRot += -0.06f * wind + 0.1f * dash;
+            }
+        }
+        for (int side = 0; side < 2; side++) {
+            ModelPart[] tentacle = this.tentacles[side];
+            // die Fangarme stoßen gebündelt nach vorn
+            tentacle[0].xRot += -0.4f * wind - 0.45f * dash;
+            tentacle[0].yRot += (side == 0 ? 0.35f : -0.35f) * dash;
+            for (int k = 1; k <= TENTACLE_PARTS; k++) {
+                tentacle[k].xRot += 0.06f * dash;
+            }
+        }
+    }
+
+    /** Abtauchen: die Arme heben sich, während er versinkt (bis er wieder ausbricht). */
+    private void dive(net.minecraft.world.entity.AnimationState anim, float t) {
+        float s = Anim.seconds(anim, t);
+        if (s < 0.0f || s > 4.6f) {
+            return;
+        }
+        float a = Anim.bump(s, 0.5f, 3.6f, 4.6f);
+        this.body.xRot -= 0.12f * a;
+        this.beak.y += 0.8f * a;
+        for (ModelPart[] arm : this.arms) {
+            arm[0].xRot -= 0.85f * a;
+            for (int k = 1; k < ARM_PARTS; k++) {
+                arm[k].xRot -= 0.07f * a;
+            }
+        }
+        for (ModelPart[] tentacle : this.tentacles) {
+            tentacle[0].xRot -= 0.9f * a;
+        }
+    }
+
+    /** Ausbruch: er schnellt empor, Arme und Fangarme fliegen auseinander, der Schnabel reißt auf – dann krachen die Arme herab. */
+    private void breach(net.minecraft.world.entity.AnimationState anim, float t) {
+        float s = Anim.seconds(anim, t);
+        if (s < 0.0f || s > 2.2f) {
+            return;
+        }
+        float burst = Anim.bump(s, 0.15f, 0.8f, 1.5f);
+        float crash = Anim.bump(s - 0.85f, 0.2f, 0.45f, 1.3f);
+        this.body.xRot -= 0.22f * burst;
+        this.mantle.yScale += 0.1f * burst;
+        this.mantle.xRot += 0.15f * burst;
+        this.beak.y += 2.6f * burst;
+        for (int i = 0; i < ARMS; i++) {
+            ModelPart[] arm = this.arms[i];
+            arm[0].xRot += -1.25f * burst + 0.45f * crash;
+            arm[0].yRot += backward(i) * -0.15f * burst;
+            for (int k = 1; k < ARM_PARTS; k++) {
+                arm[k].xRot += -0.12f * burst + 0.08f * crash;
+            }
+        }
+        for (ModelPart[] tentacle : this.tentacles) {
+            tentacle[0].xRot += -1.35f * burst + 0.5f * crash;
+            for (int k = 1; k <= TENTACLE_PARTS; k++) {
+                tentacle[k].xRot -= 0.05f * burst;
+            }
+        }
+    }
+
+    /** Geysirfeld: die vorderen Arme heben sich und klatschen aufs Wasser; danach bebt er mit erhobenen Armen. */
+    private void geyser(net.minecraft.world.entity.AnimationState anim, float t) {
+        float s = Anim.seconds(anim, t);
+        if (s < 0.0f || s > 4.4f) {
+            return;
+        }
+        float up = Anim.bump(s, 0.35f, 0.42f, 0.52f);
+        float down = Anim.bump(s - 0.45f, 0.08f, 0.35f, 1.0f);
+        float hold = Anim.bump(s - 0.7f, 0.5f, 3.0f, 3.7f);
+        float tremble = Mth.sin(t * 1.1f) * 0.05f * hold;
+        this.body.xRot += 0.14f * down - 0.06f * hold;
+        this.beak.y += 1.0f * hold;
+        for (int i = 0; i < ARMS; i++) {
+            ModelPart[] arm = this.arms[i];
+            boolean front = i == 0 || i == 1 || i == 6 || i == 7;
+            if (front) {
+                arm[0].xRot += -1.25f * up + 0.55f * down;
+                for (int k = 1; k < ARM_PARTS; k++) {
+                    arm[k].xRot += -0.1f * up + 0.1f * down;
+                }
+            }
+            arm[0].xRot += -0.3f * hold + tremble;
+        }
+        for (ModelPart[] tentacle : this.tentacles) {
+            tentacle[0].xRot += -0.5f * hold + tremble;
+        }
+    }
+
+    /** Tentakelkäfig: die Fangarme stoßen tief ins Wasser, die Arme spannen sich – und reißen zurück, wenn der Käfig zuschlägt. */
+    private void cage(net.minecraft.world.entity.AnimationState anim, float t) {
+        float s = Anim.seconds(anim, t);
+        if (s < 0.0f || s > 5.0f) {
+            return;
+        }
+        float plunge = Anim.bump(s, 0.5f, 4.0f, 4.6f);
+        float yank = Anim.bump(s - 3.45f, 0.2f, 0.35f, 0.8f);
+        this.body.xRot += 0.12f * plunge + 0.2f * yank;
+        this.mantle.zRot += Mth.sin(t * 0.9f) * 0.03f * plunge;
+        for (ModelPart[] tentacle : this.tentacles) {
+            tentacle[0].xRot += 0.95f * plunge - 0.5f * yank;
+            for (int k = 1; k <= TENTACLE_PARTS; k++) {
+                tentacle[k].xRot += 0.1f * plunge;
+            }
+        }
+        for (int i = 0; i < ARMS; i++) {
+            ModelPart[] arm = this.arms[i];
+            arm[0].xRot += -0.28f * plunge + 0.35f * yank;
+            arm[0].yRot += backward(i) * 0.12f * plunge * Mth.sin(t * 0.25f + i);
+            for (int k = 1; k < ARM_PARTS; k++) {
+                arm[k].xRot += 0.04f * plunge;
+            }
+        }
     }
 }

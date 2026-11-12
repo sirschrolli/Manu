@@ -5226,6 +5226,32 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.kraken.bite"
   },
+  "entity.kraken.breach": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_breach1",
+        "attenuation_distance": 80
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_breach2",
+        "attenuation_distance": 80
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.kraken.breach"
+  },
+  "entity.kraken.charge": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_charge1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_charge2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.kraken.charge"
+  },
   "entity.kraken.death": {
     "sounds": [
       {
@@ -5234,6 +5260,36 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.kraken.death"
+  },
+  "entity.kraken.dive": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_dive1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_dive2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.kraken.dive"
+  },
+  "entity.kraken.geyser": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_geyser1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_geyser2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_geyser3",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.kraken.geyser"
   },
   "entity.kraken.grab": {
     "sounds": [
@@ -5363,6 +5419,36 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.kraken.sweep"
+  },
+  "entity.kraken.swim": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_swim1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_swim2",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_swim3",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.kraken.swim"
+  },
+  "entity.kraken.tentacle": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_tentacle1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/kraken_tentacle2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.kraken.tentacle"
   },
   "entity.kraken.wave": {
     "sounds": [

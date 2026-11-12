@@ -472,6 +472,7 @@ public class ModLanguageProvider extends LanguageProvider {
         creature(ModEntities.STAR_RAY, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.STAR_RAY_SPAWN_EGG, "Star Ray",
                 "Sternenrochen", "Sternenrochen");
         add(ModEntities.WARDEN_SHARD.get(), pick("Crystal Shard", "Kristallsplitter"));
+        add(ModEntities.KRAKEN_TENTACLE.get(), pick("Kraken Tentacle", "Krakenarm"));
         subtitle("entity.void_maw.ambient", "Void Maw warbles", "Leerenschlund gurgelt");
         subtitle("entity.void_maw.hurt", "Void Maw hurts", "Leerenschlund nimmt Schaden");
         subtitle("entity.void_maw.death", "Void Maw dies", "Leerenschlund stirbt");
@@ -1400,7 +1401,10 @@ public class ModLanguageProvider extends LanguageProvider {
                 {"roar", "The Kraken roars", "Der Kraken brüllt"}, {"wave", "A great wave crashes", "Eine Flutwelle bricht"},
                 {"sweep", "Tentacles sweep the water", "Arme fegen durchs Wasser"}, {"grab", "A tentacle grabs", "Ein Fangarm packt zu"},
                 {"bite", "The Kraken bites", "Der Kraken beißt zu"}, {"ink", "The Kraken spits ink", "Der Kraken spuckt Tinte"},
-                {"whirl", "A whirlpool roars", "Ein Strudel tost"}, {"slam", "A tentacle slams down", "Ein Fangarm schlägt nieder"}}) {
+                {"whirl", "A whirlpool roars", "Ein Strudel tost"}, {"slam", "A tentacle slams down", "Ein Fangarm schlägt nieder"},
+                {"swim", "The Kraken swims", "Der Kraken schwimmt"}, {"charge", "The Kraken charges", "Der Kraken rammt"},
+                {"dive", "The Kraken dives", "Der Kraken taucht ab"}, {"breach", "The Kraken bursts from the deep", "Der Kraken bricht hervor"},
+                {"geyser", "A geyser erupts", "Ein Geysir schießt empor"}, {"tentacle", "Tentacles burst from the water", "Arme brechen aus dem Wasser"}}) {
             subtitle("entity.kraken." + e[0], e[1], e[2]);
         }
         subtitle("entity.manta_ray.hurt", "Manta Ray hurts", "Mantarochen nimmt Schaden");

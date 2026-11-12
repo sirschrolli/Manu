@@ -22,7 +22,8 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * Der Kraken, fünffach vergrößert (so hoch wie ein Turm): Augen und Leuchtpunkte glühen (in der Raserei pulsierend heller, im Tod verlöschend).
- * Er steigt aus dem Schlund empor (Erwachen) und sinkt im Tod wieder hinab; im Strudel kreist er um sich selbst.
+ * Er steigt aus dem Schlund empor (Erwachen) und sinkt im Tod wieder hinab; im Strudel kreist er um sich selbst. Seit 1.00
+ * taucht er auch ab (Ausbruch aus der Tiefe) und bricht dann kurz hoch über die Oberfläche hinaus.
  */
 public class KrakenRenderer extends MobRenderer<KrakenEntity, KrakenRenderState, KrakenModel> {
     public static final float SCALE = 5.0f;
@@ -55,6 +56,15 @@ public class KrakenRenderer extends MobRenderer<KrakenEntity, KrakenRenderState,
         float roar = Anim.seconds(state.roar, t);
         if (roar >= 0.0f && roar < 3.0f) {
             glow = Math.max(glow, 0.9f + Mth.sin(t * 0.8f) * 0.1f);
+        }
+        // im Ausbruch und beim Rammstoß glühen die Augen auf
+        float breach = Anim.seconds(state.breach, t);
+        if (breach >= 0.0f && breach < 1.6f) {
+            glow = Math.max(glow, 1.0f - breach / 1.6f * 0.15f);
+        }
+        float charge = Anim.seconds(state.charge, t);
+        if (charge >= 0.8f && charge < 2.2f) {
+            glow = Math.max(glow, 0.95f);
         }
         if (state.deathTime > 0.0f) {
             glow *= 1.0f - Mth.clamp(state.deathTime / KrakenEntity.DEATH_TICKS, 0.0f, 1.0f) * 0.95f;
@@ -124,6 +134,12 @@ public class KrakenRenderer extends MobRenderer<KrakenEntity, KrakenRenderState,
         state.ink.copyFrom(entity.inkAnimation);
         state.whirl.copyFrom(entity.whirlAnimation);
         state.wave.copyFrom(entity.waveAnimation);
+        state.charge.copyFrom(entity.chargeAnimation);
+        state.dive.copyFrom(entity.diveAnimation);
+        state.breach.copyFrom(entity.breachAnimation);
+        state.geyser.copyFrom(entity.geyserAnimation);
+        state.cage.copyFrom(entity.cageAnimation);
+        state.swim = entity.swim(partialTicks);
         state.grabSide = entity.grabSide();
         state.sink = entity.sink(partialTicks);
         state.enraged = entity.isEnraged();
