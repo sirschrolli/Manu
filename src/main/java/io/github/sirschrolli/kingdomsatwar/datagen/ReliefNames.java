@@ -26,6 +26,7 @@ final class ReliefNames {
             "cabbage",
             "carbon",
             "chronicle",
+            "chronit",
             "cooked_crab_meat",
             "cooked_venison",
             "crab_claw",

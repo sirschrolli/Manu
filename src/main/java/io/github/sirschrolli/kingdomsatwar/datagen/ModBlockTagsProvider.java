@@ -295,6 +295,16 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(ModTags.Blocks.STORAGE_BLOCKS_SKY_IRON, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_BLOCK);
         tag(Tags.BlockItems.STORAGE_BLOCKS.block()).addTag(ModTags.Blocks.STORAGE_BLOCKS_SKY_IRON);
         add(BlockTags.BEACON_BASE_BLOCKS, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_BLOCK);
+        // Chronit (seit 1.01)
+        add(BlockTags.MINEABLE_WITH_PICKAXE, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_ORE, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_BLOCK);
+        add(BlockTags.NEEDS_DIAMOND_TOOL, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_ORE, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_BLOCK);
+        add(ModTags.Blocks.ORES_CHRONIT, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_ORE);
+        tag(Tags.BlockItems.ORES.block()).addTag(ModTags.Blocks.ORES_CHRONIT);
+        tag(BlockItemTags.ORES.block()).addTag(ModTags.Blocks.ORES_CHRONIT);
+        add(ModTags.Blocks.STORAGE_BLOCKS_CHRONIT, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_BLOCK);
+        tag(Tags.BlockItems.STORAGE_BLOCKS.block()).addTag(ModTags.Blocks.STORAGE_BLOCKS_CHRONIT);
+        add(BlockTags.BEACON_BASE_BLOCKS, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_BLOCK);
+        add(BlockTags.CRYSTAL_SOUND_BLOCKS, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_BLOCK);
         add(BlockTags.MINEABLE_WITH_SHOVEL, FaeBlocks.FAE_SOIL, FaeBlocks.FAE_GRASS);
         add(BlockTags.MINEABLE_WITH_HOE, FaeBlocks.FAE_MOSS, FaeBlocks.ROSE_GLIMMER_LEAVES, FaeBlocks.AZURE_GLIMMER_LEAVES,
                 FaeBlocks.THORN_HEDGE);

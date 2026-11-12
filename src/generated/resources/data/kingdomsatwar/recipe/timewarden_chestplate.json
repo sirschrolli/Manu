@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "kingdomsatwar:chronit",
+    "G": "minecraft:gold_ingot",
+    "S": "kingdomsatwar:world_seam"
+  },
+  "pattern": [
+    "C C",
+    "CSC",
+    "CGC"
+  ],
+  "result": {
+    "id": "kingdomsatwar:timewarden_chestplate"
+  }
+}

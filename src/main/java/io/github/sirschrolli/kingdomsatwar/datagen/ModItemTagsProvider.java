@@ -283,6 +283,17 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         tag(Tags.Items.INGOTS).addTag(ModTags.Items.INGOTS_SKY_IRON);
         add(ItemTags.BEACON_PAYMENT_ITEMS, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_INGOT);
         add(ModTags.Items.REPAIRS_STARWALKER_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_INGOT);
+        // Chronit (seit 1.01)
+        copy(ModTags.Blocks.ORES_CHRONIT, ModTags.Items.ORES_CHRONIT);
+        copy(ModTags.Blocks.STORAGE_BLOCKS_CHRONIT, ModTags.Items.STORAGE_BLOCKS_CHRONIT);
+        add(ModTags.Items.GEMS_CHRONIT, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT);
+        tag(Tags.Items.GEMS).addTag(ModTags.Items.GEMS_CHRONIT);
+        add(ItemTags.BEACON_PAYMENT_ITEMS, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT);
+        add(ModTags.Items.REPAIRS_TIMEWARDEN_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT);
+        add(ItemTags.HEAD_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_HELMET);
+        add(ItemTags.CHEST_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_CHESTPLATE);
+        add(ItemTags.LEG_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_LEGGINGS);
+        add(ItemTags.FOOT_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_BOOTS);
         // der Sternenbogen (0.99): ein Bogen wie jeder andere (Verzauberungen, Köcher anderer Mods), mit Himmelseisen zu reparieren
         add(ModTags.Items.REPAIRS_STAR_BOW, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_INGOT);
         add(ItemTags.BOW_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_BOW);
@@ -294,6 +305,9 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         add(ItemTags.LEG_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.STARWALKER_LEGGINGS);
         add(ItemTags.FOOT_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.STARWALKER_BOOTS);
         for (var piece : io.github.sirschrolli.kingdomsatwar.registry.VoidGear.starwalkerSet()) {
+            add(ItemTags.TRIMMABLE_ARMOR, piece);
+        }
+        for (var piece : io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.timewardenSet()) {
             add(ItemTags.TRIMMABLE_ARMOR, piece);
         }
         add(ModTags.Items.REPAIRS_GLITCH_GEAR, io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.GLITCH_SHARD);

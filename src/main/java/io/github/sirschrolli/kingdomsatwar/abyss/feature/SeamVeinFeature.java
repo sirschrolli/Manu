@@ -10,9 +10,23 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.Feature;
 
-/** Eine <b>Weltennaht</b> über den Boden: eine zackige, glühende Fuge, die dem Gelände folgt. */
+/**
+ * Eine <b>Weltennaht</b> über den Boden: eine zackige, glühende Fuge, die dem Gelände folgt. Seit 1.01 gerinnt an ihr die
+ * Zeit zu <b>Chronit</b>: unter manchem Stück der Naht und hier und da daneben steckt Chronit-Erz.
+ */
 public record SeamVeinFeature() implements Feature {
     public static final MapCodec<SeamVeinFeature> CODEC = MapCodec.unit(SeamVeinFeature::new);
+
+    /** So oft steckt unter einem Stück der Naht Chronit, so oft daneben. */
+    public static final float CHRONIT_BELOW = 0.14f;
+    public static final float CHRONIT_BESIDE = 0.05f;
+
+    private static void chronit(WorldGenLevel level, BlockPos origin, BlockPos pos) {
+        if (AbyssBuild.inReach(origin, pos) && level.getBlockState(pos).isSolidRender()
+                && !level.getBlockState(pos).is(AbyssBlocks.WORLD_SEAM.get())) {
+            level.setBlock(pos, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_ORE.get().defaultBlockState(), 2);
+        }
+    }
 
     @Override
     public MapCodec<SeamVeinFeature> codec() {
@@ -33,6 +47,13 @@ public record SeamVeinFeature() implements Feature {
             if (AbyssBuild.inReach(origin, pos) && level.getBlockState(pos).isSolidRender()) {
                 level.setBlock(pos, seam, 2);
                 placed++;
+                // geronnene Zeit: Chronit unter der Naht und ab und zu daneben
+                if (random.nextFloat() < CHRONIT_BELOW) {
+                    chronit(level, origin, pos.below());
+                }
+                if (random.nextFloat() < CHRONIT_BESIDE) {
+                    chronit(level, origin, pos.relative(Direction.Plane.HORIZONTAL.getRandomDirection(random)));
+                }
             }
             if (random.nextInt(3) == 0) {
                 dir = random.nextBoolean() ? dir.getClockWise() : dir.getCounterClockWise();

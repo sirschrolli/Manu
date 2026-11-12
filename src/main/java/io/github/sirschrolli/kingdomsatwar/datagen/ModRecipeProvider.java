@@ -697,6 +697,11 @@ public class ModRecipeProvider extends RecipeProvider {
         storage(skyIron, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_BLOCK.get());
         smeltOre(skyIron, 1.2f, io.github.sirschrolli.kingdomsatwar.registry.VoidGear.RAW_SKY_IRON.get(), io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_ORE.get());
         this.starwalkerArmor(skyIron);
+        // Chronit und die Rüstung der Zeitwächter (1.01)
+        Item chronit = io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT.get();
+        storage(chronit, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_BLOCK.get());
+        smeltOre(chronit, 1.4f, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_ORE.get());
+        this.timewardenArmor(chronit);
         ItemLike faestone = FaeBlocks.FAESTONE.base().get();
         ItemLike faeBricks = FaeBlocks.FAESTONE_BRICKS.base().get();
         shaped(RecipeCategory.BUILDING_BLOCKS, faeBricks, 4)
@@ -1156,6 +1161,22 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('I', ingot).unlockedBy(has, has(ingot)).save(output, key("starwalker_leggings"));
         shaped(RecipeCategory.COMBAT, set.get(3).get()).pattern("I I").pattern("I I")
                 .define('I', ingot).unlockedBy(has, has(ingot)).save(output, key("starwalker_boots"));
+    }
+
+    /** Die Rüstung der Zeitwächter (1.01): Chronit in Gold gefasst, im Harnisch das Herz der Uhr – eine Weltennaht. */
+    private void timewardenArmor(Item gem) {
+        String has = getHasName(gem);
+        var set = io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.timewardenSet();
+        Item gold = net.minecraft.world.item.Items.GOLD_INGOT;
+        Item seam = io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.WORLD_SEAM.get().asItem();
+        shaped(RecipeCategory.COMBAT, set.get(0).get()).pattern("CGC").pattern("C C")
+                .define('C', gem).define('G', gold).unlockedBy(has, has(gem)).save(output, key("timewarden_helmet"));
+        shaped(RecipeCategory.COMBAT, set.get(1).get()).pattern("C C").pattern("CSC").pattern("CGC")
+                .define('C', gem).define('G', gold).define('S', seam).unlockedBy(has, has(gem)).save(output, key("timewarden_chestplate"));
+        shaped(RecipeCategory.COMBAT, set.get(2).get()).pattern("CGC").pattern("C C").pattern("C C")
+                .define('C', gem).define('G', gold).unlockedBy(has, has(gem)).save(output, key("timewarden_leggings"));
+        shaped(RecipeCategory.COMBAT, set.get(3).get()).pattern("C C").pattern("G G")
+                .define('C', gem).define('G', gold).unlockedBy(has, has(gem)).save(output, key("timewarden_boots"));
     }
 
     /** Die Dämmerrüstung (0.98): Dämmerquarz mit weichem Leder. */

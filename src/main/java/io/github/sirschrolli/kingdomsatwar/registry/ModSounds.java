@@ -251,6 +251,10 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_BREACH = register("entity.kraken.breach");
     public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_GEYSER = register("entity.kraken.geyser");
     public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_TENTACLE = register("entity.kraken.tentacle");
+    // seit 1.01: die Rüstung der Zeitwächter (Chronit)
+    public static final DeferredHolder<SoundEvent, SoundEvent> TIMEWARDEN_REWIND = register("item.timewarden.rewind");
+    public static final DeferredHolder<SoundEvent, SoundEvent> TIMEWARDEN_TICK = register("item.timewarden.tick");
+    public static final DeferredHolder<SoundEvent, SoundEvent> TIMEWARDEN_READY = register("item.timewarden.ready");
     // Feenreich (0.63)
     public static final DeferredHolder<SoundEvent, SoundEvent> FAE_PORTAL_AMBIENT = register("block.fae_portal.ambient");
     public static final DeferredHolder<SoundEvent, SoundEvent> FAE_PORTAL_LIGHT = register("block.fae_portal.light");

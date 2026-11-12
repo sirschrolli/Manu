@@ -812,6 +812,28 @@ public class ModLanguageProvider extends LanguageProvider {
                 "Voller Satz: Sturz ins Nichts trägt dich zurück (alle zwei Minuten)");
         text("message.kingdomsatwar.starwalker_anchor", "The stars carry you back to firm ground",
                 "Die Sterne tragen dich zurück auf festen Boden");
+        // Chronit und die Rüstung der Zeitwächter (1.01)
+        block(io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_ORE, "Chronite Ore", "Chronit-Erz");
+        block(io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_BLOCK, "Block of Chronite", "Chronitblock");
+        item(io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT, "Chronite", "Chronit");
+        lore("chronit", "Time, curdled to crystal where two worlds meet – sparks hang frozen inside",
+                "Zeit, zu Kristall geronnen, wo zwei Welten aneinanderstoßen – innen stehen erstarrte Funken");
+        item(io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_HELMET, "Timewarden Helm", "Zeitwächterhelm");
+        item(io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_CHESTPLATE, "Timewarden Cuirass", "Zeitwächterharnisch");
+        item(io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_LEGGINGS, "Timewarden Greaves", "Zeitwächterbeinschienen");
+        item(io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_BOOTS, "Timewarden Boots", "Zeitwächterstiefel");
+        lore("timewarden_armor", "Each piece: those who strike you sometimes falter (slower for a moment)",
+                "Jeder Teil: Wer dich trifft, gerät manchmal ins Stocken (kurz langsamer)");
+        text(ModItems.loreKey("timewarden_armor", 2), "Full set: a deadly blow turns time back three seconds",
+                "Voller Satz: Ein tödlicher Treffer spult die Zeit drei Sekunden zurück");
+        text(ModItems.loreKey("timewarden_armor", 3), "Then your clock stands still for three minutes",
+                "Danach steht deine Uhr drei Minuten still");
+        text("message.kingdomsatwar.timewarden_rewind", "Time turns back – your clock stands still",
+                "Die Zeit spult zurück – deine Uhr steht still");
+        text("message.kingdomsatwar.timewarden_ready", "Your clock is ticking again", "Deine Uhr tickt wieder");
+        subtitle("item.timewarden.rewind", "Time turns back", "Die Zeit spult zurück");
+        subtitle("item.timewarden.tick", "Time falters", "Die Zeit stockt");
+        subtitle("item.timewarden.ready", "A clock ticks again", "Eine Uhr tickt wieder");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_SOIL, "Fae Soil", "Feenerde");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_GRASS, "Fae Grass Block", "Feengrasblock");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_MOSS, "Fae Moss", "Feenmoos");

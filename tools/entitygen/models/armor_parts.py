@@ -25,6 +25,10 @@
     Kristall auf der Brust, gewölbte Schulterplatten, über denen zwei Kristallsplitter schweben, Armreife; ein kurzer
     Kometenmantel aus Sternentuch, der nach unten spitz zuläuft; ein Gürtel mit Kristallschnalle, Kniekacheln mit
     Sternnieten; Stiefel mit Zehenkappen und kleinen Kometenflossen an den Fersen
+  * Chronit (seit 1.01, die Rüstung der Zeitwächter): ein Kamm wie ein Uhrzeiger (mit Spatenspitze) über dem Helm,
+    Zahnräder an den Schläfen; auf der Brust ein Zifferblatt mit zwei Zeigern und leuchtender Nabe, im Rücken ein Pendel mit
+    einem Gewicht aus Chronit, Schulterplatten aus Uhrbronze mit Zahnrädern, Armreife mit Bernstein; eine Zahnradschnalle
+    am Gürtel, Kniekacheln mit Chronit; Stiefel mit Messingkappen und Zahnrädern an den Knöcheln
   * Aquamarin (seit 0.97, die Taucherrüstung): ein runder Taucherhelm aus Aquamarin mit Messingkragen, vorn ein großes
     Sichtfenster (man sieht das Gesicht dahinter), an den Seiten kleine Bullaugen, oben ein Ventil, hinten der Schlauch;
     zwei Luftflaschen auf dem Rücken mit Ventilen und Messingbändern, eine Druckanzeige auf der Brust, flache
@@ -42,7 +46,8 @@ from ..geometry import Model
 from ..paint import Ctx, along, hash01, hexc, mix, noise3, pick, ramp, rel_y
 
 SETS = ["steel", "konterit", "nightsteel", "abyssite", "fire", "ice", "lightning", "nature", "earth", "water", "crown",
-        "leather", "chainmail", "iron", "gold", "diamond", "netherite", "copper", "turtle", "moonstone", "aquamarine", "dusk", "starwalker"]
+        "leather", "chainmail", "iron", "gold", "diamond", "netherite", "copper", "turtle", "moonstone", "aquamarine", "dusk", "starwalker",
+        "timewarden"]
 SLOTS = {"head": ["head"], "chest": ["body", "left_arm", "right_arm"], "legs": ["body", "left_leg", "right_leg"],
          "feet": ["left_leg", "right_leg"]}
 
@@ -123,6 +128,10 @@ PALETTES = {
         "star_plate": ramp("#141a2e", "#b4c4ea", 8),
         "star_glow": ramp("#3a74d6", "#f4fbff", 6),
         "star_shard": ramp("#30206e", "#eadcff", 7),
+        # Chronit (1.01): die Rüstung der Zeitwächter
+        "tw_bronze": ramp("#2e1a0a", "#e8b884", 8),
+        "tw_amber": ramp("#a8480a", "#fff4c8", 6),
+        "tw_dial": ramp("#c49a62", "#fffaee", 5),
     }
 }
 
@@ -619,6 +628,74 @@ def _starwalker(m: Model) -> None:
         _comet_fin(m, f, f"star_heel_{bone}", (1.2 * side, 9.6, 2.7), (14.0, 8.0 * side, 0.0), 0.62)
 
 
+# ------------------------------------------------------------------ Chronit (1.01): die Rüstung der Zeitwächter
+
+def _tw_gear(m: Model, parent: str, name: str, pivot, rot, size: float, thick: float) -> None:
+    """Ein Zahnrad: eine Scheibe (die Zähne und das Rund malt der Pinsel), Vorderseite in Richtung -z des Knochens."""
+    m.bone(name, parent, pivot, rot)
+    m.cube(name, (-size / 2, -size / 2, -thick / 2), (size, size, thick), "tw_gear")
+
+
+def _timewarden(m: Model) -> None:
+    h = _slot(m, "timewarden", "head", "head")
+    # der Zeigerkamm: ein Minutenzeiger, flach von der Seite zu sehen, ein wenig nach hinten geneigt – Fuß, Ring, Schaft
+    # und Spatenspitze aus Messing, in der Spitze ein Funken Chronit
+    m.cube(h, (-0.5, -9.9, -3.2), (1.0, 0.9, 6.4), "tw_brass")
+    m.bone("tw_hand", h, (0.0, -9.6, -0.6), (-14.0, 0.0, 0.0))
+    m.cube("tw_hand", (-0.35, -2.0, -0.45), (0.7, 2.0, 0.9), "tw_brass")             # Schaft unten
+    m.cube("tw_hand", (-0.35, -3.0, -1.35), (0.7, 0.6, 2.7), "tw_brass")             # der Ring: oben
+    m.cube("tw_hand", (-0.35, -2.4, -1.35), (0.7, 0.6, 0.6), "tw_brass")             # … vorn
+    m.cube("tw_hand", (-0.35, -2.4, 0.75), (0.7, 0.6, 0.6), "tw_brass")              # … hinten
+    m.cube("tw_hand", (-0.35, -1.9, -1.35), (0.7, 0.5, 2.7), "tw_brass")             # … unten
+    m.cube("tw_hand", (-0.3, -5.6, -0.4), (0.6, 2.7, 0.8), "tw_brass")               # Schaft oben
+    m.cube("tw_hand", (-0.3, -6.6, -1.2), (0.6, 1.0, 2.4), "tw_brass")               # die Spatenspitze
+    m.cube("tw_hand", (-0.3, -7.4, -0.75), (0.6, 0.8, 1.5), "tw_brass")
+    m.cube("tw_hand", (-0.25, -8.1, -0.3), (0.5, 0.7, 0.6), "tw_amber")
+    # Zahnräder an den Schläfen (Scheiben nach außen gedreht)
+    _tw_gear(m, h, "tw_gear_left", (5.35, -5.4, 0.4), (0.0, 90.0, 0.0), 3.8, 0.7)
+    _tw_gear(m, h, "tw_gear_right", (-5.35, -5.4, 0.4), (0.0, -90.0, 0.0), 3.8, 0.7)
+    _tw_gear(m, h, "tw_gear_left_small", (5.25, -3.4, -2.2), (0.0, 90.0, 0.0), 1.8, 0.6)
+    _tw_gear(m, h, "tw_gear_right_small", (-5.25, -3.4, -2.2), (0.0, -90.0, 0.0), 1.8, 0.6)
+
+    b = _slot(m, "timewarden", "chest", "body")
+    # das Zifferblatt auf der Brust
+    m.bone("tw_dial", b, (0.0, 3.6, -3.35), (0.0, 0.0, 0.0))
+    m.cube("tw_dial", (-2.4, -2.4, -0.55), (4.8, 4.8, 0.55), "tw_dial")
+    # das Pendel im Rücken: eine Stange und ein Gewicht aus Chronit in Messing
+    m.cube(b, (-0.3, 0.6, 3.05), (0.6, 7.0, 0.5), "tw_brass")
+    m.bone("tw_bob", b, (0.0, 8.6, 3.45), (0.0, 0.0, 0.0))
+    m.cube("tw_bob", (-1.6, -1.6, -0.35), (3.2, 3.2, 0.7), "tw_bob")
+    for x in (-4.4, 3.2):
+        m.cube(b, (x, -0.6, -3.55), (1.2, 1.2, 0.6), "tw_amber")       # Nieten an den Riemen
+    for side, bone in ((1, "left_arm"), (-1, "right_arm")):
+        a = _slot(m, "timewarden", "chest", bone)
+        p = f"tw_pauldron_{bone}"
+        m.bone(p, a, (1.0 * side, -3.1, 0.0), (0.0, 0.0, 12.0 * side))
+        m.cube(p, (_mx(-3.1, 6.8, side), -1.6, -3.6), (6.8, 1.7, 7.2), "tw_plate")
+        m.cube(p, (_mx(-2.1, 5.9, side), 0.1, -3.7), (5.9, 1.3, 7.4), "tw_plate")
+        m.cube(p, (_mx(-0.6, 1.2, side), -2.2, -3.6), (1.2, 0.6, 7.2), "tw_brass")          # der Grat
+        _tw_gear(m, p, f"tw_shoulder_gear_{bone}", (3.9 * side, -0.6, 0.0), (0.0, 90.0 * side, 0.0), 2.8, 0.6)
+        # der Armreif mit Bernstein
+        m.cube(a, (_mx(-2.3, 6.6, side), 6.0, -3.3), (6.6, 1.7, 6.6), "tw_plate")
+        m.cube(a, (_mx(0.5, 1.0, side), 6.35, -3.7), (1.0, 1.0, 0.5), "tw_amber")
+
+    t = _slot(m, "timewarden", "legs", "body")
+    # die Zahnradschnalle mit Bernsteinnabe
+    _tw_gear(m, t, "tw_buckle", (0.0, 10.9, -3.4), (0.0, 0.0, 0.0), 2.8, 0.6)
+    for side, bone in ((1, "left_leg"), (-1, "right_leg")):
+        g = _slot(m, "timewarden", "legs", bone)
+        # Kniekachel mit Chronit
+        m.cube(g, (-2.2, 3.5, -3.15), (4.4, 2.9, 0.75), "tw_plate")
+        m.cube(g, (-0.6, 4.3, -3.65), (1.2, 1.2, 0.55), "tw_amber")
+
+    for side, bone in ((1, "left_leg"), (-1, "right_leg")):
+        f = _slot(m, "timewarden", "feet", bone)
+        # die Messingkappe und außen am Knöchel ein Zahnrad
+        m.cube(f, (-2.5, 10.4, -4.1), (5.0, 2.4, 1.4), "tw_plate")
+        m.cube(f, (-2.6, 12.0, -4.2), (5.2, 0.8, 1.6), "tw_brass")
+        _tw_gear(m, f, f"tw_ankle_{bone}", (3.05 * side, 8.4, 0.4), (0.0, 90.0 * side, 0.0), 2.2, 0.5)
+
+
 # ------------------------------------------------------------------ Dämmerquarz (0.98): die Rüstung der Schleicher
 
 def _quartz_points(m: Model, parent: str, name: str, pivot, rot, scale: float = 1.0) -> None:
@@ -957,7 +1034,7 @@ def _turtle(m: Model) -> None:
 
 
 def build() -> Model:
-    m = Model("armor_parts", 256, 320)
+    m = Model("armor_parts", 256, 384)
     m.tex_res = 2
     _steel(m)
     _konterit(m)
@@ -978,6 +1055,7 @@ def build() -> Model:
     _aquamarine(m)
     _dusk(m)
     _starwalker(m)
+    _timewarden(m)
     # Plätze ohne eigene Teile bekommen leere Knochen, damit Java jeden Namen findet
     for s in SETS:
         for slot, bones in SLOTS.items():
@@ -1585,6 +1663,80 @@ def _dusk_gem(ctx: Ctx):
     return col
 
 
+def _tw_gear_paint(ctx: Ctx):
+    """Ein Zahnrad aus Messing: auf den großen Flächen rund, mit zwölf Zähnen, vier Speichen und einer Nabe aus Bernstein
+    (sie leuchtet); die schmalen Seiten Messing."""
+    if ctx.face not in ("front", "back"):
+        return pick(ctx.pal["brass"], 0.45 + (_noise(ctx, 151) - 0.5) * 0.1)
+    cx, cy = (ctx.w - 1) / 2.0, (ctx.h - 1) / 2.0
+    dx, dy = ctx.s - cx, ctx.t - cy
+    r = math.hypot(dx, dy)
+    outer = min(cx, cy) + 0.5
+    inner = outer * 0.72
+    if r > outer:
+        return None
+    if r > inner:
+        a = math.atan2(dy, dx)
+        if int((a + math.pi) / math.tau * 24.0) % 2 == 1:
+            return None                                   # zwischen den Zähnen
+        return pick(ctx.pal["brass"], 0.7 - 0.3 * (dy / max(cy, 1.0)))
+    if r < outer * 0.28:
+        col = pick(ctx.pal["tw_amber"], 0.9)
+        ctx.glow = col
+        return col
+    spoke = abs(dx) < 0.55 or abs(dy) < 0.55
+    if not spoke and inner * 0.42 < r < inner * 0.92:
+        return pick(ctx.pal["tw_bronze"], 0.15)               # die Fenster zwischen den Speichen: dunkel
+    return pick(ctx.pal["brass"], 0.62 - 0.25 * (dy / max(cy, 1.0)))
+
+
+def _tw_dial_paint(ctx: Ctx):
+    """Das Zifferblatt: ein Messingring, darin ein helles Blatt mit zwölf Strichen (die vier Hauptstunden länger), ein
+    großer Zeiger nach oben, ein kleiner nach vier Uhr, die Nabe aus Bernstein leuchtet."""
+    if ctx.face not in ("front", "back"):
+        return pick(ctx.pal["brass"], 0.5)
+    cx, cy = (ctx.w - 1) / 2.0, (ctx.h - 1) / 2.0
+    dx, dy = ctx.s - cx, ctx.t - cy
+    r = math.hypot(dx, dy)
+    outer = min(cx, cy) + 0.5
+    if r > outer:
+        return None
+    if r > outer - 1.0:
+        return pick(ctx.pal["brass"], 0.78 - 0.3 * (dy / max(cy, 1.0)))
+    if r < 0.8:
+        col = pick(ctx.pal["tw_amber"], 0.95)
+        ctx.glow = col
+        return col
+    dark = pick(ctx.pal["tw_bronze"], 0.12)
+    if abs(dx) < 0.5 and dy < 0 and r < outer - 1.6:
+        return dark                                       # der große Zeiger
+    hx, hy = math.cos(math.radians(30.0)), math.sin(math.radians(30.0))
+    along_h = dx * hx + dy * hy
+    if 0 < along_h < outer * 0.55 and abs(-dx * hy + dy * hx) < 0.6:
+        return dark                                       # der kleine Zeiger
+    a = math.atan2(dy, dx)
+    hour = round(a / (math.pi / 6.0))
+    if abs(a - hour * math.pi / 6.0) < 0.16 and r > outer - (2.4 if hour % 3 == 0 else 1.8):
+        return pick(ctx.pal["tw_bronze"], 0.25)
+    return pick(ctx.pal["tw_dial"], 0.9 - 0.3 * (r / outer))
+
+
+def _tw_bob(ctx: Ctx):
+    """Das Pendelgewicht: eine Scheibe aus Chronit in einem Messingring – sie glimmt."""
+    if ctx.face not in ("front", "back"):
+        return pick(ctx.pal["brass"], 0.5)
+    cx, cy = (ctx.w - 1) / 2.0, (ctx.h - 1) / 2.0
+    r = math.hypot(ctx.s - cx, ctx.t - cy)
+    outer = min(cx, cy) + 0.5
+    if r > outer:
+        return None
+    if r > outer - 0.9:
+        return pick(ctx.pal["brass"], 0.7)
+    col = pick(ctx.pal["tw_amber"], 0.85 - 0.3 * (r / outer))
+    ctx.glow = mix((0, 0, 0, 255), col, 0.75)
+    return col
+
+
 def materials(variant: str) -> dict:
     out = {
         "fur": _fur,
@@ -1663,6 +1815,12 @@ def materials(variant: str) -> dict:
         "star_core": _star_core,
         "star_fin": _star_fin,
         "star_shard": _crystal("star_shard", "star_glow", 0.55),
+        "tw_plate": _metal("tw_bronze", rim="brass", rim_from=0.82, rivets=False),
+        "tw_brass": _gold("brass"),
+        "tw_amber": _gem("tw_amber"),
+        "tw_gear": _tw_gear_paint,
+        "tw_dial": _tw_dial_paint,
+        "tw_bob": _tw_bob,
     }
     for e in DRAGON:
         out["dragon_scale_" + e] = _scale(DRAGON[e][0])

@@ -10660,6 +10660,45 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.item.star_wings.boost"
   },
+  "item.timewarden.ready": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:item/timewarden_ready1",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.item.timewarden.ready"
+  },
+  "item.timewarden.rewind": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:item/timewarden_rewind1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:item/timewarden_rewind2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.item.timewarden.rewind"
+  },
+  "item.timewarden.tick": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:item/timewarden_tick1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:item/timewarden_tick2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:item/timewarden_tick3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.item.timewarden.tick"
+  },
   "music.creation": {
     "sounds": [
       {

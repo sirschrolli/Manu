@@ -26,7 +26,7 @@ PUPPET = {"head": ((0, 0, 0), [(-5, -9, -5, 10, 10, 10)]), "body": ((0, 0, 0), [
 
 def puppet_with(set_name: str, slots: list[str]) -> Model:
     src = armor_parts.build()
-    m = Model("puppet", 256, 320)
+    m = Model("puppet", 256, 384)
     m.tex_res = 2
     for bone, (pivot, boxes) in PUPPET.items():
         m.bone(bone, "root", pivot)

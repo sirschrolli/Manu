@@ -29,6 +29,7 @@ import items_armor as icons
 import items_gear as gear
 import dusk_textures as dusk_tex
 import sky_iron_textures as sky_tex
+import chronit_textures as tw_tex
 
 Rect = tuple[int, int, int, int]  # x, y, Breite, Höhe
 
@@ -725,8 +726,32 @@ def starwalker() -> Design:
     })
 
 
+def timewarden() -> Design:
+    """Chronit (die Rüstung der Zeitwächter, 1.01): Platten aus Uhrbronze mit Messingsäumen. Der Helm ist geschlossen,
+    vorn eine runde Sichtscheibe in einem Messingring mit zwei Bernsteinaugen; auf der Brust ein Zifferblatt aus Chronit
+    mit Zeigern, auf dem Rücken ein Zahnrad, am Gürtel eine Schnalle aus Chronit, an den Knien Chronitsteine (Zeigerkamm,
+    Zahnräder, Pendel und Zifferblatt kommen als 3D-Teile)."""
+    return Design("timewarden", {"A": tw_tex.BRONZE, "B": tw_tex.TRIM, "D": tw_tex.AMBER, "E": tw_tex.CHRONIT}, mask=True, d={
+        "head_top": [".", ".", "...ed...", "...fd...", "...fd...", "...ed..."],
+        "head_front": ["...ed...", ".", "..eddc..", ".e1111c.", ".et11tc.", ".e1111c.", "..dccb..", "."],
+        "head_side": [".", ".", ".", "..ede...", "..dtd...", "..cdc...", ".", "."],
+        "head_back": [".", ".", "eeddddcc"],
+        "body_front": [".", ".f....d.", "..eddc..", ".eEFFEc.", ".eF1uEc.", ".eE1EEc.", "..dccb..", ".", "...dc...", "...ED...", ".",
+                       "..dccb.."],
+        "body_back": [".", ".", "..eddc..", ".e3443c.", ".d4tt4c.", ".d3443c.", "..dccb..", ".", "."],
+        "arm_side": TRIM_ARM,
+        "boot_side": TRIM_BOOT,
+        "boot_front": TRIM_BOOT,
+        "belt_front": ["."] * 7 + ["feeGFdcb"],
+        "belt_back": TRIM_BELT,
+        "belt_side": TRIM_BELT_SIDE,
+        "thigh_front": [".", ".", ".", ".", ".GF."],
+    })
+
+
 def designs() -> list[Design]:
-    return [steel(), nightsteel(), abyssite(), konterit(), werewolf_pelt(), ember_scale(), moonstone(), aquamarine(), dusk(), starwalker()] + \
+    return [steel(), nightsteel(), abyssite(), konterit(), werewolf_pelt(), ember_scale(), moonstone(), aquamarine(), dusk(), starwalker(),
+            timewarden()] + \
         [dragon(k) for k in icons.DRAGONS]
 
 

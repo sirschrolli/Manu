@@ -63,6 +63,12 @@ final class AbyssModels {
                 .select(Direction.Axis.Z, BlockModelGenerators.plainVariant(ew))));
 
         ModModelProvider.flat(items, AbyssBlocks.RIFT_KEY.get());
+        // Chronit (seit 1.01): Erz im Chaosgestein, Kristall, Block, die Rüstung der Zeitwächter
+        ModModelProvider.ore(blocks, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_ORE, AbyssBlocks.CHAOS_STONE.base().get(), "chronit");
+        ModModelProvider.glowingCube(blocks, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_BLOCK.get());
+        ModModelProvider.flat(items, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT.get());
+        ModModelProvider.armor(items, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_HELMET.get(), io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_CHESTPLATE.get(), io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_LEGGINGS.get(),
+                io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_BOOTS.get());
         ModModelProvider.flat(items, AbyssBlocks.WORLD_EATER_SPAWN_EGG.get());
 
         // der Schlund der Welten: der Weltenspeer und die Trophäe
