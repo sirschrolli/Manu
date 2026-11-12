@@ -198,7 +198,7 @@ public final class KawPlaces {
     public static final Site CITADEL = register(new Site("zitadelle", ShadowGate.SHADOW_WORLD, ModStructures.SHADOW_CITADEL_STRUCTURE,
             (level, from) -> citadel(level), (level, spot) -> surfaceAt(level, spot.center(), 0, 76, 0.0f)));
     public static final Site SOUL_PEN = register(new Site("seelenpferch", ShadowGate.SHADOW_WORLD, ModStructures.SOUL_PEN_STRUCTURE,
-            chunkCenter(ModStructures.SOUL_PEN_STRUCTURE), KawPlaces::soulPenLanding));
+            pieceCenter(ModStructures.SOUL_PEN_STRUCTURE, SoulPenPiece.class, SoulPenPiece::center), KawPlaces::soulPenLanding));
     public static final Site UMBRER_VILLAGE = register(new Site("umbrerdorf", ShadowGate.SHADOW_WORLD, ModStructures.UMBRER_VILLAGE_STRUCTURE,
             structure(ModStructures.UMBRER_VILLAGE_STRUCTURE), approach(Approach.CENTER, 0)));
     public static final Site MOON_TEMPLE = shadowSite("mondtempel", ShadowSiteStructure.Kind.TEMPLE, Approach.FRONT);
@@ -225,7 +225,7 @@ public final class KawPlaces {
     public static final Site SEA_VILLAGE = register(new Site("meeresdorf", UrmeerDimension.LEVEL, ModStructures.SEA_VILLAGE_STRUCTURE,
             structure(ModStructures.SEA_VILLAGE_STRUCTURE), approach(Approach.CENTER, 0)));
     public static final Site WITCH_GROTTO = register(new Site("hexengrotte", UrmeerDimension.LEVEL, ModStructures.WITCH_GROTTO_STRUCTURE,
-            chunkCenter(ModStructures.WITCH_GROTTO_STRUCTURE), KawPlaces::witchGrottoLanding));
+            pieceCenter(ModStructures.WITCH_GROTTO_STRUCTURE, WitchGrottoPiece.class, WitchGrottoPiece::center), KawPlaces::witchGrottoLanding));
 
     // ---- Feenreich (Lichtungen, keine Bauwerke: ihre Lage folgt aus dem Startwert)
     public static final Site MONDHAIN = register(new Site("mondhain", FaeGate.FAE_REALM, null,
@@ -458,6 +458,31 @@ public final class KawPlaces {
                 return null;
             }
             StructureStart start = start(level, holder.value(), chunk);
+            return new Spot(new BlockPos(chunk.getMiddleBlockX(), level.getSeaLevel(), chunk.getMiddleBlockZ()), false,
+                    start != null ? start.getBoundingBox() : null);
+        };
+    }
+
+    /**
+     * Das nächste Bauwerk dieser Art, die Mitte (mit Höhe des Bodens) aus seinem Bauteil – dort, wo es wirklich steht (ein
+     * Seelenpferch sucht sich seinen Platz rings um den Chunk der Verteilung).
+     */
+    private static <P extends StructurePiece> Finder pieceCenter(ResourceKey<Structure> key, Class<P> type,
+            java.util.function.Function<P, BlockPos> center) {
+        return (level, from) -> {
+            Holder<Structure> holder = holder(level, key);
+            ChunkPos chunk = nearestChunk(level, holder, from);
+            if (chunk == null) {
+                return null;
+            }
+            StructureStart start = start(level, holder.value(), chunk);
+            if (start != null) {
+                for (StructurePiece piece : start.getPieces()) {
+                    if (type.isInstance(piece)) {
+                        return new Spot(center.apply(type.cast(piece)), true, start.getBoundingBox());
+                    }
+                }
+            }
             return new Spot(new BlockPos(chunk.getMiddleBlockX(), level.getSeaLevel(), chunk.getMiddleBlockZ()), false,
                     start != null ? start.getBoundingBox() : null);
         };
@@ -901,7 +926,8 @@ public final class KawPlaces {
         int cx = spot.center().getX();
         int cz = spot.center().getZ();
         WitchCauldronBlockEntity cauldron = cauldron(level, spot);
-        int floor = cauldron != null ? cauldron.getBlockPos().getY() - WitchGrottoPiece.CAULDRON_Y : level.getHeight(Heightmap.Types.OCEAN_FLOOR, cx, cz);
+        int floor = cauldron != null ? cauldron.getBlockPos().getY() - WitchGrottoPiece.CAULDRON_Y
+                : spot.knownY() ? spot.center().getY() : level.getHeight(Heightmap.Types.OCEAN_FLOOR, cx, cz);
         Direction door = Direction.SOUTH;
         Holder<Structure> holder = holder(level, ModStructures.WITCH_GROTTO_STRUCTURE);
         StructureStart start = holder == null ? null : start(level, holder.value(), ChunkPos.containing(spot.center()));
@@ -917,7 +943,8 @@ public final class KawPlaces {
         int cx = spot.center().getX();
         int cz = spot.center().getZ();
         SoulBellBlockEntity bell = soulBell(level, spot);
-        int floor = bell != null ? bell.getBlockPos().getY() - SoulPenPiece.BELL_Y : level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, cx, cz);
+        int floor = bell != null ? bell.getBlockPos().getY() - SoulPenPiece.BELL_Y
+                : spot.knownY() ? spot.center().getY() : level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, cx, cz);
         Direction gate = SoulPenPiece.GATE;
         int reach = SoulPenPiece.PATH_END;
         return new Landing(cx + 0.5 + gate.getStepX() * reach, floor, cz + 0.5 + gate.getStepZ() * reach, gate.getOpposite().toYRot(), 5.0f);
@@ -1163,6 +1190,9 @@ public final class KawPlaces {
         if (core == null) {
             return noLair(source, boss);
         }
+        if (core.phase() == ErrorCoreBlockEntity.Phase.RUNNING) {
+            return alreadyAwake(source, boss);
+        }
         return core.summon(level) != null ? awakened(source, boss) : cannot(source, boss);
     }
 
@@ -1247,7 +1277,10 @@ public final class KawPlaces {
             }
         }
         if (cocoon == null) {
-            return noLair(source, boss);
+            // der Kokon ist aufgerissen: Fliegt die Königin noch, ist sie wach
+            boolean flying = !level.getEntitiesOfClass(io.github.sirschrolli.kingdomsatwar.entity.fae.MothQueenEntity.class,
+                    new net.minecraft.world.phys.AABB(spot.center()).inflate(96.0, 64.0, 96.0), net.minecraft.world.entity.Entity::isAlive).isEmpty();
+            return flying ? alreadyAwake(source, boss) : noLair(source, boss);
         }
         return MothCocoonBlock.awaken(level, cocoon, null) ? awakened(source, boss) : cannot(source, boss);
     }
@@ -1260,6 +1293,9 @@ public final class KawPlaces {
         StageHatBlockEntity hat = stageHat(level, spot);
         if (hat == null) {
             return noLair(source, boss);
+        }
+        if (hat.phase() == StageHatBlockEntity.Phase.SHOW) {
+            return alreadyAwake(source, boss);
         }
         return hat.summon(level) != null ? awakened(source, boss) : cannot(source, boss);
     }
