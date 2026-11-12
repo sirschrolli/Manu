@@ -127,6 +127,39 @@ final class UrmeerGameTests {
         for (int i = 0; i < found.length; i++) {
             helper.assertTrue(found[i] > 0, "Biom nirgends gefunden: " + UrmeerBiomes.ALL.get(i).identifier());
         }
+        // wie oft taugt der Grund für eine Hexengrotte (eben genug, tief genug)?
+        int okRough = 0;
+        int okDepth = 0;
+        int okBoth = 0;
+        int[] rough = new int[30];
+        java.util.Map<String, Integer> grottoBiomes = new java.util.TreeMap<>();
+        for (int gx = -12; gx < 12; gx++) {
+            for (int gz = -12; gz < 12; gz++) {
+                int x = gx * 160 + 8;
+                int z = gz * 160 + 8;
+                int[] hs = new int[25];
+                int i = 0;
+                for (int dx = -2; dx <= 2; dx++) {
+                    for (int dz = -2; dz <= 2; dz++) {
+                        hs[i++] = generator.getBaseHeight(x + dx * 6, z + dz * 6, Heightmap.Types.OCEAN_FLOOR_WG, heights, random);
+                    }
+                }
+                java.util.Arrays.sort(hs);
+                int r = hs[hs.length - 3] - hs[2];
+                rough[Math.min(29, r)]++;
+                boolean a = r <= io.github.sirschrolli.kingdomsatwar.worldgen.witch.WitchGrottoStructure.MAX_ROUGHNESS;
+                boolean b = UrmeerTerrain.SEA_LEVEL - (hs[12] - 1) >= io.github.sirschrolli.kingdomsatwar.worldgen.witch.WitchGrottoPiece.HEIGHT + 6;
+                okRough += a ? 1 : 0;
+                okDepth += b ? 1 : 0;
+                okBoth += a && b ? 1 : 0;
+                var gb = resolver.getNoiseBiome(x >> 2, (hs[12] + 3) >> 2, z >> 2);
+                String name = gb.unwrapKey().map(k -> k.identifier().getPath()).orElse("?");
+                grottoBiomes.merge(name + (a && b ? "+" : "-"), 1, Integer::sum);
+            }
+        }
+        KingdomsAtWar.LOGGER.info("[Urmeer] Hexengrotte: eben genug {}/576, tief genug {}/576, beides {}/576; Unebenheit {}; Biome {}", okRough,
+                okDepth, okBoth, java.util.Arrays.toString(rough), grottoBiomes);
+        helper.assertTrue(okBoth > 576 / 5, "Zu wenig ebener, tiefer Grund für Hexengrotten: " + okBoth + " von 576");
         float landShare = land / (float) samples;
         float deepShare = deep / (float) samples;
         helper.assertTrue(deepShare > 0.55f, "Zu wenig offenes, tiefes Meer: " + deepShare);

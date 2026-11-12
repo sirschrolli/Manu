@@ -249,6 +249,8 @@ final class Showcase {
                         MystikShowcase.boss(steps);
                     } else if (scene.equals("keeper_boss")) {
                         KeeperShowcase.boss(steps);
+                    } else if (scene.equals("sea_witch")) {
+                        SeaWitchShowcase.boss(steps);
                     } else if (scene.equals("anni_boss")) {
                         AnniShowcase.boss(steps);
                     } else if (scene.equals("creator_boss")) {

@@ -89,6 +89,11 @@ public class WitchGrottoPiece extends StructurePiece {
         return this.center;
     }
 
+    /** In welche Richtung der Eingang dieser Grotte zeigt. */
+    public Direction door() {
+        return entrance(this.seed);
+    }
+
     /** Wo der Hexenkessel steht. */
     public static BlockPos cauldron(BlockPos center) {
         return center.above(CAULDRON_Y);
