@@ -141,7 +141,9 @@ final class UrmeerGameTests {
                 int i = 0;
                 for (int dx = -2; dx <= 2; dx++) {
                     for (int dz = -2; dz <= 2; dz++) {
-                        hs[i++] = generator.getBaseHeight(x + dx * 6, z + dz * 6, Heightmap.Types.OCEAN_FLOOR_WG, heights, random);
+                        hs[i++] = generator.getBaseHeight(x + dx * io.github.sirschrolli.kingdomsatwar.worldgen.witch.WitchGrottoStructure.SPREAD,
+                                z + dz * io.github.sirschrolli.kingdomsatwar.worldgen.witch.WitchGrottoStructure.SPREAD, Heightmap.Types.OCEAN_FLOOR_WG,
+                                heights, random);
                     }
                 }
                 java.util.Arrays.sort(hs);

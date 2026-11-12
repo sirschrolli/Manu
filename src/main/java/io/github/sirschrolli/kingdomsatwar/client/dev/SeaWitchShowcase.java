@@ -78,12 +78,12 @@ final class SeaWitchShowcase {
         steps.add(Step.command("time set 6000"));
         steps.add(Step.server(any -> locate(sea(any), g)));
         steps.add(Step.until(() -> g.ready, 12000));
-        // die Grotte von außen
-        steps.add(look(g, WitchGrottoPiece.REACH + 5.0, 7.0, 6.0, WitchGrottoPiece.RADIUS - 2.0, 3.0, 0.0));
+        // die Grotte von außen (in ihrer toten Zone)
+        steps.add(look(g, 20.0, 8.0, 7.0, 9.0, 4.5, 0.0));
         shot(steps, "grotto_outside", true);
-        steps.add(look(g, 6.0, 16.0, 20.0, 0.0, 4.0, 0.0));
+        steps.add(look(g, 8.0, 26.0, 17.0, 0.0, 5.0, 0.0));
         shot(steps, "grotto_dome", false);
-        steps.add(look(g, WitchGrottoPiece.RADIUS + 3.5, 3.2, 0.6, WitchGrottoPiece.RADIUS - 6.0, 2.6, 0.0));
+        steps.add(look(g, WitchGrottoPiece.REACH - 4.0, 3.4, 0.4, WitchGrottoPiece.RADIUS - 5.0, 3.6, 0.0));
         shot(steps, "grotto_entrance", false);
         // innen
         steps.add(Step.server(any -> {
@@ -95,12 +95,14 @@ final class SeaWitchShowcase {
                 e.discard();
             }
         }));
-        steps.add(look(g, WitchGrottoPiece.RADIUS - 4.5, 4.5, 2.5, 0.0, 2.5, 0.0));
+        steps.add(lookIn(g, WitchGrottoPiece.RADIUS - 5.0, 5.5, 3.0, 0.0, 3.6, 0.0));
         shot(steps, "grotto_inside", false);
-        steps.add(look(g, 3.0, 4.0, 2.5, 0.0, 2.6, 0.0));
+        steps.add(lookIn(g, 4.2, 4.6, 2.8, 0.0, 2.6, 0.0));
         shot(steps, "grotto_cauldron", false);
-        steps.add(look(g, 0.5, 3.6, 3.5, -7.0, 2.0, 0.0));
+        steps.add(lookIn(g, 0.5, 4.8, 4.5, -10.0, 2.8, 0.0));
         shot(steps, "grotto_wreck", false);
+        steps.add(lookIn(g, 4.0, 3.0, -1.0, -3.0, 6.0, 5.0));
+        shot(steps, "grotto_bubbles", false);
         steps.add(Step.once(minecraft -> {
             if (g.ore == null) {
                 return;
@@ -122,10 +124,10 @@ final class SeaWitchShowcase {
                 }
             }
         }));
-        steps.add(look(g, 4.5, 6.4, 1.5, 0.0, 6.0, 0.0));
+        steps.add(lookIn(g, 7.0, 5.6, 2.4, 0.0, 6.4, 0.0));
         steps.add(Step.waitTicks(40));
         steps.add(Step.screenshot("witch_trance"));
-        steps.add(look(g, 2.6, 4.2, -2.4, 0.0, 6.4, 0.0));
+        steps.add(lookIn(g, 3.6, 3.0, -3.0, 0.0, 7.0, 0.0));
         steps.add(Step.waitTicks(10));
         steps.add(Step.screenshot("witch_trance_below"));
         // sie erwacht
@@ -134,7 +136,7 @@ final class SeaWitchShowcase {
                 witch.awaken();
             }
         }));
-        steps.add(look(g, 4.8, 6.6, 1.2, 0.0, 6.4, 0.0));
+        steps.add(lookIn(g, 6.2, 7.0, 1.6, 0.0, 6.8, 0.0));
         steps.add(attackAt(g, SeaWitchEntity.Attack.AWAKEN, 28));
         steps.add(Step.screenshot("witch_awaken"));
         steps.add(attackAt(g, SeaWitchEntity.Attack.AWAKEN, 44));
@@ -151,7 +153,7 @@ final class SeaWitchShowcase {
             if (knight == null) {
                 return;
             }
-            Vec3 p = rel(g, 6.0, 3.0, 0.0);
+            Vec3 p = rel(g, 6.0, 4.0, 0.0);
             knight.snapTo(p.x, p.y, p.z, 0.0f, 0.0f);
             knight.setNoAi(true);
             knight.setNoGravity(true);
@@ -165,25 +167,26 @@ final class SeaWitchShowcase {
         }));
         steps.add(stage(g, 7.0, false));
         steps.add(Step.hud(true));
-        steps.add(follow(g, 45.0, 7.0, 1.5, 0.25));
+        steps.add(follow(g, 40.0, 8.0, 1.0, 0.3));
         steps.add(Step.waitTicks(80));
-        steps.add(follow(g, 45.0, 7.0, 1.5, 0.25));
+        steps.add(follow(g, 40.0, 8.0, 1.0, 0.3));
         steps.add(Step.waitTicks(4));
         steps.add(Step.screenshot("witch_bossbar"));
         steps.add(Step.hud(false));
         // die Angriffe: {Angriff, Tick, Name, Winkel, Abstand, Höhe, Blick zum Ritter, Abstand des Ritters, Zorn}
         java.util.Set<String> started = new java.util.HashSet<>();
         for (String[] shot : new String[][] {
-                {"INK", "13", "witch_ink_raise", "55", "6.5", "0.8", "0.3", "7.0", ""},
-                {"INK", "22", "witch_ink", "70", "8.0", "1.0", "0.5", "7.0", ""},
-                {"WHIRLPOOL", "34", "witch_whirlpool", "50", "9.0", "2.5", "0.65", "7.0", ""},
-                {"SONG", "34", "witch_song", "35", "6.0", "0.4", "0.1", "8.0", ""},
-                {"BUBBLE", "24", "witch_bubble", "65", "7.0", "1.0", "0.65", "6.0", ""},
-                {"SHARKS", "32", "witch_sharks", "60", "9.0", "2.0", "0.3", "8.0", ""},
-                {"CORAL", "24", "witch_coral", "55", "9.5", "3.0", "0.5", "7.0", ""},
-                {"TAIL", "11", "witch_tail", "80", "6.5", "1.0", "0.3", "2.6", ""},
-                {"FURY", "26", "witch_fury", "40", "6.5", "0.8", "0.0", "6.0", ""},
-                {"CURSE", "30", "witch_curse", "60", "8.0", "2.0", "0.2", "6.0", "1"}}) {
+                {"INK", "13", "witch_ink_raise", "50", "6.5", "0.6", "0.2", "8.0", ""},
+                {"INK", "22", "witch_ink", "70", "8.5", "1.0", "0.5", "8.0", ""},
+                {"WHIRLPOOL", "34", "witch_whirlpool", "55", "8.5", "2.5", "0.7", "8.0", ""},
+                {"SONG", "34", "witch_song", "30", "6.5", "0.2", "0.1", "8.0", ""},
+                {"BUBBLE", "24", "witch_bubble", "65", "7.5", "1.0", "0.7", "7.0", ""},
+                {"SHARKS", "32", "witch_sharks", "60", "9.0", "2.0", "0.35", "8.0", ""},
+                {"CORAL", "24", "witch_coral", "50", "9.0", "3.0", "0.5", "8.0", ""},
+                {"TAIL", "11", "witch_tail", "75", "6.5", "0.6", "0.3", "2.6", ""},
+                {"FURY", "16", "witch_fury_scream", "35", "6.5", "0.4", "0.0", "7.0", ""},
+                {"FURY", "24", "witch_fury", "35", "8.0", "0.8", "0.0", "7.0", ""},
+                {"CURSE", "30", "witch_curse", "55", "8.0", "2.0", "0.2", "7.0", "1"}}) {
             SeaWitchEntity.Attack attack = SeaWitchEntity.Attack.valueOf(shot[0]);
             int tick = Integer.parseInt(shot[1]);
             if (started.add(shot[0])) {
@@ -211,7 +214,7 @@ final class SeaWitchShowcase {
                 e.discard();
             }
             if (level.getEntity(g.witch) instanceof SeaWitchEntity witch) {
-                Vec3 home = Vec3.atBottomCenterOf(g.cauldron.above(3));
+                Vec3 home = Vec3.atBottomCenterOf(g.cauldron.above(WitchGrottoPiece.HOVER - WitchGrottoPiece.CAULDRON_Y));
                 witch.snapTo(home.x, home.y, home.z, yawToward(g), 0.0f);
                 witch.setDeltaMovement(Vec3.ZERO);
                 witch.damageCooldownTime = 0;
@@ -219,7 +222,7 @@ final class SeaWitchShowcase {
                 witch.hurtServer(level, level.damageSources().genericKill(), 1000.0f);
             }
         }));
-        steps.add(look(g, 5.0, 6.0, 1.5, 0.0, 5.5, 0.0));
+        steps.add(lookIn(g, 6.0, 6.0, 1.8, 0.0, 6.0, 0.0));
         steps.add(Step.waitTicks(28));
         steps.add(Step.screenshot("witch_death"));
         steps.add(Step.waitTicks(SeaWitchEntity.DEATH_TICKS));
@@ -228,13 +231,13 @@ final class SeaWitchShowcase {
                 item.discard();
             }
         }));
-        steps.add(look(g, 2.4, 4.0, 1.8, 0.0, 2.4, 0.0));
+        steps.add(lookIn(g, 3.0, 4.2, 2.2, 0.0, 2.4, 0.0));
         steps.add(Step.waitTicks(30));
         steps.add(Step.screenshot("grotto_cauldron_cold"));
         // die Taucherrüstung und der Hexenstab am Rüstungsständer, daneben Aquamarin
         steps.add(Step.server(any -> {
             ServerLevel level = sea(any);
-            Vec3 p = rel(g, 3.5, 1.0, 5.0);
+            Vec3 p = rel(g, 4.0, 1.0, 7.0);
             BlockPos floor = BlockPos.containing(p.x, p.y - 1.0, p.z);
             for (int dx = -1; dx <= 1; dx++) {
                 for (int dz = -1; dz <= 1; dz++) {
@@ -242,7 +245,7 @@ final class SeaWitchShowcase {
                             .defaultBlockState(), Block.UPDATE_ALL);
                 }
             }
-            Vec3 side = rel(g, 3.5, 0.0, 7.0);
+            Vec3 side = rel(g, 4.0, 0.0, 9.0);
             BlockPos s = BlockPos.containing(side.x, floor.getY(), side.z);
             level.setBlock(s, SeaGear.AQUAMARINE_BLOCK.get().defaultBlockState(), Block.UPDATE_ALL);
             level.setBlock(s.above(), SeaGear.AQUAMARINE_ORE.get().defaultBlockState(), Block.UPDATE_ALL);
@@ -263,13 +266,13 @@ final class SeaWitchShowcase {
             stand.addTag(TAG);
             level.addFreshEntity(stand);
         }));
-        steps.add(look(g, 7.6, 2.8, 4.4, 3.5, 2.0, 5.5));
+        steps.add(lookIn(g, 8.4, 2.9, 5.6, 4.0, 2.0, 7.4));
         steps.add(Step.waitTicks(30));
         steps.add(Step.screenshot("diving_gear"));
-        steps.add(look(g, 5.4, 2.4, 3.2, 3.5, 2.0, 5.0));
+        steps.add(lookIn(g, 6.1, 2.5, 6.1, 4.0, 2.1, 7.0));
         steps.add(Step.waitTicks(10));
         steps.add(Step.screenshot("diving_gear_close"));
-        steps.add(look(g, 1.2, 2.6, 6.6, 3.5, 1.6, 5.6));
+        steps.add(lookIn(g, 1.6, 2.7, 8.4, 4.0, 1.7, 7.2));
         steps.add(Step.waitTicks(10));
         steps.add(Step.screenshot("diving_gear_back"));
         steps.add(Step.server(any -> {
@@ -325,7 +328,8 @@ final class SeaWitchShowcase {
         // ein Aquamarinerz, das offen im Wasser liegt (außerhalb der Kuppel)
         double best = Double.MAX_VALUE;
         for (BlockPos p : BlockPos.betweenClosed(g.center.offset(-40, -6, -40), g.center.offset(40, 14, 40))) {
-            if (!level.getBlockState(p).is(SeaGear.AQUAMARINE_ORE.get()) || p.distSqr(g.center) < 18 * 18) {
+            int keep = WitchGrottoPiece.RADIUS + 4;
+            if (!level.getBlockState(p).is(SeaGear.AQUAMARINE_ORE.get()) || p.distSqr(g.center) < keep * keep) {
                 continue;
             }
             if (level.getBlockState(p.above()).is(net.minecraft.world.level.block.Blocks.WATER)) {
@@ -353,7 +357,7 @@ final class SeaWitchShowcase {
             int k = 0;
             for (int dx = -2; dx <= 2; dx++) {
                 for (int dz = -2; dz <= 2; dz++) {
-                    hs[k++] = generator.getBaseHeight(x + dx * 6, z + dz * 6, net.minecraft.world.level.levelgen.Heightmap.Types.OCEAN_FLOOR_WG,
+                    hs[k++] = generator.getBaseHeight(x + dx * 8, z + dz * 8, net.minecraft.world.level.levelgen.Heightmap.Types.OCEAN_FLOOR_WG,
                             level, random);
                 }
             }
@@ -402,6 +406,18 @@ final class SeaWitchShowcase {
         });
     }
 
+    /** Wie {@link #look}, aber die Kamera bleibt im Inneren der Kuppel (nie in der Wand). */
+    private static Step lookIn(Grotto g, double along, double up, double side, double talong, double tup, double tside) {
+        return Step.once(minecraft -> {
+            if (g.center == null) {
+                return;
+            }
+            Vec3 eye = WitchGrottoPiece.keepInside(g.center, rel(g, along, up, side), 0.2, 0.9);
+            Vec3 to = rel(g, talong, tup, tside).subtract(eye);
+            tp(minecraft, eye, to);
+        });
+    }
+
     private static void tp(net.minecraft.client.Minecraft minecraft, Vec3 eye, Vec3 to) {
         float yaw = (float) (-Math.atan2(to.x, to.z) * 180.0 / Math.PI);
         float pitch = (float) (-Math.atan2(to.y, Math.sqrt(to.x * to.x + to.z * to.z)) * 180.0 / Math.PI);
@@ -423,14 +439,14 @@ final class SeaWitchShowcase {
             if (!(level.getEntity(g.witch) instanceof SeaWitchEntity witch) || !(level.getEntity(g.knight) instanceof LivingEntity knight)) {
                 return;
             }
-            Vec3 k = rel(g, ahead - 1.0, 4.4, 0.0);
+            Vec3 k = rel(g, ahead - 2.0, 4.5, 0.0);
             knight.teleportTo(k.x, k.y, k.z);
             knight.setDeltaMovement(Vec3.ZERO);
             knight.setHealth(knight.getMaxHealth());
             knight.removeAllEffects();
             knight.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 1_000_000, 4, false, false));
             knight.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 1_000_000, 0, false, false));
-            Vec3 a = rel(g, -1.0, 4.6, 0.0);
+            Vec3 a = rel(g, -2.0, WitchGrottoPiece.HOVER, 0.0);
             float yaw = yawToward(g);
             witch.snapTo(a.x, a.y, a.z, yaw, 0.0f);
             witch.setYBodyRot(yaw);
@@ -479,7 +495,7 @@ final class SeaWitchShowcase {
             }
             Vec3 focus = c.add(k.subtract(c).scale(toward));
             Vec3 dir = line.normalize().yRot((float) Math.toRadians(angle));
-            Vec3 eye = focus.add(dir.scale(distance)).add(0.0, height, 0.0);
+            Vec3 eye = WitchGrottoPiece.keepInside(g.center, focus.add(dir.scale(distance)).add(0.0, height, 0.0), 0.2, 0.9);
             Vec3 look = focus.subtract(eye);
             float yaw = (float) (-Math.atan2(look.x, look.z) * 180.0 / Math.PI);
             float pitch = (float) (-Math.atan2(look.y, Math.sqrt(look.x * look.x + look.z * look.z)) * 180.0 / Math.PI);

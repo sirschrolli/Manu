@@ -22,6 +22,8 @@ public class WitchGrottoStructure extends Structure {
     public static final MapCodec<WitchGrottoStructure> CODEC = simpleCodec(WitchGrottoStructure::new);
     /** So uneben darf der Grund unter der Grotte höchstens sein. */
     public static final int MAX_ROUGHNESS = 7;
+    /** Abstand der Messpunkte (5 × 5 Punkte, also gut die ganze Kuppel). */
+    public static final int SPREAD = 8;
 
     public WitchGrottoStructure(Structure.StructureSettings settings) {
         super(settings);
@@ -37,7 +39,7 @@ public class WitchGrottoStructure extends Structure {
         int i = 0;
         for (int dx = -2; dx <= 2; dx++) {
             for (int dz = -2; dz <= 2; dz++) {
-                heights[i++] = context.chunkGenerator().getBaseHeight(x + dx * 6, z + dz * 6, Heightmap.Types.OCEAN_FLOOR_WG,
+                heights[i++] = context.chunkGenerator().getBaseHeight(x + dx * SPREAD, z + dz * SPREAD, Heightmap.Types.OCEAN_FLOOR_WG,
                         context.heightAccessor(), context.randomState());
             }
         }

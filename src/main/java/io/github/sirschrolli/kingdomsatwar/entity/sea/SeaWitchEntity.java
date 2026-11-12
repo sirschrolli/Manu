@@ -345,9 +345,10 @@ public class SeaWitchEntity extends Monster implements io.github.sirschrolli.kin
             level.addParticle(ParticleTypes.BUBBLE, this.getRandomX(0.7), this.getY(0.2 + this.random.nextDouble() * 0.6), this.getRandomZ(0.7),
                     0.0, 0.05, 0.0);
         }
-        if (this.isEnraged() && this.random.nextInt(3) == 0) {
-            level.addParticle(ParticleTypes.SQUID_INK, this.getRandomX(0.8), this.getY(0.4 + this.random.nextDouble() * 0.5), this.getRandomZ(0.8),
-                    0.0, 0.0, 0.0);
+        if (this.isEnraged() && this.random.nextInt(7) == 0) {
+            // im Zorn zieht sie eine Spur aus Tinte hinter sich her (am Schwanz, nicht vor dem Gesicht)
+            level.addParticle(ParticleTypes.SQUID_INK, this.getRandomX(0.6), this.getY(0.05 + this.random.nextDouble() * 0.3), this.getRandomZ(0.6),
+                    0.0, -0.01, 0.0);
         }
     }
 
@@ -490,21 +491,13 @@ public class SeaWitchEntity extends Monster implements io.github.sirschrolli.kin
         this.swimTo(this.inGrotto(goal), fury ? 1.3 : 1.0);
     }
 
-    /** Hält ein Ziel in ihrer Grotte (waagerecht und in der Höhe). */
+    /** Hält ein Ziel in ihrer Grotte: unter der Kuppel, nicht zu nah an Wand und Decke. */
     private Vec3 inGrotto(Vec3 goal) {
         if (this.home == null) {
             return goal;
         }
-        Vec3 h = Vec3.atCenterOf(this.home);
-        double dx = goal.x - h.x;
-        double dz = goal.z - h.z;
-        double flat = Math.sqrt(dx * dx + dz * dz);
-        double max = ARENA - 6.0;
-        if (flat > max) {
-            dx *= max / flat;
-            dz *= max / flat;
-        }
-        return new Vec3(h.x + dx, Mth.clamp(goal.y, h.y - 2.5, h.y + 6.0), h.z + dz);
+        BlockPos center = this.home.below(io.github.sirschrolli.kingdomsatwar.worldgen.witch.WitchGrottoPiece.HOVER);
+        return io.github.sirschrolli.kingdomsatwar.worldgen.witch.WitchGrottoPiece.keepInside(center, goal, this.getBbHeight(), 0.6);
     }
 
     /** Fortgelockt: Sie zerfließt in einer Tintenwolke und erscheint wieder über ihrem Kessel. */
@@ -624,7 +617,7 @@ public class SeaWitchEntity extends Monster implements io.github.sirschrolli.kin
         }
         if (t == 40) {
             this.sound(level, ModSounds.SEA_WITCH_LAUGH.get(), 4.0f, 1.0f);
-            this.inkCloud(level, 50);
+            this.inkWave(level, this.getY(0.35), 28, 0.35);
             Component title = Component.translatable("boss.kingdomsatwar.sea_witch").withColor(0x7AF0C8);
             Component subtitle = Component.translatable("boss.kingdomsatwar.sea_witch.title").withStyle(ChatFormatting.GRAY);
             for (ServerPlayer player : level.players()) {
@@ -957,7 +950,11 @@ public class SeaWitchEntity extends Monster implements io.github.sirschrolli.kin
             level.sendParticles(ParticleTypes.GLOW_SQUID_INK, this.getX(), this.getY(0.6), this.getZ(), 4, 0.6, 0.8, 0.6, 0.02);
         }
         if (t == 20) {
-            this.inkCloud(level, 160);
+            // die Woge: drei Ringe aus Tinte laufen von ihr fort, dazwischen leuchtende Funken
+            this.inkWave(level, this.getY(0.15), 40, 0.75);
+            this.inkWave(level, this.getY(0.45), 48, 0.9);
+            this.inkWave(level, this.getY(0.75), 40, 0.75);
+            level.sendParticles(ParticleTypes.GLOW_SQUID_INK, this.getX(), this.getY(0.5), this.getZ(), 24, 2.5, 1.2, 2.5, 0.08);
             for (LivingEntity victim : this.victims(level, this.getBoundingBox().inflate(14.0))) {
                 double d = victim.distanceTo(this);
                 if (d > 14.0) {
@@ -970,6 +967,20 @@ public class SeaWitchEntity extends Monster implements io.github.sirschrolli.kin
                 victim.needsSync = true;
                 victim.hurtServer(level, this.damageSources().indirectMagic(this, this), 6.0f);
                 victim.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 80, 0), this);
+            }
+        }
+    }
+
+    /** Ein Ring aus Tinte, der waagrecht von ihr fortläuft (auf Höhe {@code y}, {@code count} Tropfen, Tempo {@code speed}). */
+    private void inkWave(ServerLevel level, double y, int count, double speed) {
+        for (int i = 0; i < count; i++) {
+            double a = Math.PI * 2.0 * i / count + this.random.nextDouble() * 0.1;
+            double dx = Math.cos(a);
+            double dz = Math.sin(a);
+            level.sendParticles(ParticleTypes.SQUID_INK, this.getX() + dx * 1.1, y, this.getZ() + dz * 1.1, 0, dx, 0.04, dz, speed);
+            if (i % 3 == 0) {
+                level.sendParticles(ParticleTypes.GLOW_SQUID_INK, this.getX() + dx * 0.9, y, this.getZ() + dz * 0.9, 0, dx, 0.08, dz,
+                        speed * 0.8);
             }
         }
     }
