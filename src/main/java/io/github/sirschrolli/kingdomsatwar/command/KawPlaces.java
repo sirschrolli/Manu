@@ -190,6 +190,7 @@ public final class KawPlaces {
     public static final Site HORTFESTE = siteKind("hortfeste", Level.NETHER, SiteKind.HORTFESTE, Approach.INSIDE, 0);
     public static final Site GIANT_BONES = siteKind("riesengebeine", Level.NETHER, SiteKind.GIANT_BONES, Approach.FRONT, 20);
     public static final Site LOST_GATE = siteKind("verlorene_pforte", Level.NETHER, SiteKind.LOST_GATE, Approach.FRONT, 28);
+    public static final Site FLAME_SANCTUARY = siteKind("flammenheiligtum", Level.NETHER, SiteKind.FLAME_SANCTUARY, Approach.FRONT, 30);
 
     // ---- End
     public static final Site STARWATCH = siteKind("sternwarte", Level.END, SiteKind.STARWATCH, Approach.FRONT, 40);
@@ -251,6 +252,7 @@ public final class KawPlaces {
         boss(new Boss("karkinos", ModEntities.REEF_COLOSSUS, ATOLL, KawPlaces::awakenKarkinos, KawPlaces::resetKarkinos, null));
         boss(new Boss("anni", ModEntities.ANNI_TROLL, ERROR_ZONE, KawPlaces::awakenAnni, KawPlaces::resetAnni, null));
         boss(new Boss("malleus", ModEntities.GLUTSCHMIED, ASH_FORGE, KawPlaces::awakenMalleus, KawPlaces::resetMalleus, null));
+        boss(new Boss("ignara", ModEntities.IGNARA, FLAME_SANCTUARY, KawPlaces::awakenIgnara, KawPlaces::resetIgnara, null));
         boss(new Boss("asteria", ModEntities.ASTERIA, STARWATCH, KawPlaces::awakenAsteria, KawPlaces::resetAsteria, null));
         boss(new Boss("noctua", ModEntities.MOTH_QUEEN, MONDHAIN, KawPlaces::awakenNoctua, null, null));
         boss(new Boss("missmystik", ModEntities.MISS_MYSTIK, MYSTIK_STAGE, KawPlaces::awakenMystik, KawPlaces::resetMystik, null));
@@ -1231,6 +1233,33 @@ public final class KawPlaces {
             return noLair(source, boss);
         }
         anvil.reset(level);
+        return resetDone(source, boss);
+    }
+
+    private static io.github.sirschrolli.kingdomsatwar.block.nether.@Nullable FlameAltarBlockEntity flameAltar(ServerLevel level, Spot spot) {
+        return nearest(level, spot.center(), 12, io.github.sirschrolli.kingdomsatwar.block.nether.FlameAltarBlockEntity.class, altar -> true);
+    }
+
+    private static int awakenIgnara(CommandSourceStack source, ServerLevel level, Spot spot, Boss boss) {
+        var altar = flameAltar(level, spot);
+        if (altar == null) {
+            return noLair(source, boss);
+        }
+        if (altar.phase() == io.github.sirschrolli.kingdomsatwar.block.nether.FlameAltarBlock.Phase.AWAKE) {
+            return alreadyAwake(source, boss);
+        }
+        if (altar.phase() == io.github.sirschrolli.kingdomsatwar.block.nether.FlameAltarBlock.Phase.DEFEATED) {
+            altar.reset(level);
+        }
+        return altar.awaken(level) != null ? awakened(source, boss) : cannot(source, boss);
+    }
+
+    private static int resetIgnara(CommandSourceStack source, ServerLevel level, Spot spot, Boss boss) {
+        var altar = flameAltar(level, spot);
+        if (altar == null) {
+            return noLair(source, boss);
+        }
+        altar.reset(level);
         return resetDone(source, boss);
     }
 

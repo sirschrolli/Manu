@@ -1159,6 +1159,46 @@ public class ModLanguageProvider extends LanguageProvider {
                 "Vom Dach der Aschenesse hallen Hammerschläge …");
         text("block.kingdomsatwar.glut_anvil.peaceful", "The forge stays cold (the world is set to Peaceful).",
                 "Die Esse bleibt kalt (die Welt steht auf „Friedlich“).");
+        // Ignara, die Flammenpriesterin, und das Flammenheiligtum (1.2)
+        creature(ModEntities.IGNARA, io.github.sirschrolli.kingdomsatwar.registry.FlameSanctuary.IGNARA_SPAWN_EGG,
+                "Ignara, the Flame Priestess", "Ignara, die Flammenpriesterin", "Flammenpriesterin");
+        add(ModEntities.OPAL_SHARD.get(), pick("Opal Shard", "Opalsplitter"));
+        text("boss.kingdomsatwar.ignara", "Ignara, the Flame Priestess", "Ignara, die Flammenpriesterin");
+        text("boss.kingdomsatwar.ignara.title", "Keeper of the Eternal Flame", "Hüterin der ewigen Flamme");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FlameSanctuary.FLAME_ALTAR, "Flame Altar", "Flammenaltar");
+        lore("flame_altar", "The altar of the eternal flame in the Flame Sanctuary", "Der Altar der ewigen Flamme im Flammenheiligtum");
+        text(ModItems.loreKey("flame_altar", 2), "Gone out: a Fire Opal rekindles the flame – and calls her back",
+                "Erloschen: Ein Feueropal entzündet die Flamme neu – und ruft sie zurück");
+        text("block.kingdomsatwar.flame_altar.hint", "A priestess hovers before the altar, deep in prayer … whoever comes close disturbs her.",
+                "Vor dem Altar schwebt eine Priesterin, ins Gebet versunken … wer näher kommt, stört sie.");
+        text("block.kingdomsatwar.flame_altar.awake", "The altar blazes – the priestess has risen.",
+                "Der Altar lodert – die Priesterin hat sich erhoben.");
+        text("block.kingdomsatwar.flame_altar.defeated", "The eternal flame has gone out. A Fire Opal might rekindle it.",
+                "Die ewige Flamme ist erloschen. Ein Feueropal könnte sie neu entzünden.");
+        text("block.kingdomsatwar.flame_altar.warning", "A solemn chant drifts across the lava …",
+                "Ein feierlicher Gesang weht über die Lava …");
+        text("block.kingdomsatwar.flame_altar.peaceful", "The flame stays out (the world is set to Peaceful).",
+                "Die Flamme bleibt aus (die Welt steht auf „Friedlich“).");
+        item(io.github.sirschrolli.kingdomsatwar.registry.FlameSanctuary.FLAME_WHIP, "Flame Whip", "Flammenpeitsche");
+        lore("flame_whip", "The whip of Ignara, the Flame Priestess", "Die Peitsche von Ignara, der Flammenpriesterin");
+        text(ModItems.loreKey("flame_whip", 2), "Reaches farther than a sword; every hit sets foes ablaze",
+                "Reicht weiter als ein Schwert; jeder Treffer setzt in Brand");
+        text(ModItems.loreKey("flame_whip", 3), "Use: the lash strikes the first foe up to ten blocks away and pulls it close",
+                "Benutzen: Der Peitschenschlag trifft das erste Wesen bis zehn Blöcke weit und reißt es heran");
+        for (String[] e : new String[][] {{"ambient", "Flame Priestess hums", "Flammenpriesterin summt"},
+                {"pray", "Flame Priestess chants a hymn", "Flammenpriesterin singt einen Hymnus"},
+                {"hurt", "Flame Priestess hurts", "Flammenpriesterin nimmt Schaden"},
+                {"death", "Flame Priestess fades", "Flammenpriesterin verlischt"},
+                {"awaken", "Flame Priestess rises", "Flammenpriesterin erhebt sich"},
+                {"call", "Flame Priestess calls the Blazes", "Flammenpriesterin ruft die Lohen"},
+                {"lash", "Whip cracks", "Peitsche knallt"}, {"swing", "Whip whirls", "Peitsche schwirrt"},
+                {"wave", "Lava surges", "Lava wogt heran"}, {"pillar", "Pillar of flame erupts", "Flammensäule bricht hervor"},
+                {"charge", "Flames gather", "Flammen sammeln sich"}, {"shard", "Opal shard bursts", "Opalsplitter zerspringt"},
+                {"phoenix", "Phoenix rises", "Phönix steigt auf"}, {"dive", "Phoenix dives", "Phönix stürzt herab"}}) {
+            subtitle("entity.ignara." + e[0], e[1], e[2]);
+        }
+        subtitle("block.flame_altar.ignite", "Flame Altar ignites", "Flammenaltar entzündet sich");
+        subtitle("item.flame_whip.crack", "Flame Whip cracks", "Flammenpeitsche knallt");
         // Waffen und Rüstungen aus Monsterteilen (0.70)
         item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.WEREWOLF_PELT, "Werewolf Pelt", "Werwolfspelz");
         lore("werewolf_pelt", "Thick, dark fur – still warm", "Dichtes, dunkles Fell – noch warm");

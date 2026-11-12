@@ -352,6 +352,256 @@ def emberwalker_icons(put: Callable[[str, Image.Image], None]) -> None:
 # Ausgabe
 # =============================================================================
 
+# =============================================================================
+# Das Flammenheiligtum (seit 1.2): der Flammenaltar und die Flammenpeitsche
+# =============================================================================
+
+#: polierter Schwarzstein des Altars (dunkles Grau mit einem Hauch Violett)
+ALTAR_STONE = st.ramp("#3c3442", dark=0.13, light=0.64, cool=290, hue_dark=10, warm=40, hue_light=8, chroma_light=0.7)
+#: Tempelgold (heller und wärmer als das Schwarzgold der Rüstung)
+TEMPLE_GOLD = st.ramp("#dca23a", dark=0.3, light=0.96, cool=30, hue_dark=14, chroma_dark=1.1, warm=95, hue_light=12,
+                      chroma_light=0.5)
+#: kalte Asche im erloschenen Becken
+ASH = st.ramp("#625a58", dark=0.15, light=0.8, cool=280, hue_dark=8, warm=60, hue_light=6, chroma_light=0.6)
+#: die Peitschenschnur: karminrotes, geflochtenes Leder; der Griff: dunkles Leder
+LASH_LEATHER = st.ramp("#962a1c", dark=0.17, light=0.8, cool=10, hue_dark=10, warm=60, hue_light=20, chroma_light=0.6)
+GRIP_LEATHER = st.ramp("#4e2c20", dark=0.12, light=0.7, cool=20, hue_dark=8, warm=60, hue_light=10, chroma_light=0.6)
+#: die Flammen des Altars (von dunkelrot bis fast weiß)
+FIRE = st.fixed("#6e1206", "#b02a0a", "#e8480e", "#ff7a1a", "#ffa630", "#ffd46a", "#fff4c8")
+FIRE_FRAMES = 32
+
+
+def _altar_texture(fn) -> Image.Image:
+    s = st.Spr()
+    for y in range(N):
+        for x in range(N):
+            px = fn(x, y)
+            if px is not None:
+                s.set(x, y, px)
+    return s.image({"S": ALTAR_STONE, "G": TEMPLE_GOLD, "O": OPAL, "A": ASH, "E": EMBER, "F": FLASH_GREEN, "T": FLASH_TEAL})
+
+
+#: das Flammenzeichen auf den Seiten des Schafts (die Fläche dort ist 10 x 6 Pixel: u 3–13, v 5–11)
+ALTAR_SIGIL = {
+    (8, 5): 5, (7, 6): 4, (8, 6): 5, (9, 6): 3, (7, 7): 4, (8, 7): 2, (9, 7): 4, (6, 8): 4, (7, 8): 2, (8, 8): 1, (9, 8): 3,
+    (10, 8): 3, (6, 9): 4, (7, 9): 2, (8, 9): 1, (9, 9): 2, (10, 9): 2, (7, 10): 3, (8, 10): 3, (9, 10): 2,
+}
+
+
+def altar_stone() -> Image.Image:
+    """Polierter Schwarzstein für den Schaft: feine, wolkige Maserung, oben eine helle, unten eine dunkle Kante; in der Mitte
+    ein eingelegtes Flammenzeichen aus Tempelgold, darin ein glimmender Feueropal."""
+    def fn(x, y):
+        if (x, y) in ALTAR_SIGIL:
+            return ("G", ALTAR_SIGIL[(x, y)])
+        if (x, y) in ((8, 8), (8, 9)):
+            return ("O", 4)
+        n = st.smooth_noise(71, x, y, 3.0)
+        lv = 2 + (1 if n > 0.3 else 0) - (1 if n < -0.5 else 0)
+        if y == 5:
+            lv += 1
+        if y == 10 and (x, y) not in ALTAR_SIGIL:
+            lv -= 1
+        if x in (3, 12):
+            lv += 1 if x == 3 else -1
+        return ("S", st.clamp(lv, 0, 6))
+    img = _altar_texture(fn)
+    # der Opal im Zeichen: ein grüner Blitz
+    img.putpixel((8, 8), OPAL[5])
+    img.putpixel((8, 9), FLASH_GREEN[4])
+    return img
+
+
+def altar_base() -> Image.Image:
+    """Der Sockel: Ziegel aus poliertem Schwarzstein (je vier Pixel hoch, versetzt), mit feinen, dunklen Fugen; die Seiten
+    des Sockels zeigen die unteren drei Reihen (eine helle Kante oben)."""
+    def fn(x, y):
+        row = y // 4
+        joint_x = (x + (4 if row % 2 else 0)) % 8 == 7
+        if y % 4 == 3 or joint_x:
+            return ("S", 0)
+        lv = 2
+        if y % 4 == 0:
+            lv = 3                                 # die obere Kante jedes Ziegels im Licht
+        n = st.noise(83, x, y)
+        if n > 0.6:
+            lv += 1
+        elif n < -0.65:
+            lv -= 1
+        if y == 13:
+            lv = 4                                 # die Oberkante des Sockels
+        return ("S", st.clamp(lv, 0, 6))
+    return _altar_texture(fn)
+
+
+def altar_gold() -> Image.Image:
+    """Tempelgold: poliert, mit einer eingravierten Flammenwelle; oben eine helle, unten eine dunkle Kante (für Stufe, Kragen,
+    Becken und Rand – jede Reihe ist für sich ein Band)."""
+    def fn(x, y):
+        lv = 4
+        if y == 0:
+            lv = 5
+        elif y in (1, 2, 3):
+            wave = round(2 + math.sin((x + 0.5) * math.tau / 8) * 1.0)
+            lv = 2 if y == wave else (5 if y == 1 else 4)
+            if y == 3:
+                lv = 3
+        else:
+            lv = 4 if (x + y) % 5 else 5
+            if y % 4 == 3:
+                lv = 3
+        return ("G", lv)
+    return _altar_texture(fn)
+
+
+def altar_coals(hot: bool) -> Image.Image:
+    """Das Becken von oben: brennt das Feuer, liegt dort Glut (Schollen mit hellen Rissen); erloschen nur Asche mit ein paar
+    schwarzen Kohlen."""
+    def fn(x, y):
+        d1, d2, plate = _plates(x + 0.5, y + 0.5)
+        edge = d2 - d1
+        if hot:
+            if edge < 0.9:
+                return ("E", 5 if edge < 0.45 else 4)
+            n = st.noise(97 + plate, x, y)
+            return ("E", 2 if n < 0.3 else 3)
+        if edge < 0.7:
+            return ("A", 1)
+        n = st.noise(101 + plate, x, y)
+        return ("A", 3 if n > 0.4 else (2 if n > -0.5 else 4))
+    return _altar_texture(fn)
+
+
+def altar_opal() -> Image.Image:
+    """Der Feueropal vorn am Schaft (4 x 4, bei u 6–10, v 6–10), drumherum Tempelgold."""
+    art = {
+        (6, 6): 3, (7, 6): 5, (8, 6): 5, (9, 6): 4,
+        (6, 7): 4, (7, 7): 6, (8, 7): 5, (9, 7): 4,
+        (6, 8): 4, (7, 8): 5, (8, 8): 4, (9, 8): 3,
+        (6, 9): 3, (7, 9): 4, (8, 9): 3, (9, 9): 2,
+    }
+
+    def fn(x, y):
+        if (x, y) in art:
+            return ("O", art[(x, y)])
+        if 5 <= x <= 10 and 5 <= y <= 10:
+            return ("G", 5 if x == 5 or y == 5 else 3 if x == 10 or y == 10 else 4)
+        return ("G", 4)
+    img = _altar_texture(fn)
+    img.putpixel((7, 7), SHINE[2])
+    img.putpixel((8, 8), FLASH_GREEN[4])
+    img.putpixel((9, 7), FLASH_TEAL[4])
+    return img
+
+
+def altar_fire() -> Image.Image:
+    """Die Flammen über dem Altar (Bildfolge, 32 Bilder): ein Feuer, das sich von unten nährt – jede Zelle steigt auf, kühlt
+    ein wenig ab und weht zufällig zur Seite; in der Mitte brennt es am höchsten. Wo es zu kalt ist, bleibt das Bild leer."""
+    import random
+    rnd = random.Random(1201)
+    w, h = N, N + 4
+    fire = [[0.0] * w for _ in range(h)]
+    hottest = 36.0
+
+    def source():
+        for x in range(w):
+            cx = abs(x + 0.5 - w / 2) / (w / 2)
+            fire[h - 1][x] = hottest * max(0.0, 1.0 - cx ** 1.6) * (0.85 + 0.15 * rnd.random())
+
+    def step():
+        source()
+        for y in range(1, h):
+            for x in range(w):
+                r = rnd.randint(0, 2)
+                dst = min(w - 1, max(0, x + r - 1))
+                edge = abs(dst + 0.5 - w / 2) / (w / 2)
+                cool = rnd.random() * (1.5 + 3.0 * edge ** 1.5) + 0.6
+                fire[y - 1][dst] = max(0.0, fire[y][x] - cool)
+
+    for _ in range(120):
+        step()
+    out = Image.new("RGBA", (N, N * FIRE_FRAMES), CLEAR)
+    for fr in range(FIRE_FRAMES):
+        step()
+        cells = {}
+        for y in range(N):
+            for x in range(N):
+                v = fire[y + 4][x] / hottest
+                if v >= 0.14:
+                    cells[(x, y)] = min(6, int((v - 0.14) / 0.86 * 7.0))
+        for (x, y), lv in cells.items():
+            # einzelne Funken ohne Nachbarn fallen weg (sonst flimmert es)
+            if sum((x + dx, y + dy) in cells for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1))) < 2:
+                continue
+            out.putpixel((x, fr * N + y), FIRE[lv])
+    return out
+
+
+# --- die Flammenpeitsche ------------------------------------------------------
+
+def _whip_lash_points() -> list[tuple[float, float]]:
+    """Die Schnur im Bild: vom Griff (unten links) in einem weiten Bogen nach oben und zur Spitze oben rechts."""
+    pts = []
+    p0, p1, p2, p3 = (6.2, 9.6), (2.0, 2.0), (12.0, 11.0), (14.2, 1.6)
+    for i in range(120):
+        t = i / 119
+        a = (1 - t) ** 3
+        b = 3 * (1 - t) ** 2 * t
+        c = 3 * (1 - t) * t ** 2
+        d = t ** 3
+        pts.append((a * p0[0] + b * p1[0] + c * p2[0] + d * p3[0], a * p0[1] + b * p1[1] + c * p2[1] + d * p3[1]))
+    return pts
+
+
+def flame_whip_icon() -> Image.Image:
+    """Die Flammenpeitsche im Inventar: unten links der Griff (Feueropal als Knauf, dunkles Leder, Goldringe); die karminrote
+    Schnur schwingt in einer Welle nach oben rechts – erst nach links hinauf, über einen Bogen und wieder hinauf zur Spitze,
+    die glüht und brennt."""
+    s = st.Spr()
+    lash = [(6, 7), (5, 6), (4, 5), (4, 4), (4, 3), (5, 2), (6, 2), (7, 2), (8, 2), (9, 3), (10, 4), (10, 5), (11, 6), (12, 6),
+            (13, 5), (13, 4), (14, 3), (14, 2)]
+    for i, (x, y) in enumerate(lash):
+        if i >= len(lash) - 4:
+            s.set(x, y, ("E", 2 + (i - (len(lash) - 4))))          # das Ende glüht
+        else:
+            s.set(x, y, ("L", 4 if y <= 3 or x <= 4 else 3))       # oben und links im Licht
+    for (x, y, lv) in ((15, 1, 6), (15, 0, 5), (14, 1, 5), (15, 2, 4)):
+        s.set(x, y, ("F", lv))                                     # die Flamme an der Spitze
+    for (x, y, lv) in ((5, 9, 3), (4, 10, 3), (3, 11, 3), (5, 10, 1), (4, 11, 1), (3, 12, 1)):
+        s.set(x, y, ("H", lv))                                     # die Lederwicklung des Griffs
+    for (x, y, lv) in ((6, 8, 5), (6, 9, 3), (5, 8, 4), (2, 12, 4), (2, 11, 5)):
+        s.set(x, y, ("G", lv))                                     # Goldringe oben und unten
+    for (x, y, lv) in ((1, 13, 5), (2, 13, 4), (1, 14, 3), (2, 14, 2)):
+        s.set(x, y, ("O", lv))                                     # der Feueropal als Knauf
+    s = s.outline(prefer=("G", "H", "L", "O", "E"), override={"E": "L", "F": "L", "O": "G"}, light=0, dark=0)
+    img = s.image({"L": LASH_LEATHER, "H": GRIP_LEATHER, "G": TEMPLE_GOLD, "O": OPAL, "E": EMBER, "F": FIRE})
+    img.putpixel((1, 13), SHINE[3])
+    return img
+
+
+def flame_whip_model() -> tuple[Image.Image, Image.Image]:
+    """Die Textur des 3D-Modells (16 x 16) und die seiner leuchtenden Teile:
+      Gold (u 0–2, v 0–2), Lederwicklung des Griffs (u 2–4, v 0–6), die geflochtene Schnur (u 4–5, v 0–16, nach oben heller);
+      leuchtend: der Opalknauf (u 0–2, v 0–2), die glühende Schnur (u 4–5, v 0–16), die Flamme (u 6–8, v 0–4)."""
+    base = Image.new("RGBA", (N, N), CLEAR)
+    glow = Image.new("RGBA", (N, N), CLEAR)
+    for y in range(2):
+        for x in range(2):
+            base.putpixel((x, y), TEMPLE_GOLD[5 if (x + y) == 0 else 4])
+            glow.putpixel((x, y), OPAL[5 if (x, y) == (0, 0) else 4])
+    glow.putpixel((1, 1), FLASH_GREEN[4])
+    for y in range(6):
+        for x in range(2, 4):
+            base.putpixel((x, y), GRIP_LEATHER[3 if (x + y) % 3 else 1])
+    for y in range(N):
+        base.putpixel((4, y), LASH_LEATHER[2 + (y % 3 == 0) + (1 if y > 8 else 0)])
+        glow.putpixel((4, y), EMBER[3 + min(2, y // 6)])
+    for y in range(4):
+        for x in range(6, 8):
+            glow.putpixel((x, y), FIRE[6 - y] if x == 6 else FIRE[5 - y])
+    return base, glow
+
+
 def build(put: Callable[[str, Image.Image], None]) -> None:
     block, glow = opal_block()
     put("block/fire_opal_block", block)
@@ -363,6 +613,19 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
         put(f"block/lava_crust_{age}", crust)
         put(f"block/lava_crust_{age}_glow", crust_glow)
     emberwalker_icons(put)
+    # das Flammenheiligtum (1.2)
+    put("block/flame_altar_stone", altar_stone())
+    put("block/flame_altar_base", altar_base())
+    put("block/flame_altar_gold", altar_gold())
+    put("block/flame_altar_coals", altar_coals(True))
+    put("block/flame_altar_ash", altar_coals(False))
+    put("block/flame_altar_opal", altar_opal())
+    put("block/flame_altar_fire", altar_fire())
+    ANIMATIONS["block/flame_altar_fire"] = (FIRE_FRAMES, 1, False)
+    put("item/flame_whip", flame_whip_icon())
+    whip, whip_glow = flame_whip_model()
+    put("item/flame_whip_model", whip)
+    put("item/flame_whip_model_glow", whip_glow)
 
 
 if __name__ == "__main__":

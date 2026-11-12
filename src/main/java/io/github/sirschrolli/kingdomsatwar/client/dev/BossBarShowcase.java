@@ -18,7 +18,7 @@ import net.minecraft.world.BossEvent;
  */
 final class BossBarShowcase {
     private static final String[] ALL = {"fire", "ice", "lightning", "nature", "earth", "water", "shadow", "void", "reef", "kraken",
-        "moth", "forge", "star", "mystic", "anni", "anni2", "schrolli", "schrolli_true", "schrolli_almighty", "world_eater",
+        "moth", "forge", "ignara", "star", "mystic", "anni", "anni2", "schrolli", "schrolli_true", "schrolli_almighty", "world_eater",
         "mage_fire", "mage_ice", "mage_lightning", "mage_nature", "mage_earth", "mage_water"};
     private static final float[] LEVELS = {0.92f, 0.55f, 0.2f, 0.74f, 0.42f, 0.14f, 0.63f, 0.28f, 0.86f, 0.47f};
 

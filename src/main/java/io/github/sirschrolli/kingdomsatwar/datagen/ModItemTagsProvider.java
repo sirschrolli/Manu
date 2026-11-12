@@ -307,6 +307,9 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         // der Minutenzeiger (1.1): ein Schwert, mit Chronit auszubessern
         add(ModTags.Items.REPAIRS_MINUTE_HAND, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT);
         add(ItemTags.SWORDS, io.github.sirschrolli.kingdomsatwar.registry.ClockTower.MINUTE_HAND);
+        // die Flammenpeitsche (1.2): mit Feueropalen zu reparieren, verzauberbar wie ein Schwert
+        add(ModTags.Items.REPAIRS_FLAME_WHIP, io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL);
+        add(ItemTags.SWORDS, io.github.sirschrolli.kingdomsatwar.registry.FlameSanctuary.FLAME_WHIP);
         add(ItemTags.HEAD_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_HELMET);
         add(ItemTags.CHEST_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_CHESTPLATE);
         add(ItemTags.LEG_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_LEGGINGS);

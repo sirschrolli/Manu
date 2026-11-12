@@ -60,6 +60,7 @@ PHASES = {
     "schrolli_true": (0.6, 0.45, 0.25),  # Nova, Apokalypse, Neuschöpfung
     "schrolli_almighty": (0.66, 0.25),   # zweimal das Sonnengericht
     "world_eater": (0.66, 0.5, 0.33),    # Ruf der Welten, Zorn, Ruf der Welten
+    "ignara": (0.5,),                    # unter halber Kraft steigt sie als Phönix auf
 }
 # die Erzmagier wechseln bei zwei Dritteln und einem Drittel die Phase
 MAGE_PHASES = (0.66, 0.33)
@@ -211,6 +212,13 @@ ELEMENTS = {
                         f0="#2a1004", f1="#8a3a08", f2="#ffb347", f3="#fff0c4",
                         brass0="#5a3c0e", brass1="#a07420", brass2="#deb44a", brass3="#fff0b8",
                         blued0="#0b1030", blued1="#283a86", blued2="#7e96dc", enamel="#ebe1ca", ink="#1f233a"),
+    # Ignara, die Flammenpriesterin (seit 1.2): Tempelgold mit Feueropalen in der Oberkante, darüber lodern Flammenzungen (am
+    # Medaillon hoch wie ihr Flammenhaar), unter der Leiste schlängelt sich ihre Flammenpeitsche, als Spitze ein großer
+    # Feueropal; die Füllung züngelnde Flammen mit den grünen und blauen Blitzen eines Opals
+    "ignara": dict(m0="#2a1208", m1="#8a561c", m2="#f2c860", acc="#ff6a1a", glow="#fff0c0", deep="#2a0604",
+                   f0="#4a0806", f1="#b8280a", f2="#ff8a24", f3="#fff2b8", gold="#f2c45a", gold_dark="#8a5a18",
+                   opal0="#5a0c0a", opal1="#c8300e", opal2="#ff8a2a", opal3="#ffe08a", flash_g="#5af0a0", flash_b="#62c8ff",
+                   leather="#6a1e12", leather_light="#a8442a", leather_dark="#2e0a08"),
 }
 
 OUTLINE = (12, 10, 12, 255)
@@ -2511,6 +2519,143 @@ def post_soul_shepherd(img: Image.Image, pal: dict) -> None:
 
 
 # =============================================================================================
+# Ignara, die Flammenpriesterin (seit 1.2)
+# =============================================================================================
+
+def _ignara_tongue(layer: Image.Image, g: dict, cx: int, base: int, h: int, w: int, seed: float) -> None:
+    """Eine Flammenzunge: unten breit und rot, in der Mitte golden, die Spitze fast weiß; sie schwingt leicht zur Seite."""
+    lp = layer.load()
+    for k in range(h):
+        t = k / max(1, h - 1)
+        half = max(0, round((w / 2) * (1 - t) ** 0.7))
+        sway = round(math.sin(k * 0.8 + seed) * t * 1.4)
+        for dx in range(-half, half + 1):
+            edge = abs(dx) == half and half > 0
+            if t < 0.3:
+                col = g["f1"] if edge else g["f2"]
+            elif t < 0.75:
+                col = g["f1"] if edge else (g["f3"] if dx == 0 else g["f2"])
+            else:
+                col = g["f2"] if edge else g["f3"]
+            put(lp, layer, cx + dx + sway, base - k, col)
+
+
+def deco_ignara(img: Image.Image, pal: dict) -> None:
+    """Über dem Rahmen lodern Flammenzungen – am Medaillon hoch wie Ignaras Flammenhaar, nach rechts niedriger; unter der
+    Leiste schlängelt sich ihre Flammenpeitsche (goldener Griff am Medaillon, die Schnur in Wellen, die Spitze brennt); als
+    Spitze der Leiste ein großer Feueropal in goldener Fassung."""
+    g = {k: c(pal, k) for k in pal}
+    top, bottom = BAR_Y - 3, BAR_Y + BAR_H + 2
+    # Flammenzungen über der Oberkante
+    flames = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    for x in range(BAR_X - 3, BAR_X + BAR_W - 2, 6):
+        if any(abs(x - (BAR_X + round(BAR_W * f))) < 7 for f in GEMS):
+            continue
+        rel = max(0.0, (x - BAR_X) / BAR_W)
+        hgt = 2 + round(8 * (1.0 - rel) ** 2.2 + 3.5 * hash01(x, 1301) ** 1.5)
+        _ignara_tongue(flames, g, x, top - 1, hgt, 5 if rel < 0.25 else 4, hash01(x, 1303) * 6.0)
+    _outline(flames, g["f0"])
+    img.alpha_composite(flames)
+    # die Flammenpeitsche unter der Leiste
+    whip = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    wp = whip.load()
+    # der Griff: Gold, schräg vom Medaillon nach rechts unten
+    for k in range(7):
+        x, y = 34 + k, 33 + k // 3
+        put(wp, whip, x, y, g["gold"] if k % 3 else g["gold_dark"])
+        put(wp, whip, x, y + 1, g["gold_dark"])
+    put(wp, whip, 41, 34, g["opal2"])
+    put(wp, whip, 41, 35, g["opal1"])
+    # die Schnur: Wellen, die nach rechts flacher und dünner werden
+    x_end = BAR_X + 118
+    prev = None
+    for x in range(42, x_end):
+        u = (x - 42) / (x_end - 42)
+        y = bottom + 7 + 2.6 * math.sin(u * math.tau * 2.4 + 0.4) * (1.0 - 0.45 * u) - 2.0 * (1.0 - u) ** 3
+        yy = int(round(y))
+        thick = 2 if u < 0.55 else 1
+        for d in range(thick):
+            col = g["leather_light"] if d == 0 and thick == 2 else g["leather"]
+            put(wp, whip, x, yy + d, col)
+        if prev is not None and abs(yy - prev) > 1:
+            for fill in range(min(yy, prev) + 1, max(yy, prev)):
+                put(wp, whip, x, fill, g["leather"])
+        prev = yy
+    # die brennende Spitze
+    for k, (dx, dy, col) in enumerate(((0, 0, g["f1"]), (1, 0, g["f2"]), (2, -1, g["f2"]), (2, 0, g["f3"]), (3, -1, g["f3"]),
+                                       (1, -1, g["f1"]), (3, -2, g["f2"]), (4, -2, g["f3"]), (2, 1, g["f1"]))):
+        put(wp, whip, x_end + dx, prev + dy, col)
+    _outline(whip, OUTLINE)
+    img.alpha_composite(whip)
+    # Spitze der Leiste: ein großer Feueropal, von Gold gefasst
+    tip = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    tp = tip.load()
+    cy = BAR_Y + BAR_H // 2
+    for k in range(9):
+        x = 231 + k
+        half = min(k * 1.3 + 0.5, (8 - k) * 0.8 + 0.5)
+        for y in range(cy - 6, cy + 7):
+            d = y + 0.5 - (cy + 0.5)
+            if abs(d) > half:
+                continue
+            if k == 0:
+                col = g["gold"] if d < 0 else g["gold_dark"]
+            elif d < -0.6:
+                col = g["opal3"] if k < 4 else g["opal2"]
+            elif d < 0.6:
+                col = g["opal2"]
+            else:
+                col = g["opal1"] if k < 5 else g["opal0"]
+            put(tp, tip, x, y, col)
+    put(tp, tip, 233, cy - 2, (255, 255, 255, 255))
+    put(tp, tip, 235, cy - 1, g["flash_g"])
+    put(tp, tip, 236, cy + 1, g["flash_b"])
+    put(tp, tip, 234, cy + 2, g["flash_g"])
+    _outline(tip, OUTLINE)
+    img.alpha_composite(tip)
+
+
+def post_ignara(img: Image.Image, pal: dict) -> None:
+    """Nach dem Rahmen: Feueropale sitzen in der Ober- und Unterkante (statt der Nieten), jeder mit einem grünen oder blauen
+    Blitz."""
+    g = {k: c(pal, k) for k in pal}
+    px = img.load()
+    x0, x1, y0, y1 = BAR_X - 3, BAR_X + BAR_W + 2, BAR_Y - 3, BAR_Y + BAR_H + 2
+    for i, x in enumerate(range(x0 + 9, x1 - 4, 22)):
+        if any(abs(x - (BAR_X + round(BAR_W * f))) < 7 for f in GEMS):
+            continue
+        for y in (y0 + 1, y1 - 1):
+            put(px, img, x, y, g["opal3"])
+            put(px, img, x + 1, y, g["flash_g"] if (i + y) % 2 else g["flash_b"])
+            put(px, img, x - 1, y, g["opal1"])
+            put(px, img, x + 2, y, g["opal1"])
+            put(px, img, x, y - 1 if y == y0 + 1 else y + 1, g["gold"])
+            put(px, img, x + 1, y - 1 if y == y0 + 1 else y + 1, g["gold_dark"])
+
+
+def fill_strip_ignara() -> Image.Image:
+    """Füllung: züngelnde Flammen (unten am hellsten), darin hie und da der grüne oder blaue Blitz eines Feueropals."""
+    pal = ELEMENTS["ignara"]
+    f0, f1, f2, f3 = (c(pal, k) for k in ("f0", "f1", "f2", "f3"))
+    flash = (c(pal, "flash_g"), c(pal, "flash_b"))
+    img = Image.new("RGBA", (256, BAR_H), CLEAR)
+    px = img.load()
+    for y in range(BAR_H):
+        for x in range(256):
+            v = fill_value("ignara", x, y)
+            if v >= 0.99:
+                col = flash[int(hash01(x, y, 1311) * 2) % 2]
+            elif v > 0.6:
+                col = mix(f2, f3, ((v - 0.6) / 0.35) ** 1.6 * 0.75)
+            else:
+                col = mix(f0, f1, min(1.0, max(0.0, v) / 0.6 + 0.1))
+            if y == BAR_H - 1:
+                col = mix(col, f0, 0.4)
+            px[x, y] = col
+    return img
+
+
+# =============================================================================================
 # Die Sternenweberin (seit 0.99)
 # =============================================================================================
 
@@ -3036,14 +3181,15 @@ def banner_cap(element: str) -> Image.Image:
 
 POST = {"schrolli": post_schrolli, "schrolli_true": post_schrolli, "schrolli_almighty": post_almighty,
         "world_eater": post_world_eater, "kraken": post_kraken, "keeper": post_keeper, "sea_witch": post_sea_witch,
-        "soul_shepherd": post_soul_shepherd, "star_weaver": post_star_weaver}
+        "soul_shepherd": post_soul_shepherd, "star_weaver": post_star_weaver, "ignara": post_ignara}
 BORDERS = {"world_eater": frame_border_stone, "keeper": frame_border_stone}
 
 
 DECOS = {"schrolli": deco_schrolli, "schrolli_true": deco_schrolli, "schrolli_almighty": deco_almighty,
          "world_eater": deco_world_eater, "anni": deco_anni, "anni2": deco_anni, "mystic": deco_mystic, "star": deco_star, "forge": deco_forge, "moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
          "water": deco_water, "kraken": deco_kraken, "keeper": deco_keeper, "sea_witch": deco_sea_witch,
-         "soul_shepherd": deco_soul_shepherd, "star_weaver": deco_star_weaver, "hour_warden": deco_hour_warden}
+         "soul_shepherd": deco_soul_shepherd, "star_weaver": deco_star_weaver, "hour_warden": deco_hour_warden,
+         "ignara": deco_ignara}
 
 
 def frame(element: str, phases: tuple | None = None) -> Image.Image:
@@ -3198,6 +3344,16 @@ def fill_value(element: str, x: int, y: int) -> float:
         if hash01(x, y, 1207) > 0.975:
             return 1.0
         return 0.48 + 0.2 * math.sin(tau * x / 64 + 1.2 * math.sin(tau * y / 9 + tau * x / 128)) + 0.08 * math.sin(tau * x / 16)
+    if element == "ignara":
+        # Flammen, die nach oben dünner werden; selten blitzt ein Opal (1.0)
+        tongue = 0.5 + 0.5 * math.sin(tau * x / 16 + 1.6 * math.sin(tau * x / 64) + 0.6 * math.sin(tau * y / 9 + tau * x / 32))
+        rel = 1.0 - y / (BAR_H - 1)
+        h = 0.35 + 0.65 * tongue
+        if hash01(x, y, 1309) > 0.982 and 0 < y < BAR_H - 1:
+            return 1.0
+        if rel < h:
+            return 0.62 + 0.33 * (1.0 - rel / h)
+        return 0.32 - 0.14 * (rel - h)
     if element == "soul_shepherd":
         # Seelenfeuer: züngelnde Flammen, die nach oben dünner werden, dazwischen helle Funken
         tongue = 0.5 + 0.5 * math.sin(tau * x / 16 + 1.8 * math.sin(tau * x / 64) + 0.5 * math.sin(tau * y / 9 + tau * x / 32))
@@ -3261,6 +3417,8 @@ def fill_strip(element: str) -> Image.Image:
         return fill_strip_kraken()
     if element == "keeper":
         return fill_strip_keeper()
+    if element == "ignara":
+        return fill_strip_ignara()
     pal = ELEMENTS[element]
     f0, f1, f2, f3 = (c(pal, k) for k in ("f0", "f1", "f2", "f3"))
     img = Image.new("RGBA", (256, BAR_H), CLEAR)
@@ -3388,7 +3546,7 @@ def portrait(element: str) -> Image.Image:
     mit dunkler Kontur (2 Pixel = 1 Pixel im Spiel), damit er sich vom Grund des Medaillons abhebt."""
     from entitygen.models import (asteria, boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water,
                                   glutschmied, kraken, miss_mystik, moth_queen, reef_colossus, shattered_king, anni_troll,
-                                  schrolli, sea_witch, soul_shepherd, star_weaver, stone_keeper, world_eater, hour_warden)
+                                  schrolli, sea_witch, soul_shepherd, star_weaver, stone_keeper, world_eater, hour_warden, ignara)
     from entitygen.paint import paint_model
     from entitygen.preview import render
     mod = {"fire": boss_fire, "ice": boss_ice, "lightning": boss_lightning, "nature": boss_nature, "earth": boss_earth,
@@ -3396,7 +3554,7 @@ def portrait(element: str) -> Image.Image:
            "forge": glutschmied, "star": asteria, "mystic": miss_mystik, "anni": anni_troll, "anni2": anni_troll,
            "schrolli": schrolli, "schrolli_true": schrolli, "schrolli_almighty": schrolli, "world_eater": world_eater,
            "kraken": kraken, "keeper": stone_keeper, "sea_witch": sea_witch, "soul_shepherd": soul_shepherd,
-           "star_weaver": star_weaver, "hour_warden": hour_warden}[element]
+           "star_weaver": star_weaver, "hour_warden": hour_warden, "ignara": ignara}[element]
     m = mod.build()
     m.pack()
     variant = "anni_troll_v2" if element == "anni2" else element if element.startswith("schrolli") else next(iter(mod.PALETTES))
@@ -3436,6 +3594,14 @@ def portrait(element: str) -> Image.Image:
             for child in bone.children:
                 strip_moth(child)
         strip_moth(m.root)
+    if element == "ignara":
+        # Kopf mit Maske, Krone und Flammenhaar, Hals und Kragen (ohne Arme, Peitsche, Opalrad, Schwingen und Rock)
+        def strip_ignara(bone):
+            if bone.name.startswith(("left_", "right_", "whip", "orb", "wheel", "shard", "skirt", "robe", "hem", "cape", "sash")):
+                bone.cubes.clear()
+            for child in bone.children:
+                strip_ignara(child)
+        strip_ignara(m.root)
     if element == "forge":
         # der Widderschädel mit Hörnern, Flammen und Kiefer (ohne Arme, Waffen und Beine)
         def strip_forge(bone):
@@ -3525,18 +3691,20 @@ def portrait(element: str) -> Image.Image:
                 strip_anni(child)
         strip_anni(m.root)
     zoom = {"kraken": 1.5, "schrolli": 1.0, "schrolli_true": 1.0, "schrolli_almighty": 1.0, "world_eater": 1.35, "nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86, "star": 0.92, "mystic": 0.95,
-            "anni": 1.0, "anni2": 1.0, "keeper": 0.8, "sea_witch": 1.5, "soul_shepherd": 1.12, "star_weaver": 0.95, "hour_warden": 0.9}.get(element, 1.2)
+            "anni": 1.0, "anni2": 1.0, "keeper": 0.8, "sea_witch": 1.5, "soul_shepherd": 1.12, "star_weaver": 0.95, "hour_warden": 0.9, "ignara": 0.85}.get(element, 1.2)
     yaw = {"kraken": -20, "schrolli": -22, "schrolli_true": -22, "schrolli_almighty": -22, "world_eater": -6, "water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14, "star": -24, "mystic": -22, "anni": -24,
-           "anni2": -24, "keeper": -20, "sea_witch": -22, "soul_shepherd": -14, "star_weaver": -20, "hour_warden": -16}.get(element, -42)
-    pitch = {"kraken": -18, "schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2, "keeper": -5, "sea_witch": 2, "soul_shepherd": 4, "star_weaver": 48, "hour_warden": 4}.get(element, 6)
+           "anni2": -24, "keeper": -20, "sea_witch": -22, "soul_shepherd": -14, "star_weaver": -20, "hour_warden": -16, "ignara": -18}.get(element, -42)
+    pitch = {"kraken": -18, "schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2, "keeper": -5, "sea_witch": 2, "soul_shepherd": 4, "star_weaver": 48, "hour_warden": 4, "ignara": 4}.get(element, 6)
     big = render(m, tex, glow, yaw, pitch, 448, pose=getattr(mod, "FOLD_POSE", None), background=(0, 0, 0, 0), zoom=zoom,
-                 focus=["body"] if element in ("reef", "kraken", "star_weaver") else ["helm"] if element == "star" else ["head"])
+                 focus=["body"] if element in ("reef", "kraken", "star_weaver") else ["helm"] if element == "star"
+                 else ["lock_l", "lock_r", "crown"] if element == "ignara" else ["head"])
     img = big.resize((64, 64), Image.LANCZOS)
     img = ImageEnhance.Brightness(img).enhance({"kraken": 1.85, "fire": 1.9, "earth": 1.5, "lightning": 1.9, "nature": 1.6, "shadow": 2.4,
                                                  "void": 1.0, "reef": 1.35, "moth": 1.25, "forge": 1.65, "star": 1.15, "mystic": 1.2,
                                                  "anni": 1.45, "anni2": 1.45, "schrolli": 1.5, "schrolli_true": 1.5,
                                                  "schrolli_almighty": 1.45, "world_eater": 2.0, "keeper": 1.3, "sea_witch": 1.35,
-                                                 "soul_shepherd": 1.7, "star_weaver": 2.3, "hour_warden": 1.6}.get(element, 1.4))
+                                                 "soul_shepherd": 1.7, "star_weaver": 2.3, "hour_warden": 1.6,
+                                                 "ignara": 1.3}.get(element, 1.4))
     img = ImageEnhance.Color(img).enhance(1.15)
     img = ImageEnhance.Contrast(img).enhance(1.12)
     if element == "schrolli_almighty":

@@ -83,7 +83,13 @@ public enum SiteKind implements StringRepresentable {
      * Versunkener Tempel (seit 0.89): das runde Heiligtum des Meervolks auf dem Grund der tiefen Ozeane, mit Säulen, halb
      * eingestürzter Kuppel und dem Gezeitentor ins Urmeer in der Mitte (ein eigenes Bauwerk, an keiner Vanilla-Stelle).
      */
-    SUNKEN_TEMPLE(GenerationStep.Decoration.SURFACE_STRUCTURES);
+    SUNKEN_TEMPLE(GenerationStep.Decoration.SURFACE_STRUCTURES),
+    /**
+     * Flammenheiligtum (seit 1.2): eine runde Plattform aus Schwarzstein auf Basaltstelzen im Lavameer der Unterwelt, mit
+     * Mosaikboden, Feuerschalen und dem Flammenaltar, vor dem Ignara, die Flammenpriesterin, betet; Stege führen zum Fels
+     * (ein eigenes Bauwerk, an keiner Vanilla-Stelle). Ganz zuletzt gebaut.
+     */
+    FLAME_SANCTUARY(GenerationStep.Decoration.TOP_LAYER_MODIFICATION);
 
     public static final Codec<SiteKind> CODEC = StringRepresentable.fromEnum(SiteKind::values);
 

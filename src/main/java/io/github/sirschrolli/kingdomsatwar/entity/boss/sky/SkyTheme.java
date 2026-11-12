@@ -49,7 +49,9 @@ public enum SkyTheme {
     /** Der Steinhüter (0.96): Mondstein umschließt den Getroffenen – er ist schwer und langsam. */
     KEEPER(1, 0x9ED0FF, 0xF2FAFF, () -> ModParticles.FAE_SPARK.get()),
     /** Der Stundenwächter (1.1): die Zeit stockt um den Getroffenen – langsam in Schritt und Schlag, und sie zieht ihn zurück. */
-    TIME(2, 0xFFB347, 0xFFE7A0, () -> ParticleTypes.WAX_ON);
+    TIME(2, 0xFFB347, 0xFFE7A0, () -> ParticleTypes.WAX_ON),
+    /** Ignara, die Flammenpriesterin (1.2): die Flammenschlinge – der Getroffene brennt und wird zu ihr heruntergerissen. */
+    PRIEST(2, 0xFF6A1A, 0xFFE7A0, () -> ModParticles.BOSS_FLAME.get());
 
     private static final SkyTheme[] VALUES = values();
 

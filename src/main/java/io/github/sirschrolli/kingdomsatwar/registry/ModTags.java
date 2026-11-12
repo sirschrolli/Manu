@@ -264,6 +264,7 @@ public final class ModTags {
         public static final TagKey<Item> REPAIRS_STARWALKER_ARMOR = mod("repairs_starwalker_armor");
         public static final TagKey<Item> REPAIRS_TIMEWARDEN_ARMOR = mod("repairs_timewarden_armor");
         public static final TagKey<Item> REPAIRS_EMBERWALKER_ARMOR = mod("repairs_emberwalker_armor");
+        public static final TagKey<Item> REPAIRS_FLAME_WHIP = mod("repairs_flame_whip");
         public static final TagKey<Item> REPAIRS_MINUTE_HAND = mod("repairs_minute_hand");
         public static final TagKey<Item> REPAIRS_STAR_BOW = mod("repairs_star_bow");
         public static final TagKey<Item> REPAIRS_SHEPHERD_CROOK = mod("repairs_shepherd_crook");

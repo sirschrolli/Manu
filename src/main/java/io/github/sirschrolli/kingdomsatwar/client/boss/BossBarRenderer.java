@@ -175,6 +175,10 @@ public final class BossBarRenderer {
         // Malleus, der Glutschmied: geschwärztes Eisen mit Nieten, glühende Nähte, Hammer und Speer gekreuzt
         STYLES.put("forge", style("forge", 0xFF8A30, new float[] {0.5f}, new Motes(Drift.ARC, 4.0f, 0xFFF2B8, 0xFF8A24, 0xA8300A),
                 new Motes(Drift.EMBER, 2.5f, 0xFFD27A, 0xFF7A1A, 0x8A2406)));
+        // Ignara, die Flammenpriesterin (seit 1.2): Tempelgold mit Feueropalen, lodernde Flammenzungen, darunter ihre Flammenpeitsche;
+        // Glut steigt auf, dazwischen blitzt es grün und blau wie in einem Opal; unter halber Kraft steigt sie als Phönix auf
+        STYLES.put("ignara", style("ignara", 0xFF9A3A, new float[] {0.5f}, new Motes(Drift.EMBER, 4.5f, 0xFFE9A0, 0xFF8A24, 0xC8300E),
+                new Motes(Drift.GLITTER, 1.0f, 0x5AF0A0, 0x62C8FF, 0xFFE08A)));
         // Asteria, die Sternenreiterin: Silber mit Goldsaum, Sterne und Nachthimmel, ein Stern im Medaillon
         STYLES.put("star", style("star", 0x9AD8FF, new float[] {0.5f}, new Motes(Drift.TWINKLE, 4.5f, 0xFFFFFF, 0x9AD8FF, 0xE8C25A)));
         // MissMystik, die Feen-Zauberkünstlerin: violetter Samt mit Goldsaum, Zauberkarten, Harlekin-Rauten

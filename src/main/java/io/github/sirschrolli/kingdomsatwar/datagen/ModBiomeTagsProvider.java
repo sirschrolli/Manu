@@ -336,6 +336,8 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
                 .add(net.minecraft.world.level.biome.Biomes.SOUL_SAND_VALLEY);
         this.tag(BiomeTags.HAS_NETHER_FOSSIL).replace();
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.LOST_GATE)).addTag(BiomeTags.IS_NETHER);
+        // das Flammenheiligtum (1.2) im Lavameer, überall im Nether
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.FLAME_SANCTUARY)).addTag(BiomeTags.IS_NETHER);
         this.tag(BiomeTags.HAS_RUINED_PORTAL_NETHER).replace();
         // die Sternwarte auf den äußeren Inseln des Ends (statt der Endstadt)
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.STARWATCH))

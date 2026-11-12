@@ -57,6 +57,7 @@ public class SiteStructure extends Structure {
             case STARWATCH -> Starwatch.plan(context, terrain, seed);
             case ERROR_ZONE -> ErrorZone.plan(context, terrain, seed);
             case SUNKEN_TEMPLE -> SunkenTemple.plan(context, terrain, seed);
+            case FLAME_SANCTUARY -> FlameSanctum.plan(context, terrain, seed);
         };
     }
 

@@ -488,6 +488,16 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(net.minecraft.world.item.Items.GOLD_INGOT, 1, 2))
                 .withPool(drop(ModItems.GEMSTONE.get(), 0, 1))
                 .withPool(drop(ModItems.GOLD_COIN.get(), 1, 2)));
+        // Ignara, die Flammenpriesterin (ein Feueropal entzündet den Flammenaltar neu): die Flammenpeitsche selten (auch beim
+        // ersten Sieg); der Herzkristall nur beim ersten eigenen Sieg; Feueropale (für die Rüstung der Glutwandler) in maßvoller
+        // Menge, Lohenruten, ein wenig Gold; ihre Opalsplitter zerspringen ohne Beute
+        EntityType<?> ignara = ModEntities.IGNARA.get();
+        this.add(ignara, signature(LootTable.lootTable(), ignara, io.github.sirschrolli.kingdomsatwar.registry.FlameSanctuary.FLAME_WHIP.get())
+                .withPool(firstOnly(ignara, ModItems.HEART_CRYSTAL.get(), 1))
+                .withPool(material(io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL.get(), 1, 3))
+                .withPool(drop(net.minecraft.world.item.Items.BLAZE_ROD, 0, 2))
+                .withPool(drop(net.minecraft.world.item.Items.GOLD_INGOT, 0, 1))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 1, 2)));
         // Asteria, die Sternenreiterin (ein Endkristall entzündet den Sternstein neu): Lanze und Schwingen ihres Rochens selten
         // (auch beim ersten Sieg); der Herzkristall nur beim ersten eigenen Sieg; Sternsplitter und ein wenig aus dem End
         EntityType<?> asteria = ModEntities.ASTERIA.get();

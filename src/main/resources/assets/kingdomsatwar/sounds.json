@@ -2315,6 +2315,19 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.block.fae_portal.travel"
   },
+  "block.flame_altar.ignite": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/nether/flame_altar_ignite1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/nether/flame_altar_ignite2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.block.flame_altar.ignite"
+  },
   "boss.sky_ward.charge": {
     "sounds": [
       {
@@ -5018,6 +5031,204 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.hour_warden.toll"
+  },
+  "entity.ignara.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_ambient1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_ambient2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_ambient3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ignara.ambient"
+  },
+  "entity.ignara.awaken": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_awaken1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ignara.awaken"
+  },
+  "entity.ignara.call": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_call1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_call2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ignara.call"
+  },
+  "entity.ignara.charge": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_charge1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_charge2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ignara.charge"
+  },
+  "entity.ignara.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_death1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ignara.death"
+  },
+  "entity.ignara.dive": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_dive1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_dive2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ignara.dive"
+  },
+  "entity.ignara.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_hurt1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_hurt2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_hurt3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ignara.hurt"
+  },
+  "entity.ignara.lash": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_lash1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_lash2",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_lash3",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ignara.lash"
+  },
+  "entity.ignara.phoenix": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_phoenix1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ignara.phoenix"
+  },
+  "entity.ignara.pillar": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_pillar1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_pillar2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_pillar3",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ignara.pillar"
+  },
+  "entity.ignara.pray": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_pray1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_pray2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ignara.pray"
+  },
+  "entity.ignara.shard": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_shard1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_shard2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_shard3",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_shard4",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ignara.shard"
+  },
+  "entity.ignara.swing": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_swing1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_swing2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_swing3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ignara.swing"
+  },
+  "entity.ignara.wave": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_wave1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/nether/ignara_wave2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ignara.wave"
   },
   "entity.kraken.ambient": {
     "sounds": [
@@ -10014,6 +10225,23 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.item.fae_elytra.flap"
+  },
+  "item.flame_whip.crack": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/nether/flame_whip_crack1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/nether/flame_whip_crack2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/nether/flame_whip_crack3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.item.flame_whip.crack"
   },
   "item.glitch_wings.blink": {
     "sounds": [

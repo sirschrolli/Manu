@@ -382,6 +382,23 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> GLUTSCHMIED_HURT = register("entity.glutschmied.hurt");
     public static final DeferredHolder<SoundEvent, SoundEvent> GLUTSCHMIED_DEATH = register("entity.glutschmied.death");
     public static final DeferredHolder<SoundEvent, SoundEvent> GLUTSCHMIED_STEP = register("entity.glutschmied.step");
+    // Ignara, die Flammenpriesterin (1.2)
+    public static final DeferredHolder<SoundEvent, SoundEvent> IGNARA_AMBIENT = register("entity.ignara.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> IGNARA_PRAY = register("entity.ignara.pray");
+    public static final DeferredHolder<SoundEvent, SoundEvent> IGNARA_HURT = register("entity.ignara.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> IGNARA_DEATH = register("entity.ignara.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> IGNARA_AWAKEN = register("entity.ignara.awaken");
+    public static final DeferredHolder<SoundEvent, SoundEvent> IGNARA_LASH = register("entity.ignara.lash");
+    public static final DeferredHolder<SoundEvent, SoundEvent> IGNARA_SWING = register("entity.ignara.swing");
+    public static final DeferredHolder<SoundEvent, SoundEvent> IGNARA_WAVE = register("entity.ignara.wave");
+    public static final DeferredHolder<SoundEvent, SoundEvent> IGNARA_PILLAR = register("entity.ignara.pillar");
+    public static final DeferredHolder<SoundEvent, SoundEvent> IGNARA_CHARGE = register("entity.ignara.charge");
+    public static final DeferredHolder<SoundEvent, SoundEvent> IGNARA_SHARD = register("entity.ignara.shard");
+    public static final DeferredHolder<SoundEvent, SoundEvent> IGNARA_CALL = register("entity.ignara.call");
+    public static final DeferredHolder<SoundEvent, SoundEvent> IGNARA_PHOENIX = register("entity.ignara.phoenix");
+    public static final DeferredHolder<SoundEvent, SoundEvent> IGNARA_DIVE = register("entity.ignara.dive");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FLAME_ALTAR_IGNITE = register("block.flame_altar.ignite");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FLAME_WHIP_CRACK = register("item.flame_whip.crack");
     public static final DeferredHolder<SoundEvent, SoundEvent> FAE_ELYTRA_FLAP = register("item.fae_elytra.flap");
     // Asteria, die Sternenreiterin (0.65)
     public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_CRY = register("entity.asteria.cry");

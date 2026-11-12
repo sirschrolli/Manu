@@ -475,6 +475,10 @@ public class SkyBoltEntity extends Entity {
                 victim.igniteForSeconds(4.0f);
                 pull(victim, owner, 0.9);
             }
+            case PRIEST -> {
+                victim.igniteForSeconds(6.0f);
+                pull(victim, owner, 1.0);
+            }
             case STAR -> {
                 victim.addEffect(new MobEffectInstance(MobEffects.GLOWING, 160, 0), owner);
                 pull(victim, owner, 0.8);

@@ -81,6 +81,8 @@ public final class ClientSetup {
                 io.github.sirschrolli.kingdomsatwar.client.model.geom.MothQueenGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.GLUTSCHMIED,
                 io.github.sirschrolli.kingdomsatwar.client.model.geom.GlutschmiedGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.IGNARA,
+                io.github.sirschrolli.kingdomsatwar.client.model.geom.IgnaraGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.MISS_MYSTIK,
                 io.github.sirschrolli.kingdomsatwar.client.model.geom.MissMystikGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.LIGHT_DOVE,
@@ -269,6 +271,10 @@ public final class ClientSetup {
                 io.github.sirschrolli.kingdomsatwar.client.renderer.nether.GlutschmiedRenderer::new);
         event.registerEntityRenderer(ModEntities.GLUTKLUMPEN.get(),
                 context -> new net.minecraft.client.renderer.entity.ThrownItemRenderer<>(context, 1.6f, true));
+        event.registerEntityRenderer(ModEntities.IGNARA.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.nether.IgnaraRenderer::new);
+        event.registerEntityRenderer(ModEntities.OPAL_SHARD.get(),
+                context -> new net.minecraft.client.renderer.entity.ThrownItemRenderer<>(context, 1.3f, true));
         event.registerEntityRenderer(ModEntities.MISS_MYSTIK.get(),
                 io.github.sirschrolli.kingdomsatwar.client.renderer.fae.MissMystikRenderer::new);
         event.registerEntityRenderer(ModEntities.MYSTIK_IMAGE.get(),

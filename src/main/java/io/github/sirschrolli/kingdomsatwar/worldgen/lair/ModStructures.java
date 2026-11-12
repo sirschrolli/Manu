@@ -476,6 +476,8 @@ public final class ModStructures {
                 case ERROR_ZONE -> spread(56, 18, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 40_404_404, castles);
                 // der Versunkene Tempel: das Tor ins Urmeer – nicht zu selten, damit man es findet
                 case SUNKEN_TEMPLE -> spread(24, 8, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 58_913_117, castles);
+                // das Flammenheiligtum (1.2): im Lavameer der Unterwelt, ein seltener Fund
+                case FLAME_SANCTUARY -> spread(36, 12, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 61_220_903, castles);
             };
             if (placement != null) {
                 context.register(siteSet(kind), new StructureSet(structure, placement));

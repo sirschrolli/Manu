@@ -391,6 +391,13 @@ public class ModChestLootProvider implements LootTableSubProvider {
                 .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
                         .add(LootItem.lootTableItem(Items.WITHER_SKELETON_SKULL))
                         .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance(0.06f))));
+        // das Flammenheiligtum (1.2): die Gaben der Pilger neben dem Altar – Feueropale, Gold, Lohenruten, Kerzen, ein wenig
+        // Weihrauch (Glutpulver) und selten ein Herzkristall
+        this.output.accept(ModLootTables.SITE_FLAME_SANCTUARY, coins(LootTable.lootTable().withPool(crystals(6, 6)), 2, 8, 0, 2, 0.1f)
+                .withPool(pool(2, 4, item(io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL.get(), 4, 1, 2),
+                        item(Items.GOLD_INGOT, 4, 1, 3), item(Items.GOLD_NUGGET, 4, 3, 9), item(Items.BLAZE_POWDER, 3, 2, 5),
+                        item(Items.BLAZE_ROD, 2, 1, 2), item(Items.MAGMA_CREAM, 2, 1, 3), item(Items.DYED_CANDLE.pick(net.minecraft.world.item.DyeColor.RED), 3, 1, 3),
+                        item(Items.GILDED_BLACKSTONE, 2, 1, 2), item(Items.FIRE_CHARGE, 2, 1, 3))));
     }
 
     /**

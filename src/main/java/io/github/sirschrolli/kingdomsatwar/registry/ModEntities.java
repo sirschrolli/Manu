@@ -489,6 +489,15 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.nether.GlutklumpenEntity>> GLUTKLUMPEN =
             ENTITIES.registerEntityType("molten_glob", io.github.sirschrolli.kingdomsatwar.entity.nether.GlutklumpenEntity::new,
                     MobCategory.MISC, builder -> builder.sized(0.5f, 0.5f).fireImmune().noLootTable().clientTrackingRange(8).updateInterval(2));
+    /** Ignara, die Flammenpriesterin (1.2): schwebt betend vor dem Flammenaltar im Flammenheiligtum, bis jemand ihr zu nahe kommt. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.nether.IgnaraEntity>> IGNARA =
+            ENTITIES.registerEntityType("ignara", io.github.sirschrolli.kingdomsatwar.entity.nether.IgnaraEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(1.2f, 3.2f).eyeHeight(2.7f).fireImmune().notInPeaceful()
+                            .clientTrackingRange(16).updateInterval(2));
+    /** Ein Splitter aus Feueropal, den Ignara im Opalregen herabstürzen lässt. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.nether.OpalShardEntity>> OPAL_SHARD =
+            ENTITIES.registerEntityType("opal_shard", io.github.sirschrolli.kingdomsatwar.entity.nether.OpalShardEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(0.4f, 0.4f).fireImmune().noLootTable().clientTrackingRange(8).updateInterval(2));
     /** Asteria, die Sternenreiterin: stößt vom Himmel herab, wenn jemand an den Sternstein der Sternwarte tritt. */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.end.AsteriaEntity>> ASTERIA =
             ENTITIES.registerEntityType("asteria", io.github.sirschrolli.kingdomsatwar.entity.end.AsteriaEntity::new,
@@ -996,6 +1005,7 @@ public final class ModEntities {
         event.put(STAR_SPIDERLING.get(), io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarSpiderlingEntity.createAttributes().build());
         event.put(MOON_MOTH.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MoonMothEntity.createAttributes().build());
         event.put(GLUTSCHMIED.get(), io.github.sirschrolli.kingdomsatwar.entity.nether.GlutschmiedEntity.createAttributes().build());
+        event.put(IGNARA.get(), io.github.sirschrolli.kingdomsatwar.entity.nether.IgnaraEntity.createAttributes().build());
         event.put(ASTERIA.get(), io.github.sirschrolli.kingdomsatwar.entity.end.AsteriaEntity.createAttributes().build());
         event.put(MISS_MYSTIK.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MissMystikEntity.createAttributes().build());
         event.put(MYSTIK_IMAGE.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MystikImageEntity.createAttributes().build());
