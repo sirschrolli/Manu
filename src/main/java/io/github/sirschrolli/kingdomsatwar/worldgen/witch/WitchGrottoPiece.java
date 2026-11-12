@@ -79,8 +79,34 @@ public class WitchGrottoPiece extends StructurePiece {
         this.sea = tag.getIntOr("Sea", 96);
     }
 
+    /** Der Kasten des Bauwerks: etwas größer als die tote Zone, damit auch die Chunks ringsum von der Grotte wissen (Bäume). */
     public static BoundingBox makeBox(BlockPos c) {
-        return new BoundingBox(c.getX() - REACH, c.getY() - 4, c.getZ() - REACH, c.getX() + REACH, c.getY() + HEIGHT + 20, c.getZ() + REACH);
+        int r = REACH + 6;
+        return new BoundingBox(c.getX() - r, c.getY() - 4, c.getZ() - r, c.getX() + r, c.getY() + HEIGHT + 20, c.getZ() + r);
+    }
+
+    /**
+     * Liegt (x, z) in der toten Zone einer Hexengrotte (plus {@code margin})? Beim Erzeugen der Welt über die Verweise des
+     * Chunks auf die Grotten ringsum – so lassen auch Bäume aus Nachbarchunks, die erst nach der Grotte wachsen, sie frei.
+     */
+    public static boolean inClearing(WorldGenLevel level, int x, int z, int margin) {
+        var structure = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .getValue(ModStructures.WITCH_GROTTO_STRUCTURE);
+        var chunk = structure == null ? null
+                : level.getChunk(x >> 4, z >> 4, net.minecraft.world.level.chunk.status.ChunkStatus.STRUCTURE_REFERENCES, false);
+        if (chunk == null) {
+            return false;
+        }
+        double keep = REACH + margin;
+        for (long ref : chunk.getReferencesForStructure(structure)) {
+            net.minecraft.world.level.ChunkPos start = net.minecraft.world.level.ChunkPos.unpack(ref);
+            double dx = start.getMiddleBlockX() - x;
+            double dz = start.getMiddleBlockZ() - z;
+            if (dx * dx + dz * dz < keep * keep) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -637,34 +663,42 @@ public class WitchGrottoPiece extends StructurePiece {
             Direction d = this.door;
             Direction side = d.getClockWise();
             int first = (int) Math.floor(this.outer(Math.atan2(d.getStepZ(), d.getStepX())));
-            // der Pfad: am Eingang eben (auf Höhe des Bodens, darunter aufgefüllt), weiter draußen auf dem Grund
+            // vor dem Eingang ein ebener Vorplatz (die Hänge ringsum abgeflacht), dann der Pfad auf dem Grund
             for (int k = first - 1; k <= REACH - 3; k++) {
-                for (int s = -2; s <= 2; s++) {
+                boolean flat = k <= first + 8;
+                int wide = !flat ? 1 : k <= first ? 2 : 8;
+                for (int s = -wide; s <= wide; s++) {
                     int x = this.cx + d.getStepX() * k + side.getStepX() * s;
                     int z = this.cz + d.getStepZ() * k + side.getStepZ() * s;
                     if (!this.in(x, this.f, z)) {
                         continue;
                     }
-                    boolean flat = k <= first + 7;
-                    int top = flat ? this.f : this.groundTop(x, z);
-                    if (top < 0 || Math.abs(top - this.f) > 4) {
+                    int a = Math.abs(s);
+                    // die Kuppel selbst bleibt neben dem Eingang ganz (den Gang durch die Schale schneidet doorway())
+                    boolean dome = Math.hypot(x - this.cx, z - this.cz) < this.outer(Math.atan2(z - this.cz, x - this.cx)) + 0.5;
+                    if (dome && k > first) {
+                        continue;
+                    }
+                    int top = flat ? this.f + Math.max(0, (int) Math.floor((a - 4) * 1.5)) : this.groundTop(x, z);
+                    if (top < 0 || Math.abs(top - this.f) > 6) {
                         continue;
                     }
                     if (flat) {
-                        for (int y = this.f - 3; y < this.f; y++) {
+                        for (int y = this.f - 3; y < top; y++) {
                             if (!LairContext.isGround(this.level.getBlockState(new BlockPos(x, y, z)))) {
                                 this.set(x, y, z, SeaBlocks.TIDE_STONE.base().get());
                             }
                         }
-                        for (int y = this.f + 1; y <= this.f + 8; y++) {
+                        for (int y = top + 1; !dome && y <= this.f + 10; y++) {
                             this.water(x, y, z);
                         }
                     }
-                    if (Math.abs(s) <= 1) {
+                    if (a <= 1) {
                         this.set(x, top, z, this.rand(x, z, 71) < 0.15 ? Blocks.BONE_BLOCK.defaultBlockState() : Blocks.GRAVEL.defaultBlockState());
                     } else if (flat) {
-                        this.set(x, top, z, this.rand(x, z, 73) < 0.5 ? Blocks.GRAVEL.defaultBlockState()
-                                : SeaBlocks.TIDE_STONE.base().get().defaultBlockState());
+                        double r = this.rand(x, z, 73);
+                        this.set(x, top, z, a <= 4 && r < 0.5 ? Blocks.GRAVEL.defaultBlockState()
+                                : r < 0.12 ? Blocks.SAND.defaultBlockState() : SeaBlocks.TIDE_STONE.base().get().defaultBlockState());
                     }
                 }
             }

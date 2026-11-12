@@ -79,7 +79,7 @@ final class SeaWitchShowcase {
         steps.add(Step.server(any -> locate(sea(any), g)));
         steps.add(Step.until(() -> g.ready, 12000));
         // die Grotte von außen (in ihrer toten Zone)
-        steps.add(look(g, 20.0, 8.0, 7.0, 9.0, 4.5, 0.0));
+        steps.add(look(g, 19.0, 11.0, 8.0, 6.0, 5.0, 0.0));
         shot(steps, "grotto_outside", true);
         steps.add(look(g, 8.0, 26.0, 17.0, 0.0, 5.0, 0.0));
         shot(steps, "grotto_dome", false);
@@ -101,7 +101,7 @@ final class SeaWitchShowcase {
         shot(steps, "grotto_cauldron", false);
         steps.add(lookIn(g, 0.5, 4.8, 4.5, -10.0, 2.8, 0.0));
         shot(steps, "grotto_wreck", false);
-        steps.add(lookIn(g, 4.0, 3.0, -1.0, -3.0, 6.0, 5.0));
+        steps.add(lookIn(g, 1.5, 3.0, 1.0, -3.0, 7.5, 5.0));
         shot(steps, "grotto_bubbles", false);
         steps.add(Step.once(minecraft -> {
             if (g.ore == null) {
@@ -180,12 +180,12 @@ final class SeaWitchShowcase {
                 {"INK", "22", "witch_ink", "70", "8.5", "1.0", "0.5", "8.0", ""},
                 {"WHIRLPOOL", "34", "witch_whirlpool", "55", "8.5", "2.5", "0.7", "8.0", ""},
                 {"SONG", "34", "witch_song", "30", "6.5", "0.2", "0.1", "8.0", ""},
-                {"BUBBLE", "24", "witch_bubble", "65", "7.5", "1.0", "0.7", "7.0", ""},
-                {"SHARKS", "32", "witch_sharks", "60", "9.0", "2.0", "0.35", "8.0", ""},
+                {"BUBBLE", "24", "witch_bubble", "40", "8.0", "1.0", "0.55", "7.0", ""},
+                {"SHARKS", "32", "witch_sharks", "50", "9.5", "2.0", "0.4", "8.0", ""},
                 {"CORAL", "24", "witch_coral", "50", "9.0", "3.0", "0.5", "8.0", ""},
                 {"TAIL", "11", "witch_tail", "75", "6.5", "0.6", "0.3", "2.6", ""},
                 {"FURY", "16", "witch_fury_scream", "35", "6.5", "0.4", "0.0", "7.0", ""},
-                {"FURY", "24", "witch_fury", "35", "8.0", "0.8", "0.0", "7.0", ""},
+                {"FURY", "22", "witch_fury", "35", "9.0", "1.0", "0.0", "7.0", ""},
                 {"CURSE", "30", "witch_curse", "55", "8.0", "2.0", "0.2", "7.0", "1"}}) {
             SeaWitchEntity.Attack attack = SeaWitchEntity.Attack.valueOf(shot[0]);
             int tick = Integer.parseInt(shot[1]);
@@ -237,7 +237,7 @@ final class SeaWitchShowcase {
         // die Taucherrüstung und der Hexenstab am Rüstungsständer, daneben Aquamarin
         steps.add(Step.server(any -> {
             ServerLevel level = sea(any);
-            Vec3 p = rel(g, 4.0, 1.0, 7.0);
+            Vec3 p = rel(g, 6.5, 1.0, 0.0);
             BlockPos floor = BlockPos.containing(p.x, p.y - 1.0, p.z);
             for (int dx = -1; dx <= 1; dx++) {
                 for (int dz = -1; dz <= 1; dz++) {
@@ -245,7 +245,7 @@ final class SeaWitchShowcase {
                             .defaultBlockState(), Block.UPDATE_ALL);
                 }
             }
-            Vec3 side = rel(g, 4.0, 0.0, 9.0);
+            Vec3 side = rel(g, 6.5, 0.0, 2.2);
             BlockPos s = BlockPos.containing(side.x, floor.getY(), side.z);
             level.setBlock(s, SeaGear.AQUAMARINE_BLOCK.get().defaultBlockState(), Block.UPDATE_ALL);
             level.setBlock(s.above(), SeaGear.AQUAMARINE_ORE.get().defaultBlockState(), Block.UPDATE_ALL);
@@ -254,7 +254,7 @@ final class SeaWitchShowcase {
             stand.setNoBasePlate(true);
             stand.setNoGravity(true);
             stand.setRightArmPose(new Rotations(-25, 0, 10));
-            float yaw = g.door.toYRot();
+            float yaw = g.door.toYRot() - 25.0f;
             stand.setYRot(yaw);
             stand.setYBodyRot(yaw);
             stand.setYHeadRot(yaw);
@@ -266,13 +266,13 @@ final class SeaWitchShowcase {
             stand.addTag(TAG);
             level.addFreshEntity(stand);
         }));
-        steps.add(lookIn(g, 8.4, 2.9, 5.6, 4.0, 2.0, 7.4));
+        steps.add(lookIn(g, 11.0, 2.9, 2.6, 6.5, 2.0, 0.4));
         steps.add(Step.waitTicks(30));
         steps.add(Step.screenshot("diving_gear"));
-        steps.add(lookIn(g, 6.1, 2.5, 6.1, 4.0, 2.1, 7.0));
+        steps.add(lookIn(g, 9.3, 2.4, 0.9, 6.5, 2.1, 0.3));
         steps.add(Step.waitTicks(10));
         steps.add(Step.screenshot("diving_gear_close"));
-        steps.add(lookIn(g, 1.6, 2.7, 8.4, 4.0, 1.7, 7.2));
+        steps.add(lookIn(g, 3.6, 2.8, -1.8, 6.5, 1.7, 0.2));
         steps.add(Step.waitTicks(10));
         steps.add(Step.screenshot("diving_gear_back"));
         steps.add(Step.server(any -> {

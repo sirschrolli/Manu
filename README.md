@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.96.0 – Der Steinhüter.** Im Feenreich liegen jetzt **alte Mondsteinbrüche**: runde Gruben, zwölf Blöcke tief, in drei Stufen abgebaut, mit Rampen an den Wänden, offenen **Adern aus Mondsteinerz**, gemeißelten Lampen, überhängendem Moos mit Leuchtranken, zwei Gerüsten aus Glimmerholz, einem **Kran**, an dessen Kette noch ein behauener Block hängt, und der **Hütte des Vorarbeiters** mit einer Truhe. Am Grund kniet vor dem leuchtenden **Hüterstein** der **Steinhüter** und schläft – ein Riese aus Feenstein mit Lavendelmoos, Mondsteinkristallen und einem pulsierenden Herzen. Wer hinabsteigt, weckt ihn: **Faustschlag**, **Stampfer**, **Felswurf**, **Kristallspur**, **Felssprung** (er folgt dir auf die Terrassen) und im Zorn der **Mondstrahl**; unter halber Kraft wächst ihm ein **Kristallpanzer**, der zerspringt – dann ist er benommen. Eigene Bossleiste, eigene Klänge. Er hinterlässt den **Hüterhammer** (in 3D, Rechtsklick: eine Spur aus Mondsteinkristallen); der erloschene Stein ruft mit einem **Mondstein** einen neuen Hüter. Neu ist auch das **Mondsteinerz** im ganzen Feenreich (Mondstein, Mondsteinblock) und die **Mondsteinrüstung** der Zauberer – Schutz wie Eisen, sehr gut verzauberbar, **mehr Mana** und schnellere Erholung (der volle Satz 80 Mana mehr), in 3D mit Stirnreif, Sternenmantel, Schulterstücken mit Mondsicheln und spitzen Zauberschuhen.
+> **Testversion 0.97.0 – Die Meerhexe.** Am Grund des Urmeers liegen jetzt **Hexengrotten**: buckelige Kuppeln aus Gezeitenstein in einer **toten Zone**, in der nichts mehr wächst, mit einem Eingang durch die **Rippen eines Wals**, Knochensäulen mit Seelenlaternen, zwei Blasensäulen, Nischen voller Hexenkram, Laternen an Ketten, dem Wrack eines Bootes und zwei Truhen. In der Mitte brodelt der **Hexenkessel** – und über ihm schwebt in Trance **die Meerhexe**, eine verstoßene Meerjungfrau mit einer Krone aus schwarzer Koralle, Haar aus Tang und einem Aalschwanz, gebändert wie ein Feuerfisch. Wer ihr zu nahe kommt, weckt sie: **Tintengeschosse**, **Strudel**, **Sirenengesang** (wegsehen!), **Blasengefängnis**, **Haie**, **Korallenspieße**, **Schwanzhieb**, im Zorn der **Fluch der Tiefe** und eine **Woge aus Tinte**. Eigene Bossleiste, eigene Klänge. Sie hinterlässt den **Hexenstab** (in 3D, Rechtsklick: drei Tintenkugeln, die dem Ziel folgen); den erkalteten Kessel weckt eine **Perle**. Neu ist auch **Aquamarinerz** am Meeresgrund (Aquamarin, Aquamarinblock) und daraus die **Taucherrüstung** – länger atmen, schneller schwimmen und abbauen, mit dem vollen Satz klare Sicht unter Wasser; in 3D mit Taucherhelm und Bullaugen, Luftflaschen, Bleigürtel und Flossen.
+> In 0.96 kam **der Steinhüter**: Im Feenreich liegen jetzt **alte Mondsteinbrüche**: runde Gruben, zwölf Blöcke tief, in drei Stufen abgebaut, mit Rampen an den Wänden, offenen **Adern aus Mondsteinerz**, gemeißelten Lampen, überhängendem Moos mit Leuchtranken, zwei Gerüsten aus Glimmerholz, einem **Kran**, an dessen Kette noch ein behauener Block hängt, und der **Hütte des Vorarbeiters** mit einer Truhe. Am Grund kniet vor dem leuchtenden **Hüterstein** der **Steinhüter** und schläft – ein Riese aus Feenstein mit Lavendelmoos, Mondsteinkristallen und einem pulsierenden Herzen. Wer hinabsteigt, weckt ihn: **Faustschlag**, **Stampfer**, **Felswurf**, **Kristallspur**, **Felssprung** (er folgt dir auf die Terrassen) und im Zorn der **Mondstrahl**; unter halber Kraft wächst ihm ein **Kristallpanzer**, der zerspringt – dann ist er benommen. Eigene Bossleiste, eigene Klänge. Er hinterlässt den **Hüterhammer** (in 3D, Rechtsklick: eine Spur aus Mondsteinkristallen); der erloschene Stein ruft mit einem **Mondstein** einen neuen Hüter. Neu ist auch das **Mondsteinerz** im ganzen Feenreich (Mondstein, Mondsteinblock) und die **Mondsteinrüstung** der Zauberer – Schutz wie Eisen, sehr gut verzauberbar, **mehr Mana** und schnellere Erholung (der volle Satz 80 Mana mehr), in 3D mit Stirnreif, Sternenmantel, Schulterstücken mit Mondsicheln und spitzen Zauberschuhen.
 > In 0.95 kamen **Rüstungen in 3D**: Getragene Rüstungen haben jetzt **echte 3D-Teile passend zu ihrem Material** – an Spielern und auf Rüstungsständern, für **alle Rüstungen der Mod und die von Minecraft**. Die **Stahlrüstung** ist ein Ritter: Kamm und roter **Helmbusch**, Schulterstücke aus drei Platten mit Goldsaum, Ellbogenkacheln, Beintaschen, Kniebuckel und goldene **Sporen**. **Konterit** (leicht und schnell) trägt **Flügel an den Schläfen und Knöcheln**, einen Stirnstein, sichelförmige Schulterstücke und einen **kurzen Umhang**. **Nachtstahl** hat eine **Krone aus Nachtkristallen** und Kristallstacheln auf Schultern, Rücken, Knien und Fersen, deren Spitzen leuchten. **Abyssit** hat zwei große **Hörner** mit leuchtenden Adern, einen Stirnkristall, schwere Schulterstücke und leuchtende Kristalle. Die **Drachenschuppen** tragen die **Hörner ihres Drachen** (Feuer geschwungen mit Glut, Eis aus Kristall, Blitz gezackt, Natur ein **Geweih mit Blättern**, Erde **Widderhörner**, Wasser **Flossen**), Rückenstacheln (Blätter, ein Flossensaum, Steinplatten), Schulterschuppen mit Kralle, Krallen an den Stiefeln und zu den Beinschienen einen **Drachenschwanz** mit der Spitze ihres Elements (eine glühende Flamme, ein Eiskristall, eine Blitzklinge, ein Blatt, eine Steinkeule mit Bernstein, eine Flosse). Die **Edelsteinkrone** bekommt Zacken mit Perlen und Edelsteine. Und die Rüstungen von Minecraft: **Leder** (Feder, Pelzkragen, Gürtel mit Tasche, Pelzstulpen), **Kettenhemd** (Kettenkragen, Kettenschultern, Kettenschurz), **Kupfer** (Helmspitze, Platten mit Grünspan), **Eisen** (Nasenschutz, Schulterstücke, Kniebuckel), **Gold** (Strahlenkamm, Rubine, Sonnenscheibe), **Diamant** (Kamm und Schultern aus Diamantsplittern), **Netherit** (Hörner, schwere Schulterstücke mit Dornen) und der **Schildkrötenpanzer**. Verzauberte Rüstungen schimmern auch an ihren 3D-Teilen.
 > In 0.94 kamen **schönere Bossleisten**: Die Leisten aller Bosse leben jetzt: Erscheint ein Boss, **senkt sich seine Leiste herab**, das **Namensband entrollt sich** (ein Band mit Borte, Ziersteinen und Schwalbenschwänzen in den Farben des Bosses) und die Füllung **lädt sich auf** – die Phasen-Edelsteine leuchten auf, sobald sie erreicht sind. Die Edelsteine sitzen jetzt **genau bei den Kampfphasen** jedes Bosses (beim Kraken bei zwei Dritteln und einem Drittel, beim Weltenfresser dreimal, bei der Wahren Gestalt Schrollis bei Nova, Apokalypse und Neuschöpfung, bei Noctua, Malleus, Asteria und Anni bei der Hälfte …), mit einer **Kerbe** in der Leiste. **Treffer** lassen den Rahmen beben, das verlorene Stück weiß aufblitzen und das Bildnis rot; **Heilung** schimmert. Ein **Glanz** zieht über die Rahmen, um jede Leiste schweben **Teilchen ihres Bosses** – Glut, Schneeflocken, Funken, Blätter, Staub, Luftblasen, Schattenrauch, Sterne, Flügelstaub, Konfetti, Störpixel oder Tinte –, **mit jeder Phase mehr**. Erreicht ein Boss eine Phase, **zerspringt ihr Edelstein** klirrend in Splitter, Rahmen und Namensband blitzen auf; in der **letzten Phase** strömt und pulsiert die Füllung schneller, der Rahmen glüht, das Bildnis färbt sich vor Wut rot. **Der Kraken** hat jetzt seine eigene Leiste (bisher zeigte er nur die Leiste von Minecraft): Bronze mit Patina und Seepocken, zwei purpurrote Arme mit Saugnäpfen klammern sich an den Rahmen, als Spitze ein eingerollter Arm, darunter Tang und Tinte, im Medaillon sein Bildnis mit den goldenen Augen und eine Füllung aus wirbelnder Tinte mit leuchtenden Punkten. Bosse mit **Namensschild** behalten ihre eigene Leiste.
 > In 0.93 kamen **Meeresdörfer**: Im Urmeer lebt jetzt **das Meervolk**: Auf dem Grund der Tangwälder, Korallengärten, Perlmuttgründe und Weiten stehen **Meeresdörfer** – ein Platz aus Prismarin und Perlmutt mit einer **Dreizacksäule**, deren Zinken leuchten, ringsum **Muschelhäuser** (runde Kuppeln aus dem Holz der Landschaft mit Bullaugen und einer leuchtenden Perle obenauf), der gewundene **Gesangsturm** aus Perlmutt, Tanggärten, Korallenbeete und Marktstände. Dort wohnen **Meerjungfrauen** in sechs Gestalten (Koralle, Tang, Perle, Lagune, Gold und die leuchtende Tiefsee): Sie treten Wasser, wenn sie stehen, schwimmen waagrecht wie Delfine, summen kleine Melodien und tauschen gegen **Perlen** – die **Perlentaucherin** (Perlmutt, Nautilusschalen, ein Herz des Meeres), die **Korallengärtnerin** (die Setzlinge der Meeresbäume, Korallen), die **Muschelbauerin** (Meereshölzer, Türen, Laternen, Prismarin) und die **Gezeitensängerin** (Tränke, Bücher mit den Verzauberungen des Wassers, ein Aquisitor). **Tritonwachen** mit Flossenhelm und Dreizack halten Haie und Ertrunkene fern und werfen ihren Dreizack nach jedem, der eine Meerjungfrau angreift. Perlen gibt es für Fisch, Tang, Prismarin und Tinte, in den Truhen der Dörfer und manchmal in Muscheln.
@@ -401,6 +402,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Schönere Bossleisten** (0.94): die Leisten aller Bosse leben – Erscheinen mit entrollendem Namensband und Aufladen, Phasen-Edelsteine genau bei den Kampfphasen jedes Bosses (sie zerspringen in Splitter), Beben und Aufblitzen bei Treffern, Schimmer bei Heilung, ein Glanz über dem Rahmen, Teilchen je Boss und Phase, die letzte Phase pulsierend; die eigene Leiste des Kraken; mit Namensschild bleibt die eigene Leiste | ✅ fertig |
 | **Rüstungen in 3D** (0.95): getragene Rüstungen mit 3D-Teilen passend zum Material – Stahl (Helmbusch, Schulterstücke, Sporen), Konterit (Flügel, Umhang), Nachtstahl (Kristallkrone und Stacheln), Abyssit (Hörner, Kristalle), Drachenschuppen je Element (Hörner oder Geweih, Rückenstacheln, Drachenschwanz, Krallen), Edelsteinkrone; dazu Leder, Kettenhemd, Kupfer, Eisen, Gold, Diamant, Netherit und Schildkrötenpanzer | ✅ fertig |
 | **Der Steinhüter** (0.96): der alte Mondsteinbruch im Feenreich (drei Stufen, Rampen, Erzadern, Lampen, Gerüste, Kran, Hütte mit Truhe); der Steinhüter als Boss (schläft vor dem Hüterstein, sieben Angriffe, Kristallpanzer, Benommenheit, eigene Bossleiste und Klänge, Rückruf mit Mondstein); der Hüterhammer in 3D; Mondsteinerz, Mondstein, Mondsteinblock und die Mondsteinrüstung (mehr Mana, in 3D) | ✅ fertig |
+| **Die Meerhexe** (0.97): die Hexengrotte im Urmeer (Kuppel aus Gezeitenstein in einer toten Zone, Eingang durch die Rippen eines Wals, Knochensäulen, Blasensäulen, Nischen, Wrack, zwei Truhen); die Meerhexe als Boss (schwebt in Trance über ihrem Kessel, acht Angriffe und der Zorn mit der Woge aus Tinte, eigene Bossleiste und Klänge, Rückruf mit einer Perle); der Hexenstab in 3D; Aquamarinerz, Aquamarin, Aquamarinblock und die Taucherrüstung (länger atmen, schneller schwimmen und abbauen, klare Sicht, in 3D) | ✅ fertig |
 | **Der Weg zum Unsterblichen** (0.77): Heldenstufe bis 200, fünf neue Ränge (Mythos, Halbgott, Titan, Sternenwanderer, Unsterblicher) mit Abzeichen und Wahrzeichen, Heldenkraft je Stufe, Talente bis 40 Punkte (Meisterschaft), je 25 Herz- und Manakristalle, das Licht der Unsterblichkeit, Heldenherzen in Schichten | ✅ fertig |
 | **Schrolli greift zur Klinge** (0.76): Nahkampf am Boden – Landung, Beine in goldenen Beinschienen, die Klinge aus Licht mit Lichtspur, sieben Künste der Klinge (Klingenhieb, Lichtsicheln, Sturmlauf, Klingenwirbel, Himmelssturz, Schwingenwehr mit Gegenschlag, Weltenklinge), jetzt 33 Künste; warme, leisere Klänge und Musik | ✅ fertig |
 | **Die Kampfdimensionen** (0.74): Mondbühne, Glutesse, Sternenzelt, Fehlerraum, Thronwelt und Weltenschlund – die sechs großen Bosse ziehen ihre Gegner in ein Abbild ihres Horts unter einem fremden Himmel (Regeln wie in der Arkanen Sphäre, Nachzügler folgen); nach der Niederlage erwacht der Boss unversehrt in seiner ursprünglichen Gestalt; Spawn-Ei des Weltenfressers; `/locate` findet Schlund und Thron | ✅ fertig |
@@ -461,7 +463,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.96.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.97.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -469,7 +471,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.96.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.97.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -2710,6 +2712,96 @@ Anglerfische, Ertrunkene und Wächter vom Dorf fern – aus der Nähe mit Stöß
 eilen herbei, wenn jemand eine Meerjungfrau angreift. Mit Spielern tauschen sie nicht; sie grüßen nur. Beide gibt es als
 Spawn-Ei.
 
+### Die Meerhexe und die Hexengrotte (seit 0.97)
+
+![Die Meerhexe in ihrer Hexengrotte, ihre Angriffe, der Hexenstab und die Taucherrüstung aus Aquamarin](docs/bilder/meerhexe.jpg)
+
+Seit 0.97 liegen am Grund des Urmeers **Hexengrotten** – in den Weiten, im Tangwald, in der Leuchtenden Tiefe und auf den
+Perlmuttgründen, wo der Grund eben genug ist und noch gut zwanzig Blöcke Wasser darüber stehen. Rings um eine Grotte ist das
+Meer **tot**: Bäume und Tang sind verschwunden, auf dem Grund liegen Kies, tote Korallen, Knochen, getrockneter Tang und hier
+und da ein Schädel – so steht die Kuppel frei, auch mitten im dichtesten Tangwald. Die Grotte selbst ist eine buckelige
+**Kuppel aus Gezeitenstein**, gut dreißig Blöcke breit und vierzehn hoch, mit Resten alter Mauern, toten Korallen und hier und
+da **Aquamarin** in der Schale; innen steht das Wasser. Man betritt sie durch die **Rippen eines Wals**: drei Spitzbögen aus
+Knochen, auf dem ersten ein Schädel, am zweiten zwei Schädel und eine Seelenlaterne; davor führt ein Pfad aus Kies und Knochen
+zwischen zwei Laternenpfosten hindurch.
+
+Innen ist der Boden aus Sand und Kies, mit Seegras, Leuchtalgen und Knochen. In der Mitte steht auf einem **Podest** aus
+Gezeitensteinziegeln mit leuchtenden Runen der **Hexenkessel** – schwarze Bronze mit Grünspan und Nieten, überwuchert von
+schwarzer Koralle mit leuchtenden Polypen; darin brodelt ein meergrüner Trank, Blasen steigen auf. Rings um das Podest stehen
+vier **Knochensäulen** mit Seelenlaternen, dahinter zwei **Blasensäulen** über Seelensand (wer hineinschwimmt, bekommt Luft),
+an den Wänden **Nischen** mit Braustand, Kerzen, Schädeln, Töpfen und Seegurken; von der Decke hängen Laternen an Ketten, und
+Leuchtflechten überziehen sie. Hinten liegt das **Wrack** eines Bootes (Rumpf und Mast) mit einer Truhe, eine zweite Truhe
+steht hinter dem Kessel (Aquamarin, Perlen, Tinte, Prismarin, Flaschen, Gold, Münzen – mit etwas Glück ein Taucherhelm, Flossen,
+ein Herz des Meeres oder ein verzaubertes Buch). Höchstens eine Grotte je Gebiet von knapp 500 × 500 Blöcken, nie zu nahe am
+Schlund des Kraken (Finden: `/kaw hexengrotte` im Urmeer, mit `tp`, `awaken` und `reset`).
+
+Über dem Kessel schwebt in Trance **die Meerhexe** – eine verstoßene Meerjungfrau, die dort unten ihre Zauber braut: oben eine
+hagere Frau mit fahler, graugrüner Haut, schmalem Gesicht, leuchtenden Augen und dunklen Lippen, einer **Krone aus schwarzer
+Koralle** mit einem leuchtenden Aquamarin und wildem **Haar aus Tang**, dessen Strähnen im Wasser nach oben treiben und an den
+Spitzen leuchten; dazu ein zerschlissener Umhang aus Tang, eine Kette aus Haizähnen, Armreife aus Knochen und lange Krallen.
+Unten ein langer **Aalschwanz** in fünf Gliedern, gebändert wie ein Feuerfisch, mit leuchtenden Punkten, giftigen Stacheln
+auf dem Rücken, zwei gefächerten Flossen an den Hüften und einer zerrissenen Schwanzflosse. In der rechten Hand hält sie ihren
+**Hexenstab** aus Treibholz: Drei Korallenzinken halten eine leuchtende Kugel, darunter hängen Muscheln und Zähne an Schnüren.
+In Trance wiegt sie sich langsam, ihr Leuchten ist gedämpft, und ihr Haar treibt um sie her. Wer sich der Grotte nähert, hört ein Flüstern
+(„Ein Flüstern treibt durchs Wasser … hier unten braut jemand etwas.“). Wer ihr näher als zehn Blöcke kommt (oder sie schlägt),
+weckt sie: Ihre Augen leuchten auf, ihr Haar hebt sich, die Kugel auf ihrem Stab glüht auf – und sie lacht, und ein Ring aus
+Tinte läuft von ihr fort. In Trance und beim Erwachen ist sie unverwundbar.
+
+Sie steht in der Reihe der Bosse **zwischen Malleus und den Drachen** (680 Lebenspunkte, Rüstung 8, Zähigkeit 3, lässt sich
+kaum wegstoßen; Stürze, Wände und Wasser schaden ihr nicht). Sie schwimmt im Kreis um ihre Gegner, auf und ab wogend, bleibt
+dabei unter ihrer Kuppel und greift abwechselnd an. Wer sie weit fortlockt, dem entkommt sie in einer Tintenwolke zurück über
+ihren Kessel. Eigene Bossleiste (geschwärzte Bronze mit Grünspan, hinter dem Medaillon fächert schwarze Koralle mit
+leuchtenden Polypen, auf dem Rahmen sprießen kleine Korallen und liegen Perlen, unten treibt Tang, als Spitze eine
+Korallengabel mit einer leuchtenden Kugel; die Füllung wirbelt meergrün wie ihr Trank, mit Blasen), eigene Klänge.
+
+| Angriff | Was geschieht |
+|---|---|
+| **Tintengeschosse** | sie hebt den Stab, und aus der Kugel jagen drei Kugeln aus Hexentinte (im Zorn fünf), die ihrem Ziel ein wenig folgen – Schaden und kurz Blindheit |
+| **Strudel** | ein leuchtender Kreis warnt, dann dreht sich das Wasser um ihr Ziel: Wer darin ist, wird herumgerissen, zur Mitte gezogen und verletzt – wer schnell hinausschwimmt, entkommt (im Zorn ist der Strudel größer) |
+| **Sirenengesang** | sie singt, ein Hexenkreis glüht um sie auf: Wer sie dabei ansieht, den zieht ihr Lied zu ihr hin, ihm wird übel – und am Ende packt sie zu. Also wegsehen! |
+| **Blasengefängnis** | eine Blase schließt ihr Ziel ein (im Zorn auch ein zweites), hält es fest, presst ihm die Luft ab – und platzt |
+| **Haie** | sie hebt die Arme, und die Tiefe antwortet: zwei Haie (im Zorn drei) schießen aus dem Dunkel – höchstens drei zugleich; sie verschwinden mit ihr |
+| **Korallenspieße** | sie stößt den Stab hinab, und Korallen brechen in einer Spur (im Zorn in dreien) aus dem Grund auf ihr Ziel zu – wer getroffen wird, fliegt |
+| **Schwanzhieb** | wer ihr zu nahe kommt, den fegt ihr Schwanz in einer Drehung fort |
+| **Fluch der Tiefe** | nur im Zorn: ein Hexenkreis um sie, dann legt sich der Fluch auf alle in der Nähe – Schwäche, Abbaulähmung, Hunger – und sie zehrt davon |
+
+Unter halber Kraft schreit sie **vor Zorn**: Drei Ringe aus Tinte laufen als **Woge** von ihr fort, stoßen alle weg und
+verdunkeln das Wasser – danach ist sie schneller und wütender, und eine Spur aus Tinte zieht hinter ihr her. Findet sie
+niemanden mehr, kehrt sie über ihren Kessel zurück und versinkt nach einer Weile wieder in Trance – geheilt und ohne Zorn.
+Besiegt sinkt sie, das Licht in ihr erlischt, und sie **zerfließt zu Tinte**. Sie hinterlässt den **Hexenstab**, einen
+**Herzkristall**, Aquamarin, Perlen, Leuchttinte, Nautilusschalen und Münzen. Der Kessel **erkaltet** – eine **Perle**
+darauf (Rechtsklick) ruft sie zurück, und sie erwacht sofort.
+
+**Der Hexenstab** – Treibholz, oben drei Zinken aus schwarzer Koralle um eine leuchtende Kugel (in der Hand in 3D):
+
+| Eigenschaft | Wirkung |
+|---|---|
+| Schlag | wie ein Schwert: 7 Schaden, 1,4 Schläge je Sekunde |
+| **Tintengeschosse** | Rechtsklick: **drei Kugeln aus Hexentinte**, die dem anvisierten Ziel ein wenig folgen (6 Schaden, mit Schärfe mehr, dazu kurz Blindheit); danach ruht er zweieinhalb Sekunden – **unter Wasser** nur anderthalb |
+| Haltbarkeit | 640, mit **Aquamarin** zu reparieren, sehr gut verzauberbar, episch |
+
+**Aquamarin:** **Aquamarinerz** – lange, meerblaue Kristallsäulen im Gezeitenstein, die ein wenig leuchten – steckt in Adern
+im Gezeitenstein des ganzen Urmeers und liegt offen in **Findlingen** am Meeresgrund (und in der Schale der Hexengrotten). Mit
+einer **Eisenspitzhacke** abgebaut gibt es **Aquamarin** (Glück bringt mehr, das Erz lässt sich auch schmelzen): einen klaren
+Stein in der Farbe des Meeres. Neun ergeben einen **Aquamarinblock** (im Treppenschliff, er klingt wie Glocken).
+
+**Die Taucherrüstung** aus Aquamarin – Schutz wie Eisen, etwas zäher, gut verzauberbar, und jeder Teil hilft unter Wasser:
+
+| Teil | Rezept | Unter Wasser |
+|---|---|---|
+| **Taucherhelm** | fünf Aquamarin um eine Glasscheibe | länger atmen und schneller abbauen |
+| **Harnisch** mit Luftflaschen | acht Aquamarin und eine Perle | noch länger atmen (mit dem Helm mehr als Atmung II) |
+| **Beinschutz** | sieben Aquamarin | schneller schwimmen |
+| **Flossen** | vier Aquamarin und zweimal getrockneter Seetang | noch schneller schwimmen (mit dem Beinschutz wie Wasserläufer II) |
+
+Mit dem **vollen Satz** sieht man unter Wasser **klar** (Nachtsicht, solange der Kopf unter Wasser ist, und noch ein paar
+Sekunden danach). In 3D trägt sie einen runden **Taucherhelm** mit Sichtfenster im Messingrahmen, Bullaugen an den Seiten,
+Ventil und Messingkragen, zwei **Luftflaschen** auf dem Rücken mit Schlauch zum Helm, eine Druckanzeige auf der Brust,
+Armreife mit Aquamarin, einen **Bleigürtel**, Knieplatten mit Messingsaum und breite **Flossen** an den Füßen.
+
+Aquamarinerz, Aquamarin, Aquamarinblock, die Rüstung, der Hexenkessel, der Hexenstab und das Spawn-Ei der Meerhexe liegen im
+Kreativ-Reiter **„Das Meer“**.
+
 ### Das Feenreich
 
 ![Das Feenreich: Landschaften, Wesen, der Mondhain, Noctua und die Feen-Elytren](docs/bilder/feenreich.jpg)
@@ -4300,6 +4392,7 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 | `/kaw mondhain` · `/kaw mondhain tp` · `/kaw mondhain awaken` | (nur Operatoren) Lage des nächsten Mondhains im Feenreich anzeigen (`/locate` findet ihn nicht), dorthin reisen (auch aus einer anderen Welt), die Mottenkönigin aus ihrem Kokon wecken |
 | `/kaw zauberbuehne` · `/kaw zauberbuehne tp` · `/kaw zauberbuehne awaken` · `/kaw zauberbuehne reset` | (nur Operatoren) Lage der nächsten Zauberbühne im Feenreich anzeigen (`/locate` findet sie nicht), in den Zuschauergang reisen (auch aus einer anderen Welt), MissMystiks Vorstellung beginnen, den Zylinder wieder füllen |
 | `/kaw fehlerzone` · `/kaw fehlerzone tp` · `/kaw fehlerzone awaken` · `/kaw fehlerzone reset` | (nur Operatoren) Lage der nächsten Fehlerzone in der Oberwelt anzeigen, an ihren Rand reisen (auch aus einer anderen Welt), Anni den Troll aus dem Fehlerkern laden, den Kern zurücksetzen |
+| `/kaw hexengrotte` · `/kaw hexengrotte tp` · `/kaw hexengrotte awaken` · `/kaw hexengrotte reset` | (nur Operatoren) Lage der nächsten Hexengrotte im Urmeer anzeigen, vor ihren Eingang reisen (auch aus einer anderen Welt), die Meerhexe aus ihrer Trance wecken, sie wieder in Trance versetzen (der Kessel brodelt wieder) |
 | `/kaw throne` · `/kaw throne tp` · `/kaw throne reset` | (nur Operatoren) Lage des Throns der Alten in der Leere anzeigen, an seinen Rand reisen, den Zerbrochenen König wieder schlafen legen |
 | `/kaw dim <oberwelt\|nether\|end\|schattenwelt\|leere>` · `/kaw dim <Dimension>` | (im Kreativmodus oder mit Cheats) sofort in eine andere Dimension wechseln – man landet an derselben Stelle (im Nether bei einem Achtel der Koordinaten) auf sicherem Boden: im Nether in einer Höhle, im End auf der Obsidianplattform, in der Leere auf dem nächsten Bruchstück |
 | `/kaw story reset\|card <Kapitel>\|chronicle` | (nur Operatoren) Geschichte zurücksetzen, eine Titelkarte zeigen, die Chronik als Buch geben (seit 0.79 sonst nur noch per Taste J) |
@@ -4332,7 +4425,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.96.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.97.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -4488,15 +4581,17 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      Leiste des Kraken;
    - **0.95 – Rüstungen in 3D** (fertig): getragene Rüstungen mit 3D-Teilen passend zum Material – alle
      Rüstungen der Mod und die von Minecraft;
-   - zuletzt **0.96 – Der Steinhüter** (fertig): der alte Mondsteinbruch im Feenreich mit dem Steinhüter als
-     Boss, der Hüterhammer, Mondsteinerz und die Mondsteinrüstung der Zauberer.
+   - **0.96 – Der Steinhüter** (fertig): der alte Mondsteinbruch im Feenreich mit dem Steinhüter als
+     Boss, der Hüterhammer, Mondsteinerz und die Mondsteinrüstung der Zauberer;
+   - zuletzt **0.97 – Die Meerhexe** (fertig): die Hexengrotte im Urmeer mit der Meerhexe als Boss, der
+     Hexenstab, Aquamarinerz und die Taucherrüstung.
 
    Damit ist der Weg der Geschichte vollständig – vom Siegel der sechs Drachen bis zum Weltenfresser im Abgrund.
 
    **Als Nächstes geplant:** weitere Bosse, Erze und Bauwerke für die anderen Dimensionen und bessere Klänge.
 
    Die Bosse werden in dieser Reihenfolge stärker: Karkinos und Noctua (früh im Spiel) → Steinhüter → Erzmagier → MissMystik →
-   Malleus → Drachen → Asteria → Kraken → Anni der Troll → Zerbrochener König → Weltenfresser → Schrolli der Schöpfer.
+   Malleus → Meerhexe → Drachen → Asteria → Kraken → Anni der Troll → Zerbrochener König → Weltenfresser → Schrolli der Schöpfer.
 
 ## Danksagung
 

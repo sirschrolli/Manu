@@ -327,6 +327,11 @@ public record SeaTreeFeature(Kind kind) implements Feature {
         if (!ground(level.getBlockState(origin.below())) || !open(level.getBlockState(origin))) {
             return false;
         }
+        // beim Erzeugen der Welt nie in der toten Zone einer Hexengrotte (dort wächst nichts mehr)
+        if (level instanceof net.minecraft.server.level.WorldGenRegion
+                && io.github.sirschrolli.kingdomsatwar.worldgen.witch.WitchGrottoPiece.inClearing(level, origin.getX(), origin.getZ(), 5)) {
+            return false;
+        }
         int water = water(level, origin, 64);
         // nie bis an die Oberfläche: drei Blöcke Wasser bleiben darüber (an Land wächst er wie ein Baum, bis 20 hoch)
         int room = water > 0 ? water - 3 : 20;

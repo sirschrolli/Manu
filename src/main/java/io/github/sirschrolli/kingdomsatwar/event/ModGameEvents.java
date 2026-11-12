@@ -632,8 +632,17 @@ public final class ModGameEvents {
             ServerPlayer player = source.getPlayerOrException();
             int floor = cauldron != null ? cauldron.getY() - io.github.sirschrolli.kingdomsatwar.worldgen.witch.WitchGrottoPiece.CAULDRON_Y
                     : sea.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.OCEAN_FLOOR, cx, cz);
-            int z = cz + io.github.sirschrolli.kingdomsatwar.worldgen.witch.WitchGrottoPiece.REACH + 2;
-            player.teleportTo(sea, cx + 0.5, floor + 6, z + 0.5, java.util.Set.of(), 180.0f, 15.0f, true);
+            // vor den Eingang (am Anfang des Pfads, mit Blick auf die Rippen)
+            net.minecraft.core.Direction door = net.minecraft.core.Direction.SOUTH;
+            var start = sea.getChunk(cx >> 4, cz >> 4, net.minecraft.world.level.chunk.status.ChunkStatus.STRUCTURE_STARTS)
+                    .getStartForStructure(structure.get().value());
+            if (start != null && start.isValid()
+                    && start.getPieces().getFirst() instanceof io.github.sirschrolli.kingdomsatwar.worldgen.witch.WitchGrottoPiece piece) {
+                door = piece.door();
+            }
+            int reach = io.github.sirschrolli.kingdomsatwar.worldgen.witch.WitchGrottoPiece.REACH - 3;
+            player.teleportTo(sea, cx + 0.5 + door.getStepX() * reach, floor + 4, cz + 0.5 + door.getStepZ() * reach, java.util.Set.of(),
+                    door.getOpposite().toYRot(), 10.0f, true);
             return 1;
         }
         if (cauldron == null || !(sea.getBlockEntity(cauldron) instanceof io.github.sirschrolli.kingdomsatwar.block.sea.WitchCauldronBlockEntity be)) {
