@@ -617,7 +617,10 @@ public class SeaWitchEntity extends Monster implements io.github.sirschrolli.kin
         }
         if (t == 40) {
             this.sound(level, ModSounds.SEA_WITCH_LAUGH.get(), 4.0f, 1.0f);
-            this.inkWave(level, this.getY(0.35), 28, 0.35);
+            this.inkWave(level, this.getY(0.35), 16, 0.32);
+            io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity.create(level,
+                    io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity.Kind.SHOCKWAVE, new Vec3(this.getX(), this.getY(0.3), this.getZ()),
+                    null, 0x5AE8B8, 10, 1.0f).param(0.45f).spawn();
             Component title = Component.translatable("boss.kingdomsatwar.sea_witch").withColor(0x7AF0C8);
             Component subtitle = Component.translatable("boss.kingdomsatwar.sea_witch.title").withStyle(ChatFormatting.GRAY);
             for (ServerPlayer player : level.players()) {
@@ -950,11 +953,13 @@ public class SeaWitchEntity extends Monster implements io.github.sirschrolli.kin
             level.sendParticles(ParticleTypes.GLOW_SQUID_INK, this.getX(), this.getY(0.6), this.getZ(), 4, 0.6, 0.8, 0.6, 0.02);
         }
         if (t == 20) {
-            // die Woge: drei Ringe aus Tinte laufen von ihr fort, dazwischen leuchtende Funken
-            this.inkWave(level, this.getY(0.15), 40, 0.75);
-            this.inkWave(level, this.getY(0.45), 48, 0.9);
-            this.inkWave(level, this.getY(0.75), 40, 0.75);
-            level.sendParticles(ParticleTypes.GLOW_SQUID_INK, this.getX(), this.getY(0.5), this.getZ(), 24, 2.5, 1.2, 2.5, 0.08);
+            // die Woge: ein leuchtender Ring läuft von ihr fort (so weit, wie die Woge reicht), mit ihm Ringe aus Tinte
+            io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity.create(level,
+                    io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity.Kind.SHOCKWAVE, new Vec3(this.getX(), this.getY(0.3), this.getZ()),
+                    null, 0x5AE8B8, 16, 1.5f).param(0.8f).spawn();
+            this.inkWave(level, this.getY(0.2), 18, 0.8);
+            this.inkWave(level, this.getY(0.5), 22, 0.95);
+            this.inkWave(level, this.getY(0.8), 18, 0.8);
             for (LivingEntity victim : this.victims(level, this.getBoundingBox().inflate(14.0))) {
                 double d = victim.distanceTo(this);
                 if (d > 14.0) {
