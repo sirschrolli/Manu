@@ -83,7 +83,7 @@ final class SeaWitchShowcase {
         shot(steps, "grotto_outside", true);
         steps.add(look(g, 8.0, 26.0, 17.0, 0.0, 5.0, 0.0));
         shot(steps, "grotto_dome", false);
-        steps.add(look(g, WitchGrottoPiece.REACH + 1.0, 5.0, 2.5, WitchGrottoPiece.RADIUS - 2.0, 3.6, 0.0));
+        steps.add(lookOver(g, WitchGrottoPiece.REACH - 1.0, 4.5, 1.5, WitchGrottoPiece.RADIUS - 1.0, 3.8, 0.0));
         shot(steps, "grotto_entrance", false);
         // innen
         steps.add(Step.server(any -> {
@@ -181,7 +181,7 @@ final class SeaWitchShowcase {
                 {"WHIRLPOOL", "34", "witch_whirlpool", "55", "8.5", "2.5", "0.7", "8.0", ""},
                 {"SONG", "34", "witch_song", "30", "6.5", "0.2", "0.1", "8.0", ""},
                 {"BUBBLE", "24", "witch_bubble", "40", "8.0", "1.0", "0.55", "7.0", ""},
-                {"SHARKS", "27", "witch_sharks", "35", "10.5", "2.5", "0.3", "8.0", ""},
+                {"SHARKS", "31", "witch_sharks", "35", "10.5", "2.5", "0.5", "8.0", ""},
                 {"CORAL", "24", "witch_coral", "50", "9.0", "3.0", "0.5", "8.0", ""},
                 {"TAIL", "11", "witch_tail", "75", "6.5", "0.6", "0.3", "2.6", ""},
                 {"FURY", "16", "witch_fury_scream", "35", "6.5", "0.4", "0.0", "7.0", ""},
@@ -403,6 +403,25 @@ final class SeaWitchShowcase {
             Vec3 eye = rel(g, along, up, side);
             Vec3 to = rel(g, talong, tup, tside).subtract(eye);
             tp(minecraft, eye, to);
+        });
+    }
+
+    /** Wie {@link #look}, aber die Höhe der Kamera zählt vom Grund unter ihr (draußen, wo das Gelände ansteigt). */
+    private static Step lookOver(Grotto g, double along, double aboveGround, double side, double talong, double tup, double tside) {
+        return Step.server(any -> {
+            ServerLevel level = sea(any);
+            if (g.center == null || level == null || any.getServer().getPlayerList().getPlayers().isEmpty()) {
+                return;
+            }
+            Vec3 eye = rel(g, along, 0.0, side);
+            int ground = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.OCEAN_FLOOR, (int) Math.floor(eye.x),
+                    (int) Math.floor(eye.z));
+            eye = new Vec3(eye.x, Math.max(ground, g.center.getY()) + aboveGround, eye.z);
+            Vec3 look = rel(g, talong, tup, tside).subtract(eye);
+            float yaw = (float) (-Math.atan2(look.x, look.z) * 180.0 / Math.PI);
+            float pitch = (float) (-Math.atan2(look.y, Math.sqrt(look.x * look.x + look.z * look.z)) * 180.0 / Math.PI);
+            var player = any.getServer().getPlayerList().getPlayers().getFirst();
+            player.teleportTo(level, eye.x, eye.y - 1.62, eye.z, java.util.Set.of(), yaw, pitch, true);
         });
     }
 
