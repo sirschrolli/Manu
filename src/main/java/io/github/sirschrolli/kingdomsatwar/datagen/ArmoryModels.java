@@ -42,6 +42,9 @@ final class ArmoryModels {
                 ArmoryShapes.KEEPER_MAUL, 0.55f, 3.5f);
         MonsterGearModels.weapon(items, io.github.sirschrolli.kingdomsatwar.registry.SeaWitch.WITCH_STAFF.get(), "sea_witch_staff",
                 ArmoryShapes.SEA_WITCH_STAFF, 0.5f, 3.5f);
+        // der Hirtenstab (0.98): die Beute des Seelenhirten
+        MonsterGearModels.weapon(items, io.github.sirschrolli.kingdomsatwar.registry.SoulShepherd.CROOK.get(), "shepherd_crook",
+                ArmoryShapes.SHEPHERD_CROOK, 0.48f, 3.5f);
         // die runden Schilde sind kleiner als der von Minecraft: aus eigener Sicht etwas höher, damit man sie sieht
         shield(items, Armory.STEEL_BUCKLER.get(), "steel_buckler", ArmoryShieldShapes.STEEL_BUCKLER, 3.5f);
         shield(items, Armory.DRAGON_SHIELD.get(), "dragon_shield", ArmoryShieldShapes.DRAGON_SHIELD, 0.0f);

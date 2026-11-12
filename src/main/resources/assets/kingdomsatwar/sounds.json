@@ -8795,6 +8795,197 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.soul_heron.wings"
   },
+  "entity.soul_shepherd.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_ambient1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_ambient2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soul_shepherd.ambient"
+  },
+  "entity.soul_shepherd.awaken": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_awaken1",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soul_shepherd.awaken"
+  },
+  "entity.soul_shepherd.bell": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_bell1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_bell2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soul_shepherd.bell"
+  },
+  "entity.soul_shepherd.crash": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_crash1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_crash2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soul_shepherd.crash"
+  },
+  "entity.soul_shepherd.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_death1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soul_shepherd.death"
+  },
+  "entity.soul_shepherd.fog": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_fog1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_fog2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soul_shepherd.fog"
+  },
+  "entity.soul_shepherd.fury": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_fury1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soul_shepherd.fury"
+  },
+  "entity.soul_shepherd.hook": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_hook1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_hook2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soul_shepherd.hook"
+  },
+  "entity.soul_shepherd.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_hurt1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_hurt2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_hurt3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soul_shepherd.hurt"
+  },
+  "entity.soul_shepherd.lantern": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_lantern1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_lantern2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soul_shepherd.lantern"
+  },
+  "entity.soul_shepherd.pen": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_pen1",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soul_shepherd.pen"
+  },
+  "entity.soul_shepherd.step": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_step1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_step2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_step3",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_step4",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soul_shepherd.step"
+  },
+  "entity.soul_shepherd.storm": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_storm1",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soul_shepherd.storm"
+  },
+  "entity.soul_shepherd.wisp_hit": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_wisp_hit1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_wisp_hit2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_wisp_hit3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soul_shepherd.wisp_hit"
+  },
+  "entity.soul_shepherd.wisps": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_wisps1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/shadow/soul_shepherd_wisps2",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soul_shepherd.wisps"
+  },
   "entity.star_ray.ambient": {
     "sounds": [
       {

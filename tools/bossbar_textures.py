@@ -51,6 +51,7 @@ PHASES = {
     "kraken": (0.67, 0.34),              # zweimal ruft er die Tiefe, beim zweiten Mal gerät er in Raserei
     "keeper": (0.5,),                    # unter halber Kraft legt er den Kristallpanzer an
     "sea_witch": (0.5,),                 # unter halber Kraft rast sie vor Zorn
+    "soul_shepherd": (0.5,),             # unter halber Kraft läutet er im Zorn
     "moth": (0.5,), "forge": (0.5,), "star": (0.5,), "anni": (0.5,), "anni2": (0.5,),
     "mystic": (0.6, 0.3),                # Zugabe und großes Finale
     "schrolli": (0.7, 0.4),              # erste Gestalt: zweimal schneller
@@ -186,6 +187,14 @@ ELEMENTS = {
                       coral0="#0a060a", coral1="#24161f", coral2="#4a3443", coral3="#7a5a6c",
                       polyp="#ff7ac8", polyp_light="#ffd4f0", kelp="#1a4424", kelp_light="#3e7a3e", kelp_glow="#7affc8",
                       pearl="#f2eefa", pearl_dark="#9a92b4", orb="#3ccad8", orb_light="#c4fff8"),
+    # der Seelenhirte (seit 0.98): geschwärztes Eisen mit verwittertem Bein; hinter dem Medaillon rollen sich zwei gerippte
+    # Widderhörner, unter der Leiste hängen an Ketten Talismane (Knochen, ein Schädel, Laternchen), als Spitze der Haken seines
+    # Stabs mit der Laterne voll Seelenfeuer; über dem Rahmen treiben Irrlichter. Füllung wie Seelenfeuer – züngelnde Flammen
+    "soul_shepherd": dict(m0="#0c0d10", m1="#3a3644", m2="#b4acc0", acc="#4fe0d0", glow="#e0fffa", deep="#03100f",
+                          f0="#032a28", f1="#0c6a62", f2="#2ac8bc", f3="#e8fffb",
+                          horn0="#1e160e", horn1="#4a3a26", horn2="#86704f", horn3="#c8b28a",
+                          iron0="#121316", iron1="#2b2e35", iron2="#50555f", iron3="#8a919c",
+                          bone="#e2d8c0", bone_dark="#8e846e", soul="#2ac8bc", soul_light="#c4fff6", wood="#3e2d1e"),
 }
 
 OUTLINE = (12, 10, 12, 255)
@@ -2363,6 +2372,129 @@ def post_sea_witch(img: Image.Image, pal: dict) -> None:
 
 
 # =============================================================================================
+# Der Seelenhirte (seit 0.98)
+# =============================================================================================
+
+def _ram_horn(layer: Image.Image, g: dict, cx: float, cy: float, r0: float, r1: float, a0: float, a1: float, w0: float,
+              w1: float) -> None:
+    """Ein gerolltes Widderhorn: ein sich verjüngender Strang auf einer Spirale (Halbmesser r0 → r1, Winkel a0 → a1 in Grad,
+    Breite w0 → w1), quer gerippt – helle Wülste, dunkle Rillen, zur Spitze heller."""
+    lp = layer.load()
+    steps = 140
+    cols = (g["horn0"], g["horn1"], g["horn2"], g["horn3"])
+    for i in range(steps + 1):
+        k = i / steps
+        a = math.radians(a0 + (a1 - a0) * k)
+        r = r0 + (r1 - r0) * k
+        w = w0 + (w1 - w0) * k
+        px_, py_ = cx + math.cos(a) * r, cy + math.sin(a) * r
+        arc = abs(a1 - a0) * math.pi / 180.0 * (r0 + r1) / 2.0 * k
+        ridge = (arc / 1.7) % 1.0
+        for yy in range(int(py_ - w - 1), int(py_ + w + 2)):
+            for xx in range(int(px_ - w - 1), int(px_ + w + 2)):
+                if not (0 <= xx < FRAME_W and 0 <= yy < FRAME_H):
+                    continue
+                d = math.hypot(xx + 0.5 - px_, yy + 0.5 - py_)
+                if d > w:
+                    continue
+                # außen (vom Mittelpunkt der Spirale weg) heller
+                out = ((xx + 0.5 - cx) * math.cos(a) + (yy + 0.5 - cy) * math.sin(a)) - r
+                shade = 0.3 + 0.45 * k + (0.18 if out > 0 else -0.05) + (0.16 if ridge < 0.35 else -0.1 if ridge > 0.8 else 0.0)
+                lp[xx, yy] = _ramp(cols, max(0.0, min(1.0, shade)))
+
+
+def deco_soul_shepherd(img: Image.Image, pal: dict) -> None:
+    """Der Seelenhirte: hinter dem Medaillon rollen sich oben und unten zwei Widderhörner; als Spitze der eiserne Haken seines
+    Stabs, an dem eine Laterne voll Seelenfeuer hängt; unter der Leiste hängen an Ketten Talismane. (Die Irrlichter über dem
+    Rahmen folgen in post_soul_shepherd.)"""
+    g = {k: c(pal, k) for k in pal}
+    horns = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    _ram_horn(horns, g, 38.0, 9.0, 7.5, 2.0, 160.0, -200.0, 3.0, 1.0)
+    _ram_horn(horns, g, 38.0, 35.0, 7.5, 2.0, 200.0, 560.0, 3.0, 1.0)
+    _outline(horns, OUTLINE)
+    img.alpha_composite(horns)
+    # die Spitze: der Stab kommt aus der Leiste, sein eiserner Haken krümmt sich nach oben herum, an der Spitze die Laterne
+    tip = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    tp = tip.load()
+    for x in range(225, 231):
+        for y in (21, 22):
+            put(tp, tip, x, y, mix(g["wood"], g["horn2"], 0.35) if y == 21 else g["wood"])
+    put(tp, tip, 230, 21, g["iron2"])
+    put(tp, tip, 230, 22, g["iron1"])
+    for i in range(80):                                       # der Haken: von links unten über den Scheitel nach rechts
+        a = math.radians(200.0 - i * 2.6)
+        x, y = 233.5 + math.cos(a) * 3.2, 18.0 - math.sin(a) * 3.2
+        put(tp, tip, int(round(x)), int(round(y)), g["iron2"] if math.sin(a) > 0.3 else g["iron1"])
+        put(tp, tip, int(round(x - math.cos(a) * 0.9)), int(round(y + math.sin(a) * 0.9)), g["iron1"])
+    put(tp, tip, 237, 19, g["iron1"])
+    put(tp, tip, 237, 20, g["iron2"])                         # die Kette
+    for y in range(21, 28):                                   # die Laterne
+        for x in range(235, 240):
+            if y in (21, 27):
+                put(tp, tip, x, y, g["iron2"] if y == 21 else g["iron1"])
+            elif x in (235, 239):
+                put(tp, tip, x, y, g["iron1"])
+            else:
+                d = abs(x - 237) + abs(y - 24)
+                put(tp, tip, x, y, g["soul_light"] if d == 0 else g["glow"] if d == 1 else g["soul"])
+    _outline(tip, OUTLINE)
+    img.alpha_composite(tip)
+    # unter der Leiste: Ketten mit Talismanen
+    px = img.load()
+    bottom = BAR_Y + BAR_H + 2
+    charms = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    cp = charms.load()
+    for i, x0 in enumerate((62, 88, 117, 141, 168, 194, 214)):
+        if any(abs(x0 - (BAR_X + round(BAR_W * f))) < 6 for f in GEMS):
+            continue
+        length = 2 + round(hash01(x0, 921) * 4)
+        for k in range(length):
+            put(cp, charms, x0, bottom + 1 + k, g["iron2"] if k % 2 == 0 else g["iron1"])
+        y = bottom + 1 + length
+        kind = i % 3
+        if kind == 0:                                          # ein Knochen
+            for dy in range(3):
+                put(cp, charms, x0, y + dy, g["bone"] if dy != 1 else g["bone_dark"])
+            put(cp, charms, x0 - 1, y + 2, g["bone"])
+            put(cp, charms, x0 + 1, y + 2, g["bone"])
+        elif kind == 1:                                        # ein Schädelchen mit leuchtenden Augen
+            for dx in (-1, 0, 1):
+                for dy in (0, 1):
+                    put(cp, charms, x0 + dx, y + dy, g["bone"])
+            put(cp, charms, x0 - 1, y + 1, g["soul"])
+            put(cp, charms, x0 + 1, y + 1, g["soul"])
+            put(cp, charms, x0, y + 2, g["bone_dark"])
+        else:                                                  # ein Laternchen
+            put(cp, charms, x0, y, g["iron2"])
+            put(cp, charms, x0, y + 1, g["soul_light"])
+            put(cp, charms, x0, y + 2, g["soul"])
+            put(cp, charms, x0, y + 3, g["iron1"])
+    _outline(charms, OUTLINE)
+    kl = charms.load()
+    for y in range(FRAME_H):
+        for x in range(FRAME_W):
+            if kl[x, y][3] and y > bottom:
+                px[x, y] = kl[x, y]
+
+
+def post_soul_shepherd(img: Image.Image, pal: dict) -> None:
+    """Nach dem Rahmen: kleine Irrlichter (Flämmchen aus Seelenfeuer) treiben über der Oberkante."""
+    g = {k: c(pal, k) for k in pal}
+    px = img.load()
+    top = BAR_Y - 3
+    for x0 in range(BAR_X + 22, BAR_X + BAR_W - 10, 17):
+        if any(abs(x0 - (BAR_X + round(BAR_W * f))) < 8 for f in GEMS) or hash01(x0, 923) < 0.25:
+            continue
+        y = top - 4 - round(hash01(x0, 925) * 5)
+        for (dx, dy, col) in ((0, 0, g["soul_light"]), (0, 1, g["glow"]), (-1, 1, g["soul"]), (1, 1, g["soul"]), (0, 2, g["soul"]),
+                              (0, -1, g["soul"])):
+            put(px, img, x0 + dx, y + dy, col)
+        for (dx, dy) in ((0, -2), (-1, -1), (1, -1), (-2, 1), (2, 1), (-1, 2), (1, 2), (0, 3), (-1, 0), (1, 0)):
+            if px[x0 + dx, y + dy][3] == 0:
+                put(px, img, x0 + dx, y + dy, OUTLINE)
+
+
+# =============================================================================================
 # Der Steinhüter (seit 0.96)
 # =============================================================================================
 
@@ -2573,6 +2705,7 @@ BANNER_COLORS = {
     "world_eater": dict(trim="#e8541a", trim_dark="#54444e", fabric="#1c0a0a"),
     "keeper": dict(trim="#a8d2ff", trim_dark="#4e5a8a", fabric="#141428"),
     "sea_witch": dict(trim="#5ae8b8", trim_dark="#2e4a44", fabric="#06120f"),
+    "soul_shepherd": dict(trim="#4fe0d0", trim_dark="#3a3644", fabric="#0a1012"),
 }
 
 
@@ -2659,13 +2792,15 @@ def banner_cap(element: str) -> Image.Image:
 
 
 POST = {"schrolli": post_schrolli, "schrolli_true": post_schrolli, "schrolli_almighty": post_almighty,
-        "world_eater": post_world_eater, "kraken": post_kraken, "keeper": post_keeper, "sea_witch": post_sea_witch}
+        "world_eater": post_world_eater, "kraken": post_kraken, "keeper": post_keeper, "sea_witch": post_sea_witch,
+        "soul_shepherd": post_soul_shepherd}
 BORDERS = {"world_eater": frame_border_stone, "keeper": frame_border_stone}
 
 
 DECOS = {"schrolli": deco_schrolli, "schrolli_true": deco_schrolli, "schrolli_almighty": deco_almighty,
          "world_eater": deco_world_eater, "anni": deco_anni, "anni2": deco_anni, "mystic": deco_mystic, "star": deco_star, "forge": deco_forge, "moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
-         "water": deco_water, "kraken": deco_kraken, "keeper": deco_keeper, "sea_witch": deco_sea_witch}
+         "water": deco_water, "kraken": deco_kraken, "keeper": deco_keeper, "sea_witch": deco_sea_witch,
+         "soul_shepherd": deco_soul_shepherd}
 
 
 def frame(element: str, phases: tuple | None = None) -> Image.Image:
@@ -2805,6 +2940,16 @@ def fill_value(element: str, x: int, y: int) -> float:
         if hash01(x // 2, y // 2, 731) > 0.95:
             return 1.0
         return 0.5 + 0.32 * math.sin(tau * x / 48 + 2.0 * math.sin(tau * y / 12 + tau * x / 96)) + 0.12 * math.sin(tau * x / 24 - tau * y / 9)
+    if element == "soul_shepherd":
+        # Seelenfeuer: züngelnde Flammen, die nach oben dünner werden, dazwischen helle Funken
+        tongue = 0.5 + 0.5 * math.sin(tau * x / 16 + 1.8 * math.sin(tau * x / 64) + 0.5 * math.sin(tau * y / 9 + tau * x / 32))
+        rel = 1.0 - y / (BAR_H - 1)                          # 0 unten … 1 oben
+        h = 0.3 + 0.7 * tongue
+        if hash01(x, y // 2, 927) > 0.975 and rel > 0.3:
+            return 1.0
+        if rel < h:
+            return 0.6 + 0.32 * (1.0 - rel / h)               # in der Flamme: unten am hellsten
+        return 0.3 - 0.12 * (rel - h)
     if element == "shadow":
         # wabernder Rauch, durch den einzelne Seelen ziehen
         smoke = 0.42 + 0.22 * math.sin(tau * x / 64 + 2.0 * math.sin(tau * y / 9 + tau * x / 32))
@@ -2985,14 +3130,14 @@ def portrait(element: str) -> Image.Image:
     mit dunkler Kontur (2 Pixel = 1 Pixel im Spiel), damit er sich vom Grund des Medaillons abhebt."""
     from entitygen.models import (asteria, boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water,
                                   glutschmied, kraken, miss_mystik, moth_queen, reef_colossus, shattered_king, anni_troll,
-                                  schrolli, sea_witch, stone_keeper, world_eater)
+                                  schrolli, sea_witch, soul_shepherd, stone_keeper, world_eater)
     from entitygen.paint import paint_model
     from entitygen.preview import render
     mod = {"fire": boss_fire, "ice": boss_ice, "lightning": boss_lightning, "nature": boss_nature, "earth": boss_earth,
            "water": boss_water, "shadow": boss_shadow, "void": shattered_king, "reef": reef_colossus, "moth": moth_queen,
            "forge": glutschmied, "star": asteria, "mystic": miss_mystik, "anni": anni_troll, "anni2": anni_troll,
            "schrolli": schrolli, "schrolli_true": schrolli, "schrolli_almighty": schrolli, "world_eater": world_eater,
-           "kraken": kraken, "keeper": stone_keeper, "sea_witch": sea_witch}[element]
+           "kraken": kraken, "keeper": stone_keeper, "sea_witch": sea_witch, "soul_shepherd": soul_shepherd}[element]
     m = mod.build()
     m.pack()
     variant = "anni_troll_v2" if element == "anni2" else element if element.startswith("schrolli") else next(iter(mod.PALETTES))
@@ -3090,6 +3235,15 @@ def portrait(element: str) -> Image.Image:
             for child in bone.children:
                 strip_witch(child)
         strip_witch(m.root)
+    if element == "soul_shepherd":
+        # Kapuze, Widderschädel und Hörner, darunter das Schaffell (ohne Arme, Stab, Kutte, Umhang und Irrlichter)
+        def strip_shepherd(bone):
+            if bone.name.startswith(("left_arm", "right_arm", "crook", "hook", "lantern", "hand_bell", "skirt", "hem", "left_leg",
+                                     "right_leg", "wisp", "cloak", "charm", "mantle_rag")):
+                bone.cubes.clear()
+            for child in bone.children:
+                strip_shepherd(child)
+        strip_shepherd(m.root)
     if element in ("anni", "anni2"):
         # Kopf mit Grinsen, Bildschirmauge, Ohren und Haarschopf (ohne Leib, Arme und Hammer)
         def strip_anni(bone):
@@ -3102,17 +3256,18 @@ def portrait(element: str) -> Image.Image:
                 strip_anni(child)
         strip_anni(m.root)
     zoom = {"kraken": 1.5, "schrolli": 1.0, "schrolli_true": 1.0, "schrolli_almighty": 1.0, "world_eater": 1.35, "nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86, "star": 0.92, "mystic": 0.95,
-            "anni": 1.0, "anni2": 1.0, "keeper": 0.8, "sea_witch": 1.5}.get(element, 1.2)
+            "anni": 1.0, "anni2": 1.0, "keeper": 0.8, "sea_witch": 1.5, "soul_shepherd": 1.12}.get(element, 1.2)
     yaw = {"kraken": -20, "schrolli": -22, "schrolli_true": -22, "schrolli_almighty": -22, "world_eater": -6, "water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14, "star": -24, "mystic": -22, "anni": -24,
-           "anni2": -24, "keeper": -20, "sea_witch": -22}.get(element, -42)
-    pitch = {"kraken": -18, "schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2, "keeper": -5, "sea_witch": 2}.get(element, 6)
+           "anni2": -24, "keeper": -20, "sea_witch": -22, "soul_shepherd": -14}.get(element, -42)
+    pitch = {"kraken": -18, "schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2, "keeper": -5, "sea_witch": 2, "soul_shepherd": 4}.get(element, 6)
     big = render(m, tex, glow, yaw, pitch, 448, pose=getattr(mod, "FOLD_POSE", None), background=(0, 0, 0, 0), zoom=zoom,
                  focus=["body"] if element in ("reef", "kraken") else ["helm"] if element == "star" else ["head"])
     img = big.resize((64, 64), Image.LANCZOS)
     img = ImageEnhance.Brightness(img).enhance({"kraken": 1.85, "fire": 1.9, "earth": 1.5, "lightning": 1.9, "nature": 1.6, "shadow": 2.4,
                                                  "void": 1.0, "reef": 1.35, "moth": 1.25, "forge": 1.65, "star": 1.15, "mystic": 1.2,
                                                  "anni": 1.45, "anni2": 1.45, "schrolli": 1.5, "schrolli_true": 1.5,
-                                                 "schrolli_almighty": 1.45, "world_eater": 2.0, "keeper": 1.3, "sea_witch": 1.35}.get(element, 1.4))
+                                                 "schrolli_almighty": 1.45, "world_eater": 2.0, "keeper": 1.3, "sea_witch": 1.35,
+                                                 "soul_shepherd": 1.7}.get(element, 1.4))
     img = ImageEnhance.Color(img).enhance(1.15)
     img = ImageEnhance.Contrast(img).enhance(1.12)
     if element == "schrolli_almighty":

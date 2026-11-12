@@ -74,6 +74,22 @@ REGIONS: dict[str, dict[str, UV]] = {
         "shell": (13, 0, 15, 2),        # Muscheln
         "tooth": (13, 2, 14, 5),        # ein Haizahn
     },
+    "shepherd_crook": {
+        "shaft": (0, 0, 1, 16),         # Sumpfeiche
+        "shaft_side": (1, 0, 2, 16),
+        "wrap": (2, 0, 4, 5),           # Strick um den Griff
+        "iron": (2, 5, 4, 7),           # geschmiedetes Eisen (Fuß, Bänder, Zwinge)
+        "iron_top": (2, 7, 4, 9),
+        "hook": (4, 0, 6, 12),          # der eiserne Haken: Spitze oben
+        "hook_edge": (6, 0, 7, 12),
+        "roof": (8, 0, 11, 2),          # Dach und Boden der Laterne
+        "roof_top": (8, 2, 11, 4),
+        "glass": (11, 0, 14, 4),        # das Glas der Laterne, dahinter Seelenfeuer (leuchtet)
+        "glass_top": (11, 4, 14, 6),
+        "chain": (14, 0, 15, 4),        # die Kette der Laterne
+        "cord": (15, 0, 16, 6),         # die Schnur des Talismans
+        "bone": (8, 4, 10, 8),          # ein Knochen als Talisman
+    },
     "draconium_warhammer": {
         "handle": (0, 0, 2, 16),        # dunkles Holz mit Draconiumbändern
         "wrap": (2, 0, 4, 6),           # Schuppenleder
@@ -309,6 +325,30 @@ def sea_witch_staff() -> Shape:
     return s
 
 
+def shepherd_crook() -> Shape:
+    """Der Hirtenstab (0.98): ein langer Stab aus Sumpfeiche mit eisernem Fuß, am Griff mit Strick umwickelt, oben eine Zwinge
+    und der eiserne Haken, der sich nach links krümmt und mit der Spitze wieder nach unten zeigt; an ihr hängt an einer kurzen
+    Kette eine Laterne voll Seelenfeuer, an der Zwinge ein Knochen an einer Schnur."""
+    s = Shape(REGIONS["shepherd_crook"])
+    s.box(7.2, -9.0, 7.2, 8.8, -7.8, 8.8, "iron", cap="iron_top")
+    s.box(7.35, -7.8, 7.35, 8.65, 15.2, 8.65, "shaft", side="shaft_side", cap="iron_top")
+    s.box(7.2, -3.4, 7.2, 8.8, 2.0, 8.8, "wrap", cap="iron_top")
+    s.box(7.25, 6.4, 7.25, 8.75, 7.2, 8.75, "iron", cap="iron_top")
+    s.box(7.15, 14.8, 7.15, 8.85, 16.4, 8.85, "iron", cap="iron_top")
+    # der Haken
+    x, y, _ = s.chain(8.0, 16.2, 0, [0, 38, 44, 46, 44, 36], [1.6, 1.6, 1.5, 1.4, 1.3, 1.1], (-0.6, -0.42), (0.6, 0.42),
+                      (1.1, 0.8), "hook", "hook_edge")
+    # die Laterne an der Spitze: Kette, Dach, Glas (leuchtet), Boden
+    s.box(x - 0.15, y - 1.3, 7.85, x + 0.15, y + 0.1, 8.15, "chain")
+    s.box(x - 1.25, y - 1.9, 6.75, x + 1.25, y - 1.3, 9.25, "roof", cap="roof_top")
+    s.box(x - 1.0, y - 4.2, 7.0, x + 1.0, y - 1.9, 9.0, "glass", cap="glass_top", glow=True)
+    s.box(x - 1.25, y - 4.7, 6.75, x + 1.25, y - 4.2, 9.25, "roof", cap="roof_top")
+    # ein Knochen an einer Schnur an der Zwinge
+    s.box(8.85, 12.6, 7.9, 9.05, 15.2, 8.1, "cord")
+    s.box(8.55, 11.0, 7.7, 9.35, 12.8, 8.3, "bone")
+    return s
+
+
 def nightsteel_dagger() -> Shape:
     """Nachtstahl-Dolch: ein Knauf mit Mondstein, der umwickelte Griff, eine geschwungene Parierstange und die kurze, breite
     Klinge mit violett glühender Hohlkehle."""
@@ -463,6 +503,7 @@ ITEMS = {
     "DRACONIUM_WARHAMMER": ("draconium_warhammer", draconium_warhammer),
     "KEEPER_MAUL": ("keeper_maul", keeper_maul),
     "SEA_WITCH_STAFF": ("sea_witch_staff", sea_witch_staff),
+    "SHEPHERD_CROOK": ("shepherd_crook", shepherd_crook),
     "NIGHTSTEEL_DAGGER": ("nightsteel_dagger", nightsteel_dagger),
     "ABYSSITE_GREATSWORD": ("abyssite_greatsword", abyssite_greatsword),
     "STEEL_DOUBLE_AXE": ("steel_double_axe", steel_double_axe),

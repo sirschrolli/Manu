@@ -158,6 +158,10 @@ public final class BossBarRenderer {
         // die Meerhexe (Urmeer, seit 0.97): geschwärzte Bronze mit schwarzer Koralle, Tang und Perlen, Füllung wie ihr Trank
         STYLES.put("sea_witch", style("sea_witch", 0x7AF0C8, new float[] {0.5f}, new Motes(Drift.BUBBLE, 3.5f, 0xDCFFF2, 0x5AE8B8),
                 new Motes(Drift.GLITTER, 1.2f, 0xFF7AC8, 0x7AFFC8, 0xDCFFF2)));
+        // der Seelenhirte (Schattenwelt, seit 0.98): geschwärztes Eisen und Bein, Widderhörner, Talismane an Ketten, der Haken
+        // seines Stabs mit der Laterne; die Füllung züngelndes Seelenfeuer, aus dem Seelen aufsteigen
+        STYLES.put("soul_shepherd", style("soul_shepherd", 0x7AE8DC, new float[] {0.5f},
+                new Motes(Drift.SMOKE, 3.0f, 0x8EF0E4, 0x2AC8BC, 0xE0FFFA), new Motes(Drift.EMBER, 1.5f, 0xB8FFF2, 0x4FE0D0)));
         // Noctua, die Mottenkönigin (Feenreich): Mondsilber mit Mottenflügeln, Füllung aus schimmerndem Flügelstaub
         STYLES.put("moth", style("moth", 0xFFB8E8, new float[] {0.5f}, new Motes(Drift.GLITTER, 4.5f, 0xFFF0FA, 0xFF8AD0, 0x9EE8C8)));
         // Malleus, der Glutschmied: geschwärztes Eisen mit Nieten, glühende Nähte, Hammer und Speer gekreuzt

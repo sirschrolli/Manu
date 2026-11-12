@@ -165,6 +165,8 @@ final class SkyWardGameTests {
         expected.put(ModEntities.REEF_COLOSSUS.get(), SkyTheme.REEF);
         expected.put(ModEntities.MOTH_QUEEN.get(), SkyTheme.MOTH);
         expected.put(ModEntities.STONE_KEEPER.get(), SkyTheme.KEEPER);
+        expected.put(ModEntities.SEA_WITCH.get(), SkyTheme.REEF);
+        expected.put(ModEntities.SOUL_SHEPHERD.get(), SkyTheme.ASH);
         expected.put(ModEntities.WITHER.get(), SkyTheme.ASH);
         expected.put(ModEntities.MISS_MYSTIK.get(), SkyTheme.MYSTIK);
         expected.put(ModEntities.GLUTSCHMIED.get(), SkyTheme.FORGE);

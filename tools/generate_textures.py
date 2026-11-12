@@ -72,6 +72,7 @@ import seal_textures  # noqa: E402
 import shadow_textures  # noqa: E402
 import shadow_gear_textures  # noqa: E402
 import dusk_textures  # noqa: E402
+import shepherd_textures  # noqa: E402
 import void_textures  # noqa: E402
 import abyss_textures  # noqa: E402
 import sea_textures  # noqa: E402
@@ -390,6 +391,7 @@ def build_all() -> dict[str, Image.Image]:
     shadow_textures.build(put)
     shadow_gear_textures.build(put)
     dusk_textures.build(put)
+    shepherd_textures.build(put)
     void_textures.build(put)
     abyss_textures.build(put)
     sea_textures.build(put)
@@ -439,7 +441,7 @@ def main() -> None:
         img.save(target)
     # Bildfolgen der Meeresblöcke: .mcmeta daneben
     for key, (frames, frametime, interpolate) in {**sea_blocks.ANIMATIONS, **urmeer_textures.ANIMATIONS, **fae_textures.ANIMATIONS, **abyss_textures.ANIMATIONS,
-                                                     **dusk_textures.ANIMATIONS}.items():
+                                                     **dusk_textures.ANIMATIONS, **shepherd_textures.ANIMATIONS}.items():
         meta = {"animation": {"frametime": frametime, "interpolate": interpolate}}
         (TEXTURES / f"{key}.png.mcmeta").write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
     for key, meta in {**abyss_textures.META, **creator_textures.META}.items():

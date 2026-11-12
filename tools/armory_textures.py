@@ -347,6 +347,42 @@ def sea_witch_staff_atlas():
     return img, glow
 
 
+SWAMP_OAK = st.ramp("#4e3826", dark=0.12, light=0.72, cool=20)
+ROPE = st.ramp("#8a7650", dark=0.2, light=0.86, cool=30)
+DARK_IRON = st.ramp("#5e636e", dark=0.1, light=0.84, chroma_dark=1.2)
+SOUL_FIRE = st.fixed("#06302e", "#0c5a54", "#16908a", "#2ac8bc", "#6af0e0", "#b8fff2", "#f0fffc")
+
+
+def shepherd_crook_atlas():
+    R = _regions("shepherd_crook")
+    img, glow = _blank()
+    paint(img, R["shaft"], wood(SWAMP_OAK, 53))
+    paint(img, R["shaft_side"], wood(SWAMP_OAK, 55))
+    paint(img, R["wrap"], wrap(ROPE))
+    paint(img, R["iron"], metal(DARK_IRON))
+    paint(img, R["iron_top"], top(DARK_IRON))
+    paint(img, R["hook"], strand(DARK_IRON, 5.5, 2.5, True, 57))
+    paint(img, R["hook_edge"], strand(DARK_IRON, 4.5, 2.0, False))
+    paint(img, R["roof"], metal(DARK_IRON, 3.5))
+    paint(img, R["roof_top"], top(DARK_IRON))
+
+    def flame(x, y, w, h):
+        # Seelenfeuer hinter dem Glas: unten in der Mitte am hellsten, die Ränder sind eiserne Streben
+        if w > 2 and x in (0, w - 1):
+            return _lv(DARK_IRON, 2)
+        dx = abs(x - (w - 1) / 2) / max(1.0, w / 2)
+        t = y / max(1, h - 1)
+        return _lv(SOUL_FIRE, 6.2 - dx * 2.4 - abs(t - 0.62) * 2.6)
+    paint(img, R["glass"], flame)
+    paint(glow, R["glass"], flame)
+    paint(img, R["glass_top"], lambda x, y, w, h: _lv(SOUL_FIRE, 4))
+    paint(glow, R["glass_top"], lambda x, y, w, h: _lv(SOUL_FIRE, 4))
+    paint(img, R["chain"], lambda x, y, w, h: _lv(DARK_IRON, 4 if y % 2 == 0 else 2))
+    paint(img, R["cord"], lambda x, y, w, h: _lv(ROPE, 2))
+    paint(img, R["bone"], strand(BONE, 5.5, 3.5, True))
+    return img, glow
+
+
 def nightsteel_dagger_atlas():
     R = _regions("nightsteel_dagger")
     img, glow = _blank()
@@ -536,6 +572,7 @@ ATLASES = {
     "ember_pickaxe": ember_pickaxe_atlas, "vein_breaker": vein_breaker_atlas, "ore_seeker": ore_seeker_atlas,
     "keeper_maul": keeper_maul_atlas,
     "sea_witch_staff": sea_witch_staff_atlas,
+    "shepherd_crook": shepherd_crook_atlas,
 }
 
 
@@ -811,9 +848,43 @@ def sea_witch_staff_icon() -> Image.Image:
                                                                "F": KELP})
 
 
+def shepherd_crook_icon() -> Image.Image:
+    """Der Hirtenstab im Inventar: schräg von unten links nach oben rechts, Sumpfeiche (am Griff Strick), oben der eiserne Haken,
+    der sich nach rechts herumkrümmt, an seiner Spitze die Laterne mit Seelenfeuer."""
+    s = st.Spr(16, 16)
+    for k in range(10):
+        x, y = 1 + k, 14 - k
+        if 2 <= k <= 4:
+            s.set(x, y, ("F", 4 if k % 2 else 3))                # Strick am Griff
+            s.set(x - 1, y, ("F", 2))
+            continue
+        s.set(x, y, ("A", 4 if k % 3 else 3))
+        if k > 0:
+            s.set(x - 1, y, ("A", 2))
+    s.set(0, 15, ("C", 3))
+    s.set(1, 15, ("C", 2))
+    # die Zwinge und der Haken (Eisen)
+    s.set(10, 4, ("C", 5))
+    s.set(9, 4, ("C", 3))
+    for (x, y, lvl) in ((10, 3, 4), (11, 2, 5), (12, 1, 5), (13, 1, 4), (14, 2, 4), (14, 3, 3), (14, 4, 3), (13, 5, 2)):
+        s.set(x, y, ("C", lvl))
+    for (x, y, lvl) in ((11, 3, 2), (12, 2, 3), (13, 2, 2)):
+        s.set(x, y, ("C", lvl))
+    # die Kette und die Laterne
+    s.set(13, 6, ("C", 4))
+    for (x, y, lvl) in ((12, 7, 3), (13, 7, 4), (14, 7, 3)):
+        s.set(x, y, ("C", lvl))
+    for (x, y, lvl) in ((12, 8, 4), (13, 8, 6), (14, 8, 4), (12, 9, 3), (13, 9, 5), (14, 9, 3)):
+        s.set(x, y, ("E", lvl))
+    for (x, y, lvl) in ((12, 10, 2), (13, 10, 3), (14, 10, 2)):
+        s.set(x, y, ("C", lvl))
+    return s.outline(prefer=("E", "C", "A", "F")).image({"A": SWAMP_OAK, "C": DARK_IRON, "E": SOUL_FIRE, "F": ROPE})
+
+
 ICONS = {name: (lambda n=name: icon(n)) for name in ICON_ART}
 ICONS["keeper_maul"] = keeper_maul_icon
 ICONS["sea_witch_staff"] = lambda: sea_witch_staff_icon()
+ICONS["shepherd_crook"] = lambda: shepherd_crook_icon()
 
 
 def build(put) -> None:

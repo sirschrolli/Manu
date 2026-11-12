@@ -443,6 +443,16 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(net.minecraft.world.item.Items.GLOW_INK_SAC, 4, 8))
                 .withPool(drop(net.minecraft.world.item.Items.NAUTILUS_SHELL, 1, 3))
                 .withPool(drop(ModItems.GOLD_COIN.get(), 4, 9)));
+        // der Seelenhirte (0.98): der Hirtenstab, ein Herzkristall, Dämmerquarz, Seelenkristalle, Schattenessenz, Mondsilber und
+        // Schätze; seine Irrlichter hinterlassen nichts
+        this.add(ModEntities.SOUL_SHEPHERD.get(), LootTable.lootTable()
+                .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.SoulShepherd.CROOK.get(), 1))
+                .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 1))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ.get(), 6, 12))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.SOUL_CRYSTAL.get(), 3, 6))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.SHADOW_ESSENCE.get(), 4, 8))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.MOONSILVER_INGOT.get(), 2, 5))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 4, 9)));
         // Malleus, der Glutschmied: der Glutspeer, ein Herzkristall, Glutklumpen, Netheritschrott und Schätze; seine
         // Glutklumpen zerplatzen ohne Beute
         this.add(ModEntities.GLUTSCHMIED.get(), LootTable.lootTable()

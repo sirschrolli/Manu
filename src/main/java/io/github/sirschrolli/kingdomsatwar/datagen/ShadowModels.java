@@ -36,6 +36,93 @@ final class ShadowModels {
     private static final int GRASS_ITEM_TINT = 0xFF6A4E9A;
     private static final int LEAVES_ITEM_TINT = 0xFF7448B0;
 
+    /** Die Seelenglocke (0.98): Krone, Schulter, Flanke, Schlagring (vier Wände) und Klöppel; im Mund das Seelenfeuer. */
+    private static final TextureSlot BELL_LIP = TextureSlot.create("lip");
+    private static final TextureSlot BELL_INSIDE = TextureSlot.create("inside");
+    private static final TextureSlot BELL_CROWN = TextureSlot.create("crown");
+    private static final TextureSlot BELL_MOUTH = TextureSlot.create("mouth");
+
+    private static ModelTemplate soulBell(boolean lit) {
+        ExtendedModelTemplateBuilder b = ExtendedModelTemplateBuilder.builder()
+                .parent(Identifier.withDefaultNamespace("block/block"))
+                .requiredTextureSlot(TextureSlot.SIDE).requiredTextureSlot(TextureSlot.TOP).requiredTextureSlot(BELL_LIP)
+                .requiredTextureSlot(BELL_INSIDE).requiredTextureSlot(BELL_CROWN).requiredTextureSlot(BELL_MOUTH)
+                .requiredTextureSlot(TextureSlot.PARTICLE)
+                .ambientOcclusion(false);
+        // die Krone (oben an den Balken des Glockenstuhls)
+        b.element(e -> e.from(6, 13, 6).to(10, 16, 10).allFaces((dir, face) -> face.uvs(6, 0, 10, 3).texture(BELL_CROWN)));
+        // die Schulter: Seiten aus den Zeilen 3–5 des Aufrisses, oben die Schulter von oben
+        b.element(e -> e.from(5, 11, 5).to(11, 13, 11).allFaces((dir, face) -> {
+            if (dir == net.minecraft.core.Direction.UP) {
+                face.uvs(5, 5, 11, 11).texture(TextureSlot.TOP);
+            } else if (dir == net.minecraft.core.Direction.DOWN) {
+                face.uvs(5, 5, 11, 11).texture(BELL_INSIDE);
+            } else {
+                face.uvs(5, 3, 11, 5).texture(TextureSlot.SIDE);
+            }
+        }));
+        // die Flanke mit dem Runenband; unten (zum Mund hin) das Seelenfeuer
+        b.element(e -> {
+            e.from(4, 5, 4).to(12, 11, 12).allFaces((dir, face) -> {
+                if (dir == net.minecraft.core.Direction.UP) {
+                    face.uvs(4, 4, 12, 12).texture(TextureSlot.TOP);
+                } else if (dir == net.minecraft.core.Direction.DOWN) {
+                    face.uvs(4, 4, 12, 12).texture(BELL_MOUTH);
+                } else {
+                    face.uvs(4, 5, 12, 11).texture(TextureSlot.SIDE);
+                }
+            });
+            if (lit) {
+                e.lightEmission(13);
+            }
+        });
+        // der Schlagring: vier Wände (außen der Aufriss, innen das Dunkel, unten die Kante)
+        int[][] walls = {{3, 3, 3, 13, 5, 4}, {3, 3, 12, 13, 5, 13}, {3, 3, 4, 4, 5, 12}, {12, 3, 4, 13, 5, 12}};
+        for (int[] w : walls) {
+            b.element(e -> e.from(w[0], w[1], w[2]).to(w[3], w[4], w[5]).allFaces((dir, face) -> {
+                boolean outer = switch (dir) {
+                    case NORTH -> w[2] == 3;
+                    case SOUTH -> w[5] == 13;
+                    case WEST -> w[0] == 3;
+                    case EAST -> w[3] == 13;
+                    default -> false;
+                };
+                if (dir.getAxis() == net.minecraft.core.Direction.Axis.Y) {
+                    face.uvs(w[0], w[2], w[3], w[5]).texture(BELL_LIP);
+                } else {
+                    face.uvs(3, 11, 13, 13).texture(outer ? TextureSlot.SIDE : BELL_INSIDE);
+                }
+            }));
+        }
+        // der Klöppel
+        b.element(e -> e.from(7, 2, 7).to(9, 5, 9).allFaces((dir, face) -> face.uvs(7, 10, 9, 13).texture(BELL_CROWN)));
+        return b.build();
+    }
+
+    private static final ModelTemplate SOUL_BELL_LIT = soulBell(true);
+    private static final ModelTemplate SOUL_BELL_COLD = soulBell(false);
+
+    /** Die Seelenglocke: das Seelenfeuer im Mund brennt (der Hirte schläft oder kämpft) oder ist erloschen (besiegt). */
+    private static void soulBell(BlockModelGenerators blocks) {
+        Block bell = io.github.sirschrolli.kingdomsatwar.registry.SoulShepherd.SOUL_BELL.get();
+        TextureMapping lit = new TextureMapping()
+                .put(TextureSlot.SIDE, TextureMapping.getBlockTexture(bell, "_side"))
+                .put(TextureSlot.TOP, TextureMapping.getBlockTexture(bell, "_top"))
+                .put(BELL_LIP, TextureMapping.getBlockTexture(bell, "_lip"))
+                .put(BELL_INSIDE, TextureMapping.getBlockTexture(bell, "_inside"))
+                .put(BELL_CROWN, TextureMapping.getBlockTexture(bell, "_crown"))
+                .put(BELL_MOUTH, TextureMapping.getBlockTexture(bell, "_mouth"))
+                .put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(bell, "_side"));
+        TextureMapping cold = lit.copyAndUpdate(BELL_MOUTH, TextureMapping.getBlockTexture(bell, "_mouth_cold"));
+        Identifier litModel = SOUL_BELL_LIT.create(bell, lit, blocks.modelOutput);
+        Identifier coldModel = SOUL_BELL_COLD.createWithSuffix(bell, "_cold", cold, blocks.modelOutput);
+        blocks.blockStateOutput.accept(net.minecraft.client.data.models.blockstates.MultiVariantGenerator.dispatch(bell).with(
+                net.minecraft.client.data.models.blockstates.PropertyDispatch.initial(
+                        io.github.sirschrolli.kingdomsatwar.block.shadow.SoulBellBlock.PHASE).generate(phase ->
+                        BlockModelGenerators.plainVariant(phase == io.github.sirschrolli.kingdomsatwar.block.shadow.SoulBellBlock.Phase.DEFEATED
+                                ? coldModel : litModel))));
+    }
+
     static void register(BlockModelGenerators blocks, ItemModelGenerators items) {
         // Gestein
         blocks.createTrivialCube(ShadowBlocks.CRACKED_SHADOW_STONE_BRICKS.get());
@@ -105,6 +192,9 @@ final class ShadowModels {
         ModModelProvider.glowingCube(blocks, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ_BLOCK.get());
         ModModelProvider.flat(items, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ.get());
         ModModelProvider.armor(items, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_HOOD.get(), io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_CLOAK.get(), io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_LEGGINGS.get(), io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_BOOTS.get());
+        // der Seelenhirte (0.98): die Seelenglocke und sein Spawn-Ei (den Hirtenstab macht ArmoryModels)
+        soulBell(blocks);
+        ModModelProvider.flat(items, io.github.sirschrolli.kingdomsatwar.registry.SoulShepherd.SOUL_SHEPHERD_SPAWN_EGG.get());
 
         // Speicherblöcke, Laterne, Setzling
         blocks.createTrivialCube(ShadowBlocks.MOONSILVER_BLOCK.get());

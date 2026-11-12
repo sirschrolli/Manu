@@ -954,6 +954,40 @@ public class ModLanguageProvider extends LanguageProvider {
                 {"fury", "Sea Witch screams", "Meerhexe schreit"}}) {
             subtitle("entity.sea_witch." + e[0], e[1], e[2]);
         }
+        // der Seelenhirte und der Seelenpferch (0.98)
+        creature(ModEntities.SOUL_SHEPHERD, io.github.sirschrolli.kingdomsatwar.registry.SoulShepherd.SOUL_SHEPHERD_SPAWN_EGG, "Soul Shepherd",
+                "Seelenhirte", "Seelenhirten");
+        add(ModEntities.SOUL_WISP.get(), pick("Will-o'-the-Wisp", "Irrlicht"));
+        text("boss.kingdomsatwar.soul_shepherd", "The Soul Shepherd", "Der Seelenhirte");
+        text("boss.kingdomsatwar.soul_shepherd.named", "%s", "%s");
+        text("boss.kingdomsatwar.soul_shepherd.title", "Keeper of the Lost, Warden of the Soul Pen", "Hüter der Verlorenen, Wächter des Seelenpferchs");
+        item(io.github.sirschrolli.kingdomsatwar.registry.SoulShepherd.CROOK, "Shepherd's Crook", "Hirtenstab");
+        lore("shepherd_crook", "The crook of the Soul Shepherd – swamp oak, an iron hook and a lantern of soul fire",
+                "Der Stab des Seelenhirten – Sumpfeiche, ein eiserner Haken und eine Laterne voll Seelenfeuer");
+        text(ModItems.loreKey("shepherd_crook", 2), "Use: a chain of soul light hooks your target and drags it to you",
+                "Benutzen: eine Kette aus Seelenlicht hakt dein Ziel und reißt es zu dir");
+        text(ModItems.loreKey("shepherd_crook", 3), "Repair with Dusk Quartz", "Mit Dämmerquarz reparieren");
+        block(io.github.sirschrolli.kingdomsatwar.registry.SoulShepherd.SOUL_BELL, "Soul Bell", "Seelenglocke");
+        text("block.kingdomsatwar.soul_bell.hint", "Soul fire glimmers inside the bell … and beneath it someone stands in silent prayer. Come closer, if you dare.",
+                "In der Glocke glimmt Seelenfeuer … und unter ihr steht jemand in stiller Andacht. Komm näher, wenn du dich traust.");
+        text("block.kingdomsatwar.soul_bell.awake", "The Soul Shepherd is awake!", "Der Seelenhirte ist erwacht!");
+        text("block.kingdomsatwar.soul_bell.defeated", "The bell has fallen silent. A Soul Crystal held to it would call the Shepherd back.",
+                "Die Glocke ist verstummt. Ein Seelenkristall an ihr würde den Hirten zurückrufen.");
+        text("block.kingdomsatwar.soul_bell.warning", "A bell tolls somewhere in the fog … something is watching over this swamp.",
+                "Irgendwo im Nebel läutet eine Glocke … jemand wacht über diesen Sumpf.");
+        text("block.kingdomsatwar.soul_bell.peaceful", "The bell hangs still (the world is set to Peaceful).",
+                "Die Glocke hängt still (die Welt steht auf „Friedlich“).");
+        text("message.kingdomsatwar.soul_shepherd.fury", "The Soul Shepherd rings his bell in wrath!", "Der Seelenhirte läutet im Zorn!");
+        for (String[] e : new String[][] {{"ambient", "Soul Shepherd breathes", "Seelenhirte atmet"},
+                {"hurt", "Soul Shepherd groans", "Seelenhirte stöhnt"}, {"death", "Soul Shepherd fades", "Seelenhirte vergeht"},
+                {"step", "Heavy footsteps in the mire", "Schwere Schritte im Morast"}, {"awaken", "Soul Shepherd awakens", "Seelenhirte erwacht"},
+                {"bell", "Soul bell tolls", "Seelenglocke läutet"}, {"hook", "Chain rattles", "Kette klirrt"},
+                {"lantern", "Soul fire roars", "Seelenfeuer faucht"}, {"wisps", "Will-o'-the-wisps rise", "Irrlichter steigen auf"},
+                {"wisp_hit", "Will-o'-the-wisp bursts", "Irrlicht zerstiebt"}, {"fog", "Soul Shepherd dissolves into fog", "Seelenhirte zerfließt zu Nebel"},
+                {"pen", "Ring of soul fire flares", "Ring aus Seelenfeuer lodert"}, {"crash", "Crook strikes the ground", "Stab schlägt in den Grund"},
+                {"storm", "Souls whirl", "Seelen wirbeln"}, {"fury", "Soul Shepherd screams", "Seelenhirte schreit"}}) {
+            subtitle("entity.soul_shepherd." + e[0], e[1], e[2]);
+        }
         text("command.kingdomsatwar.hexengrotte.where", "Nearest Witch's Grotto: %s (%s blocks)", "Nächste Hexengrotte: %s (%s Blöcke)");
         text("command.kingdomsatwar.hexengrotte.not_sea", "Witch's grottos only exist in the Primordial Sea.", "Hexengrotten gibt es nur im Urmeer.");
         text("command.kingdomsatwar.hexengrotte.none", "No Witch's Grotto nearby.", "Keine Hexengrotte in der Nähe.");

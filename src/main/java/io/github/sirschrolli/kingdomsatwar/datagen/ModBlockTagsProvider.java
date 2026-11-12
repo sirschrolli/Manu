@@ -303,6 +303,8 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockTags.DRAGON_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.GLUT_ANVIL);
         add(BlockTags.DRAGON_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.SeaWitch.WITCH_CAULDRON);
         add(BlockTags.WITHER_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.SeaWitch.WITCH_CAULDRON);
+        add(BlockTags.DRAGON_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.SoulShepherd.SOUL_BELL);
+        add(BlockTags.WITHER_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.SoulShepherd.SOUL_BELL);
         add(BlockTags.WITHER_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.GLUT_ANVIL);
         add(BlockTags.DRAGON_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STARSTONE);
         add(BlockTags.WITHER_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STARSTONE);
