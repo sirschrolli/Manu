@@ -665,6 +665,31 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(EmptyLootItem.emptyItem().setWeight(4))));
         // die Hütte des Vorarbeiters im alten Mondsteinbruch (0.96): was die Steinbrecher zurückließen – Mondstein, Ziegel,
         // Werkzeug, Proviant; selten ein Teil der Mondsteinrüstung
+        // die Hexengrotte (0.97): Zutaten der Hexe, Aquamarin, Perlen, Tränke, Schätze aus dem Wrack
+        this.output.accept(ModLootTables.WITCH_GROTTO_CHEST, coins(LootTable.lootTable(), 4, 10, 1, 4, 0.15f)
+                .withPool(LootPool.lootPool()
+                        .setRolls(ContextIntProviders.between(4, 7))
+                        .add(item(io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE.get(), 8, 1, 3))
+                        .add(item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.PEARL.get(), 8, 1, 3))
+                        .add(item(Items.GLOW_INK_SAC, 7, 2, 5))
+                        .add(item(Items.INK_SAC, 6, 2, 6))
+                        .add(item(Items.PRISMARINE_CRYSTALS, 5, 2, 6))
+                        .add(item(Items.PRISMARINE_SHARD, 5, 2, 6))
+                        .add(item(Items.NAUTILUS_SHELL, 3, 1, 2))
+                        .add(item(Items.GLASS_BOTTLE, 6, 1, 4))
+                        .add(item(Items.FERMENTED_SPIDER_EYE, 4, 1, 2))
+                        .add(item(Items.BONE, 6, 2, 6))
+                        .add(item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.SHARK_TOOTH.get(), 5, 1, 3))
+                        .add(item(Items.GOLD_INGOT, 4, 1, 3))
+                        .add(item(Items.EMERALD, 3, 1, 3)))
+                .withPool(LootPool.lootPool()
+                        .setRolls(ContextIntProviders.exactly(1))
+                        .add(LootItem.lootTableItem(io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_HELMET.get()).setWeight(1))
+                        .add(LootItem.lootTableItem(io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_BOOTS.get()).setWeight(1))
+                        .add(LootItem.lootTableItem(Items.HEART_OF_THE_SEA).setWeight(1))
+                        .add(LootItem.lootTableItem(Items.BOOK).setWeight(3)
+                                .apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
+                        .add(EmptyLootItem.emptyItem().setWeight(5))));
         this.output.accept(ModLootTables.MOONSTONE_QUARRY_CHEST, coins(LootTable.lootTable(), 3, 8, 1, 4, 0.12f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(4, 7))

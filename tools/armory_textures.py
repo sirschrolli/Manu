@@ -310,6 +310,43 @@ def keeper_maul_atlas():
     return img, glow
 
 
+DRIFTWOOD = st.ramp("#a89a84", dark=0.22, light=0.94, cool=30, hue_dark=10, chroma_light=0.4)
+BLACK_CORAL = st.fixed("#060406", "#140c12", "#24161f", "#38242f", "#4e3443", "#6a4a5c", "#8a6a7c")
+KELP = st.ramp("#3a6a3a", dark=0.12, light=0.8, cool=170)
+SEA_ORB = st.fixed("#0a3a5a", "#126a8a", "#1e9cb4", "#3ccad8", "#7aeef0", "#c4fff8", "#ffffff")
+SHELL = st.ramp("#e0b8b0", dark=0.3, light=0.98, cool=340)
+BONE = st.ramp("#e8dcc4", dark=0.35, light=0.99, cool=40)
+
+
+def sea_witch_staff_atlas():
+    R = _regions("sea_witch_staff")
+    img, glow = _blank()
+    paint(img, R["shaft"], wood(DRIFTWOOD, 41))
+    paint(img, R["shaft_side"], wood(DRIFTWOOD, 43))
+    paint(img, R["knot"], metal(DRIFTWOOD, 3.0))
+    paint(img, R["knot_top"], top(DRIFTWOOD))
+    paint(img, R["wrap"], wrap(KELP))
+    paint(img, R["coral"], strand(BLACK_CORAL, 5.5, 1.5, True, 47))
+    paint(img, R["coral_edge"], strand(BLACK_CORAL, 4.5, 1.0, False))
+
+    def orb(x, y, w, h):
+        dx, dy = x - (w - 1) / 2, y - (h - 1) / 2
+        r = math.hypot(dx, dy) / max(1.0, w / 2)
+        swirl = math.sin(math.atan2(dy, dx) * 2.0 + r * 4.0)
+        level = 5.2 - r * 2.0 + swirl * 0.6
+        if (x, y) in ((1, 1), (2, 1), (1, 2)):
+            level = 6
+        return _lv(SEA_ORB, level)
+    paint(img, R["orb"], orb)
+    paint(glow, R["orb"], orb)
+    paint(img, R["orb_side"], orb)
+    paint(glow, R["orb_side"], orb)
+    paint(img, R["cord"], lambda x, y, w, h: _lv(DRIFTWOOD, 1))
+    paint(img, R["shell"], lambda x, y, w, h: _lv(SHELL, 5 if (x + y) % 2 == 0 else 3))
+    paint(img, R["tooth"], strand(BONE, 6.0, 3.0, True))
+    return img, glow
+
+
 def nightsteel_dagger_atlas():
     R = _regions("nightsteel_dagger")
     img, glow = _blank()
@@ -498,6 +535,7 @@ ATLASES = {
     "abyssite_greatsword": abyssite_greatsword_atlas, "steel_double_axe": steel_double_axe_atlas, "miner_hammer": miner_hammer_atlas,
     "ember_pickaxe": ember_pickaxe_atlas, "vein_breaker": vein_breaker_atlas, "ore_seeker": ore_seeker_atlas,
     "keeper_maul": keeper_maul_atlas,
+    "sea_witch_staff": sea_witch_staff_atlas,
 }
 
 
@@ -743,8 +781,39 @@ def keeper_maul_icon() -> Image.Image:
                                                                "F": LEATHER})
 
 
+def sea_witch_staff_icon() -> Image.Image:
+    """Der Hexenstab im Inventar: schräg von unten links nach oben rechts, gebleichtes Treibholz (am Griff Tang), oben die
+    leuchtende Kugel zwischen drei schwarzen Korallenzinken, darunter eine Muschel an einer Schnur."""
+    s = st.Spr(16, 16)
+    for k in range(12):
+        x, y = 1 + k, 14 - k
+        lvl = 4 if k % 3 else 3
+        if 2 <= k <= 4:
+            s.set(x, y, ("F", 4 if k % 2 else 3))                # Tang am Griff
+            s.set(x - 1, y, ("F", 2))
+            continue
+        s.set(x, y, ("A", lvl))
+        if k > 0:
+            s.set(x - 1, y, ("A", 2))
+    s.set(0, 15, ("A", 3))
+    # die Korallenzinken um die Kugel
+    for (x, y, lvl) in ((10, 2, 3), (9, 1, 4), (14, 6, 3), (15, 5, 4), (13, 3, 2), (11, 6, 2)):
+        s.set(x, y, ("B", lvl))
+    # die Kugel (E), Mitte bei (12, 3.5)
+    for (x, y, lvl) in ((11, 3, 5), (12, 3, 6), (13, 4, 4), (12, 4, 5), (11, 4, 4), (12, 2, 5), (13, 3, 5), (12, 5, 3), (11, 2, 4)):
+        s.set(x, y, ("E", lvl))
+    # eine Muschel an einer Schnur
+    s.set(9, 7, ("C", 2))
+    s.set(9, 8, ("C", 2))
+    s.set(8, 9, ("D", 5))
+    s.set(9, 9, ("D", 4))
+    return s.outline(prefer=("E", "B", "A", "F", "D")).image({"A": DRIFTWOOD, "B": BLACK_CORAL, "C": DRIFTWOOD, "D": SHELL, "E": SEA_ORB,
+                                                               "F": KELP})
+
+
 ICONS = {name: (lambda n=name: icon(n)) for name in ICON_ART}
 ICONS["keeper_maul"] = keeper_maul_icon
+ICONS["sea_witch_staff"] = lambda: sea_witch_staff_icon()
 
 
 def build(put) -> None:

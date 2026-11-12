@@ -50,6 +50,7 @@ PHASES = {
     "reef": (0.66, 0.4),                 # Ruf ins Riff, dann die Flut
     "kraken": (0.67, 0.34),              # zweimal ruft er die Tiefe, beim zweiten Mal gerät er in Raserei
     "keeper": (0.5,),                    # unter halber Kraft legt er den Kristallpanzer an
+    "sea_witch": (0.5,),                 # unter halber Kraft rast sie vor Zorn
     "moth": (0.5,), "forge": (0.5,), "star": (0.5,), "anni": (0.5,), "anni2": (0.5,),
     "mystic": (0.6, 0.3),                # Zugabe und großes Finale
     "schrolli": (0.7, 0.4),              # erste Gestalt: zweimal schneller
@@ -177,6 +178,14 @@ ELEMENTS = {
                    crystal0="#24367e", crystal1="#4f6cc8", crystal2="#8eacf0", crystal3="#e8f2ff",
                    vine="#28403a", vine_light="#4e7468", bloom_pink="#ff9ad0", bloom_cyan="#9af2ff",
                    bloom_light="#f2fffe", spore="#ffb0e4"),
+    # die Meerhexe (seit 0.97): geschwärzte Bronze mit Grünspan; hinter dem Medaillon fächert schwarze Koralle mit leuchtenden
+    # Polypen, auf dem Rahmen sprießen kleine Korallen und liegen Perlen, unter der Leiste treibt Tang mit leuchtenden Spitzen;
+    # als Spitze eine Korallengabel mit einer leuchtenden Kugel. Füllung wie ihr Trank – meergrün wirbelnd, mit Blasen
+    "sea_witch": dict(m0="#0a1614", m1="#2e4a44", m2="#8ac4b0", acc="#5ae8b8", glow="#dcfff2", deep="#03100c",
+                      f0="#04201a", f1="#0e5a48", f2="#2ab890", f3="#dcfff4",
+                      coral0="#0a060a", coral1="#24161f", coral2="#4a3443", coral3="#7a5a6c",
+                      polyp="#ff7ac8", polyp_light="#ffd4f0", kelp="#1a4424", kelp_light="#3e7a3e", kelp_glow="#7affc8",
+                      pearl="#f2eefa", pearl_dark="#9a92b4", orb="#3ccad8", orb_light="#c4fff8"),
 }
 
 OUTLINE = (12, 10, 12, 255)
@@ -2238,6 +2247,122 @@ def fill_strip_kraken() -> Image.Image:
 
 
 # =============================================================================================
+# Die Meerhexe (seit 0.97)
+# =============================================================================================
+
+def _witch_coral(layer: Image.Image, g: dict, x0: float, y0: float, ang: float, length: float, width: float, depth: int,
+                 seed: int) -> None:
+    """Ein Ast schwarzer Koralle: ein sich verjüngender Strang, der sich gabelt; an den Spitzen leuchtende Polypen."""
+    lp = layer.load()
+    steps = max(2, int(length * 2))
+    x, y = x0, y0
+    for i in range(steps + 1):
+        k = i / steps
+        w = width * (1.0 - 0.55 * k)
+        px_, py_ = x0 + math.cos(ang) * length * k, y0 + math.sin(ang) * length * k
+        r = max(0.5, w)
+        for yy in range(int(py_ - r - 1), int(py_ + r + 2)):
+            for xx in range(int(px_ - r - 1), int(px_ + r + 2)):
+                if not (0 <= xx < FRAME_W and 0 <= yy < FRAME_H):
+                    continue
+                d = math.hypot(xx + 0.5 - px_, yy + 0.5 - py_)
+                if d > r:
+                    continue
+                shade = 0.25 + 0.5 * (1.0 - depth / 3.0) + (0.2 if (xx + 0.5 - px_) * math.sin(ang) - (yy + 0.5 - py_) * math.cos(ang) < 0 else 0.0)
+                lp[xx, yy] = _ramp((g["coral0"], g["coral1"], g["coral2"], g["coral3"]), min(1.0, shade))
+        x, y = px_, py_
+    if depth >= 2 or length < 3.0:
+        for dx, dy in ((0, 0), (1, 0), (0, 1)):
+            xx, yy = int(x) + dx, int(y) + dy
+            if 0 <= xx < FRAME_W and 0 <= yy < FRAME_H:
+                lp[xx, yy] = g["polyp_light"] if (dx, dy) == (0, 0) else g["polyp"]
+        return
+    for side in (-1, 1):
+        a = ang + side * math.radians(24 + 14 * hash01(seed, side, 701))
+        _witch_coral(layer, g, x, y, a, length * (0.62 + 0.1 * hash01(seed, side, 703)), width * 0.6, depth + 1, seed * 3 + side)
+
+
+def deco_sea_witch(img: Image.Image, pal: dict) -> None:
+    """Die Meerhexe: hinter dem Medaillon fächert schwarze Koralle (oben vier Äste, unten zwei), an den Spitzen leuchtende
+    Polypen; unter der Leiste treibt Tang mit leuchtenden Spitzen, darüber steigen Blasen; als Spitze eine Korallengabel, die
+    eine leuchtende Kugel hält. (Kleine Korallen und Perlen auf dem Rahmen folgen in post_sea_witch.)"""
+    g = {k: c(pal, k) for k in pal}
+    bottom = BAR_Y + BAR_H + 2
+    fan = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    for i, (x0, y0, ang, length, width) in enumerate((
+            (30.0, 14.0, -100.0, 9.0, 1.8), (33.0, 14.0, -70.0, 11.0, 2.0), (36.0, 15.0, -45.0, 10.0, 1.8),
+            (38.0, 17.0, -20.0, 8.0, 1.5), (36.0, 30.0, 35.0, 8.0, 1.5), (33.0, 33.0, 65.0, 7.0, 1.3))):
+        _witch_coral(fan, g, x0, y0, math.radians(ang), length, width, 0, i + 1)
+    _outline(fan, OUTLINE)
+    img.alpha_composite(fan)
+    # die Spitze: eine Korallengabel mit einer leuchtenden Kugel
+    tip = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    tp = tip.load()
+    for i, (ang, length) in enumerate(((-30.0, 6.0), (30.0, 6.0))):
+        _witch_coral(tip, g, 228.0, 22.5, math.radians(ang), length, 1.1, 2, 31 + i)
+    for y in range(17, 29):
+        for x in range(228, 240):
+            d = math.hypot(x + 0.5 - 234.0, y + 0.5 - 22.5)
+            if d <= 3.6:
+                tp[x, y] = _ramp((g["orb_light"], g["orb"], g["f1"]), d / 3.6) if d > 0.8 else g["glow"]
+    _outline(tip, OUTLINE)
+    img.alpha_composite(tip)
+    # Tang unter der Leiste, mit leuchtenden Spitzen
+    px = img.load()
+    kelp = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    kp = kelp.load()
+    for i, x0 in enumerate((58, 74, 93, 110, 131, 149, 172, 190, 207, 223)):
+        length = 4 + round(hash01(x0, 709) * 7)
+        phase = hash01(x0, 711) * math.tau
+        x = x0
+        for k in range(length):
+            x = x0 + round(1.1 * math.sin(k * 0.7 + phase))
+            put(kp, kelp, x, bottom + 1 + k, g["kelp_light"] if k % 3 == 1 else g["kelp"])
+        put(kp, kelp, x, bottom + 1 + length, g["kelp_glow"])
+    _outline(kelp, OUTLINE)
+    kl = kelp.load()
+    for y in range(FRAME_H):
+        for x in range(FRAME_W):
+            if kl[x, y][3] and y > bottom:
+                px[x, y] = kl[x, y]
+    # Blasen über dem Rahmen
+    for x in range(BAR_X + 60, BAR_X + BAR_W - 6, 11):
+        if hash01(x, 713) < 0.4 or any(abs(x - (BAR_X + round(BAR_W * f))) < 7 for f in GEMS):
+            continue
+        y = 2 + round(hash01(x, 717) * 8)
+        if hash01(x, 719) > 0.5:
+            for dx, dy in ((0, -1), (1, 0), (0, 1), (-1, 0)):
+                put(px, img, x + dx, y + dy, mix(g["acc"], g["glow"], 0.4))
+            put(px, img, x - 1, y - 1, g["glow"])
+        else:
+            put(px, img, x, y, mix(g["acc"], g["glow"], 0.6))
+
+
+def post_sea_witch(img: Image.Image, pal: dict) -> None:
+    """Nach dem Rahmen: kleine Korallen sprießen aus der Oberkante (mit leuchtenden Polypen), dazwischen liegen Perlen."""
+    g = {k: c(pal, k) for k in pal}
+    px = img.load()
+    top = BAR_Y - 3
+    corals = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    for i, (x0, ang, length) in enumerate(((70, -100.0, 6.0), (98, -80.0, 7.0), (140, -95.0, 5.0), (176, -75.0, 6.5), (205, -105.0, 5.5))):
+        if any(abs(x0 - (BAR_X + round(BAR_W * f))) < 8 for f in GEMS):
+            continue
+        _witch_coral(corals, g, x0 + 0.5, top + 0.5, math.radians(ang), length, 1.1, 1, 51 + i)
+    _outline(corals, OUTLINE)
+    cp = corals.load()
+    for y in range(0, top + 1):
+        for x in range(FRAME_W):
+            if cp[x, y][3]:
+                px[x, y] = cp[x, y]
+    for x0 in (84, 121, 158, 192):
+        if any(abs(x0 - (BAR_X + round(BAR_W * f))) < 8 for f in GEMS):
+            continue
+        for dx, dy, col in ((0, 0, g["pearl"]), (1, 0, g["pearl"]), (0, 1, g["pearl_dark"]), (1, 1, g["pearl_dark"]), (0, -1, OUTLINE),
+                            (1, -1, OUTLINE), (-1, 0, OUTLINE), (2, 0, OUTLINE)):
+            put(px, img, x0 + dx, top - 1 + dy, col)
+
+
+# =============================================================================================
 # Der Steinhüter (seit 0.96)
 # =============================================================================================
 
@@ -2447,6 +2572,7 @@ BANNER_COLORS = {
     "anni2": dict(trim="#ff2040", trim_dark="#ff8a30", fabric="#1a0a10"),
     "world_eater": dict(trim="#e8541a", trim_dark="#54444e", fabric="#1c0a0a"),
     "keeper": dict(trim="#a8d2ff", trim_dark="#4e5a8a", fabric="#141428"),
+    "sea_witch": dict(trim="#5ae8b8", trim_dark="#2e4a44", fabric="#06120f"),
 }
 
 
@@ -2533,13 +2659,13 @@ def banner_cap(element: str) -> Image.Image:
 
 
 POST = {"schrolli": post_schrolli, "schrolli_true": post_schrolli, "schrolli_almighty": post_almighty,
-        "world_eater": post_world_eater, "kraken": post_kraken, "keeper": post_keeper}
+        "world_eater": post_world_eater, "kraken": post_kraken, "keeper": post_keeper, "sea_witch": post_sea_witch}
 BORDERS = {"world_eater": frame_border_stone, "keeper": frame_border_stone}
 
 
 DECOS = {"schrolli": deco_schrolli, "schrolli_true": deco_schrolli, "schrolli_almighty": deco_almighty,
          "world_eater": deco_world_eater, "anni": deco_anni, "anni2": deco_anni, "mystic": deco_mystic, "star": deco_star, "forge": deco_forge, "moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
-         "water": deco_water, "kraken": deco_kraken, "keeper": deco_keeper}
+         "water": deco_water, "kraken": deco_kraken, "keeper": deco_keeper, "sea_witch": deco_sea_witch}
 
 
 def frame(element: str, phases: tuple | None = None) -> Image.Image:
@@ -2674,6 +2800,11 @@ def fill_value(element: str, x: int, y: int) -> float:
         # milchiger Mondstein: weiche Wolken (der Schimmer kommt in fill_strip_keeper dazu)
         return (0.5 + 0.22 * math.sin(tau * x / 64 + 1.3 * math.sin(tau * y / 9 + tau * x / 128))
                 + 0.14 * math.sin(tau * x / 32 - tau * y / 18))
+    if element == "sea_witch":
+        # ihr Trank: wirbelnde Schlieren, dazwischen helle Blasen
+        if hash01(x // 2, y // 2, 731) > 0.95:
+            return 1.0
+        return 0.5 + 0.32 * math.sin(tau * x / 48 + 2.0 * math.sin(tau * y / 12 + tau * x / 96)) + 0.12 * math.sin(tau * x / 24 - tau * y / 9)
     if element == "shadow":
         # wabernder Rauch, durch den einzelne Seelen ziehen
         smoke = 0.42 + 0.22 * math.sin(tau * x / 64 + 2.0 * math.sin(tau * y / 9 + tau * x / 32))
@@ -2854,14 +2985,14 @@ def portrait(element: str) -> Image.Image:
     mit dunkler Kontur (2 Pixel = 1 Pixel im Spiel), damit er sich vom Grund des Medaillons abhebt."""
     from entitygen.models import (asteria, boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water,
                                   glutschmied, kraken, miss_mystik, moth_queen, reef_colossus, shattered_king, anni_troll,
-                                  schrolli, stone_keeper, world_eater)
+                                  schrolli, sea_witch, stone_keeper, world_eater)
     from entitygen.paint import paint_model
     from entitygen.preview import render
     mod = {"fire": boss_fire, "ice": boss_ice, "lightning": boss_lightning, "nature": boss_nature, "earth": boss_earth,
            "water": boss_water, "shadow": boss_shadow, "void": shattered_king, "reef": reef_colossus, "moth": moth_queen,
            "forge": glutschmied, "star": asteria, "mystic": miss_mystik, "anni": anni_troll, "anni2": anni_troll,
            "schrolli": schrolli, "schrolli_true": schrolli, "schrolli_almighty": schrolli, "world_eater": world_eater,
-           "kraken": kraken, "keeper": stone_keeper}[element]
+           "kraken": kraken, "keeper": stone_keeper, "sea_witch": sea_witch}[element]
     m = mod.build()
     m.pack()
     variant = "anni_troll_v2" if element == "anni2" else element if element.startswith("schrolli") else next(iter(mod.PALETTES))
@@ -2951,6 +3082,14 @@ def portrait(element: str) -> Image.Image:
             for child in bone.children:
                 strip_keeper(child)
         strip_keeper(m.root)
+    if element == "sea_witch":
+        # der Kopf mit Krone, treibenden Strähnen und Haar, die Schultern mit dem Tangumhang (ohne Arme, Stab und Schwanz)
+        def strip_witch(bone):
+            if bone.name.startswith(("left_arm", "right_arm", "staff", "tail", "fan_", "spines", "fluke", "cape")):
+                bone.cubes.clear()
+            for child in bone.children:
+                strip_witch(child)
+        strip_witch(m.root)
     if element in ("anni", "anni2"):
         # Kopf mit Grinsen, Bildschirmauge, Ohren und Haarschopf (ohne Leib, Arme und Hammer)
         def strip_anni(bone):
@@ -2963,17 +3102,17 @@ def portrait(element: str) -> Image.Image:
                 strip_anni(child)
         strip_anni(m.root)
     zoom = {"kraken": 1.5, "schrolli": 1.0, "schrolli_true": 1.0, "schrolli_almighty": 1.0, "world_eater": 1.35, "nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86, "star": 0.92, "mystic": 0.95,
-            "anni": 1.0, "anni2": 1.0, "keeper": 0.8}.get(element, 1.2)
+            "anni": 1.0, "anni2": 1.0, "keeper": 0.8, "sea_witch": 1.5}.get(element, 1.2)
     yaw = {"kraken": -20, "schrolli": -22, "schrolli_true": -22, "schrolli_almighty": -22, "world_eater": -6, "water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14, "star": -24, "mystic": -22, "anni": -24,
-           "anni2": -24, "keeper": -20}.get(element, -42)
-    pitch = {"kraken": -18, "schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2, "keeper": -5}.get(element, 6)
+           "anni2": -24, "keeper": -20, "sea_witch": -22}.get(element, -42)
+    pitch = {"kraken": -18, "schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2, "keeper": -5, "sea_witch": 2}.get(element, 6)
     big = render(m, tex, glow, yaw, pitch, 448, pose=getattr(mod, "FOLD_POSE", None), background=(0, 0, 0, 0), zoom=zoom,
                  focus=["body"] if element in ("reef", "kraken") else ["helm"] if element == "star" else ["head"])
     img = big.resize((64, 64), Image.LANCZOS)
     img = ImageEnhance.Brightness(img).enhance({"kraken": 1.85, "fire": 1.9, "earth": 1.5, "lightning": 1.9, "nature": 1.6, "shadow": 2.4,
                                                  "void": 1.0, "reef": 1.35, "moth": 1.25, "forge": 1.65, "star": 1.15, "mystic": 1.2,
                                                  "anni": 1.45, "anni2": 1.45, "schrolli": 1.5, "schrolli_true": 1.5,
-                                                 "schrolli_almighty": 1.45, "world_eater": 2.0, "keeper": 1.3}.get(element, 1.4))
+                                                 "schrolli_almighty": 1.45, "world_eater": 2.0, "keeper": 1.3, "sea_witch": 1.35}.get(element, 1.4))
     img = ImageEnhance.Color(img).enhance(1.15)
     img = ImageEnhance.Contrast(img).enhance(1.12)
     if element == "schrolli_almighty":

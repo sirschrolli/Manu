@@ -434,6 +434,15 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST.get(), 4, 8))
                 .withPool(drop(ModItems.GEMSTONE.get(), 2, 4))
                 .withPool(drop(ModItems.GOLD_COIN.get(), 4, 9)));
+        // die Meerhexe (0.97): der Hexenstab, ein Herzkristall, Aquamarin, Perlen, Tinte und Schätze; ihre Tinte hinterlässt nichts
+        this.add(ModEntities.SEA_WITCH.get(), LootTable.lootTable()
+                .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.SeaWitch.WITCH_STAFF.get(), 1))
+                .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 1))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE.get(), 6, 12))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.PEARL.get(), 3, 6))
+                .withPool(drop(net.minecraft.world.item.Items.GLOW_INK_SAC, 4, 8))
+                .withPool(drop(net.minecraft.world.item.Items.NAUTILUS_SHELL, 1, 3))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 4, 9)));
         // Malleus, der Glutschmied: der Glutspeer, ein Herzkristall, Glutklumpen, Netheritschrott und Schätze; seine
         // Glutklumpen zerplatzen ohne Beute
         this.add(ModEntities.GLUTSCHMIED.get(), LootTable.lootTable()

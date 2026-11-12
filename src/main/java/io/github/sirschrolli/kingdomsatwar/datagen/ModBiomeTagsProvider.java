@@ -185,6 +185,11 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
                 .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.CORAL_GARDEN)
                 .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.PEARL_GROUNDS)
                 .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.DEEP);
+        // die Hexengrotten (0.97): in den tiefen, dunklen Gegenden des Urmeers
+        this.tag(ModTags.Biomes.HAS_WITCH_GROTTO).add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.DEEP)
+                .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.KELP_FOREST)
+                .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.GLOW_DEPTHS)
+                .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.PEARL_GROUNDS);
         this.tag(ModTags.Biomes.HAS_KRAKEN_MAW).add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.DEEP)
                 .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.KELP_FOREST)
                 .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.PEARL_GROUNDS)

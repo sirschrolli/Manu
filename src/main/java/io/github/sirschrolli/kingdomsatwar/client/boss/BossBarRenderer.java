@@ -155,6 +155,9 @@ public final class BossBarRenderer {
         // Leuchtranken; die Füllung milchiger Mondstein mit wanderndem Schimmer; unter halber Kraft legt er den Kristallpanzer an
         STYLES.put("keeper", style("keeper", 0xA8D4FF, new float[] {0.5f}, new Motes(Drift.DUST, 3.0f, 0xBFB8CF, 0x938AA6, 0x645C76),
                 new Motes(Drift.GLITTER, 1.5f, 0xFFB0E4, 0x9AF2FF, 0xD4ECFF)));
+        // die Meerhexe (Urmeer, seit 0.97): geschwärzte Bronze mit schwarzer Koralle, Tang und Perlen, Füllung wie ihr Trank
+        STYLES.put("sea_witch", style("sea_witch", 0x7AF0C8, new float[] {0.5f}, new Motes(Drift.BUBBLE, 3.5f, 0xDCFFF2, 0x5AE8B8),
+                new Motes(Drift.GLITTER, 1.2f, 0xFF7AC8, 0x7AFFC8, 0xDCFFF2)));
         // Noctua, die Mottenkönigin (Feenreich): Mondsilber mit Mottenflügeln, Füllung aus schimmerndem Flügelstaub
         STYLES.put("moth", style("moth", 0xFFB8E8, new float[] {0.5f}, new Motes(Drift.GLITTER, 4.5f, 0xFFF0FA, 0xFF8AD0, 0x9EE8C8)));
         // Malleus, der Glutschmied: geschwärztes Eisen mit Nieten, glühende Nähte, Hammer und Speer gekreuzt

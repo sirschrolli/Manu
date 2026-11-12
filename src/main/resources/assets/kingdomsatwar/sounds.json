@@ -7856,6 +7856,202 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.schrolli.word"
   },
+  "entity.sea_witch.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_ambient1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_ambient2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.sea_witch.ambient"
+  },
+  "entity.sea_witch.awaken": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_awaken1",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.sea_witch.awaken"
+  },
+  "entity.sea_witch.bubble": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_bubble1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_bubble2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.sea_witch.bubble"
+  },
+  "entity.sea_witch.cast": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_cast1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_cast2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.sea_witch.cast"
+  },
+  "entity.sea_witch.coral": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_coral1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_coral2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_coral3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.sea_witch.coral"
+  },
+  "entity.sea_witch.curse": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_curse1",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.sea_witch.curse"
+  },
+  "entity.sea_witch.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_death1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.sea_witch.death"
+  },
+  "entity.sea_witch.fury": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_fury1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.sea_witch.fury"
+  },
+  "entity.sea_witch.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_hurt1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_hurt2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_hurt3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.sea_witch.hurt"
+  },
+  "entity.sea_witch.ink": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_ink1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_ink2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_ink3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.sea_witch.ink"
+  },
+  "entity.sea_witch.ink_hit": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_ink_hit1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_ink_hit2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_ink_hit3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.sea_witch.ink_hit"
+  },
+  "entity.sea_witch.laugh": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_laugh1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_laugh2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.sea_witch.laugh"
+  },
+  "entity.sea_witch.song": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_song1",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.sea_witch.song"
+  },
+  "entity.sea_witch.summon": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_summon1",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.sea_witch.summon"
+  },
+  "entity.sea_witch.tail": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_tail1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_tail2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.sea_witch.tail"
+  },
+  "entity.sea_witch.whirlpool": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/sea_witch_whirlpool1",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.sea_witch.whirlpool"
+  },
   "entity.seraphling.ambient": {
     "sounds": [
       {

@@ -270,6 +270,23 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> MOTH_QUEEN_DIVE = register("entity.moth_queen.dive");
     // Malleus, der Glutschmied (0.64)
     // der Steinhüter (0.96)
+    // die Meerhexe (0.97)
+    public static final DeferredHolder<SoundEvent, SoundEvent> SEA_WITCH_AMBIENT = register("entity.sea_witch.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SEA_WITCH_HURT = register("entity.sea_witch.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SEA_WITCH_DEATH = register("entity.sea_witch.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SEA_WITCH_AWAKEN = register("entity.sea_witch.awaken");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SEA_WITCH_LAUGH = register("entity.sea_witch.laugh");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SEA_WITCH_SONG = register("entity.sea_witch.song");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SEA_WITCH_CAST = register("entity.sea_witch.cast");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SEA_WITCH_INK = register("entity.sea_witch.ink");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SEA_WITCH_INK_HIT = register("entity.sea_witch.ink_hit");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SEA_WITCH_WHIRLPOOL = register("entity.sea_witch.whirlpool");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SEA_WITCH_BUBBLE = register("entity.sea_witch.bubble");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SEA_WITCH_SUMMON = register("entity.sea_witch.summon");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SEA_WITCH_CORAL = register("entity.sea_witch.coral");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SEA_WITCH_CURSE = register("entity.sea_witch.curse");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SEA_WITCH_TAIL = register("entity.sea_witch.tail");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SEA_WITCH_FURY = register("entity.sea_witch.fury");
     public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_AMBIENT = register("entity.stone_keeper.ambient");
     public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_HURT = register("entity.stone_keeper.hurt");
     public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_DEATH = register("entity.stone_keeper.death");

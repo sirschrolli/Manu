@@ -60,6 +60,20 @@ REGIONS: dict[str, dict[str, UV]] = {
         "pommel": (4, 9, 6, 11),        # der Knaufstein
         "pommel_top": (6, 9, 8, 11),
     },
+    "sea_witch_staff": {
+        "shaft": (0, 0, 1, 16),         # gebleichtes Treibholz
+        "shaft_side": (1, 0, 2, 16),
+        "knot": (2, 0, 4, 2),           # Knorren
+        "knot_top": (2, 2, 4, 3),
+        "wrap": (2, 3, 4, 8),           # Tang um den Griff
+        "coral": (4, 0, 6, 10),         # Zinken aus schwarzer Koralle: Spitze oben
+        "coral_edge": (6, 0, 7, 10),
+        "orb": (8, 0, 12, 4),           # die leuchtende Kugel
+        "orb_side": (8, 4, 12, 8),
+        "cord": (12, 0, 13, 6),         # Schnüre
+        "shell": (13, 0, 15, 2),        # Muscheln
+        "tooth": (13, 2, 14, 5),        # ein Haizahn
+    },
     "draconium_warhammer": {
         "handle": (0, 0, 2, 16),        # dunkles Holz mit Draconiumbändern
         "wrap": (2, 0, 4, 6),           # Schuppenleder
@@ -272,6 +286,29 @@ def keeper_maul() -> Shape:
     return s
 
 
+def sea_witch_staff() -> Shape:
+    """Der Hexenstab (0.97): ein Stab aus gebleichtem Treibholz mit Knorren, am Griff mit Tang umwickelt; oben halten drei
+    Zinken aus schwarzer Koralle eine leuchtende, meerblaue Kugel; darunter hängen Muscheln und ein Haizahn an Schnüren."""
+    s = Shape(REGIONS["sea_witch_staff"])
+    s.box(7.1, -8.0, 7.1, 8.9, -6.8, 8.9, "knot", cap="knot_top")
+    s.box(7.35, -6.8, 7.35, 8.65, 6.2, 8.65, "shaft", side="shaft_side", cap="knot_top")
+    s.box(7.3, 6.0, 7.3, 8.7, 14.8, 8.7, "shaft", side="shaft_side", cap="knot_top", rot=(0.0, 0.0, 3.0), pivot=(8.0, 6.0, 8.0))
+    s.box(7.2, -3.0, 7.2, 8.8, 2.2, 8.8, "wrap", cap="knot_top")
+    s.box(7.15, 7.6, 7.15, 8.85, 8.7, 8.85, "knot", cap="knot_top")
+    # drei Zinken aus schwarzer Koralle, nach außen gebogen
+    s.chain(7.0, 14.4, 30, -16, [1.6, 1.5, 1.1], (-0.42, -0.1), (0.42, 0.1), (0.75, 0.25), "coral", "coral_edge")
+    s.chain(9.0, 14.4, -30, 16, [1.6, 1.5, 1.1], (-0.42, -0.1), (0.42, 0.1), (0.75, 0.25), "coral", "coral_edge")
+    s.chain(8.0, 14.4, 0, 0, [1.4, 1.2, 0.9], (-0.38, -0.1), (0.38, 0.1), (0.7, 0.22), "coral", "coral_edge", z=9.0)
+    # die Kugel zwischen den Zinken (leuchtet)
+    s.box(6.6, 16.0, 6.6, 9.4, 18.8, 9.4, "orb", cap="orb_side", glow=True)
+    # Schnüre mit Muscheln und einem Haizahn
+    s.box(9.15, 11.6, 7.9, 9.35, 14.4, 8.1, "cord")
+    s.box(8.8, 10.6, 7.6, 9.7, 11.6, 8.4, "shell")
+    s.box(6.65, 10.9, 7.9, 6.85, 14.4, 8.1, "cord")
+    s.box(6.45, 9.4, 7.85, 7.05, 10.9, 8.15, "tooth")
+    return s
+
+
 def nightsteel_dagger() -> Shape:
     """Nachtstahl-Dolch: ein Knauf mit Mondstein, der umwickelte Griff, eine geschwungene Parierstange und die kurze, breite
     Klinge mit violett glühender Hohlkehle."""
@@ -425,6 +462,7 @@ ITEMS = {
     "STEEL_HALBERD": ("steel_halberd", steel_halberd),
     "DRACONIUM_WARHAMMER": ("draconium_warhammer", draconium_warhammer),
     "KEEPER_MAUL": ("keeper_maul", keeper_maul),
+    "SEA_WITCH_STAFF": ("sea_witch_staff", sea_witch_staff),
     "NIGHTSTEEL_DAGGER": ("nightsteel_dagger", nightsteel_dagger),
     "ABYSSITE_GREATSWORD": ("abyssite_greatsword", abyssite_greatsword),
     "STEEL_DOUBLE_AXE": ("steel_double_axe", steel_double_axe),

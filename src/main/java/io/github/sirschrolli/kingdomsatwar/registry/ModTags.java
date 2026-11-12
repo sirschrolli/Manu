@@ -186,6 +186,7 @@ public final class ModTags {
         public static final TagKey<Biome> HAS_KRAKEN_MAW = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_kraken_maw"));
         /** Wo Meeresdörfer stehen (seit 0.93): die Landschaften unter Wasser und die offenen Weiten des Urmeers. */
         public static final TagKey<Biome> HAS_SEA_VILLAGE = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_sea_village"));
+        public static final TagKey<Biome> HAS_WITCH_GROTTO = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_witch_grotto"));
         /** Wo Dörfer der jeweiligen Bauweise entstehen (Fachwerk, nordisch, Lehm, Pfahlbau). */
         public static final java.util.Map<io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageStyle, TagKey<Biome>> HAS_VILLAGE = villageTags();
         /** Wo die eigenen Bauwerke der Oberwelt stehen können (je Art). */
@@ -246,6 +247,7 @@ public final class ModTags {
         public static final TagKey<Item> REPAIRS_MOONSTONE_ARMOR = mod("repairs_moonstone_armor");
         public static final TagKey<Item> REPAIRS_KEEPER_MAUL = mod("repairs_keeper_maul");
         public static final TagKey<Item> REPAIRS_AQUAMARINE_ARMOR = mod("repairs_aquamarine_armor");
+        public static final TagKey<Item> REPAIRS_SEA_WITCH_STAFF = mod("repairs_sea_witch_staff");
         /** Reparieren die Waffen und Rüstungen aus Monsterteilen (0.70). */
         public static final TagKey<Item> REPAIRS_CLAW_BLADE = mod("repairs_claw_blade");
         public static final TagKey<Item> REPAIRS_BOG_CLUB = mod("repairs_bog_club");

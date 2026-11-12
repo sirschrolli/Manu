@@ -238,6 +238,8 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         tag(Tags.Items.GEMS).addTag(ModTags.Items.GEMS_MOONSTONE);
         add(ModTags.Items.REPAIRS_MOONSTONE_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOONSTONE);
         add(ModTags.Items.REPAIRS_KEEPER_MAUL, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOONSTONE);
+        add(ModTags.Items.REPAIRS_SEA_WITCH_STAFF, io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE);
+        add(ItemTags.SWORDS, io.github.sirschrolli.kingdomsatwar.registry.SeaWitch.WITCH_STAFF);
         add(ItemTags.SWORDS, io.github.sirschrolli.kingdomsatwar.registry.FaeGear.KEEPER_MAUL);
         add(ItemTags.HEAD_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.FaeGear.MOONSTONE_HELMET);
         add(ItemTags.CHEST_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.FaeGear.MOONSTONE_CHESTPLATE);

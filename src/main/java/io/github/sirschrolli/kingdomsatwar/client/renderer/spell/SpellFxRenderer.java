@@ -144,6 +144,7 @@ public class SpellFxRenderer extends EntityRenderer<SpellFxEntity, SpellFxRender
             case PRISON -> this.model(this.prison, "ice_prison", true, state, poseStack, collector,
                     Mth.clamp((state.life - state.age) / 3.0f, 0.0f, 1.0f));
             case CRYSTAL -> this.model(this.crystal, "moon_crystal", false, state, poseStack, collector, 1.0f);
+            case CORAL -> this.model(this.crystal, "coral_spike", false, state, poseStack, collector, 1.0f);
         }
         poseStack.popPose();
         super.submit(state, poseStack, collector, camera);

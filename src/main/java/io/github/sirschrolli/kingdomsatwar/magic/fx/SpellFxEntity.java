@@ -79,7 +79,9 @@ public class SpellFxEntity extends Entity {
          */
         FISSURE,
         /** Mondsteinkristalle, die aus dem Boden brechen (Kristallspur des Steinhüters, seit 0.96). Größe = Maßstab. */
-        CRYSTAL;
+        CRYSTAL,
+        /** Korallenspieße, die aus dem Grund brechen (die Meerhexe, seit 0.97). Größe = Maßstab. */
+        CORAL;
 
         public static Kind of(int index) {
             return values()[Mth.clamp(index, 0, values().length - 1)];
@@ -363,6 +365,24 @@ public class SpellFxEntity extends Entity {
                     level.addParticle(ParticleTypes.END_ROD, this.getX() + (this.random.nextDouble() - 0.5) * size,
                             this.getY() + size * (0.6 + this.random.nextDouble() * 1.2), this.getZ() + (this.random.nextDouble() - 0.5) * size,
                             0.0, 0.02, 0.0);
+                }
+                if (t == life - 6) {
+                    this.groundBurst(size * 0.9, 10);
+                }
+            }
+            case CORAL -> {
+                if (t == 1) {
+                    this.groundBurst(size * 1.1, 18);
+                    for (int i = 0; i < 8; i++) {
+                        level.addParticle(ParticleTypes.BUBBLE, this.getX() + (this.random.nextDouble() - 0.5) * size * 1.4,
+                                this.getY() + this.random.nextDouble() * size * 1.6, this.getZ() + (this.random.nextDouble() - 0.5) * size * 1.4,
+                                0.0, 0.08, 0.0);
+                    }
+                }
+                if (t > 2 && t < life - 6 && this.random.nextInt(3) == 0) {
+                    level.addParticle(ParticleTypes.BUBBLE, this.getX() + (this.random.nextDouble() - 0.5) * size,
+                            this.getY() + size * (0.4 + this.random.nextDouble() * 1.2), this.getZ() + (this.random.nextDouble() - 0.5) * size,
+                            0.0, 0.06, 0.0);
                 }
                 if (t == life - 6) {
                     this.groundBurst(size * 0.9, 10);

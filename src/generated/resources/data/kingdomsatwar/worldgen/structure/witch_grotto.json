@@ -1,0 +1,11 @@
+{
+  "type": "kingdomsatwar:witch_grotto",
+  "biomes": "#kingdomsatwar:has_witch_grotto",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "full",
+      "spawns": []
+    }
+  },
+  "step": "top_layer_modification"
+}

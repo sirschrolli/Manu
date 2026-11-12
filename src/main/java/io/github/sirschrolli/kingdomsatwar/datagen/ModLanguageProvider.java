@@ -899,6 +899,47 @@ public class ModLanguageProvider extends LanguageProvider {
                 {"shatter", "Crystal armor shatters", "Kristallpanzer zerspringt"}}) {
             subtitle("entity.stone_keeper." + e[0], e[1], e[2]);
         }
+        // die Meerhexe und die Hexengrotte (0.97)
+        creature(ModEntities.SEA_WITCH, io.github.sirschrolli.kingdomsatwar.registry.SeaWitch.SEA_WITCH_SPAWN_EGG, "Sea Witch", "Meerhexe", "Meerhexen");
+        add(ModEntities.INK_BOLT.get(), pick("Witch's Ink", "Hexentinte"));
+        text("boss.kingdomsatwar.sea_witch", "The Sea Witch", "Die Meerhexe");
+        text("boss.kingdomsatwar.sea_witch.named", "%s", "%s");
+        text("boss.kingdomsatwar.sea_witch.title", "Outcast of the Deep, Mistress of the Grotto", "Verstoßene der Tiefe, Herrin der Grotte");
+        item(io.github.sirschrolli.kingdomsatwar.registry.SeaWitch.WITCH_STAFF, "Sea Witch's Staff", "Hexenstab");
+        lore("sea_witch_staff", "The staff of the Sea Witch – driftwood, black coral and a glowing orb",
+                "Der Stab der Meerhexe – Treibholz, schwarze Koralle und eine leuchtende Kugel");
+        text(ModItems.loreKey("sea_witch_staff", 2), "Use: three bolts of witch's ink that follow your target (faster under water)",
+                "Benutzen: drei Kugeln aus Hexentinte, die deinem Ziel folgen (unter Wasser schneller)");
+        text(ModItems.loreKey("sea_witch_staff", 3), "Repair with Aquamarine", "Mit Aquamarin reparieren");
+        block(io.github.sirschrolli.kingdomsatwar.registry.SeaWitch.WITCH_CAULDRON, "Witch's Cauldron", "Hexenkessel");
+        text("block.kingdomsatwar.witch_cauldron.hint", "A brew bubbles and glows … and someone hovers above it in a trance. Come closer, if you dare.",
+                "Ein Trank brodelt und leuchtet … und über ihm schwebt jemand in Trance. Komm näher, wenn du dich traust.");
+        text("block.kingdomsatwar.witch_cauldron.awake", "The Sea Witch is awake!", "Die Meerhexe ist erwacht!");
+        text("block.kingdomsatwar.witch_cauldron.defeated", "The cauldron has gone cold. A Pearl dropped into it would call the Witch back.",
+                "Der Kessel ist erkaltet. Eine Perle hineingeworfen würde die Hexe zurückrufen.");
+        text("block.kingdomsatwar.witch_cauldron.warning", "A whisper drifts through the water … something brews down here.",
+                "Ein Flüstern treibt durchs Wasser … hier unten braut jemand etwas.");
+        text("block.kingdomsatwar.witch_cauldron.peaceful", "The brew lies still (the world is set to Peaceful).",
+                "Der Trank liegt still (die Welt steht auf „Friedlich“).");
+        text("message.kingdomsatwar.sea_witch.song", "The Sea Witch sings – don't look at her!", "Die Meerhexe singt – sieh sie nicht an!");
+        text("message.kingdomsatwar.sea_witch.bubble", "A bubble closes around you – the air is pressed out!",
+                "Eine Blase schließt dich ein – sie presst dir die Luft ab!");
+        text("message.kingdomsatwar.sea_witch.curse", "The Curse of the Deep lies upon you.", "Der Fluch der Tiefe liegt auf dir.");
+        text("message.kingdomsatwar.sea_witch.fury", "The Sea Witch screams in fury!", "Die Meerhexe schreit vor Zorn!");
+        for (String[] e : new String[][] {{"ambient", "Sea Witch whispers", "Meerhexe flüstert"},
+                {"hurt", "Sea Witch hisses", "Meerhexe faucht"}, {"death", "Sea Witch dissolves", "Meerhexe zerfließt"},
+                {"awaken", "Sea Witch awakens", "Meerhexe erwacht"}, {"laugh", "Sea Witch cackles", "Meerhexe lacht"},
+                {"song", "Sea Witch sings", "Meerhexe singt"}, {"cast", "Sea Witch casts a spell", "Meerhexe zaubert"},
+                {"ink", "Witch's ink flies", "Hexentinte fliegt"}, {"ink_hit", "Ink bursts", "Tinte zerplatzt"},
+                {"whirlpool", "Water whirls", "Wasser strudelt"}, {"bubble", "Bubble closes", "Blase schließt sich"},
+                {"summon", "Sea Witch calls sharks", "Meerhexe ruft Haie"}, {"coral", "Coral bursts from the seabed", "Korallen brechen hervor"},
+                {"curse", "Curse of the Deep", "Fluch der Tiefe"}, {"tail", "Tail lashes", "Schwanz peitscht"},
+                {"fury", "Sea Witch screams", "Meerhexe schreit"}}) {
+            subtitle("entity.sea_witch." + e[0], e[1], e[2]);
+        }
+        text("command.kingdomsatwar.hexengrotte.where", "Nearest Witch's Grotto: %s (%s blocks)", "Nächste Hexengrotte: %s (%s Blöcke)");
+        text("command.kingdomsatwar.hexengrotte.not_sea", "Witch's grottos only exist in the Primordial Sea.", "Hexengrotten gibt es nur im Urmeer.");
+        text("command.kingdomsatwar.hexengrotte.none", "No Witch's Grotto nearby.", "Keine Hexengrotte in der Nähe.");
         text("command.kingdomsatwar.mondsteinbruch.where", "Nearest Old Moonstone Quarry: %s (%s blocks)",
                 "Nächster alter Mondsteinbruch: %s (%s Blöcke)");
         text("command.kingdomsatwar.mondsteinbruch.not_fae", "Moonstone quarries only exist in the Fae Realm.",

@@ -27,9 +27,9 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               enderman, endermite, shulker, shulker_bullet, ender_dragon,
                               crystal_crawler, deer, dragon, dragon_armor, glimmer_moth, goose, lindworm, moosling, night_wing,
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp,
-                              ice_lance, icicle, ice_prison, phoenix, poison_flower, stone_fist, stone_spike, thorn_vine, moon_crystal,
+                              ice_lance, icicle, ice_prison, phoenix, poison_flower, stone_fist, stone_spike, thorn_vine, moon_crystal, coral_spike,
                               void_maw, shard_warden, distortling, star_ray, warden_shard, shattered_king,
-                              shattered_crown, manta_ray, glow_jellyfish, shark, anglerfish, giant_crab, reef_colossus, kraken, mermaid,
+                              shattered_crown, manta_ray, glow_jellyfish, shark, anglerfish, giant_crab, reef_colossus, kraken, mermaid, sea_witch,
                               armor_parts,
                               fairy, mushroomling, thorn_wight, moth_queen, glutschmied, asteria, stone_keeper, keeper_boulder,
                               miss_mystik, light_dove, magic_sword, anni_troll,
@@ -66,6 +66,22 @@ def write_model(module, class_name: str, doc: str, folder: str, variants: dict, 
         if preview:
             img.resize((img.width * 3, img.height * 3)).save(f"/tmp/claude-0/-home-claude/50786bb5-6cc3-5907-a25e-13bee43305bb/scratchpad/ent_{folder.replace("/", "_")}_{variant}.png")
     print(f"{class_name}: {len(model.all_cubes())} Quader, {len(variants)} Varianten")
+
+
+def write_texture(module, name: str, folder: str, variants: dict, preview: bool):
+    """Wie write_model, aber nur die Textur (die Geometrie und ihre Java-Klasse gehören einem anderen Modell)."""
+    if ONLY and name not in ONLY:
+        return
+    model = module.build()
+    model.pack()
+    out = TEX / folder
+    out.mkdir(parents=True, exist_ok=True)
+    for i, (variant, pal) in enumerate(variants.items()):
+        img, glow = paint_model(model, module.materials(variant), pal, seed=100 + i, params={"variant": variant})
+        img.save(out / f"{variant}.png")
+        if glow.getbbox() is not None:
+            glow.save(out / f"{variant}_glow.png")
+    print(f"{name}: {len(model.all_cubes())} Quader, {len(variants)} Varianten (nur Textur)")
 
 
 def main():
@@ -427,6 +443,10 @@ def main():
     write_model(mermaid, "MermaidGeometry",
                 "Geometrie des Meervolks (seit 0.93): Meerjungfrauen aller Berufe und Tritonwachen, Zubehör je Beruf; sechs Gestalten.",
                 "mermaid", mermaid.PALETTES, preview, same_seed=True)
+    write_model(sea_witch, "SeaWitchGeometry",
+                "Geometrie der Meerhexe (seit 0.97): hagere Meerjungfrau mit Tanghaar, treibenden Strähnen, Korallenkrone, Tangumhang, "
+                "Krallen, Hexenstab mit leuchtender Kugel und einem gebänderten Aalschwanz mit Stacheln und Fächerflossen; im Spiel ×1,5.",
+                "sea_witch", sea_witch.PALETTES, preview, same_seed=True)
     write_model(armor_parts, "ArmorPartsGeometry",
                 "Geometrie der 3D-Teile getragener Rüstungen (seit 0.95): je Rüstungssatz und Platz ein Knochen <satz>_<platz>_<knochen>.",
                 "armor_parts", armor_parts.PALETTES, preview, same_seed=True)
@@ -445,6 +465,8 @@ def main():
                 "Geometrie des Eisgefängnisses (acht Kristalle shard0–shard7 mit Drehpunkt am Fuß auf dem Boden, dazu der "
                 "Kristallknoten \"cap\"; durchscheinend, die Kristalle wachsen einzeln aus dem Boden).",
                 "spell/ice_prison", ice_prison.PALETTES, preview)
+    # Korallenspieße (0.97): Form und Java-Klasse der Mondsteinkristalle, nur die Textur ist eigen
+    write_texture(coral_spike, "CoralSpikeTexture", "spell/coral_spike", coral_spike.PALETTES, preview)
     write_model(moon_crystal, "MoonCrystalGeometry", "Geometrie der Mondsteinkristalle (Kristallspur des Steinhüters, seit 0.96).",
                 "spell/moon_crystal", moon_crystal.PALETTES, preview)
     write_model(stone_spike, "StoneSpikeGeometry",

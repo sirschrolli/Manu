@@ -427,6 +427,14 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.MothQueenEntity>> MOTH_QUEEN =
             ENTITIES.registerEntityType("moth_queen", io.github.sirschrolli.kingdomsatwar.entity.fae.MothQueenEntity::new, MobCategory.MONSTER,
                     builder -> builder.sized(3.2f, 2.6f).eyeHeight(2.0f).fireImmune().notInPeaceful().clientTrackingRange(16).updateInterval(2));
+    /** Die Meerhexe (0.97): schwebt in Trance über ihrem Kessel in der Hexengrotte am Grund des Urmeers. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.sea.SeaWitchEntity>> SEA_WITCH =
+            ENTITIES.registerEntityType("sea_witch", io.github.sirschrolli.kingdomsatwar.entity.sea.SeaWitchEntity::new, MobCategory.MONSTER,
+                    builder -> builder.sized(1.4f, 3.2f).eyeHeight(2.85f).notInPeaceful().clientTrackingRange(16).updateInterval(2));
+    /** Eine Kugel aus Hexentinte (die Meerhexe, der Hexenstab). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.sea.InkBoltEntity>> INK_BOLT =
+            ENTITIES.registerEntityType("ink_bolt", io.github.sirschrolli.kingdomsatwar.entity.sea.InkBoltEntity::new, MobCategory.MISC,
+                    builder -> builder.sized(0.5f, 0.5f).noLootTable().clientTrackingRange(8).updateInterval(1));
     /** Der Steinhüter (0.96): kniet am Grund des alten Mondsteinbruchs im Feenreich, bis jemand an den Grund tritt. */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.StoneKeeperEntity>> STONE_KEEPER =
             ENTITIES.registerEntityType("stone_keeper", io.github.sirschrolli.kingdomsatwar.entity.fae.StoneKeeperEntity::new,
@@ -941,6 +949,7 @@ public final class ModEntities {
         event.put(THORN_WIGHT.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.ThornWightEntity.createAttributes().build());
         event.put(MOTH_QUEEN.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MothQueenEntity.createAttributes().build());
         event.put(STONE_KEEPER.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.StoneKeeperEntity.createAttributes().build());
+        event.put(SEA_WITCH.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.SeaWitchEntity.createAttributes().build());
         event.put(MOON_MOTH.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MoonMothEntity.createAttributes().build());
         event.put(GLUTSCHMIED.get(), io.github.sirschrolli.kingdomsatwar.entity.nether.GlutschmiedEntity.createAttributes().build());
         event.put(ASTERIA.get(), io.github.sirschrolli.kingdomsatwar.entity.end.AsteriaEntity.createAttributes().build());

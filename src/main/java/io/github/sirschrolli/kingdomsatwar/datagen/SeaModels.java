@@ -40,6 +40,89 @@ final class SeaModels {
     static final TextureSlot SHELL = TextureSlot.create("shell");
     static final TextureSlot TUBE = TextureSlot.create("tube");
 
+    /** Der Hexenkessel (0.97): vier Füße, der Boden, vier Wände mit Innenseite, ein vorstehender Rand und der Trank darin. */
+    static final TextureSlot INSIDE = TextureSlot.create("inside");
+    static final TextureSlot RIM = TextureSlot.create("rim");
+    static final TextureSlot BREW = TextureSlot.create("brew");
+
+    private static ModelTemplate cauldron(boolean lit) {
+        ExtendedModelTemplateBuilder b = ExtendedModelTemplateBuilder.builder()
+                .parent(Identifier.withDefaultNamespace("block/block"))
+                .requiredTextureSlot(TextureSlot.SIDE).requiredTextureSlot(TextureSlot.TOP).requiredTextureSlot(TextureSlot.BOTTOM)
+                .requiredTextureSlot(INSIDE).requiredTextureSlot(RIM).requiredTextureSlot(BREW).requiredTextureSlot(TextureSlot.PARTICLE)
+                .ambientOcclusion(false);
+        // die Füße
+        for (int[] f : new int[][] {{1, 1}, {12, 1}, {1, 12}, {12, 12}}) {
+            int x = f[0];
+            int z = f[1];
+            b.element(e -> e.from(x, 0, z).to(x + 3, 3, z + 3).allFaces((dir, face) -> face.uvs(x, 13, x + 3, 16)
+                    .texture(dir.getAxis() == Direction.Axis.Y ? TextureSlot.BOTTOM : TextureSlot.SIDE)));
+        }
+        // der Boden
+        b.element(e -> e.from(1, 3, 1).to(15, 5, 15).allFaces((dir, face) -> face.uvs(1, 11, 15, 13)
+                .texture(dir == Direction.UP ? INSIDE : dir == Direction.DOWN ? TextureSlot.BOTTOM : TextureSlot.SIDE)));
+        // die Wände: außen die Seite, innen die Innenseite, oben die Kante
+        int[][] walls = {{1, 5, 1, 15, 14, 3}, {1, 5, 13, 15, 14, 15}, {1, 5, 3, 3, 14, 13}, {13, 5, 3, 15, 14, 13}};
+        for (int[] w : walls) {
+            b.element(e -> e.from(w[0], w[1], w[2]).to(w[3], w[4], w[5]).allFaces((dir, face) -> {
+                boolean outer = switch (dir) {
+                    case NORTH -> w[2] == 1;
+                    case SOUTH -> w[5] == 15;
+                    case WEST -> w[0] == 1;
+                    case EAST -> w[3] == 15;
+                    default -> false;
+                };
+                if (dir == Direction.UP) {
+                    face.uvs(w[0], w[2], w[3], w[5]).texture(TextureSlot.TOP);
+                } else if (dir == Direction.DOWN) {
+                    face.uvs(w[0], w[2], w[3], w[5]).texture(INSIDE);
+                } else {
+                    face.uvs(1, 2, 15, 11).texture(outer ? TextureSlot.SIDE : INSIDE);
+                }
+            }));
+        }
+        // der vorstehende Rand
+        int[][] rims = {{0, 13, 0, 16, 15, 2}, {0, 13, 14, 16, 15, 16}, {0, 13, 2, 2, 15, 14}, {14, 13, 2, 16, 15, 14}};
+        for (int[] r : rims) {
+            b.element(e -> e.from(r[0], r[1], r[2]).to(r[3], r[4], r[5]).allFaces((dir, face) -> face
+                    .uvs(dir.getAxis() == Direction.Axis.Y ? r[0] : 0, dir.getAxis() == Direction.Axis.Y ? r[2] : 0,
+                            dir.getAxis() == Direction.Axis.Y ? r[3] : 16, dir.getAxis() == Direction.Axis.Y ? r[5] : 2)
+                    .texture(RIM)));
+        }
+        // der Trank: brodelnd und leuchtend – erkaltet tiefer und dunkel
+        int level = lit ? 12 : 7;
+        b.element(e -> {
+            e.from(3, level, 3).to(13, level, 13).face(Direction.UP, f -> f.uvs(3, 3, 13, 13).texture(BREW));
+            if (lit) {
+                e.lightEmission(15);
+            }
+        });
+        return b.build();
+    }
+
+    private static final ModelTemplate CAULDRON_LIT = cauldron(true);
+    private static final ModelTemplate CAULDRON_COLD = cauldron(false);
+
+    /** Der Hexenkessel: brodelnd (Hexe schläft oder kämpft) und erkaltet (besiegt). */
+    private static void witchCauldron(BlockModelGenerators blocks) {
+        Block cauldron = io.github.sirschrolli.kingdomsatwar.registry.SeaWitch.WITCH_CAULDRON.get();
+        TextureMapping lit = new TextureMapping()
+                .put(TextureSlot.SIDE, TextureMapping.getBlockTexture(cauldron, "_side"))
+                .put(TextureSlot.TOP, TextureMapping.getBlockTexture(cauldron, "_top"))
+                .put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(cauldron, "_bottom"))
+                .put(INSIDE, TextureMapping.getBlockTexture(cauldron, "_inside"))
+                .put(RIM, TextureMapping.getBlockTexture(cauldron, "_rim"))
+                .put(BREW, TextureMapping.getBlockTexture(cauldron, "_brew"))
+                .put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(cauldron, "_side"));
+        TextureMapping cold = lit.copyAndUpdate(BREW, TextureMapping.getBlockTexture(cauldron, "_brew_cold"));
+        Identifier litModel = CAULDRON_LIT.create(cauldron, lit, blocks.modelOutput);
+        Identifier coldModel = CAULDRON_COLD.createWithSuffix(cauldron, "_cold", cold, blocks.modelOutput);
+        blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(cauldron).with(PropertyDispatch.initial(
+                io.github.sirschrolli.kingdomsatwar.block.sea.WitchCauldronBlock.PHASE).generate(phase ->
+                BlockModelGenerators.plainVariant(phase == io.github.sirschrolli.kingdomsatwar.block.sea.WitchCauldronBlock.Phase.DEFEATED
+                        ? coldModel : litModel))));
+    }
+
     static void register(BlockModelGenerators blocks, ItemModelGenerators items) {
         blocks.createLantern(SeaBlocks.DEEP_SEA_LANTERN.get());
         // das Urmeer (0.89): gemeißelter Gezeitenstein mit leuchtender Welle, der Schleier des Gezeitentors (wie beim
@@ -69,6 +152,9 @@ final class SeaModels {
         ModModelProvider.flat(items, io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE.get());
         ModModelProvider.armor(items, io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_HELMET.get(), io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_CHESTPLATE.get(),
                 io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_LEGGINGS.get(), io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_BOOTS.get());
+        // die Meerhexe (0.97): der Hexenkessel, das Spawn-Ei (der Hexenstab steht bei der Waffenkammer)
+        witchCauldron(blocks);
+        ModModelProvider.flat(items, io.github.sirschrolli.kingdomsatwar.registry.SeaWitch.SEA_WITCH_SPAWN_EGG.get());
     }
 
     /** Die Meereshölzer (0.92): wie Glimmerholz – Stamm, Holz, Laub, Setzling, Tür, Falltür, Zaun und Zauntor. */

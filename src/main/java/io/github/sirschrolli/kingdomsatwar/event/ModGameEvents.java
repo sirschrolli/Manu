@@ -100,6 +100,11 @@ public final class ModGameEvents {
                         .then(Commands.literal("tp").executes(context -> mystikStage(context.getSource(), "tp")))
                         .then(Commands.literal("awaken").executes(context -> mystikStage(context.getSource(), "awaken")))
                         .then(Commands.literal("reset").executes(context -> mystikStage(context.getSource(), "reset"))))
+                .then(Commands.literal("hexengrotte").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .executes(context -> witchGrotto(context.getSource(), ""))
+                        .then(Commands.literal("tp").executes(context -> witchGrotto(context.getSource(), "tp")))
+                        .then(Commands.literal("awaken").executes(context -> witchGrotto(context.getSource(), "awaken")))
+                        .then(Commands.literal("reset").executes(context -> witchGrotto(context.getSource(), "reset"))))
                 .then(Commands.literal("mondsteinbruch").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .executes(context -> moonstoneQuarry(context.getSource(), ""))
                         .then(Commands.literal("tp").executes(context -> moonstoneQuarry(context.getSource(), "tp")))
@@ -585,6 +590,81 @@ public final class ModGameEvents {
         }
         source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.mondsteinbruch.awakened"), true);
         return 1;
+    }
+
+    /**
+     * {@code /kaw hexengrotte}: Lage der nächsten Hexengrotte im Urmeer; {@code tp} bringt einen vor ihren Eingang (auch aus
+     * einer anderen Welt), {@code awaken} weckt die Meerhexe (oder ruft eine neue, wenn sie besiegt ist), {@code reset} lässt
+     * sie wieder in Trance fallen.
+     */
+    private static int witchGrotto(net.minecraft.commands.CommandSourceStack source, String mode) throws
+            com.mojang.brigadier.exceptions.CommandSyntaxException {
+        ServerLevel sea = source.getServer().getLevel(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerDimension.LEVEL);
+        if (sea == null || (source.getLevel() != sea && mode.isEmpty())) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.hexengrotte.not_sea"));
+            return 0;
+        }
+        BlockPos from = source.getLevel() == sea ? BlockPos.containing(source.getPosition()) : BlockPos.ZERO;
+        var structure = sea.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .get(io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.WITCH_GROTTO_STRUCTURE);
+        var found = structure.isEmpty() ? null : sea.getChunkSource().getGenerator().findNearestMapStructure(sea,
+                net.minecraft.core.HolderSet.direct(structure.get()), from, 100, false);
+        if (found == null) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.hexengrotte.none"));
+            return 0;
+        }
+        BlockPos corner = found.getFirst();
+        int cx = (corner.getX() & ~15) + 8;
+        int cz = (corner.getZ() & ~15) + 8;
+        int distance = (int) Math.sqrt(Math.pow(cx - from.getX(), 2) + Math.pow(cz - from.getZ(), 2));
+        Component where = Component.literal(cx + ", " + cz).withStyle(net.minecraft.ChatFormatting.DARK_AQUA);
+        source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.hexengrotte.where", where, distance), false);
+        if (mode.isEmpty()) {
+            return 1;
+        }
+        for (int dx = -2; dx <= 2; dx++) {
+            for (int dz = -2; dz <= 2; dz++) {
+                sea.getChunk((cx >> 4) + dx, (cz >> 4) + dz);
+            }
+        }
+        BlockPos cauldron = findWitchCauldron(sea, cx, cz);
+        if (mode.equals("tp")) {
+            ServerPlayer player = source.getPlayerOrException();
+            int floor = cauldron != null ? cauldron.getY() - io.github.sirschrolli.kingdomsatwar.worldgen.witch.WitchGrottoPiece.CAULDRON_Y
+                    : sea.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.OCEAN_FLOOR, cx, cz);
+            int z = cz + io.github.sirschrolli.kingdomsatwar.worldgen.witch.WitchGrottoPiece.REACH + 2;
+            player.teleportTo(sea, cx + 0.5, floor + 6, z + 0.5, java.util.Set.of(), 180.0f, 15.0f, true);
+            return 1;
+        }
+        if (cauldron == null || !(sea.getBlockEntity(cauldron) instanceof io.github.sirschrolli.kingdomsatwar.block.sea.WitchCauldronBlockEntity be)) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.hexengrotte.none"));
+            return 0;
+        }
+        if (mode.equals("reset")) {
+            be.reset(sea);
+            source.sendSuccess(() -> Component.literal("Die Meerhexe fällt wieder in Trance."), true);
+            return 1;
+        }
+        io.github.sirschrolli.kingdomsatwar.entity.sea.SeaWitchEntity witch = be.witch(sea);
+        if (witch == null) {
+            witch = be.spawn(sea, true);
+        } else {
+            witch.awaken();
+        }
+        source.sendSuccess(() -> Component.literal("Die Meerhexe erwacht!"), true);
+        return witch != null ? 1 : 0;
+    }
+
+    /** Sucht den Hexenkessel in der Mitte der Grotte (von oben nach unten). */
+    private static @org.jspecify.annotations.Nullable BlockPos findWitchCauldron(ServerLevel level, int x, int z) {
+        int top = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.OCEAN_FLOOR, x, z);
+        for (int y = top + 2; y > top - 30; y--) {
+            BlockPos pos = new BlockPos(x, y, z);
+            if (level.getBlockState(pos).is(io.github.sirschrolli.kingdomsatwar.registry.SeaWitch.WITCH_CAULDRON.get())) {
+                return pos;
+            }
+        }
+        return null;
     }
 
     /** Sucht den Hüterstein am Grund des Mondsteinbruchs (von oben nach unten, in der Mitte). */

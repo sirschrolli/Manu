@@ -70,6 +70,7 @@ public final class ModModelLayers {
     public static final ModelLayerLocation STONE_SPIKE = new ModelLayerLocation(KingdomsAtWar.id("stone_spike"), "main");
     public static final ModelLayerLocation MOON_CRYSTAL = new ModelLayerLocation(KingdomsAtWar.id("moon_crystal"), "main");
     public static final ModelLayerLocation STONE_KEEPER = new ModelLayerLocation(KingdomsAtWar.id("stone_keeper"), "main");
+    public static final ModelLayerLocation SEA_WITCH = new ModelLayerLocation(KingdomsAtWar.id("sea_witch"), "main");
     public static final ModelLayerLocation KEEPER_BOULDER = new ModelLayerLocation(KingdomsAtWar.id("keeper_boulder"), "main");
     public static final ModelLayerLocation STONE_FIST = new ModelLayerLocation(KingdomsAtWar.id("stone_fist"), "main");
     public static final ModelLayerLocation THORN_VINE = new ModelLayerLocation(KingdomsAtWar.id("thorn_vine"), "main");

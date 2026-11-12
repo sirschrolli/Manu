@@ -31,12 +31,17 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * Eine Kristallspur (seit 0.96): Mondsteinkristalle brechen nacheinander aus dem Boden, Schritt für Schritt in eine Richtung
- * – die Kristallspur des Steinhüters und die des Hüterhammers. Die Spur folgt dem Gelände (Stufen hinauf und hinab, bis drei
+ * – die Kristallspur des Steinhüters und die des Hüterhammers (seit 0.97 auch als Korallenspieße der Meerhexe). Die Spur folgt dem Gelände (Stufen hinauf und hinab, bis drei
  * Blöcke) und endet an Wänden und Abgründen. Wen ein Kristall erwischt, der wird hochgeschleudert, nimmt Schaden und ist kurz
  * verlangsamt (jedes Wesen nur einmal je Spur).
  */
 @EventBusSubscriber(modid = KingdomsAtWar.MODID)
 public final class CrystalLine {
+    /** Wie die Spur aussieht: Mondsteinkristalle (Steinhüter, Hüterhammer) oder Korallenspieße (Meerhexe, seit 0.97). */
+    public enum Style {
+        MOONSTONE, CORAL
+    }
+
     private static final List<CrystalLine> ACTIVE = new ArrayList<>();
     /** So weit (waagerecht) um einen Kristall wird getroffen. */
     public static final double HIT_RADIUS = 1.3;
@@ -50,6 +55,7 @@ public final class CrystalLine {
     private final float size;
     private final @Nullable LivingEntity owner;
     private final Predicate<LivingEntity> canHit;
+    private final Style style;
     private final Set<UUID> hit = new HashSet<>();
     private Vec3 next;
     private double floorY;
@@ -57,8 +63,9 @@ public final class CrystalLine {
     private int timer;
 
     private CrystalLine(ServerLevel level, Vec3 start, Vec3 dir, int steps, double spacing, int interval, float damage, float size,
-            @Nullable LivingEntity owner, Predicate<LivingEntity> canHit) {
+            @Nullable LivingEntity owner, Predicate<LivingEntity> canHit, Style style) {
         this.level = level;
+        this.style = style;
         this.dir = new Vec3(dir.x, 0.0, dir.z).normalize();
         this.steps = steps;
         this.spacing = spacing;
@@ -77,7 +84,13 @@ public final class CrystalLine {
      */
     public static CrystalLine start(ServerLevel level, Vec3 start, Vec3 dir, int steps, double spacing, int interval, float damage, float size,
             @Nullable LivingEntity owner, Predicate<LivingEntity> canHit) {
-        CrystalLine line = new CrystalLine(level, start, dir, steps, spacing, interval, damage, size, owner, canHit);
+        return start(level, start, dir, steps, spacing, interval, damage, size, owner, canHit, Style.MOONSTONE);
+    }
+
+    /** Wie oben, in einem anderen Aussehen ({@link Style}). */
+    public static CrystalLine start(ServerLevel level, Vec3 start, Vec3 dir, int steps, double spacing, int interval, float damage, float size,
+            @Nullable LivingEntity owner, Predicate<LivingEntity> canHit, Style style) {
+        CrystalLine line = new CrystalLine(level, start, dir, steps, spacing, interval, damage, size, owner, canHit, style);
         ACTIVE.add(line);
         line.erupt();
         return line;
@@ -122,18 +135,23 @@ public final class CrystalLine {
         }
         this.floorY = ground;
         Vec3 at = new Vec3(this.next.x, ground, this.next.z);
-        SpellFxEntity.create(this.level, SpellFxEntity.Kind.CRYSTAL, at, null, 0x8EC8FF, 24, this.size * (0.85f + 0.3f * this.level.getRandom().nextFloat()))
-                .spawn();
+        boolean coral = this.style == Style.CORAL;
+        SpellFxEntity.create(this.level, coral ? SpellFxEntity.Kind.CORAL : SpellFxEntity.Kind.CRYSTAL, at, null, coral ? 0xFF7A8A : 0x8EC8FF, 24,
+                this.size * (0.85f + 0.3f * this.level.getRandom().nextFloat())).spawn();
         BlockPos below = BlockPos.containing(at.x, at.y - 0.5, at.z);
         BlockState floor = this.level.getBlockState(below);
         if (!floor.isAir()) {
             this.level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, floor), at.x, at.y + 0.2, at.z, 14, 0.5, 0.15, 0.5, 0.12);
         }
-        this.level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, FaeBlocks.MOONSTONE_BLOCK.get().defaultBlockState()), at.x, at.y + 0.8,
-                at.z, 6, 0.3, 0.5, 0.3, 0.1);
+        BlockState chips = coral ? net.minecraft.world.level.block.Blocks.FIRE_CORAL_BLOCK.defaultBlockState()
+                : FaeBlocks.MOONSTONE_BLOCK.get().defaultBlockState();
+        this.level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, chips), at.x, at.y + 0.8, at.z, 6, 0.3, 0.5, 0.3, 0.1);
+        if (coral) {
+            this.level.sendParticles(ParticleTypes.BUBBLE, at.x, at.y + 0.6, at.z, 10, 0.4, 0.6, 0.4, 0.08);
+        }
         if (this.step % 2 == 0) {
-            this.level.playSound(null, at.x, at.y, at.z, ModSounds.STONE_KEEPER_CRYSTAL.get(), SoundSource.HOSTILE, 1.4f,
-                    0.85f + this.level.getRandom().nextFloat() * 0.3f);
+            this.level.playSound(null, at.x, at.y, at.z, coral ? ModSounds.SEA_WITCH_CORAL.get() : ModSounds.STONE_KEEPER_CRYSTAL.get(),
+                    SoundSource.HOSTILE, 1.4f, 0.85f + this.level.getRandom().nextFloat() * 0.3f);
         }
         double r = HIT_RADIUS * Math.max(0.8, this.size / 0.8);
         AABB box = new AABB(at.x - r, at.y - 0.5, at.z - r, at.x + r, at.y + 2.6, at.z + r);

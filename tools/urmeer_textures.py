@@ -175,3 +175,6 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     # Aquamarin (0.97): der Block mit dem Lichtnetz und der Kristall
     import aquamarine_textures
     aquamarine_textures.build(put, ANIMATIONS)
+    # die Meerhexe (0.97): der Hexenkessel und ihre Tintenkugeln
+    import witch_textures
+    witch_textures.build(put, ANIMATIONS)

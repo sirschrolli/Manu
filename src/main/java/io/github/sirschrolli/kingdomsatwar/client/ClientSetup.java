@@ -154,6 +154,7 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.STONE_SPIKE, io.github.sirschrolli.kingdomsatwar.client.model.geom.StoneSpikeGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.MOON_CRYSTAL, io.github.sirschrolli.kingdomsatwar.client.model.geom.MoonCrystalGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.STONE_KEEPER, io.github.sirschrolli.kingdomsatwar.client.model.geom.StoneKeeperGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.SEA_WITCH, io.github.sirschrolli.kingdomsatwar.client.model.geom.SeaWitchGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.KEEPER_BOULDER, io.github.sirschrolli.kingdomsatwar.client.model.geom.KeeperBoulderGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.STONE_FIST, io.github.sirschrolli.kingdomsatwar.client.model.geom.StoneFistGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.THORN_VINE, io.github.sirschrolli.kingdomsatwar.client.model.geom.ThornVineGeometry::createLayer);
@@ -243,6 +244,8 @@ public final class ClientSetup {
                 io.github.sirschrolli.kingdomsatwar.client.renderer.fae.MothQueenRenderer::new);
         event.registerEntityRenderer(ModEntities.MOON_MOTH.get(),
                 io.github.sirschrolli.kingdomsatwar.client.renderer.fae.MoonMothRenderer::new);
+        event.registerEntityRenderer(ModEntities.SEA_WITCH.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.sea.SeaWitchRenderer::new);
+        event.registerEntityRenderer(ModEntities.INK_BOLT.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.sea.InkBoltRenderer::new);
         event.registerEntityRenderer(ModEntities.STONE_KEEPER.get(),
                 io.github.sirschrolli.kingdomsatwar.client.renderer.fae.StoneKeeperRenderer::new);
         event.registerEntityRenderer(ModEntities.KEEPER_BOULDER.get(),
