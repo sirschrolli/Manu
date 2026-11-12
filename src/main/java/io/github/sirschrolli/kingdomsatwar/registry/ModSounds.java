@@ -302,6 +302,23 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> SOUL_SHEPHERD_CRASH = register("entity.soul_shepherd.crash");
     public static final DeferredHolder<SoundEvent, SoundEvent> SOUL_SHEPHERD_STORM = register("entity.soul_shepherd.storm");
     public static final DeferredHolder<SoundEvent, SoundEvent> SOUL_SHEPHERD_FURY = register("entity.soul_shepherd.fury");
+    // die Sternenweberin (0.99)
+    public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WEAVER_AMBIENT = register("entity.star_weaver.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WEAVER_HURT = register("entity.star_weaver.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WEAVER_DEATH = register("entity.star_weaver.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WEAVER_STEP = register("entity.star_weaver.step");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WEAVER_AWAKEN = register("entity.star_weaver.awaken");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WEAVER_THREAD = register("entity.star_weaver.thread");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WEAVER_WEB = register("entity.star_weaver.web");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WEAVER_CONSTELLATION = register("entity.star_weaver.constellation");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WEAVER_STARFALL = register("entity.star_weaver.starfall");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WEAVER_COCOON = register("entity.star_weaver.cocoon");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WEAVER_BROOD = register("entity.star_weaver.brood");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WEAVER_DROP = register("entity.star_weaver.drop");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WEAVER_BITE = register("entity.star_weaver.bite");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WEAVER_SPINDLE = register("entity.star_weaver.spindle");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WEAVER_FURY = register("entity.star_weaver.fury");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WEAVER_SPIDERLING = register("entity.star_weaver.spiderling");
     public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_AMBIENT = register("entity.stone_keeper.ambient");
     public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_HURT = register("entity.stone_keeper.hurt");
     public static final DeferredHolder<SoundEvent, SoundEvent> STONE_KEEPER_DEATH = register("entity.stone_keeper.death");

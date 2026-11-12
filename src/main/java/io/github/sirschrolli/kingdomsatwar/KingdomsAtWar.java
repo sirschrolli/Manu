@@ -47,6 +47,7 @@ public final class KingdomsAtWar {
         io.github.sirschrolli.kingdomsatwar.registry.SoulShepherd.init();
         io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.init();
         io.github.sirschrolli.kingdomsatwar.registry.VoidGear.init();
+        io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.init();
         io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.init();
         io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.init();
         io.github.sirschrolli.kingdomsatwar.registry.SeaWoods.init();

@@ -439,6 +439,22 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.shadow.SoulShepherdEntity>> SOUL_SHEPHERD =
             ENTITIES.registerEntityType("soul_shepherd", io.github.sirschrolli.kingdomsatwar.entity.shadow.SoulShepherdEntity::new, MobCategory.MONSTER,
                     builder -> builder.sized(1.4f, 3.8f).eyeHeight(3.25f).fireImmune().notInPeaceful().clientTrackingRange(16).updateInterval(2));
+    /** Die Sternenweberin (0.99): hängt in Andacht über ihrem Gelege in der Mitte des Sternennetzes (Leere). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarWeaverEntity>> STAR_WEAVER =
+            ENTITIES.registerEntityType("star_weaver", io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarWeaverEntity::new, MobCategory.MONSTER,
+                    builder -> builder.sized(3.0f, 2.1f).eyeHeight(1.5f).fireImmune().notInPeaceful().clientTrackingRange(16).updateInterval(2));
+    /** Ein Sternspinnling (die Brut der Sternenweberin). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarSpiderlingEntity>> STAR_SPIDERLING =
+            ENTITIES.registerEntityType("star_spiderling", io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarSpiderlingEntity::new, MobCategory.MONSTER,
+                    builder -> builder.sized(0.9f, 0.5f).eyeHeight(0.35f).noLootTable().clientTrackingRange(10));
+    /** Ein Ballen Sternennetz (gespuckt von der Sternenweberin). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarWebShotEntity>> STAR_WEB_SHOT =
+            ENTITIES.registerEntityType("star_web_shot", io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarWebShotEntity::new, MobCategory.MISC,
+                    builder -> builder.sized(0.5f, 0.5f).noLootTable().clientTrackingRange(8).updateInterval(1));
+    /** Ein Sternenpfeil (vom Sternenbogen). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarArrowEntity>> STAR_ARROW =
+            ENTITIES.registerEntityType("star_arrow", io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarArrowEntity::new, MobCategory.MISC,
+                    builder -> builder.sized(0.5f, 0.5f).eyeHeight(0.13f).noLootTable().clientTrackingRange(4).updateInterval(20));
     /** Ein Irrlicht (der Seelenhirte). */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.shadow.SoulWispEntity>> SOUL_WISP =
             ENTITIES.registerEntityType("soul_wisp", io.github.sirschrolli.kingdomsatwar.entity.shadow.SoulWispEntity::new, MobCategory.MISC,
@@ -959,6 +975,8 @@ public final class ModEntities {
         event.put(STONE_KEEPER.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.StoneKeeperEntity.createAttributes().build());
         event.put(SEA_WITCH.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.SeaWitchEntity.createAttributes().build());
         event.put(SOUL_SHEPHERD.get(), io.github.sirschrolli.kingdomsatwar.entity.shadow.SoulShepherdEntity.createAttributes().build());
+        event.put(STAR_WEAVER.get(), io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarWeaverEntity.createAttributes().build());
+        event.put(STAR_SPIDERLING.get(), io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarSpiderlingEntity.createAttributes().build());
         event.put(MOON_MOTH.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MoonMothEntity.createAttributes().build());
         event.put(GLUTSCHMIED.get(), io.github.sirschrolli.kingdomsatwar.entity.nether.GlutschmiedEntity.createAttributes().build());
         event.put(ASTERIA.get(), io.github.sirschrolli.kingdomsatwar.entity.end.AsteriaEntity.createAttributes().build());

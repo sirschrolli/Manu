@@ -31,6 +31,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               void_maw, shard_warden, distortling, star_ray, warden_shard, shattered_king,
                               shattered_crown, manta_ray, glow_jellyfish, shark, anglerfish, giant_crab, reef_colossus, kraken, mermaid, sea_witch,
                               soul_shepherd,
+                              star_weaver,
                               armor_parts,
                               fairy, mushroomling, thorn_wight, moth_queen, glutschmied, asteria, stone_keeper, keeper_boulder,
                               miss_mystik, light_dove, magic_sword, anni_troll,
@@ -453,6 +454,11 @@ def main():
                 "über den Schultern, Kapuze mit Widderschädel, gerollten Hörnern und Seelenlicht in den Augen, knochige Arme, "
                 "Hirtenstab mit Haken und Seelenlaterne, Handglocke, Talismane am Strick, drei Irrlichter; im Spiel ×1,5.",
                 "soul_shepherd", soul_shepherd.PALETTES, preview)
+    write_model(star_weaver, "StarWeaverGeometry",
+                "Geometrie der Sternenweberin (seit 0.99): riesige Spinne, Vorderleib aus nachtblauem Chitin mit acht Sternenaugen, "
+                "Kieferklauen mit Giftzähnen und Tastern, ein Hinterleib wie Nachthimmel mit Spiralgalaxie, drei Kristalle der Leere, "
+                "Spinnwarzen, acht Beine aus Hüfte, Schenkel, Schiene und Fuß mit leuchtenden Gelenken; im Spiel ×2.",
+                "star_weaver", star_weaver.PALETTES, preview)
     write_model(armor_parts, "ArmorPartsGeometry",
                 "Geometrie der 3D-Teile getragener Rüstungen (seit 0.95): je Rüstungssatz und Platz ein Knochen <satz>_<platz>_<knochen>.",
                 "armor_parts", armor_parts.PALETTES, preview, same_seed=True)
