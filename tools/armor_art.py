@@ -727,17 +727,17 @@ def starwalker() -> Design:
 
 
 def timewarden() -> Design:
-    """Chronit (die Rüstung der Zeitwächter, 1.01): Platten aus Uhrbronze mit Messingsäumen. Der Helm ist geschlossen,
-    vorn eine runde Sichtscheibe in einem Messingring mit zwei Bernsteinaugen; auf der Brust ein Zifferblatt aus Chronit
-    mit Zeigern, auf dem Rücken ein Zahnrad, am Gürtel eine Schnalle aus Chronit, an den Knien Chronitsteine (Zeigerkamm,
+    """Chronit (die Rüstung der Zeitwächter, 1.1): Platten aus Uhrbronze mit Messingsäumen. Der Helm ist geschlossen,
+    vorn eine runde Sichtscheibe in einem Messingring mit einem glühenden Sehschlitz aus Bernstein; auf der Brust ein
+    Zifferblatt aus Chronit mit zwei dunklen Zeigern, darunter ein Pendel, auf dem Rücken ein Zahnrad, am Gürtel eine Schnalle aus Chronit, an den Knien Chronitsteine (Zeigerkamm,
     Zahnräder, Pendel und Zifferblatt kommen als 3D-Teile)."""
     return Design("timewarden", {"A": tw_tex.BRONZE, "B": tw_tex.TRIM, "D": tw_tex.AMBER, "E": tw_tex.CHRONIT}, mask=True, d={
         "head_top": [".", ".", "...ed...", "...fd...", "...fd...", "...ed..."],
-        "head_front": ["...ed...", ".", "..eddc..", ".e1111c.", ".et11tc.", ".e1111c.", "..dccb..", "."],
+        "head_front": ["...ed...", ".", "..eddc..", ".e2112c.", ".e1tt1c.", ".e2112c.", "..dccb..", "."],
         "head_side": [".", ".", ".", "..ede...", "..dtd...", "..cdc...", ".", "."],
         "head_back": [".", ".", "eeddddcc"],
-        "body_front": [".", ".f....d.", "..eddc..", ".eEFFEc.", ".eF1uEc.", ".eE1EEc.", "..dccb..", ".", "...dc...", "...ED...", ".",
-                       "..dccb.."],
+        "body_front": [".", ".f....d.", "..eddc..", ".eGF1Fc.", ".eFE1Ec.", ".eFE21c.", ".eEDDCc.", "..dccb..", "...dc...", "...ED...",
+                       ".", "..dccb.."],
         "body_back": [".", ".", "..eddc..", ".e3443c.", ".d4tt4c.", ".d3443c.", "..dccb..", ".", "."],
         "arm_side": TRIM_ARM,
         "boot_side": TRIM_BOOT,

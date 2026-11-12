@@ -36,7 +36,7 @@ CHRONIT = st.ramp("#e39a34", dark=0.3, light=0.97, cool=25, hue_dark=12, chroma_
 #: erstarrte Funken und Glanzlichter
 SPARK = st.ramp("#fff0bf", dark=0.72, light=1.0, cool=70, warm=100, chroma_light=0.12)
 #: Uhrbronze (die Platten der Rüstung)
-BRONZE = st.ramp("#8c5d33", dark=0.17, light=0.84, cool=15, hue_dark=10, chroma_dark=1.15, warm=80, hue_light=10, chroma_light=0.5)
+BRONZE = st.ramp("#a8723a", dark=0.2, light=0.92, cool=15, hue_dark=10, chroma_dark=1.15, warm=85, hue_light=10, chroma_light=0.55)
 #: Säume und Zahnräder: Messing
 TRIM = gear.BRASS
 #: das Leuchten (Augen, Zeiger, Stundenmarken)

@@ -62,7 +62,8 @@ final class AbyssModels {
     /** Der Uhrturm (1.1): Uhrwerk, Zifferblatt, das Uhrwerkherz (je Phase), der Minutenzeiger, das Spawn-Ei. */
     private static void clockTower(BlockModelGenerators blocks, ItemModelGenerators items) {
         blocks.createTrivialCube(io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCKWORK.get());
-        blocks.createTrivialCube(io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCK_FACE.get());
+        // das Email liegt gedreht (zufällig je Block) – auf dem großen Zifferblatt wiederholt sich kein Muster
+        blocks.createRotatedVariantBlock(io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCK_FACE.get());
         Block heart = io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCK_HEART.get();
         Material side = TextureMapping.getBlockTexture(heart, "_side");
         TextureMapping base = new TextureMapping().put(TextureSlot.TOP, TextureMapping.getBlockTexture(heart, "_top")).put(TextureSlot.SIDE, side)

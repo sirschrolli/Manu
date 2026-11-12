@@ -491,10 +491,7 @@ def _dial(ctx: Ctx):
                 ctx.glow = col
                 return col
             return pick(ctx.pal["ink"], 0.4)
-        # der Minutenring: kleine Striche
-        minute = a / (2.0 * math.pi) * 60.0
-        if abs(minute - round(minute)) * 2.0 * math.pi / 60.0 * r < 0.12 and k > 0.83:
-            return pick(ctx.pal["ink"], 0.6)
+        # der Minutenring: eine feine Linie (einzelne Striche wären bei dieser Größe nur Krümel)
         if abs(k - 0.83) < 0.012:
             return pick(ctx.pal["ink"], 0.5)
         return pick(ctx.pal["enamel"], 0.72 + (noise3(u * 0.7, v * 0.7, 1.0, 3111) - 0.5) * 0.1 + (0.05 if v > 0 else 0.0))

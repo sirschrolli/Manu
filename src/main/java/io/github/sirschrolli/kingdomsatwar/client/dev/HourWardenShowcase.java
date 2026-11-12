@@ -83,14 +83,15 @@ final class HourWardenShowcase {
         // der Uhrturm: von oben, vom Zifferblatt, von der Seite, die Spitze, innen, das Herz, Zahnräder, von unten
         boolean first = true;
         for (Object[] view : new Object[][] {
-                {"clock_aerial", new double[] {36.0, 30.0, 30.0, -12.0, 6.0, 0.0}},
+                {"clock_aerial", new double[] {24.0, 27.0, 15.0, -9.0, 2.0, 0.0}},
+                {"clock_dial_top", new double[] {9.0, 21.0, 2.0, -3.0, 0.0, 0.0}},
                 {"clock_dial", new double[] {13.0, 4.5, 6.0, tower, 14.0, 0.0}},
-                {"clock_tower_side", new double[] {tower + 4.0, 18.0, -34.0, tower, 20.0, 0.0}},
+                {"clock_tower_side", new double[] {-12.0, 13.0, -25.0, tower, 18.0, 0.0}},
                 {"clock_tower_top", new double[] {tower + 16.0, ClockTowerPiece.ROOF + 10.0, 14.0, tower, ClockTowerPiece.ROOF + 5.0, 0.0}},
                 {"clock_gear_room", new double[] {tower - 3.5, ClockTowerPiece.GEAR_ROOM + 2.2, 3.5, tower + 1.0, ClockTowerPiece.GEAR_ROOM + 2.0, -1.0}},
                 {"clock_bell_room", new double[] {tower + 3.6, ClockTowerPiece.BELL_ROOM + 2.0, -3.6, tower, ClockTowerPiece.ROOF - 4.0, 0.0}},
                 {"clock_heart", new double[] {3.6, 2.4, 2.4, 0.0, -0.6, 0.0}},
-                {"clock_gears", new double[] {30.0, -4.0, -26.0, 0.0, 2.0, 0.0}},
+                {"clock_gears", new double[] {22.0, -3.0, -21.0, 0.0, 3.0, 0.0}},
                 {"clock_below", new double[] {16.0, -15.0, 12.0, 0.0, -9.0, 0.0}}}) {
             String name = (String) view[0];
             double[] v = (double[]) view[1];
@@ -165,52 +166,69 @@ final class HourWardenShowcase {
         steps.add(Step.screenshot("warden_bossbar"));
         steps.add(Step.hud(false));
 
-        // die Angriffe: {Angriff, Tick, Name, Winkel, Abstand, Höhe, Blick zum Ritter, Abstand des Ritters, Kraft, starten}
+        // die Angriffe: {Angriff, Tick, Name, Winkel (P: quer zum Pendel), Abstand, Höhe, Blick zum Ritter (beim Pendel: Höhe des
+        // Blicks), Abstand des Ritters, Kraft, Beginn (F: erzwingen, S: Rückspulen und hart treffen, Z: die Zwölfte Stunde)}
         java.util.Set<String> started = new java.util.HashSet<>();
         for (String[] shot : new String[][] {
-                {"SWEEP", "9", "warden_sweep_wind", "65", "7.5", "1.6", "0.4", "3.6", "1", "1"},
-                {"SWEEP", "13", "warden_sweep", "60", "7.5", "1.6", "0.4", "3.6", "1", "1"},
-                {"STRIKE", "15", "warden_strike_raise", "70", "8.0", "1.8", "0.5", "3.2", "1", "1"},
-                {"STRIKE", "22", "warden_strike", "55", "9.0", "2.4", "0.5", "3.2", "1", "1"},
-                {"GEARS", "22", "warden_gears", "40", "10.0", "3.0", "0.5", "10.0", "1", "1"},
-                {"GEARS", "34", "warden_gears_roll", "55", "9.0", "2.6", "0.7", "10.0", "1", "1"},
-                {"TIME_STOP", "24", "warden_timestop_charge", "55", "8.0", "1.8", "0.3", "6.0", "1", "1"},
-                {"TIME_STOP", "37", "warden_timestop", "35", "10.0", "3.0", "0.5", "6.0", "1", "1"},
-                {"TIME_STOP", "53", "warden_timestop_strike", "80", "7.0", "1.8", "0.7", "6.0", "1", "1"},
-                {"PENDULUM", "26", "warden_pendulum_appear", "75", "18.0", "6.0", "0.8", "7.0", "1", "1"},
-                {"PENDULUM", "43", "warden_pendulum", "80", "15.0", "3.0", "0.9", "7.0", "1", "1"},
-                {"HOURGLASS", "36", "warden_hourglass", "40", "10.0", "4.0", "0.6", "5.0", "1", "1"},
-                {"BLINK", "9", "warden_blink", "60", "8.0", "2.0", "0.6", "6.0", "1", "1"},
-                {"REWIND", "34", "warden_rewind", "50", "7.5", "1.6", "0.0", "8.0", "0.6", "1"},
-                {"STAGGER", "12", "warden_stagger", "45", "7.0", "1.6", "0.0", "8.0", "0.6", "1"},
-                {"FURY", "16", "warden_fury", "35", "8.0", "1.4", "0.0", "7.0", "0.45", "1"},
-                {"TOLLS", "34", "warden_tolls", "45", "14.0", "6.0", "0.2", "7.0", "0.45", ""}}) {
+                {"SWEEP", "9", "warden_sweep_wind", "65", "7.5", "1.6", "0.4", "3.6", "1", "F"},
+                {"SWEEP", "13", "warden_sweep", "60", "7.5", "1.6", "0.4", "3.6", "1", "F"},
+                {"STRIKE", "15", "warden_strike_raise", "70", "8.0", "1.8", "0.5", "3.2", "1", "F"},
+                {"STRIKE", "22", "warden_strike", "55", "9.0", "2.4", "0.5", "3.2", "1", "F"},
+                {"GEARS", "22", "warden_gears", "40", "10.0", "3.0", "0.5", "10.0", "1", "F"},
+                {"GEARS", "34", "warden_gears_roll", "55", "9.0", "2.6", "0.7", "10.0", "1", "F"},
+                {"TIME_STOP", "24", "warden_timestop_charge", "55", "8.0", "1.8", "0.3", "6.0", "1", "F"},
+                {"TIME_STOP", "37", "warden_timestop", "35", "10.0", "3.0", "0.5", "6.0", "1", "F"},
+                {"TIME_STOP", "53", "warden_timestop_strike", "80", "7.0", "1.8", "0.7", "6.0", "1", "F"},
+                {"PENDULUM", "24", "warden_pendulum_appear", "P", "22.0", "4.0", "7.0", "7.0", "1", "F"},
+                {"PENDULUM", "41", "warden_pendulum", "P", "14.0", "2.0", "4.5", "7.0", "1", "F"},
+                {"HOURGLASS", "36", "warden_hourglass", "40", "10.0", "4.0", "0.6", "5.0", "1", "F"},
+                {"BLINK", "9", "warden_blink", "60", "8.0", "2.0", "0.6", "6.0", "1", "F"},
+                {"REWIND", "34", "warden_rewind", "25", "6.5", "1.2", "0.0", "8.0", "0.6", "F"},
+                {"STAGGER", "12", "warden_stagger", "45", "7.0", "1.6", "0.0", "8.0", "0.62", "S"},
+                {"FURY", "16", "warden_fury", "35", "8.0", "1.4", "0.0", "7.0", "0.45", "F"},
+                {"TOLLS", "34", "warden_tolls", "45", "14.0", "6.0", "0.2", "7.0", "0.45", "Z"}}) {
             if (!Step.wanted(shot[2])) {
                 continue;
             }
             HourWardenEntity.Attack attack = HourWardenEntity.Attack.valueOf(shot[0]);
             int tick = Integer.parseInt(shot[1]);
-            if (started.add(shot[0]) && !shot[9].isEmpty()) {
+            String mode = shot[9];
+            // die Glockenschläge folgen der Zwölften Stunde von selbst
+            boolean begin = started.add(shot[0]) && !(mode.equals("Z") && started.contains("FURY"));
+            if (begin) {
                 steps.add(stage(g, Double.parseDouble(shot[7]), Float.parseFloat(shot[8])));
                 steps.add(Step.waitTicks(2));
+                HourWardenEntity.Attack opening = switch (mode) {
+                    case "S" -> HourWardenEntity.Attack.REWIND;
+                    case "Z" -> HourWardenEntity.Attack.FURY;
+                    default -> attack;
+                };
                 steps.add(Step.server(any -> {
                     if (abyss(any).getEntity(g.warden) instanceof HourWardenEntity warden) {
-                        warden.forceAttack(attack);
+                        warden.forceAttack(opening);
                     }
                 }));
-            } else if (started.add(shot[0] + "+") && shot[9].isEmpty() && !started.contains("FURY")) {
-                // ohne die Zwölfte Stunde davor: sie beginnt sie selbst
-                steps.add(stage(g, Double.parseDouble(shot[7]), Float.parseFloat(shot[8])));
-                steps.add(Step.waitTicks(2));
-                steps.add(Step.server(any -> {
-                    if (abyss(any).getEntity(g.warden) instanceof HourWardenEntity warden) {
-                        warden.forceAttack(HourWardenEntity.Attack.FURY);
-                    }
-                }));
+                if (mode.equals("S")) {
+                    // Taumeln wie im Kampf: beim Rückspulen hart getroffen
+                    steps.add(Step.waitTicks(16));
+                    steps.add(Step.server(any -> {
+                        ServerLevel level = abyss(any);
+                        if (level.getEntity(g.warden) instanceof HourWardenEntity warden) {
+                            warden.damageCooldownTime = 0;
+                            warden.hurtServer(level, level.damageSources().magic(), warden.getMaxHealth() * 0.08f
+                                    / io.github.sirschrolli.kingdomsatwar.entity.boss.BossHealth.scale(warden));
+                            KingdomsAtWar.LOGGER.info("[Showcase] Rückspulen unterbrochen: {}", warden.currentAttack());
+                        }
+                    }));
+                }
             }
             steps.add(attackAt(g, attack, tick - 3));
-            steps.add(follow(g, Double.parseDouble(shot[3]), Double.parseDouble(shot[4]), Double.parseDouble(shot[5]),
-                    Double.parseDouble(shot[6])));
+            if (shot[3].equals("P")) {
+                steps.add(pendulumView(g, Double.parseDouble(shot[4]), Double.parseDouble(shot[5]), Double.parseDouble(shot[6])));
+            } else {
+                steps.add(follow(g, Double.parseDouble(shot[3]), Double.parseDouble(shot[4]), Double.parseDouble(shot[5]),
+                        Double.parseDouble(shot[6])));
+            }
             steps.add(Step.waitTicks(1));
             steps.add(Step.screenshot(shot[2]));
         }
@@ -348,7 +366,7 @@ final class HourWardenShowcase {
         if (level == null || g.center == null) {
             return;
         }
-        for (Entity e : level.getEntitiesOfClass(Mob.class, new AABB(g.center).inflate(56, 40, 56))) {
+        for (Entity e : level.getEntitiesOfClass(Entity.class, new AABB(g.center).inflate(56, 40, 56), e -> e instanceof Mob || e instanceof ItemEntity)) {
             e.discard();
         }
     }
@@ -424,6 +442,25 @@ final class HourWardenShowcase {
         }, 400);
     }
 
+    /** Kamera quer zur Bahn des Pendels: {@code distance} neben dem Ritter, {@code height} hoch, Blick auf {@code lookUp} über ihm. */
+    private static Step pendulumView(Dial g, double distance, double height, double lookUp) {
+        return Step.server(any -> {
+            ServerLevel level = abyss(any);
+            if (level == null || !(level.getEntity(g.knight) instanceof Entity knight) || !(level.getEntity(g.warden) instanceof Entity warden)
+                    || any.getServer().getPlayerList().getPlayers().isEmpty()) {
+                return;
+            }
+            Vec3 line = knight.position().subtract(warden.position()).multiply(1.0, 0.0, 1.0);
+            Vec3 across = line.lengthSqr() < 1.0e-3 ? new Vec3(0.0, 0.0, 1.0) : new Vec3(-line.z, 0.0, line.x).normalize();
+            Vec3 eye = knight.position().add(across.scale(distance)).add(0.0, height, 0.0);
+            Vec3 look = knight.position().add(0.0, lookUp, 0.0).subtract(eye);
+            float yaw = (float) (-Math.atan2(look.x, look.z) * 180.0 / Math.PI);
+            float pitch = (float) (-Math.atan2(look.y, Math.sqrt(look.x * look.x + look.z * look.z)) * 180.0 / Math.PI);
+            var player = any.getServer().getPlayerList().getPlayers().getFirst();
+            player.teleportTo(level, eye.x, eye.y - 1.62, eye.z, java.util.Set.of(), yaw, pitch, true);
+        });
+    }
+
     /**
      * Kamera beim Wächter: im Abstand {@code distance}, um {@code angle} Grad aus der Linie Wächter → Ritter gedreht,
      * {@code height} über ihm; Blick auf ihn ({@code toward} 0) oder auf den Ritter ({@code toward} 1).
@@ -433,6 +470,9 @@ final class HourWardenShowcase {
             ServerLevel level = abyss(any);
             if (level == null || !(level.getEntity(g.warden) instanceof Entity warden) || any.getServer().getPlayerList().getPlayers().isEmpty()) {
                 return;
+            }
+            if (warden instanceof HourWardenEntity hw) {
+                KingdomsAtWar.LOGGER.info("[Showcase] Wächter: {} ({}) bei {}", hw.currentAttack(), hw.attackTime(0.0f), hw.position().subtract(rel(g, 0.0, 0.0, 0.0)));
             }
             Vec3 c = warden.position().add(0.0, 2.0, 0.0);
             Vec3 k = level.getEntity(g.knight) instanceof Entity knight ? knight.position().add(0.0, 1.0, 0.0) : c.add(0.0, 0.0, 1.0);

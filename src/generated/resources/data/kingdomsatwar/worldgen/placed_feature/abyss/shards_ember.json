@@ -9,6 +9,9 @@
       "type": "minecraft:in_square"
     },
     {
+      "type": "kingdomsatwar:not_near_clock_tower"
+    },
+    {
       "type": "minecraft:height_range",
       "height": {
         "type": "minecraft:uniform",

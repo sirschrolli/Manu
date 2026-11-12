@@ -184,13 +184,30 @@ def clockwork() -> Image.Image:
 # =============================================================================
 
 def clock_face() -> Image.Image:
-    """Email: fast glatt, nur eine leise Wolke und hier und da ein heller Schimmer (nahtlos, ohne Muster)."""
+    """
+    Altes Email: elfenbeinfarben, eine leise Wolke, hier und da ein heller Schimmer – und ein Netz haarfeiner Risse
+    (Craquelé), das über die Kanten weiterläuft (nahtlos, ohne sichtbares Raster).
+    """
     img = Image.new("RGBA", (N, N), CLEAR)
     cloud = vs.layered(51207, ((8, 8, 0.6), (4, 4, 0.4)))
     shine = vs.white(51209)
+    cracks = [[0.0] * N for _ in range(N)]
+    import random
+    rnd = random.Random(51211)
+    for _ in range(2):
+        x, y = rnd.randrange(N), rnd.randrange(N)
+        dx, dy = rnd.choice(((1, 0), (0, 1), (1, 1), (1, -1)))
+        for _ in range(rnd.randrange(6, 10)):
+            cracks[y % N][x % N] = 1.0
+            # meist geradeaus, selten ein Knick
+            if rnd.random() < 0.2:
+                dx, dy = rnd.choice(((1, 0), (0, 1), (1, 1), (1, -1)))
+            x += dx
+            y += dy
     for y in range(N):
         for x in range(N):
-            level = 4.1 + (cloud[y][x] - 0.5) * 0.9 + (0.6 if shine[y][x] > 0.95 else 0.0) - (0.5 if shine[y][x] < 0.03 else 0.0)
+            level = 3.75 + (cloud[y][x] - 0.5) * 0.9 + (0.55 if shine[y][x] > 0.95 else 0.0) - (0.45 if shine[y][x] < 0.03 else 0.0)
+            level -= 0.45 * cracks[y][x]
             img.putpixel((x, y), _px(ENAMEL, level))
     return img
 

@@ -77,19 +77,22 @@ public final class AbyssFeatures {
 
     // --- Platzierungen ---
 
+    // alle halten Abstand zu den Uhrtürmen (seit 1.1): deren Auge im Chaos bleibt leer
+    private static final PlacementModifier AWAY_FROM_CLOCKS = io.github.sirschrolli.kingdomsatwar.worldgen.clock.ClockTowerClearing.Filter.INSTANCE;
+
     private static List<PlacementModifier> floor(PlacementModifier frequency) {
-        return List.of(frequency, InSquarePlacement.spread(), AnySurfacePlacement.floor(), BiomeFilter.biome());
+        return List.of(frequency, InSquarePlacement.spread(), AWAY_FROM_CLOCKS, AnySurfacePlacement.floor(), BiomeFilter.biome());
     }
 
     private static List<PlacementModifier> patch(PlacementModifier frequency, int tries) {
-        return List.of(frequency, InSquarePlacement.spread(), AnySurfacePlacement.floor(), BiomeFilter.biome(), CountPlacement.of(tries),
+        return List.of(frequency, InSquarePlacement.spread(), AWAY_FROM_CLOCKS, AnySurfacePlacement.floor(), BiomeFilter.biome(), CountPlacement.of(tries),
                 OffsetPlacement.ofTriangle(5, 1), BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE));
     }
 
     /** Frei in der Luft, zwischen {@code low} und {@code high}. */
     private static List<PlacementModifier> air(PlacementModifier frequency, int low, int high) {
-        return List.of(frequency, InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(low), VerticalAnchor.absolute(high)),
-                BiomeFilter.biome());
+        return List.of(frequency, InSquarePlacement.spread(), AWAY_FROM_CLOCKS,
+                HeightRangePlacement.uniform(VerticalAnchor.absolute(low), VerticalAnchor.absolute(high)), BiomeFilter.biome());
     }
 
     private static Supplier<Feature> block(Supplier<? extends Block> block) {

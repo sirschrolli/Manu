@@ -33,8 +33,8 @@ import org.jspecify.annotations.Nullable;
  * Der Uhrturm (seit 1.1), Chunk für Chunk gebaut – frei schwebend im Abgrund, in einem leer gefegten Auge des Chaos:
  * <ol>
  *     <li>Das <b>große Zifferblatt</b>: eine runde Scheibe aus Email (31 Blöcke breit) mit einem Lünettenring aus Uhrbronze,
- *     einer Minutenbahn, zwölf Stundenmarken (die vier Hauptstunden aus Chronit) und zwei eingelegten Zeigern – sie stehen
- *     eine Minute vor zwölf. In der Nabe sitzt das <b>Uhrwerkherz</b>; darüber steht der Stundenwächter erstarrt. Ringsum eine
+ *     einer Minutenbahn (an jeder Stunde ein Chronit), dem Ring der Stunden (römische Ziffern XII, III, VI und IX, sonst
+ *     Balken) und zwei Zeigern aus Uhrbronze mit Chronit – sie stehen eine Minute vor zwölf. In der Nabe sitzt das <b>Uhrwerkherz</b>; darüber steht der Stundenwächter erstarrt. Ringsum eine
  *     niedrige, zerbrochene Brüstung; darunter ein zerklüfteter Kegel aus Chaosgestein mit Chronit und Uhrwerk, an dem
  *     Uhrgewichte an Ketten hängen.</li>
  *     <li>Im Norden (wo die Zwölf steht) über eine Brücke der <b>Uhrturm</b>: elf Blöcke breit, Chaosziegel mit Gesimsen aus
@@ -61,6 +61,16 @@ public class ClockTowerPiece extends StructurePiece {
     static final int CLEAR_DOWN = 34;
     static final int CLEAR_UP = 66;
     static final int REACH = 48;
+    /** Das Zifferblatt: Ring der Stunden (innen), Minutenbahn, Lünette (je der innere Halbmesser). */
+    static final double CHAPTER_IN = 8.6;
+    static final double MINUTE_TRACK = 13.6;
+    static final double LUNETTE = 14.4;
+    /** Die Ziffern XII, III, VI und IX, von oben (außen) nach unten (zur Mitte), von links nach rechts (von der Mitte aus gesehen). */
+    static final String[][] NUMERALS = {
+            {"#.#.#.#", "#.#.#.#", ".#..#.#", "#.#.#.#", "#.#.#.#"},
+            {"#.#.#", "#.#.#", "#.#.#", "#.#.#", "#.#.#"},
+            {"#.#.#", "#.#.#", "#.#.#", "#.#.#", ".#..#"},
+            {"#.#.#", "#.#.#", "#..#.", "#.#.#", "#.#.#"}};
 
     private final BlockPos center;
     private final long seed;
@@ -365,6 +375,13 @@ public class ClockTowerPiece extends StructurePiece {
             }
         }
 
+        /**
+         * Ein Block des Zifferblatts (von innen nach außen): die Nabe (Herz, Bronze, Uhrwerk, ein Bronzekragen), das Feld aus
+         * Email, ein Bronzering, der Ring der Stunden (römische Ziffern an den vier Hauptstunden, Balken an den übrigen, alles
+         * dunkel eingelegt), die Minutenbahn (dunkel mit hellen Strichen, an jeder Stunde ein Chronit), die Lünette aus
+         * Uhrbronze. Darüber die beiden Zeiger aus Uhrbronze mit einem Chronit in der Spitze (eine Minute vor zwölf), der
+         * Minutenzeiger mit einem runden Gegengewicht.
+         */
         BlockState dialBlock(double dx, double dz, double r, double a, double minute, double hour) {
             if (r < 0.5) {
                 return s(ClockTower.CLOCK_HEART.get());
@@ -375,45 +392,87 @@ public class ClockTowerPiece extends StructurePiece {
             if (r < 2.7) {
                 return s(ClockTower.CLOCKWORK.get());
             }
-            if (r > 14.0) {
+            if (r < 3.3) {
+                return this.bronze();                                       // der Kragen der Nabe
+            }
+            BlockState hand = this.hand(dx, dz, r, minute, hour);
+            if (hand != null) {
+                return hand;
+            }
+            if (r > LUNETTE) {
                 // die Lünette, an den vier Hauptstunden ein Chronit
                 double h = a / (Mth.TWO_PI / 4.0);
-                if (Math.abs(h - Math.round(h)) * Mth.HALF_PI * r < 0.6 && r < 15.0) {
+                if (Math.abs(h - Math.round(h)) * Mth.HALF_PI * r < 0.6 && r < 15.2) {
                     return s(AbyssGear.CHRONIT_BLOCK.get());
                 }
                 return this.bronze();
             }
-            if (r > 12.9) {
-                // die Minutenbahn: dunkel, jede Minute ein heller Strich
+            if (r > MINUTE_TRACK) {
+                // die Minutenbahn: dunkel, jede Minute ein heller Strich, an jeder Stunde ein Chronit
                 double m = a / (Mth.TWO_PI / 60.0);
-                return Math.abs(m - Math.round(m)) * (Mth.TWO_PI / 60.0) * r < 0.42 ? s(ClockTower.CLOCK_FACE.get()) : this.polished();
-            }
-            // die Zeiger: eingelegt aus poliertem Chaosgestein, die Spitze eine Raute aus Uhrbronze
-            double[] mh = alongHand(dx, dz, minute);
-            if (mh[0] > 1.5 && mh[0] < 12.2) {
-                double half = mh[0] > 9.2 && mh[0] < 11.2 ? 1.25 - Math.abs(mh[0] - 10.2) * 0.6 : 0.6;
-                if (mh[1] < half) {
-                    return mh[0] > 9.2 ? this.bronze() : this.polished();
+                long nearest = Math.round(m);
+                if (Math.abs(m - nearest) * (Mth.TWO_PI / 60.0) * r < 0.5) {
+                    return nearest % 5 == 0 ? s(AbyssGear.CHRONIT_BLOCK.get()) : s(ClockTower.CLOCK_FACE.get());
                 }
+                return this.polished();
             }
-            double[] hh = alongHand(dx, dz, hour);
-            if (hh[0] > 1.5 && hh[0] < 8.4) {
-                double half = hh[0] > 5.6 && hh[0] < 7.6 ? 1.6 - Math.abs(hh[0] - 6.6) * 0.7 : 0.85;
-                if (hh[1] < half) {
-                    return hh[0] > 5.6 ? this.bronze() : this.polished();
+            if (r >= CHAPTER_IN) {
+                // der Ring der Stunden: an den vier Hauptstunden römische Ziffern, sonst ein Balken
+                long h = Math.round(a / (Mth.TWO_PI / 12.0));
+                double theta = h * Mth.TWO_PI / 12.0;
+                double u = dx * Math.cos(theta) + dz * Math.sin(theta);       // quer (von der Mitte aus gesehen nach rechts)
+                double v = dx * Math.sin(theta) - dz * Math.cos(theta);       // nach außen
+                if (h % 3 == 0) {
+                    return numeral((int) (Math.floorMod(h, 12L) / 3), u, v) ? this.polished() : s(ClockTower.CLOCK_FACE.get());
                 }
+                return Math.abs(u) < 0.55 && v > CHAPTER_IN + 0.9 && v < MINUTE_TRACK - 0.3 ? this.polished() : s(ClockTower.CLOCK_FACE.get());
             }
-            // die Stundenmarken: Balken (die vier Hauptstunden breiter, aus Chronit)
-            if (r > 10.4) {
-                double h = a / (Mth.TWO_PI / 12.0);
-                long nearest = Math.round(h);
-                double off = Math.abs(h - nearest) * (Mth.TWO_PI / 12.0) * r;
-                boolean main = nearest % 3 == 0;
-                if (off < (main ? 1.05 : 0.55) && r > (main ? 10.4 : 11.2)) {
-                    return main ? s(AbyssGear.CHRONIT_BLOCK.get()) : this.polished();
-                }
+            if (r > CHAPTER_IN - 0.65) {
+                return this.bronze();                                       // der innere Ring
             }
             return s(ClockTower.CLOCK_FACE.get());
+        }
+
+        /**
+         * Die Zeiger aus Uhrbronze: der Minutenzeiger lang und schmal bis an die Minutenbahn (ein Chronit in der Spitze), hinten
+         * ein rundes Gegengewicht; der Stundenzeiger kurz und kräftig mit einer breiten Raute (ein Chronit darin).
+         */
+        @Nullable BlockState hand(double dx, double dz, double r, double minute, double hour) {
+            double[] mh = alongHand(dx, dz, minute);
+            if (mh[0] > 3.0 && mh[0] < 13.5 && mh[1] < 0.5) {
+                return mh[0] > 12.8 ? s(AbyssGear.CHRONIT_BLOCK.get()) : this.bronze();
+            }
+            if (mh[0] < -3.0 && mh[0] > -4.4 && mh[1] < 0.5) {
+                return this.bronze();
+            }
+            double weight = Math.hypot(mh[0] + 5.2, mh[1]);
+            if (weight < 1.15) {
+                return weight < 0.5 ? s(AbyssGear.CHRONIT_BLOCK.get()) : this.bronze();
+            }
+            double[] hh = alongHand(dx, dz, hour);
+            if (hh[0] > 3.0 && hh[0] < 7.9) {
+                double t = hh[0];
+                double half = t < 5.0 ? 0.75 : t < 6.2 ? 0.75 + (t - 5.0) * 0.8 : Math.max(0.0, 1.71 - (t - 6.2) * 1.0);
+                if (hh[1] < half) {
+                    return Math.abs(t - 6.1) < 0.6 && hh[1] < 0.5 ? s(AbyssGear.CHRONIT_BLOCK.get()) : this.bronze();
+                }
+            }
+            return null;
+        }
+
+        /**
+         * Die römischen Ziffern XII, III, VI und IX (fünf Blöcke hoch, von der Mitte aus lesbar): Ist an der Stelle {@code u}
+         * (quer) und {@code v} (Abstand von der Mitte) ein Strich?
+         */
+        static boolean numeral(int quarter, double u, double v) {
+            String[] glyph = NUMERALS[quarter];
+            int width = glyph[0].length();
+            int col = (int) Math.round(u) + (width - 1) / 2;
+            int row = (int) Math.floor(v - CHAPTER_IN);
+            if (col < 0 || col >= width || row < 0 || row >= glyph.length) {
+                return false;
+            }
+            return glyph[glyph.length - 1 - row].charAt(col) == '#';
         }
 
         /** Die Brüstung: niedrige Chaosmauern, an der Brücke offen, an jeder Stunde eine Lücke, stellenweise zerbrochen. */

@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Version 1.0.0 – Der Kraken erwacht.** Der Herr des Urmeers bleibt nicht mehr an seinem Platz: **Der Kraken schwimmt** jetzt schwer und träge durch sein Becken, zieht Kreise um seine Feinde (nie über den Felsenring hinaus), wechselt dabei die Richtung, neigt den Kopf in die Fahrt, schiebt eine **Bugwelle** vor sich her und zieht **Kielwasser** hinter sich; seine Arme strömen nach hinten und rudern im Takt. Und er hat **vier neue Angriffe**: den **Rammstoß** (er saugt Wasser in den Mantel, Warnkreise zeigen die Bahn – dann schießt er mit einem Wasserstrahl quer durchs Becken und überrollt, wer im Weg ist), den **Ausbruch aus der Tiefe** (er taucht ab und ist dann unverwundbar, nur Blasen und ein dunkler Schatten verraten, wo er schwimmt; unter seinem Ziel steigt ein Ring aus Blasen auf – dann bricht er hoch aus dem Wasser und schleudert alles empor), das **Geysirfeld** (rings um seine Feinde brodelt es, dann schießen Geysire empor – ab zwei Dritteln gleich zweimal) und den **Tentakelkäfig** (sieben Arme brechen rings um sein Ziel aus dem Wasser, kreisen und ziehen sich zusammen, wer sie berührt, wird zurückgestoßen; wer die Lücke nicht findet, wird zermalmt – ein harter Schlag trennt einen Arm ab, und der Kraken spürt es). Dazu sechs neue Klänge.
+> **Version 1.1.0 – Der Stundenwächter.** Im **Abgrund** treiben jetzt **Uhrtürme**: In einem leer gefegten Auge des Chaos schwebt ein **großes Zifferblatt** – gut dreißig Blöcke breit, mit römischen Ziffern, Zeigern aus **Uhrbronze** und **Chronit** an jeder Stunde –, im Norden der **Turm** mit Zifferblättern auf allen Seiten, einer Treppe um den hohlen Kern, in dem das große Pendel hängt, der **Uhrwerkkammer** und der **Glockenstube** (je eine Truhe), ringsum schweben riesige **Zahnräder**. In der Nabe des Zifferblatts sitzt das **Uhrwerkherz**, und darüber steht erstarrt – eine Minute vor zwölf – **der Stundenwächter**: ein Ritter aus Uhrbronze, so groß wie zwei Männer, ein Zifferblatt als Heiligenschein, zwei Klingen wie Zeiger. Wer ihm zu nahe kommt, setzt seine Zeiger in Gang: **Zeigerhieb**, **Stundenschlag** (ein Glockenschlag rollt als Ring davon – springen!), **Zahnradwurf**, **Zeitstopp** (wer ihn ansieht, erstarrt – wer wegschaut, nicht), **Pendelschwung**, **Sanduhr**, **Zeitsprung**, **Rückspulen** (er heilt – wer ihn dabei hart trifft, bringt ihn ins Taumeln) und unter halber Kraft **die Zwölfte Stunde** mit zwölf Glockenschlägen. Eigene Bossleiste, eigene Klänge. Er hinterlässt den **Minutenzeiger** (jeder zwölfte Treffer schlägt die Stunde, Rechtsklick: Zeitsprung); Chronit im stillstehenden Herzen weckt einen neuen Wächter. Neu ist auch **Chronit** (gerinnt an den Weltennähten des Abgrunds) und daraus die **Rüstung der Zeitwächter** – Die Zeit stockt, und mit dem vollen Satz eine **Zweite Chance**: Ein tödlicher Treffer spult die Zeit drei Sekunden zurück.
+> In 1.0.0 erwachte **der Kraken**: Der Herr des Urmeers bleibt nicht mehr an seinem Platz: **Der Kraken schwimmt** jetzt schwer und träge durch sein Becken, zieht Kreise um seine Feinde (nie über den Felsenring hinaus), wechselt dabei die Richtung, neigt den Kopf in die Fahrt, schiebt eine **Bugwelle** vor sich her und zieht **Kielwasser** hinter sich; seine Arme strömen nach hinten und rudern im Takt. Und er hat **vier neue Angriffe**: den **Rammstoß** (er saugt Wasser in den Mantel, Warnkreise zeigen die Bahn – dann schießt er mit einem Wasserstrahl quer durchs Becken und überrollt, wer im Weg ist), den **Ausbruch aus der Tiefe** (er taucht ab und ist dann unverwundbar, nur Blasen und ein dunkler Schatten verraten, wo er schwimmt; unter seinem Ziel steigt ein Ring aus Blasen auf – dann bricht er hoch aus dem Wasser und schleudert alles empor), das **Geysirfeld** (rings um seine Feinde brodelt es, dann schießen Geysire empor – ab zwei Dritteln gleich zweimal) und den **Tentakelkäfig** (sieben Arme brechen rings um sein Ziel aus dem Wasser, kreisen und ziehen sich zusammen, wer sie berührt, wird zurückgestoßen; wer die Lücke nicht findet, wird zermalmt – ein harter Schlag trennt einen Arm ab, und der Kraken spürt es). Dazu sechs neue Klänge.
 > In 0.99 kam **die Sternenweberin**: In den leeren Weiten der **Leere** hängen jetzt **Sternennetze**: eine runde Netzplatte aus leuchtender **Sternenseide** (acht Speichen, vier Ringe) und **Sternengewebe**, durch das man ins Nichts hinabsieht, am Rand offen; sechs **Ankerfelsen** mit Adern aus Himmelseisen halten das Netz an durchhängenden Tauen, hoch darüber die **Sternenkrone**, an den Tauen und unter dem Rand **Sternenkokons** (zerschlagen geben sie frei, was sich verfing), auf dem größten Anker eine Truhe. In der Mitte liegt das **Sternengelege** – und darüber hängt kopfüber an ihrem Faden **die Sternenweberin**: eine riesige Spinne aus nachtblauem Chitin mit acht Sternenaugen, auf dem Hinterleib eine **Spiralgalaxie**, aus dem Rücken wachsen Kristalle der Leere. Wer ihr zu nahe kommt, weckt sie: **Giftbiss**, **Fangfaden**, **Netzwurf**, **Sternbild**, **Sternschnuppen**, **Umgarnen**, **Brut** (Sternspinnlinge), **Abseilen** und im Zorn die **Spindel**. Eigene Bossleiste, eigene Klänge. Sie hinterlässt den **Sternenbogen** (schwerelose, schnellere Pfeile; im Schleichen ein **Netzpfeil**, der sein Ziel einspinnt); ein **Himmelseisenbarren** im erloschenen Gelege ruft eine neue Weberin. Neu ist auch **Himmelseisen** (Erz in der ganzen Leere, im Kern gefallener Sterne) und daraus die **Rüstung der Sternwandler** – leichter, Sternenschweben, Sternenanker. Außerdem: **Rüstungen ohne offene Stellen** (Kragen, Ellbogen, Masken mit Sehschlitzen), Rüstungs-Effekte wirken **still ohne Symbol** und die Nachtsicht **flackert nicht mehr**, die volle **Taucherausrüstung gibt Wasseratmung**, die **Meerjungfrauen handeln wie alle anderen Händler** (Münzen, gleiches Handelsfenster), **8369 Fischarten** (die meisten im Urmeer), **seltene Fische sind schwerer zu drillen**, und im Urmeer gibt es **keine Lava** und **kein Trockenlegen mit Schwämmen**.
 > In 0.98 kam **der Seelenhirte**: Im **Seelensumpf** der Schattenwelt liegen jetzt **Seelenpferche**: ein runder Pferch auf aufgeschüttetem Grund mitten im Sumpf, umgeben von einem Zaun aus Schattenholz mit **Seelenlaternen** und **Schafsschädeln** auf den Pfosten, vier Feuerschalen mit Seelenfeuer, **Stege auf Stelzen** hinaus über den Sumpf und im Norden die **Hütte des Hirten** mit einer Truhe. In der Mitte hängt unter einem Glockenstuhl die **Seelenglocke** – und vor ihr steht in Andacht **der Seelenhirte**: ein hagerer, gebeugter Riese in zerschlissener Kutte, ein Schaffell über den Schultern, unter der Kapuze ein **Widderschädel** mit gerollten Hörnern und türkis glimmenden Augen, in der Rechten ein **Hirtenstab**, an dessen Haken eine Laterne voll Seelenfeuer hängt, in der Linken eine Handglocke; drei **Irrlichter** kreisen um ihn. Wer ihm zu nahe kommt, weckt ihn: **Hakenzug**, **Laternenschwung**, **Irrlichter**, **Seelenglocke**, **Nebelgang**, ein **Pferch aus Seelenfeuer**, der **Hirtenstoß** und im Zorn der **Seelensturm**; unter halber Kraft läutet er dreimal. Eigene Bossleiste, eigene Klänge. Er hinterlässt den **Hirtenstab** (in 3D, Rechtsklick: eine Kette aus Seelenlicht reißt das Ziel heran); die verstummte Glocke ruft mit einem **Seelenkristall** einen neuen Hirten. Neu ist auch **Dämmerquarz** in der ganzen Schattenwelt (Dämmerquarz, Dämmerquarzblock) und daraus die **Dämmerrüstung** der Schleicher – Monster bemerken dich später, mit dem vollen Satz beim Schleichen kaum noch, du schleichst schneller, landest weich und siehst beim Schleichen im Dunkeln; in 3D mit Kapuze, Halbmaske, Umhang, Quarzschließe, Gürteltaschen und Dolch.
 > In 0.97 kam **die Meerhexe**: Am Grund des Urmeers liegen jetzt **Hexengrotten**: buckelige Kuppeln aus Gezeitenstein in einer **toten Zone**, in der nichts mehr wächst, mit einem Eingang durch die **Rippen eines Wals**, Knochensäulen mit Seelenlaternen, zwei Blasensäulen, Nischen voller Hexenkram, Laternen an Ketten, dem Wrack eines Bootes und zwei Truhen. In der Mitte brodelt der **Hexenkessel** – und über ihm schwebt in Trance **die Meerhexe**, eine verstoßene Meerjungfrau mit einer Krone aus schwarzer Koralle, Haar aus Tang und einem Aalschwanz, gebändert wie ein Feuerfisch. Wer ihr zu nahe kommt, weckt sie: **Tintengeschosse**, **Strudel**, **Sirenengesang** (wegsehen!), **Blasengefängnis**, **Haie**, **Korallenspieße**, **Schwanzhieb**, im Zorn der **Fluch der Tiefe** und eine **Woge aus Tinte**. Eigene Bossleiste, eigene Klänge. Sie hinterlässt den **Hexenstab** (in 3D, Rechtsklick: drei Tintenkugeln, die dem Ziel folgen); den erkalteten Kessel weckt eine **Perle**. Neu ist auch **Aquamarinerz** am Meeresgrund (Aquamarin, Aquamarinblock) und daraus die **Taucherrüstung** – länger atmen, schneller schwimmen und abbauen, mit dem vollen Satz klare Sicht unter Wasser; in 3D mit Taucherhelm und Bullaugen, Luftflaschen, Bleigürtel und Flossen.
@@ -409,6 +410,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Der Seelenhirte** (0.98): der Seelenpferch im Seelensumpf der Schattenwelt (runder Pferch mit Zaun, Seelenlaternen und Schafsschädeln, Glockenstuhl mit der Seelenglocke, Feuerschalen, Stege auf Stelzen, Hütte mit Truhe); der Seelenhirte als Boss (steht in Andacht vor seiner Glocke, sieben Angriffe, im Zorn der Seelensturm, eigene Bossleiste und Klänge, Rückruf mit einem Seelenkristall); der Hirtenstab in 3D; Dämmerquarz, Dämmerquarzblock und die Dämmerrüstung (schwerer zu entdecken, schneller schleichen, weiche Landung, Nachtsicht beim Schleichen, in 3D) | ✅ fertig |
 | **Die Sternenweberin** (0.99): das Sternennetz in den leeren Weiten der Leere (Netzplatte aus Sternenseide und Sternengewebe, sechs Ankerfelsen mit Tauen, Sternenkrone, Kokons, Truhe); die Sternenweberin als Boss (hängt in Andacht über ihrem Gelege, acht Angriffe, im Zorn die Spindel, eigene Bossleiste und Klänge, Rückruf mit einem Himmelseisenbarren); der Sternenbogen mit Netzpfeil; Himmelseisen und die Rüstung der Sternwandler; Rüstungen ohne offene Stellen, stille Rüstungs-Effekte, Wasseratmung der Taucherausrüstung; Handel der Meerjungfrauen wie bei allen Händlern; 8369 Fischarten, Drill nach Seltenheit; keine Lava und kein Trockenlegen im Urmeer | ✅ fertig |
 | **Der Kraken erwacht** (1.0): der Kraken schwimmt in seinem Becken umher (Kreise um sein Ziel, Bugwelle und Kielwasser, Ruderschlag der Arme); vier neue Angriffe – Rammstoß, Ausbruch aus der Tiefe, Geysirfeld und Tentakelkäfig mit abschlagbaren Armen; sechs neue Klänge | ✅ fertig |
+| **Der Stundenwächter** (1.1): der Uhrturm im Abgrund (großes Zifferblatt mit römischen Ziffern und Zeigern aus Uhrbronze, Turm mit Treppe, Pendel, Uhrwerkkammer und Glockenstube, schwebende Zahnräder, zwei Truhen); der Stundenwächter als Boss (steht erstarrt über dem Uhrwerkherz, neun Angriffe mit Zeitstopp, Rückspulen und Taumeln, die Zwölfte Stunde, eigene Bossleiste und Klänge, Rückruf mit Chronit); der Minutenzeiger; Chronit und die Rüstung der Zeitwächter mit Zweiter Chance; `/kaw uhrturm` | ✅ fertig |
 | **Der Weg zum Unsterblichen** (0.77): Heldenstufe bis 200, fünf neue Ränge (Mythos, Halbgott, Titan, Sternenwanderer, Unsterblicher) mit Abzeichen und Wahrzeichen, Heldenkraft je Stufe, Talente bis 40 Punkte (Meisterschaft), je 25 Herz- und Manakristalle, das Licht der Unsterblichkeit, Heldenherzen in Schichten | ✅ fertig |
 | **Schrolli greift zur Klinge** (0.76): Nahkampf am Boden – Landung, Beine in goldenen Beinschienen, die Klinge aus Licht mit Lichtspur, sieben Künste der Klinge (Klingenhieb, Lichtsicheln, Sturmlauf, Klingenwirbel, Himmelssturz, Schwingenwehr mit Gegenschlag, Weltenklinge), jetzt 33 Künste; warme, leisere Klänge und Musik | ✅ fertig |
 | **Die Kampfdimensionen** (0.74): Mondbühne, Glutesse, Sternenzelt, Fehlerraum, Thronwelt und Weltenschlund – die sechs großen Bosse ziehen ihre Gegner in ein Abbild ihres Horts unter einem fremden Himmel (Regeln wie in der Arkanen Sphäre, Nachzügler folgen); nach der Niederlage erwacht der Boss unversehrt in seiner ursprünglichen Gestalt; Spawn-Ei des Weltenfressers; `/locate` findet Schlund und Thron | ✅ fertig |
@@ -469,7 +471,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.0.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.1.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -477,7 +479,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-1.0.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-1.1.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -1035,6 +1037,75 @@ Seit 0.74 kämpft der Weltenfresser im **Weltenschlund**, seiner eigenen Kampfdi
 großen Bosse“). Im Kreativ-Reiter liegt ein **Spawn-Ei des Weltenfressers** (ohne Hort kreist er um die Stelle, an der
 er erscheint), und `/locate structure kingdomsatwar:world_eater_hoard` findet den Schlund im Abgrund (ebenso
 `kingdomsatwar:void_throne` den Thron der Alten in der Leere).
+
+### Der Stundenwächter und der Uhrturm (seit 1.1)
+
+![Der Uhrturm im Abgrund, der Stundenwächter, seine Angriffe, der Minutenzeiger und die Rüstung der Zeitwächter](docs/bilder/stundenwaechter.jpg)
+
+Als die Welten zerbrachen, blieb in einer von ihnen die große Uhr stehen – **eine Minute vor Mitternacht**. Ihr Turm
+stürzte in den Abgrund, wo die Zeit stillsteht, und mit ihm ihr Wächter. Seit 1.1 treiben im **Abgrund** (in jedem seiner
+Biome, weit verstreut und fern des Schlunds der Welten) **Uhrtürme** – frei schwebend in einem leer gefegten Auge des
+Chaos, auf verschiedenen Höhen (`/kaw uhrturm` im Abgrund findet den nächsten, mit `tp`, `awaken` und `reset`).
+
+**Der Uhrturm:** In der Mitte liegt das **große Zifferblatt**, gut dreißig Blöcke breit – altes Email mit feinen Rissen,
+ein Ring der Stunden mit **römischen Ziffern** (XII, III, VI und IX) und Balken, eine dunkle Minutenbahn mit leuchtendem
+**Chronit** an jeder Stunde, eine Lünette aus **Uhrbronze** und zwei Zeiger aus Uhrbronze mit Chronit – sie stehen eine
+Minute vor zwölf, der lange hat hinten ein rundes Gegengewicht. Ringsum eine Brüstung aus Chaosziegeln (an jeder Stunde
+eine Lücke, stellenweise zerbrochen). In der Nabe sitzt das **Uhrwerkherz**. Im Norden, wo die Zwölf steht, führt eine Brücke zum **Turm**: elf Blöcke breit,
+Chaosziegel mit Gesimsen aus Uhrbronze, auf jeder Seite ein Zifferblatt. Innen windet sich eine Treppe um einen hohlen
+Kern, in dem das große **Pendel** hängt; auf halber Höhe die **Uhrwerkkammer**, oben die offene **Glockenstube** mit der
+großen Glocke – in beiden eine Truhe (Chronit, Uhrbronze, Uhrwerk, Gold, Uhrmacherzeug, selten ein Teil der Rüstung der
+Zeitwächter). Das Dach ist abgebrochen, seine Spitze schwebt ein Stück darüber. Ringsum schweben riesige **Zahnräder** aus
+Uhrbronze, schräg im Raum, mit Uhrwerknabe und Chronitkern; unter dem Zifferblatt hängen drei **Uhrgewichte** an Ketten.
+Auf dem Zifferblatt und im Turm entstehen keine Monster.
+
+**Der Stundenwächter** – ein Ritter aus Uhrbronze, so groß wie zwei Männer: hinter dem Kopf ein Zifferblatt wie ein
+Heiligenschein, in der Brust ein Uhrwerk, am Gürtel ein Pendel und zwei Uhrgewichte, in den Händen zwei Klingen wie
+Zeiger – rechts der lange Minutenzeiger, links der breite Stundenzeiger. Er steht **erstarrt** über dem Uhrwerkherz (eine
+Minute vor zwölf). Wer näher als dreizehn Blöcke kommt – oder ihn trifft –, setzt die Zeiger in Gang: Das Uhrwerk zieht
+sich auf, die Augen glimmen, der Zeiger springt auf zwölf, die Glocke schlägt, und er hebt die Klingen (solange er erstarrt
+steht und erwacht, ist er unverwundbar). Er hat **1.800 Lebenspunkte**, eine eigene Bossleiste mit Zahnrad und Glitzer und
+diese Angriffe:
+
+- **Zeigerhieb** – ein weiter Hieb mit dem Minutenzeiger (im Zorn schlägt der Stundenzeiger nach).
+- **Stundenschlag** – beide Zeiger über dem Kopf, ein Kreis zeigt, wo sie einschlagen; dann ein Glockenschlag, der als
+  **Ring** über das Zifferblatt rollt (darüber springen!).
+- **Zahnradwurf** – drei Zahnräder rollen auf der Kante über das Zifferblatt und prallen vom Rand ab.
+- **Zeitstopp** – er hebt die Hand, die Uhr tickt immer schneller … dann steht die Zeit still: **Wer ihn in diesem
+  Augenblick ansieht, erstarrt** (wer wegschaut, nicht) – und er tritt hinter den Erstarrten und schlägt zu.
+- **Pendelschwung** – hoch über seinem Ziel erscheint ein riesiges Pendel und schwingt dreimal über den Boden; eine Linie
+  aus Bernstein zeigt seine Bahn.
+- **Sanduhr** – um seine Gegner rinnt Sand: Wer im Kreis bleibt, wird langsam, und ist die Zeit abgelaufen, birst er.
+- **Zeitsprung** – er vergeht in Bernsteinlicht und schlägt von hinten zu; wo er stand, hallt sein Schlag nach.
+- **Rückspulen** – angeschlagen kniet er nieder und dreht seine Zeit zurück (er heilt). **Wer ihn dabei hart genug
+  trifft, bringt sein Uhrwerk aus dem Takt:** Er taumelt und nimmt mehr Schaden.
+- **Die Zwölfte Stunde** – unter halber Kraft springen seine Zeiger auf zwölf, und die große Glocke schlägt zwölfmal:
+  Jeder dritte Schlag rollt als Ring über das Zifferblatt, der zwölfte am stärksten. Danach ist er schneller und härter.
+
+Fortgelockt springt er zurück auf sein Zifferblatt; findet er niemanden mehr, kehrt er auf das Herz zurück und erstarrt
+wieder (geheilt). Besiegt sinkt er auf die Knie, sein Uhrwerk läuft aus, die Zeiger fallen – dann zerspringt er in
+Zahnräder. Er lässt den **Minutenzeiger**, einen **Herzkristall**, Chronit, Uhrbronze, Uhrwerk, Edelsteine und Münzen
+fallen (und wie jeder Boss immer gleich viel Erfahrung). Das Herz bleibt stehen; legt man **Chronit** hinein, zieht es sich
+wieder auf, und ein neuer Wächter erwacht.
+
+**Der Minutenzeiger** – ein Schwert aus Uhrbronze und Chronit, stärker als Netherit, verbrennt nicht, mit Chronit
+auszubessern: **Jeder zwölfte Treffer schlägt die Stunde** – ein Glockenschlag um das Ziel, Schaden ringsum, und alle
+Getroffenen geraten ins Stocken (beim elften Treffer zeigt eine Meldung, dass die volle Stunde bevorsteht). **Rechtsklick: Zeitsprung** – bis zu acht Blöcke in
+Blickrichtung, vor Wänden hält er an (danach ruht der Zeiger sechs Sekunden).
+
+**Chronit und die Rüstung der Zeitwächter:** An den glühenden **Weltennähten** des Abgrunds gerinnt die stillstehende Zeit
+zu **Chronit** – ein Erz im Chaosgestein unter und neben den Nähten, das ab einer Diamantspitzhacke einen bernsteinfarbenen
+Kristall gibt (schmelzen geht auch). Daraus entsteht die **Rüstung der Zeitwächter** (so stark wie Netherit, verbrennt
+nicht): Chronit in Gold gefasst, im Harnisch das Herz der Uhr – eine Weltennaht.
+- **Die Zeit stockt** (jeder Teil): Wer den Träger trifft, gerät manchmal ins Stocken – für einen Augenblick langsamer,
+  auch seine Schläge.
+- **Zweite Chance** (voller Satz): Ein tödlicher Treffer **spult die Zeit zurück** – man steht wieder dort, wo man vor drei
+  Sekunden stand, mit den Herzen von damals (mindestens vier), schädliche Wirkungen sind fort, für drei Sekunden ist man
+  unverwundbar. Danach steht die Uhr drei Minuten still; tickt sie wieder, hört man es. Ein Totem kommt zuerst. Mit dem
+  vollen Satz erstarrt man im Zeitstopp des Stundenwächters nur kurz.
+
+**Neue Blöcke:** Uhrbronze (mit Treppe, Stufe und Mauer; aus Kupfer und Gold), Uhrwerk (das sich dreht; aus Uhrbronze und
+Chronit), Zifferblatt (aus Kalzit und Knochenmehl), Chronit-Erz, Chronitblock und das Uhrwerkherz.
 
 ### Klänge der Welt
 
@@ -3461,6 +3532,7 @@ zwei Ziersteinen und Schwalbenschwänzen in den Farben des Bosses. Seit 0.94 leb
 | Anni der Troll (auch 2.0) | 50 % | Störpixel |
 | Der Zerbrochene König | 50 %, 25 % | Sterne und Kristallsplitter |
 | Der Weltenfresser | 66 %, 50 %, 33 % | Glut und violette Splitter |
+| Der Stundenwächter | 50 % | Goldglitzer und Bernsteinstaub |
 | Schrolli der Schöpfer | 70 %, 40 % | goldenes Licht |
 | Schrolli – Wahre Gestalt | 60 %, 45 %, 25 % | Sterne |
 | Schrolli der Allmächtige | 66 %, 25 % | Sonnenglut und Funken |
@@ -3511,7 +3583,7 @@ Je später ein Boss in der Geschichte steht, desto stärker ist sein Pfeil:
 | Stufe | Schaden | Flugbann | Tempo des Pfeils | wendet je Tick |
 |---|---|---|---|---|
 | 1 – Drachen, Erzmagier, Karkinos, Noctua, Aschenkönig | 8 | 8 Sekunden | 38 Blöcke je Sekunde | 5,5° |
-| 2 – MissMystik, Malleus, Asteria, Sternenfresser, Anni, Zerbrochener König | 10 | 10 Sekunden | 42 Blöcke je Sekunde | 6,5° |
+| 2 – MissMystik, Malleus, Asteria, Sternenfresser, Anni, Zerbrochener König, Stundenwächter | 10 | 10 Sekunden | 42 Blöcke je Sekunde | 6,5° |
 | 3 – Weltenfresser, Schrolli | 12 | 12 Sekunden | 46 Blöcke je Sekunde | 7,5° |
 
 (Zum Vergleich: Mit Feuerwerk fliegt man etwa 34 Blöcke je Sekunde. Wer davonfliegt, entkommt also knapp – verlässt damit
@@ -3536,6 +3608,7 @@ Jeder Boss hat seine Farbe, seine Funken und seine **Zugabe**, wenn der Pfeil tr
 | Asteria, Sternenfresser | sternweiß, Lichtfunken | Leuchten (8 s) und ein Ruck zu ihr hin |
 | Anni der Troll | cyan und magenta, Pixel | der Rückruck: Der Flieger steht wieder auf dem Boden – „Fliegen ist auf diesem Server nicht erlaubt.“ |
 | Zerbrochener König | leerenviolett, Leerenfunken | Verdorren II (5 s) |
+| Stundenwächter | bernsteinfarben, Funken | die Zeit stockt: Langsamkeit IV (3 s), Abbaulähmung (4 s) und ein Ruck zu ihm hin |
 | Weltenfresser | rot, Schatten | ein starker Sog zum Schlund |
 | Schrolli | gold, Lichtfunken | Fesseln aus Licht: Schwäche II und Leuchten (8 s) |
 
@@ -4599,6 +4672,7 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 | `/kaw fehlerzone` · `/kaw fehlerzone tp` · `/kaw fehlerzone awaken` · `/kaw fehlerzone reset` | (nur Operatoren) Lage der nächsten Fehlerzone in der Oberwelt anzeigen, an ihren Rand reisen (auch aus einer anderen Welt), Anni den Troll aus dem Fehlerkern laden, den Kern zurücksetzen |
 | `/kaw hexengrotte` · `/kaw hexengrotte tp` · `/kaw hexengrotte awaken` · `/kaw hexengrotte reset` | (nur Operatoren) Lage der nächsten Hexengrotte im Urmeer anzeigen, vor ihren Eingang reisen (auch aus einer anderen Welt), die Meerhexe aus ihrer Trance wecken, sie wieder in Trance versetzen (der Kessel brodelt wieder) |
 | `/kaw seelenpferch` · `/kaw seelenpferch tp` · `/kaw seelenpferch awaken` · `/kaw seelenpferch reset` | (nur Operatoren) Lage des nächsten Seelenpferchs in der Schattenwelt anzeigen, ans Ende des Stegs vor dem Haupttor reisen (auch aus einer anderen Welt), den Seelenhirten wecken (oder einen neuen rufen), ihn wieder in Andacht versinken lassen (die Glocke ruht wieder) |
+| `/kaw uhrturm` · `/kaw uhrturm tp` · `/kaw uhrturm awaken` · `/kaw uhrturm reset` | (nur Operatoren) Lage des nächsten Uhrturms im Abgrund anzeigen (`/locate` findet ihn nicht), an den Südrand seines Zifferblatts reisen (auch aus einer anderen Welt), den Stundenwächter wecken, das Uhrwerkherz zurücksetzen (beim nächsten Besuch steht ein neuer Wächter erstarrt da) |
 | `/kaw throne` · `/kaw throne tp` · `/kaw throne reset` | (nur Operatoren) Lage des Throns der Alten in der Leere anzeigen, an seinen Rand reisen, den Zerbrochenen König wieder schlafen legen |
 | `/kaw dim <oberwelt\|nether\|end\|schattenwelt\|leere>` · `/kaw dim <Dimension>` | (im Kreativmodus oder mit Cheats) sofort in eine andere Dimension wechseln – man landet an derselben Stelle (im Nether bei einem Achtel der Koordinaten) auf sicherem Boden: im Nether in einer Höhle, im End auf der Obsidianplattform, in der Leere auf dem nächsten Bruchstück |
 | `/kaw story reset\|card <Kapitel>\|chronicle` | (nur Operatoren) Geschichte zurücksetzen, eine Titelkarte zeigen, die Chronik als Buch geben (seit 0.79 sonst nur noch per Taste J) |
@@ -4631,7 +4705,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.0.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.1.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -4796,15 +4870,18 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    - **0.99 – Die Sternenweberin** (fertig): das Sternennetz in der Leere mit der Sternenweberin als
      Boss, der Sternenbogen, Himmelseisen und die Rüstung der Sternwandler; dazu geschlossene Rüstungen, stille
      Rüstungs-Effekte, der Münzhandel der Meerjungfrauen, 8369 Fischarten und die Regeln des Urmeers;
-   - zuletzt **1.0 – Der Kraken erwacht** (fertig): der Kraken schwimmt in seinem Becken umher und kämpft mit vier neuen
-     Angriffen (Rammstoß, Ausbruch aus der Tiefe, Geysirfeld, Tentakelkäfig).
+   - **1.0 – Der Kraken erwacht** (fertig): der Kraken schwimmt in seinem Becken umher und kämpft mit vier neuen
+     Angriffen (Rammstoß, Ausbruch aus der Tiefe, Geysirfeld, Tentakelkäfig);
+   - zuletzt **1.1 – Der Stundenwächter** (fertig): der Uhrturm im Abgrund mit dem Stundenwächter als Boss, der
+     Minutenzeiger, Chronit und die Rüstung der Zeitwächter.
 
    Damit ist der Weg der Geschichte vollständig – vom Siegel der sechs Drachen bis zum Weltenfresser im Abgrund.
 
-   **Als Nächstes geplant:** weitere Bosse, Erze und Bauwerke für die anderen Dimensionen und bessere Klänge.
+   **Als Nächstes geplant:** die Überarbeitung aller Klänge, danach weitere Bosse, Erze und Bauwerke für die anderen Dimensionen.
 
    Die Bosse werden in dieser Reihenfolge stärker: Karkinos und Noctua (früh im Spiel) → Steinhüter → Erzmagier → MissMystik →
-   Malleus → Meerhexe → Drachen → Seelenhirte → Asteria → Kraken → Anni der Troll → Sternenweberin → Zerbrochener König →
+   Malleus → Meerhexe → Drachen → Seelenhirte → Asteria → Kraken → Anni der Troll → Sternenweberin → Stundenwächter →
+   Zerbrochener König →
    Weltenfresser →
    Schrolli der Schöpfer.
 

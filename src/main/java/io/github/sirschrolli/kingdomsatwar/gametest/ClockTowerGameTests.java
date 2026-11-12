@@ -21,6 +21,7 @@ import io.github.sirschrolli.kingdomsatwar.registry.ClockTower;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
 import io.github.sirschrolli.kingdomsatwar.registry.ModTags;
+import io.github.sirschrolli.kingdomsatwar.worldgen.clock.ClockTowerClearing;
 import io.github.sirschrolli.kingdomsatwar.worldgen.clock.ClockTowerPiece;
 import io.github.sirschrolli.kingdomsatwar.worldgen.clock.ClockTowerStructure;
 import io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures;
@@ -518,6 +519,15 @@ final class ClockTowerGameTests {
         helper.assertTrue(set.value().placement() instanceof RandomSpreadStructurePlacement, "Die Uhrtürme sind nicht gleichmäßig verteilt");
         var placement = (RandomSpreadStructurePlacement) set.value().placement();
         helper.assertTrue(placement.spacing() >= 20 && placement.separation() >= 8, "Die Uhrtürme stehen zu dicht: " + placement.spacing());
+
+        // Splitter, Nähte, Kristalle und Pflanzen des Abgrunds halten Abstand (sonst wüchsen die der Nachbarchunks ins Auge hinein)
+        var placed = registries.lookupOrThrow(Registries.PLACED_FEATURE);
+        for (String name : List.of("shards_lands", "shards_ember", "shards_star", "shards_shadow", "shards_seam", "shards_great", "world_seams",
+                "float_crystals", "lift_crystals", "oaks", "shadow_trees", "chorus", "crimson_fungi")) {
+            var feature = placed.getOrThrow(ResourceKey.create(Registries.PLACED_FEATURE, KingdomsAtWar.id("abyss/" + name)));
+            helper.assertTrue(feature.value().placement().stream().anyMatch(m -> m instanceof ClockTowerClearing.Filter),
+                    "Wächst in das Auge des Uhrturms: " + name);
+        }
 
         Holder<NoiseGeneratorSettings> settings = registries.lookupOrThrow(Registries.NOISE_SETTINGS).getOrThrow(AbyssTerrain.SETTINGS);
         ServerLevel abyss = server.getLevel(AbyssGate.THE_ABYSS);

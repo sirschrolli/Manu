@@ -150,6 +150,11 @@ public final class ModFeatureTypes {
     public static final DeferredHolder<MapCodec<? extends PlacementModifier>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageClearing.Filter>>
             NOT_IN_VILLAGE = PLACEMENT_TYPES.register("not_in_village", () -> io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageClearing.Filter.CODEC);
 
+    /** Im Abgrund: nicht im leer gefegten Auge eines Uhrturms (Splitter und Pflanzen der Nachbarchunks wüchsen sonst hinein). */
+    public static final DeferredHolder<MapCodec<? extends PlacementModifier>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.clock.ClockTowerClearing.Filter>>
+            NOT_NEAR_CLOCK_TOWER = PLACEMENT_TYPES.register("not_near_clock_tower",
+                    () -> io.github.sirschrolli.kingdomsatwar.worldgen.clock.ClockTowerClearing.Filter.CODEC);
+
     /** Im Feenreich: nicht im Mondhain (Bäume, Pilze, Felsen und Ruinen lassen die Lichtung der Mottenkönigin frei). */
     public static final DeferredHolder<MapCodec<? extends PlacementModifier>, MapCodec<io.github.sirschrolli.kingdomsatwar.fae.Mondhain.Filter>>
             NOT_IN_MONDHAIN = PLACEMENT_TYPES.register("not_in_mondhain", () -> io.github.sirschrolli.kingdomsatwar.fae.Mondhain.Filter.CODEC);
