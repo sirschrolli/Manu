@@ -416,6 +416,23 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> PHASMOR_RIFT_OPEN = register("entity.phasmor.rift_open");
     public static final DeferredHolder<SoundEvent, SoundEvent> PHASMOR_RIFT_ERUPT = register("entity.phasmor.rift_erupt");
     public static final DeferredHolder<SoundEvent, SoundEvent> PHASMOR_STAGGER = register("entity.phasmor.stagger");
+    // Sordin, der Kantor der Stille (1.7), sein Orgelpult und die Stimmgabel
+    public static final DeferredHolder<SoundEvent, SoundEvent> SORDIN_AMBIENT = register("entity.sordin.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SORDIN_ORGAN = register("entity.sordin.organ");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SORDIN_HURT = register("entity.sordin.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SORDIN_DEATH = register("entity.sordin.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SORDIN_STEP = register("entity.sordin.step");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SORDIN_AWAKEN = register("entity.sordin.awaken");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SORDIN_SWING = register("entity.sordin.swing");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SORDIN_FORK = register("entity.sordin.fork");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SORDIN_SONIC = register("entity.sordin.sonic");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SORDIN_CHORD = register("entity.sordin.chord");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SORDIN_NOTES = register("entity.sordin.notes");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SORDIN_HUSH = register("entity.sordin.hush");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SORDIN_FORTISSIMO = register("entity.sordin.fortissimo");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SORDIN_STAGGER = register("entity.sordin.stagger");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ORGAN_DESK_KINDLE = register("block.organ_desk.kindle");
+    public static final DeferredHolder<SoundEvent, SoundEvent> TUNING_FORK_RESONATE = register("item.tuning_fork.resonate");
     public static final DeferredHolder<SoundEvent, SoundEvent> VOID_THRONE_KINDLE = register("block.void_throne.kindle");
     public static final DeferredHolder<SoundEvent, SoundEvent> PHASE_BLADE_DASH = register("item.phase_blade.dash");
     // seit 1.6: die Echoortung der Rüstung der Lauscher

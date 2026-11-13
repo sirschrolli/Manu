@@ -53,7 +53,9 @@ public enum SkyTheme {
     /** Ignara, die Flammenpriesterin (1.2): die Flammenschlinge – der Getroffene brennt und wird zu ihr heruntergerissen. */
     PRIEST(2, 0xFF6A1A, 0xFFE7A0, () -> ModParticles.BOSS_FLAME.get()),
     /** Phasmor, der Leerwandlerkönig: der Getroffene wird zu ihm herangerissen und kann eine Weile kaum laufen. */
-    PHASE(2, 0x3FE6CC, 0xD8FFF8, () -> ParticleTypes.REVERSE_PORTAL);
+    PHASE(2, 0x3FE6CC, 0xD8FFF8, () -> ParticleTypes.REVERSE_PORTAL),
+    /** Sordin, der Kantor der Stille (1.7): der Getroffene ist vom Klang benommen (Übelkeit) und wird zu ihm gezogen. */
+    ECHO(2, 0x29DFEB, 0xE6FFFF, () -> ParticleTypes.SCULK_SOUL);
 
     private static final SkyTheme[] VALUES = values();
 

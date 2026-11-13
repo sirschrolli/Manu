@@ -508,6 +508,11 @@ public final class ModEntities {
             ENTITIES.registerEntityType("phasmor_illusion", io.github.sirschrolli.kingdomsatwar.entity.end.PhasmorIllusion::new,
                     MobCategory.MONSTER, builder -> builder.sized(1.0f, 4.1f).eyeHeight(3.7f).notInPeaceful().noLootTable()
                             .clientTrackingRange(12).updateInterval(2));
+    /** Sordin, der Kantor der Stille (1.7): steht an der Orgel der Stillen Kathedrale und spielt, bis er etwas hört. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.deep.SordinEntity>> SORDIN =
+            ENTITIES.registerEntityType("sordin", io.github.sirschrolli.kingdomsatwar.entity.deep.SordinEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(1.1f, 3.6f).eyeHeight(3.2f).notInPeaceful()
+                            .clientTrackingRange(16).updateInterval(2));
     /** Ein Phasenbrocken: ein Block, den Phasmor um sich kreisen lässt und schleudert. */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.end.PhaseBoulderEntity>> PHASE_BOULDER =
             ENTITIES.registerEntityType("phase_boulder", io.github.sirschrolli.kingdomsatwar.entity.end.PhaseBoulderEntity::new,
@@ -1022,6 +1027,7 @@ public final class ModEntities {
         event.put(IGNARA.get(), io.github.sirschrolli.kingdomsatwar.entity.nether.IgnaraEntity.createAttributes().build());
         event.put(ASTERIA.get(), io.github.sirschrolli.kingdomsatwar.entity.end.AsteriaEntity.createAttributes().build());
         event.put(PHASMOR.get(), io.github.sirschrolli.kingdomsatwar.entity.end.PhasmorEntity.createAttributes().build());
+        event.put(SORDIN.get(), io.github.sirschrolli.kingdomsatwar.entity.deep.SordinEntity.createAttributes().build());
         event.put(PHASMOR_ILLUSION.get(), io.github.sirschrolli.kingdomsatwar.entity.end.PhasmorIllusion.createAttributes().build());
         event.put(MISS_MYSTIK.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MissMystikEntity.createAttributes().build());
         event.put(MYSTIK_IMAGE.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MystikImageEntity.createAttributes().build());

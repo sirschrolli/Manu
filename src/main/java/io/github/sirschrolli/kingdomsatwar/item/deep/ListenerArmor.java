@@ -99,7 +99,7 @@ public final class ListenerArmor {
     }
 
     /** Die Wollsohlen: Was die Stiefel verschlucken, erreicht keinen Sculk und keinen Tiefenhüter. */
-    @SubscribeEvent
+    @SubscribeEvent(priority = net.neoforged.bus.api.EventPriority.HIGH)
     static void onGameEvent(VanillaGameEvent event) {
         if (event.getCause() instanceof LivingEntity living && muffled(event.getVanillaEvent()) && hasBoots(living)) {
             event.setCanceled(true);

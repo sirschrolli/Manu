@@ -258,6 +258,7 @@ public final class KawPlaces {
         boss(new Boss("ignara", ModEntities.IGNARA, FLAME_SANCTUARY, KawPlaces::awakenIgnara, KawPlaces::resetIgnara, null));
         boss(new Boss("asteria", ModEntities.ASTERIA, STARWATCH, KawPlaces::awakenAsteria, KawPlaces::resetAsteria, null));
         boss(new Boss("phasmor", ModEntities.PHASMOR, PHASE_SANCTUARY, KawPlaces::awakenPhasmor, KawPlaces::resetPhasmor, null));
+        boss(new Boss("sordin", ModEntities.SORDIN, SILENT_CATHEDRAL, KawPlaces::awakenSordin, KawPlaces::resetSordin, null));
         boss(new Boss("noctua", ModEntities.MOTH_QUEEN, MONDHAIN, KawPlaces::awakenNoctua, null, null));
         boss(new Boss("missmystik", ModEntities.MISS_MYSTIK, MYSTIK_STAGE, KawPlaces::awakenMystik, KawPlaces::resetMystik, null));
         boss(new Boss("steinhueter", ModEntities.STONE_KEEPER, MOONSTONE_QUARRY, KawPlaces::awakenKeeper, KawPlaces::resetKeeper, null));
@@ -1291,6 +1292,33 @@ public final class KawPlaces {
             return noLair(source, boss);
         }
         throne.reset(level);
+        return resetDone(source, boss);
+    }
+
+    private static io.github.sirschrolli.kingdomsatwar.block.deep.@Nullable OrganDeskBlockEntity organDesk(ServerLevel level, Spot spot) {
+        return nearest(level, spot.center(), 3, io.github.sirschrolli.kingdomsatwar.block.deep.OrganDeskBlockEntity.class, desk -> true);
+    }
+
+    private static int awakenSordin(CommandSourceStack source, ServerLevel level, Spot spot, Boss boss) {
+        var desk = organDesk(level, spot);
+        if (desk == null) {
+            return noLair(source, boss);
+        }
+        if (desk.phase() == io.github.sirschrolli.kingdomsatwar.block.deep.OrganDeskBlock.Phase.AWAKE) {
+            return alreadyAwake(source, boss);
+        }
+        if (desk.phase() == io.github.sirschrolli.kingdomsatwar.block.deep.OrganDeskBlock.Phase.SILENCED) {
+            desk.reset(level);
+        }
+        return desk.awaken(level) != null ? awakened(source, boss) : cannot(source, boss);
+    }
+
+    private static int resetSordin(CommandSourceStack source, ServerLevel level, Spot spot, Boss boss) {
+        var desk = organDesk(level, spot);
+        if (desk == null) {
+            return noLair(source, boss);
+        }
+        desk.reset(level);
         return resetDone(source, boss);
     }
 

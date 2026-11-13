@@ -32,8 +32,8 @@ import net.minecraft.world.level.levelgen.structure.Structure;
  * Tiefenschiefer – ein Volk, das die Stille anbetete, hat sie erbaut. Zwei Türme mit spitzen Helmen, dazwischen ein Portal
  * mit Zwillingstüren und darüber eine Fensterrose aus blauem und schwarzem Glas. Innen ein hohes Mittelschiff unter einem
  * Spitztonnengewölbe, Seitenschiffe mit Gräbern, ein erhöhter Chor mit dem Altar, auf dem der Sculk-Katalysator ruht, und
- * in der Apsis die große Orgel aus grün angelaufenen Kupferpfeifen. Wer auf ihr spielt (oder auf den Kreischern herumtritt),
- * weckt, was in der Stille wohnt. Außen tragen Strebebögen das Gewölbe, auf den Fialen brennen Seelenlaternen.
+ * in der Apsis die große Orgel aus grün angelaufenen Kupferpfeifen. An ihr steht Sordin, der Kantor der Stille (seit 1.7), und
+ * spielt, ohne dass ein Ton erklingt. Wer auf ihr spielt (oder in der Nähe Lärm macht), weckt, was in der Stille wohnt. Außen tragen Strebebögen das Gewölbe, auf den Fialen brennen Seelenlaternen.
  *
  * <p>Eigene Koordinaten: Mitte des Mittelschiffs bei (0, 0, 0); y = 0 ist die Schicht des Fußbodens (man steht auf y = 1).
  * Das Portal liegt im Süden (+z), die Apsis im Norden (−z).
@@ -733,10 +733,15 @@ final class SilentCathedral {
                     this.b.set(x, small + 1, zc + 1, Blocks.LIGHTNING_ROD.waxed().exposed().defaultBlockState());
                 }
             }
-            // Spieltisch: Notenblöcke als Manual, davor die Bank
+            // Spieltisch: Notenblöcke als Manual, in der Mitte das Orgelpult (seit 1.7), vor dem Sordin, der Kantor der Stille,
+            // steht und spielt; zu beiden Seiten ein Hocker (die Mitte bleibt frei für ihn)
             for (int x = -2; x <= 2; x++) {
-                this.b.set(x, 2, -19, state(Blocks.NOTE_BLOCK));
-                this.b.set(x, 2, -18, stair(Blocks.DARK_OAK_STAIRS, Direction.SOUTH, Half.BOTTOM));
+                this.b.set(x, 2, -19, x == 0 ? io.github.sirschrolli.kingdomsatwar.registry.CathedralGear.ORGAN_DESK.get().defaultBlockState()
+                        .setValue(io.github.sirschrolli.kingdomsatwar.block.deep.OrganDeskBlock.FACING, Direction.SOUTH)
+                        : state(Blocks.NOTE_BLOCK));
+                if (Math.abs(x) == 2) {
+                    this.b.set(x, 2, -18, stair(Blocks.DARK_OAK_STAIRS, Direction.SOUTH, Half.BOTTOM));
+                }
             }
             this.b.set(-3, 2, -19, state(Blocks.DARK_OAK_PLANKS));
             this.b.set(3, 2, -19, state(Blocks.DARK_OAK_PLANKS));

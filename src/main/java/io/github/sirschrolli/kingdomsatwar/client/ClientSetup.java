@@ -60,6 +60,7 @@ public final class ClientSetup {
         io.github.sirschrolli.kingdomsatwar.client.renderer.rare.RareRenderers.registerLayers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.nether.NetherRenderers.registerLayers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.end.EndRenderers.registerLayers(event);
+        io.github.sirschrolli.kingdomsatwar.client.renderer.deep.DeepRenderers.registerLayers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.creator.CreatorRenderers.registerLayers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.siege.SiegeRenderers.registerLayers(event);
         event.registerLayerDefinition(io.github.sirschrolli.kingdomsatwar.client.armor.MonsterArmorLayer.LAYER,
@@ -233,6 +234,7 @@ public final class ClientSetup {
         io.github.sirschrolli.kingdomsatwar.client.renderer.rare.RareRenderers.registerRenderers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.nether.NetherRenderers.registerRenderers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.end.EndRenderers.registerRenderers(event);
+        io.github.sirschrolli.kingdomsatwar.client.renderer.deep.DeepRenderers.registerRenderers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.creator.CreatorRenderers.registerRenderers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.siege.SiegeRenderers.registerRenderers(event);
         event.registerEntityRenderer(ModEntities.WILD_BOAR.get(), WildBoarRenderer::new);
