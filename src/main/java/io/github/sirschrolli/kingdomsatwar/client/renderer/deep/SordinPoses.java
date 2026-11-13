@@ -81,7 +81,7 @@ final class SordinPoses {
     static final int[][] SONIC = {{0, P_READY, 0}, {8, P_STRIKE, 2}, {12, P_STRIKE, 0}, {22, P_AIM, 2}, {40, P_AIM, 0}, {50, P_READY, 0}};
     static final int[][] CHORD = {{0, P_READY, 0}, {8, P_CONDUCT_UP, 2}, {14, P_CONDUCT_DOWN, 1}, {22, P_CONDUCT_UP, 2}, {28, P_CONDUCT_DOWN, 1}, {36, P_CONDUCT_UP, 2}, {42, P_CONDUCT_DOWN, 1}, {52, P_CONDUCT_DOWN, 0}, {60, P_READY, 0}};
     static final int[][] NOTES = {{0, P_READY, 0}, {12, P_SING, 2}, {50, P_SING, 0}, {60, P_READY, 0}};
-    static final int[][] SILENCE = {{0, P_READY, 0}, {10, P_HUSH, 2}, {60, P_HUSH, 0}, {70, P_READY, 0}};
+    static final int[][] SILENCE = {{0, P_READY, 0}, {8, P_HUSH, 2}, {36, P_HUSH, 0}, {44, P_SWING_WIND, 2}, {54, P_SWING_STRIKE, 1}, {60, P_SWING_STRIKE, 0}, {70, P_READY, 0}};
     static final int[][] FORTISSIMO = {{0, P_READY, 0}, {12, P_FORTISSIMO, 2}, {56, P_FORTISSIMO, 0}, {64, P_CONDUCT_DOWN, 1}, {76, P_READY, 0}};
     static final int[][] STAGGER = {{0, P_STAGGER, 1}, {50, P_STAGGER, 0}, {60, P_READY, 0}};
 

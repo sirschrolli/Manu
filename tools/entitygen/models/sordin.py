@@ -35,7 +35,8 @@ PALETTES = {
         "verdigris": stops("#163a33", "#25594b", "#3b7d68", "#5aa58a", "#86cdb0"),
         "sculk": stops("#020d10", "#06252b", "#0b3e46", "#0f5560"),
         "glow": stops("#06424c", "#0b6f7c", "#139fac", "#29dfeb", "#8af4fb", "#e6ffff"),
-        "bone": ramp("#3e434b", "#d4d8de", steps=8),
+        # bleiche, kühle Haut über Knochen (Hände, Handgelenke): wie Kerzenwachs im Licht der Seelenlaternen
+        "bone": stops("#2a3238", "#4c585e", "#76848a", "#a3b0b2", "#c9d3d1", "#e6ecea", "#f6faf8"),
         "glass": stops("#0a1a4a", "#14328a", "#2a5cd0", "#5c9cff", "#bcdcff"),
         "lead": ramp("#050508", "#24262e"),
         "crystal": stops("#2c5a80", "#4a86b0", "#6aa6d0", "#94c8ea", "#b4e0ff", "#f2fbff"),
@@ -215,14 +216,25 @@ def _face(ctx: Ctx):
     return pick(ctx.pal["cloth"], 0.03 + (1.0 - v) * 0.04)
 
 
+def _hood_opening(u: float, v: float, grow: float = 0.0) -> bool:
+    """Die Öffnung der Kapuze: ein Spitzbogen wie die Fenster der Kathedrale (oben spitz, die Seiten gerundet)."""
+    if v < 0.15 - grow:
+        return False
+    w = 0.35 * min(1.0, max(0.0, (v - 0.15 + grow) / 0.27)) ** 0.55 + grow
+    return abs(u - 0.5) < w
+
+
 def _hood(ctx: Ctx):
-    """Die Kapuze: dunkles Tuch, vorn offen (darin der Kopf), der Rand mit einem Saum aus Kupferfäden; Sculk am Zipfel."""
+    """Die Kapuze: dunkles Tuch, vorn offen (darin der Kopf) – die Öffnung ein Spitzbogen, ihr Rand ein Saum aus dunklem
+    Seegrün mit Stichen aus Kupferfaden; Sculk am Zipfel."""
     u, v = _uv(ctx)
     if ctx.face == "front" and ctx.cube.size[2] > 6.0:
-        if 0.14 < u < 0.86 and v > 0.16:
+        if _hood_opening(u, v):
             return None                                                                 # die Öffnung
-        if 0.08 < u < 0.92 and v > 0.1:
-            return _copper(ctx, 0.5)                                                    # der Saum
+        if _hood_opening(u, v, 0.075):
+            if (ctx.s + ctx.t) % 3 == 0:
+                return _copper(ctx, 0.42)                                               # Stiche aus Kupferfaden
+            return pick(ctx.pal["stole"], 0.5 + _LIT.get(ctx.face, 0.0))                # der Saum
     s = _sculk(ctx, 0.12) if ctx.face in ("top", "back") else None
     if s is not None:
         return s
@@ -405,29 +417,32 @@ def _sleeve_wide(ctx: Ctx):
 
 
 def _bone(ctx: Ctx):
-    """Bleiche Haut über Knochen: grau, an den Gelenken dunkler."""
-    v = 0.5 + _LIT.get(ctx.face, 0.0) + (hash01(ctx.u, ctx.v, 2751) - 0.5) * 0.06
+    """Bleiche Haut über Knochen: hell wie Wachs, an den Gelenken dunkler."""
+    v = 0.66 + _LIT.get(ctx.face, 0.0) + (hash01(ctx.u, ctx.v, 2751) - 0.5) * 0.06
     if ctx.face not in ("top", "bottom") and ctx.t % 5 == 4:
-        v -= 0.12
+        v -= 0.16
     return pick(ctx.pal["bone"], v)
 
 
 def _finger(ctx: Ctx):
     f = (ctx.local[1] - ctx.cube.origin[1]) / ctx.cube.size[1]
-    v = 0.56 - f * 0.12 + _LIT.get(ctx.face, 0.0)
+    v = 0.72 - f * 0.14 + _LIT.get(ctx.face, 0.0)
     if f > 0.86:
-        v -= 0.18                                                                        # die Nägel dunkel
+        v -= 0.3                                                                         # die Nägel dunkel
     return pick(ctx.pal["bone"], v)
 
 
 def _limb(ctx: Ctx):
-    return pick(ctx.pal["bone"], 0.3 + _LIT.get(ctx.face, 0.0))
+    """Die Beine unter der Kutte: in dunkle Binden gewickelt (sie verschwinden im Schatten des Saums)."""
+    v = 0.22 + _LIT.get(ctx.face, 0.0) + (0.06 if (ctx.t + ctx.s // 2) % 4 == 0 else 0.0)
+    return pick(ctx.pal["cloth"], v)
 
 
 def _foot(ctx: Ctx):
-    if ctx.face == "top" and ctx.t < ctx.h - 1 and ctx.s % 2 == 0:
-        return pick(ctx.pal["bone"], 0.42)
-    return pick(ctx.pal["bone"], 0.32 + _LIT.get(ctx.face, 0.0))
+    """Schuhe aus dunklem Leder, vorn eine Kappe aus angelaufenem Kupfer."""
+    if ctx.face == "front" or ctx.face == "top" and ctx.t < 2:
+        return pick(ctx.pal["verdigris"], 0.3 + _LIT.get(ctx.face, 0.0))
+    return pick(ctx.pal["lead"], 0.55 + _LIT.get(ctx.face, 0.0))
 
 
 # =============================================================================================

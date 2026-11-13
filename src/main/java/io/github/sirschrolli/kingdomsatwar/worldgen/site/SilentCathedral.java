@@ -724,13 +724,13 @@ final class SilentCathedral {
                             : Blocks.COPPER_BLOCK.waxed().weathered().defaultBlockState());
                 }
                 this.b.set(x, top + 1, zc, Blocks.LIGHTNING_ROD.waxed().weathered().defaultBlockState());
-                // die vordere Reihe: kleine Pfeifen auf dem Gehäuse
+                // die vordere Reihe: kleine Pfeifen auf dem Gehäuse (ganz grün angelaufen, heller als die großen)
                 if (ax % 2 == 1) {
                     int small = 5 + (4 - ax) / 2;
                     for (int y = 5; y <= small; y++) {
-                        this.b.set(x, y, zc + 1, Blocks.CUT_COPPER.waxed().exposed().defaultBlockState());
+                        this.b.set(x, y, zc + 1, Blocks.CUT_COPPER.waxed().oxidized().defaultBlockState());
                     }
-                    this.b.set(x, small + 1, zc + 1, Blocks.LIGHTNING_ROD.waxed().exposed().defaultBlockState());
+                    this.b.set(x, small + 1, zc + 1, Blocks.LIGHTNING_ROD.waxed().oxidized().defaultBlockState());
                 }
             }
             // Spieltisch: Notenblöcke als Manual, in der Mitte das Orgelpult (seit 1.7), vor dem Sordin, der Kantor der Stille,

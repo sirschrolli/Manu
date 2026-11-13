@@ -51,6 +51,8 @@ OX_COPPER = st.fixed("#2a3a30", "#3b5a4a", "#4f7d66", "#6aa286", "#b0663a", "#d8
 SEA_LEATHER = st.ramp("#2d6a6e", dark=0.12, light=0.8, cool=190)
 ECHO_CRYSTAL = st.fixed("#1e3e5c", "#2c5a80", "#4a86b0", "#6aa6d0", "#94c8ea", "#c4e6ff", "#f2fbff")
 ECHO_GLOW = st.fixed("#0c3a52", "#16608a", "#2a90c0", "#5ec0ea", "#9cd8ff", "#d4f0ff", "#ffffff")
+#: das Leuchten des Sculk (wie Sordins Augen und die Noten auf seinem Pult)
+SCULK_GLOW = st.fixed("#06343a", "#0b6f7c", "#139fac", "#29dfeb", "#8af4fb", "#c8fcff", "#ffffff")
 # der Minutenzeiger (1.01): gebläuter Stahl, Uhrmessing, Chronit
 BLUED = st.fixed("#0a0e2a", "#141c48", "#20306e", "#2e4896", "#4566b8", "#7290dc", "#b4c8f6")
 CLOCK_BRASS = st.ramp("#d0a040", dark=0.28, light=0.96, warm=90)
@@ -580,7 +582,7 @@ def tuning_fork_atlas():
         return _lv(ECHO_CRYSTAL, level)
     paint(img, R["prong"], prong)
     paint(img, R["prong_edge"], strand(ECHO_CRYSTAL, 6.0, 4.0, False))
-    paint(glow, R["ring"], lambda x, y, w, h: _lv(ECHO_GLOW, 6 if y % 3 == 0 else 5))
+    paint(glow, R["ring"], lambda x, y, w, h: _lv(SCULK_GLOW, 4 if y % 3 == 0 else 3))   # Ringe wie Wellen: türkis
     return img, glow
 
 

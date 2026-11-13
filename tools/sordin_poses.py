@@ -92,7 +92,9 @@ TIMELINES: dict[str, list[tuple[float, str, int]]] = {
     "CHORD": [(0, "ready", 0), (8, "conduct_up", 2), (14, "conduct_down", 1), (22, "conduct_up", 2), (28, "conduct_down", 1),
               (36, "conduct_up", 2), (42, "conduct_down", 1), (52, "conduct_down", 0), (60, "ready", 0)],
     "NOTES": [(0, "ready", 0), (12, "sing", 2), (50, "sing", 0), (60, "ready", 0)],
-    "SILENCE": [(0, "ready", 0), (10, "hush", 2), (60, "hush", 0), (70, "ready", 0)],
+    # er bedeutet Stille (Finger an den Mund), verschwindet (12) – und taucht hinter dem Ziel schon ausholend auf (44), Hieb (54)
+    "SILENCE": [(0, "ready", 0), (8, "hush", 2), (36, "hush", 0), (44, "swing_wind", 2), (54, "swing_strike", 1), (60, "swing_strike", 0),
+                (70, "ready", 0)],
     "FORTISSIMO": [(0, "ready", 0), (12, "fortissimo", 2), (56, "fortissimo", 0), (64, "conduct_down", 1), (76, "ready", 0)],
     "STAGGER": [(0, "stagger", 1), (50, "stagger", 0), (60, "ready", 0)],
 }
