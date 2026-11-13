@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross_emissive",
+  "textures": {
+    "cross": "kingdomsatwar:block/moonbell",
+    "cross_emissive": "kingdomsatwar:block/moonbell_emissive"
+  }
+}

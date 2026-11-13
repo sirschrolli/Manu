@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:clock_bronze",
+  "result": {
+    "count": 2,
+    "id": "kingdomsatwar:clock_bronze_slab"
+  }
+}

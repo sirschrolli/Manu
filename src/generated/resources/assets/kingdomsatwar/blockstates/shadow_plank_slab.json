@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "kingdomsatwar:block/shadow_plank_slab"
+    },
+    "type=double": {
+      "model": "kingdomsatwar:block/shadow_planks"
+    },
+    "type=top": {
+      "model": "kingdomsatwar:block/shadow_plank_slab_top"
+    }
+  }
+}

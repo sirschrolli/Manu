@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=east,servings_eaten=0": {
+      "model": "kingdomsatwar:block/feast",
+      "y": 90
+    },
+    "facing=east,servings_eaten=1": {
+      "model": "kingdomsatwar:block/feast_eaten_1",
+      "y": 90
+    },
+    "facing=east,servings_eaten=2": {
+      "model": "kingdomsatwar:block/feast_eaten_2",
+      "y": 90
+    },
+    "facing=east,servings_eaten=3": {
+      "model": "kingdomsatwar:block/feast_eaten_3",
+      "y": 90
+    },
+    "facing=north,servings_eaten=0": {
+      "model": "kingdomsatwar:block/feast"
+    },
+    "facing=north,servings_eaten=1": {
+      "model": "kingdomsatwar:block/feast_eaten_1"
+    },
+    "facing=north,servings_eaten=2": {
+      "model": "kingdomsatwar:block/feast_eaten_2"
+    },
+    "facing=north,servings_eaten=3": {
+      "model": "kingdomsatwar:block/feast_eaten_3"
+    },
+    "facing=south,servings_eaten=0": {
+      "model": "kingdomsatwar:block/feast",
+      "y": 180
+    },
+    "facing=south,servings_eaten=1": {
+      "model": "kingdomsatwar:block/feast_eaten_1",
+      "y": 180
+    },
+    "facing=south,servings_eaten=2": {
+      "model": "kingdomsatwar:block/feast_eaten_2",
+      "y": 180
+    },
+    "facing=south,servings_eaten=3": {
+      "model": "kingdomsatwar:block/feast_eaten_3",
+      "y": 180
+    },
+    "facing=west,servings_eaten=0": {
+      "model": "kingdomsatwar:block/feast",
+      "y": 270
+    },
+    "facing=west,servings_eaten=1": {
+      "model": "kingdomsatwar:block/feast_eaten_1",
+      "y": 270
+    },
+    "facing=west,servings_eaten=2": {
+      "model": "kingdomsatwar:block/feast_eaten_2",
+      "y": 270
+    },
+    "facing=west,servings_eaten=3": {
+      "model": "kingdomsatwar:block/feast_eaten_3",
+      "y": 270
+    }
+  }
+}

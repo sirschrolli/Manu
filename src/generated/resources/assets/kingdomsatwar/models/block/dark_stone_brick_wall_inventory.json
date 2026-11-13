@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/wall_inventory",
+  "textures": {
+    "wall": "kingdomsatwar:block/dark_stone_bricks"
+  }
+}

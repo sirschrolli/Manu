@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "D": "kingdomsatwar:draconium",
+    "G": "minecraft:gold_ingot",
+    "S": "minecraft:shield"
+  },
+  "pattern": [
+    "DGD",
+    "DSD",
+    " D "
+  ],
+  "result": {
+    "id": "kingdomsatwar:dragon_shield"
+  }
+}

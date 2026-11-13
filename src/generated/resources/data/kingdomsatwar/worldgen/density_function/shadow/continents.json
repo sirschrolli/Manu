@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:cache",
+  "input": {
+    "type": "minecraft:noise",
+    "noise": "kingdomsatwar:shadow/continentalness",
+    "shift_x": "kingdomsatwar:shadow/shift_x",
+    "shift_z": "kingdomsatwar:shadow/shift_z",
+    "xz_scale": 0.25,
+    "y_scale": 0.0
+  }
+}

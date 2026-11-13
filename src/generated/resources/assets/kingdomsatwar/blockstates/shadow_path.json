@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "kingdomsatwar:block/shadow_path"
+      },
+      {
+        "model": "kingdomsatwar:block/shadow_path",
+        "y": 90
+      },
+      {
+        "model": "kingdomsatwar:block/shadow_path",
+        "y": 180
+      },
+      {
+        "model": "kingdomsatwar:block/shadow_path",
+        "y": 270
+      }
+    ]
+  }
+}

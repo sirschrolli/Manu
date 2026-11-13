@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "L": "minecraft:leather",
+    "Q": "kingdomsatwar:dusk_quartz"
+  },
+  "pattern": [
+    "QLQ",
+    "Q Q",
+    "L L"
+  ],
+  "result": {
+    "id": "kingdomsatwar:dusk_leggings"
+  }
+}

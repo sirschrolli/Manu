@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "F": "kingdomsatwar:fire_opal",
+    "M": "minecraft:magma_cream"
+  },
+  "pattern": [
+    "F F",
+    "M M"
+  ],
+  "result": {
+    "id": "kingdomsatwar:emberwalker_boots"
+  }
+}

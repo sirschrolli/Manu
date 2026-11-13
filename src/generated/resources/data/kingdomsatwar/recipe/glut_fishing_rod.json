@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "G": "kingdomsatwar:ember_scale",
+    "L": "minecraft:string",
+    "M": "minecraft:blaze_rod"
+  },
+  "pattern": [
+    "  M",
+    " ML",
+    "G L"
+  ],
+  "result": {
+    "id": "kingdomsatwar:glut_fishing_rod"
+  }
+}

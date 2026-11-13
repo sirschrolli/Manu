@@ -1,0 +1,18 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "exclusion_zone": {
+      "chunk_count": 10,
+      "other_set": "kingdomsatwar:realm_castles"
+    },
+    "salt": 165745311,
+    "separation": 23,
+    "spacing": 51
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:sea_dragon",
+      "weight": 1
+    }
+  ]
+}

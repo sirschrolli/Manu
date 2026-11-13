@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:rough_fieldstone",
+  "result": {
+    "id": "kingdomsatwar:rough_fieldstone_stairs"
+  }
+}

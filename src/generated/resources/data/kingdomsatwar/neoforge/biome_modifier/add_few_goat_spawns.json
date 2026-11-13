@@ -1,0 +1,13 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#kingdomsatwar:has_few_goats",
+  "spawners": {
+    "type": "kingdomsatwar:goat",
+    "count": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 3,
+      "min_inclusive": 1
+    },
+    "weight": 2
+  }
+}

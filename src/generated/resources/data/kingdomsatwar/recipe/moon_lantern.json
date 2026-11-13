@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "N": "kingdomsatwar:moonsilver_nugget",
+    "S": "kingdomsatwar:night_crystal_shard"
+  },
+  "pattern": [
+    "NNN",
+    "NSN",
+    "NNN"
+  ],
+  "result": {
+    "id": "kingdomsatwar:moon_lantern"
+  }
+}

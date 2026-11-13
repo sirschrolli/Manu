@@ -1,0 +1,179 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#wood"
+        },
+        "east": {
+          "cullface": "east",
+          "texture": "#wood"
+        },
+        "north": {
+          "cullface": "north",
+          "texture": "#wood"
+        },
+        "south": {
+          "cullface": "south",
+          "texture": "#wood"
+        },
+        "up": {
+          "cullface": "up",
+          "texture": "#wood"
+        },
+        "west": {
+          "cullface": "west",
+          "texture": "#wood"
+        }
+      },
+      "from": [
+        0,
+        14,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "cullface": "down",
+          "texture": "#frame"
+        },
+        "east": {
+          "texture": "#frame"
+        },
+        "north": {
+          "texture": "#frame"
+        },
+        "south": {
+          "texture": "#frame"
+        },
+        "up": {
+          "texture": "#frame"
+        },
+        "west": {
+          "texture": "#frame"
+        }
+      },
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        3,
+        14,
+        3
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "cullface": "down",
+          "texture": "#frame"
+        },
+        "east": {
+          "texture": "#frame"
+        },
+        "north": {
+          "texture": "#frame"
+        },
+        "south": {
+          "texture": "#frame"
+        },
+        "up": {
+          "texture": "#frame"
+        },
+        "west": {
+          "texture": "#frame"
+        }
+      },
+      "from": [
+        13,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        14,
+        3
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "cullface": "down",
+          "texture": "#frame"
+        },
+        "east": {
+          "texture": "#frame"
+        },
+        "north": {
+          "texture": "#frame"
+        },
+        "south": {
+          "texture": "#frame"
+        },
+        "up": {
+          "texture": "#frame"
+        },
+        "west": {
+          "texture": "#frame"
+        }
+      },
+      "from": [
+        1,
+        0,
+        13
+      ],
+      "to": [
+        3,
+        14,
+        15
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "cullface": "down",
+          "texture": "#frame"
+        },
+        "east": {
+          "texture": "#frame"
+        },
+        "north": {
+          "texture": "#frame"
+        },
+        "south": {
+          "texture": "#frame"
+        },
+        "up": {
+          "texture": "#frame"
+        },
+        "west": {
+          "texture": "#frame"
+        }
+      },
+      "from": [
+        13,
+        0,
+        13
+      ],
+      "to": [
+        15,
+        14,
+        15
+      ]
+    }
+  ],
+  "textures": {
+    "frame": "minecraft:block/stripped_oak_log",
+    "particle": "minecraft:block/oak_planks",
+    "wood": "minecraft:block/oak_planks"
+  }
+}

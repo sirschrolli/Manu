@@ -1,0 +1,18 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "exclusion_zone": {
+      "chunk_count": 12,
+      "other_set": "kingdomsatwar:void_throne"
+    },
+    "salt": 63401877,
+    "separation": 8,
+    "spacing": 20
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:star_web",
+      "weight": 1
+    }
+  ]
+}

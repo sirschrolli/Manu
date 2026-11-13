@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom_left_open",
+  "textures": {
+    "bottom": "kingdomsatwar:block/pearlwood_door_bottom",
+    "top": "kingdomsatwar:block/pearlwood_door_top"
+  }
+}

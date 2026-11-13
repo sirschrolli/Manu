@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld_rod",
+  "textures": {
+    "layer0": "kingdomsatwar:item/star_fishing_rod_cast"
+  }
+}

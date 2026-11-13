@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:void_stone",
+  "result": {
+    "id": "kingdomsatwar:polished_void_stone_stairs"
+  }
+}

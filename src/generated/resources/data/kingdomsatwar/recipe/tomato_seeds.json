@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kingdomsatwar:tomato"
+  ],
+  "result": {
+    "id": "kingdomsatwar:tomato_seeds"
+  }
+}

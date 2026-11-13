@@ -1,0 +1,698 @@
+{
+  "display": {
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        90,
+        -25
+      ],
+      "scale": [
+        0.8,
+        0.8,
+        0.8
+      ],
+      "translation": [
+        1.13,
+        3.2,
+        1.13
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        -90,
+        25
+      ],
+      "scale": [
+        0.8,
+        0.8,
+        0.8
+      ],
+      "translation": [
+        1.13,
+        3.2,
+        1.13
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        0,
+        90,
+        -55
+      ],
+      "translation": [
+        0,
+        4,
+        0.5
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        0,
+        -90,
+        55
+      ],
+      "translation": [
+        0,
+        4,
+        0.5
+      ]
+    }
+  },
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#hammer",
+          "uv": [
+            0.0,
+            0.0,
+            4.0,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#hammer",
+          "uv": [
+            0.0,
+            0.0,
+            4.0,
+            16.0
+          ]
+        },
+        "north": {
+          "texture": "#hammer",
+          "uv": [
+            0.0,
+            0.0,
+            4.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#hammer",
+          "uv": [
+            0.0,
+            0.0,
+            4.0,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#hammer",
+          "uv": [
+            0.0,
+            0.0,
+            4.0,
+            16.0
+          ]
+        },
+        "west": {
+          "texture": "#hammer",
+          "uv": [
+            0.0,
+            0.0,
+            4.0,
+            16.0
+          ]
+        }
+      },
+      "from": [
+        7.2,
+        -5,
+        7.2
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "x": 0.0,
+        "y": 0.0,
+        "z": -45.0
+      },
+      "to": [
+        8.8,
+        18,
+        8.8
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#hammer",
+          "uv": [
+            4.0,
+            0.0,
+            7.0,
+            8.0
+          ]
+        },
+        "east": {
+          "texture": "#hammer",
+          "uv": [
+            4.0,
+            0.0,
+            7.0,
+            8.0
+          ]
+        },
+        "north": {
+          "texture": "#hammer",
+          "uv": [
+            4.0,
+            0.0,
+            7.0,
+            8.0
+          ]
+        },
+        "south": {
+          "texture": "#hammer",
+          "uv": [
+            4.0,
+            0.0,
+            7.0,
+            8.0
+          ]
+        },
+        "up": {
+          "texture": "#hammer",
+          "uv": [
+            4.0,
+            0.0,
+            7.0,
+            8.0
+          ]
+        },
+        "west": {
+          "texture": "#hammer",
+          "uv": [
+            4.0,
+            0.0,
+            7.0,
+            8.0
+          ]
+        }
+      },
+      "from": [
+        6.9,
+        -3,
+        6.9
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "x": 0.0,
+        "y": 0.0,
+        "z": -45.0
+      },
+      "to": [
+        9.1,
+        3,
+        9.1
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#hammer",
+          "uv": [
+            7.0,
+            0.0,
+            16.0,
+            9.0
+          ]
+        },
+        "east": {
+          "texture": "#hammer",
+          "uv": [
+            7.0,
+            0.0,
+            16.0,
+            9.0
+          ]
+        },
+        "north": {
+          "texture": "#hammer",
+          "uv": [
+            7.0,
+            0.0,
+            16.0,
+            9.0
+          ]
+        },
+        "south": {
+          "texture": "#hammer",
+          "uv": [
+            7.0,
+            0.0,
+            16.0,
+            9.0
+          ]
+        },
+        "up": {
+          "texture": "#hammer",
+          "uv": [
+            7.0,
+            0.0,
+            16.0,
+            9.0
+          ]
+        },
+        "west": {
+          "texture": "#hammer",
+          "uv": [
+            7.0,
+            0.0,
+            16.0,
+            9.0
+          ]
+        }
+      },
+      "from": [
+        3.6,
+        17,
+        4.2
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "x": 0.0,
+        "y": 0.0,
+        "z": -45.0
+      },
+      "to": [
+        12.4,
+        23.6,
+        11.8
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#hammer_glow",
+          "uv": [
+            7.0,
+            9.0,
+            16.0,
+            14.0
+          ]
+        },
+        "east": {
+          "texture": "#hammer_glow",
+          "uv": [
+            7.0,
+            9.0,
+            16.0,
+            14.0
+          ]
+        },
+        "north": {
+          "texture": "#hammer_glow",
+          "uv": [
+            7.0,
+            9.0,
+            16.0,
+            14.0
+          ]
+        },
+        "south": {
+          "texture": "#hammer_glow",
+          "uv": [
+            7.0,
+            9.0,
+            16.0,
+            14.0
+          ]
+        },
+        "up": {
+          "texture": "#hammer_glow",
+          "uv": [
+            7.0,
+            9.0,
+            16.0,
+            14.0
+          ]
+        },
+        "west": {
+          "texture": "#hammer_glow",
+          "uv": [
+            7.0,
+            9.0,
+            16.0,
+            14.0
+          ]
+        }
+      },
+      "from": [
+        3.3,
+        16.8,
+        3.9
+      ],
+      "light_emission": 12,
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "x": 0.0,
+        "y": 0.0,
+        "z": -45.0
+      },
+      "to": [
+        12.7,
+        23.8,
+        7.6
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#hammer",
+          "uv": [
+            4.0,
+            8.0,
+            7.0,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#hammer",
+          "uv": [
+            4.0,
+            8.0,
+            7.0,
+            16.0
+          ]
+        },
+        "north": {
+          "texture": "#hammer",
+          "uv": [
+            4.0,
+            8.0,
+            7.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#hammer",
+          "uv": [
+            4.0,
+            8.0,
+            7.0,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#hammer",
+          "uv": [
+            4.0,
+            8.0,
+            7.0,
+            16.0
+          ]
+        },
+        "west": {
+          "texture": "#hammer",
+          "uv": [
+            4.0,
+            8.0,
+            7.0,
+            16.0
+          ]
+        }
+      },
+      "from": [
+        3.4,
+        17.8,
+        8
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "x": 0.0,
+        "y": 0.0,
+        "z": -45.0
+      },
+      "to": [
+        12.6,
+        22.8,
+        9.2
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#hammer_glow",
+          "uv": [
+            7.0,
+            14.0,
+            10.0,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#hammer_glow",
+          "uv": [
+            7.0,
+            14.0,
+            10.0,
+            16.0
+          ]
+        },
+        "north": {
+          "texture": "#hammer_glow",
+          "uv": [
+            7.0,
+            14.0,
+            10.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#hammer_glow",
+          "uv": [
+            7.0,
+            14.0,
+            10.0,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#hammer_glow",
+          "uv": [
+            7.0,
+            14.0,
+            10.0,
+            16.0
+          ]
+        },
+        "west": {
+          "texture": "#hammer_glow",
+          "uv": [
+            7.0,
+            14.0,
+            10.0,
+            16.0
+          ]
+        }
+      },
+      "from": [
+        2,
+        24.6,
+        4.6
+      ],
+      "light_emission": 12,
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "x": 0.0,
+        "y": 0.0,
+        "z": -45.0
+      },
+      "to": [
+        3.2,
+        25.8,
+        5.8
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#hammer_glow",
+          "uv": [
+            10.0,
+            14.0,
+            13.0,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#hammer_glow",
+          "uv": [
+            10.0,
+            14.0,
+            13.0,
+            16.0
+          ]
+        },
+        "north": {
+          "texture": "#hammer_glow",
+          "uv": [
+            10.0,
+            14.0,
+            13.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#hammer_glow",
+          "uv": [
+            10.0,
+            14.0,
+            13.0,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#hammer_glow",
+          "uv": [
+            10.0,
+            14.0,
+            13.0,
+            16.0
+          ]
+        },
+        "west": {
+          "texture": "#hammer_glow",
+          "uv": [
+            10.0,
+            14.0,
+            13.0,
+            16.0
+          ]
+        }
+      },
+      "from": [
+        13,
+        22.4,
+        3
+      ],
+      "light_emission": 12,
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "x": 0.0,
+        "y": 0.0,
+        "z": -45.0
+      },
+      "to": [
+        14,
+        23.4,
+        4
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#hammer_glow",
+          "uv": [
+            13.0,
+            14.0,
+            16.0,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#hammer_glow",
+          "uv": [
+            13.0,
+            14.0,
+            16.0,
+            16.0
+          ]
+        },
+        "north": {
+          "texture": "#hammer_glow",
+          "uv": [
+            13.0,
+            14.0,
+            16.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#hammer_glow",
+          "uv": [
+            13.0,
+            14.0,
+            16.0,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#hammer_glow",
+          "uv": [
+            13.0,
+            14.0,
+            16.0,
+            16.0
+          ]
+        },
+        "west": {
+          "texture": "#hammer_glow",
+          "uv": [
+            13.0,
+            14.0,
+            16.0,
+            16.0
+          ]
+        }
+      },
+      "from": [
+        6,
+        25.2,
+        2.6
+      ],
+      "light_emission": 12,
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "x": 0.0,
+        "y": 0.0,
+        "z": -45.0
+      },
+      "to": [
+        7,
+        26.2,
+        3.6
+      ]
+    }
+  ],
+  "gui_light": "front",
+  "textures": {
+    "hammer": "kingdomsatwar:item/bannhammer_model",
+    "hammer_glow": "kingdomsatwar:item/bannhammer_model",
+    "particle": "kingdomsatwar:item/bannhammer"
+  }
+}

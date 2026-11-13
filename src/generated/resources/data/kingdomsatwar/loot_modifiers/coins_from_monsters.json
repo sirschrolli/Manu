@@ -1,0 +1,20 @@
+{
+  "type": "neoforge:add_table",
+  "condition": {
+    "type": "minecraft:all_of",
+    "terms": [
+      {
+        "type": "minecraft:killed_by_player"
+      },
+      {
+        "type": "minecraft:entity_properties",
+        "entity": "this",
+        "predicate": {
+          "minecraft:entity_type": "#kingdomsatwar:drops_coins"
+        }
+      }
+    ]
+  },
+  "priority": 0,
+  "table": "kingdomsatwar:gameplay/monster_coins"
+}

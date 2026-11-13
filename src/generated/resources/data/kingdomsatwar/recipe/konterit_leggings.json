@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "L": "minecraft:leather",
+    "M": "kingdomsatwar:konterit"
+  },
+  "pattern": [
+    "MMM",
+    "MLM",
+    "M M"
+  ],
+  "result": {
+    "id": "kingdomsatwar:konterit_leggings"
+  }
+}

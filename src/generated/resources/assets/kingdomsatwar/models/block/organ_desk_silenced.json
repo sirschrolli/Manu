@@ -1,0 +1,256 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "cullface": "down",
+          "texture": "#top"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "north": {
+          "texture": "#front"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "west": {
+          "texture": "#side"
+        }
+      },
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        12,
+        16
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#keys",
+          "uv": [
+            0.5,
+            0.0,
+            15.5,
+            7.0
+          ]
+        },
+        "east": {
+          "texture": "#side",
+          "uv": [
+            0.0,
+            2.5,
+            7.0,
+            4.0
+          ]
+        },
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#keys"
+        },
+        "west": {
+          "texture": "#side"
+        }
+      },
+      "from": [
+        0.5,
+        12,
+        0
+      ],
+      "to": [
+        15.5,
+        13.5,
+        7
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#top",
+          "uv": [
+            0.0,
+            7.0,
+            16.0,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#side",
+          "uv": [
+            7.0,
+            0.0,
+            16.0,
+            4.0
+          ]
+        },
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "west": {
+          "texture": "#side"
+        }
+      },
+      "from": [
+        0,
+        12,
+        7
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#rack",
+          "uv": [
+            0.0,
+            0.0,
+            1.0,
+            11.0
+          ]
+        },
+        "east": {
+          "texture": "#rack",
+          "uv": [
+            0.0,
+            0.0,
+            1.0,
+            11.0
+          ]
+        },
+        "north": {
+          "texture": "#sheet",
+          "uv": [
+            1.5,
+            1.0,
+            14.5,
+            15.0
+          ]
+        },
+        "south": {
+          "texture": "#rack",
+          "uv": [
+            1.5,
+            1.0,
+            14.5,
+            15.0
+          ]
+        },
+        "up": {
+          "texture": "#rack",
+          "uv": [
+            0.0,
+            0.0,
+            1.0,
+            11.0
+          ]
+        },
+        "west": {
+          "texture": "#rack",
+          "uv": [
+            0.0,
+            0.0,
+            1.0,
+            11.0
+          ]
+        }
+      },
+      "from": [
+        1.5,
+        16,
+        10.5
+      ],
+      "rotation": {
+        "angle": 22.5,
+        "axis": "x",
+        "origin": [
+          8,
+          16,
+          11
+        ]
+      },
+      "to": [
+        14.5,
+        27,
+        11.5
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#rack",
+          "uv": [
+            1.5,
+            9.0,
+            14.5,
+            11.0
+          ]
+        },
+        "east": {
+          "texture": "#rack",
+          "uv": [
+            9.0,
+            -1.0,
+            11.0,
+            0.0
+          ]
+        },
+        "north": {
+          "texture": "#rack"
+        },
+        "south": {
+          "texture": "#rack"
+        },
+        "up": {
+          "texture": "#rack"
+        },
+        "west": {
+          "texture": "#rack"
+        }
+      },
+      "from": [
+        1.5,
+        16,
+        9
+      ],
+      "to": [
+        14.5,
+        17,
+        11
+      ]
+    }
+  ],
+  "textures": {
+    "front": "kingdomsatwar:block/organ_desk_front",
+    "keys": "kingdomsatwar:block/organ_desk_keys",
+    "particle": "kingdomsatwar:block/organ_desk_side",
+    "rack": "kingdomsatwar:block/organ_desk_rack",
+    "sheet": "kingdomsatwar:block/organ_desk_sheet_silent",
+    "side": "kingdomsatwar:block/organ_desk_side",
+    "top": "kingdomsatwar:block/organ_desk_top"
+  }
+}

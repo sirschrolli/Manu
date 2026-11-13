@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": "kingdomsatwar:faestone_bricks",
+    "M": "kingdomsatwar:moonstone"
+  },
+  "pattern": [
+    "BBB",
+    "BMB",
+    "BBB"
+  ],
+  "result": {
+    "count": 8,
+    "id": "kingdomsatwar:moonstone_bricks"
+  }
+}

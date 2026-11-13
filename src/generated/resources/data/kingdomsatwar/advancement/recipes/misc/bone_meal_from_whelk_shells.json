@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:bone_meal_from_whelk_shells"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_whelk_shells": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:whelk_shells"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_whelk_shells"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:bone_meal_from_whelk_shells"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "feature": "kingdomsatwar:abyss/shadow_trees",
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 2
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "kingdomsatwar:not_near_clock_tower"
+    },
+    {
+      "type": "kingdomsatwar:any_surface"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

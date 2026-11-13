@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "I": "kingdomsatwar:sky_iron_ingot"
+  },
+  "pattern": [
+    "I I",
+    "I I"
+  ],
+  "result": {
+    "id": "kingdomsatwar:starwalker_boots"
+  }
+}

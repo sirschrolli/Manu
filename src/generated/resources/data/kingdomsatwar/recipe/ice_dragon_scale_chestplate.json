@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": "kingdomsatwar:steel_chestplate",
+    "S": "kingdomsatwar:ice_dragon_scale"
+  },
+  "pattern": [
+    "SAS",
+    "SSS",
+    "SSS"
+  ],
+  "result": {
+    "id": "kingdomsatwar:ice_dragon_scale_chestplate"
+  }
+}

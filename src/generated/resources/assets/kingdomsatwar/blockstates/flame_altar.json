@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=east,phase=awake": {
+      "model": "kingdomsatwar:block/flame_altar_awake",
+      "y": 90
+    },
+    "facing=east,phase=defeated": {
+      "model": "kingdomsatwar:block/flame_altar_defeated",
+      "y": 90
+    },
+    "facing=east,phase=praying": {
+      "model": "kingdomsatwar:block/flame_altar",
+      "y": 90
+    },
+    "facing=north,phase=awake": {
+      "model": "kingdomsatwar:block/flame_altar_awake"
+    },
+    "facing=north,phase=defeated": {
+      "model": "kingdomsatwar:block/flame_altar_defeated"
+    },
+    "facing=north,phase=praying": {
+      "model": "kingdomsatwar:block/flame_altar"
+    },
+    "facing=south,phase=awake": {
+      "model": "kingdomsatwar:block/flame_altar_awake",
+      "y": 180
+    },
+    "facing=south,phase=defeated": {
+      "model": "kingdomsatwar:block/flame_altar_defeated",
+      "y": 180
+    },
+    "facing=south,phase=praying": {
+      "model": "kingdomsatwar:block/flame_altar",
+      "y": 180
+    },
+    "facing=west,phase=awake": {
+      "model": "kingdomsatwar:block/flame_altar_awake",
+      "y": 270
+    },
+    "facing=west,phase=defeated": {
+      "model": "kingdomsatwar:block/flame_altar_defeated",
+      "y": 270
+    },
+    "facing=west,phase=praying": {
+      "model": "kingdomsatwar:block/flame_altar",
+      "y": 270
+    }
+  }
+}

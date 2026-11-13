@@ -1,0 +1,603 @@
+package io.github.sirschrolli.kingdomsatwar.economy.town;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import org.jspecify.annotations.Nullable;
+
+/**
+ * Eine Siedlung: gegründet mit dem Stadtbanner, gehört einem Spieler, hat einen Namen, Bewohner, fertige Gebäude und
+ * Baustellen. Die Stufe ergibt sich aus der Zahl der Bewohner ({@link TownTier}).
+ */
+public final class Town {
+    /**
+     * Ein angeheuerter Bürger: sein Lebewesen, Beruf, Name, sein Bett (Kopfende, in der Welt) und seine Werkstatt
+     * (Ursprung des Gebäudes, in dem er arbeitet).
+     */
+    public record Resident(UUID entity, Profession profession, String name, int variant, Optional<BlockPos> bed, Optional<BlockPos> work) {
+        public static final Codec<Resident> CODEC = RecordCodecBuilder.create(i -> i.group(
+                UUIDUtil.CODEC.fieldOf("entity").forGetter(Resident::entity),
+                Profession.CODEC.fieldOf("profession").forGetter(Resident::profession),
+                Codec.STRING.fieldOf("name").forGetter(Resident::name),
+                Codec.INT.optionalFieldOf("variant", 0).forGetter(Resident::variant),
+                BlockPos.CODEC.optionalFieldOf("bed").forGetter(Resident::bed),
+                BlockPos.CODEC.optionalFieldOf("work").forGetter(Resident::work)
+        ).apply(i, Resident::new));
+
+        Resident withBed(@Nullable BlockPos bed) {
+            return new Resident(this.entity, this.profession, this.name, this.variant, Optional.ofNullable(bed), this.work);
+        }
+
+        Resident withWork(@Nullable BlockPos work) {
+            return new Resident(this.entity, this.profession, this.name, this.variant, this.bed, Optional.ofNullable(work));
+        }
+    }
+
+    /**
+     * Ein fertiges Gebäude (Entwurf, Ursprung und Drehung des Bauplans in der Welt); bei einem eigenen Bauplan (Dragon
+     * Architect) dessen Kennung.
+     */
+    public record Building(BuildingType type, BlockPos origin, Rotation rotation, int design, Optional<String> custom) {
+        public static final Codec<Building> CODEC = RecordCodecBuilder.create(i -> i.group(
+                BuildingType.CODEC.fieldOf("type").forGetter(Building::type),
+                BlockPos.CODEC.fieldOf("origin").forGetter(Building::origin),
+                Rotation.CODEC.fieldOf("rotation").forGetter(Building::rotation),
+                Codec.INT.optionalFieldOf("design", 0).forGetter(Building::design),
+                Codec.STRING.optionalFieldOf("plan").forGetter(Building::custom)
+        ).apply(i, Building::new));
+
+        public Building(BuildingType type, BlockPos origin, Rotation rotation) {
+            this(type, origin, rotation, 0, Optional.empty());
+        }
+
+        public Building(BuildingType type, BlockPos origin, Rotation rotation, int design) {
+            this(type, origin, rotation, design, Optional.empty());
+        }
+
+        /** Der Bauplan dieses Gebäudes (sein Entwurf oder der eigene Plan). */
+        public Blueprint plan() {
+            return this.custom.isPresent() ? io.github.sirschrolli.kingdomsatwar.architect.PlanLibrary.blueprint(this.custom.get())
+                    : this.type.blueprint(this.design);
+        }
+
+        /** Die Kurzfassung des eigenen Plans ({@code null}: kein eigener Plan oder unbekannt). */
+        public io.github.sirschrolli.kingdomsatwar.architect.@Nullable PlanInfo info() {
+            return this.custom.isPresent() ? io.github.sirschrolli.kingdomsatwar.architect.PlanLibrary.infoOf(this.custom.get()) : null;
+        }
+
+        public BlockPos world(BlockPos local) {
+            return Blueprint.world(this.origin, this.rotation, local);
+        }
+
+        public BoundingBox bounds() {
+            io.github.sirschrolli.kingdomsatwar.architect.PlanInfo info = this.info();
+            return info != null ? info.worldBounds(this.origin, this.rotation) : this.plan().worldBounds(this.origin, this.rotation);
+        }
+
+        /** Betten (Kopfende, lokal) – bei eigenen Plänen aus der Kurzfassung, ohne den ganzen Plan zu laden. */
+        public List<BlockPos> bedsLocal() {
+            io.github.sirschrolli.kingdomsatwar.architect.PlanInfo info = this.info();
+            return info != null ? info.shape().beds() : this.plan().beds();
+        }
+    }
+
+    /** Eine Baustelle: was gebaut wird, wo, und wie weit der Baumeister schon ist (Index im Bauablauf). */
+    public static final class Project {
+        public static final Codec<Project> CODEC = RecordCodecBuilder.create(i -> i.group(
+                BuildingType.CODEC.fieldOf("type").forGetter(p -> p.type),
+                BlockPos.CODEC.fieldOf("origin").forGetter(p -> p.origin),
+                Rotation.CODEC.fieldOf("rotation").forGetter(p -> p.rotation),
+                Codec.INT.optionalFieldOf("progress", 0).forGetter(p -> p.progress),
+                Codec.INT.optionalFieldOf("design", 0).forGetter(p -> p.design),
+                Codec.STRING.optionalFieldOf("plan").forGetter(p -> Optional.ofNullable(p.custom)),
+                Codec.BOOL.optionalFieldOf("fast", false).forGetter(p -> p.fast),
+                Codec.INT.listOf().optionalFieldOf("sections", List.of()).forGetter(p -> p.sectionStates())
+        ).apply(i, (type, origin, rotation, progress, design, plan, fast, sections) -> {
+            Project p = new Project(type, origin, rotation, progress, design, plan.orElse(null));
+            p.fast = fast;
+            p.savedSections = sections.stream().mapToInt(Integer::intValue).toArray();
+            return p;
+        }));
+
+        public final BuildingType type;
+        public final BlockPos origin;
+        public final Rotation rotation;
+        /** Welcher Entwurf gebaut wird (siehe {@link BuildingType#designs()}). */
+        public final int design;
+        /** Kennung des eigenen Bauplans (Dragon Architect), sonst {@code null}. */
+        public final @Nullable String custom;
+        /** Bauweise: {@code false} Block für Block, {@code true} abschnittsweise (schneller, mehrere Blöcke auf einmal). */
+        public boolean fast;
+        public int progress;
+        /** Kostbarer Block, auf den die Baustelle gerade wartet (nicht gespeichert). */
+        public net.minecraft.world.item.@Nullable Item waitingItem;
+        /** Baustoff, auf den die Baustelle gerade wartet (nicht gespeichert; der Baumeister prüft es neu). */
+        public @Nullable Material waiting;
+        /** Bauablauf (wird beim ersten Gebrauch berechnet, nicht gespeichert). */
+        private @Nullable List<Blueprint.Step> steps;
+        /** Die ganze Baustelle als eine Arbeit (gewöhnliche Pläne). */
+        private @Nullable Work whole;
+        /** Bauabschnitte eines großen eigenen Plans (beim ersten Gebrauch angelegt). */
+        private @Nullable SiteSections site;
+        /** Gespeicherter Zustand der Abschnitte (bis die Abschnitte angelegt sind). */
+        int @Nullable [] savedSections;
+
+        public Project(BuildingType type, BlockPos origin, Rotation rotation, int progress, int design, @Nullable String custom) {
+            this.type = type;
+            this.origin = origin;
+            this.rotation = rotation;
+            this.progress = progress;
+            this.design = Math.floorMod(design, Math.max(1, type.designs()));
+            this.custom = custom;
+        }
+
+        public Project(BuildingType type, BlockPos origin, Rotation rotation, int progress, int design) {
+            this(type, origin, rotation, progress, design, null);
+        }
+
+        public Project(BuildingType type, BlockPos origin, Rotation rotation, int progress) {
+            this(type, origin, rotation, progress, 0);
+        }
+
+        /** Der Bauplan dieser Baustelle (ihr Entwurf oder der eigene Plan). */
+        public Blueprint plan() {
+            return this.custom != null ? io.github.sirschrolli.kingdomsatwar.architect.PlanLibrary.blueprint(this.custom)
+                    : this.type.blueprint(this.design);
+        }
+
+        /** Die Kurzfassung des eigenen Plans ({@code null}: kein eigener Plan oder unbekannt). */
+        public io.github.sirschrolli.kingdomsatwar.architect.@Nullable PlanInfo info() {
+            return this.custom != null ? io.github.sirschrolli.kingdomsatwar.architect.PlanLibrary.infoOf(this.custom) : null;
+        }
+
+        public List<Blueprint.Step> steps() {
+            if (this.steps == null) {
+                this.steps = this.plan().steps(this.origin, this.rotation);
+            }
+            return this.steps;
+        }
+
+        /** Wird diese Baustelle in Abschnitten gebaut? (Große eigene Pläne – siehe {@link SiteSections#FROM}.) */
+        public boolean sectioned() {
+            io.github.sirschrolli.kingdomsatwar.architect.PlanInfo info = this.info();
+            return info != null && SiteSections.large(info);
+        }
+
+        /** Die Bauabschnitte ({@code null}: gewöhnliche Baustelle oder Plan nicht ladbar). */
+        public @Nullable SiteSections site() {
+            if (this.site == null && this.sectioned()) {
+                io.github.sirschrolli.kingdomsatwar.architect.PlanScan scan =
+                        io.github.sirschrolli.kingdomsatwar.architect.PlanLibrary.scan(java.util.Objects.requireNonNull(this.custom));
+                if (scan != null) {
+                    this.site = new SiteSections(this, scan, this.savedSections);
+                    this.savedSections = null;
+                }
+            }
+            return this.site;
+        }
+
+        private List<Integer> sectionStates() {
+            if (this.site != null) {
+                return this.site.states();
+            }
+            if (this.savedSections != null) {
+                List<Integer> list = new ArrayList<>();
+                for (int v : this.savedSections) {
+                    list.add(v);
+                }
+                return list;
+            }
+            return List.of();
+        }
+
+        /** Die ganze Baustelle als eine Arbeit (für gewöhnliche Pläne). */
+        public Work whole() {
+            if (this.whole == null) {
+                this.whole = new Work(this, -1, 0, null, this.bounds());
+            }
+            return this.whole;
+        }
+
+        /** Stelle vor dem Eingang (lokal) – bei eigenen Plänen aus der Kurzfassung, ohne den ganzen Plan zu laden. */
+        public BlockPos entranceLocal() {
+            io.github.sirschrolli.kingdomsatwar.architect.PlanInfo info = this.info();
+            return info != null ? info.shape().entrance() : this.plan().entrance();
+        }
+
+        /** Ist an der Baustelle schon etwas getan worden? (Für die Erstattung beim Abbrechen.) */
+        public boolean started() {
+            SiteSections site = this.sectioned() ? this.site() : null;
+            return site != null ? site.started() : this.progress > 0;
+        }
+
+        /** Wie weit der Bau ist: gezählt werden nur die gesetzten Blöcke (das Räumen des Platzes zählt nicht). */
+        public float fraction() {
+            if (this.sectioned()) {
+                SiteSections site = this.site();
+                return site == null ? 0.0f : site.fraction();
+            }
+            List<Blueprint.Step> steps = this.steps();
+            int total = 0;
+            int done = 0;
+            for (int i = 0; i < steps.size(); i++) {
+                if (!steps.get(i).state().isAir()) {
+                    total++;
+                    if (i < this.progress) {
+                        done++;
+                    }
+                }
+            }
+            return total == 0 ? 1.0f : Math.min(1.0f, done / (float) total);
+        }
+
+        public BoundingBox bounds() {
+            io.github.sirschrolli.kingdomsatwar.architect.PlanInfo info = this.info();
+            return info != null ? info.worldBounds(this.origin, this.rotation) : this.plan().worldBounds(this.origin, this.rotation);
+        }
+    }
+
+    /**
+     * Eine Arbeit an einer Baustelle: der ganze Bauablauf (gewöhnliche Pläne; der Fortschritt steht in der Baustelle und
+     * wird gespeichert) oder ein Bauabschnitt einer Großbaustelle im Rohbau ({@code phase} 0) bzw. mit den Einzelheiten
+     * ({@code phase} 1); dort zählt der Fortschritt nur, solange gebaut wird – nach einem Neustart prüft der Baumeister
+     * den Abschnitt einfach von vorn durch.
+     */
+    public static final class Work {
+        public final Project project;
+        /** Nummer des Abschnitts ({@code -1}: die ganze Baustelle). */
+        public final int section;
+        public final int phase;
+        private final @Nullable List<Blueprint.Step> steps;
+        private final BoundingBox bounds;
+        private int progress;
+
+        Work(Project project, int section, int phase, @Nullable List<Blueprint.Step> steps, BoundingBox bounds) {
+            this.project = project;
+            this.section = section;
+            this.phase = phase;
+            this.steps = steps;
+            this.bounds = bounds;
+        }
+
+        public List<Blueprint.Step> steps() {
+            return this.steps != null ? this.steps : this.project.steps();
+        }
+
+        public int progress() {
+            return this.section < 0 ? this.project.progress : this.progress;
+        }
+
+        public void setProgress(int progress) {
+            if (this.section < 0) {
+                this.project.progress = progress;
+            } else {
+                this.progress = progress;
+            }
+        }
+
+        public void advance() {
+            this.setProgress(this.progress() + 1);
+        }
+
+        /** Wo gearbeitet wird (Welt; ein Abschnitt reicht bis eine Lage über den Plan). */
+        public BoundingBox bounds() {
+            return this.bounds;
+        }
+
+        public boolean whole() {
+            return this.section < 0;
+        }
+    }
+
+    public static final Codec<Town> CODEC = RecordCodecBuilder.create(i -> i.group(
+            UUIDUtil.CODEC.fieldOf("id").forGetter(t -> t.id),
+            UUIDUtil.CODEC.fieldOf("owner").forGetter(t -> t.owner),
+            Codec.STRING.fieldOf("owner_name").forGetter(t -> t.ownerName),
+            Codec.STRING.fieldOf("name").forGetter(t -> t.name),
+            Level.RESOURCE_KEY_CODEC.fieldOf("dimension").forGetter(t -> t.dimension),
+            BlockPos.CODEC.fieldOf("banner").forGetter(t -> t.banner),
+            Codec.BOOL.optionalFieldOf("has_banner", true).forGetter(t -> t.hasBanner),
+            Codec.LONG.optionalFieldOf("founded", 0L).forGetter(t -> t.founded),
+            Codec.BOOL.optionalFieldOf("queen", false).forGetter(t -> t.queen),
+            Codec.BOOL.optionalFieldOf("crowned", false).forGetter(t -> t.crowned),
+            Resident.CODEC.listOf().optionalFieldOf("residents", List.of()).forGetter(t -> List.copyOf(t.residents)),
+            Building.CODEC.listOf().optionalFieldOf("buildings", List.of()).forGetter(t -> List.copyOf(t.buildings)),
+            Project.CODEC.listOf().optionalFieldOf("projects", List.of()).forGetter(t -> List.copyOf(t.projects))
+    ).apply(i, Town::new));
+
+    /** So viele Baumeister mehr darf eine Siedlung anheuern, solange sie eine Großbaustelle hat. */
+    public static final int GREAT_SITE_BUILDERS = 4;
+
+    /** Betten im Lager am Stadtbanner (für die ersten Bewohner, bevor es Häuser gibt). */
+    public static final int CAMP_BEDS = 2;
+
+    private final UUID id;
+    private final UUID owner;
+    private String ownerName;
+    private String name;
+    private final ResourceKey<Level> dimension;
+    private BlockPos banner;
+    private boolean hasBanner;
+    private final long founded;
+    private boolean queen;
+    private boolean crowned;
+    private final List<Resident> residents = new ArrayList<>();
+    private final List<Building> buildings = new ArrayList<>();
+    private final List<Project> projects = new ArrayList<>();
+
+    private Town(UUID id, UUID owner, String ownerName, String name, ResourceKey<Level> dimension, BlockPos banner, boolean hasBanner,
+            long founded, boolean queen, boolean crowned, List<Resident> residents, List<Building> buildings, List<Project> projects) {
+        this.id = id;
+        this.owner = owner;
+        this.ownerName = ownerName;
+        this.name = name;
+        this.dimension = dimension;
+        this.banner = banner;
+        this.hasBanner = hasBanner;
+        this.founded = founded;
+        this.queen = queen;
+        this.crowned = crowned;
+        this.residents.addAll(residents);
+        this.buildings.addAll(buildings);
+        this.projects.addAll(projects);
+    }
+
+    public static Town found(UUID owner, String ownerName, String name, ResourceKey<Level> dimension, BlockPos banner, long time) {
+        return new Town(UUID.randomUUID(), owner, ownerName, name, dimension, banner, true, time, false, false, List.of(), List.of(), List.of());
+    }
+
+    // ---------------------------------------------------------------- Grunddaten
+
+    public UUID id() {
+        return this.id;
+    }
+
+    public UUID owner() {
+        return this.owner;
+    }
+
+    public String ownerName() {
+        return this.ownerName;
+    }
+
+    void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String name() {
+        return this.name;
+    }
+
+    void setName(String name) {
+        this.name = name;
+    }
+
+    public ResourceKey<Level> dimension() {
+        return this.dimension;
+    }
+
+    public BlockPos banner() {
+        return this.banner;
+    }
+
+    public boolean hasBanner() {
+        return this.hasBanner;
+    }
+
+    void moveBanner(BlockPos pos) {
+        this.banner = pos;
+        this.hasBanner = true;
+    }
+
+    void removeBanner() {
+        this.hasBanner = false;
+    }
+
+    public long founded() {
+        return this.founded;
+    }
+
+    public boolean queen() {
+        return this.queen;
+    }
+
+    void setQueen(boolean queen) {
+        this.queen = queen;
+    }
+
+    public boolean crowned() {
+        return this.crowned;
+    }
+
+    void setCrowned(boolean crowned) {
+        this.crowned = crowned;
+    }
+
+    // ---------------------------------------------------------------- Stufe und Fläche
+
+    public TownTier tier() {
+        return TownTier.of(this.residents.size());
+    }
+
+    public int radius() {
+        return this.tier().radius();
+    }
+
+    public boolean contains(ResourceKey<Level> dimension, BlockPos pos) {
+        if (!dimension.equals(this.dimension)) {
+            return false;
+        }
+        long dx = pos.getX() - this.banner.getX();
+        long dz = pos.getZ() - this.banner.getZ();
+        int r = this.radius();
+        return dx * dx + dz * dz <= (long) r * r;
+    }
+
+    // ---------------------------------------------------------------- Bewohner
+
+    public List<Resident> residents() {
+        return List.copyOf(this.residents);
+    }
+
+    public int count(Profession profession) {
+        int n = 0;
+        for (Resident r : this.residents) {
+            if (r.profession() == profession) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    public @Nullable Resident resident(UUID entity) {
+        for (Resident r : this.residents) {
+            if (r.entity().equals(entity)) {
+                return r;
+            }
+        }
+        return null;
+    }
+
+    void addResident(Resident resident) {
+        this.residents.add(resident);
+    }
+
+    boolean removeResident(UUID entity) {
+        return this.residents.removeIf(r -> r.entity().equals(entity));
+    }
+
+    void updateResident(Resident resident) {
+        for (int i = 0; i < this.residents.size(); i++) {
+            if (this.residents.get(i).entity().equals(resident.entity())) {
+                this.residents.set(i, resident);
+            }
+        }
+    }
+
+    /** Alle Betten der Siedlung (in fertigen Gebäuden), in der Welt. */
+    public List<BlockPos> beds() {
+        List<BlockPos> beds = new ArrayList<>();
+        for (Building building : this.buildings) {
+            for (BlockPos bed : building.bedsLocal()) {
+                beds.add(building.world(bed));
+            }
+        }
+        return beds;
+    }
+
+    /** Wie viele Bewohner Platz haben: Betten in Gebäuden plus das Lager am Banner. */
+    public int capacity() {
+        return CAMP_BEDS + this.beds().size();
+    }
+
+    public int freeBeds() {
+        return Math.max(0, this.capacity() - this.residents.size());
+    }
+
+    // ---------------------------------------------------------------- Gebäude und Baustellen
+
+    public List<Building> buildings() {
+        return List.copyOf(this.buildings);
+    }
+
+    public int count(BuildingType type) {
+        int n = 0;
+        for (Building b : this.buildings) {
+            if (b.type() == type) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    /** Arbeitsplätze für einen Beruf (der Baumeister hat immer einen, solange die Siedlung steht). */
+    public int jobs(Profession profession) {
+        BuildingType workplace = profession.workplace();
+        if (profession == Profession.BUILDER) {
+            // Baumeister: einer im Lager und im Weiler, dann einer mehr je Stufe; eine Großbaustelle braucht vier mehr
+            int jobs = Math.max(1, this.tier().ordinal());
+            for (Project p : this.projects) {
+                if (p.sectioned()) {
+                    jobs += GREAT_SITE_BUILDERS;
+                    break;
+                }
+            }
+            return jobs;
+        }
+        if (workplace == null) {
+            return this.tier().ordinal() >= TownTier.VILLAGE.ordinal() ? 2 : 1;
+        }
+        return this.count(workplace) * workplace.jobs();
+    }
+
+    public @Nullable Building building(BlockPos origin) {
+        for (Building b : this.buildings) {
+            if (b.origin().equals(origin)) {
+                return b;
+            }
+        }
+        return null;
+    }
+
+    /** Wie viele Bewohner in diesem Gebäude arbeiten. */
+    public int workers(BlockPos origin) {
+        int n = 0;
+        for (Resident r : this.residents) {
+            if (r.work().isPresent() && r.work().get().equals(origin)) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    /** Ist dieses Bett schon vergeben? */
+    public boolean bedTaken(BlockPos bed) {
+        for (Resident r : this.residents) {
+            if (r.bed().isPresent() && r.bed().get().equals(bed)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void addBuilding(Building building) {
+        this.buildings.add(building);
+    }
+
+    public List<Project> projects() {
+        return this.projects;
+    }
+
+    void addProject(Project project) {
+        this.projects.add(project);
+    }
+
+    void removeProject(Project project) {
+        this.projects.remove(project);
+    }
+
+    /** Überschneidet sich ein Bereich mit einem Gebäude, einer Baustelle oder dem Banner? */
+    public boolean overlaps(BoundingBox box) {
+        BoundingBox inflated = box.inflatedBy(1);
+        for (Building b : this.buildings) {
+            if (b.bounds().intersects(inflated)) {
+                return true;
+            }
+        }
+        for (Project p : this.projects) {
+            if (p.bounds().intersects(inflated)) {
+                return true;
+            }
+        }
+        return this.hasBanner && inflated.isInside(this.banner);
+    }
+}

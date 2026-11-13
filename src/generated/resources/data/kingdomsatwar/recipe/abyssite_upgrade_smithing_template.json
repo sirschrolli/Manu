@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": "kingdomsatwar:soul_crystal",
+    "C": "kingdomsatwar:deep_shadow_stone",
+    "S": "kingdomsatwar:abyssite_upgrade_smithing_template"
+  },
+  "pattern": [
+    "#S#",
+    "#C#",
+    "###"
+  ],
+  "result": {
+    "count": 2,
+    "id": "kingdomsatwar:abyssite_upgrade_smithing_template"
+  }
+}

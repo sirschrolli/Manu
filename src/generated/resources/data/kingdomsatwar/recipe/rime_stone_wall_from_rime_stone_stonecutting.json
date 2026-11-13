@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:rime_stone",
+  "result": {
+    "id": "kingdomsatwar:rime_stone_wall"
+  }
+}

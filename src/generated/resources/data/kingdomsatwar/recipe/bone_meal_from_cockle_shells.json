@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kingdomsatwar:cockle_shells"
+  ],
+  "result": {
+    "id": "minecraft:bone_meal"
+  }
+}

@@ -1,0 +1,252 @@
+{
+  "type": "kingdomsatwar:urmeer",
+  "generator": {
+    "type": "minecraft:noise",
+    "biome_source": {
+      "type": "minecraft:multi_noise",
+      "biomes": [
+        {
+          "biome": "kingdomsatwar:urmeer_isles",
+          "parameters": {
+            "continentalness": [
+              0.47,
+              2.0
+            ],
+            "depth": [
+              -2.0,
+              2.0
+            ],
+            "erosion": [
+              -2.0,
+              2.0
+            ],
+            "humidity": [
+              -2.0,
+              2.0
+            ],
+            "offset": 0.0,
+            "temperature": [
+              -2.0,
+              2.0
+            ],
+            "weirdness": [
+              -2.0,
+              2.0
+            ]
+          }
+        },
+        {
+          "biome": "kingdomsatwar:urmeer_glow_depths",
+          "parameters": {
+            "continentalness": [
+              -2.0,
+              0.47
+            ],
+            "depth": [
+              -2.0,
+              2.0
+            ],
+            "erosion": [
+              -2.0,
+              -0.36
+            ],
+            "humidity": [
+              0.05,
+              2.0
+            ],
+            "offset": 0.0,
+            "temperature": [
+              -2.0,
+              2.0
+            ],
+            "weirdness": [
+              -2.0,
+              2.0
+            ]
+          }
+        },
+        {
+          "biome": "kingdomsatwar:urmeer_trench",
+          "parameters": {
+            "continentalness": [
+              -2.0,
+              0.47
+            ],
+            "depth": [
+              -2.0,
+              2.0
+            ],
+            "erosion": [
+              -2.0,
+              -0.36
+            ],
+            "humidity": [
+              -2.0,
+              0.05
+            ],
+            "offset": 0.0,
+            "temperature": [
+              -2.0,
+              2.0
+            ],
+            "weirdness": [
+              -2.0,
+              2.0
+            ]
+          }
+        },
+        {
+          "biome": "kingdomsatwar:urmeer_reef",
+          "parameters": {
+            "continentalness": [
+              -2.0,
+              0.47
+            ],
+            "depth": [
+              -2.0,
+              2.0
+            ],
+            "erosion": [
+              -0.36,
+              2.0
+            ],
+            "humidity": [
+              -2.0,
+              2.0
+            ],
+            "offset": 0.0,
+            "temperature": [
+              0.26,
+              2.0
+            ],
+            "weirdness": [
+              -2.0,
+              2.0
+            ]
+          }
+        },
+        {
+          "biome": "kingdomsatwar:urmeer_coral_garden",
+          "parameters": {
+            "continentalness": [
+              -2.0,
+              0.47
+            ],
+            "depth": [
+              -2.0,
+              2.0
+            ],
+            "erosion": [
+              -0.36,
+              2.0
+            ],
+            "humidity": [
+              -2.0,
+              2.0
+            ],
+            "offset": 0.0,
+            "temperature": [
+              0.16,
+              0.26
+            ],
+            "weirdness": [
+              -2.0,
+              2.0
+            ]
+          }
+        },
+        {
+          "biome": "kingdomsatwar:urmeer_kelp_forest",
+          "parameters": {
+            "continentalness": [
+              -2.0,
+              0.47
+            ],
+            "depth": [
+              -2.0,
+              2.0
+            ],
+            "erosion": [
+              -0.36,
+              2.0
+            ],
+            "humidity": [
+              0.2,
+              2.0
+            ],
+            "offset": 0.0,
+            "temperature": [
+              -2.0,
+              0.16
+            ],
+            "weirdness": [
+              -2.0,
+              2.0
+            ]
+          }
+        },
+        {
+          "biome": "kingdomsatwar:urmeer_pearl_grounds",
+          "parameters": {
+            "continentalness": [
+              -2.0,
+              0.47
+            ],
+            "depth": [
+              -2.0,
+              2.0
+            ],
+            "erosion": [
+              -0.36,
+              2.0
+            ],
+            "humidity": [
+              -2.0,
+              -0.24
+            ],
+            "offset": 0.0,
+            "temperature": [
+              -2.0,
+              0.16
+            ],
+            "weirdness": [
+              -2.0,
+              2.0
+            ]
+          }
+        },
+        {
+          "biome": "kingdomsatwar:urmeer_deep",
+          "parameters": {
+            "continentalness": [
+              -2.0,
+              0.47
+            ],
+            "depth": [
+              -2.0,
+              2.0
+            ],
+            "erosion": [
+              -0.36,
+              2.0
+            ],
+            "humidity": [
+              -0.24,
+              0.2
+            ],
+            "offset": 0.0,
+            "temperature": [
+              -2.0,
+              0.16
+            ],
+            "weirdness": [
+              -2.0,
+              2.0
+            ]
+          }
+        }
+      ]
+    },
+    "settings": "kingdomsatwar:urmeer"
+  }
+}

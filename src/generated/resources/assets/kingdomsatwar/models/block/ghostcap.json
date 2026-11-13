@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross_emissive",
+  "textures": {
+    "cross": "kingdomsatwar:block/ghostcap",
+    "cross_emissive": "kingdomsatwar:block/ghostcap_emissive"
+  }
+}

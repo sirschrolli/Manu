@@ -1,0 +1,24 @@
+{
+  "type": "kingdomsatwar:add_spawns_in_category",
+  "biomes": [
+    "minecraft:warm_ocean",
+    "minecraft:lukewarm_ocean",
+    "minecraft:deep_lukewarm_ocean",
+    "minecraft:ocean",
+    "minecraft:deep_ocean",
+    "minecraft:cold_ocean",
+    "minecraft:deep_cold_ocean"
+  ],
+  "category": "water_ambient",
+  "spawners": [
+    {
+      "type": "kingdomsatwar:glow_jellyfish",
+      "count": {
+        "type": "minecraft:uniform",
+        "max_inclusive": 6,
+        "min_inclusive": 3
+      },
+      "weight": 8
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "kingdomsatwar:block/void_rift_ns"
+    },
+    "axis=z": {
+      "model": "kingdomsatwar:block/void_rift_ew"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:blasting",
+  "cookingtime": 100,
+  "experience": 1.0,
+  "group": "dusk_quartz",
+  "ingredient": "kingdomsatwar:deep_dusk_quartz_ore",
+  "result": {
+    "id": "kingdomsatwar:dusk_quartz"
+  }
+}

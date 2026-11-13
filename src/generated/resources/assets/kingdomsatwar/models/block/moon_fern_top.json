@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross_emissive",
+  "textures": {
+    "cross": "kingdomsatwar:block/moon_fern_top",
+    "cross_emissive": "kingdomsatwar:block/moon_fern_top_emissive"
+  }
+}

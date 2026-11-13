@@ -1,0 +1,12 @@
+{
+  "type": "kingdomsatwar:boulder",
+  "accent": "kingdomsatwar:frost_crystal",
+  "accent_chance": 0.04,
+  "in_water": false,
+  "max_radius": 3.0,
+  "min_radius": 1.6,
+  "secondary": "minecraft:packed_ice",
+  "secondary_chance": 0.2,
+  "stone": "kingdomsatwar:rime_stone",
+  "top": "minecraft:snow"
+}

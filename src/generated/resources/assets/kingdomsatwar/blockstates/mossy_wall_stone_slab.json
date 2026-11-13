@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "kingdomsatwar:block/mossy_wall_stone_slab"
+    },
+    "type=double": {
+      "model": "kingdomsatwar:block/mossy_wall_stones"
+    },
+    "type=top": {
+      "model": "kingdomsatwar:block/mossy_wall_stone_slab_top"
+    }
+  }
+}

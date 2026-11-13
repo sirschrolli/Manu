@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "kingdomsatwar:void_throne",
+    "max_distance": 800,
+    "min_distance": 450,
+    "salt": 77031
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:void_throne",
+      "weight": 1
+    }
+  ]
+}

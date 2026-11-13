@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross_emissive",
+  "textures": {
+    "cross": "kingdomsatwar:block/seal_shard",
+    "cross_emissive": "kingdomsatwar:block/seal_shard_emissive"
+  }
+}

@@ -1,0 +1,360 @@
+{
+  "type": "minecraft:sequence",
+  "sequence": [
+    "minecraft:bedrock_floor",
+    {
+      "type": "minecraft:condition",
+      "if_true": "minecraft:on_floor",
+      "then_run": {
+        "type": "minecraft:sequence",
+        "sequence": [
+          {
+            "type": "minecraft:condition",
+            "if_true": {
+              "type": "minecraft:biome",
+              "biome_is": [
+                "kingdomsatwar:urmeer_trench",
+                "kingdomsatwar:urmeer_glow_depths"
+              ]
+            },
+            "then_run": {
+              "type": "minecraft:sequence",
+              "sequence": [
+                {
+                  "type": "minecraft:condition",
+                  "if_true": {
+                    "type": "minecraft:steep"
+                  },
+                  "then_run": {
+                    "type": "minecraft:block",
+                    "result_state": "kingdomsatwar:abyssal_stone"
+                  }
+                },
+                {
+                  "type": "minecraft:condition",
+                  "if_true": {
+                    "type": "minecraft:noise_threshold",
+                    "max_threshold": 1.7976931348623157E308,
+                    "min_threshold": 0.35,
+                    "noise": "kingdomsatwar:urmeer/patches"
+                  },
+                  "then_run": {
+                    "type": "minecraft:block",
+                    "result_state": "kingdomsatwar:abyssal_stone"
+                  }
+                },
+                {
+                  "type": "minecraft:block",
+                  "result_state": "kingdomsatwar:abyssal_sand"
+                }
+              ]
+            }
+          },
+          {
+            "type": "minecraft:condition",
+            "if_true": {
+              "type": "minecraft:not",
+              "invert": {
+                "type": "minecraft:y_above",
+                "add_stone_depth": false,
+                "anchor": {
+                  "absolute": 38
+                },
+                "surface_depth_multiplier": 0
+              }
+            },
+            "then_run": {
+              "type": "minecraft:sequence",
+              "sequence": [
+                {
+                  "type": "minecraft:condition",
+                  "if_true": {
+                    "type": "minecraft:steep"
+                  },
+                  "then_run": {
+                    "type": "minecraft:block",
+                    "result_state": "kingdomsatwar:abyssal_stone"
+                  }
+                },
+                {
+                  "type": "minecraft:condition",
+                  "if_true": {
+                    "type": "minecraft:noise_threshold",
+                    "max_threshold": 1.7976931348623157E308,
+                    "min_threshold": 0.35,
+                    "noise": "kingdomsatwar:urmeer/patches"
+                  },
+                  "then_run": {
+                    "type": "minecraft:block",
+                    "result_state": "kingdomsatwar:abyssal_stone"
+                  }
+                },
+                {
+                  "type": "minecraft:block",
+                  "result_state": "kingdomsatwar:abyssal_sand"
+                }
+              ]
+            }
+          },
+          {
+            "type": "minecraft:condition",
+            "if_true": "minecraft:not_underwater",
+            "then_run": {
+              "type": "minecraft:sequence",
+              "sequence": [
+                {
+                  "type": "minecraft:condition",
+                  "if_true": {
+                    "type": "minecraft:steep"
+                  },
+                  "then_run": {
+                    "type": "minecraft:block",
+                    "result_state": "kingdomsatwar:tide_stone"
+                  }
+                },
+                {
+                  "type": "minecraft:condition",
+                  "if_true": {
+                    "type": "minecraft:not",
+                    "invert": {
+                      "type": "minecraft:y_above",
+                      "add_stone_depth": false,
+                      "anchor": {
+                        "absolute": 99
+                      },
+                      "surface_depth_multiplier": 0
+                    }
+                  },
+                  "then_run": {
+                    "type": "minecraft:block",
+                    "result_state": "minecraft:sand"
+                  }
+                },
+                {
+                  "type": "minecraft:condition",
+                  "if_true": "minecraft:not_underwater",
+                  "then_run": {
+                    "type": "minecraft:block",
+                    "result_state": "minecraft:grass_block"
+                  }
+                },
+                {
+                  "type": "minecraft:block",
+                  "result_state": "minecraft:sand"
+                }
+              ]
+            }
+          },
+          {
+            "type": "minecraft:condition",
+            "if_true": {
+              "type": "minecraft:steep"
+            },
+            "then_run": {
+              "type": "minecraft:block",
+              "result_state": "kingdomsatwar:tide_stone"
+            }
+          },
+          {
+            "type": "minecraft:condition",
+            "if_true": {
+              "type": "minecraft:biome",
+              "biome_is": [
+                "kingdomsatwar:urmeer_reef",
+                "kingdomsatwar:urmeer_coral_garden"
+              ]
+            },
+            "then_run": {
+              "type": "minecraft:sequence",
+              "sequence": [
+                {
+                  "type": "minecraft:condition",
+                  "if_true": {
+                    "type": "minecraft:noise_threshold",
+                    "max_threshold": 1.7976931348623157E308,
+                    "min_threshold": 0.45,
+                    "noise": "kingdomsatwar:urmeer/patches"
+                  },
+                  "then_run": {
+                    "type": "minecraft:block",
+                    "result_state": "minecraft:calcite"
+                  }
+                },
+                {
+                  "type": "minecraft:block",
+                  "result_state": "minecraft:sand"
+                }
+              ]
+            }
+          },
+          {
+            "type": "minecraft:condition",
+            "if_true": {
+              "type": "minecraft:biome",
+              "biome_is": "kingdomsatwar:urmeer_pearl_grounds"
+            },
+            "then_run": {
+              "type": "minecraft:sequence",
+              "sequence": [
+                {
+                  "type": "minecraft:condition",
+                  "if_true": {
+                    "type": "minecraft:noise_threshold",
+                    "max_threshold": 1.7976931348623157E308,
+                    "min_threshold": 0.2,
+                    "noise": "kingdomsatwar:urmeer/patches"
+                  },
+                  "then_run": {
+                    "type": "minecraft:block",
+                    "result_state": "minecraft:calcite"
+                  }
+                },
+                {
+                  "type": "minecraft:condition",
+                  "if_true": {
+                    "type": "minecraft:noise_threshold",
+                    "max_threshold": 0.6,
+                    "min_threshold": 0.35,
+                    "noise": "kingdomsatwar:urmeer/surface"
+                  },
+                  "then_run": {
+                    "type": "minecraft:block",
+                    "result_state": "minecraft:smooth_sandstone"
+                  }
+                },
+                {
+                  "type": "minecraft:block",
+                  "result_state": "minecraft:sand"
+                }
+              ]
+            }
+          },
+          {
+            "type": "minecraft:sequence",
+            "sequence": [
+              {
+                "type": "minecraft:condition",
+                "if_true": {
+                  "type": "minecraft:noise_threshold",
+                  "max_threshold": 1.7976931348623157E308,
+                  "min_threshold": 0.5,
+                  "noise": "kingdomsatwar:urmeer/patches"
+                },
+                "then_run": {
+                  "type": "minecraft:block",
+                  "result_state": "minecraft:clay"
+                }
+              },
+              {
+                "type": "minecraft:condition",
+                "if_true": {
+                  "type": "minecraft:noise_threshold",
+                  "max_threshold": 0.12,
+                  "min_threshold": -0.3,
+                  "noise": "kingdomsatwar:urmeer/surface"
+                },
+                "then_run": {
+                  "type": "minecraft:block",
+                  "result_state": "minecraft:gravel"
+                }
+              },
+              {
+                "type": "minecraft:block",
+                "result_state": "minecraft:sand"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "minecraft:condition",
+      "if_true": "minecraft:under_floor",
+      "then_run": {
+        "type": "minecraft:sequence",
+        "sequence": [
+          {
+            "type": "minecraft:condition",
+            "if_true": {
+              "type": "minecraft:steep"
+            },
+            "then_run": {
+              "type": "minecraft:block",
+              "result_state": "kingdomsatwar:tide_stone"
+            }
+          },
+          {
+            "type": "minecraft:condition",
+            "if_true": {
+              "type": "minecraft:biome",
+              "biome_is": [
+                "kingdomsatwar:urmeer_trench",
+                "kingdomsatwar:urmeer_glow_depths"
+              ]
+            },
+            "then_run": {
+              "type": "minecraft:block",
+              "result_state": "kingdomsatwar:abyssal_stone"
+            }
+          },
+          {
+            "type": "minecraft:condition",
+            "if_true": {
+              "type": "minecraft:not",
+              "invert": {
+                "type": "minecraft:y_above",
+                "add_stone_depth": false,
+                "anchor": {
+                  "absolute": 38
+                },
+                "surface_depth_multiplier": 0
+              }
+            },
+            "then_run": {
+              "type": "minecraft:block",
+              "result_state": "kingdomsatwar:abyssal_stone"
+            }
+          },
+          {
+            "type": "minecraft:condition",
+            "if_true": {
+              "type": "minecraft:biome",
+              "biome_is": "kingdomsatwar:urmeer_isles"
+            },
+            "then_run": {
+              "type": "minecraft:sequence",
+              "sequence": [
+                {
+                  "type": "minecraft:condition",
+                  "if_true": {
+                    "type": "minecraft:not",
+                    "invert": {
+                      "type": "minecraft:y_above",
+                      "add_stone_depth": false,
+                      "anchor": {
+                        "absolute": 99
+                      },
+                      "surface_depth_multiplier": 0
+                    }
+                  },
+                  "then_run": {
+                    "type": "minecraft:block",
+                    "result_state": "minecraft:sandstone"
+                  }
+                },
+                {
+                  "type": "minecraft:block",
+                  "result_state": "minecraft:dirt"
+                }
+              ]
+            }
+          },
+          {
+            "type": "minecraft:block",
+            "result_state": "minecraft:sandstone"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_grove_bell": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:grove_bell"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:blue_dye_from_grove_bell"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_grove_bell"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:blue_dye_from_grove_bell"
+    ]
+  }
+}

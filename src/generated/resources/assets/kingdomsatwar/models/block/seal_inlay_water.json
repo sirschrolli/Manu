@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "kingdomsatwar:block/polished_sealstone",
+    "side": "kingdomsatwar:block/polished_sealstone",
+    "top": "kingdomsatwar:block/seal_inlay_water"
+  }
+}

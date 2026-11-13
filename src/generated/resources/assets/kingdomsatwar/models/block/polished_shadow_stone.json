@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "kingdomsatwar:block/polished_shadow_stone"
+  }
+}

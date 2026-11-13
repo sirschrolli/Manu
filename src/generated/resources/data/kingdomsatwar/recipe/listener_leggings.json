@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "P": "kingdomsatwar:echo_crystal",
+    "S": "minecraft:sculk"
+  },
+  "pattern": [
+    "PSP",
+    "P P",
+    "P P"
+  ],
+  "result": {
+    "id": "kingdomsatwar:listener_leggings"
+  }
+}

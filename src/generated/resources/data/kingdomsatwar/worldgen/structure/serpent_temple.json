@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/serpent_temple",
+  "kind": "serpent_temple",
+  "spawn_overrides": {},
+  "step": "top_layer_modification"
+}

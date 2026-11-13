@@ -1,0 +1,17 @@
+{
+  "placement": {
+    "type": "kingdomsatwar:unique_nest",
+    "biomes": "#kingdomsatwar:has_lightning_dragon_nests",
+    "element": "lightning",
+    "inland": true,
+    "max_distance": 2700,
+    "min_distance": 1100,
+    "salt": 219
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:lightning_dragon_lair",
+      "weight": 1
+    }
+  ]
+}

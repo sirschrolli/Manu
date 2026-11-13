@@ -1,0 +1,77 @@
+{
+  "ambient_light": 0.12,
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "mood": {
+        "block_search_extent": 8,
+        "offset": 2.0,
+        "sound": "minecraft:ambient.basalt_deltas.mood",
+        "tick_delay": 6000
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "minecraft:music.nether.crimson_forest"
+      }
+    },
+    "minecraft:gameplay/bed_rule": {
+      "can_set_spawn": "never",
+      "can_sleep": "never",
+      "error_message": {
+        "translate": "block.kingdomsatwar.bed.boss_arena"
+      }
+    },
+    "minecraft:gameplay/can_start_raid": false,
+    "minecraft:gameplay/fast_lava": true,
+    "minecraft:gameplay/nether_portal_spawns_piglin": false,
+    "minecraft:gameplay/respawn_anchor_works": false,
+    "minecraft:gameplay/sky_light_level": 8.0,
+    "minecraft:gameplay/water_evaporates": true,
+    "minecraft:visual/ambient_light_color": "#4a1a0a",
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:ash"
+        },
+        "probability": 0.008
+      },
+      {
+        "particle": {
+          "type": "minecraft:white_ash"
+        },
+        "probability": 0.002
+      }
+    ],
+    "minecraft:visual/cloud_color": "#d0301810",
+    "minecraft:visual/cloud_height": 150.0,
+    "minecraft:visual/fog_color": "#7a2208",
+    "minecraft:visual/fog_end_distance": 200.0,
+    "minecraft:visual/fog_start_distance": 30.0,
+    "minecraft:visual/moon_angle": 180.0,
+    "minecraft:visual/moon_phase": "new_moon",
+    "minecraft:visual/sky_color": "#3a0a04",
+    "minecraft:visual/sky_light_color": "#ff9a6a",
+    "minecraft:visual/sky_light_factor": 0.75,
+    "minecraft:visual/star_angle": 0.0,
+    "minecraft:visual/star_brightness": 0.0,
+    "minecraft:visual/sun_angle": 96.0,
+    "minecraft:visual/sunrise_sunset_color": "#e6ff6a10"
+  },
+  "coordinate_scale": 1.0,
+  "has_ceiling": false,
+  "has_ender_dragon_fight": false,
+  "has_fixed_time": true,
+  "has_skylight": true,
+  "height": 256,
+  "infiniburn": "#minecraft:infiniburn_nether",
+  "logical_height": 256,
+  "min_y": 0,
+  "monster_spawn_block_light_limit": 0,
+  "monster_spawn_light_level": {
+    "type": "minecraft:uniform",
+    "max_inclusive": 7,
+    "min_inclusive": 0
+  }
+}

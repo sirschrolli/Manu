@@ -1,0 +1,1382 @@
+{
+ "de_01": {
+  "take": "de_01_2.wav",
+  "wer": 0.0,
+  "heard": "Es gab eine Zeit, da stieg aus der Tiefe dieser Welt eine Dunkelheit empor, die alles Licht verschlang.",
+  "duration": 6.4,
+  "all": [
+   [
+    "de_01_2.wav",
+    0.0,
+    6.4
+   ],
+   [
+    "de_01_0.wav",
+    0.0,
+    6.08
+   ],
+   [
+    "de_01_1.wav",
+    0.111,
+    6.8
+   ]
+  ]
+ },
+ "de_02": {
+  "take": "de_02_2.wav",
+  "wer": 0.083,
+  "heard": "Wälder verdorben, Flüsse wurden schwarz und die Menschen flohen vor den Schatten.",
+  "duration": 5.92,
+  "all": [
+   [
+    "de_02_2.wav",
+    0.083,
+    5.92
+   ],
+   [
+    "de_02_0.wav",
+    0.083,
+    6.0
+   ],
+   [
+    "de_02_1.wav",
+    0.083,
+    5.68
+   ]
+  ]
+ },
+ "de_03": {
+  "take": "de_03_0.wav",
+  "wer": 0.0,
+  "heard": "Da erhoben sich sechs Drachen, geboren aus Feuer, Eis, Blitz, Natur, Erde und Wasser.",
+  "duration": 8.32,
+  "all": [
+   [
+    "de_03_0.wav",
+    0.0,
+    8.32
+   ],
+   [
+    "de_03_2.wav",
+    0.0,
+    8.56
+   ],
+   [
+    "de_03_1.wav",
+    0.143,
+    8.16
+   ]
+  ]
+ },
+ "de_04": {
+  "take": "de_04_0.wav",
+  "wer": 0.0,
+  "heard": "Gemeinsam schmiedeten sie ein Siegel und verbannten die Dunkelheit tief unter die Erde.",
+  "duration": 6.32,
+  "all": [
+   [
+    "de_04_0.wav",
+    0.0,
+    6.32
+   ],
+   [
+    "de_04_1.wav",
+    0.0,
+    6.32
+   ],
+   [
+    "de_04_2.wav",
+    0.0,
+    6.48
+   ]
+  ]
+ },
+ "de_05": {
+  "take": "de_05_0.wav",
+  "wer": 0.0,
+  "heard": "Jeder von ihnen trägt seitdem einen Splitter dieses Siegels in seinem Herzen.",
+  "duration": 5.52,
+  "all": [
+   [
+    "de_05_0.wav",
+    0.0,
+    5.52
+   ],
+   [
+    "de_05_1.wav",
+    0.0,
+    5.52
+   ],
+   [
+    "de_05_2.wav",
+    0.0,
+    4.96
+   ]
+  ]
+ },
+ "de_06": {
+  "take": "de_06_0.wav",
+  "wer": 0.0,
+  "heard": "Doch die Jahrhunderte vergingen und die Last des Siegels machte sie wild.",
+  "duration": 5.2,
+  "all": [
+   [
+    "de_06_0.wav",
+    0.0,
+    5.2
+   ],
+   [
+    "de_06_1.wav",
+    0.0,
+    5.28
+   ],
+   [
+    "de_06_2.wav",
+    0.0,
+    4.64
+   ]
+  ]
+ },
+ "de_07": {
+  "take": "de_07_2.wav",
+  "wer": 0.037,
+  "heard": "Sie hüten ihre Nester in Asche und Eis, auf Sturmgipfeln, in uralten Heinen, tief im Fels und am Grund des Meeres und dulden niemanden in ihrer Nähe.",
+  "duration": 11.92,
+  "all": [
+   [
+    "de_07_2.wav",
+    0.037,
+    11.92
+   ],
+   [
+    "de_07_0.wav",
+    0.037,
+    11.68
+   ],
+   [
+    "de_07_1.wav",
+    0.037,
+    12.32
+   ]
+  ]
+ },
+ "de_08": {
+  "take": "de_08_1.wav",
+  "wer": 0.0,
+  "heard": "Nun ist deine Zeit gekommen. Gründe ein Königreich, sammle Ritter um dich und stelle ein Heer auf.",
+  "duration": 7.28,
+  "all": [
+   [
+    "de_08_1.wav",
+    0.0,
+    7.28
+   ],
+   [
+    "de_08_2.wav",
+    0.0,
+    7.28
+   ],
+   [
+    "de_08_0.wav",
+    0.0,
+    7.68
+   ]
+  ]
+ },
+ "de_09": {
+  "take": "de_09_2.wav",
+  "wer": 0.0,
+  "heard": "Bezwinge die sechs Drachen und bring ihre Splitter zurück in den Kreis der Steine.",
+  "duration": 5.68,
+  "all": [
+   [
+    "de_09_2.wav",
+    0.0,
+    5.68
+   ],
+   [
+    "de_09_0.wav",
+    0.0,
+    6.0
+   ],
+   [
+    "de_09_1.wav",
+    0.0,
+    5.04
+   ]
+  ]
+ },
+ "de_10": {
+  "take": "de_10_2.wav",
+  "wer": 0.0,
+  "heard": "Doch hüte dich, was das Siegel verschließt, wartet nur darauf, dass es bricht.",
+  "duration": 5.92,
+  "all": [
+   [
+    "de_10_2.wav",
+    0.0,
+    5.92
+   ],
+   [
+    "de_10_0.wav",
+    0.0,
+    5.6
+   ],
+   [
+    "de_10_1.wav",
+    0.0,
+    6.64
+   ]
+  ]
+ },
+ "de_11": {
+  "take": "de_11_0.wav",
+  "wer": 0.0,
+  "heard": "Dies ist dein Königreich.",
+  "duration": 2.4,
+  "all": [
+   [
+    "de_11_0.wav",
+    0.0,
+    2.4
+   ],
+   [
+    "de_11_1.wav",
+    0.0,
+    2.48
+   ],
+   [
+    "de_11_2.wav",
+    1.0,
+    0.16
+   ]
+  ]
+ },
+ "story_kingdom_de": {
+  "take": "story_kingdom_de_1.wav",
+  "wer": 0.0,
+  "heard": "Jedes Königreich beginnt mit einem einzigen Schritt. Such dir ein Stück Land, pflanze dort dein Banner und gewinne den Ersten, der dir sein Schwert anvertraut.",
+  "duration": 11.44,
+  "all": [
+   [
+    "story_kingdom_de_1.wav",
+    0.0,
+    11.44
+   ],
+   [
+    "story_kingdom_de_0.wav",
+    0.0,
+    10.88
+   ],
+   [
+    "story_kingdom_de_2.wav",
+    0.0,
+    12.16
+   ]
+  ]
+ },
+ "story_chronicle_de": {
+  "take": "story_chronicle_de_0.wav",
+  "wer": 0.0,
+  "heard": "Nun folgen dir die ersten Getreuen. Schlag die Chronik auf. Sie erzählt von einem Kreis aus sechs Steinen, in dem das Siegel ruht. Dort beginnt dein eigentlicher Weg.",
+  "duration": 11.36,
+  "all": [
+   [
+    "story_chronicle_de_0.wav",
+    0.0,
+    11.36
+   ],
+   [
+    "story_chronicle_de_2.wav",
+    0.0,
+    10.96
+   ],
+   [
+    "story_chronicle_de_1.wav",
+    0.0,
+    12.0
+   ]
+  ]
+ },
+ "story_dragon_1_de": {
+  "take": "story_dragon_1_de_0.wav",
+  "wer": 0.0,
+  "heard": "Sechs Steine, sechs leere Nischen. Jeder Drache trägt seinen Splitter im Herzen und keiner von ihnen wird ihn freiwillig hergeben. Der Drachenkompass weist dir den Weg.",
+  "duration": 12.0,
+  "all": [
+   [
+    "story_dragon_1_de_0.wav",
+    0.0,
+    12.0
+   ],
+   [
+    "story_dragon_1_de_1.wav",
+    0.0,
+    12.0
+   ],
+   [
+    "story_dragon_1_de_2.wav",
+    0.0,
+    11.84
+   ]
+  ]
+ },
+ "story_fallen_fire_de": {
+  "take": "story_fallen_fire_de_2.wav",
+  "wer": 0.0,
+  "heard": "Pyrrhon, der Aschenfürst, ist gefallen. Seine Glut ist erloschen, doch sein Splitter brennt noch.",
+  "duration": 7.76,
+  "all": [
+   [
+    "story_fallen_fire_de_2.wav",
+    0.0,
+    7.76
+   ],
+   [
+    "story_fallen_fire_de_0.wav",
+    0.0,
+    7.84
+   ],
+   [
+    "story_fallen_fire_de_1.wav",
+    0.0,
+    7.44
+   ]
+  ]
+ },
+ "story_fallen_ice_de": {
+  "take": "story_fallen_ice_de_1.wav",
+  "wer": 0.1,
+  "heard": "Glasiara, die Frostkönigin, ist gefallen. Das ewige Eis ist verstummt.",
+  "duration": 6.16,
+  "all": [
+   [
+    "story_fallen_ice_de_1.wav",
+    0.1,
+    6.16
+   ],
+   [
+    "story_fallen_ice_de_2.wav",
+    0.1,
+    6.4
+   ],
+   [
+    "story_fallen_ice_de_0.wav",
+    0.1,
+    5.84
+   ]
+  ]
+ },
+ "story_fallen_lightning_de": {
+  "take": "story_fallen_lightning_de_0.wav",
+  "wer": 0.0,
+  "heard": "Voltarion, der Sturmbringer ist gefallen. Über den Gipfeln verzieht sich das Gewitter.",
+  "duration": 6.48,
+  "all": [
+   [
+    "story_fallen_lightning_de_0.wav",
+    0.0,
+    6.48
+   ],
+   [
+    "story_fallen_lightning_de_2.wav",
+    0.0,
+    6.08
+   ],
+   [
+    "story_fallen_lightning_de_1.wav",
+    0.0,
+    7.04
+   ]
+  ]
+ },
+ "story_fallen_nature_de": {
+  "take": "story_fallen_nature_de_2.wav",
+  "wer": 0.071,
+  "heard": "Verdantis, die Hüterin des Heinz, ist gefallen. Im uralten Wald ist es still geworden.",
+  "duration": 6.96,
+  "all": [
+   [
+    "story_fallen_nature_de_2.wav",
+    0.071,
+    6.96
+   ],
+   [
+    "story_fallen_nature_de_1.wav",
+    0.143,
+    6.8
+   ],
+   [
+    "story_fallen_nature_de_0.wav",
+    0.143,
+    6.32
+   ]
+  ]
+ },
+ "story_fallen_earth_de": {
+  "take": "story_fallen_earth_de_2.wav",
+  "wer": 0.0,
+  "heard": "Terragon, der Bergbrecher ist gefallen. Die Erde hat aufgehört zu beben.",
+  "duration": 6.16,
+  "all": [
+   [
+    "story_fallen_earth_de_2.wav",
+    0.0,
+    6.16
+   ],
+   [
+    "story_fallen_earth_de_1.wav",
+    0.0,
+    6.24
+   ],
+   [
+    "story_fallen_earth_de_0.wav",
+    0.0,
+    5.28
+   ]
+  ]
+ },
+ "story_fallen_water_de": {
+  "take": "story_fallen_water_de_1.wav",
+  "wer": 0.0,
+  "heard": "Thalassa, die Herrin der Tiefe, ist gefallen. Das Meer liegt ruhig.",
+  "duration": 5.36,
+  "all": [
+   [
+    "story_fallen_water_de_1.wav",
+    0.0,
+    5.36
+   ],
+   [
+    "story_fallen_water_de_2.wav",
+    0.0,
+    6.56
+   ],
+   [
+    "story_fallen_water_de_0.wav",
+    0.091,
+    5.84
+   ]
+  ]
+ },
+ "story_remaining_5_de": {
+  "take": "story_remaining_5_de_0.wav",
+  "wer": 0.0,
+  "heard": "Noch fünf Drachen bewachen das Siegel, bring den Splitter zu seinem Stein im Kreis.",
+  "duration": 6.0,
+  "all": [
+   [
+    "story_remaining_5_de_0.wav",
+    0.0,
+    6.0
+   ],
+   [
+    "story_remaining_5_de_2.wav",
+    0.0,
+    6.0
+   ],
+   [
+    "story_remaining_5_de_1.wav",
+    0.071,
+    5.36
+   ]
+  ]
+ },
+ "story_remaining_4_de": {
+  "take": "story_remaining_4_de_2.wav",
+  "wer": 0.0,
+  "heard": "Noch vier Drachen. Mit jedem Splitter wird das Siegel schwächer und das Dunkel darunter unruhiger.",
+  "duration": 6.72,
+  "all": [
+   [
+    "story_remaining_4_de_2.wav",
+    0.0,
+    6.72
+   ],
+   [
+    "story_remaining_4_de_1.wav",
+    0.0,
+    8.0
+   ],
+   [
+    "story_remaining_4_de_0.wav",
+    0.067,
+    6.64
+   ]
+  ]
+ },
+ "story_remaining_3_de": {
+  "take": "story_remaining_3_de_0.wav",
+  "wer": 0.0,
+  "heard": "Die Hälfte ist vollbracht, noch drei Drachen und aus der Tiefe dringt ein Flüstern.",
+  "duration": 6.48,
+  "all": [
+   [
+    "story_remaining_3_de_0.wav",
+    0.0,
+    6.48
+   ],
+   [
+    "story_remaining_3_de_2.wav",
+    0.0,
+    6.64
+   ],
+   [
+    "story_remaining_3_de_1.wav",
+    0.0,
+    5.76
+   ]
+  ]
+ },
+ "story_remaining_2_de": {
+  "take": "story_remaining_2_de_1.wav",
+  "wer": 0.0,
+  "heard": "Noch zwei Drachen. Wer nachts am Siegelkreis lauscht, hört es unter den Steinen pochen.",
+  "duration": 5.68,
+  "all": [
+   [
+    "story_remaining_2_de_1.wav",
+    0.0,
+    5.68
+   ],
+   [
+    "story_remaining_2_de_2.wav",
+    0.0,
+    6.08
+   ],
+   [
+    "story_remaining_2_de_0.wav",
+    0.0,
+    5.12
+   ]
+  ]
+ },
+ "story_remaining_1_de": {
+  "take": "story_remaining_1_de_2.wav",
+  "wer": 0.043,
+  "heard": "Nur noch ein Drache bewacht das Siegel, Ruth auch sein Splitter im Kreis wird es brechen.  Sei bereit für das, was darunter wartet.",
+  "duration": 9.6,
+  "all": [
+   [
+    "story_remaining_1_de_2.wav",
+    0.043,
+    9.6
+   ],
+   [
+    "story_remaining_1_de_1.wav",
+    0.043,
+    10.0
+   ],
+   [
+    "story_remaining_1_de_0.wav",
+    0.043,
+    8.16
+   ]
+  ]
+ },
+ "story_all_fallen_de": {
+  "take": "story_all_fallen_de_2.wav",
+  "wer": 0.0,
+  "heard": "Der letzte Drache ist gefallen. Sechs Splitter, sechs Steine, das Siegel wartet auf dich.",
+  "duration": 6.64,
+  "all": [
+   [
+    "story_all_fallen_de_2.wav",
+    0.0,
+    6.64
+   ],
+   [
+    "story_all_fallen_de_1.wav",
+    0.0,
+    6.32
+   ],
+   [
+    "story_all_fallen_de_0.wav",
+    0.0,
+    7.2
+   ]
+  ]
+ },
+ "story_seal_de": {
+  "take": "story_seal_de_0.wav",
+  "wer": 0.0,
+  "heard": "Das Siegel ist gebrochen. Was die Drachen so lange verschlossen hielten, ist erwacht.  Das Tor steht offen und dahinter wartet die Schattenwelt.",
+  "duration": 9.2,
+  "all": [
+   [
+    "story_seal_de_0.wav",
+    0.0,
+    9.2
+   ],
+   [
+    "story_seal_de_2.wav",
+    0.0,
+    8.72
+   ],
+   [
+    "story_seal_de_1.wav",
+    0.0,
+    10.24
+   ]
+  ]
+ },
+ "story_crown_de": {
+  "take": "story_crown_de_0.wav",
+  "wer": 0.037,
+  "heard": "Die Schattenwelt. Seit Jahrhunderten lebt hier das Volk der Umbrer und irgendwo in der Dunkelheit wartet Nixar.  Doch vergiss nicht, daheim wartet ein Reich auf seine Krone.",
+  "duration": 12.32,
+  "all": [
+   [
+    "story_crown_de_0.wav",
+    0.037,
+    12.32
+   ],
+   [
+    "story_crown_de_1.wav",
+    0.074,
+    12.16
+   ],
+   [
+    "story_crown_de_2.wav",
+    0.074,
+    12.8
+   ]
+  ]
+ },
+ "story_nyxar_de": {
+  "take": "story_nyxar_de_0.wav",
+  "wer": 0.077,
+  "heard": "Nüxa der Schattendrache ist gefallen. Die Schatten weichen zurück, doch sie vergessen nicht.",
+  "duration": 6.08,
+  "all": [
+   [
+    "story_nyxar_de_0.wav",
+    0.077,
+    6.08
+   ],
+   [
+    "story_nyxar_de_2.wav",
+    0.077,
+    6.24
+   ],
+   [
+    "story_nyxar_de_1.wav",
+    0.077,
+    5.84
+   ]
+  ]
+ },
+ "story_crowned_de": {
+  "take": "story_crowned_de_1.wav",
+  "wer": 0.0,
+  "heard": "Und so endet die Chronik des Siegels. Ein Königreich geboren aus einem einzigen Schritt hat seine Krone gefunden. Lang lebe die Krone.",
+  "duration": 9.92,
+  "all": [
+   [
+    "story_crowned_de_1.wav",
+    0.0,
+    9.92
+   ],
+   [
+    "story_crowned_de_2.wav",
+    0.0,
+    9.2
+   ],
+   [
+    "story_crowned_de_0.wav",
+    0.0,
+    10.72
+   ]
+  ]
+ },
+ "en_01": {
+  "take": "en_01_2.wav",
+  "wer": 0.0,
+  "heard": "There was a time when a darkness rose from the depths of this world and swallowed every light",
+  "duration": 6.08,
+  "all": [
+   [
+    "en_01_2.wav",
+    0.0,
+    6.08
+   ],
+   [
+    "en_01_0.wav",
+    0.0,
+    6.0
+   ],
+   [
+    "en_01_1.wav",
+    0.0,
+    6.64
+   ]
+  ]
+ },
+ "en_02": {
+  "take": "en_02_0.wav",
+  "wer": 0.0,
+  "heard": "Forests withered, rivers turned black, and the people fled before the shadows.",
+  "duration": 5.92,
+  "all": [
+   [
+    "en_02_0.wav",
+    0.0,
+    5.92
+   ],
+   [
+    "en_02_1.wav",
+    0.0,
+    5.92
+   ],
+   [
+    "en_02_2.wav",
+    0.0,
+    6.08
+   ]
+  ]
+ },
+ "en_03": {
+  "take": "en_03_1.wav",
+  "wer": 0.0,
+  "heard": "Then six dragons rose up, born of fire, ice, lightning, nature, earth and water.",
+  "duration": 7.92,
+  "all": [
+   [
+    "en_03_1.wav",
+    0.0,
+    7.92
+   ],
+   [
+    "en_03_2.wav",
+    0.0,
+    7.6
+   ],
+   [
+    "en_03_0.wav",
+    0.0,
+    8.72
+   ]
+  ]
+ },
+ "en_04": {
+  "take": "en_04_2.wav",
+  "wer": 0.0,
+  "heard": "Together they forged a seal and banished the darkness deep beneath the earth.",
+  "duration": 5.76,
+  "all": [
+   [
+    "en_04_2.wav",
+    0.0,
+    5.76
+   ],
+   [
+    "en_04_0.wav",
+    0.0,
+    6.0
+   ],
+   [
+    "en_04_1.wav",
+    0.0,
+    5.52
+   ]
+  ]
+ },
+ "en_05": {
+  "take": "en_05_2.wav",
+  "wer": 0.0,
+  "heard": "Ever since, each of them has carried a shard of that seal in its heart.",
+  "duration": 5.76,
+  "all": [
+   [
+    "en_05_2.wav",
+    0.0,
+    5.76
+   ],
+   [
+    "en_05_0.wav",
+    0.0,
+    6.0
+   ],
+   [
+    "en_05_1.wav",
+    0.0,
+    5.12
+   ]
+  ]
+ },
+ "en_06": {
+  "take": "en_06_2.wav",
+  "wer": 0.0,
+  "heard": "But the centuries passed and the burden of the seal drove them wild.",
+  "duration": 5.52,
+  "all": [
+   [
+    "en_06_2.wav",
+    0.0,
+    5.52
+   ],
+   [
+    "en_06_1.wav",
+    0.0,
+    5.44
+   ],
+   [
+    "en_06_0.wav",
+    0.0,
+    5.6
+   ]
+  ]
+ },
+ "en_07": {
+  "take": "en_07_1.wav",
+  "wer": 0.0,
+  "heard": "They guard their nests in ash and ice, on stormy peaks, in ancient groves, deep within the rock, and at the bottom of the sea, and suffer no one to come near.",
+  "duration": 11.92,
+  "all": [
+   [
+    "en_07_1.wav",
+    0.0,
+    11.92
+   ],
+   [
+    "en_07_2.wav",
+    0.0,
+    12.16
+   ],
+   [
+    "en_07_0.wav",
+    0.0,
+    10.64
+   ]
+  ]
+ },
+ "en_08": {
+  "take": "en_08_1.wav",
+  "wer": 0.0,
+  "heard": "Now your time has come, found a kingdom, gather knights around you and raise an army.",
+  "duration": 7.12,
+  "all": [
+   [
+    "en_08_1.wav",
+    0.0,
+    7.12
+   ],
+   [
+    "en_08_0.wav",
+    0.0,
+    7.36
+   ],
+   [
+    "en_08_2.wav",
+    0.125,
+    6.72
+   ]
+  ]
+ },
+ "en_09": {
+  "take": "en_09_1.wav",
+  "wer": 0.0,
+  "heard": "Defeat the six dragons and bring their shards back to the Ring of Stones.",
+  "duration": 5.76,
+  "all": [
+   [
+    "en_09_1.wav",
+    0.0,
+    5.76
+   ],
+   [
+    "en_09_2.wav",
+    0.0,
+    5.04
+   ],
+   [
+    "en_09_0.wav",
+    0.071,
+    5.52
+   ]
+  ]
+ },
+ "en_10": {
+  "take": "en_10_2.wav",
+  "wer": 0.0,
+  "heard": "But beware, what the seal holds back is only waiting for it to break.",
+  "duration": 5.6,
+  "all": [
+   [
+    "en_10_2.wav",
+    0.0,
+    5.6
+   ],
+   [
+    "en_10_1.wav",
+    0.0,
+    5.68
+   ],
+   [
+    "en_10_0.wav",
+    0.0,
+    5.04
+   ]
+  ]
+ },
+ "en_11": {
+  "take": "en_11_1.wav",
+  "wer": 0.0,
+  "heard": "This is your kingdom.",
+  "duration": 2.0,
+  "all": [
+   [
+    "en_11_1.wav",
+    0.0,
+    2.0
+   ],
+   [
+    "en_11_2.wav",
+    0.0,
+    2.32
+   ],
+   [
+    "en_11_0.wav",
+    0.0,
+    1.6
+   ]
+  ]
+ },
+ "story_kingdom_en": {
+  "take": "story_kingdom_en_0.wav",
+  "wer": 0.0,
+  "heard": "Every Kingdom begins with a single step. Find a piece of land, plant your banner there, and win the first who will entrust you with his sword.",
+  "duration": 10.08,
+  "all": [
+   [
+    "story_kingdom_en_0.wav",
+    0.0,
+    10.08
+   ],
+   [
+    "story_kingdom_en_1.wav",
+    0.0,
+    10.0
+   ],
+   [
+    "story_kingdom_en_2.wav",
+    0.0,
+    10.24
+   ]
+  ]
+ },
+ "story_chronicle_en": {
+  "take": "story_chronicle_en_0.wav",
+  "wer": 0.0,
+  "heard": "Now, the first of the faithful follow you. Open the Chronicle. It tells of a ring of six  stones where the seal rests. That is where your true path begins.",
+  "duration": 12.32,
+  "all": [
+   [
+    "story_chronicle_en_0.wav",
+    0.0,
+    12.32
+   ],
+   [
+    "story_chronicle_en_1.wav",
+    0.0,
+    12.64
+   ],
+   [
+    "story_chronicle_en_2.wav",
+    0.0,
+    11.6
+   ]
+  ]
+ },
+ "story_dragon_1_en": {
+  "take": "story_dragon_1_en_1.wav",
+  "wer": 0.0,
+  "heard": "Six stones, six empty niches. Each dragon carries its shard in its heart and not one of them will give it up willingly. The dragon compass will show you the way.",
+  "duration": 12.24,
+  "all": [
+   [
+    "story_dragon_1_en_1.wav",
+    0.0,
+    12.24
+   ],
+   [
+    "story_dragon_1_en_2.wav",
+    0.0,
+    11.92
+   ],
+   [
+    "story_dragon_1_en_0.wav",
+    0.065,
+    12.4
+   ]
+  ]
+ },
+ "story_fallen_fire_en": {
+  "take": "story_fallen_fire_en_1.wav",
+  "wer": 0.0,
+  "heard": "Pyrrhon, the ash lord, has fallen. His embers have died, but his shard still burns.",
+  "duration": 7.44,
+  "all": [
+   [
+    "story_fallen_fire_en_1.wav",
+    0.0,
+    7.44
+   ],
+   [
+    "story_fallen_fire_en_2.wav",
+    0.0,
+    7.2
+   ],
+   [
+    "story_fallen_fire_en_0.wav",
+    0.0,
+    7.84
+   ]
+  ]
+ },
+ "story_fallen_ice_en": {
+  "take": "story_fallen_ice_en_1.wav",
+  "wer": 0.0,
+  "heard": "Glaciara, the Frost Queen has fallen, the Eternal Ice has fallen silent.",
+  "duration": 5.76,
+  "all": [
+   [
+    "story_fallen_ice_en_1.wav",
+    0.0,
+    5.76
+   ],
+   [
+    "story_fallen_ice_en_0.wav",
+    0.0,
+    6.88
+   ],
+   [
+    "story_fallen_ice_en_2.wav",
+    0.083,
+    5.68
+   ]
+  ]
+ },
+ "story_fallen_lightning_en": {
+  "take": "story_fallen_lightning_en_1.wav",
+  "wer": 0.0,
+  "heard": "Voltarion, the stormbringer, has fallen. Above the peaks, the storm is passing.",
+  "duration": 7.36,
+  "all": [
+   [
+    "story_fallen_lightning_en_1.wav",
+    0.0,
+    7.36
+   ],
+   [
+    "story_fallen_lightning_en_0.wav",
+    0.167,
+    6.32
+   ],
+   [
+    "story_fallen_lightning_en_2.wav",
+    0.167,
+    6.16
+   ]
+  ]
+ },
+ "story_fallen_nature_en": {
+  "take": "story_fallen_nature_en_0.wav",
+  "wer": 0.077,
+  "heard": "Fadantis, guardian of the grove, has fallen. The ancient forest has grown still.",
+  "duration": 6.8,
+  "all": [
+   [
+    "story_fallen_nature_en_0.wav",
+    0.077,
+    6.8
+   ],
+   [
+    "story_fallen_nature_en_1.wav",
+    0.077,
+    6.72
+   ],
+   [
+    "story_fallen_nature_en_2.wav",
+    0.077,
+    7.36
+   ]
+  ]
+ },
+ "story_fallen_earth_en": {
+  "take": "story_fallen_earth_en_2.wav",
+  "wer": 0.2,
+  "heard": "Terragon, the mountain breaker, has fallen. The earth has stopped trembling.",
+  "duration": 5.92,
+  "all": [
+   [
+    "story_fallen_earth_en_2.wav",
+    0.2,
+    5.92
+   ],
+   [
+    "story_fallen_earth_en_1.wav",
+    0.2,
+    6.16
+   ],
+   [
+    "story_fallen_earth_en_0.wav",
+    0.3,
+    5.12
+   ]
+  ]
+ },
+ "story_fallen_water_en": {
+  "take": "story_fallen_water_en_0.wav",
+  "wer": 0.091,
+  "heard": "Talassa, mistress of the deep, has fallen. The sea lies calm.",
+  "duration": 5.92,
+  "all": [
+   [
+    "story_fallen_water_en_0.wav",
+    0.091,
+    5.92
+   ],
+   [
+    "story_fallen_water_en_1.wav",
+    0.091,
+    5.92
+   ],
+   [
+    "story_fallen_water_en_2.wav",
+    0.091,
+    5.84
+   ]
+  ]
+ },
+ "story_remaining_5_en": {
+  "take": "story_remaining_5_en_1.wav",
+  "wer": 0.0,
+  "heard": "Five dragons still guard the seal, bring the shard to its stone in the circle.",
+  "duration": 6.0,
+  "all": [
+   [
+    "story_remaining_5_en_1.wav",
+    0.0,
+    6.0
+   ],
+   [
+    "story_remaining_5_en_0.wav",
+    0.0,
+    6.4
+   ],
+   [
+    "story_remaining_5_en_2.wav",
+    0.0,
+    5.36
+   ]
+  ]
+ },
+ "story_remaining_4_en": {
+  "take": "story_remaining_4_en_1.wav",
+  "wer": 0.0,
+  "heard": "Four dragons remain. With every shard the seal grows weaker and the darkness beneath grows restless.",
+  "duration": 8.32,
+  "all": [
+   [
+    "story_remaining_4_en_1.wav",
+    0.0,
+    8.32
+   ],
+   [
+    "story_remaining_4_en_0.wav",
+    0.0,
+    8.4
+   ],
+   [
+    "story_remaining_4_en_2.wav",
+    0.0,
+    7.92
+   ]
+  ]
+ },
+ "story_remaining_3_en": {
+  "take": "story_remaining_3_en_0.wav",
+  "wer": 0.0,
+  "heard": "Half the task is done, three dragons remain, and a whisper rises from the deep.",
+  "duration": 6.24,
+  "all": [
+   [
+    "story_remaining_3_en_0.wav",
+    0.0,
+    6.24
+   ],
+   [
+    "story_remaining_3_en_2.wav",
+    0.0,
+    6.24
+   ],
+   [
+    "story_remaining_3_en_1.wav",
+    0.0,
+    7.04
+   ]
+  ]
+ },
+ "story_remaining_2_en": {
+  "take": "story_remaining_2_en_2.wav",
+  "wer": 0.0,
+  "heard": "Two dragons remain. Whoever listens at the seal circle by night hears something knocking beneath the stones.",
+  "duration": 7.12,
+  "all": [
+   [
+    "story_remaining_2_en_2.wav",
+    0.0,
+    7.12
+   ],
+   [
+    "story_remaining_2_en_1.wav",
+    0.0,
+    6.96
+   ],
+   [
+    "story_remaining_2_en_0.wav",
+    0.0,
+    7.52
+   ]
+  ]
+ },
+ "story_remaining_1_en": {
+  "take": "story_remaining_1_en_2.wav",
+  "wer": 0.12,
+  "heard": "Only one dragon still guards the seal. Once it's shard two, rests in the circle, the seal will break.  Be ready for what waits beneath.",
+  "duration": 10.48,
+  "all": [
+   [
+    "story_remaining_1_en_2.wav",
+    0.12,
+    10.48
+   ],
+   [
+    "story_remaining_1_en_1.wav",
+    0.12,
+    10.16
+   ],
+   [
+    "story_remaining_1_en_0.wav",
+    0.12,
+    11.12
+   ]
+  ]
+ },
+ "story_all_fallen_en": {
+  "take": "story_all_fallen_en_2.wav",
+  "wer": 0.0,
+  "heard": "The last dragon has fallen. Six shards, six stones. The seal is waiting for you.",
+  "duration": 6.72,
+  "all": [
+   [
+    "story_all_fallen_en_2.wav",
+    0.0,
+    6.72
+   ],
+   [
+    "story_all_fallen_en_0.wav",
+    0.0,
+    6.8
+   ],
+   [
+    "story_all_fallen_en_1.wav",
+    0.0,
+    6.48
+   ]
+  ]
+ },
+ "story_seal_en": {
+  "take": "story_seal_en_0.wav",
+  "wer": 0.0,
+  "heard": "The seal is broken, what the dragons kept locked away for so long has awoken.  The gate stands open and beyond it lies the shadow world.",
+  "duration": 10.4,
+  "all": [
+   [
+    "story_seal_en_0.wav",
+    0.0,
+    10.4
+   ],
+   [
+    "story_seal_en_2.wav",
+    0.0,
+    10.88
+   ],
+   [
+    "story_seal_en_1.wav",
+    0.0,
+    9.36
+   ]
+  ]
+ },
+ "story_crown_en": {
+  "take": "story_crown_en_2.wav",
+  "wer": 0.034,
+  "heard": "The shadow world for centuries the Umbran folk have lived here, and somewhere in the darkness Nixar waits, but do not forget, back home, a realm awaits its crown.",
+  "duration": 12.8,
+  "all": [
+   [
+    "story_crown_en_2.wav",
+    0.034,
+    12.8
+   ],
+   [
+    "story_crown_en_1.wav",
+    0.034,
+    12.4
+   ],
+   [
+    "story_crown_en_0.wav",
+    0.034,
+    13.2
+   ]
+  ]
+ },
+ "story_nyxar_en": {
+  "take": "story_nyxar_en_1.wav",
+  "wer": 0.071,
+  "heard": "Nuxa, the Shadow Dragon, has fallen. The shadows recede, but they do not forget.",
+  "duration": 6.56,
+  "all": [
+   [
+    "story_nyxar_en_1.wav",
+    0.071,
+    6.56
+   ],
+   [
+    "story_nyxar_en_0.wav",
+    0.071,
+    6.16
+   ],
+   [
+    "story_nyxar_en_2.wav",
+    0.071,
+    8.0
+   ]
+  ]
+ },
+ "story_crowned_en": {
+  "take": "story_crowned_en_2.wav",
+  "wer": 0.0,
+  "heard": "And so ends the Chronicle of the Seal.  A kingdom born of a single step has found its crown.  Long live the crown!",
+  "duration": 9.12,
+  "all": [
+   [
+    "story_crowned_en_2.wav",
+    0.0,
+    9.12
+   ],
+   [
+    "story_crowned_en_1.wav",
+    0.0,
+    9.36
+   ],
+   [
+    "story_crowned_en_0.wav",
+    0.0,
+    8.8
+   ]
+  ]
+ }
+}

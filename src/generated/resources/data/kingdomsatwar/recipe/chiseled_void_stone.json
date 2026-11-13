@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "S": "kingdomsatwar:void_stone_brick_slab"
+  },
+  "pattern": [
+    "S",
+    "S"
+  ],
+  "result": {
+    "id": "kingdomsatwar:chiseled_void_stone"
+  }
+}

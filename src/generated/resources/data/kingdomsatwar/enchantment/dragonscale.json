@@ -1,0 +1,49 @@
+{
+  "anvil_cost": 4,
+  "description": {
+    "translate": "enchantment.kingdomsatwar.dragonscale"
+  },
+  "effects": {
+    "minecraft:damage_protection": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": {
+            "type": "minecraft:linear",
+            "base": 2.5,
+            "per_level_above_first": 2.5
+          }
+        },
+        "requirements": {
+          "type": "minecraft:damage_source_properties",
+          "predicate": {
+            "source_entity": {
+              "minecraft:entity_type": "#kingdomsatwar:dragons"
+            },
+            "tags": [
+              {
+                "expected": false,
+                "id": "#minecraft:bypasses_invulnerability"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "exclusive_set": "#minecraft:exclusive_set/armor",
+  "max_cost": {
+    "base": 18,
+    "per_level_above_first": 8
+  },
+  "max_level": 4,
+  "min_cost": {
+    "base": 10,
+    "per_level_above_first": 8
+  },
+  "slots": [
+    "armor"
+  ],
+  "supported_items": "#minecraft:enchantable/armor",
+  "weight": 2
+}

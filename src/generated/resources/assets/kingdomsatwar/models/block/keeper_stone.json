@@ -1,0 +1,89 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "cullface": "down",
+          "texture": "#bottom"
+        },
+        "east": {
+          "cullface": "east",
+          "texture": "#side"
+        },
+        "north": {
+          "cullface": "north",
+          "texture": "#side"
+        },
+        "south": {
+          "cullface": "south",
+          "texture": "#side"
+        },
+        "up": {
+          "cullface": "up",
+          "texture": "#top"
+        },
+        "west": {
+          "cullface": "west",
+          "texture": "#side"
+        }
+      },
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "faces": {
+        "east": {
+          "cullface": "east",
+          "texture": "#glow_side"
+        },
+        "north": {
+          "cullface": "north",
+          "texture": "#glow_side"
+        },
+        "south": {
+          "cullface": "south",
+          "texture": "#glow_side"
+        },
+        "up": {
+          "cullface": "up",
+          "texture": "#glow_top"
+        },
+        "west": {
+          "cullface": "west",
+          "texture": "#glow_side"
+        }
+      },
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "light_emission": 15,
+      "neoforge_data": {
+        "ambient_occlusion": false
+      },
+      "to": [
+        16,
+        16,
+        16
+      ]
+    }
+  ],
+  "textures": {
+    "bottom": "kingdomsatwar:block/keeper_stone_bottom",
+    "glow_side": "kingdomsatwar:block/keeper_stone_side_glow",
+    "glow_top": "kingdomsatwar:block/keeper_stone_top_glow",
+    "particle": "kingdomsatwar:block/keeper_stone_side",
+    "side": "kingdomsatwar:block/keeper_stone_side",
+    "top": "kingdomsatwar:block/keeper_stone_top"
+  }
+}

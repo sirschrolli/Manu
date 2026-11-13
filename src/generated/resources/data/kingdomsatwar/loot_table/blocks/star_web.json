@@ -1,0 +1,41 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "kingdomsatwar:star_web",
+        "state": {
+          "temporary": "false"
+        }
+      },
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "condition": {
+                "type": "minecraft:any_of",
+                "terms": [
+                  "minecraft:tool/can_shear",
+                  "minecraft:tool/can_silk_touch"
+                ]
+              },
+              "name": "kingdomsatwar:star_web"
+            },
+            {
+              "type": "minecraft:item",
+              "modifier": {
+                "type": "minecraft:explosion_decay"
+              },
+              "name": "minecraft:string"
+            }
+          ]
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "kingdomsatwar:blocks/star_web"
+}

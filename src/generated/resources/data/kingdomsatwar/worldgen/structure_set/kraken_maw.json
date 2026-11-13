@@ -1,0 +1,15 @@
+{
+  "placement": {
+    "type": "kingdomsatwar:kraken_maw",
+    "biomes": "#kingdomsatwar:has_kraken_maw",
+    "max_distance": 900,
+    "min_distance": 350,
+    "salt": 91113
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:kraken_maw",
+      "weight": 1
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=east,phase=awake": {
+      "model": "kingdomsatwar:block/void_throne",
+      "y": 90
+    },
+    "facing=east,phase=defeated": {
+      "model": "kingdomsatwar:block/void_throne_defeated",
+      "y": 90
+    },
+    "facing=east,phase=guarded": {
+      "model": "kingdomsatwar:block/void_throne",
+      "y": 90
+    },
+    "facing=north,phase=awake": {
+      "model": "kingdomsatwar:block/void_throne"
+    },
+    "facing=north,phase=defeated": {
+      "model": "kingdomsatwar:block/void_throne_defeated"
+    },
+    "facing=north,phase=guarded": {
+      "model": "kingdomsatwar:block/void_throne"
+    },
+    "facing=south,phase=awake": {
+      "model": "kingdomsatwar:block/void_throne",
+      "y": 180
+    },
+    "facing=south,phase=defeated": {
+      "model": "kingdomsatwar:block/void_throne_defeated",
+      "y": 180
+    },
+    "facing=south,phase=guarded": {
+      "model": "kingdomsatwar:block/void_throne",
+      "y": 180
+    },
+    "facing=west,phase=awake": {
+      "model": "kingdomsatwar:block/void_throne",
+      "y": 270
+    },
+    "facing=west,phase=defeated": {
+      "model": "kingdomsatwar:block/void_throne_defeated",
+      "y": 270
+    },
+    "facing=west,phase=guarded": {
+      "model": "kingdomsatwar:block/void_throne",
+      "y": 270
+    }
+  }
+}

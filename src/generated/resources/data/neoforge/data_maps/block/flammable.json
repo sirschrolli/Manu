@@ -1,0 +1,344 @@
+{
+  "values": {
+    "kingdomsatwar:abysswood_fence": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:abysswood_fence_gate": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:abysswood_leaves": {
+      "burn_odds": 60,
+      "ignite_odds": 30
+    },
+    "kingdomsatwar:abysswood_log": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:abysswood_plank_slab": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:abysswood_plank_stairs": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:abysswood_planks": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:abysswood_wood": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:ancient_leaves": {
+      "burn_odds": 60,
+      "ignite_odds": 30
+    },
+    "kingdomsatwar:ancient_log": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:ancient_plank_slab": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:ancient_plank_stairs": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:ancient_planks": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:azure_glimmer_leaves": {
+      "burn_odds": 60,
+      "ignite_odds": 30
+    },
+    "kingdomsatwar:bramble": {
+      "burn_odds": 100,
+      "ignite_odds": 60
+    },
+    "kingdomsatwar:charred_plank_slab": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:charred_plank_stairs": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:charred_planks": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:coralwood_fence": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:coralwood_fence_gate": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:coralwood_leaves": {
+      "burn_odds": 60,
+      "ignite_odds": 30
+    },
+    "kingdomsatwar:coralwood_log": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:coralwood_plank_slab": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:coralwood_plank_stairs": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:coralwood_planks": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:coralwood_wood": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:fae_mushroom_stem": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:glimmerwood_fence": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:glimmerwood_fence_gate": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:glimmerwood_log": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:glimmerwood_plank_slab": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:glimmerwood_plank_stairs": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:glimmerwood_planks": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:glimmerwood_wood": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:gnarled_roots": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:kelpwood_fence": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:kelpwood_fence_gate": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:kelpwood_leaves": {
+      "burn_odds": 60,
+      "ignite_odds": 30
+    },
+    "kingdomsatwar:kelpwood_log": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:kelpwood_plank_slab": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:kelpwood_plank_stairs": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:kelpwood_planks": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:kelpwood_wood": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:oak_bench": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:oak_chair": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:oak_table": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:pearlwood_fence": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:pearlwood_fence_gate": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:pearlwood_leaves": {
+      "burn_odds": 60,
+      "ignite_odds": 30
+    },
+    "kingdomsatwar:pearlwood_log": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:pearlwood_plank_slab": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:pearlwood_plank_stairs": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:pearlwood_planks": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:pearlwood_wood": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:rose_glimmer_leaves": {
+      "burn_odds": 60,
+      "ignite_odds": 30
+    },
+    "kingdomsatwar:shadow_fence": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:shadow_fence_gate": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:shadow_leaves": {
+      "burn_odds": 60,
+      "ignite_odds": 30
+    },
+    "kingdomsatwar:shadow_log": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:shadow_plank_slab": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:shadow_plank_stairs": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:shadow_planks": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:shadow_wood": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:stripped_abysswood_log": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:stripped_abysswood_wood": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:stripped_coralwood_log": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:stripped_coralwood_wood": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:stripped_glimmerwood_log": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:stripped_glimmerwood_wood": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:stripped_kelpwood_log": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:stripped_kelpwood_wood": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:stripped_pearlwood_log": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:stripped_pearlwood_wood": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:stripped_shadow_log": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:stripped_shadow_wood": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:thorn_hedge": {
+      "burn_odds": 60,
+      "ignite_odds": 30
+    },
+    "kingdomsatwar:thornbriar": {
+      "burn_odds": 100,
+      "ignite_odds": 60
+    },
+    "kingdomsatwar:throne": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:timber_beam": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:timber_frame": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:timber_frame_cross": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:timber_frame_diagonal": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:wooden_shingle_slab": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:wooden_shingle_stairs": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:wooden_shingles": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    }
+  }
+}

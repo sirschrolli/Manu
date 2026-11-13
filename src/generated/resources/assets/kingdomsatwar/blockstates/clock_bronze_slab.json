@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "kingdomsatwar:block/clock_bronze_slab"
+    },
+    "type=double": {
+      "model": "kingdomsatwar:block/clock_bronze"
+    },
+    "type=top": {
+      "model": "kingdomsatwar:block/clock_bronze_slab_top"
+    }
+  }
+}

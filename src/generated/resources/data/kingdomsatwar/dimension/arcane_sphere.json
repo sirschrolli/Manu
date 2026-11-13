@@ -1,0 +1,18 @@
+{
+  "type": "kingdomsatwar:arcane_sphere",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "kingdomsatwar:arcane_sphere",
+      "features": false,
+      "lakes": false,
+      "layers": [
+        {
+          "block": "minecraft:air",
+          "height": 1
+        }
+      ],
+      "structure_overrides": []
+    }
+  }
+}

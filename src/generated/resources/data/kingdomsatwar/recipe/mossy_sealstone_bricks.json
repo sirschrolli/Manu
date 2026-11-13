@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "kingdomsatwar:sealstone_bricks",
+    "minecraft:moss_block"
+  ],
+  "result": {
+    "id": "kingdomsatwar:mossy_sealstone_bricks"
+  }
+}

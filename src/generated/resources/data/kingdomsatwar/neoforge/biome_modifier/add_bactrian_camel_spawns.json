@@ -1,0 +1,21 @@
+{
+  "type": "kingdomsatwar:add_spawns_in_category",
+  "biomes": [
+    "minecraft:badlands",
+    "minecraft:eroded_badlands",
+    "minecraft:savanna_plateau",
+    "kingdomsatwar:rock_gorges"
+  ],
+  "category": "creature",
+  "spawners": [
+    {
+      "type": "kingdomsatwar:camel",
+      "count": {
+        "type": "minecraft:uniform",
+        "max_inclusive": 1,
+        "min_inclusive": 1
+      },
+      "weight": 1
+    }
+  ]
+}

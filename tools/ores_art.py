@@ -1,0 +1,404 @@
+#!/usr/bin/env python3
+"""
+Erz-Einschlüsse, von Hand gepixelt nach dem Vorbild der Vanilla-Erze: unregelmäßige, verschieden große Klumpen
+(2-6 Pixel), die mit mehreren Tönen ins Gestein übergehen – oben links Glanz, unten rechts die dunkelste Erzfarbe.
+Keine runden „Perlen" mit dunklem Rand.
+
+Die Einschlüsse sind durchsichtig und liegen im Modell über dem Gestein (Stein, Tiefenschiefer, Schattenstein,
+Tiefschattenstein); leuchtende Erze bekommen dazu eine Leuchtebene mit ihren hellsten Pixeln.
+
+Zeichen: '.' = Gestein, 1..4 = Erzton (dunkel -> hell), 5..8 = zweiter Erzton (Edelstein: violette Steine).
+Wird von tools/generate_textures.py aufgerufen: build(put).
+"""
+from __future__ import annotations
+
+from typing import Callable
+
+from PIL import Image
+
+from pixelart import Color, hexc
+
+N = 16
+
+# Metallische Erze: flache, unregelmäßige Klumpen
+METAL_A = [
+    "................",
+    "...34...........",
+    "..34432.....3...",
+    ".344321....343..",
+    "..2321......21..",
+    "...1............",
+    "..........34....",
+    ".......3.34432..",
+    "......34343221..",
+    ".......2221.1...",
+    "..3.............",
+    ".343.......34...",
+    "..221.....3442..",
+    "...........221..",
+    ".....34.........",
+    "......21........",
+]
+
+METAL_B = [
+    "................",
+    "..........34....",
+    "...3.....34432..",
+    "..3443...343221.",
+    "..34421...221...",
+    "...221..........",
+    "................",
+    ".34.......3.....",
+    "3443.....343....",
+    ".2321...34421...",
+    "..21.....2221...",
+    "...........1....",
+    "......34........",
+    ".....34432...3..",
+    "......3221..32..",
+    ".......1........",
+]
+
+# Kristall-Erze: kleine, spitze Kristalle mit hellem Glanzpunkt
+GEM_C = [
+    "................",
+    "..4.............",
+    ".434....43......",
+    ".3432..4432.....",
+    "..321..3321..4..",
+    "........21..343.",
+    "............32..",
+    "....43..........",
+    "...4432....4....",
+    "...33421..434...",
+    "....2321..321...",
+    "......1.........",
+    ".4..........43..",
+    ".32.....4..4432.",
+    "........32..321.",
+    "................",
+]
+
+# Mondstein-Erz (0.96): runde, glatt gewaschene Steine (Cabochons) – oben links ein Glanz, unten rechts dunkel; einer schimmert
+# fliederfarben (5-8) statt blau
+MOON_STONES = [
+    "................",
+    "..43............",
+    ".4432.....4.....",
+    ".3321....432....",
+    "..21......2.....",
+    "................",
+    "................",
+    "......887.......",
+    ".....88876......",
+    ".....77765..43..",
+    "......665...32..",
+    "................",
+    "...43...........",
+    "..4432.....443..",
+    "...21......321..",
+    "................",
+]
+
+# Aquamarin-Erz (0.97): schlanke, sechseckige Säulen in kleinen Büscheln, die schräg aus dem Gezeitenstein wachsen – die
+# linke Kante im Licht, die rechte im Schatten, oben die helle Endfläche
+AQUA_PRISMS = [
+    "................",
+    "...4.......4....",
+    "...43.....43....",
+    ".4.432...432....",
+    ".43.32...32.....",
+    "..32.21.32......",
+    "..21..1.21......",
+    "...1............",
+    "................",
+    "...........4....",
+    "....4......43...",
+    "...432......32.4",
+    "...32...4...2143",
+    "..32...434...432",
+    "..21...321...32.",
+    "........1....1..",
+]
+
+# Dämmerquarz-Erz (0.98): Quarzspitzen in kleinen Drusen, aufrecht und schräg – oben die helle Spitze, links im Licht;
+# an der Wurzel (5-8) ein Rest Abendrot
+DUSK_POINTS = [
+    "................",
+    "....4...........",
+    "...43.......4...",
+    "...432.....43...",
+    "..4321.....432..",
+    "..3321....4321..",
+    "..7765....3321..",
+    "...76.....7765..",
+    "...........76...",
+    "......4.........",
+    ".....43.........",
+    ".4...432....4...",
+    ".43..321...43...",
+    ".32..765...321..",
+    ".76...6....765..",
+    "................",
+]
+
+# Himmelseisenerz (0.99): Bruchstücke gefallener Sterne – blankes Eisen (1-4, oben links der Glanz) mit einer schwarzen
+# Schmelzkruste (5-6) am Rand, wie eingesprengte Meteoritensplitter
+SKY_IRON_CHUNKS = [
+    "................",
+    "..5665..........",
+    ".563446.....56..",
+    ".5344326...5436.",
+    ".6322165...6321.",
+    "..65556.....55..",
+    "......566.......",
+    ".....53446......",
+    ".....643325.....",
+    "......53216.....",
+    ".......556....5.",
+    "..56.........546",
+    ".5446........631",
+    ".6321.........5.",
+    "..556...........",
+    "................",
+]
+
+# Chronit-Erz (1.01): bernsteinfarbene Kristallspitzen (1-4, oben links das Licht) mit erstarrten Funken (5-6), wie sie an
+# den Weltennähten aus dem Chaosgestein wachsen – in kleinen Büscheln, schräg nach oben
+CHRONIT_POINTS = [
+    "................",
+    "...4............",
+    "..443......43...",
+    "..4532....4432..",
+    "...432....3421..",
+    "...321.....21...",
+    "....1...........",
+    "........4.......",
+    ".......443......",
+    "......45432.....",
+    "......44321..4..",
+    ".......321..443.",
+    "..43....1...4321",
+    ".4532........21.",
+    ".4321...........",
+    "..21............",
+]
+
+# Feueropal-Erz (1.1.6): runde Knollen aus Feueropal im Netherrack und Schwarzstein (1-4, oben links der Glanz), darin das
+# grüne Farbenspiel des Opals (5-8)
+FIRE_OPAL_NODES = [
+    "................",
+    "..344...........",
+    ".34443..........",
+    ".34743.....34...",
+    ".23332....3443..",
+    "..121....34732..",
+    "..........2321..",
+    "...........1....",
+    "................",
+    ".....344........",
+    "....34444.......",
+    "....346432...34.",
+    "....237321..3432",
+    ".....1221...2321",
+    "..............1.",
+    "................",
+]
+
+# Phasiterz (1.4): Büschel aus türkisen Kristallprismen im Endstein (1-4, oben links das Licht), darin violette Funken
+# (5-8) – schräg nach oben gewachsen, wo die Leerwandler den Stein am häufigsten durchquert haben
+PHASIT_CLUSTERS = [
+    "................",
+    "...4.......4....",
+    "..443.....443...",
+    "..4532....4521..",
+    "..4321.....321..",
+    "...21.....4.....",
+    ".........443....",
+    "....4...45632...",
+    "...443..44321...",
+    "..45632..321....",
+    "..44321.....4...",
+    "...321.....443..",
+    "....1.....4532..",
+    ".43.......4321..",
+    ".4321......21...",
+    "..21............",
+]
+
+# Hallkristallerz (1.6): blasse Kristalle im Tiefenschiefer (1-4, oben links das Licht), dazu ein Ring wie eine Welle auf einem
+# Teich (5-8) um einen Stern aus Kristall – hier hat der Gesang der Orgel am längsten im Gestein nachgeklungen
+ECHO_CLUSTERS = [
+    "................",
+    "...776.....4....",
+    "..7...6...443...",
+    ".7..4..6..4321..",
+    ".7.434.5...321..",
+    ".6..3..5....1...",
+    "..6...5.........",
+    "...655..........",
+    "................",
+    "..........4.....",
+    "..4......443....",
+    "..43.....4321...",
+    "..21......321...",
+    "......4....1.4..",
+    "......43.....43.",
+    "......21.....21.",
+]
+
+# Edelstein-Erz: grüne (1-4) und violette (5-8) Steine
+GEM_MIXED = [
+    "................",
+    "..8.............",
+    ".878....43......",
+    ".7876..4432.....",
+    "..765..3321..8..",
+    "........21..787.",
+    "............76..",
+    "....43..........",
+    "...4432....8....",
+    "...33421..878...",
+    "....2321..765...",
+    "......1.........",
+    ".4..........87..",
+    ".32.....8..8876.",
+    "........76..765.",
+    "................",
+]
+
+
+def mirror(art: list[str]) -> list[str]:
+    return [row[::-1] for row in art]
+
+
+def flip(art: list[str]) -> list[str]:
+    """Senkrecht gespiegelt – Licht bleibt oben links, indem die Töne der Klumpen erhalten bleiben."""
+    return list(reversed(art))
+
+
+def overlay(art: list[str], tones: list[Color], second: list[Color] | None = None) -> Image.Image:
+    img = Image.new("RGBA", (N, N), (0, 0, 0, 0))
+    for y, row in enumerate(art):
+        for x, ch in enumerate(row):
+            if ch == ".":
+                continue
+            v = int(ch)
+            pal = tones if v <= 4 else (second or tones)
+            img.putpixel((x, y), pal[(v - 1) % 4])
+    return img
+
+
+def glow_of(img: Image.Image, bright: list[Color]) -> Image.Image:
+    glow = Image.new("RGBA", (N, N), (0, 0, 0, 0))
+    for y in range(N):
+        for x in range(N):
+            if img.getpixel((x, y)) in bright:
+                glow.putpixel((x, y), img.getpixel((x, y)))
+    return glow
+
+
+def tones(*hex_values: str) -> list[Color]:
+    return [hexc(v) for v in hex_values]
+
+
+CARBON = tones("#25262b", "#34363c", "#474a52", "#61656f")
+GEMSTONE = tones("#1c6a3c", "#2c9c58", "#5fd88a", "#d2ffe2")
+GEMSTONE_VIOLET = tones("#4a1a72", "#7a34b0", "#ad6ae4", "#f0d8ff")
+KONTERIT = tones("#4c1c6c", "#7e30ac", "#b562e4", "#ecc8ff")
+AETHERIT = tones("#0f5c6c", "#1aa2b6", "#5fdcec", "#dcfcff")
+DRACONIUM = tones("#6e1210", "#b4261e", "#ec6232", "#ffcc9c")
+WYVERNIT = tones("#3c6088", "#6c9cc8", "#a8d0f0", "#f2faff")
+MOONSILVER = tones("#6a7592", "#96a2bc", "#c2cde0", "#eef3fb")
+NIGHTSTEEL = tones("#22204a", "#34346e", "#4c4e98", "#7c80cc")
+SOUL = tones("#0e5c58", "#18a69c", "#58e4d6", "#dafff8")
+ABYSSITE = tones("#4c0c48", "#8c1a82", "#e04ad2", "#ffc4f4")
+MOONSTONE = tones("#34509c", "#6f8fdc", "#b4d0fa", "#f2f8ff")
+MOONSTONE_LILAC = tones("#523e9e", "#8e74d8", "#cbb6f6", "#faf0ff")
+AQUAMARINE = tones("#17406e", "#2f86c0", "#78d2ee", "#dcfcff")
+DUSK_VIOLET = tones("#2a1f45", "#4f3a80", "#8a6cc4", "#e4d8ff")
+DUSK_EMBER = tones("#4e2232", "#8a3f50", "#c8746a", "#ffc4a0")
+SKY_IRON = tones("#3c4660", "#6f7ea2", "#aebfe0", "#f0f6ff")
+SKY_CRUST = tones("#141018", "#2a2229", "#463a40", "#6a5a5a")
+CHRONIT = tones("#7a3a0c", "#c8701e", "#f2aa40", "#ffe6a6")
+CHRONIT_SPARK = tones("#ffd27a", "#fff2c8", "#fff2c8", "#ffffff")
+FIRE_OPAL = tones("#a8260c", "#e85e18", "#ffa02e", "#ffe27a")
+FIRE_OPAL_FLASH = tones("#14784a", "#2fc070", "#7ff0a8", "#e6fff0")
+PHASIT = tones("#0c5a52", "#1a9e8c", "#3ce0c6", "#c8fff2")
+PHASIT_SPARK = tones("#5a1e9a", "#9a4ae0", "#d49cff", "#f6e6ff")
+ECHO = tones("#2c5a80", "#6aa6d0", "#b4e0ff", "#f2fbff")
+ECHO_WAVE = tones("#1c5a72", "#2f98b8", "#6fd8f0", "#cff6ff")
+
+
+def build(put: Callable[[str, Image.Image], None]) -> None:
+    put("block/carbon_ore_overlay", overlay(METAL_A, CARBON))
+    put("block/gemstone_ore_overlay", overlay(GEM_MIXED, GEMSTONE, GEMSTONE_VIOLET))
+    put("block/konterit_ore_overlay", overlay(GEM_C, KONTERIT))
+    aetherit = overlay(mirror(GEM_C), AETHERIT)
+    put("block/aetherit_ore_overlay", aetherit)
+    put("block/aetherit_ore_glow", glow_of(aetherit, AETHERIT[2:]))
+    draconium = overlay(METAL_B, DRACONIUM)
+    put("block/draconium_ore_overlay", draconium)
+    put("block/draconium_ore_glow", glow_of(draconium, DRACONIUM[2:]))
+    put("block/wyvernit_ore_overlay", overlay(mirror(METAL_A), WYVERNIT))
+    put("block/moonsilver_ore_overlay", overlay(METAL_B, MOONSILVER))
+    put("block/nightsteel_ore_overlay", overlay(mirror(METAL_B), NIGHTSTEEL))
+    soul = overlay(GEM_C, SOUL)
+    put("block/soul_crystal_ore_overlay", soul)
+    put("block/soul_crystal_ore_glow", glow_of(soul, SOUL[2:]))
+    abyss = overlay(mirror(METAL_A), ABYSSITE)
+    put("block/abyssite_ore_overlay", abyss)
+    put("block/abyssite_ore_glow", glow_of(abyss, ABYSSITE[2:]))
+    moon = overlay(MOON_STONES, MOONSTONE, MOONSTONE_LILAC)
+    put("block/moonstone_ore_overlay", moon)
+    put("block/moonstone_ore_glow", glow_of(moon, MOONSTONE[2:] + MOONSTONE_LILAC[2:]))
+    aqua = overlay(AQUA_PRISMS, AQUAMARINE)
+    put("block/aquamarine_ore_overlay", aqua)
+    put("block/aquamarine_ore_glow", glow_of(aqua, AQUAMARINE[3:]))
+    dusk = overlay(DUSK_POINTS, DUSK_VIOLET, DUSK_EMBER)
+    put("block/dusk_quartz_ore_overlay", dusk)
+    put("block/dusk_quartz_ore_glow", glow_of(dusk, DUSK_VIOLET[3:] + DUSK_EMBER[2:]))
+    sky = overlay(SKY_IRON_CHUNKS, SKY_IRON, SKY_CRUST)
+    put("block/sky_iron_ore_overlay", sky)
+    put("block/sky_iron_ore_glow", glow_of(sky, SKY_IRON[3:]))
+    chronit = overlay(CHRONIT_POINTS, CHRONIT, CHRONIT_SPARK)
+    put("block/chronit_ore_overlay", chronit)
+    put("block/chronit_ore_glow", glow_of(chronit, CHRONIT[2:] + CHRONIT_SPARK))
+    opal = overlay(FIRE_OPAL_NODES, FIRE_OPAL, FIRE_OPAL_FLASH)
+    put("block/fire_opal_ore_overlay", opal)
+    put("block/fire_opal_ore_glow", glow_of(opal, FIRE_OPAL[2:] + FIRE_OPAL_FLASH[1:]))
+    phasit = overlay(PHASIT_CLUSTERS, PHASIT, PHASIT_SPARK)
+    put("block/phasit_ore_overlay", phasit)
+    put("block/phasit_ore_glow", glow_of(phasit, PHASIT[2:] + PHASIT_SPARK[1:]))
+    echo = overlay(ECHO_CLUSTERS, ECHO, ECHO_WAVE)
+    put("block/echo_crystal_ore_overlay", echo)
+    put("block/echo_crystal_ore_glow", glow_of(echo, ECHO[2:] + ECHO_WAVE[1:]))
+
+
+if __name__ == "__main__":
+    import sys
+    from pathlib import Path
+
+    tex = Path(__file__).resolve().parent.parent / "src/main/resources/assets/kingdomsatwar/textures/block"
+    ref = Path(sys.argv[2]) if len(sys.argv) > 2 else None
+    bases = {"carbon": "stone", "gemstone": "stone", "konterit": "stone", "aetherit": "stone", "draconium": "stone",
+             "wyvernit": "stone", "moonsilver": "shadow_stone", "nightsteel": "shadow_stone",
+             "soul_crystal": "deep_shadow_stone_side", "abyssite": "deep_shadow_stone_side", "dusk_quartz": "shadow_stone", "sky_iron": "void_stone",
+             "chronit": "chaos_stone"}
+    out: dict[str, Image.Image] = {}
+    build(lambda k, v: out.__setitem__(k.split("/")[-1], v))
+    zoom = 6
+    sheet = Image.new("RGB", (5 * (48 * zoom // 2 + 8), 2 * (48 * zoom // 2 + 8)), (40, 40, 40))
+    for i, (mat, base) in enumerate(bases.items()):
+        if base == "stone" and ref is not None:
+            b = Image.open(ref / "stone.png").convert("RGBA")
+        else:
+            b = Image.open(tex / f"{base}.png").convert("RGBA").crop((0, 0, 16, 16))
+        t = b.copy()
+        t.alpha_composite(out[f"{mat}_ore_overlay"])
+        tile = Image.new("RGBA", (32, 32))
+        for k in range(4):
+            tile.paste(t, ((k % 2) * 16, (k // 2) * 16))
+        tile = tile.resize((32 * zoom // 2 * 3 // 2, 32 * zoom // 2 * 3 // 2), Image.NEAREST)
+        sheet.paste(tile, ((i % 5) * (48 * zoom // 2 + 8), (i // 5) * (48 * zoom // 2 + 8)))
+    sheet.save(sys.argv[1] if len(sys.argv) > 1 else "ores_art.png")

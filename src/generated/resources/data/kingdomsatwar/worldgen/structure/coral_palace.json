@@ -1,0 +1,18 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/coral_palace",
+  "kind": "coral_palace",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "full",
+      "spawns": [
+        {
+          "type": "kingdomsatwar:guardian",
+          "count": 1,
+          "weight": 1
+        }
+      ]
+    }
+  },
+  "step": "surface_structures"
+}

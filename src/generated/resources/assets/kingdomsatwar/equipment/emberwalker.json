@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "kingdomsatwar:emberwalker"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "kingdomsatwar:emberwalker"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "kingdomsatwar:emberwalker"
+      }
+    ]
+  }
+}

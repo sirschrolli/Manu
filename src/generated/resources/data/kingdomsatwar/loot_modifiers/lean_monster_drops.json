@@ -1,0 +1,12 @@
+{
+  "type": "kingdomsatwar:lean_drops",
+  "condition": {
+    "type": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {
+      "minecraft:entity_type": "#kingdomsatwar:drops_coins"
+    }
+  },
+  "drop": 0.35,
+  "priority": 0
+}

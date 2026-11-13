@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "L": "minecraft:leather",
+    "N": "kingdomsatwar:nightsteel_ingot"
+  },
+  "pattern": [
+    " N",
+    "L "
+  ],
+  "result": {
+    "id": "kingdomsatwar:nightsteel_dagger"
+  }
+}

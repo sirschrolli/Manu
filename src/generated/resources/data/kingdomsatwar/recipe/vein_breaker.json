@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": "minecraft:amethyst_shard",
+    "N": "kingdomsatwar:nightsteel_ingot",
+    "R": "minecraft:stick"
+  },
+  "pattern": [
+    "NNN",
+    "ARA",
+    " R "
+  ],
+  "result": {
+    "id": "kingdomsatwar:vein_breaker"
+  }
+}

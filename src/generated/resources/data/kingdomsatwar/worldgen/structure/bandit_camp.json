@@ -1,0 +1,18 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/bandit_camp",
+  "kind": "bandit_camp",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "full",
+      "spawns": [
+        {
+          "type": "kingdomsatwar:pillager",
+          "count": 1,
+          "weight": 1
+        }
+      ]
+    }
+  },
+  "step": "top_layer_modification"
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_bait_worm": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:bait_worm"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:bait_glow"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_bait_worm"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:bait_glow"
+    ]
+  }
+}

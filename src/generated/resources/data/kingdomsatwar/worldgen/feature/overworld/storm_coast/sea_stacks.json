@@ -1,0 +1,12 @@
+{
+  "type": "kingdomsatwar:spire",
+  "band": "kingdomsatwar:shale",
+  "band_every": 6,
+  "base_radius": 2.2,
+  "body": "kingdomsatwar:stormstone",
+  "in_water": true,
+  "lean": 0.1,
+  "max_height": 13,
+  "min_height": 5,
+  "tip": "minecraft:air"
+}

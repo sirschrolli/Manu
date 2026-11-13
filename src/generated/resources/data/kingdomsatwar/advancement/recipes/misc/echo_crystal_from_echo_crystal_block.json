@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_echo_crystal_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:echo_crystal_block"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:echo_crystal_from_echo_crystal_block"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_echo_crystal_block"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:echo_crystal_from_echo_crystal_block"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "phase=awake": {
+      "model": "kingdomsatwar:block/soul_bell"
+    },
+    "phase=defeated": {
+      "model": "kingdomsatwar:block/soul_bell_cold"
+    },
+    "phase=sleeping": {
+      "model": "kingdomsatwar:block/soul_bell"
+    }
+  }
+}

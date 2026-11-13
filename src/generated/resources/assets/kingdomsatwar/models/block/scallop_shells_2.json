@@ -1,0 +1,177 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#shell",
+          "uv": [
+            0.0,
+            0.0,
+            10.0,
+            9.0
+          ]
+        },
+        "up": {
+          "texture": "#shell",
+          "uv": [
+            0.0,
+            0.0,
+            10.0,
+            9.0
+          ]
+        }
+      },
+      "from": [
+        2.75,
+        0.3,
+        3.5
+      ],
+      "rotation": {
+        "origin": [
+          5.5,
+          0,
+          6
+        ],
+        "x": 0.0,
+        "y": -30.0,
+        "z": 0.0
+      },
+      "to": [
+        8.25,
+        0.3,
+        8.5
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#shell",
+          "uv": [
+            0.0,
+            0.0,
+            10.0,
+            9.0
+          ]
+        },
+        "up": {
+          "texture": "#shell",
+          "uv": [
+            0.0,
+            0.0,
+            10.0,
+            9.0
+          ]
+        }
+      },
+      "from": [
+        3.3,
+        0.75,
+        3.9
+      ],
+      "rotation": {
+        "origin": [
+          5.5,
+          0,
+          6
+        ],
+        "x": -4.0,
+        "y": -30.0,
+        "z": 0.0
+      },
+      "to": [
+        7.7,
+        0.75,
+        7.6
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#shell",
+          "uv": [
+            0.0,
+            0.0,
+            10.0,
+            9.0
+          ]
+        },
+        "up": {
+          "texture": "#shell",
+          "uv": [
+            0.0,
+            0.0,
+            10.0,
+            9.0
+          ]
+        }
+      },
+      "from": [
+        7.75,
+        0.3,
+        8
+      ],
+      "rotation": {
+        "origin": [
+          10.5,
+          0,
+          10.5
+        ],
+        "x": 0.0,
+        "y": 55.0,
+        "z": 0.0
+      },
+      "to": [
+        13.25,
+        0.3,
+        13
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#shell",
+          "uv": [
+            0.0,
+            0.0,
+            10.0,
+            9.0
+          ]
+        },
+        "up": {
+          "texture": "#shell",
+          "uv": [
+            0.0,
+            0.0,
+            10.0,
+            9.0
+          ]
+        }
+      },
+      "from": [
+        8.3,
+        0.75,
+        8.4
+      ],
+      "rotation": {
+        "origin": [
+          10.5,
+          0,
+          10.5
+        ],
+        "x": -4.0,
+        "y": 55.0,
+        "z": 0.0
+      },
+      "to": [
+        12.7,
+        0.75,
+        12.1
+      ]
+    }
+  ],
+  "textures": {
+    "particle": "kingdomsatwar:block/scallop_shells",
+    "shell": "kingdomsatwar:block/scallop_shells"
+  }
+}

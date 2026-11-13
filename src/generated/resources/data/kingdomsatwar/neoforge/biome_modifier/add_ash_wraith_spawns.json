@@ -1,0 +1,13 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#kingdomsatwar:has_ash_wraiths",
+  "spawners": {
+    "type": "kingdomsatwar:ash_wraith",
+    "count": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 2,
+      "min_inclusive": 1
+    },
+    "weight": 14
+  }
+}

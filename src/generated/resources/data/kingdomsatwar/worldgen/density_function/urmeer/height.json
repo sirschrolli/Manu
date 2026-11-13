@@ -1,0 +1,419 @@
+{
+  "type": "minecraft:cache",
+  "input": {
+    "type": "minecraft:add",
+    "left": {
+      "type": "minecraft:add",
+      "left": {
+        "type": "minecraft:sub",
+        "left": {
+          "type": "minecraft:add",
+          "left": {
+            "type": "minecraft:add",
+            "left": {
+              "type": "minecraft:add",
+              "left": {
+                "type": "minecraft:mul",
+                "left": {
+                  "type": "minecraft:mul",
+                  "left": {
+                    "type": "minecraft:noise",
+                    "noise": "kingdomsatwar:urmeer/hills",
+                    "xz_scale": 1.0,
+                    "y_scale": 0.0
+                  },
+                  "right": 11.0
+                },
+                "right": {
+                  "type": "minecraft:sub",
+                  "left": 1.0,
+                  "right": {
+                    "type": "minecraft:mul",
+                    "left": {
+                      "type": "minecraft:add",
+                      "left": {
+                        "type": "minecraft:mul",
+                        "left": {
+                          "type": "minecraft:clamp",
+                          "input": "kingdomsatwar:urmeer/reef",
+                          "max": 0.35999998,
+                          "min": 0.16
+                        },
+                        "right": 5.0000005
+                      },
+                      "right": -0.8000001
+                    },
+                    "right": 0.7
+                  }
+                }
+              },
+              "right": {
+                "type": "minecraft:mul",
+                "left": {
+                  "type": "minecraft:noise",
+                  "noise": "kingdomsatwar:urmeer/swell",
+                  "xz_scale": 1.0,
+                  "y_scale": 0.0
+                },
+                "right": 2.6
+              }
+            },
+            "right": {
+              "type": "minecraft:mul",
+              "left": {
+                "type": "minecraft:add",
+                "left": {
+                  "type": "minecraft:mul",
+                  "left": {
+                    "type": "minecraft:clamp",
+                    "input": "kingdomsatwar:urmeer/reef",
+                    "max": 0.35999998,
+                    "min": 0.16
+                  },
+                  "right": 5.0000005
+                },
+                "right": -0.8000001
+              },
+              "right": 36.0
+            }
+          },
+          "right": {
+            "type": "minecraft:add",
+            "left": {
+              "type": "minecraft:mul",
+              "left": {
+                "type": "minecraft:add",
+                "left": {
+                  "type": "minecraft:mul",
+                  "left": {
+                    "type": "minecraft:clamp",
+                    "input": "kingdomsatwar:urmeer/islands",
+                    "max": 0.59,
+                    "min": 0.39
+                  },
+                  "right": 5.0000005
+                },
+                "right": -1.9500002
+              },
+              "right": 58.0
+            },
+            "right": {
+              "type": "minecraft:mul",
+              "left": {
+                "type": "minecraft:mul",
+                "left": {
+                  "type": "minecraft:add",
+                  "left": {
+                    "type": "minecraft:mul",
+                    "left": {
+                      "type": "minecraft:clamp",
+                      "input": "kingdomsatwar:urmeer/islands",
+                      "max": 0.59,
+                      "min": 0.39
+                    },
+                    "right": 5.0000005
+                  },
+                  "right": -1.9500002
+                },
+                "right": {
+                  "type": "minecraft:mul",
+                  "left": {
+                    "type": "minecraft:noise",
+                    "noise": "kingdomsatwar:urmeer/hills",
+                    "xz_scale": 1.0,
+                    "y_scale": 0.0
+                  },
+                  "right": 11.0
+                }
+              },
+              "right": 0.6
+            }
+          }
+        },
+        "right": {
+          "type": "minecraft:mul",
+          "left": {
+            "type": "minecraft:mul",
+            "left": {
+              "type": "minecraft:add",
+              "left": {
+                "type": "minecraft:mul",
+                "left": {
+                  "type": "minecraft:clamp",
+                  "input": "kingdomsatwar:urmeer/trench",
+                  "max": -0.33,
+                  "min": -0.48000002
+                },
+                "right": -6.6666665
+              },
+              "right": -2.2
+            },
+            "right": {
+              "type": "minecraft:sub",
+              "left": 1.0,
+              "right": {
+                "type": "minecraft:add",
+                "left": {
+                  "type": "minecraft:mul",
+                  "left": {
+                    "type": "minecraft:clamp",
+                    "input": "kingdomsatwar:urmeer/islands",
+                    "max": 0.59,
+                    "min": 0.39
+                  },
+                  "right": 5.0000005
+                },
+                "right": -1.9500002
+              }
+            }
+          },
+          "right": 70.0
+        }
+      },
+      "right": 56.0
+    },
+    "right": {
+      "type": "minecraft:mul",
+      "left": {
+        "type": "minecraft:mul",
+        "left": {
+          "type": "minecraft:mul",
+          "left": {
+            "type": "minecraft:add",
+            "left": {
+              "type": "minecraft:mul",
+              "left": {
+                "type": "minecraft:clamp",
+                "input": {
+                  "type": "minecraft:noise",
+                  "noise": "kingdomsatwar:urmeer/spires",
+                  "xz_scale": 1.0,
+                  "y_scale": 0.0
+                },
+                "max": 0.68,
+                "min": 0.6
+              },
+              "right": 12.500003
+            },
+            "right": -7.500002
+          },
+          "right": {
+            "type": "minecraft:max",
+            "left": {
+              "type": "minecraft:sub",
+              "left": 89.0,
+              "right": {
+                "type": "minecraft:add",
+                "left": {
+                  "type": "minecraft:sub",
+                  "left": {
+                    "type": "minecraft:add",
+                    "left": {
+                      "type": "minecraft:add",
+                      "left": {
+                        "type": "minecraft:add",
+                        "left": {
+                          "type": "minecraft:mul",
+                          "left": {
+                            "type": "minecraft:mul",
+                            "left": {
+                              "type": "minecraft:noise",
+                              "noise": "kingdomsatwar:urmeer/hills",
+                              "xz_scale": 1.0,
+                              "y_scale": 0.0
+                            },
+                            "right": 11.0
+                          },
+                          "right": {
+                            "type": "minecraft:sub",
+                            "left": 1.0,
+                            "right": {
+                              "type": "minecraft:mul",
+                              "left": {
+                                "type": "minecraft:add",
+                                "left": {
+                                  "type": "minecraft:mul",
+                                  "left": {
+                                    "type": "minecraft:clamp",
+                                    "input": "kingdomsatwar:urmeer/reef",
+                                    "max": 0.35999998,
+                                    "min": 0.16
+                                  },
+                                  "right": 5.0000005
+                                },
+                                "right": -0.8000001
+                              },
+                              "right": 0.7
+                            }
+                          }
+                        },
+                        "right": {
+                          "type": "minecraft:mul",
+                          "left": {
+                            "type": "minecraft:noise",
+                            "noise": "kingdomsatwar:urmeer/swell",
+                            "xz_scale": 1.0,
+                            "y_scale": 0.0
+                          },
+                          "right": 2.6
+                        }
+                      },
+                      "right": {
+                        "type": "minecraft:mul",
+                        "left": {
+                          "type": "minecraft:add",
+                          "left": {
+                            "type": "minecraft:mul",
+                            "left": {
+                              "type": "minecraft:clamp",
+                              "input": "kingdomsatwar:urmeer/reef",
+                              "max": 0.35999998,
+                              "min": 0.16
+                            },
+                            "right": 5.0000005
+                          },
+                          "right": -0.8000001
+                        },
+                        "right": 36.0
+                      }
+                    },
+                    "right": {
+                      "type": "minecraft:add",
+                      "left": {
+                        "type": "minecraft:mul",
+                        "left": {
+                          "type": "minecraft:add",
+                          "left": {
+                            "type": "minecraft:mul",
+                            "left": {
+                              "type": "minecraft:clamp",
+                              "input": "kingdomsatwar:urmeer/islands",
+                              "max": 0.59,
+                              "min": 0.39
+                            },
+                            "right": 5.0000005
+                          },
+                          "right": -1.9500002
+                        },
+                        "right": 58.0
+                      },
+                      "right": {
+                        "type": "minecraft:mul",
+                        "left": {
+                          "type": "minecraft:mul",
+                          "left": {
+                            "type": "minecraft:add",
+                            "left": {
+                              "type": "minecraft:mul",
+                              "left": {
+                                "type": "minecraft:clamp",
+                                "input": "kingdomsatwar:urmeer/islands",
+                                "max": 0.59,
+                                "min": 0.39
+                              },
+                              "right": 5.0000005
+                            },
+                            "right": -1.9500002
+                          },
+                          "right": {
+                            "type": "minecraft:mul",
+                            "left": {
+                              "type": "minecraft:noise",
+                              "noise": "kingdomsatwar:urmeer/hills",
+                              "xz_scale": 1.0,
+                              "y_scale": 0.0
+                            },
+                            "right": 11.0
+                          }
+                        },
+                        "right": 0.6
+                      }
+                    }
+                  },
+                  "right": {
+                    "type": "minecraft:mul",
+                    "left": {
+                      "type": "minecraft:mul",
+                      "left": {
+                        "type": "minecraft:add",
+                        "left": {
+                          "type": "minecraft:mul",
+                          "left": {
+                            "type": "minecraft:clamp",
+                            "input": "kingdomsatwar:urmeer/trench",
+                            "max": -0.33,
+                            "min": -0.48000002
+                          },
+                          "right": -6.6666665
+                        },
+                        "right": -2.2
+                      },
+                      "right": {
+                        "type": "minecraft:sub",
+                        "left": 1.0,
+                        "right": {
+                          "type": "minecraft:add",
+                          "left": {
+                            "type": "minecraft:mul",
+                            "left": {
+                              "type": "minecraft:clamp",
+                              "input": "kingdomsatwar:urmeer/islands",
+                              "max": 0.59,
+                              "min": 0.39
+                            },
+                            "right": 5.0000005
+                          },
+                          "right": -1.9500002
+                        }
+                      }
+                    },
+                    "right": 70.0
+                  }
+                },
+                "right": 56.0
+              }
+            },
+            "right": 0.0
+          }
+        },
+        "right": {
+          "type": "minecraft:add",
+          "left": {
+            "type": "minecraft:mul",
+            "left": {
+              "type": "minecraft:clamp",
+              "input": {
+                "type": "minecraft:noise",
+                "noise": "kingdomsatwar:urmeer/swell",
+                "xz_scale": 1.0,
+                "y_scale": 0.0
+              },
+              "max": 0.5,
+              "min": -0.5
+            },
+            "right": 0.55
+          },
+          "right": 0.725
+        }
+      },
+      "right": {
+        "type": "minecraft:sub",
+        "left": 1.0,
+        "right": {
+          "type": "minecraft:add",
+          "left": {
+            "type": "minecraft:mul",
+            "left": {
+              "type": "minecraft:clamp",
+              "input": "kingdomsatwar:urmeer/trench",
+              "max": -0.33,
+              "min": -0.48000002
+            },
+            "right": -6.6666665
+          },
+          "right": -2.2
+        }
+      }
+    }
+  }
+}

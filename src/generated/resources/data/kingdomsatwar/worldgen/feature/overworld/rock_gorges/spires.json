@@ -1,0 +1,12 @@
+{
+  "type": "kingdomsatwar:spire",
+  "band": "kingdomsatwar:shale",
+  "band_every": 3,
+  "base_radius": 2.0,
+  "body": "minecraft:tuff",
+  "in_water": false,
+  "lean": 0.08,
+  "max_height": 18,
+  "min_height": 7,
+  "tip": "minecraft:air"
+}

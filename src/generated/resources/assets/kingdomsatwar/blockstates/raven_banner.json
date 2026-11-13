@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "kingdomsatwar:block/raven_banner",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "kingdomsatwar:block/raven_banner"
+    },
+    "facing=south": {
+      "model": "kingdomsatwar:block/raven_banner",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "kingdomsatwar:block/raven_banner",
+      "y": 270
+    }
+  }
+}

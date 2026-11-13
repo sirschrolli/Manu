@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "blocks",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": "kingdomsatwar:sealstone_bricks",
+  "result": {
+    "id": "kingdomsatwar:cracked_sealstone_bricks"
+  }
+}

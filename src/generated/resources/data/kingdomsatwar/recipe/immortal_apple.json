@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": "kingdomsatwar:creator_spark",
+    "D": "kingdomsatwar:dragon_apple",
+    "H": "kingdomsatwar:heart_crystal",
+    "M": "kingdomsatwar:mana_crystal",
+    "N": "minecraft:nether_star",
+    "S": "kingdomsatwar:star_apple",
+    "X": "kingdomsatwar:shadow_apple"
+  },
+  "pattern": [
+    "HDM",
+    "SCX",
+    "MNH"
+  ],
+  "result": {
+    "id": "kingdomsatwar:immortal_apple"
+  }
+}

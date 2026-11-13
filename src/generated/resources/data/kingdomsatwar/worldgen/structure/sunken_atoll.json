@@ -1,0 +1,11 @@
+{
+  "type": "kingdomsatwar:sunken_atoll",
+  "biomes": "#kingdomsatwar:has_sunken_atoll",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "full",
+      "spawns": []
+    }
+  },
+  "step": "top_layer_modification"
+}

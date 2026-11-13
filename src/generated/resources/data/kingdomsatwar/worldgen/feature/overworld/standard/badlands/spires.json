@@ -1,0 +1,12 @@
+{
+  "type": "kingdomsatwar:spire",
+  "band": "minecraft:white_terracotta",
+  "band_every": 4,
+  "base_radius": 1.8,
+  "body": "minecraft:orange_terracotta",
+  "in_water": false,
+  "lean": 0.08,
+  "max_height": 16,
+  "min_height": 7,
+  "tip": "minecraft:red_sandstone"
+}

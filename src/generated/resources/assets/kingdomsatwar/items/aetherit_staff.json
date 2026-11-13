@@ -1,0 +1,124 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "entries": [
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "kingdomsatwar:item/aetherit_staff_apprentice",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": -1
+            },
+            {
+              "type": "minecraft:custom_model_data",
+              "default": 13081599
+            }
+          ]
+        },
+        "threshold": -0.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "kingdomsatwar:item/aetherit_staff_adept",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": -1
+            },
+            {
+              "type": "minecraft:custom_model_data",
+              "default": 13081599
+            }
+          ]
+        },
+        "threshold": 0.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "kingdomsatwar:item/aetherit_staff_mage",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": -1
+            },
+            {
+              "type": "minecraft:custom_model_data",
+              "default": 13081599
+            }
+          ]
+        },
+        "threshold": 1.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "kingdomsatwar:item/aetherit_staff_magister",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": -1
+            },
+            {
+              "type": "minecraft:custom_model_data",
+              "default": 13081599
+            }
+          ]
+        },
+        "threshold": 2.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "kingdomsatwar:item/aetherit_staff_archmage",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": -1
+            },
+            {
+              "type": "minecraft:custom_model_data",
+              "default": 13081599
+            }
+          ]
+        },
+        "threshold": 3.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "kingdomsatwar:item/aetherit_staff_aetherlord",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": -1
+            },
+            {
+              "type": "minecraft:custom_model_data",
+              "default": 13081599
+            }
+          ]
+        },
+        "threshold": 4.5
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "kingdomsatwar:item/aetherit_staff_apprentice",
+      "tints": [
+        {
+          "type": "minecraft:constant",
+          "value": -1
+        },
+        {
+          "type": "minecraft:custom_model_data",
+          "default": 13081599
+        }
+      ]
+    },
+    "property": "minecraft:custom_model_data"
+  }
+}

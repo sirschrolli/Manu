@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:cobbled_deep_shadow_stone",
+  "result": {
+    "id": "kingdomsatwar:cobbled_deep_shadow_stone_stairs"
+  }
+}

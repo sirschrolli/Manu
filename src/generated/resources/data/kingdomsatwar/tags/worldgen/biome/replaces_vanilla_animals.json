@@ -1,0 +1,13 @@
+{
+  "values": [
+    "#minecraft:is_overworld",
+    "kingdomsatwar:royal_meadows",
+    "kingdomsatwar:primeval_forest",
+    "kingdomsatwar:rock_gorges",
+    "kingdomsatwar:frost_peaks",
+    "kingdomsatwar:ash_fields",
+    "kingdomsatwar:storm_coast",
+    "kingdomsatwar:coral_coast",
+    "kingdomsatwar:mist_moor"
+  ]
+}

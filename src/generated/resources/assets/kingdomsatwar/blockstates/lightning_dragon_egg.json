@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "hatch=0": {
+      "model": "kingdomsatwar:block/lightning_dragon_egg"
+    },
+    "hatch=1": {
+      "model": "kingdomsatwar:block/lightning_dragon_egg_hatch_1"
+    },
+    "hatch=2": {
+      "model": "kingdomsatwar:block/lightning_dragon_egg_hatch_2"
+    },
+    "hatch=3": {
+      "model": "kingdomsatwar:block/lightning_dragon_egg_hatch_3"
+    }
+  }
+}

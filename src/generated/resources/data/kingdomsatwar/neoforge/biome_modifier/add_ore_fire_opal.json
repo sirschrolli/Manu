@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_nether",
+  "features": "kingdomsatwar:ore_fire_opal",
+  "step": "underground_ores"
+}

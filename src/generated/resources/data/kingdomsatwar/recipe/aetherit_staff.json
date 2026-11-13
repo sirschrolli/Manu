@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "H": "kingdomsatwar:reinforced_handle",
+    "K": "kingdomsatwar:aether_core",
+    "S": "kingdomsatwar:steel_ingot"
+  },
+  "pattern": [
+    " SK",
+    " HS",
+    "H  "
+  ],
+  "result": {
+    "id": "kingdomsatwar:aetherit_staff"
+  }
+}

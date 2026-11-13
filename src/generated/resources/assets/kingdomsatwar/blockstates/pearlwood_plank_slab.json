@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "kingdomsatwar:block/pearlwood_plank_slab"
+    },
+    "type=double": {
+      "model": "kingdomsatwar:block/pearlwood_planks"
+    },
+    "type=top": {
+      "model": "kingdomsatwar:block/pearlwood_plank_slab_top"
+    }
+  }
+}

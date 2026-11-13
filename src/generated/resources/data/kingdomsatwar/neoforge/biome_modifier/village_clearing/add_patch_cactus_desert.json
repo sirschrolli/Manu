@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "minecraft:desert",
+  "features": "kingdomsatwar:village_safe/patch_cactus_desert",
+  "step": "vegetal_decoration"
+}

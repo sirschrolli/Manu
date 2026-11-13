@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "kingdomsatwar:block/moonbell",
+    "layer1": "kingdomsatwar:block/moonbell_emissive"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "values": [
+    "#minecraft:is_ocean",
+    "#minecraft:is_beach",
+    "kingdomsatwar:coral_coast",
+    "kingdomsatwar:storm_coast",
+    "kingdomsatwar:urmeer_deep",
+    "kingdomsatwar:urmeer_isles",
+    "kingdomsatwar:urmeer_kelp_forest",
+    "kingdomsatwar:urmeer_pearl_grounds"
+  ]
+}

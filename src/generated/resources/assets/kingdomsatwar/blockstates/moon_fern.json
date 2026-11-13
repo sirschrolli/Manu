@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "kingdomsatwar:block/moon_fern_bottom"
+    },
+    "half=upper": {
+      "model": "kingdomsatwar:block/moon_fern_top"
+    }
+  }
+}

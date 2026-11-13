@@ -1,0 +1,46 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#wood"
+        },
+        "east": {
+          "cullface": "east",
+          "texture": "#wood"
+        },
+        "north": {
+          "cullface": "north",
+          "texture": "#wood"
+        },
+        "south": {
+          "cullface": "south",
+          "texture": "#wood"
+        },
+        "up": {
+          "cullface": "up",
+          "texture": "#wood"
+        },
+        "west": {
+          "cullface": "west",
+          "texture": "#wood"
+        }
+      },
+      "from": [
+        0,
+        14,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ]
+    }
+  ],
+  "textures": {
+    "particle": "minecraft:block/oak_planks",
+    "wood": "minecraft:block/oak_planks"
+  }
+}

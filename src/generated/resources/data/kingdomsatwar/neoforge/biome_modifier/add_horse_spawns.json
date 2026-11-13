@@ -1,0 +1,13 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#kingdomsatwar:has_horses",
+  "spawners": {
+    "type": "kingdomsatwar:horse",
+    "count": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 6,
+      "min_inclusive": 2
+    },
+    "weight": 5
+  }
+}

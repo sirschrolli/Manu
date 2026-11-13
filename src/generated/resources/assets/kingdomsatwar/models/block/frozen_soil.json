@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "kingdomsatwar:block/frozen_soil_bottom",
+    "side": "kingdomsatwar:block/frozen_soil_side",
+    "top": "kingdomsatwar:block/frozen_soil_top"
+  }
+}

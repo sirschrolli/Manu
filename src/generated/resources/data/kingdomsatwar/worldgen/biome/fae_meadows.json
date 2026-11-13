@@ -1,0 +1,105 @@
+{
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "mood": {
+        "block_search_extent": 8,
+        "offset": 2.0,
+        "sound": "minecraft:ambient.cave",
+        "tick_delay": 6000
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "minecraft:music.overworld.cherry_grove"
+      }
+    },
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": {
+          "ambient": [
+            {
+              "type": "kingdomsatwar:fae_wisp",
+              "count": 1,
+              "weight": 4
+            }
+          ],
+          "creature": [
+            {
+              "type": "kingdomsatwar:fairy",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 4,
+                "min_inclusive": 2
+              },
+              "weight": 14
+            },
+            {
+              "type": "minecraft:rabbit",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 3,
+                "min_inclusive": 2
+              },
+              "weight": 6
+            }
+          ]
+        }
+      },
+      "modifier": "overlay"
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "kingdomsatwar:fae_spark"
+        },
+        "probability": 0.0025
+      }
+    ],
+    "minecraft:visual/fog_color": "#f2a27c",
+    "minecraft:visual/sky_color": "#7a5ab8",
+    "minecraft:visual/water_fog_color": "#2a2a6a"
+  },
+  "carvers": [],
+  "downfall": 0.6,
+  "effects": {
+    "dry_foliage_color": "#f6a6c8",
+    "foliage_color": "#f6a6c8",
+    "grass_color": "#a6f0be",
+    "water_color": "#4fa8d8"
+  },
+  "features": [
+    [],
+    [],
+    [
+      "kingdomsatwar:fae/boulders"
+    ],
+    [],
+    [
+      "kingdomsatwar:fae/mondhain",
+      "kingdomsatwar:fae/mystik_stage",
+      "kingdomsatwar:fae/moonstone_quarry",
+      "kingdomsatwar:fae/ruins"
+    ],
+    [],
+    [
+      "kingdomsatwar:fae/ore_moonstone"
+    ],
+    [],
+    [],
+    [
+      "kingdomsatwar:fae/meadow_trees",
+      "kingdomsatwar:fae/giant_mushrooms_rare",
+      "kingdomsatwar:fae/sprouts_dense",
+      "kingdomsatwar:fae/meadow_flowers",
+      "kingdomsatwar:fae/starlace",
+      "kingdomsatwar:fae/lantern_mushrooms_rare",
+      "kingdomsatwar:fae/moon_lilies_rare",
+      "kingdomsatwar:fae/fairy_rings"
+    ]
+  ],
+  "has_precipitation": false,
+  "temperature": 0.7
+}

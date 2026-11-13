@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "kingdomsatwar:block/tide_gate_ns"
+    },
+    "axis=z": {
+      "model": "kingdomsatwar:block/tide_gate_ew"
+    }
+  }
+}

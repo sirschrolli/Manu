@@ -1,0 +1,19 @@
+{
+  "feature": "kingdomsatwar:void/shard_spires_hanging",
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 2
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "kingdomsatwar:any_surface",
+      "ceiling": true
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

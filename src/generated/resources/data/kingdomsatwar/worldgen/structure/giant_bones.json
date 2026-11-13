@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/giant_bones",
+  "kind": "giant_bones",
+  "spawn_overrides": {},
+  "step": "underground_decoration"
+}
