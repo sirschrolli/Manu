@@ -450,6 +450,33 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> ROBBER_KNIGHT_FALL = register("entity.robber_knight.fall");
     public static final DeferredHolder<SoundEvent, SoundEvent> RAVEN_BANNER_TEAR = register("block.raven_banner.tear");
     public static final DeferredHolder<SoundEvent, SoundEvent> MORNING_STAR_SMASH = register("item.morning_star.smash");
+    // Ventor, der Gladiator der Winde (1.9), das Arenasiegel, der Sturmdreizack und das Wurfnetz
+    public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_AWAKEN = register("entity.ventor.awaken");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_SHOUT = register("entity.ventor.shout");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_CROWD = register("entity.ventor.crowd");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_AMBIENT = register("entity.ventor.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_HURT = register("entity.ventor.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_DEATH = register("entity.ventor.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_FALL = register("entity.ventor.fall");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_GATHER = register("entity.ventor.gather");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_GUST = register("entity.ventor.gust");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_SLAM = register("entity.ventor.slam");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_THRUST = register("entity.ventor.thrust");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_STAB = register("entity.ventor.stab");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_NET = register("entity.ventor.net");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_THROW = register("entity.ventor.throw");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_VORTEX = register("entity.ventor.vortex");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_RISE = register("entity.ventor.rise");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_DIVE = register("entity.ventor.dive");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_IMPACT = register("entity.ventor.impact");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_CYCLONE = register("entity.ventor.cyclone");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_RAGE = register("entity.ventor.rage");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_STORM = register("entity.ventor.storm");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WIND_VORTEX_HOWL = register("entity.wind_vortex.howl");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ARENA_SEAL_CAGE = register("block.arena_seal.cage");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ARENA_SEAL_READY = register("block.arena_seal.ready");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STORM_TRIDENT_BURST = register("item.storm_trident.burst");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GLADIATOR_NET_SNARE = register("item.gladiator_net.snare");
     public static final DeferredHolder<SoundEvent, SoundEvent> VOID_THRONE_KINDLE = register("block.void_throne.kindle");
     public static final DeferredHolder<SoundEvent, SoundEvent> PHASE_BLADE_DASH = register("item.phase_blade.dash");
     // seit 1.6: die Echoortung der Rüstung der Lauscher

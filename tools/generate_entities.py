@@ -34,7 +34,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               star_weaver,
                               hour_warden, clock_gear, clock_pendulum,
                               armor_parts,
-                              fairy, mushroomling, thorn_wight, moth_queen, glutschmied, ignara, phasmor, sordin, robber_knight, asteria, stone_keeper, keeper_boulder,
+                              fairy, mushroomling, thorn_wight, moth_queen, glutschmied, ignara, phasmor, sordin, robber_knight, ventor, ventor_wind, asteria, stone_keeper, keeper_boulder,
                               miss_mystik, light_dove, magic_sword, anni_troll,
                               werewolf, mire_shambler, ember_wyrm, ash_wraith, soul_heron, night_ram, rift_hound, chorus_maw,
                               world_eater, world_eater_segment, world_eater_tail, world_chunk,
@@ -116,6 +116,15 @@ def main():
     write_model(robber_knight, "RobberKnightGeometry",
                 "Geometrie von Kuno von Rabenfels, dem Raubritter, und seinem Ross (1.8; im Spiel 1,1-fach vergrößert).",
                 "robber_knight", robber_knight.PALETTES, preview)
+    write_model(ventor, "VentorGeometry",
+                "Geometrie von Ventor, dem Gladiator der Winde (1.9; im Spiel 1,1-fach vergrößert): Leib, Helm, Dreizack, Netz, Windfäden.",
+                "ventor", ventor.PALETTES, preview)
+    write_model(ventor_wind, "VentorWindGeometry",
+                "Geometrie von Ventors Wind-Ebene (gleiche Knochen wie VentorGeometry, nur der Dunst der Ringe; das Bild rollt).",
+                "ventor", ventor_wind.PALETTES, preview)
+    if not ONLY or "VentorWindGeometry" in ONLY:
+        wind_img, _ = ventor_wind.full_texture()          # die Wind-Textur rollt: das ganze Bild, nicht nur die Flächen
+        wind_img.save(TEX / "ventor" / "wind.png")
     write_model(stone_keeper, "StoneKeeperGeometry", "Geometrie des Steinhüters (im Spiel 1,4-fach vergrößert).",
                 "stone_keeper", stone_keeper.PALETTES, preview)
     write_model(keeper_boulder, "KeeperBoulderGeometry", "Geometrie des Felsbrockens, den der Steinhüter schleudert.",

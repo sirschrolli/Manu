@@ -496,6 +496,11 @@ public class SkyBoltEntity extends Entity {
                 victim.addEffect(new MobEffectInstance(MobEffects.GLOWING, 160, 0), owner);
                 pull(victim, owner, 0.8);
             }
+            case WIND -> {
+                victim.addEffect(new MobEffectInstance(MobEffects.NAUSEA, 120, 0), owner);
+                victim.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 80, 0), owner);
+                pull(victim, owner, 1.0);
+            }
             case GLITCH -> this.rubberBand(level, victim, owner);
             case VOID -> victim.addEffect(new MobEffectInstance(MobEffects.WITHER, 100, 1), owner);
             case MAW -> pull(victim, owner, 1.3);

@@ -353,6 +353,13 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         add(ItemTags.MELEE_WEAPON_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.CastleGear.MORNING_STAR);
         add(ItemTags.SHARP_WEAPON_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.CastleGear.MORNING_STAR);
         add(net.neoforged.neoforge.common.Tags.Items.MELEE_WEAPON_TOOLS, io.github.sirschrolli.kingdomsatwar.registry.CastleGear.MORNING_STAR);
+        // der Sturmdreizack (1.9): eine Stichwaffe wie ein Dreizack (Schärfe, Haltbarkeit …), mit Böenruten auszubessern
+        tag(ModTags.Items.REPAIRS_STORM_TRIDENT).add(net.minecraft.core.registries.BuiltInRegistries.ITEM.getResourceKey(
+                net.minecraft.world.item.Items.BREEZE_ROD).orElseThrow());
+        add(ItemTags.DURABILITY_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.ArenaGear.STORM_TRIDENT);
+        add(ItemTags.MELEE_WEAPON_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.ArenaGear.STORM_TRIDENT);
+        add(ItemTags.SHARP_WEAPON_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.ArenaGear.STORM_TRIDENT);
+        add(net.neoforged.neoforge.common.Tags.Items.MELEE_WEAPON_TOOLS, io.github.sirschrolli.kingdomsatwar.registry.ArenaGear.STORM_TRIDENT);
         add(ItemTags.HEAD_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_HELMET);
         add(ItemTags.CHEST_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_CHESTPLATE);
         add(ItemTags.LEG_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_LEGGINGS);

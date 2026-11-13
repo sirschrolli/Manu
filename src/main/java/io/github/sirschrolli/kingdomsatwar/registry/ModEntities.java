@@ -513,6 +513,23 @@ public final class ModEntities {
             ENTITIES.registerEntityType("robber_knight", io.github.sirschrolli.kingdomsatwar.entity.castle.RobberKnightEntity::new,
                     MobCategory.MONSTER, builder -> builder.sized(1.7f, 3.3f).eyeHeight(2.95f).notInPeaceful()
                             .clientTrackingRange(16).updateInterval(2));
+    /** Ventor, der Gladiator der Winde (1.9): steigt aus dem Spawner der Böen, sobald alle Käfige der Arena bezwungen sind. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.arena.VentorEntity>> VENTOR =
+            ENTITIES.registerEntityType("ventor", io.github.sirschrolli.kingdomsatwar.entity.arena.VentorEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(1.4f, 3.3f).eyeHeight(2.9f).notInPeaceful()
+                            .clientTrackingRange(16).updateInterval(2));
+    /** Ventors Sturmdreizack im Flug (auch der des Spielers): Böe beim Aufschlag, kehrt in die Hand zurück. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.arena.StormTridentEntity>> STORM_TRIDENT =
+            ENTITIES.registerEntityType("storm_trident", io.github.sirschrolli.kingdomsatwar.entity.arena.StormTridentEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(0.5f, 0.5f).eyeHeight(0.13f).noLootTable().clientTrackingRange(8).updateInterval(20));
+    /** Ein geworfenes Wurfnetz (Ventors oder eines Spielers). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.arena.GladiatorNetEntity>> GLADIATOR_NET =
+            ENTITIES.registerEntityType("gladiator_net", io.github.sirschrolli.kingdomsatwar.entity.arena.GladiatorNetEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(0.5f, 0.5f).noLootTable().clientTrackingRange(8).updateInterval(1));
+    /** Eine Windhose, die Ventor ruft. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.arena.WindVortexEntity>> WIND_VORTEX =
+            ENTITIES.registerEntityType("wind_vortex", io.github.sirschrolli.kingdomsatwar.entity.arena.WindVortexEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(1.2f, 3.2f).noLootTable().noSave().clientTrackingRange(10).updateInterval(1));
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.deep.SordinEntity>> SORDIN =
             ENTITIES.registerEntityType("sordin", io.github.sirschrolli.kingdomsatwar.entity.deep.SordinEntity::new,
                     MobCategory.MONSTER, builder -> builder.sized(1.1f, 3.6f).eyeHeight(3.2f).notInPeaceful()
@@ -1033,6 +1050,7 @@ public final class ModEntities {
         event.put(PHASMOR.get(), io.github.sirschrolli.kingdomsatwar.entity.end.PhasmorEntity.createAttributes().build());
         event.put(SORDIN.get(), io.github.sirschrolli.kingdomsatwar.entity.deep.SordinEntity.createAttributes().build());
         event.put(ROBBER_KNIGHT.get(), io.github.sirschrolli.kingdomsatwar.entity.castle.RobberKnightEntity.createAttributes().build());
+        event.put(VENTOR.get(), io.github.sirschrolli.kingdomsatwar.entity.arena.VentorEntity.createAttributes().build());
         event.put(PHASMOR_ILLUSION.get(), io.github.sirschrolli.kingdomsatwar.entity.end.PhasmorIllusion.createAttributes().build());
         event.put(MISS_MYSTIK.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MissMystikEntity.createAttributes().build());
         event.put(MYSTIK_IMAGE.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MystikImageEntity.createAttributes().build());

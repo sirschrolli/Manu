@@ -57,7 +57,9 @@ public enum SkyTheme {
     /** Sordin, der Kantor der Stille (1.7): der Getroffene ist vom Klang benommen (Übelkeit) und wird zu ihm gezogen. */
     ECHO(2, 0x29DFEB, 0xE6FFFF, () -> ParticleTypes.SCULK_SOUL),
     /** Kuno von Rabenfels, der Raubritter (1.8): ein Bolzen holt den Getroffenen vom Himmel – er ist eine Weile schwerfällig. */
-    RAVEN(2, 0xE4C254, 0xFFF6CC, () -> ParticleTypes.CRIT);
+    RAVEN(2, 0xE4C254, 0xFFF6CC, () -> ParticleTypes.CRIT),
+    /** Ventor, der Gladiator der Winde (1.9): der Sturm wirbelt den Getroffenen herum – ihm wird schwindlig, er stürzt. */
+    WIND(2, 0x62DBE8, 0xE6FFFF, () -> ParticleTypes.SMALL_GUST);
 
     private static final SkyTheme[] VALUES = values();
 
