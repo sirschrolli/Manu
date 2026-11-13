@@ -394,11 +394,12 @@ final class PhasmorGameTests {
     /**
      * Das Phasenheiligtum: auf dem Absatz der Stufen steht der Leerenthron (wachend, mit Blick nach vorn), unten vor den
      * Stufen ist Platz für den knienden König; neben dem Thron zwei Truhen mit Beute, dahinter die Wand mit dem Auge aus
-     * Phasit. Gebaut wird nur ein Ausschnitt um Thron und Stufen, hoch über dem Test (so bleiben die Nachbartests unberührt).
+     * Phasit. Gebaut wird nur ein Ausschnitt um Thron und Stufen, hoch über dem Test – in einer Höhe, die kein anderer Test
+     * benutzt (auf 110 bauen schon andere, deren Plattformen über ihr Testfeld hinausreichen).
      */
     private static void sanctuary(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        BlockPos origin = helper.absolutePos(new BlockPos(4, 110, 14));
+        BlockPos origin = helper.absolutePos(new BlockPos(4, 160, 14));
         var sanctum = SiteSamples.phaseSanctum(origin);
         BlockPos thronePos = SiteSamples.phaseSanctumThrone(sanctum);
         var box = BoundingBox.fromCorners(SiteSamples.phaseSanctumAt(sanctum, -6, -2, -15), SiteSamples.phaseSanctumAt(sanctum, 6, 12, -4));
@@ -436,7 +437,7 @@ final class PhasmorGameTests {
             level.setBlock(p, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
         }
         // gedreht blickt der Thron mit – der König kniet immer zwischen Thron und Mitte
-        var turned = SiteSamples.phaseSanctum(helper.absolutePos(new BlockPos(-7, 126, 4)), Rotation.CLOCKWISE_90);
+        var turned = SiteSamples.phaseSanctum(helper.absolutePos(new BlockPos(-7, 180, 4)), Rotation.CLOCKWISE_90);
         BlockPos turnedThrone = SiteSamples.phaseSanctumThrone(turned);
         var small = BoundingBox.fromCorners(turnedThrone.offset(-1, -1, -1), turnedThrone.offset(1, 1, 1));
         turned.postProcess(level, level.structureManager(), level.getChunkSource().getGenerator(), net.minecraft.util.RandomSource.create(5), small,

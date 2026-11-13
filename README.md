@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Version 1.4 – Phasit und die Rüstung der Leerwandler.** Auf den **äußeren Inseln des Ends** schimmert jetzt **Phasiterz** im Endstein – türkise Büschel, wo die Leerwandler seit Äonen hin und her springen (ab der Diamantspitzhacke; auf der Hauptinsel des Drachen nicht). Aus **Phasit**, einem türkisen Kristall mit einem violetten Funken darin, baut man den **Phasitblock** (Licht 8, Sockel für ein Leuchtfeuer) und die **Rüstung der Leerwandler** (mit Enderperlen, die Stiefel mit Chorusfrüchten; Schutz wie Diamant): eine Kapuze mit leuchtenden Augenschlitzen und einer **Krone aus Phasitsplittern**, ein langer **Mantel** mit türkis leuchtenden Fäden und einem Phasit auf der Brust, Schulterplatten mit **schwebenden Splittern**, Stiefel auf **Schwebesohlen** – alles in 3D. **Phasenschritt** (jeder Teil): Trifft dich ein Wesen im Nahkampf, weichst du mit 6 % je Teil (mit allen vier 24 %) **dem Hieb ganz aus** und springst vier bis acht Blöcke fort, weg vom Angreifer – zurück bleibt ein türkises Nachbild (höchstens alle drei Sekunden). **Schwebende Sohlen** (Stiefel): **Enderperlen** tun nicht mehr weh. **Einer von ihnen** (alle vier Teile): Die **Leerwandler** werden nicht wütend, wenn du sie ansiehst.
+> **Version 1.5 – Phasmor, der Leerwandlerkönig, und das Phasenheiligtum.** Über den **äußeren Inseln des Ends** schwebt jetzt das **Phasenheiligtum**: eine runde Plattform aus Endsteinziegeln mit einem Mosaik aus Purpur, Obsidian und **Phasit**, darunter ein Zapfen voller Phasiterz, acht Säulen mit Phasitkristallen, schwebende Stufen hinab zur Insel – und hinten, auf drei Stufen vor einer Wand mit einem **Auge aus Phasit**, der **Leerenthron**. Davor kniet **Phasmor, der Leerwandlerkönig**, und hält Wache, die Klinge vor sich im Boden – wer ihm zu nahe kommt, weckt ihn. Fast fünf Blöcke groß, eine Krone aus schwebenden Phasitsplittern, kämpft er mit seiner **Phasenklinge**: **Klingenhieb**, **Phasenstoß** (er zerfließt und steht hinter dir), **Trugbilder**, die aussehen wie er (jeder Treffer lässt eines zerfallen), **Blockwurf** (Brocken aus dem Heiligtum steigen um ihn auf und fliegen auf dich), **Leerenrisse** (wer darin steht, wird verschluckt und hoch über dem Heiligtum ausgespuckt) – und unter halber Kraft setzt er die **Krone** auf und rast im **Phasensturm** von Gegner zu Gegner. Geschossen weicht er oft aus, aber **Wasser** schadet ihm und lässt ihn sich krümmen. Eigene Bossleiste, eigene Klänge. Seine Beute: selten die **Phasenklinge** (ein Zweihänder aus einem einzigen Phasitkristall; Rechtsklick: der **Phasenhieb** – bis zu sieben Blöcke vorwärts phasen, wen du durchquerst, den triffst du), sonst **Phasit**. Ein Phasit auf dem erloschenen Thron ruft ihn zurück.
+> In 1.4 kam **Phasit und die Rüstung der Leerwandler**: Auf den **äußeren Inseln des Ends** schimmert jetzt **Phasiterz** im Endstein – türkise Büschel, wo die Leerwandler seit Äonen hin und her springen (ab der Diamantspitzhacke; auf der Hauptinsel des Drachen nicht). Aus **Phasit**, einem türkisen Kristall mit einem violetten Funken darin, baut man den **Phasitblock** (Licht 8, Sockel für ein Leuchtfeuer) und die **Rüstung der Leerwandler** (mit Enderperlen, die Stiefel mit Chorusfrüchten; Schutz wie Diamant): eine Kapuze mit leuchtenden Augenschlitzen und einer **Krone aus Phasitsplittern**, ein langer **Mantel** mit türkis leuchtenden Fäden und einem Phasit auf der Brust, Schulterplatten mit **schwebenden Splittern**, Stiefel auf **Schwebesohlen** – alles in 3D. **Phasenschritt** (jeder Teil): Trifft dich ein Wesen im Nahkampf, weichst du mit 6 % je Teil (mit allen vier 24 %) **dem Hieb ganz aus** und springst vier bis acht Blöcke fort, weg vom Angreifer – zurück bleibt ein türkises Nachbild (höchstens alle drei Sekunden). **Schwebende Sohlen** (Stiefel): **Enderperlen** tun nicht mehr weh. **Einer von ihnen** (alle vier Teile): Die **Leerwandler** werden nicht wütend, wenn du sie ansiehst.
 > In 1.3 kam **das Härte-Paket**: Kingdoms at War wurde **deutlich schwerer** – zwanzig Regeln, fest eingebaut: **Monster** haben **doppelt so viel Leben**, treffen **50 % härter**, wittern dich **doppelt so weit** (höchstens 48 Blöcke) und **heilen sich**, wenn man sie in Ruhe lässt (ein halbes Herz alle zwei Sekunden); **Bosse heilen sich**, wenn du vor ihnen fliehst (2 % je Sekunde, sobald niemand mehr in 32 Blöcken ist). **Giftige Treffer:** Zombies machen hungrig, Spinnen vergiften, Skelettpfeile lähmen, andere Monster schwächen. **Fallschaden** ist anderthalbmal so hoch, **jeder zweite Pfeil zersplittert**, wenn er in einen Block fährt. **Erze** – die eigenen wie Kohle, Eisen, Gold, Diamant – sind **halb so häufig**, **Herz- und Manakristalle** wachsen halb so oft, liegen halb so oft in Truhen und geben nur noch **ein halbes Herz bzw. 10 Mana**; **Truhen** sind karger, **Monster** lassen seltener etwas fallen (ihre Teile und Münzen nur halb so oft). **Tränke** wirken halb so lange, der **Zaubertisch** will **doppelt so viel Lapislazuli** (die Erfahrungsstufen bleiben gleich), **Händler** verlangen anderthalbmal so viel und zahlen weniger, **Karten** kosten noch einmal das Doppelte. **Felder** wachsen halb so schnell, **Jungtiere** brauchen doppelt so lange, **das Wild** flieht schon aus 16 Blöcken – und der **Hirsch wehrt sich**: Wer ihn angreift, den nimmt er mit gesenktem Geweih auf die Hörner. Die **Erfahrung**, die du bekommst, bleibt genau gleich.
 > In 1.2 kam **Ignara, die Flammenpriesterin, und das Flammenheiligtum**: Mitten im **Lavameer des Nethers** steht jetzt das **Flammenheiligtum**: eine runde Plattform aus Schwarzstein auf Basaltstelzen, mit einer goldenen Sonne im Mosaikboden, acht Säulen mit **ewigem Feuer**, Stegen zum Fels und dem **Flammenaltar**. Vor ihm schwebt **Ignara** und betet – wer ihr zu nahe kommt, weckt sie. Sie kämpft mit ihrer **Flammenpeitsche** (Hieb, Flammenschlinge, die dich heranreißt), lässt eine **Lavawoge** über das Heiligtum rollen, **Feuersäulen** aus dem Boden brechen und **Feueropale vom Himmel regnen**, ruft **Glutgeister** – und unter halber Kraft wird sie zum **Phönix** mit Schwingen aus Flammen und stürzt sich auf dich. Ihre Beute: selten die **Flammenpeitsche** (reicht weiter als ein Schwert, setzt in Brand; Rechtsklick: der **Peitschenschlag**, der das erste Wesen bis zehn Blöcke weit trifft und heranreißt), sonst **Feueropale**. Ein Feueropal entzündet den erloschenen Altar und ruft sie zurück. Außerdem: **Herzkristalle sind nie mehr sicher** – Bosse, die wiederkommen, lassen sie bei jedem Sieg nur zu **25 %** fallen, einmalige Bosse (Drachen, Nyxar, Zerbrochener König, Weltenfresser) je Kristall zu **50 %**.
 > In 1.1.5 wurde **die Beute der Bosse, die wiederkommen,** knapper: Ihr **Sonderstück** (Waffe, Schwingen, Zylinder, Angel, Zaubertafel) fällt **nie mehr sicher** – auch beim ersten Sieg nur in etwa einem von fünf Kämpfen; sicher ist beim ersten eigenen Sieg nur noch der **Herz- oder Manakristall**, und **Münzen, Gold, Edelsteine** und die übrigen Schätze sind etwa auf die Hälfte gesunken. Die Drachen und die anderen einmaligen Bosse bleiben, wie sie waren, ebenso die Erfahrung.
@@ -365,6 +366,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Ignara, die Flammenpriesterin** im **Flammenheiligtum** (Lavameer des Nethers): Gebet und Erwachen, Peitschenhieb, Flammenschlinge, Lavawoge, Feuersäulen, Opalregen, Glutgeister, Phönixgestalt mit Sturzflug; Flammenaltar, **Flammenpeitsche** mit Peitschenschlag (seit 1.2) | ✅ fertig |
 | **Härte-Paket** (seit 1.3): stärkere, wachsamere und heilende Monster, heilende Bosse, giftige Treffer, mehr Fallschaden, zersplitternde Pfeile, halb so viele Erze, seltenere Schätze, Kristalle und Monsterbeute, kürzere Tränke, teureres Verzaubern, teurere Händler und Karten, langsamere Felder und Tierzucht, scheues Wild, der Hirsch wehrt sich | ✅ fertig |
 | **Phasit** auf den äußeren Endinseln und die **Rüstung der Leerwandler** (seit 1.4): Phasitblock, 3D-Teile mit Splitterkrone, Mantel und Schwebesohlen; Phasenschritt (einem Nahkampfhieb ausweichen), Enderperlen ohne Schaden (Stiefel), ruhige Leerwandler (ganzer Satz) | ✅ fertig |
+| **Phasmor, der Leerwandlerkönig** im **Phasenheiligtum** (über den äußeren Endinseln): Wache und Erwachen, Klingenhieb, Phasenstoß, Trugbilder, Blockwurf, Leerenrisse, Krönung mit Phasensturm, Wasser schadet ihm; Leerenthron, **Phasenklinge** mit Phasenhieb (seit 1.5) | ✅ fertig |
 | Ausrüstung: Stahl, Konterit, Draconium, Drachenschuppen (mit Set-Bonus), Gleiter, Krone, Trollkeule; Waffen und Rüstungen aus Monsterteilen (3D) | ✅ fertig |
 | Magie: Aetherit-Stab, sieben Zauber in drei Stufen, Zaubertafeln, Magietisch, Zauberkreis (Radialmenü) | ✅ fertig |
 | Sechs Erzmagier als Bosse, jeder in seinem eigenen Magierturm (sechs Bauweisen, je Element im passenden Land) | ✅ fertig |
@@ -481,7 +483,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.4.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.5.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -489,7 +491,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-1.4.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-1.5.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -1598,6 +1600,56 @@ Leerwandler darunter, mit einem Splitter an jeder Ferse.
 - **Schwebende Sohlen** (Stiefel): **Enderperlen** tun nicht mehr weh.
 - **Einer von ihnen** (alle vier Teile): Die **Leerwandler** (Endermen) werden **nicht wütend, wenn du sie ansiehst** –
   wer sie angreift, hat sie trotzdem gegen sich.
+
+### Phasmor, der Leerwandlerkönig, und das Phasenheiligtum (seit 1.5)
+
+![Das schwebende Phasenheiligtum, Phasmor kniend vor dem Leerenthron, seine Angriffe, die Krönung und die Phasenklinge](docs/bilder/phasenheiligtum.jpg)
+
+**Das Phasenheiligtum** schwebt über einer der **äußeren Inseln des Ends** (Endhochland und Endmittelland), gut zehn
+Blöcke über dem Boden und höher als alles ringsum: eine runde Plattform aus Endsteinziegeln, unter der ein **Zapfen aus
+Endstein und Obsidian** hängt, durchsetzt von Phasiterz. Ihr Boden ist ein **Mosaik** – in der Mitte ein Phasitblock in
+einem Ring aus Purpur, acht Strahlen aus Purpur, ein Ring aus Obsidian mit Phasit an den Enden der Strahlen, ein Rand aus
+Ziegeln mit einer niedrigen Mauer. An vier Stellen ist der Boden eingebrochen, man sieht hinab auf die Insel. **Acht
+Purpursäulen** tragen Kristalle aus Phasit, um die Endstäbe ragen. Hinten erhebt sich auf drei Stufen der **Leerenthron**
+(Obsidian, Purpur, ein Phasit in der Lehne, oben ein Kamm aus drei Phasitzacken) vor einer Wand aus Obsidian mit einem
+großen **Auge aus Phasit**; zu beiden Seiten stehen **Truhen** (Münzen, Phasit, Enderperlen, Chorusfrüchte, Purpur,
+Gold, Smaragde, Enderaugen, selten ein Kristall). Vorn führen **schwebende Stufen** hinab auf die Insel.
+
+**Phasmor, der Leerwandlerkönig** kniet vor den Stufen und hält Wache – die Hände auf dem Knauf, die Klinge vor sich im
+Boden, das Haupt gesenkt; dann und wann summt seine Klinge, und wer sich nähert, hört sie von fern. In dieser Zeit ist er
+unverwundbar – wer dem Thron auf vierzehn Blöcke nahekommt (oder ihn angreift), **weckt ihn**: Er hebt das Haupt, steht auf,
+reißt die Klinge aus dem Stein, reckt sie empor, und der Phasit im Thron leuchtet auf. Er ist ein Leerwandler, nur
+größer als alle anderen – fast fünf Blöcke mit der Krone –, mit einem Leib aus Leere, durch den ein türkiser Riss
+läuft, einem Brustpanzer und Schulterplatten aus Leerenstahl, über denen Splitter schweben, einem Mantel und einem
+Wappenrock; über seinem Haupt kreist eine **Krone aus fünf Phasitsplittern**.
+- **Klingenhieb:** über die rechte Schulter ausholen, dann schräg hinab – ein weiter Bogen aus türkisem Licht.
+- **Phasenstoß:** Er zerfließt zu einem Nachbild – und steht hinter dir, die Klinge schon erhoben.
+- **Trugbilder:** Er hebt die Linke, und aus der Leere treten drei (gekrönt vier) Abbilder; er selbst mischt sich unter
+  sie. Die Trugbilder greifen an, aber **jeder Treffer lässt eines zerfallen** – und alle zerfallen, wenn er fällt.
+- **Blockwurf:** Brocken aus dem Heiligtum (Endsteinziegel, Purpur, Obsidian) steigen um ihn auf und kreisen, dann wirft
+  er sie nacheinander; sie zerschellen, wo sie aufschlagen.
+- **Leerenrisse:** Er stößt die Klinge in den Boden – unter dir (und daneben) öffnen sich türkise Kreise. Wer noch darin
+  steht, wenn sie aufbrechen, wird **verschluckt und hoch über dem Heiligtum wieder ausgespuckt**.
+- **Krönung** (unter halber Kraft): Er brüllt auf, die Krone lodert, eine Druckwelle wirft alle fort, die Trugbilder
+  zerfallen – danach treffen seine Hiebe härter, er greift schneller an und beherrscht den **Phasensturm**: fünf Sprünge
+  in rascher Folge, nach jedem ein Hieb rundum.
+- **Wasser:** Er hasst es. Ein Wurf mit einer Wasserflasche (oder Wasser, in dem er steht) schadet ihm, lässt ihn sich
+  krümmen – dann kann er weder springen noch ausweichen – und die Trugbilder zerfallen.
+- Pfeilen und anderen **Geschossen** weicht er oft aus: Er phast zur Seite.
+
+Lockt man ihn aus dem Heiligtum, phast er vor die Stufen zurück; findet er niemanden mehr, kniet er nach einer Weile
+wieder nieder – geheilt und ohne Krone. Besiegt sinkt er auf die Knie und zerfällt zu türkisem Staub, und **der Phasit
+im Thron erlischt**. Er lässt selten seine **Phasenklinge** fallen (zu einem Fünftel, auch beim ersten Sieg) und sonst
+nur **zwei bis vier Phasit** – den Werkstoff der Rüstung der Leerwandler –, einen Herzkristall nur zu einem Viertel.
+**Ein Phasit** auf dem erloschenen Thron entzündet ihn neu und ruft den König zurück. Finden mit `/kaw structure
+phasenheiligtum`, wecken oder zurücksetzen mit `/kaw boss phasmor awaken|reset`.
+
+**Die Phasenklinge** (episch, verzauberbar wie ein Schwert, mit Phasit auszubessern): ein Zweihänder aus einem einzigen
+Phasitkristall – im Inventar das Bild, in der Hand ein 3D-Modell: Phasitknauf, umwickelter Griff, eine Parierstange aus
+Purpur mit Phasitsplittern, die Kristallklinge mit leuchtendem Grat. Sie trifft härter als ein Netheritschwert und
+**reicht ein Stück weiter**. **Rechtsklick: der Phasenhieb** – du phast in Blickrichtung bis zu sieben Blöcke weit (über
+Stufen hinweg, nie durch Wände), und **wen du dabei durchquerst, der nimmt Schaden** (mit Schärfe mehr); zurück bleibt
+ein türkises Nachbild (alle fünf Sekunden).
 
 ### Bauwerke des Ends
 
@@ -4856,7 +4908,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.4.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.5.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |

@@ -138,7 +138,8 @@ final class PhasmorShowcase {
         steps.add(Step.screenshot("phasmor_awaken"));
         steps.add(Step.waitTicks(12));
         steps.add(Step.hud(true));
-        steps.add(Step.waitTicks(4));
+        // die Leiste senkt sich, entrollt ihr Band und lädt sich auf (gut anderthalb Sekunden)
+        steps.add(Step.waitTicks(36));
         steps.add(Step.screenshot("phasmor_bossbar"));
         steps.add(Step.hud(false));
         steps.add(Step.waitTicks(30));
