@@ -132,6 +132,10 @@ public class ArenaSealBlockEntity extends BlockEntity {
             return;
         }
         if (!this.scanned) {
+            BlockPos p = this.worldPosition;
+            if (!level.hasChunksAt(p.getX() - SCAN_RADIUS, p.getZ() - SCAN_RADIUS, p.getX() + SCAN_RADIUS, p.getZ() + SCAN_RADIUS)) {
+                return;     // erst, wenn die ganze Arena geladen ist (sonst fehlten Käfige)
+            }
             this.scan(level);
         }
         switch (this.phase()) {
