@@ -6,7 +6,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
-/** Modell-Ebenen und Renderer der Raubritterburg (seit 1.8): Kuno von Rabenfels, der Raubritter, mit seinem Ross. */
+/** Modell-Ebenen und Renderer der Raubritterburg (seit 1.8): Kuno von Rabenfels, der Raubritter, mit seinem Ross, und das Rabenbanner. */
 public final class CastleRenderers {
     /** Kuno von Rabenfels, der Raubritter (1.8). */
     public static final ModelLayerLocation ROBBER_KNIGHT = layer("robber_knight");
@@ -27,5 +27,6 @@ public final class CastleRenderers {
 
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ModEntities.ROBBER_KNIGHT.get(), RobberKnightRenderer::new);
+        event.registerBlockEntityRenderer(io.github.sirschrolli.kingdomsatwar.registry.CastleGear.RAVEN_BANNER_ENTITY.get(), RavenBannerRenderer::new);
     }
 }

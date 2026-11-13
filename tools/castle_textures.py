@@ -5,10 +5,10 @@ Querholz das Banner derer von Rabenfels.
 
   * raven_banner_pole – dunkle Eiche, längs gemasert;
   * raven_banner_iron – geschwärztes Eisen mit Nieten (Fuß, Bänder, Querholz-Beschläge);
-  * raven_banner_gold – Gold (Knauf, Spitzen des Querholzes);
-  * raven_banner_cloth (32 x 48) – das Banner: ein goldenes Feld mit sanften Falten und einem schwarzen Saum, darin der
-    schwarze Rabe (wie auf Kunos Wappenrock), unten ein schwarzer Streifen mit goldenen Zacken und der Schwalbenschwanz;
-  * raven_banner_torn (32 x 48) – das zerrissene Banner: Fetzen hängen vom Querholz, versengt, ein Stück des Raben;
+  * entity/raven_banner/raven_banner (128 x 128) – was der Block-Renderer zeichnet: das Banner (48 x 72, ein goldenes Feld
+    mit sanften Falten und einem schwarzen Rand, darin der schwarze Rabe wie auf Kunos Wappenrock, unten ein schwarzer
+    Streifen mit goldenen Zacken und der Schwalbenschwanz), das zerrissene Banner (Fetzen, versengt, ein Stück des Raben),
+    Eichenholz, Gold und Eisen für Pfahl, Querholz, Knauf und Beschläge;
   * item/raven_banner – das Bild im Inventar: Pfahl, Querholz und Banner.
 
 Wird von tools/generate_textures.py aufgerufen: build(put).
@@ -125,112 +125,135 @@ def gold() -> Image.Image:
     return img
 
 
+#: das Tuch (in der Textur des Banners: 2 Pixel je Modelleinheit, 24 x 36 Einheiten)
+CW, CH = 48, 72
+#: so groß wird der Rabe gezeichnet (je Bildpunkt der Vorlage)
+RS = 3
+RX, RY = 3, 10
+
+
 def _fold(x: int, y: int) -> float:
     """Die Falten des Tuchs: senkrechte Wellen, die nach unten etwas weiter werden."""
-    return 0.7 * math.sin(x * 0.55 + 0.4 + y * 0.02) + 0.35 * math.sin(x * 1.3 + 1.7)
+    return 0.7 * math.sin(x * 0.37 + 0.4 + y * 0.015) + 0.35 * math.sin(x * 0.87 + 1.7)
 
 
-def _raven_at(x: int, y: int, x0: int, y0: int) -> str | None:
-    """Das Zeichen des (doppelt großen) Raben bei (x, y), wenn er bei (x0, y0) beginnt."""
-    rx, ry = (x - x0) // 2, (y - y0) // 2
-    if 0 <= ry < len(RAVEN) and 0 <= rx < len(RAVEN[0]) and x >= x0 and y >= y0:
+def _raven_at(x: int, y: int) -> str | None:
+    """Das Zeichen des (vergrößerten) Raben bei (x, y)."""
+    if x < RX or y < RY:
+        return None
+    rx, ry = (x - RX) // RS, (y - RY) // RS
+    if 0 <= ry < len(RAVEN) and 0 <= rx < len(RAVEN[0]):
         ch = RAVEN[ry][rx]
         return None if ch == "." else ch
     return None
 
 
-def _raven_color(x: int, y: int, x0: int, y0: int, ch: str) -> tuple:
+def _raven_color(x: int, y: int, ch: str) -> tuple:
     """Der Rabe: schwarz, Federn mit dunkelgrauen Kanten, das Auge golden, der Schnabel etwas heller."""
+    rx, ry = (x - RX) / RS, (y - RY) / RS
     if ch == "o":
-        return GOLD[5] + (255,) if (x - x0) % 2 == 0 and (y - y0) % 2 == 0 else BLACK[0] + (255,)
-    rx, ry = (x - x0) / 2.0, (y - y0) / 2.0
-    if rx < 2.5 and 2 <= ry < 3:
-        return BLACK[3] + (255,) if (y - y0) % 2 == 0 else BLACK[2] + (255,)   # der Schnabel
+        cx, cy = (x - RX) % RS, (y - RY) % RS
+        return GOLD[5] + (255,) if (cx, cy) in ((1, 1), (1, 0), (0, 1)) else BLACK[0] + (255,)
+    if rx < 2.6 and 2 <= ry < 3:
+        return (BLACK[3] if (y - RY) % RS == 0 else BLACK[2]) + (255,)                 # der Schnabel
     # Flügelfedern: schräge, hellere Linien auf dem Rumpf
-    if 5 <= ry <= 8 and (int(x - x0) + int(y - y0)) % 5 == 0 and rx > 4:
+    if 5 <= ry <= 8.5 and rx > 4 and (x - RX + y - RY) % 6 == 0:
         return BLACK[3] + (255,)
-    left = _raven_at(x - 1, y, x0, y0) is None
-    top = _raven_at(x, y - 1, x0, y0) is None
+    left = _raven_at(x - 1, y) is None
+    top = _raven_at(x, y - 1) is None
     return BLACK[2] + (255,) if left or top else BLACK[1] + (255,)
 
 
-def _swallowtail(x: int, y: int) -> bool:
-    """Ist (x, y) im Banner (32 x 48)? Unten der Schwalbenschwanz: ein Keil in der Mitte, die Ecken schräg."""
-    if y >= 38 and abs(x - 15.5) < (y - 37.0) * 1.05:
+def _inside(x: int, y: int) -> bool:
+    """Ist (x, y) im Banner? Unten der Schwalbenschwanz: ein Keil in der Mitte, die äußeren Ecken schräg."""
+    if not (0 <= x < CW and 0 <= y < CH):
         return False
-    if y >= 42 and (x < (y - 42) * 0.7 or x > 31 - (y - 42) * 0.7):
+    if y >= 58 and abs(x - (CW - 1) / 2) < (y - 57) * 0.75:
+        return False
+    if y >= 63 and (x < (y - 63) * 0.6 or x > CW - 1 - (y - 63) * 0.6):
         return False
     return True
 
 
 def cloth() -> Image.Image:
-    img = Image.new("RGBA", (32, 48), CLEAR)
+    """Das Banner derer von Rabenfels (48 x 72): oben der Saum um das Querholz, ein goldenes Feld mit Falten und schwarzem
+    Rand, darin der Rabe; unten ein schwarzer Streifen mit goldenen Zacken und der Schwalbenschwanz."""
+    img = Image.new("RGBA", (CW, CH), CLEAR)
     px = img.load()
-    x0, y0 = 2, 8
-    for y in range(48):
-        for x in range(32):
-            if not _swallowtail(x, y):
+    for y in range(CH):
+        for x in range(CW):
+            if not _inside(x, y):
                 continue
             fold = _fold(x, y)
-            col = _c(CLOTH, 3.2 + fold + (0.4 if _h(x, y, 21) < 0.12 else 0.0) - (0.5 if _h(x, y, 23) < 0.08 else 0.0))
-            if y <= 2:
-                col = _c(CLOTH, 1.6 + (0.8 if y == 0 else 0.0) + 0.4 * math.sin(x * 0.8))      # der Saum um das Querholz
-            elif x in (0, 31) or y == 3:
-                col = BLACK[1] + (255,)                                                        # schwarzer Rand
-            elif x in (1, 30):
-                col = _c(CLOTH, 1.6 + fold)
-            ch = _raven_at(x, y, x0, y0)
+            col = _c(CLOTH, 3.2 + fold + (0.4 if _h(x, y, 21) < 0.1 else 0.0) - (0.5 if _h(x, y, 23) < 0.07 else 0.0))
+            if y <= 3:
+                col = _c(CLOTH, 1.5 + (0.9 if y == 0 else 0.4 if y == 1 else 0.0) + 0.4 * math.sin(x * 0.6))   # der Saum
+            elif x in (0, CW - 1) or y == 4:
+                col = BLACK[1] + (255,)                                                                 # schwarzer Rand
+            elif x in (1, CW - 2) or y == 5:
+                col = _c(CLOTH, 1.7 + fold)
+            ch = _raven_at(x, y)
             if ch is not None:
-                col = _raven_color(x, y, x0, y0, ch)
+                col = _raven_color(x, y, ch)
             # unten ein schwarzer Streifen mit goldenen Zacken (wie der gezackte Saum seiner Schabracke)
-            if 34 <= y <= 37:
-                zig = (x % 4) if (x // 4) % 2 == 0 else 3 - (x % 4)
-                col = BLACK[1] + (255,) if y - 34 > zig else _c(CLOTH, 3.6 + fold)
-                if y == 37:
-                    col = BLACK[1] + (255,)
-            if y >= 38 and not _swallowtail(x, y + 1) or y == 47:
-                col = BLACK[2] + (255,)                                                        # der Rand der Zipfel
+            if 49 <= y <= 55:
+                k = x % 8
+                zig = k if k < 4 else 7 - k
+                col = BLACK[1] + (255,) if y - 49 > zig + 1 or y == 55 else _c(CLOTH, 3.6 + fold)
+            if y >= 56 and (not _inside(x - 1, y) or not _inside(x + 1, y) or not _inside(x, y + 1)):
+                col = BLACK[2] + (255,)                                                                 # der Rand der Zipfel
             px[x, y] = col
     return img
+
+
+#: die Fetzen des zerrissenen Banners: (von x, bis x, Länge)
+STRIPS = [(3, 14, 41), (18, 24, 27), (29, 42, 58)]
+
+
+def _kept(x: int, y: int) -> bool:
+    if x < 0 or x >= CW or y >= CH or y < 0:
+        return False
+    if y <= 3 and 2 <= x <= 43 and not (x > 34 and y == 3):
+        return True
+    for (a, b, ln) in STRIPS:
+        ragged = ln - 6 + int(_h(x, 31) * 9) - abs(x - (a + b) / 2) * 0.7
+        if a <= x <= b and y < ragged:
+            return True
+    return False
 
 
 def torn() -> Image.Image:
     """Das zerrissene Banner: oben ein Rest des Saums, drei Fetzen hängen herab, ihre Ränder versengt; auf dem längsten ist
     noch ein Stück des Raben zu sehen."""
     full = cloth().load()
-    img = Image.new("RGBA", (32, 48), CLEAR)
+    img = Image.new("RGBA", (CW, CH), CLEAR)
     px = img.load()
-    strips = [(2, 9, 27), (12, 16, 17), (19, 27, 36)]               # (von x, bis x, Länge)
-    for y in range(48):
-        for x in range(32):
-            keep = y <= 2 and 1 <= x <= 28 and not (x > 22 and y == 2)
-            for (a, b, ln) in strips:
-                ragged = ln - 4 + int(_h(x, 31) * 6) - abs(x - (a + b) / 2) * 0.6
-                if a <= x <= b and y < ragged:
-                    keep = True
-            if not keep:
+    for y in range(CH):
+        for x in range(CW):
+            if not _kept(x, y):
                 continue
             col = full[x, y]
             if col[3] == 0:
                 continue
-            # versengte Ränder: wo das Tuch endet, ist es braun und dunkel
-            edge = any(not _kept(px2x, y2, strips) for px2x, y2 in ((x - 1, y), (x + 1, y), (x, y + 1), (x, y + 2)))
-            if edge and y > 2:
+            edge = any(not _kept(nx, ny) for nx, ny in ((x - 1, y), (x + 1, y), (x, y + 1), (x, y + 2)))
+            if edge and y > 3:
                 col = SCORCH[int(_h(x, y, 37) * 2.99)] + (255,)
             px[x, y] = col
     return img
 
 
-def _kept(x: int, y: int, strips) -> bool:
-    if x < 0 or x > 31 or y > 47:
-        return False
-    if y <= 2 and 1 <= x <= 28 and not (x > 22 and y == 2):
-        return True
-    for (a, b, ln) in strips:
-        ragged = ln - 4 + int(_h(x, 31) * 6) - abs(x - (a + b) / 2) * 0.6
-        if a <= x <= b and y < ragged:
-            return True
-    return False
+def banner_texture() -> Image.Image:
+    """Die Textur des Banners am Querholz (gezeichnet vom Block-Renderer): das Tuch, das zerrissene Tuch, Eichenholz für Pfahl
+    und Querholz, Gold für Knauf und Spitzen, Eisen für Beschläge."""
+    img = Image.new("RGBA", (128, 128), CLEAR)
+    img.alpha_composite(cloth(), (0, 0))
+    img.alpha_composite(torn(), (48, 0))
+    wood = pole()
+    for k in range(4):
+        img.alpha_composite(wood, (96, k * 16))
+    img.alpha_composite(gold(), (112, 0))
+    img.alpha_composite(iron(), (112, 16))
+    return img
 
 
 def icon() -> Image.Image:
@@ -270,19 +293,17 @@ def build(put) -> None:
     """Für tools/generate_textures.py."""
     put("block/raven_banner_pole", pole())
     put("block/raven_banner_iron", iron())
-    put("block/raven_banner_gold", gold())
-    put("block/raven_banner_cloth", cloth())
-    put("block/raven_banner_torn", torn())
+    put("entity/raven_banner/raven_banner", banner_texture())
     put("item/raven_banner", icon())
 
 
 if __name__ == "__main__":
     out = sys.argv[1] if len(sys.argv) > 1 else "/tmp/raven_banner.png"
-    tiles = [pole(), iron(), gold(), cloth(), torn(), icon()]
-    sheet = Image.new("RGBA", (sum(t.width * 8 + 16 for t in tiles), 48 * 8), (96, 104, 112, 255))
+    tiles = [pole(), iron(), gold(), cloth(), torn(), icon(), banner_texture()]
+    sheet = Image.new("RGBA", (sum(t.width * 6 + 16 for t in tiles), 128 * 6), (96, 104, 112, 255))
     x = 0
     for t in tiles:
-        sheet.alpha_composite(t.resize((t.width * 8, t.height * 8), Image.NEAREST), (x, 0))
-        x += t.width * 8 + 16
+        sheet.alpha_composite(t.resize((t.width * 6, t.height * 6), Image.NEAREST), (x, 0))
+        x += t.width * 6 + 16
     sheet.save(out)
     print(out)

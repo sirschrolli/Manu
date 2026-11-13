@@ -1,47 +1,17 @@
 {
   "variants": {
-    "facing=east,phase=awake": {
+    "facing=east": {
       "model": "kingdomsatwar:block/raven_banner",
       "y": 90
     },
-    "facing=east,phase=fallen": {
-      "model": "kingdomsatwar:block/raven_banner_torn",
-      "y": 90
-    },
-    "facing=east,phase=guarded": {
-      "model": "kingdomsatwar:block/raven_banner",
-      "y": 90
-    },
-    "facing=north,phase=awake": {
+    "facing=north": {
       "model": "kingdomsatwar:block/raven_banner"
     },
-    "facing=north,phase=fallen": {
-      "model": "kingdomsatwar:block/raven_banner_torn"
-    },
-    "facing=north,phase=guarded": {
-      "model": "kingdomsatwar:block/raven_banner"
-    },
-    "facing=south,phase=awake": {
+    "facing=south": {
       "model": "kingdomsatwar:block/raven_banner",
       "y": 180
     },
-    "facing=south,phase=fallen": {
-      "model": "kingdomsatwar:block/raven_banner_torn",
-      "y": 180
-    },
-    "facing=south,phase=guarded": {
-      "model": "kingdomsatwar:block/raven_banner",
-      "y": 180
-    },
-    "facing=west,phase=awake": {
-      "model": "kingdomsatwar:block/raven_banner",
-      "y": 270
-    },
-    "facing=west,phase=fallen": {
-      "model": "kingdomsatwar:block/raven_banner_torn",
-      "y": 270
-    },
-    "facing=west,phase=guarded": {
+    "facing=west": {
       "model": "kingdomsatwar:block/raven_banner",
       "y": 270
     }

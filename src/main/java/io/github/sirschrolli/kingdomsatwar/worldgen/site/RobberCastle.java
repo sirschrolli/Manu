@@ -666,7 +666,7 @@ final class RobberCastle {
             this.b.set(3, 1, -6, Blocks.BARREL);
             this.b.set(3, 2, -6, Blocks.BARREL);
             // Laternen auf Pfählen
-            for (int[] p : new int[][] {{-2, -3}, {2, 9}, {-6, 8}}) {
+            for (int[] p : new int[][] {{-5, -4}, {2, 9}, {-6, 8}}) {
                 this.b.set(p[0], 1, p[1], state(Blocks.SPRUCE_FENCE));
                 this.b.set(p[0], 2, p[1], state(Blocks.SPRUCE_FENCE));
                 this.lantern(p[0], 3, p[1], false);
@@ -674,14 +674,15 @@ final class RobberCastle {
         }
 
         /**
-         * Das Rabenbanner (seit 1.8): vor dem Bergfried, auf einem Sockel aus Pflaster; zwei Schritte davor und zur Seite hält
-         * Kuno von Rabenfels, der Raubritter, zu Ross Hof (das Banner ruft ihn, sobald jemand naht).
+         * Das Rabenbanner (seit 1.8): vor dem Bergfried, auf einem Sockel aus Pflaster (mit Pfahl und Banner gut drei Blöcke
+         * hoch); zwei Schritte davor und zur Seite hält Kuno von Rabenfels, der Raubritter, zu Ross Hof (das Banner ruft ihn,
+         * sobald jemand naht).
          */
         void banner() {
             this.b.set(-2, 0, -6, state(Blocks.COBBLESTONE));
             this.b.set(-2, 1, -6, io.github.sirschrolli.kingdomsatwar.registry.CastleGear.RAVEN_BANNER.get().defaultBlockState()
                     .setValue(io.github.sirschrolli.kingdomsatwar.block.castle.RavenBannerBlock.FACING, Direction.SOUTH));
-            for (int y = 2; y <= 3; y++) {
+            for (int y = 2; y <= 4; y++) {
                 this.b.set(-2, y, -6, Blocks.AIR.defaultBlockState());
             }
         }

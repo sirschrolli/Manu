@@ -1093,7 +1093,7 @@ final class SiteGameTests {
             if (count(helper, home.offset(-1, 0, -1), home.offset(1, 3, 1), st -> !st.isAir()) > 0) {
                 problems.add("der Platz des Raubritters ist verbaut");
             }
-            if (!level.getBlockState(banner.above()).isAir()) {
+            if (count(helper, banner.above(), banner.above(3), st -> !st.isAir()) > 0) {
                 problems.add("über dem Banner ist kein Platz");
             }
         }

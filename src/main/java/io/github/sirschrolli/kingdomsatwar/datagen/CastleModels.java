@@ -1,12 +1,10 @@
 package io.github.sirschrolli.kingdomsatwar.datagen;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
-import io.github.sirschrolli.kingdomsatwar.block.castle.RavenBannerBlock;
 import io.github.sirschrolli.kingdomsatwar.registry.CastleGear;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
-import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
@@ -17,17 +15,15 @@ import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder;
 
 /**
- * Modelle zur Raubritterburg (seit 1.8): das Rabenbanner (ein eiserner Fuß, der hohe Pfahl aus dunkler Eiche mit Eisenbändern
- * und goldenem Knauf, das Querholz mit goldenen Spitzen und daran das Banner – zerrissen nur noch Fetzen), der Morgenstern
- * (im Inventar das Bild, in der Hand das 3D-Modell) und das Spawn-Ei des Raubritters.
+ * Modelle zur Raubritterburg (seit 1.8): das Rabenbanner (als Block der eiserne Fuß und der Pfahl aus dunkler Eiche mit
+ * Eisenbändern; Knauf, Querholz und das wehende Banner zeichnet der Block-Renderer), der Morgenstern (im Inventar das Bild, in
+ * der Hand das 3D-Modell) und das Spawn-Ei des Raubritters.
  */
 final class CastleModels {
     private CastleModels() {}
 
     private static final TextureSlot POLE = TextureSlot.create("pole");
     private static final TextureSlot IRON = TextureSlot.create("iron");
-    private static final TextureSlot GOLD = TextureSlot.create("gold");
-    private static final TextureSlot CLOTH = TextureSlot.create("cloth");
 
     static void register(BlockModelGenerators blocks, ItemModelGenerators items) {
         banner(blocks);
@@ -70,57 +66,32 @@ final class CastleModels {
     }
 
     /**
-     * Das Modell (Blick nach Norden: dort hängt das Banner, dorthin blickt der Ritter): Fuß, Pfahl, Bänder, Knauf, Querholz und
-     * das Tuch (vorn das Bild, hinten gespiegelt). {@code torn}: nur noch Fetzen.
+     * Das Modell des Blocks: der eiserne Fuß und der Pfahl aus dunkler Eiche mit Eisenbändern (zwei Blöcke hoch). Was darüber
+     * ist – das obere Stück des Pfahls mit dem goldenen Knauf, das Querholz und das wehende Banner (zerrissen: Fetzen) –
+     * zeichnet der Block-Renderer ({@code RavenBannerRenderer}).
      */
-    private static Identifier bannerModel(BlockModelGenerators blocks, Block banner, String suffix, boolean torn) {
+    private static Identifier bannerModel(BlockModelGenerators blocks, Block banner) {
         ExtendedModelTemplateBuilder b = ExtendedModelTemplateBuilder.builder().parent(Identifier.withDefaultNamespace("block/block"))
-                .requiredTextureSlot(POLE).requiredTextureSlot(IRON).requiredTextureSlot(GOLD).requiredTextureSlot(CLOTH)
-                .requiredTextureSlot(TextureSlot.PARTICLE);
+                .requiredTextureSlot(POLE).requiredTextureSlot(IRON).requiredTextureSlot(TextureSlot.PARTICLE);
         // der eiserne Fuß und der Pfahl (in zwei Stücken, damit die Maserung nicht gestreckt wird)
         box(b, 5.0f, 0.0f, 5.0f, 11.0f, 1.5f, 11.0f, IRON);
-        box(b, 7.0f, 1.5f, 7.0f, 9.0f, 16.0f, 9.0f, POLE);
-        box(b, 7.0f, 16.0f, 7.0f, 9.0f, 30.0f, 9.0f, POLE);
-        // Eisenbänder, der goldene Knauf
-        box(b, 6.75f, 5.0f, 6.75f, 9.25f, 6.0f, 9.25f, IRON);
-        box(b, 6.75f, 18.0f, 6.75f, 9.25f, 19.0f, 9.25f, IRON);
-        box(b, 6.5f, 30.0f, 6.5f, 9.5f, 31.5f, 9.5f, GOLD);
-        box(b, 7.25f, 31.5f, 7.25f, 8.75f, 32.0f, 8.75f, GOLD);
-        // das Querholz mit goldenen Spitzen und eisernem Beschlag am Pfahl
-        box(b, -0.5f, 27.6f, 6.0f, 16.5f, 29.0f, 7.4f, POLE);
-        box(b, -1.5f, 27.4f, 5.8f, -0.5f, 29.2f, 7.6f, GOLD);
-        box(b, 16.5f, 27.4f, 5.8f, 17.5f, 29.2f, 7.6f, GOLD);
-        box(b, 6.6f, 27.2f, 5.8f, 9.4f, 29.4f, 7.6f, IRON);
-        // das Tuch: vorn das Bild, hinten gespiegelt, die Kanten schmal
-        b.element(e -> {
-            e.from(0.0f, 5.0f, 5.35f).to(16.0f, 29.0f, 5.75f);
-            e.allFaces((direction, face) -> {
-                switch (direction) {
-                    case NORTH -> face.uvs(0.0f, 0.0f, 16.0f, 16.0f).texture(CLOTH);
-                    case SOUTH -> face.uvs(16.0f, 0.0f, 0.0f, 16.0f).texture(CLOTH);
-                    case UP, DOWN -> face.uvs(0.0f, 0.0f, 16.0f, 0.3f).texture(CLOTH);
-                    default -> face.uvs(0.0f, 0.0f, 0.3f, 16.0f).texture(CLOTH);
-                }
-            });
-        });
+        box(b, 6.25f, 1.5f, 6.25f, 9.75f, 2.5f, 9.75f, IRON);
+        box(b, 7.0f, 2.5f, 7.0f, 9.0f, 16.0f, 9.0f, POLE);
+        box(b, 7.0f, 16.0f, 7.0f, 9.0f, 32.0f, 9.0f, POLE);
+        // Eisenbänder
+        box(b, 6.75f, 9.0f, 6.75f, 9.25f, 10.0f, 9.25f, IRON);
+        box(b, 6.75f, 22.0f, 6.75f, 9.25f, 23.0f, 9.25f, IRON);
         TextureMapping textures = new TextureMapping()
                 .put(POLE, new Material(KingdomsAtWar.id("block/raven_banner_pole")))
                 .put(IRON, new Material(KingdomsAtWar.id("block/raven_banner_iron")))
-                .put(GOLD, new Material(KingdomsAtWar.id("block/raven_banner_gold")))
-                .put(CLOTH, new Material(KingdomsAtWar.id(torn ? "block/raven_banner_torn" : "block/raven_banner_cloth")))
                 .put(TextureSlot.PARTICLE, new Material(KingdomsAtWar.id("block/raven_banner_pole")));
-        return b.build().createWithSuffix(banner, suffix, textures, blocks.modelOutput);
+        return b.build().create(banner, textures, blocks.modelOutput);
     }
 
     private static void banner(BlockModelGenerators blocks) {
         Block banner = CastleGear.RAVEN_BANNER.get();
-        Identifier flying = bannerModel(blocks, banner, "", false);
-        Identifier torn = bannerModel(blocks, banner, "_torn", true);
-        blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(banner)
-                .with(PropertyDispatch.initial(RavenBannerBlock.PHASE).generate(phase -> BlockModelGenerators.plainVariant(switch (phase) {
-                    case GUARDED, AWAKE -> flying;
-                    case FALLEN -> torn;
-                })))
+        Identifier pole = bannerModel(blocks, banner);
+        blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(banner, BlockModelGenerators.plainVariant(pole))
                 .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING));
     }
 }

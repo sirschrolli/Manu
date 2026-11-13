@@ -205,6 +205,10 @@ public class RobberKnightEntity extends Monster implements SkyWarden {
     private final List<AbstractArrow> bolts = new ArrayList<>();
     /** Seine Leute, die er herbeigerufen hat. */
     private final Set<UUID> men = new HashSet<>();
+    /** Sein Ross, das ihn abgeworfen hat und flieht: wohin, und wie lange es noch dorthin getrieben wird. */
+    private @Nullable UUID fleeing;
+    private Vec3 fleeTo = Vec3.ZERO;
+    private int fleeTicks;
     private int clientAttackStart;
 
     public RobberKnightEntity(EntityType<? extends RobberKnightEntity> type, Level level) {
@@ -315,11 +319,14 @@ public class RobberKnightEntity extends Monster implements SkyWarden {
         return this.banner;
     }
 
-    /** Beginnt sofort einen bestimmten Angriff (für Tests und die Vorführung). */
+    /** Beginnt sofort einen bestimmten Angriff (für Tests und die Vorführung; {@code NONE}: er hält zwei Sekunden inne). */
     public void forceAttack(Attack next) {
         if (next == Attack.CHARGE || next == Attack.HALT) {
             this.chargeDir = this.forward();
             this.chargeStart = this.position();
+        }
+        if (next == Attack.NONE) {
+            this.cooldown = 40;
         }
         this.begin(next);
     }
@@ -470,6 +477,7 @@ public class RobberKnightEntity extends Monster implements SkyWarden {
         super.customServerAiStep(level);
         this.bossBar.setProgress(this.getHealth() / this.getMaxHealth());
         this.tickBolts();
+        this.tickFleeingHorse(level);
         if (this.tickCount % 40 == 0 && this.strayed(level)) {
             return;
         }
@@ -1107,6 +1115,17 @@ public class RobberKnightEntity extends Monster implements SkyWarden {
         }
     }
 
+    /** Das Ross läuft davon: Seine eigenen Launen (grasen, stehen, umherschlendern) halten es die ersten Sekunden nicht auf. */
+    private void tickFleeingHorse(ServerLevel level) {
+        if (this.fleeTicks <= 0 || this.fleeing == null) {
+            return;
+        }
+        this.fleeTicks--;
+        if (this.fleeTicks % 4 == 0 && level.getEntity(this.fleeing) instanceof Warhorse horse && horse.isAlive() && !horse.isVehicle()) {
+            horse.getNavigation().moveTo(this.fleeTo.x, this.fleeTo.y, this.fleeTo.z, 2.2);
+        }
+    }
+
     /** Sein Rappe flieht (gesattelt, aber herrenlos: wer will, kann ihn zähmen). */
     private void spawnFleeingHorse(ServerLevel level, Vec3 back) {
         Warhorse horse = ModEntities.WARHORSE.get().create(level, EntitySpawnReason.EVENT);
@@ -1122,6 +1141,9 @@ public class RobberKnightEntity extends Monster implements SkyWarden {
         level.addFreshEntity(horse);
         Vec3 away = this.position().add(back.scale(18.0));
         horse.getNavigation().moveTo(away.x, away.y, away.z, 2.2);
+        this.fleeing = horse.getUUID();
+        this.fleeTo = away;
+        this.fleeTicks = 60;
         level.playSound(null, horse.getX(), horse.getY(), horse.getZ(), SoundEvents.HORSE_GALLOP, SoundSource.NEUTRAL, 1.6f, 1.0f);
     }
 
