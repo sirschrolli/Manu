@@ -78,11 +78,14 @@ final class RobberKnightGameTests {
         }
     }
 
-    /** Ein Hof aus Pflaster (im großen Testbereich). */
-    private static void yard(GameTestHelper helper) {
+    /**
+     * Der Boden aus Stein (der große Testbereich bringt ihn zwar mit, doch steht er im ersten Tick noch nicht überall; Stein,
+     * nicht Pflaster: Ein Nachbartest, dessen Phasenschritt hierher springt, erwartet Stein unter den Füßen).
+     */
+    private static void floor(GameTestHelper helper) {
         for (int x = 0; x < 48; x++) {
             for (int z = 0; z < 48; z++) {
-                helper.setBlock(x, 0, z, Blocks.COBBLESTONE);
+                helper.setBlock(x, 0, z, Blocks.STONE);
             }
         }
     }
@@ -133,7 +136,7 @@ final class RobberKnightGameTests {
      */
     private static void banner(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        yard(helper);
+        floor(helper);
         helper.assertTrue(ModEntities.ROBBER_KNIGHT.get().getCategory() == MobCategory.MONSTER, "Der Raubritter: falsche Gruppe");
         BlockPos pos = helper.absolutePos(new BlockPos(20, 1, 8));
         RavenBannerBlockEntity banner = placeBanner(level, pos);
@@ -204,6 +207,7 @@ final class RobberKnightGameTests {
                 var horses = level.getEntitiesOfClass(Warhorse.class, area.inflate(16), h -> h.entityTags().contains("kaw_robber_horse"));
                 helper.assertTrue(horses.size() == 1, "Kein Ross, das flieht: " + horses.size());
                 helper.assertTrue(horses.getFirst().getItemBySlot(EquipmentSlot.SADDLE).is(Items.SADDLE), "Das Ross ist nicht gesattelt");
+                horses.getFirst().discard();                      // (es liefe sonst in die Nachbartests davon)
                 helper.runAfterDelay(RobberKnightEntity.Attack.UNHORSE.duration, () -> tidyOnFailure(tidy, () -> {
                     helper.assertTrue(knight.currentAttack() != RobberKnightEntity.Attack.UNHORSE, "Er rafft sich nicht auf");
                     knight.setInvulnerableTime(0);
@@ -246,7 +250,7 @@ final class RobberKnightGameTests {
      */
     private static void attacks(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        yard(helper);
+        floor(helper);
         RobberKnightEntity knight = helper.spawn(ModEntities.ROBBER_KNIGHT.get(), new BlockPos(24, 1, 10));
         knight.confine(18.0);
         LivingEntity soldier = helper.spawnWithNoFreeWill(ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get(), new BlockPos(24, 1, 14));
@@ -378,7 +382,7 @@ final class RobberKnightGameTests {
      */
     private static void shield(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        yard(helper);
+        floor(helper);
         RobberKnightEntity knight = helper.spawn(ModEntities.ROBBER_KNIGHT.get(), new BlockPos(24, 1, 8));
         knight.confine(20.0);
         AABB area = new AABB(helper.absolutePos(new BlockPos(24, 1, 20))).inflate(30, 12, 30);

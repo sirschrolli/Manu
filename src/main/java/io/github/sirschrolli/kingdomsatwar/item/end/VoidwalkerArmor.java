@@ -50,6 +50,8 @@ public final class VoidwalkerArmor {
     /** So weit (Blöcke, waagrecht) springt man mindestens und höchstens. */
     public static final double MIN_JUMP = 4.0;
     public static final double MAX_JUMP = 8.0;
+    /** So weit darf der Boden am Ziel höher oder tiefer liegen (sonst führte ein Schritt etwa von einer Brücke in die Tiefe). */
+    public static final double MAX_DROP = 3.5;
     /** Die Farbe des Nachbilds: Phasit-Türkis. */
     public static final int AFTERIMAGE = 0x3FE6CC;
     private static final EquipmentSlot[] SLOTS = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
@@ -128,6 +130,11 @@ public final class VoidwalkerArmor {
                 entity.stopRiding();
             }
             if (entity.randomTeleport(x, y, z, false, state -> state.is(BlockTags.CONSUMABLE_DOES_NOT_TELEPORT_TO)) && !entity.isInWater()) {
+                if (Math.abs(entity.getY() - from.y) > MAX_DROP) {
+                    // (randomTeleport sucht den Boden beliebig weit unten – ein Schritt soll nicht von der Brücke in die Tiefe führen)
+                    entity.teleportTo(from.x, from.y, from.z);
+                    continue;
+                }
                 LAST_PHASE.put(entity, level.getGameTime());
                 entity.resetFallDistance();
                 level.gameEvent(GameEvent.TELEPORT, from, GameEvent.Context.of(entity));
