@@ -260,6 +260,7 @@ public final class KawPlaces {
         boss(new Boss("phasmor", ModEntities.PHASMOR, PHASE_SANCTUARY, KawPlaces::awakenPhasmor, KawPlaces::resetPhasmor, null));
         boss(new Boss("sordin", ModEntities.SORDIN, SILENT_CATHEDRAL, KawPlaces::awakenSordin, KawPlaces::resetSordin, null));
         boss(new Boss("raubritter", ModEntities.ROBBER_KNIGHT, ROBBER_CASTLE, KawPlaces::awakenRobberKnight, KawPlaces::resetRobberKnight, null));
+        boss(new Boss("ventor", ModEntities.VENTOR, TRIAL_ARENA, KawPlaces::awakenVentor, KawPlaces::resetVentor, null));
         boss(new Boss("noctua", ModEntities.MOTH_QUEEN, MONDHAIN, KawPlaces::awakenNoctua, null, null));
         boss(new Boss("missmystik", ModEntities.MISS_MYSTIK, MYSTIK_STAGE, KawPlaces::awakenMystik, KawPlaces::resetMystik, null));
         boss(new Boss("steinhueter", ModEntities.STONE_KEEPER, MOONSTONE_QUARRY, KawPlaces::awakenKeeper, KawPlaces::resetKeeper, null));
@@ -1330,6 +1331,31 @@ public final class KawPlaces {
             banner.reset(level);
         }
         return banner.awaken(level) != null ? awakened(source, boss) : cannot(source, boss);
+    }
+
+    private static io.github.sirschrolli.kingdomsatwar.block.arena.@Nullable ArenaSealBlockEntity arenaSeal(ServerLevel level, Spot spot) {
+        return nearest(level, spot.center(), 4, io.github.sirschrolli.kingdomsatwar.block.arena.ArenaSealBlockEntity.class, seal -> true);
+    }
+
+    /** Ventor steigt sofort aus dem Spawner der Böen (die Käfige gelten als bezwungen). */
+    private static int awakenVentor(CommandSourceStack source, ServerLevel level, Spot spot, Boss boss) {
+        var seal = arenaSeal(level, spot);
+        if (seal == null) {
+            return noLair(source, boss);
+        }
+        if (seal.phase() == io.github.sirschrolli.kingdomsatwar.block.arena.ArenaSealBlock.Phase.AWAKE && seal.ventor(level) != null) {
+            return alreadyAwake(source, boss);
+        }
+        return seal.awaken(level) != null ? awakened(source, boss) : cannot(source, boss);
+    }
+
+    private static int resetVentor(CommandSourceStack source, ServerLevel level, Spot spot, Boss boss) {
+        var seal = arenaSeal(level, spot);
+        if (seal == null) {
+            return noLair(source, boss);
+        }
+        seal.reset(level);
+        return resetDone(source, boss);
     }
 
     private static int resetRobberKnight(CommandSourceStack source, ServerLevel level, Spot spot, Boss boss) {

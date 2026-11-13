@@ -6,9 +6,7 @@ import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.ModSounds;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -61,7 +59,6 @@ public class ArenaSealBlockEntity extends BlockEntity {
     private boolean fought;
     private @Nullable UUID ventor;
     private int missing;
-    private final Map<UUID, Long> told = new HashMap<>();
 
     public ArenaSealBlockEntity(BlockPos pos, BlockState state) {
         super(ArenaGear.ARENA_SEAL_ENTITY.get(), pos, state);
@@ -192,6 +189,13 @@ public class ArenaSealBlockEntity extends BlockEntity {
         this.sync(level);
     }
 
+    /** Für Tests und die Vorführung: Käfig {@code i} gilt als bezwungen (mit Windstoß und Klang wie im Spiel). */
+    public void conquerForShow(ServerLevel level, int i) {
+        if (i >= 0 && i < this.cages.size() && (this.conquered & (1 << i)) == 0) {
+            this.conquer(level, i);
+        }
+    }
+
     /** Ist ein Käfig bezwungen? Dann zündet sein Windsiegel, und ein Windstoß fährt von ihm zum Podest. */
     private void checkCages(ServerLevel level) {
         for (int i = 0; i < this.cages.size(); i++) {
@@ -264,7 +268,6 @@ public class ArenaSealBlockEntity extends BlockEntity {
             default -> ready ? Component.translatable("block.kingdomsatwar.arena_seal.ready").withColor(VentorEntity.WIND) : progress();
         };
         player.sendOverlayMessage(text);
-        this.told.put(player.getUUID(), level.getGameTime());
     }
 
     private Component progress() {

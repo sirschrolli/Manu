@@ -518,6 +518,17 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(net.minecraft.world.item.Items.GOLD_INGOT, 1, 2))
                 .withPool(drop(ModItems.GOLD_COIN.get(), 1, 3))
                 .withPool(drop(net.minecraft.world.item.Items.SADDLE, 0, 1)));
+        // Ventor, der Gladiator der Winde (wer die Käfige der Arena erneut bezwingt, fordert ihn wieder): der Sturmdreizack selten
+        // (auch beim ersten Sieg); der Herzkristall nur selten; dazu seine Wurfnetze, Böenruten und Windkugeln, etwas Kupfer und
+        // wenige Münzen
+        EntityType<?> ventor = ModEntities.VENTOR.get();
+        this.add(ventor, signature(LootTable.lootTable(), ventor, io.github.sirschrolli.kingdomsatwar.registry.ArenaGear.STORM_TRIDENT.get())
+                .withPool(hearts(1))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ArenaGear.GLADIATOR_NET.get(), 1, 3))
+                .withPool(drop(net.minecraft.world.item.Items.BREEZE_ROD, 1, 3))
+                .withPool(drop(net.minecraft.world.item.Items.WIND_CHARGE, 2, 6))
+                .withPool(drop(net.minecraft.world.item.Items.COPPER_INGOT, 2, 5))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 1, 3)));
         // Asteria, die Sternenreiterin (ein Endkristall entzündet den Sternstein neu): Lanze und Schwingen ihres Rochens selten
         // (auch beim ersten Sieg); der Herzkristall nur selten; Sternsplitter und ein wenig aus dem End
         EntityType<?> asteria = ModEntities.ASTERIA.get();

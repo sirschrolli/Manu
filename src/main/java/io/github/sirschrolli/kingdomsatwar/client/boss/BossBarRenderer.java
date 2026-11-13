@@ -112,7 +112,9 @@ public final class BossBarRenderer {
         /** Kristallsplitter: treiben aufwärts. */
         SHARD,
         /** Splitter eines zersprungenen Edelsteins (fallen). */
-        BREAK
+        BREAK,
+        /** Windfäden: wehen schnell quer über die Leiste, mit leichtem Schwung (seit 1.9, Ventor). */
+        GUST
     }
 
     /** Teilchen einer Leiste: wie sie ziehen, wie viele je Sekunde (in der ersten Phase), in welchen Farben. */
@@ -194,6 +196,11 @@ public final class BossBarRenderer {
         // Funken; unter halber Kraft wird er aus dem Sattel geworfen
         STYLES.put("robber_knight", style("robber_knight", 0xE4C254, new float[] {0.5f},
                 new Motes(Drift.LEAF, 2.5f, 0x141418, 0x3E404C, 0x26242A), new Motes(Drift.SPARK, 1.2f, 0xFFF0A8, 0xE4C254)));
+        // Ventor, der Gladiator der Winde (seit 1.9): Bronze mit Grünspan, hinter dem Medaillon Dreizack und Netz gekreuzt, über
+        // der Leiste die Bögen der Arena, darunter sein Dreizack; Windfäden wehen quer darüber, dazwischen wirbelt Sand; unter
+        // halber Kraft entfesselt er den Sturm
+        STYLES.put("ventor", style("ventor", 0x62DBE8, new float[] {0.5f},
+                new Motes(Drift.GUST, 4.0f, 0xDCFCFF, 0xA4F0F6, 0x62DBE8), new Motes(Drift.DUST, 1.5f, 0xD4BC84, 0xB49A62)));
         // Asteria, die Sternenreiterin: Silber mit Goldsaum, Sterne und Nachthimmel, ein Stern im Medaillon
         STYLES.put("star", style("star", 0x9AD8FF, new float[] {0.5f}, new Motes(Drift.TWINKLE, 4.5f, 0xFFFFFF, 0x9AD8FF, 0xE8C25A)));
         // MissMystik, die Feen-Zauberkünstlerin: violetter Samt mit Goldsaum, Zauberkarten, Harlekin-Rauten
@@ -713,6 +720,14 @@ public final class BossBarRenderer {
                 m.vy = -(6.0f + r.nextFloat() * 7.0f);
                 m.life = 1.4f + r.nextFloat() * 1.2f;
             }
+            case GUST -> {
+                m.x = 30.0f + r.nextFloat() * (FRAME_W - 50.0f);
+                m.y = 1.0f + r.nextFloat() * (FRAME_H - 2.0f);
+                m.vx = 26.0f + r.nextFloat() * 22.0f;
+                m.vy = (r.nextFloat() - 0.5f) * 2.0f;
+                m.width = 2 + r.nextInt(4);
+                m.life = 0.45f + r.nextFloat() * 0.45f;
+            }
             case SMOKE -> {
                 m.x = along;
                 m.y = BAR_Y + r.nextFloat() * BAR_H;
@@ -800,6 +815,7 @@ public final class BossBarRenderer {
                 case SNOW, LEAF -> m.vx = sway * 5.0f;
                 case CONFETTI -> m.vx = sway * 7.0f;
                 case BUBBLE -> m.vx = Mth.sin(m.age * 6.0f + m.seed) * 3.5f;
+                case GUST -> m.vy = Mth.sin(m.age * 7.0f + m.seed) * 3.0f;
                 case ARC -> m.vy += 70.0f * dt;
                 case BREAK -> m.vy += 120.0f * dt;
                 case DRIP -> m.vy += 26.0f * dt;
@@ -883,6 +899,10 @@ public final class BossBarRenderer {
                 case GLITTER -> g.fill(0, 0, 1, 1,
                         ARGB.color(Math.round(255 * fade * (0.45f + 0.55f * flickerf(m.age * 14.0f + m.seed))), m.color));
                 case GLITCH -> g.fill(0, 0, m.width, 1, ARGB.color(Math.round(235 * alpha), m.color));
+                case GUST -> {
+                    g.fill(0, 0, m.width, 1, ARGB.color(Math.round(200 * fade), m.color));
+                    g.fill(m.width, 0, m.width + 2, 1, ARGB.color(Math.round(90 * fade), m.color));
+                }
             }
             g.pose().popMatrix();
         }

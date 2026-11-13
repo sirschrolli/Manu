@@ -701,7 +701,9 @@ public class VentorEntity extends Monster implements SkyWarden {
             level.sendParticles(ParticleTypes.SMALL_GUST, this.getX(), this.getY() + 1.2, this.getZ(), 2, 0.6, 1.0, 0.6, 0.0);
         }
         if (t == FORM_TICKS) {
-            level.sendParticles(ParticleTypes.GUST_EMITTER_LARGE, this.getX(), this.getY() + 1.6, this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
+            // er ist geformt: ein Windstoß rollt als Ring über den Sand
+            level.sendParticles(ParticleTypes.GUST_EMITTER_SMALL, this.getX(), this.getY() + 0.2, this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
+            this.gustRing(level, this.position(), 1.8, 14, 0.3);
         }
         if (t == 46) {
             this.sound(level, ModSounds.VENTOR_SHOUT.get(), 3.0f, 1.0f);
@@ -774,7 +776,9 @@ public class VentorEntity extends Monster implements SkyWarden {
         }
         if (t == 24) {
             // der Sturm bricht los: wer nah steht, fliegt
-            level.sendParticles(ParticleTypes.GUST_EMITTER_LARGE, this.getX(), this.getY() + 1.5, this.getZ(), 2, 0.5, 0.5, 0.5, 0.0);
+            level.sendParticles(ParticleTypes.GUST_EMITTER_SMALL, this.getX(), this.getY() + 0.2, this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
+            this.gustRing(level, this.position(), 2.6, 18, 0.3);
+            this.gustRing(level, this.position(), 3.6, 22, 1.1);
             for (LivingEntity victim : this.victims(level, this.getBoundingBox().inflate(5.0, 2.0, 5.0))) {
                 Vec3 dir = this.toward(victim);
                 victim.push(dir.x * 1.6, 0.5, dir.z * 1.6);
@@ -1139,6 +1143,14 @@ public class VentorEntity extends Monster implements SkyWarden {
         level.sendParticles(ParticleTypes.SMALL_GUST, this.diveMark.x, this.diveMark.y + 0.3, this.diveMark.z, 1, 0.5, 0.1, 0.5, 0.0);
     }
 
+    /** Ein Ring kleiner Böen um {@code c} (Radius, Anzahl, Höhe über dem Boden): eine Druckwelle, die man sieht, ohne dass sie ihn verdeckt. */
+    private void gustRing(ServerLevel level, Vec3 c, double radius, int count, double height) {
+        for (int i = 0; i < count; i++) {
+            double a = i * Math.PI * 2.0 / count + this.random.nextDouble() * 0.2;
+            level.sendParticles(ParticleTypes.SMALL_GUST, c.x + Math.cos(a) * radius, c.y + height, c.z + Math.sin(a) * radius, 1, 0.05, 0.05, 0.05, 0.0);
+        }
+    }
+
     /** Der Aufschlag: eine Druckwelle – in der Mitte am härtesten; wer nah steht, fliegt. */
     private void land(ServerLevel level) {
         this.landed = true;
@@ -1146,7 +1158,9 @@ public class VentorEntity extends Monster implements SkyWarden {
         this.setDeltaMovement(0.0, -0.3, 0.0);
         Vec3 c = this.position();
         this.sound(level, ModSounds.VENTOR_IMPACT.get(), 3.2f, 1.0f);
-        level.sendParticles(ParticleTypes.GUST_EMITTER_LARGE, c.x, c.y + 0.5, c.z, 1, 0.0, 0.0, 0.0, 0.0);
+        level.sendParticles(ParticleTypes.GUST_EMITTER_SMALL, c.x, c.y + 0.2, c.z, 1, 0.0, 0.0, 0.0, 0.0);
+        this.gustRing(level, c, DIVE_RADIUS * 0.6, 16, 0.2);
+        this.gustRing(level, c, DIVE_RADIUS, 24, 0.2);
         BlockPos below = BlockPos.containing(c.x, c.y - 0.5, c.z);
         BlockState ground = level.getBlockState(below);
         if (!ground.isAir()) {

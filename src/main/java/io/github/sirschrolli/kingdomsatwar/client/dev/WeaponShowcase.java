@@ -44,6 +44,7 @@ final class WeaponShowcase {
         map.put("weltenspeer", AbyssBlocks.WORLD_SPEAR);
         map.put("eisenspeer", () -> Items.IRON_SPEAR);
         map.put("dreizack", () -> Items.TRIDENT);
+        map.put("sturmdreizack", io.github.sirschrolli.kingdomsatwar.registry.ArenaGear.STORM_TRIDENT);
         map.put("bannhammer", AnniBlocks.BANNHAMMER);
         map.put("seelensense", MonsterGear.SOUL_SCYTHE);
         map.put("moorkeule", MonsterGear.BOG_CLUB);
@@ -103,7 +104,7 @@ final class WeaponShowcase {
             steps.add(Step.once(minecraft -> minecraft.options.setCameraType(CameraType.THIRD_PERSON_BACK)));
             steps.add(Step.waitTicks(4));
             steps.add(Step.screenshot("hand_" + weapon.getKey() + "_3hinten"));
-            if (weapon.getKey().contains("speer") || weapon.getKey().contains("lanze") || weapon.getKey().equals("dreizack")) {
+            if (weapon.getKey().contains("speer") || weapon.getKey().contains("lanze") || weapon.getKey().endsWith("dreizack")) {
                 // die Taste zum Benutzen gehalten: Ansturm (Speere) oder Ausholen (Dreizack)
                 steps.add(Step.once(minecraft -> minecraft.options.keyUse.setDown(true)));
                 steps.add(Step.waitTicks(14));

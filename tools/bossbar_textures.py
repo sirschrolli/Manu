@@ -64,6 +64,7 @@ PHASES = {
     "phasmor": (0.5,),                   # unter halber Kraft setzt er die Krone auf (Phasensturm)
     "sordin": (0.5,),                    # unter halber Kraft das Fortissimo
     "robber_knight": (0.5,),             # unter halber Kraft wird er aus dem Sattel geworfen
+    "ventor": (0.5,),                    # unter halber Kraft entfesselt er den Sturm
 }
 # die Erzmagier wechseln bei zwei Dritteln und einem Drittel die Phase
 MAGE_PHASES = (0.66, 0.33)
@@ -248,6 +249,16 @@ ELEMENTS = {
                           steel="#9aa2ac", steel_dark="#4a5058", steel_light="#e2e8ee",
                           wood="#6e4a26", wood_dark="#3a2612", wood_light="#9a6e40",
                           raven="#141418", raven_light="#3e404c", stone="#4a4648", stone_light="#7a7470", stone_dark="#26242a"),
+    # Ventor, der Gladiator der Winde (seit 1.9): Bronze mit Grünspan; hinter dem Medaillon Dreizack und Netz gekreuzt, über
+    # der Oberkante die Bögen der Arena (Sandstein), darunter liegt sein Sturmdreizack, als Spitze eine Windspirale aus Bronze;
+    # die Füllung Wind – helle Fäden, die schnell über die Leiste ziehen
+    "ventor": dict(m0="#140d07", m1="#5a3c1c", m2="#c8a060", acc="#62dbe8", glow="#e6ffff", deep="#05161a",
+                   f0="#04262c", f1="#137a8e", f2="#62dbe8", f3="#e6ffff",
+                   bronze="#bc9241", bronze_dark="#6a481d", bronze_light="#ecd28c",
+                   verdigris="#46a184", verdigris_dark="#1c5045", verdigris_light="#86cfb2",
+                   red="#a42620", red_dark="#5e0f10", red_light="#e2604a",
+                   wood="#51341f", wood_light="#7a5230", steel="#bdb29c", steel_light="#fbf4e2", steel_dark="#6e675c",
+                   rope="#ab925e", rope_dark="#685532", sand="#d4bc84", sand_light="#ecdcac", sand_dark="#927a4a"),
 }
 
 OUTLINE = (12, 10, 12, 255)
@@ -3122,6 +3133,113 @@ def post_robber_knight(img: Image.Image, pal: dict) -> None:
             put(px, img, x - 1, y, g["gold_dark"])
 
 
+def _ventor_trident(layer: Image.Image, g: dict, x0: float, y0: float, dx: float, dy: float, length: int) -> None:
+    """Ein Dreizack: Schaft aus dunklem Holz mit Kupferbändern von (x0, y0) in Richtung (dx, dy), am Ende Querstück und drei
+    Zinken mit leuchtenden Spitzen."""
+    lp = layer.load()
+    nx, ny = -dy, dx
+    for k in range(length):
+        x, y = x0 + dx * k, y0 + dy * k
+        band = k % 6 == 3
+        put(lp, layer, int(round(x)), int(round(y)), g["bronze_light"] if band else g["wood_light"])
+        put(lp, layer, int(round(x + nx)), int(round(y + ny)), g["bronze_dark"] if band else g["wood"])
+    ex, ey = x0 + dx * length, y0 + dy * length
+    for o in range(-4, 5):                                             # das Querstück
+        put(lp, layer, int(round(ex + nx * o)), int(round(ey + ny * o)), g["bronze_light"] if o < 0 else g["bronze"])
+        put(lp, layer, int(round(ex + nx * o + dx)), int(round(ey + ny * o + dy)), g["bronze_dark"])
+    for o, ln in ((-3.5, 5), (0, 7), (3.5, 5)):                       # drei Zinken, die Spitzen leuchten
+        for k in range(1, ln + 1):
+            col = g["glow"] if k >= ln - 1 else g["acc"] if k >= ln - 2 else g["steel_light"] if o <= 0 else g["steel"]
+            put(lp, layer, int(round(ex + nx * o + dx * (k + 1))), int(round(ey + ny * o + dy * (k + 1))), col)
+
+
+def deco_ventor(img: Image.Image, pal: dict) -> None:
+    """Ventor, der Gladiator der Winde: hinter dem Medaillon sein Dreizack und ein Wurfnetz, gekreuzt; über der Oberkante die
+    Bögen der Arena aus Sandstein; unter der Leiste liegt sein Sturmdreizack (Knauf, Lederwicklung, Schaft mit Kupferbändern,
+    Querstück, drei Zinken); als Spitze eine Windspirale aus Bronze."""
+    g = {k: c(pal, k) for k in pal}
+    top, bottom = BAR_Y - 3, BAR_Y + BAR_H + 2
+
+    # hinter dem Medaillon: der Dreizack (von links unten nach rechts oben) und das Netz (eine Raute aus Seil, mit Gewichten)
+    behind = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    bp = behind.load()
+    for i in range(-15, 16):
+        for j in range(-15, 16):
+            x, y = EMB_X + (i - j) * 0.6, EMB_Y - 4 + (i + j) * 0.6
+            if (i % 5 == 0 or j % 5 == 0) and abs(i) + abs(j) <= 26:
+                put(bp, behind, int(round(x)), int(round(y)), g["rope"] if (i + j) % 2 == 0 else g["rope_dark"])
+    for (x, y) in ((EMB_X - 18, EMB_Y + 6), (EMB_X + 18, EMB_Y + 6), (EMB_X, EMB_Y + 14)):
+        for dx, dy in ((0, 0), (1, 0), (0, 1), (1, 1)):
+            put(bp, behind, x + dx, y + dy, g["steel_dark"])
+    _ventor_trident(behind, g, EMB_X - 17, EMB_Y + 17, 0.72, -0.72, 34)
+    _outline(behind, OUTLINE)
+    img.alpha_composite(behind)
+
+    # die Bögen der Arena über der Oberkante (Sandstein; nicht über den Edelsteinen)
+    arches = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    ap = arches.load()
+    for x0 in range(BAR_X + 6, BAR_X + BAR_W - 10, 15):
+        if any(abs(x0 + 5 - (BAR_X + round(BAR_W * f))) < 10 for f in GEMS):
+            continue
+        for y in range(top - 6, top):
+            for x in range(x0, x0 + 11):
+                rel = (x - x0 - 5.0) / 3.2
+                inside = y > top - 4 + rel * rel * 0.5 and abs(x - x0 - 5) <= 3
+                if inside:
+                    continue
+                if y == top - 6:
+                    col = g["sand_light"] if x < x0 + 8 else g["sand"]
+                elif x in (x0, x0 + 1):
+                    col = g["sand_light"]
+                elif x in (x0 + 9, x0 + 10):
+                    col = g["sand_dark"]
+                else:
+                    col = g["sand"] if hash01(x, y, 1901) > 0.2 else g["sand_dark"]
+                put(ap, arches, x, y, col)
+    _outline(arches, OUTLINE)
+    img.alpha_composite(arches)
+
+    # der Sturmdreizack unter der Leiste
+    spear = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    sp = spear.load()
+    cy = bottom + 6
+    for dx, dy in ((0, 0), (1, 0), (0, -1), (1, -1), (0, 1), (1, 1), (-1, 0)):  # der Knauf (Kupfer)
+        put(sp, spear, BAR_X - 4 + dx, cy + dy, g["bronze_light"] if dy < 0 else g["bronze"] if dy == 0 else g["bronze_dark"])
+    for x in range(BAR_X - 2, BAR_X + 12):                             # die Lederwicklung
+        put(sp, spear, x, cy - 1, g["red_light"] if x % 3 == 0 else g["red"])
+        put(sp, spear, x, cy, g["red"] if x % 3 else g["red_dark"])
+    _ventor_trident(spear, g, BAR_X + 12, cy - 0.5, 1.0, 0.0, 120)
+    _outline(spear, OUTLINE)
+    img.alpha_composite(spear)
+
+    # die Spitze: eine Windspirale aus Bronze
+    tip = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    tp = tip.load()
+    cx, cy2 = 231, int(BAR_Y + BAR_H / 2)
+    for k in range(70):
+        a = k * 0.32
+        r = 0.6 + k * 0.085
+        x, y = cx + math.cos(a) * r, cy2 + math.sin(a) * r
+        col = g["bronze_light"] if math.sin(a) < 0 else g["bronze"] if k < 50 else g["verdigris_light"]
+        put(tp, tip, int(round(x)), int(round(y)), col)
+    _outline(tip, OUTLINE)
+    img.alpha_composite(tip)
+
+
+def post_ventor(img: Image.Image, pal: dict) -> None:
+    """Nach dem Rahmen: statt der Nieten Buckel aus Grünspan in Ober- und Unterkante."""
+    g = {k: c(pal, k) for k in pal}
+    px = img.load()
+    x0, x1, y0, y1 = BAR_X - 3, BAR_X + BAR_W + 2, BAR_Y - 3, BAR_Y + BAR_H + 2
+    for x in range(x0 + 9, x1 - 4, 22):
+        if any(abs(x - (BAR_X + round(BAR_W * f))) < 7 for f in GEMS):
+            continue
+        for y in (y0 + 1, y1 - 1):
+            put(px, img, x, y, g["verdigris_light"])
+            put(px, img, x + 1, y, g["verdigris"])
+            put(px, img, x - 1, y, g["verdigris_dark"])
+
+
 def post_phasmor(img: Image.Image, pal: dict) -> None:
     """Nach dem Rahmen: statt der Nieten kleine Phasite in Purpur in Ober- und Unterkante."""
     g = {k: c(pal, k) for k in pal}
@@ -3579,6 +3697,7 @@ BANNER_COLORS = {
     "phasmor": dict(trim="#c48ccc", trim_dark="#6a3a74", fabric="#08070f"),
     "sordin": dict(trim="#5aa58a", trim_dark="#25594b", fabric="#0a0d14"),
     "robber_knight": dict(trim="#e4c254", trim_dark="#8a6414", fabric="#121014"),
+    "ventor": dict(trim="#bc9241", trim_dark="#6a481d", fabric="#0a1214"),
 }
 
 
@@ -3667,7 +3786,7 @@ def banner_cap(element: str) -> Image.Image:
 POST = {"schrolli": post_schrolli, "schrolli_true": post_schrolli, "schrolli_almighty": post_almighty,
         "world_eater": post_world_eater, "kraken": post_kraken, "keeper": post_keeper, "sea_witch": post_sea_witch,
         "soul_shepherd": post_soul_shepherd, "star_weaver": post_star_weaver, "ignara": post_ignara, "phasmor": post_phasmor,
-        "sordin": post_sordin, "robber_knight": post_robber_knight}
+        "sordin": post_sordin, "robber_knight": post_robber_knight, "ventor": post_ventor}
 BORDERS = {"world_eater": frame_border_stone, "keeper": frame_border_stone}
 
 
@@ -3675,7 +3794,8 @@ DECOS = {"schrolli": deco_schrolli, "schrolli_true": deco_schrolli, "schrolli_al
          "world_eater": deco_world_eater, "anni": deco_anni, "anni2": deco_anni, "mystic": deco_mystic, "star": deco_star, "forge": deco_forge, "moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
          "water": deco_water, "kraken": deco_kraken, "keeper": deco_keeper, "sea_witch": deco_sea_witch,
          "soul_shepherd": deco_soul_shepherd, "star_weaver": deco_star_weaver, "hour_warden": deco_hour_warden,
-         "ignara": deco_ignara, "phasmor": deco_phasmor, "sordin": deco_sordin, "robber_knight": deco_robber_knight}
+         "ignara": deco_ignara, "phasmor": deco_phasmor, "sordin": deco_sordin, "robber_knight": deco_robber_knight,
+         "ventor": deco_ventor}
 
 
 def frame(element: str, phases: tuple | None = None) -> Image.Image:
@@ -3840,6 +3960,17 @@ def fill_value(element: str, x: int, y: int) -> float:
         if rel < h:
             return 0.62 + 0.33 * (1.0 - rel / h)
         return 0.32 - 0.14 * (rel - h)
+    if element == "ventor":
+        # Wind: helle Fäden ziehen in Wellen über die Leiste, dazwischen hie und da ein Sandkorn
+        lane = math.sin(math.tau * (y * 1.0 / 4.5 + x / 48.0) + 1.4 * math.sin(math.tau * x / 96.0))
+        dash = math.sin(math.tau * x / 22.0 + y * 1.7)
+        if hash01(x, y, 1911) > 0.988:
+            return 1.0
+        if lane > 0.86 and dash > -0.2:
+            return 0.95
+        if lane > 0.55:
+            return 0.62 + 0.2 * (lane - 0.55)
+        return 0.3 + 0.12 * (lane + 1.0) / 2.0
     if element == "robber_knight":
         # Gold mit Sparren, die nach vorn weisen (wie sein Ansturm); selten blitzt es
         s = (x + abs(y - (BAR_H - 1) / 2) * 2.0) % 16.0
@@ -4065,7 +4196,7 @@ def portrait(element: str) -> Image.Image:
     from entitygen.models import (asteria, boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water,
                                   glutschmied, kraken, miss_mystik, moth_queen, reef_colossus, shattered_king, anni_troll,
                                   schrolli, sea_witch, soul_shepherd, star_weaver, stone_keeper, world_eater, hour_warden, ignara,
-                                  phasmor, sordin, robber_knight)
+                                  phasmor, sordin, robber_knight, ventor)
     from entitygen.paint import paint_model
     from entitygen.preview import render
     mod = {"fire": boss_fire, "ice": boss_ice, "lightning": boss_lightning, "nature": boss_nature, "earth": boss_earth,
@@ -4074,7 +4205,7 @@ def portrait(element: str) -> Image.Image:
            "schrolli": schrolli, "schrolli_true": schrolli, "schrolli_almighty": schrolli, "world_eater": world_eater,
            "kraken": kraken, "keeper": stone_keeper, "sea_witch": sea_witch, "soul_shepherd": soul_shepherd,
            "star_weaver": star_weaver, "hour_warden": hour_warden, "ignara": ignara, "phasmor": phasmor, "sordin": sordin,
-           "robber_knight": robber_knight}[element]
+           "robber_knight": robber_knight, "ventor": ventor}[element]
     m = mod.build()
     m.pack()
     variant = "anni_troll_v2" if element == "anni2" else element if element.startswith("schrolli") else next(iter(mod.PALETTES))
@@ -4150,6 +4281,14 @@ def portrait(element: str) -> Image.Image:
             for child in bone.children:
                 strip_knight(child)
         strip_knight(m.root)
+    if element == "ventor":
+        # der Helm mit dem Rosshaarkamm über den Schultern (ohne Arme, Dreizack, Netz, Schurz und Wirbel)
+        def strip_ventor(bone):
+            if bone.name.startswith(("arm_", "forearm_", "hand_", "trident", "net", "loin", "wind", "ring_", "galerus")):
+                bone.cubes.clear()
+            for child in bone.children:
+                strip_ventor(child)
+        strip_ventor(m.root)
     if element == "forge":
         # der Widderschädel mit Hörnern, Flammen und Kiefer (ohne Arme, Waffen und Beine)
         def strip_forge(bone):
@@ -4240,11 +4379,11 @@ def portrait(element: str) -> Image.Image:
         strip_anni(m.root)
     zoom = {"kraken": 1.5, "schrolli": 1.0, "schrolli_true": 1.0, "schrolli_almighty": 1.0, "world_eater": 1.35, "nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86, "star": 0.92, "mystic": 0.95,
             "anni": 1.0, "anni2": 1.0, "keeper": 0.8, "sea_witch": 1.5, "soul_shepherd": 1.12, "star_weaver": 0.95, "hour_warden": 0.9, "ignara": 0.85, "phasmor": 0.88, "sordin": 0.72,
-            "robber_knight": 1.2}.get(element, 1.2)
+            "robber_knight": 1.2, "ventor": 1.05}.get(element, 1.2)
     yaw = {"kraken": -20, "schrolli": -22, "schrolli_true": -22, "schrolli_almighty": -22, "world_eater": -6, "water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14, "star": -24, "mystic": -22, "anni": -24,
            "anni2": -24, "keeper": -20, "sea_witch": -22, "soul_shepherd": -14, "star_weaver": -20, "hour_warden": -16, "ignara": -18, "phasmor": -10, "sordin": -14,
-           "robber_knight": -24}.get(element, -42)
-    pitch = {"kraken": -18, "schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2, "keeper": -5, "sea_witch": 2, "soul_shepherd": 4, "star_weaver": 48, "hour_warden": 4, "ignara": 4, "phasmor": 8, "sordin": 6, "robber_knight": 6}.get(element, 6)
+           "robber_knight": -24, "ventor": -22}.get(element, -42)
+    pitch = {"kraken": -18, "schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2, "keeper": -5, "sea_witch": 2, "soul_shepherd": 4, "star_weaver": 48, "hour_warden": 4, "ignara": 4, "phasmor": 8, "sordin": 6, "robber_knight": 6, "ventor": 6}.get(element, 6)
     big = render(m, tex, glow, yaw, pitch, 448, pose=getattr(mod, "FOLD_POSE", None), background=(0, 0, 0, 0), zoom=zoom,
                  focus=["body"] if element in ("reef", "kraken", "star_weaver") else ["helm"] if element == "star"
                  else ["lock_l", "lock_r", "crown"] if element == "ignara" else ["helm"] if element == "robber_knight" else ["head"])
@@ -4255,7 +4394,7 @@ def portrait(element: str) -> Image.Image:
                                                  "schrolli_almighty": 1.45, "world_eater": 2.0, "keeper": 1.3, "sea_witch": 1.35,
                                                  "soul_shepherd": 1.7, "star_weaver": 2.3, "hour_warden": 1.6,
                                                  "ignara": 1.3, "phasmor": 1.45, "sordin": 1.9,
-                                                 "robber_knight": 1.5}.get(element, 1.4))
+                                                 "robber_knight": 1.5, "ventor": 1.35}.get(element, 1.4))
     img = ImageEnhance.Color(img).enhance(1.15)
     img = ImageEnhance.Contrast(img).enhance(1.12)
     if element == "schrolli_almighty":

@@ -14,6 +14,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -21,33 +23,41 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 /**
  * Ein Wurfnetz, das sich um jemanden gelegt hat (seit 1.9): Wer darin steckt, kommt kaum vom Fleck – wie in einem
  * Spinnennetz, nur fester. Mit der Hand oder einer Klinge ist es schnell zerrissen; sonst löst es sich nach
- * {@value #LIFETIME} Ticks von selbst. Ventor wirft es, und das Wurfnetz aus seiner Beute ebenso.
+ * {@value #LIFETIME} Ticks von selbst – ein Netz, das danebenging und als Falle am Boden liegt ({@link #TRAP}), erst nach
+ * {@value #TRAP_LIFETIME}. Ventor wirft es, und das Wurfnetz aus seiner Beute ebenso.
  */
 public class GladiatorNetBlock extends Block {
-    /** So lange (Ticks) hält ein Netz. */
+    /** So lange (Ticks) hält ein Netz, das jemanden traf … */
     public static final int LIFETIME = 70;
+    /** … und so lange eines, das als Falle am Boden liegt. */
+    public static final int TRAP_LIFETIME = 200;
+    public static final BooleanProperty TRAP = BooleanProperty.create("trap");
     private static final VoxelShape SHAPE = Block.box(1.0, 0.0, 1.0, 15.0, 14.0, 15.0);
 
     public GladiatorNetBlock(BlockBehaviour.Properties properties) {
         super(properties);
+        this.registerDefaultState(this.stateDefinition.any().setValue(TRAP, false));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(TRAP);
     }
 
     /**
-     * Legt ein Netz an {@code pos}, wenn dort Luft (oder etwas Ersetzbares ohne Wasser) ist; liegt dort schon eines, hält es
-     * länger. Gibt zurück, ob dort jetzt ein Netz ist.
+     * Legt ein Netz an {@code pos} (um jemanden oder als Falle), wenn dort Luft (oder etwas Ersetzbares ohne Wasser) ist; liegt
+     * dort schon eines, bleibt es. Gibt zurück, ob dort jetzt ein Netz ist.
      */
-    public static boolean place(ServerLevel level, BlockPos pos, int lifetime) {
+    public static boolean place(ServerLevel level, BlockPos pos, boolean trap) {
         Block net = ArenaGear.GLADIATOR_NET_BLOCK.get();
         BlockState here = level.getBlockState(pos);
         if (here.is(net)) {
-            level.scheduleTick(pos, net, lifetime);
             return true;
         }
         if (!here.isAir() && !(here.canBeReplaced() && here.getFluidState().isEmpty()) || !level.isInWorldBounds(pos)) {
             return false;
         }
-        level.setBlock(pos, net.defaultBlockState(), Block.UPDATE_ALL);
-        level.scheduleTick(pos, net, lifetime);
+        level.setBlock(pos, net.defaultBlockState().setValue(TRAP, trap), Block.UPDATE_ALL);
         return true;
     }
 
@@ -63,7 +73,7 @@ public class GladiatorNetBlock extends Block {
     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
         super.onPlace(state, level, pos, oldState, movedByPiston);
         if (!level.isClientSide() && !oldState.is(this)) {
-            level.scheduleTick(pos, this, LIFETIME);
+            level.scheduleTick(pos, this, state.getValue(TRAP) ? TRAP_LIFETIME : LIFETIME);
         }
     }
 

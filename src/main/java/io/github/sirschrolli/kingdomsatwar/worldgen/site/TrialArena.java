@@ -436,7 +436,10 @@ final class TrialArena {
             }
         }
 
-        /** Das Podest in der Mitte: rund, mit Stufen, Kupferstäben und dem Spawner der Böen obenauf. */
+        /**
+         * Das Podest in der Mitte: rund, mit Stufen, Kupferstäben und dem Spawner der Böen obenauf; darunter (in der Mitte des
+         * Podests) das Arenasiegel, das die Käfige zählt und Ventor ruft, den Gladiator der Winde (seit 1.9).
+         */
         void dais() {
             for (int x = -3; x <= 3; x++) {
                 for (int z = -3; z <= 3; z++) {
@@ -444,7 +447,9 @@ final class TrialArena {
                     if (r <= 2.5) {
                         this.b.set(x, 1, z, state(Blocks.CUT_SANDSTONE));
                         if (r <= 1.5) {
-                            this.b.set(x, 2, z, x == 0 && z == 0 ? state(Blocks.CHISELED_SANDSTONE) : state(Blocks.SMOOTH_SANDSTONE));
+                            this.b.set(x, 2, z, x == 0 && z == 0
+                                    ? io.github.sirschrolli.kingdomsatwar.registry.ArenaGear.ARENA_SEAL.get().defaultBlockState()
+                                    : state(Blocks.SMOOTH_SANDSTONE));
                         }
                     }
                 }

@@ -34,9 +34,8 @@ import net.minecraft.world.phys.Vec3;
 public class GladiatorNetEntity extends ThrowableItemProjectile {
     public static final double SPEED = 1.15;
     private static final double GRAVITY = 0.035;
-    /** So lange hält ein Netz, das jemanden traf, und eines, das als Falle am Boden liegt. */
-    public static final int SNARE_TICKS = 70;
-    public static final int TRAP_TICKS = 200;
+    /** So lange ist langsam, wen ein Netz traf. */
+    public static final int SNARE_TICKS = GladiatorNetBlock.LIFETIME;
     private float damage = 2.0f;
 
     public GladiatorNetEntity(EntityType<? extends GladiatorNetEntity> type, Level level) {
@@ -102,7 +101,7 @@ public class GladiatorNetEntity extends ThrowableItemProjectile {
         super.onHitBlock(result);
         if (this.level() instanceof ServerLevel level) {
             BlockPos at = result.getBlockPos().relative(result.getDirection());
-            if (GladiatorNetBlock.place(level, at, TRAP_TICKS)) {
+            if (GladiatorNetBlock.place(level, at, true)) {
                 level.playSound(null, at, ModSounds.GLADIATOR_NET_SNARE.get(), SoundSource.NEUTRAL, 1.2f, 1.2f);
             }
         }
@@ -121,9 +120,9 @@ public class GladiatorNetEntity extends ThrowableItemProjectile {
     /** Legt das Netz um {@code victim}: um die Füße (bei Großen auch um den Leib); dazu ist es eine Weile langsam. */
     public static void snare(ServerLevel level, LivingEntity victim, int ticks) {
         BlockPos feet = victim.blockPosition();
-        boolean held = GladiatorNetBlock.place(level, feet, ticks);
+        boolean held = GladiatorNetBlock.place(level, feet, false);
         if (victim.getBbHeight() > 1.2) {
-            held |= GladiatorNetBlock.place(level, feet.above(), ticks);
+            held |= GladiatorNetBlock.place(level, feet.above(), false);
         }
         victim.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, ticks, held ? 1 : 3));
         level.playSound(null, victim.getX(), victim.getY(), victim.getZ(), ModSounds.GLADIATOR_NET_SNARE.get(), SoundSource.HOSTILE, 1.8f, 1.0f);

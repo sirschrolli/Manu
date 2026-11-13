@@ -1358,6 +1358,56 @@ public class ModLanguageProvider extends LanguageProvider {
         }
         subtitle("block.raven_banner.tear", "Banner tears", "Banner zerreißt");
         subtitle("item.morning_star.smash", "Morning star smashes", "Morgenstern schmettert");
+        // Ventor, der Gladiator der Winde, das Arenasiegel, der Sturmdreizack und das Wurfnetz (1.9)
+        creature(ModEntities.VENTOR, io.github.sirschrolli.kingdomsatwar.registry.ArenaGear.VENTOR_SPAWN_EGG,
+                "Ventor, Gladiator of the Winds", "Ventor, der Gladiator der Winde", "Ventor");
+        add(ModEntities.STORM_TRIDENT.get(), pick("Storm Trident", "Sturmdreizack"));
+        add(ModEntities.GLADIATOR_NET.get(), pick("Throwing Net", "Wurfnetz"));
+        add(ModEntities.WIND_VORTEX.get(), pick("Whirlwind", "Windhose"));
+        text("boss.kingdomsatwar.ventor", "Ventor, Gladiator of the Winds", "Ventor, der Gladiator der Winde");
+        text("boss.kingdomsatwar.ventor.title", "Master of the Arena of Trials", "Der Meister der Arena der Prüfungen");
+        text("boss.kingdomsatwar.ventor.rage", "The storm of the arena breaks loose!", "Der Sturm der Arena ist entfesselt!");
+        block(io.github.sirschrolli.kingdomsatwar.registry.ArenaGear.ARENA_SEAL, "Arena Seal", "Arenasiegel");
+        lore("arena_seal", "Set into the dais of the Arena of Trials, beneath the breeze spawner",
+                "Eingelassen in das Podest der Arena der Prüfungen, unter dem Spawner der Böen");
+        text(ModItems.loreKey("arena_seal", 2), "Counts the conquered cages – when all are conquered, the master of the arena rises",
+                "Zählt die bezwungenen Käfige – sind alle bezwungen, steigt der Meister der Arena auf");
+        text("block.kingdomsatwar.arena_seal.progress", "Arena of Trials: %s of %s cages conquered",
+                "Arena der Prüfungen: %s von %s Käfigen bezwungen");
+        text("block.kingdomsatwar.arena_seal.ready", "All cages conquered – the master of the arena awaits you in the sand!",
+                "Alle Käfige bezwungen – der Meister der Arena erwartet dich im Sand!");
+        text("block.kingdomsatwar.arena_seal.awake", "The master of the arena is fighting!", "Der Meister der Arena kämpft!");
+        text("block.kingdomsatwar.arena_seal.conquered", "The master of the arena is defeated. Conquer the cages again to challenge him once more.",
+                "Der Meister der Arena ist besiegt. Bezwinge die Käfige erneut, um ihn noch einmal zu fordern.");
+        block(io.github.sirschrolli.kingdomsatwar.registry.ArenaGear.GLADIATOR_NET_BLOCK, "Gladiator Net", "Gladiatorennetz");
+        item(io.github.sirschrolli.kingdomsatwar.registry.ArenaGear.STORM_TRIDENT, "Storm Trident", "Sturmdreizack");
+        lore("storm_trident", "The trident of Ventor, gladiator of the winds", "Der Dreizack Ventors, des Gladiators der Winde");
+        text(ModItems.loreKey("storm_trident", 2), "Thrown: unleashes a gust where it strikes",
+                "Geworfen: Wo er einschlägt, entfesselt er eine Böe");
+        text(ModItems.loreKey("storm_trident", 3), "Always returns to your hand – even without Loyalty",
+                "Kehrt immer in die Hand zurück – auch ohne Treue");
+        item(io.github.sirschrolli.kingdomsatwar.registry.ArenaGear.GLADIATOR_NET, "Throwing Net", "Wurfnetz");
+        lore("gladiator_net", "A gladiator's net with lead weights", "Ein Gladiatorennetz mit Bleigewichten");
+        text(ModItems.loreKey("gladiator_net", 2), "Use: throw – whoever it hits is caught for a while",
+                "Benutzen: werfen – wen es trifft, der steckt eine Weile fest");
+        for (String[] e : new String[][] {{"awaken", "Whirlwind rises", "Wirbelwind erhebt sich"},
+                {"shout", "Gladiator shouts", "Gladiator ruft"}, {"crowd", "Crowd cheers", "Menge jubelt"},
+                {"ambient", "Wind howls", "Wind heult"}, {"hurt", "Bronze rings", "Bronze klingt"},
+                {"death", "The wind dies down", "Der Wind erstirbt"}, {"fall", "Bronze statue falls", "Bronzestatue stürzt"},
+                {"gather", "Wind gathers", "Wind sammelt sich"}, {"gust", "Gust blows", "Böe fegt"},
+                {"slam", "Something slams into a wall", "Etwas prallt gegen eine Wand"}, {"thrust", "Trident thrusts", "Dreizack stößt zu"},
+                {"stab", "Trident strikes", "Dreizack trifft"}, {"net", "Net whirs", "Netz schwirrt"},
+                {"throw", "Trident whistles", "Dreizack pfeift"}, {"vortex", "Whirlwinds rise", "Windhosen erheben sich"},
+                {"rise", "Gladiator soars", "Gladiator steigt auf"}, {"dive", "Gladiator dives", "Gladiator stürzt herab"},
+                {"impact", "Ground shakes", "Boden bebt"}, {"cyclone", "Cyclone roars", "Zyklon tost"},
+                {"rage", "Storm breaks loose", "Sturm bricht los"}, {"storm", "Storm gust approaches", "Sturmböe naht"}}) {
+            subtitle("entity.ventor." + e[0], e[1], e[2]);
+        }
+        subtitle("entity.wind_vortex.howl", "Whirlwind howls", "Windhose heult");
+        subtitle("block.arena_seal.cage", "Cage conquered", "Käfig bezwungen");
+        subtitle("block.arena_seal.ready", "Arena awakens", "Arena erwacht");
+        subtitle("item.storm_trident.burst", "Gust bursts", "Böe entlädt sich");
+        subtitle("item.gladiator_net.snare", "Net ensnares", "Netz verfängt sich");
         // Waffen und Rüstungen aus Monsterteilen (0.70)
         item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.WEREWOLF_PELT, "Werewolf Pelt", "Werwolfspelz");
         lore("werewolf_pelt", "Thick, dark fur – still warm", "Dichtes, dunkles Fell – noch warm");

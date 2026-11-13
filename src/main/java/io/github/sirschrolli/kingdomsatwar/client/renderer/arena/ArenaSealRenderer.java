@@ -29,10 +29,15 @@ import org.jspecify.annotations.Nullable;
  */
 public class ArenaSealRenderer implements BlockEntityRenderer<ArenaSealBlockEntity, ArenaSealRenderer.State> {
     private static final RenderType TYPE = RenderTypes.entityCutout(KingdomsAtWar.id("textures/entity/ventor/sigil.png"));
-    /** So weit von der Mitte des Spawners schweben die Siegel (Blöcke), so groß sind sie, so hoch über dem Siegel. */
-    private static final float RADIUS = 1.3f;
-    private static final float SIZE = 0.5f;
-    private static final float HEIGHT = 1.5f;
+    /**
+     * So weit von der Mitte schweben die Siegel (Blöcke), so groß sind sie, so hoch über dem Arenasiegel: als Kranz über dem
+     * Spawner der Böen (er steht auf dem Siegel und reicht bis 2 Blöcke darüber), leicht nach oben geneigt, damit man sie
+     * von den Rängen und vom Sand aus sieht.
+     */
+    private static final float RADIUS = 1.2f;
+    private static final float SIZE = 0.72f;
+    private static final float HEIGHT = 2.85f;
+    private static final float TILT = 0.35f;
     /** Ein mattes Siegel ist halbhell (Block- und Himmelslicht 7). */
     private static final int DIM = 7 << 4 | 7 << 20;
 
@@ -83,6 +88,7 @@ public class ArenaSealRenderer implements BlockEntityRenderer<ArenaSealBlockEnti
             // die Fläche (in x-y, Normale +z) zum Käfig drehen: +z zeigt dann in Richtung (cos θ, sin θ)
             pose.rotate(Axis.YP.rotation(Mth.HALF_PI - angle));
             pose.translate(0.0f, 0.0f, RADIUS);
+            pose.rotate(Axis.XP.rotation(-TILT));
             pose.rotate(Axis.ZP.rotation(state.time * (lit ? 0.04f : 0.01f) + i));
             pose.scale(pulse, pulse, pulse);
             int light = lit ? 0xF000F0 : DIM;
@@ -105,6 +111,6 @@ public class ArenaSealRenderer implements BlockEntityRenderer<ArenaSealBlockEnti
     @Override
     public AABB getRenderBoundingBox(ArenaSealBlockEntity seal) {
         BlockPos pos = seal.getBlockPos();
-        return new AABB(pos.getX() - 1.5, pos.getY() + 0.5, pos.getZ() - 1.5, pos.getX() + 2.5, pos.getY() + 2.6, pos.getZ() + 2.5);
+        return new AABB(pos.getX() - 1.5, pos.getY() + 0.5, pos.getZ() - 1.5, pos.getX() + 2.5, pos.getY() + HEIGHT + 1.0, pos.getZ() + 2.5);
     }
 }

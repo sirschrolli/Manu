@@ -2187,6 +2187,28 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.ambient.zap"
   },
+  "block.arena_seal.cage": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/arena_seal_cage1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/arena_seal_cage2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.block.arena_seal.cage"
+  },
+  "block.arena_seal.ready": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/arena_seal_ready1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.block.arena_seal.ready"
+  },
   "block.creator_altar.awaken": {
     "sounds": [
       {
@@ -9974,6 +9996,291 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.triton.hurt"
   },
+  "entity.ventor.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_ambient1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_ambient2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_ambient3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ventor.ambient"
+  },
+  "entity.ventor.awaken": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_awaken1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ventor.awaken"
+  },
+  "entity.ventor.crowd": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_crowd1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_crowd2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ventor.crowd"
+  },
+  "entity.ventor.cyclone": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_cyclone1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_cyclone2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ventor.cyclone"
+  },
+  "entity.ventor.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_death1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ventor.death"
+  },
+  "entity.ventor.dive": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_dive1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_dive2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ventor.dive"
+  },
+  "entity.ventor.fall": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_fall1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_fall2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ventor.fall"
+  },
+  "entity.ventor.gather": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_gather1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_gather2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ventor.gather"
+  },
+  "entity.ventor.gust": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_gust1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_gust2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_gust3",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ventor.gust"
+  },
+  "entity.ventor.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_hurt1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_hurt2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_hurt3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ventor.hurt"
+  },
+  "entity.ventor.impact": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_impact1",
+        "attenuation_distance": 56
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_impact2",
+        "attenuation_distance": 56
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ventor.impact"
+  },
+  "entity.ventor.net": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_net1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_net2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ventor.net"
+  },
+  "entity.ventor.rage": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_rage1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ventor.rage"
+  },
+  "entity.ventor.rise": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_rise1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_rise2",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ventor.rise"
+  },
+  "entity.ventor.shout": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_shout1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_shout2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ventor.shout"
+  },
+  "entity.ventor.slam": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_slam1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_slam2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_slam3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ventor.slam"
+  },
+  "entity.ventor.stab": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_stab1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_stab2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_stab3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ventor.stab"
+  },
+  "entity.ventor.storm": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_storm1",
+        "attenuation_distance": 56
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_storm2",
+        "attenuation_distance": 56
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ventor.storm"
+  },
+  "entity.ventor.throw": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_throw1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_throw2",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ventor.throw"
+  },
+  "entity.ventor.thrust": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_thrust1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_thrust2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_thrust3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ventor.thrust"
+  },
+  "entity.ventor.vortex": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_vortex1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/ventor_vortex2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ventor.vortex"
+  },
   "entity.void_maw.ambient": {
     "sounds": [
       {
@@ -10413,6 +10720,23 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.will_o_wisp.vanish"
+  },
+  "entity.wind_vortex.howl": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/wind_vortex_howl1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/wind_vortex_howl2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/wind_vortex_howl3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.wind_vortex.howl"
   },
   "entity.world_eater.ambient": {
     "sounds": [
@@ -10898,6 +11222,19 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.item.flame_whip.crack"
   },
+  "item.gladiator_net.snare": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/gladiator_net_snare1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/gladiator_net_snare2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.item.gladiator_net.snare"
+  },
   "item.glitch_wings.blink": {
     "sounds": [
       {
@@ -11034,6 +11371,23 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.item.star_wings.boost"
+  },
+  "item.storm_trident.burst": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/arena/storm_trident_burst1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/storm_trident_burst2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/arena/storm_trident_burst3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.item.storm_trident.burst"
   },
   "item.timewarden.ready": {
     "sounds": [

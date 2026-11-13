@@ -79,6 +79,7 @@ import phase_textures  # noqa: E402
 import echo_textures  # noqa: E402
 import cathedral_textures  # noqa: E402
 import castle_textures  # noqa: E402
+import arena_textures  # noqa: E402
 import clocktower_textures  # noqa: E402
 import weaver_textures  # noqa: E402
 import shepherd_textures  # noqa: E402
@@ -407,6 +408,7 @@ def build_all() -> dict[str, Image.Image]:
     echo_textures.build(put)
     cathedral_textures.build(put)
     castle_textures.build(put)
+    arena_textures.build(put)
     clocktower_textures.build(put)
     weaver_textures.build(put)
     shepherd_textures.build(put)
