@@ -223,8 +223,9 @@ public final class Trading {
     }
 
     /**
-     * Die Erweiterung des Fischbeutels (beim Fischer): Preis und Bild richten sich nach dem Beutel, den dieser Spieler bei sich
-     * trägt – jede Stufe kostet mehr als die vorige ({@link FishBag#upgradePrice}).
+     * Die Erweiterung des Fischbeutels (beim Fischer und seit 1.9.2 bei jeder Händlerin des Meervolks): Preis und Bild richten
+     * sich nach dem Beutel, den dieser Spieler bei sich trägt – jede Stufe kostet mehr als die vorige
+     * ({@link FishBag#upgradePrice}). Jede Erweiterung ist ein Kauf und zählt zur Handelsgrenze des Ladens.
      */
     private static Offer bagUpgrade(Player player, int discount, boolean free, boolean hard) {
         ItemStack bag = FishBag.forUpgrade(player);
@@ -346,10 +347,8 @@ public final class Trading {
         if (offer.getCoins() > 0) {
             Coins.give(player, offer.getCoins());
         }
-        if (!bagUpgrade) {
-            // die Erweiterung des Fischbeutels ist kein Warenhandel: Sie zählt nicht zur Handelsgrenze des Ladens
-            citizen.recordTrade(limit(), pauseMillis());
-        }
+        // jeder Handel zählt zur Handelsgrenze des Ladens – seit 1.9.2 auch die Erweiterung des Fischbeutels
+        citizen.recordTrade(limit(), pauseMillis());
         Reputation.add(player, Reputation.TRADE);
         citizen.level().playSound(null, citizen.getX(), citizen.getY(), citizen.getZ(), citizen.agreeSound(), SoundSource.NEUTRAL, 0.6f, 1.0f);
         citizen.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.CHAIN_HIT, SoundSource.PLAYERS, 0.5f, 1.7f);

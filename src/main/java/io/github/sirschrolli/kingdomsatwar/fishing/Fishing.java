@@ -156,8 +156,8 @@ public final class Fishing {
     }
 
     /**
-     * Um welchen Anteil die Wartezeit dieses Hakens kürzer ist: Köder, die Angel selbst (seit 0.87) und die Verzauberung
-     * „Köder“ (zusätzlich zu dem, was sie bei Minecraft ohnehin abzieht) wirken nacheinander.
+     * Um welchen Anteil die Wartezeit dieses Hakens kürzer ist: Köder, die Angel selbst (seit 0.87), die Verzauberung „Köder“
+     * (zusätzlich zu dem, was sie bei Minecraft ohnehin abzieht) und seit 1.9.2 die Angelkunst des Helden wirken nacheinander.
      */
     public static float haste(FishingHook hook) {
         Player owner = hook.getPlayerOwner();
@@ -166,8 +166,9 @@ public final class Fishing {
         }
         ItemStack rod = rodStack(owner);
         RodType type = rodType(rod);
-        return haste(Bait.of(baitStack(owner)).haste(), type == null ? 0.0f : type.haste(place(hook)),
+        float gear = haste(Bait.of(baitStack(owner)).haste(), type == null ? 0.0f : type.haste(place(hook)),
                 io.github.sirschrolli.kingdomsatwar.enchant.EnchantPower.level(rod, net.minecraft.world.item.enchantment.Enchantments.LURE));
+        return 1.0f - (1.0f - gear) * (1.0f - io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.fishingHaste(owner));
     }
 
     /** Köder, Angel und Verzauberung „Köder“ zusammen (jede kürzt, was die vorige übrig lässt). */
@@ -178,7 +179,12 @@ public final class Fishing {
 
     /** Um wie viel größer die Fangzone im Drill ist: Glück, Drillmeister und die Angel der Mod zusammen. */
     public static float zoneBonus(int luck, int angler, @Nullable RodType type, RodType.Place place) {
-        return Math.min(ZONE_CAP, Math.min(0.2f, 0.05f * luck) + ANGLER_ZONE * angler + (type == null ? 0.0f : type.zone(place)));
+        return zoneBonus(luck, angler, type, place, 0.0f);
+    }
+
+    /** Dasselbe mit der Angelkunst des Helden (seit 1.9.2; auch sie bleibt unter der Grenze von {@value #ZONE_CAP}). */
+    public static float zoneBonus(int luck, int angler, @Nullable RodType type, RodType.Place place, float talent) {
+        return Math.min(ZONE_CAP, Math.min(0.2f, 0.05f * luck) + ANGLER_ZONE * angler + (type == null ? 0.0f : type.zone(place)) + talent);
     }
 
     // =====================================================================================
@@ -195,7 +201,8 @@ public final class Fishing {
         // die Angeln der Mod bringen hier ihr eigenes Glück mit (seit 0.87)
         RodType type = rodType(rod);
         RodType.Place place = RodType.Place.of(level, hook.blockPosition(), medium, deep(hook));
-        int luck = Math.max(0, hookLuck + Math.round(player.getLuck()) + (type == null ? 0 : type.luck(place)));
+        int luck = Math.max(0, hookLuck + Math.round(player.getLuck() + io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.fishingLuck(player))
+                + (type == null ? 0 : type.luck(place)));
         InteractionHand hand = player.getMainHandItem() == rod ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
         ItemStack baitStack = player.getItemInHand(hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
         Bait bait = Bait.of(baitStack);
@@ -223,7 +230,7 @@ public final class Fishing {
         SESSIONS.put(player.getUUID(), session);
         int angler = io.github.sirschrolli.kingdomsatwar.enchant.EnchantPower.level(rod, io.github.sirschrolli.kingdomsatwar.enchant.ModEnchantments.ANGLER);
         ModNetwork.send(player, new FishingStartPayload(session.id, species.ordinal(), medium.ordinal(), log(player).has(species), chest,
-                zoneBonus(luck, angler, type, place)));
+                zoneBonus(luck, angler, type, place, io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.fishingZone(player))));
         return 0;
     }
 

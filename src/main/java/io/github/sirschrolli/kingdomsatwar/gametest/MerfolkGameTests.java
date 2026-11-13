@@ -120,9 +120,9 @@ final class MerfolkGameTests {
     /**
      * Der Handel (seit 0.99 wie bei allen anderen Händlern, gegen Münzen): jeder Beruf hat Angebote, jedes kostet Münzen
      * oder bringt welche ein; die Perlentaucherin hat ein Herz des Meeres und kauft Perlen, die Korallengärtnerin die vier
-     * Setzlinge, die Muschelbauerin Meereslaternen, die Gezeitensängerin einen Aquisitor und Bücher. Die Angebote bleiben
-     * zwischen Anzeigen und Handeln gleich, ein Handel klappt über {@link Trading}, und die Wache handelt nicht. Dazu Perle,
-     * Spawn-Eier und Beute.
+     * Setzlinge, die Muschelbauerin Meereslaternen, die Gezeitensängerin einen Aquisitor und Bücher; seit 1.9.2 erweitert jede
+     * den Fischbeutel (ein Kauf, der zur Handelsgrenze zählt). Die Angebote bleiben zwischen Anzeigen und Handeln gleich, ein
+     * Handel klappt über {@link Trading}, und die Wache handelt nicht. Dazu Perle, Spawn-Eier und Beute.
      */
     private static void trades(GameTestHelper helper) {
         pool(helper);
@@ -139,6 +139,8 @@ final class MerfolkGameTests {
             for (Trading.Offer offer : offers) {
                 helper.assertTrue(offer.giveCoins() > 0 || offer.getCoins() > 0, profession.id() + " handelt ohne Münzen: " + offer.get());
             }
+            helper.assertTrue(offers.stream().anyMatch(o -> o.special().equals(io.github.sirschrolli.kingdomsatwar.fishing.FishBag.UPGRADE_OFFER)),
+                    profession.id() + " erweitert den Fischbeutel nicht");
             switch (profession) {
                 case PEARL_DIVER -> {
                     helper.assertTrue(offers.stream().anyMatch(o -> o.get().is(Items.HEART_OF_THE_SEA)), "Die Perlentaucherin hat kein Herz des Meeres");
@@ -182,6 +184,26 @@ final class MerfolkGameTests {
                 helper.assertTrue(player.getInventory().countItem(Items.COD) == codBefore,
                         "Der Kabeljau ist noch da: " + player.getInventory().countItem(Items.COD) + " statt " + codBefore);
                 helper.assertTrue(mermaid.tradesUsed() == 1, "Der Handel zählt nicht zur Handelsgrenze");
+                // die Erweiterung des Fischbeutels: Der Beutel wächst, sein Inhalt bleibt – und es ist ein Kauf
+                ItemStack bag = new ItemStack(io.github.sirschrolli.kingdomsatwar.registry.FishingItems.FISH_BAG.get());
+                bag.set(io.github.sirschrolli.kingdomsatwar.registry.ModDataComponents.FISH_BAG.get(),
+                        io.github.sirschrolli.kingdomsatwar.fishing.FishBag.EMPTY.upgraded().upgraded());
+                player.getInventory().add(bag);
+                List<Trading.Offer> priced = Trading.offers(player, mermaid);
+                int upgrade = -1;
+                for (int i = 0; i < priced.size(); i++) {
+                    if (priced.get(i).special().equals(io.github.sirschrolli.kingdomsatwar.fishing.FishBag.UPGRADE_OFFER)) {
+                        upgrade = i;
+                    }
+                }
+                helper.assertTrue(upgrade >= 0 && io.github.sirschrolli.kingdomsatwar.fishing.FishBag.of(priced.get(upgrade).get()).level() == 3,
+                        "Die Erweiterung zeigt nicht die nächste Stufe des Beutels");
+                io.github.sirschrolli.kingdomsatwar.economy.Coins.give(player, priced.get(upgrade).giveCoins());
+                var bought = Trading.trade(player, mermaid.getId(), upgrade);
+                ItemStack carried = io.github.sirschrolli.kingdomsatwar.fishing.FishBag.forUpgrade(player);
+                helper.assertTrue(bought == Trading.Result.DONE && io.github.sirschrolli.kingdomsatwar.fishing.FishBag.of(carried).level() == 3,
+                        "Die Meerjungfrau erweitert den Beutel nicht: " + bought);
+                helper.assertTrue(mermaid.tradesUsed() == 2, "Die Erweiterung zählt nicht zur Handelsgrenze: " + mermaid.tradesUsed());
                 helper.getLevel().getServer().getPlayerList().remove(player);
             }
             mermaid.discard();

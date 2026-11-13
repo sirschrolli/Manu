@@ -9,6 +9,7 @@ Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
 > **Version 1.9 – Ventor, der Gladiator der Winde.** Die **Arena der Prüfungen** hat jetzt ihren Meister: Auf dem Podest unter dem Spawner der Böen liegt das neue **Arenasiegel**, und über dem Spawner schwebt für jeden der sechs Käfige ein kupfernes **Windsiegel**. Jeder Käfig, den du bezwingst, schickt einen Windstoß zum Podest und entzündet sein Siegel; sind alle bezwungen und betritt jemand den Sand, steigt aus dem Wirbel **Ventor, der Gladiator der Winde**, auf – ein Standbild aus Bronze, das der Wind füllt: Käfighelm mit Augenschlitzen und rotem Kamm, Armschiene und Schulterschild, statt der Beine ein Wirbelwind, in der Rechten der **Sturmdreizack**, in der Linken ein **Wurfnetz**. Er grüßt die Ränge – dann kämpft er wie ein Netzkämpfer: **Böe** (wer davonfliegt und an eine Wand prallt, den trifft es doppelt; solange sie weht, prallen Geschosse ab), **Dreizackstoß**, **Netzwurf** (wen es trifft, der steckt fest – und gleich kommt der Stoß, härter als sonst), **Dreizackwurf** (der Dreizack kehrt in seine Hand zurück), **Windkugeln**, **Windhosen**, die durch die Arena ziehen und jeden hochreißen, und der **Sturzflug** (ein Kreis am Boden – raus da!). Unter halber Kraft **entfesselt er den Sturm**: Alle acht Sekunden fegt eine Sturmböe quer durch die Arena (man sieht sie kommen – ducken!), und er dreht sich im **Zyklon**. Eigene Bossleiste, eigene Klänge. Er lässt selten den **Sturmdreizack** fallen (3D, geworfen entfesselt er eine Böe und kehrt immer zurück) und sonst **Wurfnetze**, Böenruten und Windkugeln; wer ihn noch einmal fordern will, muss die Käfige erneut bezwingen.
+> **1.9.2 – Angelkunst und der Fischbeutel im Urmeer:** Ein **siebtes Talent**, die **Angelkunst**: Die Fische beißen schneller (bis 50 %), die Fangzone im Drill wird größer (bis 40 %), und die Meisterschaft bringt Glück beim Angeln. Dazu erweitert jetzt **jede Händlerin des Meervolks** im Urmeer den **Fischbeutel** – und jede Erweiterung ist ein Kauf, der zur Handelsgrenze zählt (auch beim Fischer im Dorf): Nach einigen Käufen macht der Laden Pause.
 > **1.9.1 – Der Heldenweg bis Stufe 500 und doppelt so viele Kristalle:** Der Held steigt jetzt bis **Heldenstufe 500** auf (bisher 200) – aber stärker wird er dabei nicht: Die Heldenkraft und die Talentpunkte, die bisher die Stufen bis 200 brachten, verteilen sich auf den ganzen Weg; erst auf Stufe 500 ist man so stark wie bisher auf 200. Stufe 500 braucht rund 20,9 Millionen Heldenerfahrung. Der Unsterbliche (Stufe 200) bleibt der letzte Rang. Helden aus älteren Spielständen werden auf die Stufe gehoben, die sie genauso stark macht – aus 200 wird 500. Und weil ein Kristall seit 1.3 nur noch ein halbes Herz (bzw. 10 Mana) gibt, darf man jetzt **je 50 Herz- und Manakristalle** aufnehmen statt 25 – bis zu 25 Herzen und 500 Mana mehr.
 > In 1.8 kam **Kuno von Rabenfels, der Raubritter**: Die **Raubritterburg** im dunklen Wald hat jetzt ihren Herrn: Vor dem Bergfried weht das neue **Rabenbanner** – Gold, darin ein schwarzer Rabe –, und unter ihm hält **Kuno von Rabenfels, der Raubritter**, zu Ross Hof: in Plattenrüstung mit goldenem Wappenrock, auf dem Topfhelm ein Rabe als Zimier, auf einem schwarzen Schlachtross mit goldener Schabracke, die Lanze aufrecht, den Schild am Arm. Wer ihm auf vierzehn Blöcke nahekommt (oder ihn angreift), den fordert er: Das Ross steigt, er reckt die Lanze – und senkt sie ein. **Zu Ross** kämpft er mit dem **Lanzengang** (er nimmt Anlauf und sprengt in gerader Linie heran; wer den Stoß mit einem erhobenen **Schild** auffängt, an dem **bricht die Lanze**, und er wankt im Sattel), dem **Lanzenstich**, dem **Steigen** des Rosses, dem **Hornruf** (seine Leute kommen ihm zu Hilfe) und dem **Bolzenhagel** (rote Zeichen am Boden – raus da!). Unter halber Kraft **wirft ihn das Ross ab** und flieht; **zu Fuß** zieht er den **Morgenstern**: Morgensternschlag, Wirbel, Schildstoß und der **Schildwall** (von vorn trifft ihn nichts – geh ihm in den Rücken). Eigene Bossleiste, eigene Klänge. Er lässt selten seinen **Morgenstern** fallen (eine 3D-Waffe und ein Schildbrecher; Rechtsklick: der **Schmetterschlag**) und sonst ein wenig Raubgut; ein **schwarzes Banner** am zerrissenen Pfahl ruft ihn zurück.
 > In 1.7 kam **Sordin, der Kantor der Stille**: In der Apsis der **Stillen Kathedrale**, tief im Reich des Sculk, steht jetzt **Sordin, der Kantor der Stille**, an der Kupferorgel und spielt – ohne dass ein Ton erklingt; vor ihm leuchten auf dem neuen **Orgelpult** die Noten. Er ist ein hagerer Mönch in einer dunklen Kutte, die Kapuze ein Spitzbogen wie die Fenster seiner Kathedrale, darin ein glühender, singender Mund; auf seinem Rücken ein Fächer aus Orgelpfeifen, in der Hand eine **Stimmgabel** aus Kupfer und Hallkristall. Er **hört wie der Tiefenhüter**: Wer ihm auf zehn Blöcke nahekommt, in Hörweite Lärm macht (Schritte, Sprünge, abgebaute Blöcke … – wer schleicht oder die Wollsohlen der Lauscher trägt, bleibt ungehört) oder einen **Notenblock** anschlägt, weckt ihn. Er kämpft mit Klang: **Gabelhieb**, die **Schallwelle** (durch Stein und jede Rüstung – nur **Wolle** hält sie auf), der **Akkord** (drei Ringe laufen über den Boden – springen!), der **Notenschwarm** (Noten, die ihr Ziel suchen) und **die Stille** (Dunkelheit, er verschwindet und trifft von hinten); unter halber Kraft das **Fortissimo** – ein Schlag in alle Richtungen, danach drei Schallwellen auf einmal. Doch Klang ist auch seine Schwäche: **Spielt jemand auf der Orgel**, hält er sich die Ohren zu und **taumelt** (drei Sekunden lang nimmt er mehr Schaden). Eigene Bossleiste, eigene Klänge. Er lässt selten seine **Stimmgabel** fallen (eine 3D-Waffe, Rechtsklick: die **Resonanz**, ein Schallschlag durch Stein und Rüstung) und sonst Hallkristall; **ein Hallkristall** auf dem verstummten Pult ruft ihn zurück.
@@ -489,7 +490,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.9.1.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.9.2.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -497,7 +498,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-1.9.1.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-1.9.2.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -3108,8 +3109,11 @@ sich trägt (dem in der Hand, sonst dem ersten im Inventar), sein Inhalt bleibt.
 (9 Bronze sind ein Silber, 81 ein Gold; wer im Dorf angesehen ist, zahlt wie überall weniger.) Der Fischer verkauft auch
 den Beutel selbst (24 Bronze) und **kauft den Fang auf**: 8 beliebige gewöhnliche Fische für 5 Bronze, 5 ungewöhnliche für
 7, 2 seltene für 8, einen mystischen für 10 und seit 0.90 auch eine Legende für 40 – lose aus dem Inventar oder gleich
-aus dem Beutel, von den Arten, von denen man am meisten hat. Die Erweiterung zählt nicht zur Handelsgrenze des Ladens – man kann so viele
-Stufen auf einmal kaufen, wie die Börse hergibt.
+aus dem Beutel, von den Arten, von denen man am meisten hat. Seit 1.9.2 ist **jede Erweiterung ein Kauf** wie jeder andere
+Handel: Sie zählt zur Handelsgrenze des Ladens, und ist die erreicht, macht der Laden Pause – wer seinen Beutel schnell
+wachsen lassen will, muss von Händler zu Händler ziehen oder warten. **Im Urmeer** erweitert seit 1.9.2 **jede Händlerin
+des Meervolks** den Fischbeutel (Perlentaucherin, Korallengärtnerin, Muschelbauerin und Gezeitensängerin, zum selben
+Preis wie der Fischer).
 
 Für andere Mods: Jeder Fang löst wie bei Minecraft das Angel-Ereignis und die Fortschritte aus; die Fische stehen in
 `#minecraft:fishes`, `#c:foods/raw_fish` und `#kingdomsatwar:fish`. Im Kreativmodus liegen Fischbeutel, Fische und Köder im Tab
@@ -3372,7 +3376,8 @@ sie summen und singen kleine Melodien. Seit 0.99 handeln die Meerjungfrauen **wi
 **Handelsfenster** (mit ihrem Gesicht in der Kopfzeile), gegen **Münzen**, mit Rabatt durch Ansehen und einer Pause nach
 einigen Handeln – danach haben sie neue Waren (andere Korallen, Anemonen, ein anderes Holz, andere Bücher). **Perlen** sind
 jetzt eine Ware: Die Perlentaucherin kauft und verkauft sie; man findet sie in den Truhen der Dörfer und in mancher Muschel
-(etwa in jeder achten).
+(etwa in jeder achten). Seit 1.9.2 **erweitert jede von ihnen den Fischbeutel** – wie der Fischer im Dorf, Stufe um Stufe
+teurer, und jede Erweiterung ist ein Kauf, der zur Handelsgrenze zählt (danach macht ihr Laden Pause).
 
 | Beruf | Zeichen | Kauft (für Münzen) | Verkauft (gegen Münzen) |
 |---|---|---|---|
@@ -4405,7 +4410,7 @@ wie viel Heldenerfahrung er braucht.
 
 **Talente & Werte** (Knopf auf dem Weg) – dunkel und gold: links dein Held, sein Rang, seine Werte, Kristalle und
 Biome; rechts das Abzeichen mit der Stufe, die Leiste bis zur nächsten (sie füllt sich beim Öffnen), die elf Ränge auf
-einer Linie und die sechs Talente als Karten mit je zwanzig Kästchen und einem goldenen Plus-Knopf, der pulsiert,
+einer Linie und die sieben Talente als Karten mit je zwanzig Kästchen und einem goldenen Plus-Knopf, der pulsiert,
 solange Punkte frei sind. Seit 0.77 fasst jedes Talent **40 Punkte**: Die zweiten zwanzig sind die **Meisterschaft** –
 die Kästchen werden nacheinander golden, ein Schimmer wandert über sie:
 
@@ -4417,9 +4422,11 @@ die Kästchen werden nacheinander golden, ein Schimmer wandert über sie:
 | Zähigkeit | +0,4 Rüstung | +0,4 Rüstung und +0,25 Rüstungshärte | +16 Rüstung, +5 Härte |
 | Zauberkunst | +8 Mana und 4 % schnellere Erholung | ebenso | +320 Mana, +160 % |
 | Glück | +0,2 Glück – bessere Beute in Truhen | ebenso | +8 Glück |
+| **Angelkunst** (seit 1.9.2) | die Fische beißen 1,5 % schneller, die Fangzone im Drill wird 1 % größer | 1 % schneller, 1 % mehr Zone und +0,1 Glück beim Angeln (seltenere Fische, weniger Kram, öfter eine Truhe) | 50 % schnellerer Biss, 40 % größere Fangzone, +2 Glück beim Angeln |
 
-Bis Stufe 100 kommen 49 Punkte zusammen, bis Stufe 200 99, bis Stufe 500 219 (wie bis 1.9 auf Stufe 200), alle Talente
-fassen 240 – du entscheidest, was für ein Held du bist.
+Die Angelkunst wirkt mit Köder, Angel und Verzauberung zusammen (jedes kürzt die Wartezeit, die das andere übrig lässt);
+die Fangzone wächst auch mit ihr nie über 60 %. Bis Stufe 100 kommen 49 Punkte zusammen, bis Stufe 200 99, bis Stufe 500
+219 (wie bis 1.9 auf Stufe 200), alle sieben Talente fassen 280 – du entscheidest, was für ein Held du bist.
 **Neu verteilen** kostet eine Silbermünze je verteiltem Punkt. Heldenerfahrung und Talente bleiben auch nach dem Tod.
 Wer aus 0.52 kommt, steht mit derselben Heldenerfahrung auf einer neuen Stufe und bekommt seine Punkte kostenlos
 zurück, falls er mehr verteilt hatte, als die neue Stufe hergibt.
@@ -5120,7 +5127,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.9.1.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.9.2.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |

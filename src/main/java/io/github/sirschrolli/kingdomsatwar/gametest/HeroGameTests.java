@@ -445,22 +445,24 @@ final class HeroGameTests {
             float mana = Mana.maxFor(player);
             int vanilla = player.totalExperience;
             helper.assertTrue(!HeroLevel.spend(player, HeroLevel.Talent.STRENGTH), "Punkt ohne Heldenstufe");
-            HeroLevel.award(player, HeroLevel.total(17));
-            helper.assertValueEqual(HeroLevel.of(player).level(), 17, "Heldenstufe nach der Erfahrung");
-            helper.assertValueEqual(HeroLevel.pointsFor(17), HeroLevel.Talent.values().length, "Talentpunkte auf Stufe 17");
+            HeroLevel.award(player, HeroLevel.total(19));
+            helper.assertValueEqual(HeroLevel.of(player).level(), 19, "Heldenstufe nach der Erfahrung");
+            helper.assertValueEqual(HeroLevel.pointsFor(19), HeroLevel.Talent.values().length, "Talentpunkte auf Stufe 19 (je Talent einer)");
             helper.assertValueEqual(player.totalExperience, vanilla, "die Minecraft-Erfahrung darf sich nicht ändern");
             for (HeroLevel.Talent talent : HeroLevel.Talent.values()) {
                 helper.assertTrue(HeroLevel.spend(player, talent), "Punkt für " + talent + " geht nicht");
             }
             helper.assertTrue(!HeroLevel.spend(player, HeroLevel.Talent.STRENGTH), "mehr Punkte als die Stufe hergibt");
-            double might = HeroLevel.levelDamage(17);
+            double might = HeroLevel.levelDamage(19);
             helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - (damage + 0.3 + might)) < 1.0e-6, "Stärke");
-            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.MAX_HEALTH) - (health + 1.0 + HeroLevel.levelHealth(17))) < 1.0e-6,
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.MAX_HEALTH) - (health + 1.0 + HeroLevel.levelHealth(19))) < 1.0e-6,
                     "Lebenskraft");
             helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.MOVEMENT_SPEED) - speed * 1.0125) < 1.0e-6, "Gewandtheit");
             helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ARMOR) - (armor + 0.4)) < 1.0e-6, "Zähigkeit");
             helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.LUCK) - (luck + 0.2)) < 1.0e-6, "Glück");
-            helper.assertTrue(Math.abs(Mana.maxFor(player) - (mana + 8.0f + HeroLevel.levelMana(17))) < 1.0e-3f, "Zauberkunst");
+            helper.assertTrue(Math.abs(Mana.maxFor(player) - (mana + 8.0f + HeroLevel.levelMana(19))) < 1.0e-3f, "Zauberkunst");
+            helper.assertTrue(Math.abs(HeroLevel.fishingHaste(player) - 0.015f) < 1.0e-6f && Math.abs(HeroLevel.fishingZone(player) - 0.01f) < 1.0e-6f,
+                    "Angelkunst: " + HeroLevel.fishingHaste(player));
             // höchstens vierzig Punkte je Talent (seit 0.77; die zweiten zwanzig sind die Meisterschaft)
             HeroLevel.award(player, HeroLevel.total(100));
             int spent = 0;

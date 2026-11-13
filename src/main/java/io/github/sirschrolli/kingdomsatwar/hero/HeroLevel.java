@@ -68,7 +68,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
  * zweieinhalb Stufen, {@link #might(int)}). Jede Kraftstufe gibt einen <b>Talentpunkt</b>, jeder neue <b>Rang</b> (Knappe,
  * Recke, Ritter, Held, Kriegsherr, Legende – seit 0.77 dazu Mythos, Halbgott, Titan, Sternenwanderer und, ab Stufe
  * {@value #IMMORTAL_LEVEL}, der Unsterbliche als letzter) {@value #RANK_BONUS} Punkte dazu. Die Punkte verteilt er im
- * Charakterfenster (Taste K) auf sechs Talente – je Talent höchstens {@value #MAX_TALENT} Punkte (die zweiten zwanzig sind die
+ * Charakterfenster (Taste K) auf sieben Talente (seit 1.9.2 auch die Angelkunst) – je Talent höchstens {@value #MAX_TALENT} Punkte (die zweiten zwanzig sind die
  * <b>Meisterschaft</b>), also lässt sich nicht alles meistern. Neu verteilen kostet eine Silbermünze je verteiltem Punkt.
  *
  * <p>Seit 0.77 macht der Weg auch von selbst stärker – die <b>Heldenkraft</b>: je zehn Kraftstufen ein Herz, je Kraftstufe
@@ -140,7 +140,13 @@ public final class HeroLevel {
         /** +8 Mana und +4 % Erholung je Punkt (20 Punkte: +160 Mana, +80 %; 40 Punkte: +320 Mana, +160 %). */
         ARCANA(() -> io.github.sirschrolli.kingdomsatwar.registry.ModItems.MANA_CRYSTAL.get(), 8.0, 8.0, 0xFF6FA8FF),
         /** +0,2 Glück je Punkt (bessere Beute in Truhen; 20 Punkte: +4, 40 Punkte: +8). */
-        FORTUNE(() -> Items.RABBIT_FOOT, 0.2, 0.2, 0xFFF2C14E);
+        FORTUNE(() -> Items.RABBIT_FOOT, 0.2, 0.2, 0xFFF2C14E),
+        /**
+         * Angelkunst (seit 1.9.2): Die Fische beißen je Punkt 1,5 % schneller (in der Meisterschaft 1 %; 20 Punkte: 30 %, 40
+         * Punkte: 50 %), die Fangzone im Drill wird je Punkt 1 % größer, und die Meisterschaft gibt je Punkt 0,1 Glück beim
+         * Angeln (seltenere Fische, weniger Kram, öfter eine Truhe).
+         */
+        FISHING(() -> Items.FISHING_ROD, 1.5, 1.0, 0xFF4FC8D8);
 
         private final Supplier<Item> icon;
         private final double perPoint;
@@ -192,6 +198,25 @@ public final class HeroLevel {
             return KingdomsAtWar.id("hero_" + this.getSerializedName());
         }
     }
+
+    /** Angelkunst: um welchen Anteil die Fische schneller beißen (je Punkt 1,5 %, in der Meisterschaft 1 %; höchstens 50 %). */
+    public static float fishingHaste(Player player) {
+        return (float) (Talent.FISHING.value(of(player).points(Talent.FISHING)) / 100.0);
+    }
+
+    /** Angelkunst: um wie viel größer die Fangzone im Drill ist (je Punkt 1 %). */
+    public static float fishingZone(Player player) {
+        return FISHING_ZONE * of(player).points(Talent.FISHING);
+    }
+
+    /** Angelkunst in der Meisterschaft: Glück beim Angeln (je Punkt über {@value #MASTERY} 0,1). */
+    public static float fishingLuck(Player player) {
+        return FISHING_LUCK * Math.max(0, of(player).points(Talent.FISHING) - MASTERY);
+    }
+
+    /** Angelkunst: Fangzone je Punkt und Glück je Punkt der Meisterschaft. */
+    public static final float FISHING_ZONE = 0.01f;
+    public static final float FISHING_LUCK = 0.1f;
 
     /** Rüstungshärte durch die Meisterschaft der Zähigkeit: +0,25 je Punkt über {@value #MASTERY}. */
     public static final double MASTERY_TOUGHNESS = 0.25;

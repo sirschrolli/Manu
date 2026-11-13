@@ -176,6 +176,12 @@ final class HeroLang {
                 "+8 mana and 4 % faster mana recovery per point", "+8 Mana und 4 % schnellere Erholung des Manas je Punkt");
         talent(text, "fortune", "Fortune", "Glück", "+%s luck", "+%s Glück",
                 "+0.2 luck per point – better loot in chests", "+0,2 Glück je Punkt – bessere Beute in Truhen");
+        talent(text, "fishing", "Angling", "Angelkunst", "+%s %% bite", "+%s %% Biss",
+                "Fish bite 1.5 % sooner and the catch zone in the fight grows by 1 % per point; in mastery 1 % sooner, 1 % more zone and "
+                        + "0.1 luck for fishing per point (rarer fish, less junk, more chests)",
+                "Die Fische beißen je Punkt 1,5 % schneller, und die Fangzone im Drill wird 1 % größer; in der Meisterschaft 1 % schneller, "
+                        + "1 % mehr Zone und 0,1 Glück beim Angeln je Punkt (seltenere Fische, weniger Kram, öfter eine Truhe)");
+        text.add("hero.kingdomsatwar.talent.fishing.effect_mastery", "+%s %% bite · +%s luck", "+%s %% Biss · +%s Glück");
     }
 
     private static void talent(Text text, String id, String english, String deutsch, String effectEn, String effectDe, String descEn,

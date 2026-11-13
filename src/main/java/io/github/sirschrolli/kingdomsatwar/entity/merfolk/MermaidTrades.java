@@ -26,7 +26,8 @@ import net.minecraft.world.level.ItemLike;
  * Die Angebote des Meervolks. Seit 0.99 handeln die Meerjungfrauen wie alle anderen Händler: im selben Handelsfenster,
  * gegen <b>Münzen</b> (Preise in Bronze, Rabatt durch Ansehen, nach einigen Handeln eine Pause – siehe {@link Trading}).
  * Was sie kaufen (Fisch, Tang, Knochenmehl, Prismarin, Tinte, Perlen …), bringt Münzen ein. Welche Korallen, Anemonen,
- * welches Holz und welche Bücher es gerade gibt, hängt am Vorrat ({@code seed}): Er wechselt nach jeder Pause.
+ * welches Holz und welche Bücher es gerade gibt, hängt am Vorrat ({@code seed}): Er wechselt nach jeder Pause. Seit 1.9.2
+ * erweitert jede von ihnen auch den Fischbeutel (wie der Fischer im Dorf; jede Erweiterung ist ein Kauf).
  */
 public final class MermaidTrades {
     private MermaidTrades() {}
@@ -91,6 +92,10 @@ public final class MermaidTrades {
             case GUARD -> {
                 // Wachen handeln nicht
             }
+        }
+        if (profession != MermaidProfession.GUARD) {
+            // die Erweiterung des Fischbeutels – Preis und Bild richten sich beim Handel nach dem Beutel des Spielers
+            list.add(Offer.special(io.github.sirschrolli.kingdomsatwar.fishing.FishBag.UPGRADE_OFFER, Trading.bagUpgradeIcon(0), 12));
         }
         return list;
     }

@@ -45,7 +45,7 @@ import org.jspecify.annotations.Nullable;
  */
 public class CharacterScreen extends Screen {
     private static final int WIDTH = 324;
-    private static final int HEIGHT = 246;
+    private static final int HEIGHT = 268;
     private static final int LEFT_W = 90;
     private static final int RIGHT_X = 116;
     private static final int CARD_Y = 108;
@@ -368,7 +368,9 @@ public class CharacterScreen extends Screen {
                 g.text(this.font, toughness, ex - this.font.width(toughness), y + 2, ARGB.color(Math.round(255 * hard), HeroGui.GOLD), false);
             }
         } else {
-            Component effect = effect(talent, points);
+            // (auf der Karte nur der schnellere Biss der Angelkunst – das Glück der Meisterschaft steht im Hinweis)
+            Component effect = talent == HeroLevel.Talent.FISHING
+                    ? Component.translatable(talent.translationKey() + ".effect", HeroGui.decimal(talent.value(points))) : effect(talent, points);
             g.text(this.font, effect, ex - this.font.width(effect), y + 2, points > 0 ? color : HeroGui.MUTED, false);
         }
         // zwanzig Kästchen, nach je fünf ein Spalt; in der Meisterschaft (ab Punkt 21) werden sie nacheinander golden
@@ -429,8 +431,15 @@ public class CharacterScreen extends Screen {
         }
     }
 
-    /** Was die Punkte eines Talents zusammen bringen ("+1,5 Schaden"; die Zähigkeit in der Meisterschaft auch die Härte). */
+    /**
+     * Was die Punkte eines Talents zusammen bringen ("+1,5 Schaden"; die Zähigkeit in der Meisterschaft auch die Härte, die
+     * Angelkunst dazu das Glück beim Angeln).
+     */
     static Component effect(HeroLevel.Talent talent, int points) {
+        if (talent == HeroLevel.Talent.FISHING && points > HeroLevel.MASTERY) {
+            return Component.translatable(talent.translationKey() + ".effect_mastery", HeroGui.decimal(talent.value(points)),
+                    HeroGui.decimal(HeroLevel.FISHING_LUCK * (points - HeroLevel.MASTERY)));
+        }
         if (talent == HeroLevel.Talent.TOUGHNESS && points > HeroLevel.MASTERY) {
             return Component.translatable(talent.translationKey() + ".effect_mastery", HeroGui.decimal(talent.value(points)),
                     HeroGui.decimal(HeroLevel.masteryToughness(points)));

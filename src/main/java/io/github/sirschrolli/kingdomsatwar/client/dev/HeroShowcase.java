@@ -561,7 +561,7 @@ final class HeroShowcase {
     /** Mauszeiger über eine Stelle des Charakterfensters (Koordinaten im Fenster). */
     private static void hoverCharacter(net.minecraft.client.Minecraft minecraft, int guiX, int guiY) {
         int left = (minecraft.getWindow().getGuiScaledWidth() - 324) / 2;
-        int top = (minecraft.getWindow().getGuiScaledHeight() - 246) / 2;
+        int top = (minecraft.getWindow().getGuiScaledHeight() - 268) / 2;
         double scale = minecraft.getWindow().getGuiScale();
         try {
             for (String name : new String[] {"xpos", "ypos"}) {

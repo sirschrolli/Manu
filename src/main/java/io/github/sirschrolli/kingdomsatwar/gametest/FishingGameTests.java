@@ -808,7 +808,7 @@ final class FishingGameTests {
                     io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading.Result.DONE, "Erweiterung kaufen");
             helper.assertTrue(FishBag.of(held).level() == 11 && FishBag.of(held).count(FishSpecies.COD) == 20 && FishBag.of(stored).level() == 0
                     && io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player) == 3, "Nach der Erweiterung");
-            helper.assertTrue(fisher.tradesUsed() == 0, "Die Erweiterung zählt zur Handelsgrenze des Ladens");
+            helper.assertTrue(fisher.tradesUsed() == 1, "Die Erweiterung zählt nicht zur Handelsgrenze des Ladens (seit 1.9.2 ein Kauf)");
             int next = io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading.offers(player, fisher).get(upgrade).giveCoins();
             helper.assertTrue(next > price, "Die nächste Stufe ist nicht teurer: " + next + " nach " + price);
             // Verkauf: fünf ungewöhnliche Fische – erst die losen aus dem Inventar, dann aus den Beuteln
@@ -820,7 +820,7 @@ final class FishingGameTests {
             helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading.trade(player, fisher.getId(), sale),
                     io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading.Result.DONE, "Fang verkaufen");
             helper.assertTrue(FishBag.countFish(player, FishSpecies.Rarity.UNCOMMON) == uncommon - selling.give().getCount()
-                    && io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player) == 3 + selling.getCoins() && fisher.tradesUsed() == 1, "Nach dem Verkauf");
+                    && io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player) == 3 + selling.getCoins() && fisher.tradesUsed() == 2, "Nach dem Verkauf");
             helper.assertTrue(!FishBag.removeFish(player, FishSpecies.Rarity.LEGENDARY, 1) && FishBag.removeFish(player, FishSpecies.Rarity.UNCOMMON, uncommon - 5)
                     && FishBag.countFish(player, FishSpecies.Rarity.UNCOMMON) == 0, "Fische abgeben");
             // ohne Beutel gibt es keine Erweiterung
@@ -944,6 +944,24 @@ final class FishingGameTests {
                 // mit der Angel von Minecraft: kein Vorteil
                 player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.FISHING_ROD));
                 helper.assertTrue(Fishing.haste(hook) == 0.0f, "Die Angel von Minecraft beschleunigt: " + Fishing.haste(hook));
+                // die Angelkunst des Helden (seit 1.9.2): 20 Punkte – 30 % schneller, 20 % mehr Zone; 40 Punkte – 50 %, 40 %, +2 Glück
+                io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.set(player, new io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.Hero(
+                        io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.total(300), List.of(0, 0, 0, 0, 0, 0, 20), 0));
+                helper.assertTrue(Math.abs(Fishing.haste(hook) - 0.3f) < 1.0e-4f
+                        && Math.abs(io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.fishingZone(player) - 0.2f) < 1.0e-4f
+                        && io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.fishingLuck(player) == 0.0f, "Angelkunst mit 20 Punkten: " + Fishing.haste(hook));
+                io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.set(player, new io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.Hero(
+                        io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.total(500), List.of(0, 0, 0, 0, 0, 0, 40), 0));
+                helper.assertTrue(Math.abs(Fishing.haste(hook) - 0.5f) < 1.0e-4f
+                        && Math.abs(io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.fishingZone(player) - 0.4f) < 1.0e-4f
+                        && Math.abs(io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.fishingLuck(player) - 2.0f) < 1.0e-4f,
+                        "Angelkunst mit 40 Punkten: " + Fishing.haste(hook));
+                // mit der Glutangel zusammen: jede kürzt, was die andere übrig lässt
+                player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(FishingItems.rod(io.github.sirschrolli.kingdomsatwar.fishing.RodType.GLUT)));
+                helper.assertTrue(Math.abs(Fishing.haste(hook) - 0.75f) < 1.0e-4f, "Glutangel und Angelkunst wirken nicht zusammen: " + Fishing.haste(hook));
+                helper.assertTrue(Math.abs(Fishing.zoneBonus(0, 0, null, water, 0.4f) - 0.4f) < 1.0e-4f
+                        && Fishing.zoneBonus(10, 3, null, water, 0.4f) == Fishing.ZONE_CAP, "Die Angelkunst sprengt die Grenze der Fangzone");
+                io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.set(player, io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.Hero.NONE);
             } finally {
                 hook.discard();
                 level.getServer().getPlayerList().remove(player);
