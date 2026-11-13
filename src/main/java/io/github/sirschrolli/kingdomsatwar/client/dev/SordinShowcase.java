@@ -72,8 +72,10 @@ final class SordinShowcase {
         }
         steps.add(Step.server(level -> build(level, stage)));
         steps.add(Step.until(() -> stage.ready, 6000));
-        // die Kathedrale in ihrer Höhle: das Portal mit den Türmen und der Fensterrose
-        steps.add(at(stage, 0.0, 6.0, 37.0, 0.0, 12.5, 18.0));
+        // die Kathedrale in ihrer Höhle: das Portal mit den Türmen und der Fensterrose (für die Übersicht mit Nachtsicht)
+        steps.add(Step.command("effect give @s night_vision 60 0 true"));
+        steps.add(Step.once(minecraft -> minecraft.options.fov().set(90)));
+        steps.add(at(stage, 0.0, 7.0, 37.5, 0.0, 14.0, 18.0));
         steps.add(Step.waitTicks(60));
         steps.add(Step.waitForChunks(1500));
         steps.add(Step.server(level -> {
@@ -92,11 +94,13 @@ final class SordinShowcase {
         }));
         steps.add(Step.waitTicks(60));
         steps.add(Step.screenshot("sordin_kathedrale_aussen"));
+        steps.add(Step.once(minecraft -> minecraft.options.fov().set(70)));
         // das Mittelschiff, hinten die Orgel
         steps.add(at(stage, 0.0, 8.5, 14.5, 0.0, 4.5, -18.0));
         steps.add(Step.waitTicks(30));
         steps.add(Step.waitForChunks(600));
         steps.add(Step.screenshot("sordin_kathedrale"));
+        steps.add(Step.command("effect clear @s night_vision"));
         // er spielt (von der Seite, von vorn über das Pult, ganz nah)
         steps.add(at(stage, 4.2, 5.0, -15.2, 0.0, 4.0, -18.4));
         steps.add(Step.waitTicks(25));
@@ -104,7 +108,7 @@ final class SordinShowcase {
         steps.add(at(stage, 2.4, 5.7, -19.9, 0.0, 4.9, -17.9));
         steps.add(Step.waitTicks(20));
         steps.add(Step.screenshot("sordin_wache"));
-        steps.add(at(stage, -1.7, 4.3, -17.3, 0.2, 3.2, -18.7));
+        steps.add(at(stage, 1.9, 4.3, -17.2, -0.2, 3.2, -18.7));
         steps.add(Step.waitTicks(20));
         steps.add(Step.screenshot("sordin_orgelpult"));
         // er erwacht
@@ -127,7 +131,7 @@ final class SordinShowcase {
                 cantor.setYHeadRot(0.0f);
             }
         }));
-        steps.add(Step.waitTicks(30));
+        steps.add(Step.waitTicks(36));
         steps.add(Step.screenshot("sordin_awaken"));
         steps.add(Step.hud(true));
         steps.add(Step.waitTicks(22));
@@ -139,8 +143,8 @@ final class SordinShowcase {
         // (das Bild entsteht etwa sechs Ticks nach der angegebenen Zahl: die Schritte dazwischen brauchen je einen Tick)
         // (die Kamera steht schräg hinter dem Ritter und sieht dem Kantor ins Gesicht – im Schiff, über den Bänken)
         for (String[] shot : new String[][] {{"SWING", "9", "sordin_swing", "30", "6.5", "0.6", "3.4"},
-                {"SONIC", "16", "sordin_sonic_aim", "28", "9.0", "1.0", "7.5"}, {"SONIC", "23", "sordin_sonic", "28", "9.0", "1.0", "7.5"},
-                {"CHORD", "30", "sordin_chord", "30", "9.5", "5.0", "4.5"}, {"NOTES", "30", "sordin_notes", "30", "9.0", "1.4", "7.0"},
+                {"SONIC", "16", "sordin_sonic_aim", "28", "9.0", "1.0", "7.5"}, {"SONIC", "25", "sordin_sonic", "28", "9.0", "1.0", "7.5"},
+                {"CHORD", "30", "sordin_chord", "22", "9.5", "5.0", "4.5"}, {"NOTES", "30", "sordin_notes", "30", "9.0", "1.4", "7.0"},
                 {"SILENCE", "4", "sordin_silence", "25", "6.0", "0.6", "5.0"}}) {
             if (!Step.wanted(shot[2])) {
                 continue;
@@ -152,7 +156,7 @@ final class SordinShowcase {
             steps.add(Step.screenshot(shot[2]));
             if (shot[0].equals("SILENCE")) {
                 // er taucht hinter dem Ritter wieder auf, schon ausholend
-                steps.add(Step.waitTicks(SordinEntity.SILENCE_APPEAR - 18));
+                steps.add(Step.waitTicks(SordinEntity.SILENCE_APPEAR - 14));
                 steps.add(follow(stage, 25.0, 6.5, 0.8));
                 steps.add(Step.waitTicks(4));
                 steps.add(Step.screenshot("sordin_silence_reveal"));
@@ -165,7 +169,7 @@ final class SordinShowcase {
         steps.add(Step.waitTicks(4));
         steps.add(Step.server(level -> level.blockEvent(BlockPos.containing(local(stage, 1, 2, -19)), Blocks.NOTE_BLOCK, 0, 0)));
         steps.add(Step.waitTicks(10));
-        steps.add(follow(stage, 28.0, 7.0, 0.8));
+        steps.add(follow(stage, 25.0, 5.5, 0.6));
         steps.add(Step.waitTicks(4));
         steps.add(Step.screenshot("sordin_stagger"));
         steps.add(Step.waitTicks(SordinEntity.STAGGER_TICKS));
@@ -181,14 +185,14 @@ final class SordinShowcase {
         steps.add(Step.waitTicks(4));
         steps.add(Step.screenshot("sordin_fortissimo_luft"));
         steps.add(Step.waitTicks(SordinEntity.FORTISSIMO_BLAST - 34));
-        steps.add(follow(stage, 32.0, 11.0, 3.0));
+        steps.add(follow(stage, 18.0, 11.0, 3.0));
         steps.add(Step.waitTicks(4));
         steps.add(Step.screenshot("sordin_fortissimo"));
         steps.add(Step.waitTicks(60));
         // im Fortissimo: drei Schallwellen auf einmal
         steps.add(place(stage, "SONIC", 7.5));
         steps.add(Step.waitTicks(SordinEntity.SONIC_FIRE - 4));
-        steps.add(follow(stage, 16.0, 11.0, 4.0));
+        steps.add(follow(stage, 40.0, 6.0, 6.5));
         steps.add(Step.waitTicks(4));
         steps.add(Step.screenshot("sordin_sonic_fan"));
         steps.add(Step.waitTicks(60));
@@ -253,11 +257,15 @@ final class SordinShowcase {
             minecraft.options.setCameraType(CameraType.THIRD_PERSON_FRONT);
             minecraft.options.fov().set(60);
         }));
-        steps.add(Step.waitTicks(30));
+        steps.add(Step.waitTicks(10));
+        steps.add(body(35.0f));
+        steps.add(Step.waitTicks(20));
         steps.add(Step.screenshot("stimmgabel_spieler_vorn"));
         steps.add(tp(stage, 0.0, 1.0, -6.0, 200.0f, 6.0f));
         steps.add(Step.once(minecraft -> minecraft.options.setCameraType(CameraType.THIRD_PERSON_BACK)));
-        steps.add(Step.waitTicks(20));
+        steps.add(Step.waitTicks(10));
+        steps.add(body(35.0f));
+        steps.add(Step.waitTicks(10));
         steps.add(Step.screenshot("stimmgabel_spieler_hinten"));
         steps.add(Step.once(minecraft -> {
             minecraft.options.setCameraType(CameraType.FIRST_PERSON);
@@ -279,19 +287,21 @@ final class SordinShowcase {
         steps.add(Step.waitTicks(5));
         steps.add(Step.screenshot("stimmgabel_hand"));
         steps.add(Step.hud(false));
-        // die Resonanz: durch eine Mauer aus Tiefenschiefer hindurch trifft sie den Gegner dahinter (auf der Stufe zum Chor)
+        // die Resonanz: durch eine Mauer aus Tiefenschiefer hindurch trifft sie den Gegner dahinter. Danach blickt der Spieler
+        // zur Seite: die Kamera hinter ihm sieht den Schall quer durchs Bild laufen.
         steps.add(Step.once(minecraft -> {
             ShowcaseRunner.hideHand = true;
             minecraft.options.setCameraType(CameraType.THIRD_PERSON_BACK);
+            minecraft.options.fov().set(80);
         }));
-        steps.add(tp(stage, 0.0, 1.0, 3.0, 180.0f, 0.0f));
+        steps.add(tp(stage, 0.0, 1.0, 4.0, 180.0f, 0.0f));
         steps.add(Step.server(level -> {
             for (int x = -1; x <= 1; x++) {
-                for (int y = 1; y <= 2; y++) {
-                    level.setBlock(BlockPos.containing(local(stage, x, y, -2)), Blocks.DEEPSLATE_BRICKS.defaultBlockState(), Block.UPDATE_CLIENTS);
+                for (int y = 1; y <= 3; y++) {
+                    level.setBlock(BlockPos.containing(local(stage, x, y, 2)), Blocks.DEEPSLATE_BRICKS.defaultBlockState(), Block.UPDATE_CLIENTS);
                 }
             }
-            LivingEntity dummy = creature(level, ModEntities.SOLDIERS.get(SoldierType.SWORDSMAN).get(), local(stage, 0.0, 2.0, -11.0), 0.0f);
+            LivingEntity dummy = creature(level, ModEntities.SOLDIERS.get(SoldierType.SWORDSMAN).get(), local(stage, 0.0, 1.0, -1.0), 0.0f);
             dummy.getAttribute(Attributes.MAX_HEALTH).setBaseValue(200.0);
             dummy.setHealth(200.0f);
         }));
@@ -300,7 +310,12 @@ final class SordinShowcase {
             ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
             TuningForkItem.resonate(level, player, TuningForkItem.DAMAGE);
         }));
-        steps.add(Step.waitTicks(1));
+        steps.add(Step.waitTicks(1));                     // erst der Schall (nach Norden), dann der Blick zur Seite
+        steps.add(Step.once(minecraft -> {
+            minecraft.player.setYRot(268.0f);
+            minecraft.player.setXRot(12.0f);
+            minecraft.player.setYBodyRot(300.0f);
+        }));
         steps.add(Step.screenshot("stimmgabel_resonanz"));
         steps.add(Step.waitTicks(20));
         steps.add(Step.quit());
@@ -421,6 +436,15 @@ final class SordinShowcase {
     /** Ein Punkt im Rahmen der Kathedrale (Mitte des Mittelschiffs bei 0, 0, 0; das Portal liegt bei +z) in Weltkoordinaten. */
     private static Vec3 local(Stage stage, double x, double y, double z) {
         return new Vec3(stage.origin.getX() + x + 0.5, stage.origin.getY() + y, stage.origin.getZ() + z + 0.5);
+    }
+
+    /** Dreht den Körper des Spielers gegen den Kopf (wie wenn er nur den Kopf wendet): Die Waffe in der Hand zeigt ihre Länge. */
+    private static Step body(float offset) {
+        return Step.once(minecraft -> {
+            float yaw = minecraft.player.getYRot() + offset;
+            minecraft.player.setYBodyRot(yaw);
+            minecraft.player.yBodyRotO = yaw;
+        });
     }
 
     /** Der Spieler selbst an den Punkt (x, y, z), mit Blick (Grad). */

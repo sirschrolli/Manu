@@ -56,7 +56,14 @@ final class MonsterGearModels {
      * ({@code firstPersonShift}, in Sechzehntel Blöcken), sonst ragen ihre Köpfe aus dem Bild.
      */
     static void weapon(ItemModelGenerators items, Item item, String name, float[][] parts, float firstPersonScale, float firstPersonShift) {
+        weapon(items, item, name, parts, firstPersonScale, firstPersonShift, 0.0f);
+    }
+
+    /** Wie oben; {@code firstPersonLift} hebt die Waffe aus eigener Sicht (in Sechzehntel Blöcken), damit auch ihr Griff ins Bild kommt. */
+    static void weapon(ItemModelGenerators items, Item item, String name, float[][] parts, float firstPersonScale, float firstPersonShift,
+            float firstPersonLift) {
         float handX = 1.13f - firstPersonShift;
+        float handY = 3.2f + firstPersonLift;
         TextureMapping textures = new TextureMapping()
                 .put(MODEL, tex("item/" + name + "_model"))
                 .put(MODEL_GLOW, tex("item/" + name + "_model_glow"))
@@ -68,9 +75,9 @@ final class MonsterGearModels {
                 .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, t -> t.rotation(0, -90, 55).translation(0, 4.0f, 0.5f).scale(0.85f, 0.85f, 0.85f))
                 .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND, t -> t.rotation(0, 90, -55).translation(0, 4.0f, 0.5f).scale(0.85f, 0.85f, 0.85f))
                 .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND,
-                        t -> t.rotation(0, -90, 25).translation(handX, 3.2f, 1.13f).scale(firstPersonScale, firstPersonScale, firstPersonScale))
+                        t -> t.rotation(0, -90, 25).translation(handX, handY, 1.13f).scale(firstPersonScale, firstPersonScale, firstPersonScale))
                 .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND,
-                        t -> t.rotation(0, 90, -25).translation(handX, 3.2f, 1.13f).scale(firstPersonScale, firstPersonScale, firstPersonScale));
+                        t -> t.rotation(0, 90, -25).translation(handX, handY, 1.13f).scale(firstPersonScale, firstPersonScale, firstPersonScale));
         addParts(hand, parts);
         Identifier inHand = hand.build().create(ModelLocationUtils.getModelLocation(item, "_in_hand"), textures, items.modelOutput);
         var flat = ItemModelUtils.plainModel(items.createFlatItemModel(item, ModelTemplates.FLAT_HANDHELD_ITEM));

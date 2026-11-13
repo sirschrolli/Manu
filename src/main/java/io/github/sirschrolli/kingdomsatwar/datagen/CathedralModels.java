@@ -33,7 +33,7 @@ final class CathedralModels {
 
     static void register(BlockModelGenerators blocks, ItemModelGenerators items) {
         desk(blocks);
-        MonsterGearModels.weapon(items, CathedralGear.TUNING_FORK.get(), "tuning_fork", ArmoryShapes.TUNING_FORK, 0.5f, 3.0f);
+        MonsterGearModels.weapon(items, CathedralGear.TUNING_FORK.get(), "tuning_fork", ArmoryShapes.TUNING_FORK, 0.45f, 3.0f, 2.5f);
         ModModelProvider.flat(items, CathedralGear.SORDIN_SPAWN_EGG.get());
     }
 
