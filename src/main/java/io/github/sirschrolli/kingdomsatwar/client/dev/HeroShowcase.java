@@ -448,7 +448,7 @@ final class HeroShowcase {
         steps.add(Step.server(level -> {
             ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
             HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(320) + (HeroLevel.total(321) - HeroLevel.total(320)) * 2 / 5,
-                    java.util.List.of(30, 26, 12, 20, 18, 6), 44));
+                    java.util.List.of(30, 22, 12, 20, 14, 6, 26), 44));
             player.setData(io.github.sirschrolli.kingdomsatwar.registry.ModAttachments.HERO_IMMORTAL, -1L);
         }));
         steps.add(Step.command("gamemode survival"));
