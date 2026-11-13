@@ -20,7 +20,8 @@ import net.neoforged.neoforge.common.loot.LootModifier;
 
 /**
  * Karge Truhen: In allen Truhen (Beute-Tabellen {@code …:chests/…} – die der eigenen Bauwerke, Dörfer und Türme wie die
- * der Vanilla-Bauwerke, die es noch gibt) bleibt nur ein Teil dessen liegen, was gezogen wurde. Jeder Stapel fällt mit der Wahrscheinlichkeit {@code drop} ganz
+ * der Vanilla-Bauwerke, die es noch gibt) bleibt nur ein Teil dessen liegen, was gezogen wurde (seit 1.3 – seltenere
+ * Schätze – noch weniger). Jeder Stapel fällt mit der Wahrscheinlichkeit {@code drop} ganz
  * weg, Wertvolles (Diamanten, Smaragde, Gold, Netherit, Edelsteine, verzauberte und seltene Dinge, Ausrüstung) noch öfter
  * ({@code drop_valuable}); die übrigen Stapel schrumpfen auf {@code keep} ihrer Größe. Ganz leer bleibt keine Truhe, und
  * was man für den Fortgang braucht, wird nie genommen: das Herz des Meeres, die Netherit- und die Abyssit-Vorlage, der
@@ -93,9 +94,10 @@ public class LeanLootModifier extends LootModifier {
         return false;
     }
 
-    /** Wertvoll: Edelsteine und Edelmetall, Verzaubertes, Seltenes und Ausrüstung. */
+    /** Wertvoll: Edelsteine und Edelmetall, Verzaubertes, Seltenes, Ausrüstung und (seit 1.3) Schatzkarten. */
     static boolean valuable(ItemStack stack) {
         return stack.is(Items.DIAMOND) || stack.is(Items.EMERALD) || stack.is(Items.GOLD_INGOT) || stack.is(Items.GOLD_BLOCK)
+                || stack.is(Items.FILLED_MAP)
                 || stack.is(Items.NETHERITE_SCRAP) || stack.is(Items.NETHERITE_INGOT) || stack.is(Items.ENCHANTED_BOOK)
                 || stack.is(Items.GOLDEN_APPLE) || stack.is(Items.ENCHANTED_GOLDEN_APPLE) || stack.is(Items.EXPERIENCE_BOTTLE)
                 || stack.is(Items.DIAMOND_BLOCK) || stack.is(Items.EMERALD_BLOCK) || stack.is(ModItems.GEMSTONE.get())

@@ -44,7 +44,8 @@ import org.jspecify.annotations.Nullable;
  * <ul>
  *     <li>Die Schwierigkeit steht immer auf <i>Schwer</i> und ist gesperrt.</li>
  *     <li>Die Debug-Anzeige (F3) zeigt keine Koordinaten (verkürzte Debug-Infos, auch per Spielregel nicht abschaltbar).</li>
- *     <li>Gegner haben 50 % mehr Leben, treffen 30 % härter und wittern Beute auf größere Entfernung (Bosse: 25 % und 15 %).</li>
+ *     <li>Gegner haben doppelt so viel Leben, treffen 50 % härter und wittern Beute doppelt so weit (höchstens
+ *     {@value #MAX_FOLLOW_RANGE} Blöcke; Bosse: 25 % mehr Leben, 15 % härter; bis 1.2: 50 % und 30 %).</li>
  *     <li>Die natürliche Heilung ist halbiert.</li>
  *     <li>Wer stirbt, ist nach der Wiederkehr zwei Minuten lang geschwächt.</li>
  * </ul>
@@ -53,11 +54,16 @@ import org.jspecify.annotations.Nullable;
  */
 @EventBusSubscriber(modid = KingdomsAtWar.MODID)
 public final class Hardness {
-    public static final double ENEMY_HEALTH = 0.5;
-    public static final double ENEMY_DAMAGE = 0.3;
+    /** Mehr Leben der Gegner (Anteil, seit 1.3; bis 1.2: 0,5). */
+    public static final double ENEMY_HEALTH = 1.0;
+    /** So viel härter treffen Gegner (Anteil, seit 1.3; bis 1.2: 0,3). */
+    public static final double ENEMY_DAMAGE = 0.5;
     public static final double BOSS_HEALTH = 0.25;
     public static final double BOSS_DAMAGE = 0.15;
-    public static final double ENEMY_FOLLOW_RANGE = 0.25;
+    /** So viel weiter wittern Gegner ihre Beute (Anteil, seit 1.3: doppelt so weit; bis 1.2: 0,25) … */
+    public static final double ENEMY_FOLLOW_RANGE = 1.0;
+    /** … aber nie weiter als so viele Blöcke durch die Härte (wer von Natur aus weiter wittert, behält das). */
+    public static final double MAX_FOLLOW_RANGE = 48.0;
     public static final float NATURAL_REGENERATION = 0.5f;
     public static final int RESPAWN_WEAKNESS_TICKS = 2400;
     /** Um so viel sind die Schläge nach dem Tod schwächer (wie Schwäche I). */
@@ -143,24 +149,46 @@ public final class Hardness {
         }
     }
 
-    /** Mehr Leben und größere Witterung (einmalig: die Verstärkung bleibt gespeichert). Gibt zurück, ob sie neu ist. */
+    /**
+     * Mehr Leben und größere Witterung (einmalig: die Verstärkung bleibt gespeichert). Gibt zurück, ob sie neu ist. Wer noch
+     * die Verstärkung einer älteren Fassung trägt, bekommt die neue – mit demselben Anteil an Leben wie vorher.
+     */
     public static boolean strengthen(Mob mob) {
         boolean boss = isBoss(mob);
         float before = mob.getMaxHealth();
+        float share = mob.getHealth() / Math.max(1.0f, before);
         boolean fresh = addModifier(mob, Attributes.MAX_HEALTH, HEALTH, boss ? BOSS_HEALTH : ENEMY_HEALTH);
-        addModifier(mob, Attributes.FOLLOW_RANGE, FOLLOW_RANGE, ENEMY_FOLLOW_RANGE);
-        if (fresh && mob.getHealth() >= before - 0.01f) {
-            mob.setHealth(mob.getMaxHealth());
+        addModifier(mob, Attributes.FOLLOW_RANGE, FOLLOW_RANGE, followRangeBonus(mob));
+        if (fresh) {
+            mob.setHealth(share >= 0.999f ? mob.getMaxHealth() : Math.max(1.0f, share * mob.getMaxHealth()));
         }
         return fresh;
     }
 
+    /** Die größere Witterung: doppelt so weit, aber durch die Härte nie über {@value #MAX_FOLLOW_RANGE} Blöcke. */
+    static double followRangeBonus(Mob mob) {
+        AttributeInstance range = mob.getAttribute(Attributes.FOLLOW_RANGE);
+        double base = range == null ? 0.0 : range.getBaseValue();
+        if (base <= 0.0 || base >= MAX_FOLLOW_RANGE) {
+            return 0.0;
+        }
+        return Math.min(ENEMY_FOLLOW_RANGE, MAX_FOLLOW_RANGE / base - 1.0);
+    }
+
+    /** Setzt die Verstärkung (oder ersetzt die einer älteren Fassung mit anderem Wert). Gibt zurück, ob sich etwas änderte. */
     private static boolean addModifier(Mob mob, Holder<Attribute> attribute, Identifier id, double amount) {
         AttributeInstance instance = mob.getAttribute(attribute);
-        if (instance == null || instance.hasModifier(id)) {
+        if (instance == null) {
             return false;
         }
-        instance.addPermanentModifier(new AttributeModifier(id, amount, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        AttributeModifier present = instance.getModifier(id);
+        if (present != null && Math.abs(present.amount() - amount) < 1.0e-6) {
+            return false;
+        }
+        if (present == null && amount == 0.0) {
+            return false;
+        }
+        instance.addOrReplacePermanentModifier(new AttributeModifier(id, amount, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         return true;
     }
 

@@ -15,16 +15,16 @@
         {
           "type": "minecraft:item",
           "name": "kingdomsatwar:heart_crystal",
-          "weight": 5
+          "weight": 3
         },
         {
           "type": "minecraft:item",
           "name": "kingdomsatwar:mana_crystal",
-          "weight": 20
+          "weight": 10
         },
         {
           "type": "minecraft:empty",
-          "weight": 75
+          "weight": 87
         }
       ],
       "rolls": 1
@@ -37,7 +37,7 @@
             "type": "minecraft:set_count",
             "count": {
               "type": "minecraft:uniform",
-              "max": 10,
+              "max": 6,
               "min": 0
             }
           },

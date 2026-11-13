@@ -7,7 +7,10 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
 
-/** Hirsch: leichter Gang, Lauschen mit den Ohren, Grasen und – nur bei männlichen Tieren – das Geweih. */
+/**
+ * Hirsch: leichter Gang, Lauschen mit den Ohren, Grasen und – nur bei männlichen Tieren – das Geweih; der Hirsch senkt es,
+ * wenn er auf jemanden losgeht, und stößt es beim Angriff nach oben.
+ */
 public class DeerModel extends EntityModel<CreatureRenderState> {
     private final ModelPart body;
     private final ModelPart neck;
@@ -73,6 +76,19 @@ public class DeerModel extends EntityModel<CreatureRenderState> {
             float graze = Anim.bump(s, 0.35f, 1.65f, 2.0f);
             this.neck.xRot += 1.25f * graze;
             this.head.xRot += 0.35f * graze + Mth.sin(t * 1.1f) * 0.06f * graze;   // kauen
+        }
+        // Der Hirsch geht auf jemanden los: Hals gesenkt, das Geweih nach vorn, die Ohren angelegt
+        this.neck.xRot += 0.55f * state.rage;
+        this.head.xRot += 0.2f * state.rage;
+        this.earL.xRot -= 0.45f * state.rage;
+        this.earR.xRot -= 0.45f * state.rage;
+        float ram = Anim.seconds(state.attack, t);
+        if (ram >= 0.0f) {
+            // Stoß: noch tiefer hinein, dann das Geweih ruckartig nach oben
+            float dip = Anim.bump(ram, 0.08f, 0.12f, 0.2f);
+            float toss = Anim.bump(ram - 0.12f, 0.07f, 0.16f, 0.45f);
+            this.neck.xRot += 0.2f * dip - 0.6f * toss;
+            this.head.xRot += 0.15f * dip - 0.5f * toss;
         }
         if (state.isBaby) {
             this.head.xScale = this.head.yScale = this.head.zScale = 1.35f;

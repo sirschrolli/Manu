@@ -95,11 +95,11 @@
             "type": "minecraft:random_chance_with_enchanted_bonus",
             "enchanted_chance": {
               "type": "minecraft:linear",
-              "base": 0.70000005,
-              "per_level_above_first": 0.1
+              "base": 0.36,
+              "per_level_above_first": 0.06
             },
             "enchantment": "minecraft:looting",
-            "unenchanted_chance": 0.6
+            "unenchanted_chance": 0.3
           }
         ]
       },
@@ -120,7 +120,7 @@
               "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 2,
+                "max": 1,
                 "min": 0
               }
             },

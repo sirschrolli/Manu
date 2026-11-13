@@ -6,11 +6,11 @@
         {
           "type": "minecraft:item",
           "name": "kingdomsatwar:mana_crystal",
-          "weight": 15
+          "weight": 8
         },
         {
           "type": "minecraft:empty",
-          "weight": 85
+          "weight": 92
         }
       ],
       "rolls": 1
@@ -23,8 +23,8 @@
             "type": "minecraft:set_count",
             "count": {
               "type": "minecraft:uniform",
-              "max": 6,
-              "min": 1
+              "max": 4,
+              "min": 0
             }
           },
           "name": "kingdomsatwar:bronze_coin"

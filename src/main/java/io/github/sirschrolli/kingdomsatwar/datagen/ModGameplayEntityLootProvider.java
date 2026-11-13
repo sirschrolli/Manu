@@ -28,7 +28,7 @@ public class ModGameplayEntityLootProvider implements LootTableSubProvider {
                         .add(LootItem.lootTableItem(ModItems.BRONZE_COIN.get())
                                 .apply(net.minecraft.world.level.storage.loot.functions.SetItemCountFunction.setCount(ContextIntProviders.exactly(1))))
                         .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition
-                                .randomChanceAndLootingBoost(enchantments, 0.2f, 0.05f))));
+                                .randomChanceAndLootingBoost(enchantments, 0.1f, 0.03f))));
         // Froschlichter wie bei Vanilla – Vanilla fragt nur nach dem Vanilla-Frosch, die eigenen Frösche sind eine eigene Art
         var types = this.output.lookup(net.minecraft.core.registries.Registries.ENTITY_TYPE);
         var variants = this.output.lookup(net.minecraft.core.registries.Registries.FROG_VARIANT);

@@ -16,5 +16,9 @@ public final class ModLootModifiers {
     public static final DeferredHolder<MapCodec<? extends IGlobalLootModifier>, MapCodec<LeanLootModifier>> LEAN =
             SERIALIZERS.register("lean_chests", () -> LeanLootModifier.CODEC);
 
+    /** Seltenere Monsterbeute (siehe {@link LeanDropsLootModifier}, seit 1.3). */
+    public static final DeferredHolder<MapCodec<? extends IGlobalLootModifier>, MapCodec<LeanDropsLootModifier>> LEAN_DROPS =
+            SERIALIZERS.register("lean_drops", () -> LeanDropsLootModifier.CODEC);
+
     private ModLootModifiers() {}
 }

@@ -91,11 +91,14 @@ final class EconomyGameTests {
         var params = new net.minecraft.world.level.storage.loot.LootParams.Builder(level)
                 .withParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.ORIGIN, helper.absoluteVec(net.minecraft.world.phys.Vec3.ZERO))
                 .create(net.minecraft.world.level.storage.loot.parameters.LootContextParamSets.CHEST);
+        // seit 1.3 (seltenere Schätze) sind Truhen karg – nicht jede hat Münzen, aber zwanzig zusammen genug
         int chestCoins = 0;
-        for (ItemStack stack : registries.getLootTable(io.github.sirschrolli.kingdomsatwar.loot.ModLootTables.CASTLE_RUIN_CHEST).getRandomItems(params)) {
-            chestCoins += Coins.value(stack);
+        for (int i = 0; i < 20; i++) {
+            for (ItemStack stack : registries.getLootTable(io.github.sirschrolli.kingdomsatwar.loot.ModLootTables.CASTLE_RUIN_CHEST).getRandomItems(params)) {
+                chestCoins += Coins.value(stack);
+            }
         }
-        helper.assertTrue(chestCoins >= 3, "Truhe der Burgruine ohne Münzen");
+        helper.assertTrue(chestCoins >= 10 && chestCoins <= 250, "Zwanzig Truhen der Burgruine mit " + chestCoins + " Münzen");
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         for (int i = 0; i < 24; i++) {
             var zombie = helper.spawnWithNoFreeWill(io.github.sirschrolli.kingdomsatwar.registry.ModEntities.ZOMBIE.get(),

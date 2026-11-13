@@ -139,8 +139,9 @@ final class RulesGameTests {
     }
 
     /**
-     * Gegner bekommen 50 % mehr Leben (Bosse 25 %), nur einmal; ihre Treffer gegen Spieler wiegen 30 % schwerer, gegen
-     * andere Gegner nicht; natürliche Heilung ist halbiert, Regeneration und Heiltränke nicht.
+     * Gegner bekommen doppelt so viel Leben (Bosse 25 % mehr), nur einmal, und wittern doppelt so weit; ihre Treffer gegen
+     * Spieler wiegen 50 % schwerer, gegen andere Gegner nicht; natürliche Heilung ist halbiert, Regeneration und Heiltränke
+     * nicht.
      */
     private static void hardness(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
@@ -154,19 +155,36 @@ final class RulesGameTests {
             lord.setRealm(Realm.SILBERAU);
             float zombieBase = zombie.getMaxHealth();
             float lordBase = lord.getMaxHealth();
+            double rangeBase = zombie.getAttributeBaseValue(net.minecraft.world.entity.ai.attributes.Attributes.FOLLOW_RANGE);
             boolean first = Hardness.strengthen(zombie);
             boolean second = Hardness.strengthen(zombie);
             Hardness.strengthen(lord);
             if (!first || second) {
                 problems.add("Verstärkung nicht genau einmal: " + first + "/" + second);
             }
-            if (Math.abs(zombie.getMaxHealth() - zombieBase * 1.5f) > 0.01f || zombie.getHealth() < zombie.getMaxHealth() - 0.01f) {
+            // seit 1.3: doppelt so viel Leben, 50 % härtere Treffer, doppelte Witterung (höchstens 48 Blöcke)
+            if (Math.abs(zombie.getMaxHealth() - zombieBase * 2.0f) > 0.01f || zombie.getHealth() < zombie.getMaxHealth() - 0.01f) {
                 problems.add("Gegner: " + zombieBase + " → " + zombie.getMaxHealth() + " (Leben " + zombie.getHealth() + ")");
+            }
+            double range = zombie.getAttributeValue(net.minecraft.world.entity.ai.attributes.Attributes.FOLLOW_RANGE);
+            if (Math.abs(range - Math.max(rangeBase, Math.min(rangeBase * 2.0, Hardness.MAX_FOLLOW_RANGE))) > 0.01) {
+                problems.add("Witterung: " + rangeBase + " → " + range);
             }
             if (!Hardness.isBoss(lord) || Math.abs(lord.getMaxHealth() - lordBase * 1.25f) > 0.01f) {
                 problems.add("Herrscher: " + lordBase + " → " + lord.getMaxHealth());
             }
-            if (Math.abs(Hardness.scaleDamage(zombie, player, 10.0f) - 13.0f) > 0.01f
+            // eine Verstärkung aus 1.2 (50 %) wird auf die neue gehoben, der Anteil am Leben bleibt
+            Mob old = ModEntities.ZOMBIE.get().create(level, EntitySpawnReason.MOB_SUMMONED);
+            var oldHealth = old.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH);
+            oldHealth.addPermanentModifier(new net.minecraft.world.entity.ai.attributes.AttributeModifier(KingdomsAtWar.id("hardness_health"), 0.5,
+                    net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+            old.setHealth(old.getMaxHealth() * 0.5f);
+            boolean upgraded = Hardness.strengthen(old);
+            if (!upgraded || Math.abs(old.getMaxHealth() - zombieBase * 2.0f) > 0.01f || Math.abs(old.getHealth() - zombieBase) > 0.01f) {
+                problems.add("alte Verstärkung: " + upgraded + ", " + old.getHealth() + "/" + old.getMaxHealth());
+            }
+            old.discard();
+            if (Math.abs(Hardness.scaleDamage(zombie, player, 10.0f) - 15.0f) > 0.01f
                     || Math.abs(Hardness.scaleDamage(lord, player, 10.0f) - 11.5f) > 0.01f
                     || Hardness.scaleDamage(zombie, lord, 10.0f) != 10.0f || Hardness.scaleDamage(null, player, 10.0f) != 10.0f) {
                 problems.add("Schaden: " + Hardness.scaleDamage(zombie, player, 10.0f) + "/" + Hardness.scaleDamage(lord, player, 10.0f) + "/"

@@ -6,16 +6,16 @@
         {
           "type": "minecraft:item",
           "name": "kingdomsatwar:heart_crystal",
-          "weight": 8
+          "weight": 4
         },
         {
           "type": "minecraft:item",
           "name": "kingdomsatwar:mana_crystal",
-          "weight": 6
+          "weight": 3
         },
         {
           "type": "minecraft:empty",
-          "weight": 86
+          "weight": 93
         }
       ],
       "rolls": 1
@@ -28,8 +28,8 @@
             "type": "minecraft:set_count",
             "count": {
               "type": "minecraft:uniform",
-              "max": 13,
-              "min": 3
+              "max": 8,
+              "min": 1
             }
           },
           "name": "kingdomsatwar:bronze_coin"

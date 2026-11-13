@@ -57,7 +57,7 @@ import net.neoforged.neoforge.event.RegisterGameTestsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 /**
- * Tests zum eigenen Helden: Herz- und Manakristalle geben dauerhaft ein Herz bzw. 20 Mana mehr (seit 0.77 höchstens 25
+ * Tests zum eigenen Helden: Herz- und Manakristalle geben dauerhaft ein halbes Herz bzw. 10 Mana mehr (seit 0.77 höchstens 25
  * jeder Sorte), sie wachsen auf Höhlenböden (nie unter freiem Himmel, im Wasser oder auf Erde), lassen sich abbauen, und
  * Schatztruhen, Drachenbosse und Erzmagier geben sie her. Dazu die Heldenstufen bis 200, die Talente mit ihrer
  * Meisterschaft, die Heldenkraft und das Licht der Unsterblichkeit.
@@ -100,8 +100,8 @@ final class HeroGameTests {
     }
 
     /**
-     * Herzkristalle: Rechtsklick nimmt einen auf – ein Herz mehr, gleich gefüllt; nach zehn ist Schluss (der Kristall
-     * bleibt in der Hand). Die Herzen kommen nach dem Wiedereinstieg zurück. Manakristalle: 20 Mana mehr, gleich gefüllt,
+     * Herzkristalle: Rechtsklick nimmt einen auf – ein halbes Herz mehr (seit 1.3), gleich gefüllt; nach 25 ist Schluss (der
+     * Kristall bleibt in der Hand). Die Herzen kommen nach dem Wiedereinstieg zurück. Manakristalle: 10 Mana mehr, gleich gefüllt,
      * und das Mana erholt sich bis zum neuen Höchstwert.
      */
     private static void crystals(GameTestHelper helper) {
@@ -117,16 +117,16 @@ final class HeroGameTests {
             player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.HEART_CRYSTAL.get(), Crystals.MAX + 2));
             InteractionResult first = player.getMainHandItem().use(level, player, InteractionHand.MAIN_HAND);
             helper.assertTrue(first.consumesAction(), "Herzkristall lässt sich nicht aufnehmen: " + first);
-            helper.assertTrue(Crystals.of(player).hearts() == 1 && near(player.getMaxHealth(), 22.0f) && near(player.getHealth(), 12.0f),
-                    "Ein Herzkristall sollte ein Herz mehr geben (und es füllen): " + Crystals.of(player) + ", "
+            helper.assertTrue(Crystals.of(player).hearts() == 1 && near(player.getMaxHealth(), 21.0f) && near(player.getHealth(), 11.0f),
+                    "Ein Herzkristall sollte ein halbes Herz mehr geben (und es füllen): " + Crystals.of(player) + ", "
                             + player.getHealth() + "/" + player.getMaxHealth());
             helper.assertTrue(player.getMainHandItem().getCount() == Crystals.MAX + 1, "Der Kristall wird nicht verbraucht");
             for (int i = 1; i < Crystals.MAX; i++) {
                 player.getMainHandItem().use(level, player, InteractionHand.MAIN_HAND);
             }
             helper.assertValueEqual(Crystals.MAX, 25, "so viele Kristalle jeder Sorte (seit 0.77)");
-            helper.assertTrue(Crystals.of(player).hearts() == Crystals.MAX && near(player.getMaxHealth(), 20.0f + 2.0f * Crystals.MAX),
-                    "Alle Herzkristalle sollten 35 Herzen geben: " + player.getMaxHealth());
+            helper.assertTrue(Crystals.of(player).hearts() == Crystals.MAX && near(player.getMaxHealth(), 20.0f + 1.0f * Crystals.MAX),
+                    "Alle Herzkristalle sollten 22,5 Herzen geben (seit 1.3 halb so stark): " + player.getMaxHealth());
             InteractionResult full = player.getMainHandItem().use(level, player, InteractionHand.MAIN_HAND);
             helper.assertTrue(!full.consumesAction() && player.getMainHandItem().getCount() == 2 && Crystals.of(player).hearts() == Crystals.MAX,
                     "Über alle Herzkristalle hinaus sollte nichts gehen: " + full + ", " + player.getMainHandItem().getCount());
@@ -137,7 +137,7 @@ final class HeroGameTests {
             health.removeModifier(Crystals.HEALTH_ID);
             helper.assertTrue(near(player.getMaxHealth(), 20.0f), "Steigerung lässt sich nicht entfernen");
             Crystals.applyHealth(player);
-            helper.assertTrue(near(player.getMaxHealth(), 20.0f + 2.0f * Crystals.MAX), "Die Herzen kommen nicht zurück: " + player.getMaxHealth());
+            helper.assertTrue(near(player.getMaxHealth(), 20.0f + 1.0f * Crystals.MAX), "Die Herzen kommen nicht zurück: " + player.getMaxHealth());
 
             // --- Manakristalle ---
             Mana.set(player, 0.0f);
@@ -146,7 +146,7 @@ final class HeroGameTests {
             helper.assertTrue(player.getMainHandItem().use(level, player, InteractionHand.MAIN_HAND).consumesAction(),
                     "Manakristall lässt sich nicht aufnehmen");
             helper.assertTrue(Crystals.of(player).mana() == 1 && near(Mana.maxFor(player), Mana.BASE_MAX + Crystals.MANA_PER_CRYSTAL)
-                    && near(Mana.get(player), Crystals.MANA_PER_CRYSTAL), "Ein Manakristall sollte 20 Mana mehr geben (und füllen): "
+                    && near(Mana.get(player), Crystals.MANA_PER_CRYSTAL), "Ein Manakristall sollte 10 Mana mehr geben (und füllen): "
                     + Mana.get(player) + "/" + Mana.maxFor(player));
             Mana.regenerate(player, 20 * 120);
             helper.assertTrue(near(Mana.get(player), Mana.BASE_MAX + Crystals.MANA_PER_CRYSTAL),
@@ -265,12 +265,14 @@ final class HeroGameTests {
         var tables = level.getServer().reloadableRegistries();
         LootParams chest = new LootParams.Builder(level).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(helper.absolutePos(BlockPos.ZERO)))
                 .create(LootContextParamSets.CHEST);
+        // seit 1.3 (seltenere Schätze) halb so oft: in der Schatzkammer etwa jede siebte Truhe ein Herzkristall, jede zwölfte
+        // ein Manakristall; im Allerheiligsten fast jede vierte ein Manakristall
         int[] treasury = count(tables.getLootTable(ModLootTables.REALM_TREASURY), chest, 400);
-        helper.assertTrue(treasury[0] >= 60 && treasury[1] >= 25,
-                "Schatzkammer gibt zu wenig Kristalle: " + treasury[0] + " Herz, " + treasury[1] + " Mana in 400 Truhen");
+        helper.assertTrue(treasury[0] >= 35 && treasury[0] <= 90 && treasury[1] >= 15 && treasury[1] <= 55,
+                "Schatzkammer gibt nicht die erwarteten Kristalle: " + treasury[0] + " Herz, " + treasury[1] + " Mana in 400 Truhen");
         int[] sanctum = count(tables.getLootTable(ModLootTables.MAGE_TOWER_SANCTUM), chest, 400);
-        helper.assertTrue(sanctum[1] >= 120 && sanctum[1] > sanctum[0] * 2,
-                "Allerheiligstes gibt zu wenig Manakristalle: " + sanctum[0] + " Herz, " + sanctum[1] + " Mana in 400 Truhen");
+        helper.assertTrue(sanctum[1] >= 65 && sanctum[1] <= 125 && sanctum[1] > sanctum[0] * 2,
+                "Allerheiligstes gibt nicht die erwarteten Manakristalle: " + sanctum[0] + " Herz, " + sanctum[1] + " Mana in 400 Truhen");
 
         ServerPlayer victim = helper.makeMockServerPlayerInLevel();
         try {

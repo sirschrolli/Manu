@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Version 1.2 – Ignara, die Flammenpriesterin, und das Flammenheiligtum.** Mitten im **Lavameer des Nethers** steht jetzt das **Flammenheiligtum**: eine runde Plattform aus Schwarzstein auf Basaltstelzen, mit einer goldenen Sonne im Mosaikboden, acht Säulen mit **ewigem Feuer**, Stegen zum Fels und dem **Flammenaltar**. Vor ihm schwebt **Ignara** und betet – wer ihr zu nahe kommt, weckt sie. Sie kämpft mit ihrer **Flammenpeitsche** (Hieb, Flammenschlinge, die dich heranreißt), lässt eine **Lavawoge** über das Heiligtum rollen, **Feuersäulen** aus dem Boden brechen und **Feueropale vom Himmel regnen**, ruft **Glutgeister** – und unter halber Kraft wird sie zum **Phönix** mit Schwingen aus Flammen und stürzt sich auf dich. Ihre Beute: selten die **Flammenpeitsche** (reicht weiter als ein Schwert, setzt in Brand; Rechtsklick: der **Peitschenschlag**, der das erste Wesen bis zehn Blöcke weit trifft und heranreißt), sonst **Feueropale**. Ein Feueropal entzündet den erloschenen Altar und ruft sie zurück. Außerdem: **Herzkristalle sind nie mehr sicher** – Bosse, die wiederkommen, lassen sie bei jedem Sieg nur zu **25 %** fallen, einmalige Bosse (Drachen, Nyxar, Zerbrochener König, Weltenfresser) je Kristall zu **50 %**.
+> **Version 1.3 – Das Härte-Paket.** Kingdoms at War ist jetzt **deutlich schwerer** – zwanzig Regeln, fest eingebaut: **Monster** haben **doppelt so viel Leben**, treffen **50 % härter**, wittern dich **doppelt so weit** (höchstens 48 Blöcke) und **heilen sich**, wenn man sie in Ruhe lässt (ein halbes Herz alle zwei Sekunden); **Bosse heilen sich**, wenn du vor ihnen fliehst (2 % je Sekunde, sobald niemand mehr in 32 Blöcken ist). **Giftige Treffer:** Zombies machen hungrig, Spinnen vergiften, Skelettpfeile lähmen, andere Monster schwächen. **Fallschaden** ist anderthalbmal so hoch, **jeder zweite Pfeil zersplittert**, wenn er in einen Block fährt. **Erze** – die eigenen wie Kohle, Eisen, Gold, Diamant – sind **halb so häufig**, **Herz- und Manakristalle** wachsen halb so oft, liegen halb so oft in Truhen und geben nur noch **ein halbes Herz bzw. 10 Mana**; **Truhen** sind karger, **Monster** lassen seltener etwas fallen (ihre Teile und Münzen nur halb so oft). **Tränke** wirken halb so lange, der **Zaubertisch** will **doppelt so viel Lapislazuli** (die Erfahrungsstufen bleiben gleich), **Händler** verlangen anderthalbmal so viel und zahlen weniger, **Karten** kosten noch einmal das Doppelte. **Felder** wachsen halb so schnell, **Jungtiere** brauchen doppelt so lange, **das Wild** flieht schon aus 16 Blöcken – und der **Hirsch wehrt sich**: Wer ihn angreift, den nimmt er mit gesenktem Geweih auf die Hörner. Die **Erfahrung**, die du bekommst, bleibt genau gleich.
+> In 1.2 kam **Ignara, die Flammenpriesterin, und das Flammenheiligtum**: Mitten im **Lavameer des Nethers** steht jetzt das **Flammenheiligtum**: eine runde Plattform aus Schwarzstein auf Basaltstelzen, mit einer goldenen Sonne im Mosaikboden, acht Säulen mit **ewigem Feuer**, Stegen zum Fels und dem **Flammenaltar**. Vor ihm schwebt **Ignara** und betet – wer ihr zu nahe kommt, weckt sie. Sie kämpft mit ihrer **Flammenpeitsche** (Hieb, Flammenschlinge, die dich heranreißt), lässt eine **Lavawoge** über das Heiligtum rollen, **Feuersäulen** aus dem Boden brechen und **Feueropale vom Himmel regnen**, ruft **Glutgeister** – und unter halber Kraft wird sie zum **Phönix** mit Schwingen aus Flammen und stürzt sich auf dich. Ihre Beute: selten die **Flammenpeitsche** (reicht weiter als ein Schwert, setzt in Brand; Rechtsklick: der **Peitschenschlag**, der das erste Wesen bis zehn Blöcke weit trifft und heranreißt), sonst **Feueropale**. Ein Feueropal entzündet den erloschenen Altar und ruft sie zurück. Außerdem: **Herzkristalle sind nie mehr sicher** – Bosse, die wiederkommen, lassen sie bei jedem Sieg nur zu **25 %** fallen, einmalige Bosse (Drachen, Nyxar, Zerbrochener König, Weltenfresser) je Kristall zu **50 %**.
 > In 1.1.5 wurde **die Beute der Bosse, die wiederkommen,** knapper: Ihr **Sonderstück** (Waffe, Schwingen, Zylinder, Angel, Zaubertafel) fällt **nie mehr sicher** – auch beim ersten Sieg nur in etwa einem von fünf Kämpfen; sicher ist beim ersten eigenen Sieg nur noch der **Herz- oder Manakristall**, und **Münzen, Gold, Edelsteine** und die übrigen Schätze sind etwa auf die Hälfte gesunken. Die Drachen und die anderen einmaligen Bosse bleiben, wie sie waren, ebenso die Erfahrung.
 > In 1.1.4 kamen **neue Tierstimmen**: Wo sich Tiere bisher Laute von Minecraft liehen, die nicht zu ihnen passten, haben sie jetzt **eigene Stimmen**: Der **Hirsch** fiept leise durch die Nase und schnaubt, der **Urelch** grunzt tief, und sein **Brunftruf** schwingt sich von einem Grollen zu einem langen, hellen Pfeifen auf, das weit über das Land hallt; die **Gans** ruft ihr nasales „a-honk“ und faucht mit offenem Schnabel, der **Flamingo** schreit in seiner eigenen Stimme, der **Moorschnapper** knarrt kehlig, faucht und lässt den Hornschnabel zuschlagen. Im Meer beißen **Hai** und **Anglerfisch** mit Sog, Zähnen und Blasen, der **Mantarochen** schnellt mit Gischt aus dem Wasser und klatscht schwer zurück, die **Riesenkrabbe** tippt mit spitzen Beinen, und das Leuchten der **Leuchtqualle** erlischt in gläsernen Tönen; der **Leerenschlund** beißt, heult und fällt in sich zusammen. Der **Kommandostab** gibt ein kurzes **Hornsignal**, und der Drache, den man **in der Ferne** brüllen und mit schweren **Schwingen** über das Land ziehen hört, klingt jetzt wie die Drachen der Mod. Sehr tiefe Klänge – die Schritte und Schläge der großen Bosse, das Gebrüll des Kraken und des Karkinos, die Künste des Schöpfers – sind jetzt auch auf **kleinen Lautsprechern** (Laptop, Fernseher) gut zu hören, und zu leise Klänge (der Schmerz des Steinhüters, der Tod der Riesenkrabbe) sind lauter.
 > In 1.1.3 kamen **Beute, Speere, Schnur und neue Stimmen**: **Bosse, die mehrfach kommen** (die man neu weckt, zurückruft oder in jedem ihrer Bauwerke findet) geben ihr **Sonderstück** – Waffe, Schwingen, Zylinder, Angel – und ihren **Herzkristall** nur beim **ersten eigenen Sieg** sicher; danach fällt das Sonderstück nur noch in einem von fünf Kämpfen, Kristalle gar nicht mehr, und die übrige Beute ist kleiner. Bosse mit **eigener Rüstung** (Steinhüter, Meerhexe, Seelenhirte, Sternenweberin, Stundenwächter) lassen außer ihrem Sonderstück nur noch den **Werkstoff ihrer Rüstung** fallen – etwa genug für ein Teil je Sieg. Die Erfahrung bleibt, wie sie war. Die **Speere** der Mod liegen jetzt so in der Hand wie die Speere von Minecraft: in ihrer Länge und in der Mitte gegriffen – sie ragen nicht mehr weit über den Kopf, und aus der eigenen Sicht ist die Spitze ganz im Bild. Die **Angelschnur** beginnt in jeder Sicht genau an der Rutenspitze – aus der eigenen Sicht auch bei anderem Bildformat und Sichtfeld, von außen auch beim Gehen, Schleichen und mit der Angel in der linken Hand. Und **eigene Klänge** statt geliehener: Drachen (Stimme, Schwingen, Schritte, Biss, Atem aller sechs Elemente, das Ei), Kraken (Schnabel, Schmerz, Tinte, Tentakelschlag, Woge, Strudel), Karkinos (Graben, Ausbruch, Panzer, Gezeitenlanze, Scherenschlag, Schritte, Gezeitenkraft), Nyxar (Schattenatem, Schrei), der Höhlentroll (Grummeln, Grunzen, Tod, Versteinern, Keulenschlag, Schritte) und der Lindwurm (Zischen, Biss, Schrei, Tod, Schuppengleiten).
@@ -361,6 +362,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Erze mit Bestimmung: Stahl, Konterit, Aetherit, Draconium, Wyvernit, Edelstein | ✅ fertig |
 | **Feueropal** im Nether (Netherrack und Schwarzstein) und die **Rüstung der Glutwandler**: weniger Feuerschaden je Teil, weite Sicht in der Lava (Helm), über Lava gehen auf einer Glutkruste (Stiefel), 3D-Teile mit Flammenkamm und Glutsohlen (seit 1.1.6) | ✅ fertig |
 | **Ignara, die Flammenpriesterin** im **Flammenheiligtum** (Lavameer des Nethers): Gebet und Erwachen, Peitschenhieb, Flammenschlinge, Lavawoge, Feuersäulen, Opalregen, Glutgeister, Phönixgestalt mit Sturzflug; Flammenaltar, **Flammenpeitsche** mit Peitschenschlag (seit 1.2) | ✅ fertig |
+| **Härte-Paket** (seit 1.3): stärkere, wachsamere und heilende Monster, heilende Bosse, giftige Treffer, mehr Fallschaden, zersplitternde Pfeile, halb so viele Erze, seltenere Schätze, Kristalle und Monsterbeute, kürzere Tränke, teureres Verzaubern, teurere Händler und Karten, langsamere Felder und Tierzucht, scheues Wild, der Hirsch wehrt sich | ✅ fertig |
 | Ausrüstung: Stahl, Konterit, Draconium, Drachenschuppen (mit Set-Bonus), Gleiter, Krone, Trollkeule; Waffen und Rüstungen aus Monsterteilen (3D) | ✅ fertig |
 | Magie: Aetherit-Stab, sieben Zauber in drei Stufen, Zaubertafeln, Magietisch, Zauberkreis (Radialmenü) | ✅ fertig |
 | Sechs Erzmagier als Bosse, jeder in seinem eigenen Magierturm (sechs Bauweisen, je Element im passenden Land) | ✅ fertig |
@@ -477,7 +479,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.2.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.3.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -485,7 +487,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-1.2.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-1.3.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -1915,9 +1917,36 @@ dazwischen **sechs Reihen Laderaum** (so viel wie eine große Truhe) für Bausto
   einer Liste der fremden Mods ab (gelöscht wird nichts – die Mods einfach aus dem Mod-Ordner nehmen).
 - **Keine Koordinaten:** Die Debug-Anzeige (F3) ist immer verkürzt – keine Koordinaten, kein Kopieren der Position;
   Meldungen nennen Entfernung und Himmelsrichtung statt Koordinaten.
-- **Viel härter:** Schwierigkeit fest auf *Schwer*, Gegner mit 50 % mehr Leben und 30 % härteren Treffern (Bosse 25 und
-  15 %), die natürliche Heilung halbiert, nach dem Tod zwei Minuten lang schwächere Schläge (kein Statuseffekt – der Tod
-  steckt einem einfach noch in den Knochen; Milch hilft nicht).
+- **Viel härter:** Schwierigkeit fest auf *Schwer*, Gegner mit doppelt so viel Leben und 50 % härteren Treffern (Bosse 25
+  und 15 %; bis 1.2: 50 und 30 %), die natürliche Heilung halbiert, nach dem Tod zwei Minuten lang schwächere Schläge (kein
+  Statuseffekt – der Tod steckt einem einfach noch in den Knochen; Milch hilft nicht).
+- **Das Härte-Paket (seit 1.3)** – zwanzig Regeln, fest eingebaut wie die anderen:
+
+![Das Härte-Paket: der Hirsch wehrt sich](docs/bilder/haerte.jpg)
+
+| Bereich | Regel |
+|---|---|
+| Stärkere Monster | doppelt so viel Leben, 50 % härtere Treffer (Monster, die schon in der Welt sind, werden beim nächsten Laden angepasst) |
+| Wachsame Monster | wittern dich doppelt so weit – höchstens 48 Blöcke |
+| Monster heilen sich | fünf Sekunden ohne Treffer (und ohne zu brennen), dann ein halbes Herz alle zwei Sekunden |
+| Bosse heilen sich | wer flieht, findet den Boss wieder heil: zehn Sekunden kein Treffer und niemand mehr in 32 Blöcken – dann 2 % seiner Lebenspunkte je Sekunde |
+| Giftige Treffer | Zombies: Hunger (30 %, 10 s) · Spinnen und andere Krabbler: Gift (30 %, 5 s) · Skelettpfeile: Langsamkeit (25 %, 3 s) · andere Monster im Nahkampf: Schwäche (15 %, 4 s) – Bosse haben ihre eigenen Künste |
+| Höherer Fallschaden | anderthalbmal so viel |
+| Pfeile zerbrechen | jeder zweite Pfeil, der in einen Block fährt, zersplittert (Pfeile in Wesen sind ohnehin verloren; Unendlichkeit bleibt unberührt) |
+| Seltenere Erze | nur jede zweite Erzader entsteht – bei allen Erzen der Mod und denen von Minecraft (Kohle, Kupfer, Eisen, Gold, Redstone, Lapis, Diamant, Smaragd, Netherquarz, Nethergold, antiker Schutt) |
+| Seltenere Schätze | Truhen: von dem, was gezogen wird, fallen 45 % weg (Wertvolles 70 %), die übrigen Stapel schrumpfen auf die Hälfte; Münzen in Truhen rund 40 % weniger; Herz- und Manakristalle halb so oft in Truhen und halb so oft in Höhlen |
+| Kristalle halb so stark | ein Herzkristall gibt ein halbes Herz, ein Manakristall 10 Mana (höchstens je 25: 12,5 Herzen und 250 Mana – auch die schon aufgenommenen zählen nur noch halb) |
+| Seltenere Monsterbeute | von dem, was Monster fallen lassen, bleibt gut ein Drittel aus (nie, was man für den Fortgang braucht: Lohenruten, Enderperlen, Ghasttränen, Shulkerschalen, Witherskelett-Schädel, Totems, Windruten); Münzen und die Teile der neuen Monster (Werwolfspelz, Moorherz …) halb so oft |
+| Kürzere Tränke | alle Tränke wirken halb so lange – getrunken, geworfen, verweilend und an Pfeilen |
+| Teurere Verzauberung | der Zaubertisch will doppelt so viel Lapislazuli (2, 4, 6); die Erfahrungsstufen bleiben gleich |
+| Teurere Händler | kaufen kostet anderthalbmal so viel, verkaufen bringt 70 % (Ansehen-Rabatt wie bisher) |
+| Seltenere Schatzkarten | Karten zu Dörfern, Türmen, Nestern, Reichen und zum Siegelkreis kosten noch einmal das Doppelte; Karten in Truhen gelten als wertvoll (fallen öfter weg) |
+| Langsamere Felder | Feldfrüchte, Zuckerrohr, Kakteen, Kürbisse, Melonen, Beeren … wachsen halb so schnell |
+| Langsamere Tierzucht | Jungtiere brauchen doppelt so lange, bis sie erwachsen sind, die Eltern doppelt so lange bis zur nächsten Paarung |
+| Scheues Wild | der Hirsch flieht schon aus 16 Blöcken (bisher 10) und schneller |
+| Wilde Tiere wehren sich | der Hirsch mit Geweih stellt sich: Er geht mit gesenktem Geweih auf den Angreifer los und ruft die anderen Hirsche dazu (Hirschkühe und Kitze fliehen; Wildschwein, Gans, Urelch und Schneeleopard wehrten sich schon) |
+
+  Die **Erfahrung** (Erfahrungspunkte von Minecraft wie Heldenerfahrung) bleibt **genau gleich**.
 - **Der Boden unter dem Erzmagier** lässt sich nicht abbauen oder wegsprengen.
 
 ### Verzauberungen
@@ -3983,11 +4012,11 @@ aufsteigende Zeichen) und tauchen ihre Höhle in Licht – so sieht man sie scho
 
 | | Herzkristall | Manakristall |
 |---|---|---|
-| Wirkung | ein Herz mehr, gleich gefüllt | 20 Mana mehr, gleich gefüllt |
-| Höchstens (seit 0.77) | 25 – also 35 Herzen | 25 – also 500 Mana mehr (mit dem Stab eines Lehrlings 600) |
+| Wirkung (seit 1.3) | ein halbes Herz mehr, gleich gefüllt (bis 1.2 ein ganzes) | 10 Mana mehr, gleich gefüllt (bis 1.2: 20) |
+| Höchstens (seit 0.77) | 25 – also 22,5 Herzen | 25 – also 250 Mana mehr (mit dem Stab eines Lehrlings 350) |
 | In Höhlen | auf Gestein, von tief unten bis Höhe 48 | auf Gestein, eher in der Tiefe (bis Höhe 24) |
-| In Truhen | Schatzkammern der Stammburgen, Raubritterburg, Kathedrale, Schattenzitadelle, Ruinen … | Magiertürme (im Allerheiligsten fast jede zweite Truhe), Mondtempel, Sternwarte … |
-| Von Bossen | jeder Drachenboss einen, Nyxar zwei | jeder Erzmagier einen, Nyxar einen |
+| In Truhen | Schatzkammern der Stammburgen, Raubritterburg, Kathedrale, Schattenzitadelle, Ruinen … | Magiertürme (im Allerheiligsten fast jede vierte Truhe), Mondtempel, Sternwarte … |
+| Von Bossen | Drachenbosse und Nyxar je Kristall zur Hälfte, wiederkehrende Bosse zu einem Viertel | jeder Erzmagier beim ersten Sieg einen, Nyxar einen |
 
 - **Aufnehmen:** Rechtsklick mit dem Kristall in der Hand – ein heller Klang, ein Kranz aus Funken um dich herum, und
   über der Leiste steht, wie viele Herzen bzw. wie viel Mana du jetzt hast. Der Tooltip zeigt, wie viele du schon
@@ -4796,7 +4825,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.2.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.3.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |

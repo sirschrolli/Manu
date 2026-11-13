@@ -34,8 +34,16 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                                 net.minecraft.advancements.predicates.entity.EntityTypePredicate.of(entities,
                                         io.github.sirschrolli.kingdomsatwar.registry.ModTags.EntityTypes.DROPS_COINS)))).build();
         add("coins_from_monsters", new AddTableLootModifier(Optional.of(Holder.direct(monster)), 0, ModLootTables.MONSTER_COINS));
+        // seltenere Monsterbeute (seit 1.3): ein gutes Drittel dessen, was Monster fallen lassen, bleibt aus (nicht, was man
+        // für den Fortgang braucht)
+        var anyMonster = net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition.hasProperties(
+                net.minecraft.world.level.storage.loot.LootContext.EntityTarget.THIS,
+                net.minecraft.advancements.predicates.entity.EntityPredicate.Builder.entity().entityType(
+                        net.minecraft.advancements.predicates.entity.EntityTypePredicate.of(entities,
+                                io.github.sirschrolli.kingdomsatwar.registry.ModTags.EntityTypes.DROPS_COINS))).build();
+        add("lean_monster_drops", new io.github.sirschrolli.kingdomsatwar.loot.LeanDropsLootModifier(Optional.of(Holder.direct(anyMonster)), 0, 0.35f));
         // karge Truhen: in allen eigenen Truhen bleibt nur ein Teil liegen (Wertvolles noch seltener), Stapel schrumpfen
-        add("lean_chests", new io.github.sirschrolli.kingdomsatwar.loot.LeanLootModifier(Optional.empty(), 0, 0.3f, 0.55f, 0.6f, "chests/"));
+        add("lean_chests", new io.github.sirschrolli.kingdomsatwar.loot.LeanLootModifier(Optional.empty(), 0, 0.45f, 0.7f, 0.5f, "chests/"));
         // Froschlichter, wenn ein eigener Frosch einen kleinen Magmawürfel frisst
         add("froglights_from_magma_cubes", new AddTableLootModifier(
                 Optional.of(Holder.direct(LootTableIdCondition.builder(Identifier.withDefaultNamespace("entities/magma_cube")).build())),

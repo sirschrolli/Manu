@@ -9,7 +9,7 @@
             "type": "minecraft:set_count",
             "count": {
               "type": "minecraft:uniform",
-              "max": 4,
+              "max": 2,
               "min": 0
             }
           },

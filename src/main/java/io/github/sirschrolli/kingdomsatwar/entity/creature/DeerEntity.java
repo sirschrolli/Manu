@@ -13,6 +13,11 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -39,15 +44,24 @@ import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Rothirsch: scheu und schnell. Flieht vor Spielern, die nicht schleichen; mit Äpfeln oder Weizen lässt er sich
- * anlocken und vermehren. Männliche Tiere tragen ein Geweih, Kitze ein getupftes Fell. Grast gern.
+ * Rothirsch: scheu und schnell. Flieht vor Spielern, die nicht schleichen – seit 1.3 (scheues Wild) schon aus
+ * {@value #SHY_DISTANCE} Blöcken und schneller; mit Äpfeln oder Weizen lässt er sich anlocken und vermehren. Männliche
+ * Tiere tragen ein Geweih, Kitze ein getupftes Fell. Grast gern. Seit 1.3 wehrt sich der Hirsch (wilde Tiere wehren sich):
+ * Wer ihn angreift, den nimmt er mit gesenktem Geweih auf die Hörner – und ruft die anderen Hirsche der Umgebung dazu;
+ * Hirschkühe und Kitze fliehen.
  */
 public class DeerEntity extends Animal {
     public static final byte EVENT_GRAZE = 10;
+    public static final byte EVENT_RAM = 11;
+    /** Aus so vielen Blöcken flieht das Wild vor Spielern (bis 1.2: 10). */
+    public static final float SHY_DISTANCE = 16.0f;
     private static final EntityDataAccessor<Boolean> DATA_STAG =
+            SynchedEntityData.defineId(DeerEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DATA_FIGHTING =
             SynchedEntityData.defineId(DeerEntity.class, EntityDataSerializers.BOOLEAN);
 
     public final AnimationState grazeAnimation = new AnimationState();
+    public final AnimationState ramAnimation = new AnimationState();
 
     public DeerEntity(EntityType<? extends DeerEntity> type, Level level) {
         super(type, level);
@@ -58,6 +72,8 @@ public class DeerEntity extends Animal {
                 .add(Attributes.MAX_HEALTH, 14.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.3)
                 .add(Attributes.FOLLOW_RANGE, 20.0)
+                .add(Attributes.ATTACK_DAMAGE, 5.0)
+                .add(Attributes.ATTACK_KNOCKBACK, 1.2)
                 .add(Attributes.SAFE_FALL_DISTANCE, 5.0);
     }
 
@@ -65,23 +81,93 @@ public class DeerEntity extends Animal {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_STAG, false);
+        builder.define(DATA_FIGHTING, false);
     }
 
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new PanicGoal(this, 2.0));
+        // wer angegriffen wird, flieht – nur der Hirsch stellt sich
+        this.goalSelector.addGoal(1, new PanicGoal(this, 2.2) {
+            @Override
+            protected boolean shouldPanic() {
+                return !DeerEntity.this.fights() && super.shouldPanic();
+            }
+        });
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.6, true) {
+            @Override
+            public boolean canUse() {
+                return DeerEntity.this.fights() && super.canUse();
+            }
+
+            @Override
+            public boolean canContinueToUse() {
+                return DeerEntity.this.fights() && super.canContinueToUse();
+            }
+        });
         this.goalSelector.addGoal(2, new BreedGoal(this, 1.0));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.0, this::isFood, false));
-        // Scheu: weicht Spielern aus, die nicht schleichen und kein Futter in der Hand halten
-        this.goalSelector.addGoal(4, new AvoidEntityGoal<>(this, Player.class, 10.0f, 1.5, 2.0,
-                entity -> entity instanceof Player player && !player.isDiscrete()
+        // Scheu: weicht Spielern aus, die nicht schleichen und kein Futter in der Hand halten (außer der Hirsch kämpft)
+        this.goalSelector.addGoal(4, new AvoidEntityGoal<>(this, Player.class, SHY_DISTANCE, 1.7, 2.3,
+                entity -> entity instanceof Player player && !player.isDiscrete() && this.getTarget() == null
                         && !this.isFood(player.getMainHandItem()) && !this.isFood(player.getOffhandItem())));
         this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25));
         this.goalSelector.addGoal(6, new EatBlockGoal(this));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0f));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
+        // der Hirsch wehrt sich und ruft die anderen Hirsche dazu
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
+            @Override
+            public boolean canUse() {
+                return DeerEntity.this.fights() && super.canUse();
+            }
+
+            @Override
+            protected void alertOther(Mob other, LivingEntity target) {
+                if (other instanceof DeerEntity deer && deer.fights()) {
+                    super.alertOther(other, target);
+                }
+            }
+        }.setAlertOthers());
+    }
+
+    /** Kämpft dieses Tier, wenn man es angreift? Nur der ausgewachsene Hirsch mit Geweih. */
+    public boolean fights() {
+        return this.isStag() && !this.isBaby();
+    }
+
+    /** Geht der Hirsch gerade auf jemanden los (gesenktes Geweih)? */
+    public boolean isFighting() {
+        return this.entityData.get(DATA_FIGHTING);
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if (!this.level().isClientSide()) {
+            LivingEntity target = this.getTarget();
+            if (target != null && !this.fights()) {
+                this.setTarget(null);
+                target = null;
+            }
+            boolean fighting = target != null && target.isAlive();
+            if (fighting != this.isFighting()) {
+                this.entityData.set(DATA_FIGHTING, fighting);
+            }
+        }
+    }
+
+    @Override
+    public boolean doHurtTarget(ServerLevel level, Entity target) {
+        level.broadcastEntityEvent(this, EVENT_RAM);
+        this.playSound(ModSounds.DEER_AMBIENT.get(), 1.0f, 0.75f + this.random.nextFloat() * 0.1f);
+        boolean hit = super.doHurtTarget(level, target);
+        if (hit && target instanceof LivingEntity living) {
+            // mit dem Geweih nach oben geschleudert
+            living.push(0.0, 0.2, 0.0);
+        }
+        return hit;
     }
 
     /** Männliches Tier mit Geweih. */
@@ -116,6 +202,8 @@ public class DeerEntity extends Animal {
     public void handleEntityEvent(byte id) {
         if (id == EVENT_GRAZE) {
             this.grazeAnimation.start(this.tickCount);
+        } else if (id == EVENT_RAM) {
+            this.ramAnimation.start(this.tickCount);
         } else {
             super.handleEntityEvent(id);
         }

@@ -71,10 +71,12 @@ public class SoulBerryBushBlock extends VegetationBlock implements BonemealableB
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         int age = state.getValue(AGE);
-        if (age < MAX_AGE && random.nextInt(5) == 0) {
+        // wie die Süßbeeren über NeoForge: so gilt auch hier, dass Pflanzen seit 1.3 halb so schnell wachsen
+        if (age < MAX_AGE && net.neoforged.neoforge.common.CommonHooks.canCropGrow(level, pos, state, random.nextInt(5) == 0)) {
             BlockState grown = state.setValue(AGE, age + 1);
             level.setBlock(pos, grown, Block.UPDATE_CLIENTS);
             level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(grown));
+            net.neoforged.neoforge.common.CommonHooks.fireCropGrowPost(level, pos, state);
         }
     }
 

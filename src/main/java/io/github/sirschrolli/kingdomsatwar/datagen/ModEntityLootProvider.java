@@ -271,32 +271,32 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(Items.BONE, 1, 3))
                 .withPool(rare(ModItems.DRACONIUM.get(), 0.1f, 0.03f)));
 
-        // Neue Monster (0.69)
+        // Neue Monster (0.69) – seit 1.3 (seltenere Monsterbeute) geben sie ihre Teile nur noch halb so oft
         this.add(ModEntities.WEREWOLF.get(), LootTable.lootTable()
                 .withPool(drop(Items.LEATHER, 1, 3))
                 .withPool(drop(Items.BONE, 0, 2))
                 .withPool(rare(ModItems.GEMSTONE.get(), 0.06f, 0.02f))
-                .withPool(rare(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.WEREWOLF_PELT.get(), 0.6f, 0.1f))
-                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.WEREWOLF_CLAW.get(), 0, 2)));
+                .withPool(rare(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.WEREWOLF_PELT.get(), 0.3f, 0.06f))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.WEREWOLF_CLAW.get(), 0, 1)));
         this.add(ModEntities.MIRE_SHAMBLER.get(), LootTable.lootTable()
                 .withPool(drop(Items.CLAY_BALL, 1, 3))
                 .withPool(drop(Items.MUD, 0, 2))
                 .withPool(drop(Items.SLIME_BALL, 0, 1))
                 .withPool(rare(Items.LILY_PAD, 0.25f, 0.05f))
-                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.BOG_ROOT.get(), 1, 2))
-                .withPool(rare(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.BOG_HEART.get(), 0.3f, 0.06f)));
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.BOG_ROOT.get(), 0, 1))
+                .withPool(rare(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.BOG_HEART.get(), 0.15f, 0.04f)));
         this.add(ModEntities.EMBER_WYRM.get(), LootTable.lootTable()
                 .withPool(drop(Items.MAGMA_CREAM, 1, 3))
                 .withPool(rare(Items.BLAZE_POWDER, 0.3f, 0.08f))
                 .withPool(rare(ModItems.DRAGON_SCALES.get(DragonType.FIRE).get(), 0.08f, 0.03f))
-                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_SCALE.get(), 1, 3))
-                .withPool(rare(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_FANG.get(), 0.4f, 0.08f)));
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_SCALE.get(), 0, 2))
+                .withPool(rare(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_FANG.get(), 0.2f, 0.05f)));
         this.add(ModEntities.ASH_WRAITH.get(), LootTable.lootTable()
                 .withPool(drop(Items.GUNPOWDER, 0, 2))
                 .withPool(drop(Items.BONE, 0, 1))
                 .withPool(rare(Items.GHAST_TEAR, 0.08f, 0.03f))
-                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.SOUL_ASH.get(), 1, 2))
-                .withPool(rare(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.ASH_VEIL.get(), 0.3f, 0.06f)));
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.SOUL_ASH.get(), 0, 1))
+                .withPool(rare(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.ASH_VEIL.get(), 0.15f, 0.04f)));
         // Monster der Schattenwelt und des Ends (0.71)
         this.add(ModEntities.SOUL_HERON.get(), LootTable.lootTable()
                 .withPool(drop(Items.FEATHER, 1, 3))

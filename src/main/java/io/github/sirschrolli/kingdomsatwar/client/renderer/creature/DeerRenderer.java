@@ -41,5 +41,9 @@ public class DeerRenderer extends MobRenderer<DeerEntity, CreatureRenderState, D
         super.extractRenderState(entity, state, partialTicks);
         state.stag = entity.isStag();
         state.special.copyFrom(entity.grazeAnimation);
+        state.attack.copyFrom(entity.ramAnimation);
+        state.charging = entity.isFighting();
+        state.rage = io.github.sirschrolli.kingdomsatwar.client.model.creature.Anim.follow(entity, 0, state.charging ? 1.0f : 0.0f,
+                state.ageInTicks, 7.0f);
     }
 }

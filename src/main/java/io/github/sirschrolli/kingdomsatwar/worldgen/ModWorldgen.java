@@ -92,10 +92,13 @@ public final class ModWorldgen {
         }
     }
 
-    /** Herzkristalle wachsen in Höhlen jeder Tiefe, Manakristalle eher tief unten. */
+    /**
+     * Herzkristalle wachsen in Höhlen jeder Tiefe, Manakristalle eher tief unten – seit 1.3 (seltenere Schätze) nur noch in
+     * jedem sechsten Chunk ein Versuch (bis 1.2 in jedem dritten).
+     */
     public static final List<CrystalVein> CRYSTAL_VEINS = List.of(
-            new CrystalVein("heart_crystals", ModBlocks.HEART_CRYSTAL_FORMATION, 3, -56, 48),
-            new CrystalVein("mana_crystals", ModBlocks.MANA_CRYSTAL_FORMATION, 3, -60, 24));
+            new CrystalVein("heart_crystals", ModBlocks.HEART_CRYSTAL_FORMATION, 6, -56, 48),
+            new CrystalVein("mana_crystals", ModBlocks.MANA_CRYSTAL_FORMATION, 6, -60, 24));
 
     /** Ein Feld wilder Blumen. */
     public record FlowerPatch(String name, Supplier<? extends Block> flower, int rarity, TagKey<Biome> biomes) {

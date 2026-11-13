@@ -21,8 +21,9 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 /**
- * Herz- und Manakristalle: Wer einen aufnimmt (Rechtsklick), hat für immer ein Herz mehr bzw. {@value #MANA_PER_CRYSTAL}
- * Mana mehr – höchstens {@value #MAX} von jeder Sorte (bis 0.76 zehn), also 25 Herzen und 500 Mana mehr. Sie wachsen selten in Höhlen
+ * Herz- und Manakristalle: Wer einen aufnimmt (Rechtsklick), hat für immer ein halbes Herz mehr bzw.
+ * {@value #MANA_PER_CRYSTAL} Mana mehr – höchstens {@value #MAX} von jeder Sorte (bis 0.76 zehn), also 12,5 Herzen und 250 Mana
+ * mehr (seit 1.3 halb so stark wie vorher: ein ganzes Herz und 20 Mana). Sie wachsen selten in Höhlen
  * (siehe {@link io.github.sirschrolli.kingdomsatwar.worldgen.CrystalFormationFeature}), liegen in Schatztruhen, und jeder
  * Drachenboss hinterlässt einen Herzkristall, jeder Erzmagier einen Manakristall. Was aufgenommen ist, bleibt auch nach
  * dem Tod.
@@ -31,10 +32,10 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 public final class Crystals {
     /** So viele Kristalle jeder Sorte kann man aufnehmen (bis 0.76: 10). */
     public static final int MAX = 25;
-    /** Lebenspunkte je Herzkristall (ein Herz). */
-    public static final double HEALTH_PER_HEART = 2.0;
-    /** Mana je Manakristall. */
-    public static final float MANA_PER_CRYSTAL = 20.0f;
+    /** Lebenspunkte je Herzkristall (ein halbes Herz; bis 1.2 ein ganzes). */
+    public static final double HEALTH_PER_HEART = 1.0;
+    /** Mana je Manakristall (bis 1.2: 20). */
+    public static final float MANA_PER_CRYSTAL = 10.0f;
     /** Kennung der Steigerung der Lebenspunkte (bleibt mit dem Spieler gespeichert). */
     public static final Identifier HEALTH_ID = KingdomsAtWar.id("heart_crystals");
 
@@ -80,7 +81,7 @@ public final class Crystals {
     }
 
     /**
-     * Nimmt einen Kristall auf: Ein Herzkristall gibt ein Herz mehr (und füllt es gleich), ein Manakristall 20 Mana mehr
+     * Nimmt einen Kristall auf: Ein Herzkristall gibt ein halbes Herz mehr (und füllt es gleich), ein Manakristall 10 Mana mehr
      * (ebenso gleich gefüllt).
      *
      * @return ob er aufgenommen wurde (nicht, wenn schon alle dieser Sorte aufgenommen sind)

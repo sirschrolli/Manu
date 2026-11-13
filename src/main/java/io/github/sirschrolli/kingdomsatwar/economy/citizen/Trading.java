@@ -182,31 +182,54 @@ public final class Trading {
         return town != null && town.crowned() && town.owner().equals(player.getUUID());
     }
 
+    /** Teurere Händler (seit 1.3): Was man kauft, kostet so viel mehr … */
+    public static final float HARD_BUY = 1.5f;
+    /** … was man verkauft, bringt nur noch so viel … */
+    public static final float HARD_SELL = 0.7f;
+    /** … und Karten (zu Dörfern, Türmen, Nestern, Reichen, zum Siegelkreis) kosten noch einmal doppelt so viel. */
+    public static final float HARD_MAP = 2.0f;
+
     /** Die Angebote mit den Preisen für diesen Spieler. */
     public static List<Offer> offers(Player player, CoinTrader trader) {
         int discount = discount(player, trader);
         boolean free = trader.givesFreely(player);
+        boolean hard = io.github.sirschrolli.kingdomsatwar.rules.Hardness.active(player.level().getServer());
         List<Offer> priced = new ArrayList<>();
         for (Offer o : trader.baseOffers()) {
             if (o.special().equals(FishBag.UPGRADE_OFFER)) {
-                priced.add(bagUpgrade(player, discount, free));
+                priced.add(bagUpgrade(player, discount, free, hard));
                 continue;
             }
-            int pay = free ? 0 : o.giveCoins() <= 0 ? 0 : Math.max(1, Math.round(o.giveCoins() * (100 - discount) / 100.0f));
-            int earn = o.getCoins() <= 0 ? 0 : Math.round(o.getCoins() * (100 + discount / 2) / 100.0f);
+            int pay = free ? 0 : pay(o.giveCoins(), discount, hard ? buyFactor(o) : 1.0f);
+            int earn = earn(o.getCoins(), discount, hard ? HARD_SELL : 1.0f);
             priced.add(new Offer(o.give(), pay, o.get(), earn, o.special()));
         }
         return priced;
+    }
+
+    /** Wie viel teurer dieses Angebot durch die Härte wird (Karten noch einmal doppelt). */
+    public static float buyFactor(Offer offer) {
+        return offer.special().endsWith("_map") ? HARD_BUY * HARD_MAP : HARD_BUY;
+    }
+
+    /** Was der Spieler zahlt: Grundpreis mal Härte, abzüglich seines Rabatts (mindestens eine Münze). */
+    public static int pay(int base, int discount, float factor) {
+        return base <= 0 ? 0 : Math.max(1, Math.round(base * factor * (100 - discount) / 100.0f));
+    }
+
+    /** Was der Spieler bekommt: Grundpreis mal Härte, dazu die Hälfte seines Rabatts (mindestens eine Münze). */
+    public static int earn(int base, int discount, float factor) {
+        return base <= 0 ? 0 : Math.max(1, Math.round(base * factor * (100 + discount / 2) / 100.0f));
     }
 
     /**
      * Die Erweiterung des Fischbeutels (beim Fischer): Preis und Bild richten sich nach dem Beutel, den dieser Spieler bei sich
      * trägt – jede Stufe kostet mehr als die vorige ({@link FishBag#upgradePrice}).
      */
-    private static Offer bagUpgrade(Player player, int discount, boolean free) {
+    private static Offer bagUpgrade(Player player, int discount, boolean free, boolean hard) {
         ItemStack bag = FishBag.forUpgrade(player);
         int level = bag.isEmpty() ? 0 : FishBag.of(bag).level();
-        int pay = free ? 0 : Math.max(1, Math.round(FishBag.upgradePrice(level) * (100 - discount) / 100.0f));
+        int pay = free ? 0 : pay(FishBag.upgradePrice(level), discount, hard ? HARD_BUY : 1.0f);
         return new Offer(ItemStack.EMPTY, pay, bagUpgradeIcon(level), 0, FishBag.UPGRADE_OFFER);
     }
 

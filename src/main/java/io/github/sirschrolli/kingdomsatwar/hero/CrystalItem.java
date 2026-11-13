@@ -18,7 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 /**
- * Herz- oder Manakristall in der Hand: Rechtsklick nimmt ihn auf – ein Herz bzw. 20 Mana mehr, für immer (siehe
+ * Herz- oder Manakristall in der Hand: Rechtsklick nimmt ihn auf – ein halbes Herz bzw. 10 Mana mehr, für immer (siehe
  * {@link Crystals}). Sind schon alle dieser Sorte aufgenommen (seit 0.77 je 25), bleibt er in der Hand.
  */
 public class CrystalItem extends Item {
@@ -81,10 +81,16 @@ public class CrystalItem extends Item {
             level.sendParticles(ParticleTypes.GLOW, player.getX(), player.getY() + 2.2, player.getZ(), 6, 0.45, 0.15, 0.45, 0.01);
         }
         Component message = heart
-                ? Component.translatable("message.kingdomsatwar.crystal.heart.absorbed", (int) Math.round(player.getMaxHealth() / 2.0), count.hearts(),
+                ? Component.translatable("message.kingdomsatwar.crystal.heart.absorbed", hearts(player.getMaxHealth()), count.hearts(),
                         Crystals.MAX)
                 : Component.translatable("message.kingdomsatwar.crystal.mana.absorbed",
                         Math.round(io.github.sirschrolli.kingdomsatwar.magic.Mana.maxFor(player)), count.mana(), Crystals.MAX);
         player.sendOverlayMessage(message.copy().withStyle(heart ? ChatFormatting.RED : ChatFormatting.AQUA));
+    }
+
+    /** Die Herzen als Zahl – mit „½“, wenn ein halbes dabei ist (seit 1.3 gibt jeder Herzkristall ein halbes Herz). */
+    static String hearts(float maxHealth) {
+        int halves = Math.round(maxHealth);
+        return halves % 2 == 0 ? Integer.toString(halves / 2) : (halves / 2) + "½";
     }
 }

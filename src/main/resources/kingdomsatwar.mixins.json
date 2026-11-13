@@ -6,13 +6,16 @@
   "mixins": [
     "BucketItemMixin",
     "EnchantmentHelperMixin",
+    "EnchantmentMenuMixin",
     "FishingHookMixin",
+    "OreFeatureMixin",
     "RangedAttributeMixin",
     "ServerPlayerMixin",
     "SpongeBlockMixin"
   ],
   "client": [
     "client.CameraAccess",
+    "client.EnchantmentScreenMixin",
     "client.FirstPersonHandsAccess",
     "client.FishingHookRendererMixin",
     "client.LivingEntityRendererInvoker",

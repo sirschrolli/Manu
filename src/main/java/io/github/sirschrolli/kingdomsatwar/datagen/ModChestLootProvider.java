@@ -40,9 +40,10 @@ public class ModChestLootProvider implements LootTableSubProvider {
      */
     private static LootTable.Builder coins(LootTable.Builder table, int bronzeMin, int bronzeMax, int silverMin, int silverMax,
             float goldChance) {
-        // nur Bronze, und karg: die alten Silber- und Goldmünzen zählen nur noch als ein paar Bronzestücke mehr
-        int min = Math.max(0, bronzeMin);
-        int max = bronzeMax + silverMax + (goldChance >= 0.1f ? 1 : 0);
+        // nur Bronze, und karg: die alten Silber- und Goldmünzen zählen nur noch als ein paar Bronzestücke mehr – seit 1.3
+        // (seltenere Schätze) noch etwas weniger: höchstens drei Fünftel, wenigstens die Hälfte des Mindestwerts
+        int min = Math.max(0, bronzeMin / 2);
+        int max = Math.round((bronzeMax + silverMax + (goldChance >= 0.1f ? 1 : 0)) * 0.6f);
         if (max > 0) {
             table.withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
                     .add(item(ModItems.BRONZE_COIN.get(), 1, Math.min(min, max), max)));
@@ -51,10 +52,12 @@ public class ModChestLootProvider implements LootTableSubProvider {
     }
 
     /**
-     * Höchstens ein Herz- oder Manakristall: mit der Wahrscheinlichkeit {@code heart} bzw. {@code mana} (in Hundertsteln),
-     * sonst keiner.
+     * Höchstens ein Herz- oder Manakristall: mit der halben Wahrscheinlichkeit {@code heart} bzw. {@code mana} (in
+     * Hundertsteln; seit 1.3 – seltenere Schätze – nur noch die Hälfte), sonst keiner.
      */
-    private static LootPool.Builder crystals(int heart, int mana) {
+    private static LootPool.Builder crystals(int heartChance, int manaChance) {
+        int heart = (heartChance + 1) / 2;
+        int mana = (manaChance + 1) / 2;
         LootPool.Builder pool = LootPool.lootPool().setRolls(ContextIntProviders.exactly(1));
         if (heart > 0) {
             pool.add(LootItem.lootTableItem(ModItems.HEART_CRYSTAL.get()).setWeight(heart));

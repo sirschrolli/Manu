@@ -9,8 +9,8 @@
             "type": "minecraft:set_count",
             "count": {
               "type": "minecraft:uniform",
-              "max": 16,
-              "min": 4
+              "max": 10,
+              "min": 2
             }
           },
           "name": "kingdomsatwar:bronze_coin"

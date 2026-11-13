@@ -135,6 +135,7 @@ final class Showcase {
                 case "seafloor" -> AtollShowcase.seafloor(steps);
                 case "golems" -> GolemShowcase.golems(steps);
                 case "rare" -> RareShowcase.rare(steps);
+                case "hardness" -> HardnessShowcase.deer(steps);
                 case "nether" -> NetherShowcase.nether(steps);
                 case "nether_spirits" -> NetherShowcase.spirits(steps);
                 case "nether_wither" -> NetherShowcase.withers(steps);
