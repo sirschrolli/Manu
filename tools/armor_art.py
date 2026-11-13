@@ -31,6 +31,7 @@ import dusk_textures as dusk_tex
 import sky_iron_textures as sky_tex
 import chronit_textures as tw_tex
 import flame_textures as ew_tex
+import phase_textures as vw_tex
 
 Rect = tuple[int, int, int, int]  # x, y, Breite, Höhe
 
@@ -773,9 +774,32 @@ def emberwalker() -> Design:
     })
 
 
+def voidwalker() -> Design:
+    """Phasit (die Rüstung der Leerwandler, 1.4): Platten aus schwarzem Leerenstahl mit Purpursäumen, über die türkis
+    leuchtende Nähte laufen. Der Helm ist eine Maske mit zwei leuchtenden Augenschlitzen wie bei den Leerwandlern, über der
+    Stirn ein Phasit in Purpur; auf der Brust ein Phasit, von dem die Nähte ausgehen, am Gürtel eine Phasitschnalle, an den
+    Knien Phasit, an den Stiefeln leuchtende Sohlen (Kapuze, Splitterkrone, Mantel, schwebende Splitter und die
+    Schwebesohlen kommen als 3D-Teile)."""
+    return Design("voidwalker", {"A": vw_tex.VOID_STEEL, "B": vw_tex.PURPUR, "D": vw_tex.GLOW, "E": vw_tex.PHASIT}, mask=True, d={
+        "head_top": [".", ".", "...ed...", "...fd...", "...fd...", "...ed..."],
+        "head_front": [".", "..eGFd..", "...dc...", ".", "3st44ts3", ".", ".", "bccccccb"],
+        "head_side": [".", ".", ".", ".", "....r...", ".....r..", ".", "bccccccb"],
+        "head_back": [".", ".", "eeddddcc", ".", ".", "...r....", "....r...", "bccccccb"],
+        "body_front": [".edccde.", ".f....d.", "...ed...", "..eGFd..", "..dFEc..", "...dc...", "..s..s..", ".r....r.", "."],
+        "body_back": [".", ".", ".", "...s....", "....s...", "....r...", ".....r..", "."],
+        "arm_side": [".", ".", ".", "edcb", ".", "..s.", ".", ".", "dccb"],
+        "boot_side": ["."] * 6 + ["edcb", ".", ".", "..r.", ".", "tuut"],
+        "boot_front": ["."] * 6 + ["edcb", ".", ".", ".r..", ".", "tuut"],
+        "belt_front": ["."] * 7 + ["fedGFdcb"],
+        "belt_back": TRIM_BELT,
+        "belt_side": TRIM_BELT_SIDE,
+        "thigh_front": [".", ".", ".", ".", ".GF.", ".FE.", "..s."],
+    })
+
+
 def designs() -> list[Design]:
     return [steel(), nightsteel(), abyssite(), konterit(), werewolf_pelt(), ember_scale(), moonstone(), aquamarine(), dusk(), starwalker(),
-            timewarden(), emberwalker()] + \
+            timewarden(), emberwalker(), voidwalker()] + \
         [dragon(k) for k in icons.DRAGONS]
 
 

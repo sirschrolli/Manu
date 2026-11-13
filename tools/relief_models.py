@@ -62,7 +62,7 @@ GROUPS: dict[tuple[float, float], list[str]] = {
     ],
     (1.5, 0.5): [   # Steine, Kristalle, Splitter
         "gemstone", "abyssite_shard", "star_shard", "void_shard", "glitch_shard", "night_crystal_shard", "soul_crystal", "moonstone", "aquamarine", "dusk_quartz",
-        "chronit", "fire_opal", "mana_crystal", "heart_crystal",
+        "chronit", "fire_opal", "phasit", "mana_crystal", "heart_crystal",
         "molten_glob", "shadow_heart", "bog_heart", "aether_core", "shadow_essence", "creator_spark",
         "earth_seal_shard", "fire_seal_shard", "ice_seal_shard", "lightning_seal_shard", "nature_seal_shard", "water_seal_shard",
     ],

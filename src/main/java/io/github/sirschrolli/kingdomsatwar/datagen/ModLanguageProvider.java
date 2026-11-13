@@ -847,6 +847,22 @@ public class ModLanguageProvider extends LanguageProvider {
                 "Helm: In der Lava siehst du weit");
         text(ModItems.loreKey("emberwalker_armor", 3), "Boots: lava hardens beneath your steps – walk across it",
                 "Stiefel: Lava erstarrt unter deinen Schritten – du gehst darüber");
+        // Phasit und die Rüstung der Leerwandler (1.4)
+        block(io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT_ORE, "Phasit Ore", "Phasiterz");
+        block(io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT_BLOCK, "Block of Phasit", "Phasitblock");
+        item(io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT, "Phasit", "Phasit");
+        lore("phasit", "It flickers as if it were not quite here",
+                "Er flackert, als wäre er nicht ganz da");
+        item(io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.VOIDWALKER_HELMET, "Voidwalker Hood", "Kapuze der Leerwandler");
+        item(io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.VOIDWALKER_CHESTPLATE, "Voidwalker Coat", "Mantel der Leerwandler");
+        item(io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.VOIDWALKER_LEGGINGS, "Voidwalker Leggings", "Beinlinge der Leerwandler");
+        item(io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.VOIDWALKER_BOOTS, "Voidwalker Boots", "Stiefel der Leerwandler");
+        lore("voidwalker_armor", "Each piece: a chance to phase away from a blow",
+                "Jeder Teil: mit etwas Glück phast du einem Hieb davon");
+        text(ModItems.loreKey("voidwalker_armor", 2), "Boots: ender pearls no longer hurt",
+                "Stiefel: Enderperlen tun nicht mehr weh");
+        text(ModItems.loreKey("voidwalker_armor", 3), "Full set: void walkers stay calm when you look at them",
+                "Ganzer Satz: Leerwandler bleiben ruhig, wenn du sie ansiehst");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_SOIL, "Fae Soil", "Feenerde");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_GRASS, "Fae Grass Block", "Feengrasblock");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_MOSS, "Fae Moss", "Feenmoos");

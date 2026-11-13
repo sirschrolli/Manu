@@ -82,6 +82,7 @@ final class ReliefNames {
             "nature_spell_tablet",
             "night_crystal_shard",
             "nightsteel_ingot",
+            "phasit",
             "raw_moonsilver",
             "raw_nightsteel",
             "raw_sky_iron",

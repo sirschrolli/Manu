@@ -708,6 +708,11 @@ public class ModRecipeProvider extends RecipeProvider {
         smeltOre(fireOpal, 1.2f, io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL_ORE.get(),
                 io.github.sirschrolli.kingdomsatwar.registry.FlameGear.BLACKSTONE_FIRE_OPAL_ORE.get());
         this.emberwalkerArmor(fireOpal);
+        // Phasit (seit 1.4)
+        Item phasit = io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT.get();
+        storage(phasit, io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT_BLOCK.get());
+        smeltOre(phasit, 1.2f, io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT_ORE.get());
+        this.voidwalkerArmor(phasit);
         // der Uhrturm (1.1): Uhrbronze aus Kupfer und Gold, Uhrwerk aus Uhrbronze und Chronit, Zifferblatt aus Kalzit und Knochenmehl
         ItemLike clockBronze = io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCK_BRONZE.base().get();
         shaped(RecipeCategory.BUILDING_BLOCKS, clockBronze, 4).pattern("CGC").pattern("GCG").pattern("CGC")
@@ -1211,6 +1216,22 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('F', gem).define('S', scrap).unlockedBy(has, has(gem)).save(output, key("emberwalker_leggings"));
         shaped(RecipeCategory.COMBAT, set.get(3).get()).pattern("F F").pattern("M M")
                 .define('F', gem).define('M', magma).unlockedBy(has, has(gem)).save(output, key("emberwalker_boots"));
+    }
+
+    /** Die Rüstung der Leerwandler (1.4): Phasit, in Kapuze, Mantel und Beinlingen eine Enderperle, in den Stiefeln Chorusfrüchte. */
+    private void voidwalkerArmor(Item gem) {
+        String has = getHasName(gem);
+        var set = io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.voidwalkerSet();
+        Item pearl = net.minecraft.world.item.Items.ENDER_PEARL;
+        Item chorus = net.minecraft.world.item.Items.POPPED_CHORUS_FRUIT;
+        shaped(RecipeCategory.COMBAT, set.get(0).get()).pattern("PEP").pattern("P P")
+                .define('P', gem).define('E', pearl).unlockedBy(has, has(gem)).save(output, key("voidwalker_helmet"));
+        shaped(RecipeCategory.COMBAT, set.get(1).get()).pattern("P P").pattern("PEP").pattern("PPP")
+                .define('P', gem).define('E', pearl).unlockedBy(has, has(gem)).save(output, key("voidwalker_chestplate"));
+        shaped(RecipeCategory.COMBAT, set.get(2).get()).pattern("PEP").pattern("P P").pattern("P P")
+                .define('P', gem).define('E', pearl).unlockedBy(has, has(gem)).save(output, key("voidwalker_leggings"));
+        shaped(RecipeCategory.COMBAT, set.get(3).get()).pattern("P P").pattern("C C")
+                .define('P', gem).define('C', chorus).unlockedBy(has, has(gem)).save(output, key("voidwalker_boots"));
     }
 
     /** Die Dämmerrüstung (0.98): Dämmerquarz mit weichem Leder. */

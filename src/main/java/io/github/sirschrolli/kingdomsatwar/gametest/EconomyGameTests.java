@@ -100,17 +100,24 @@ final class EconomyGameTests {
         }
         helper.assertTrue(chestCoins >= 10 && chestCoins <= 250, "Zwanzig Truhen der Burgruine mit " + chestCoins + " Münzen");
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        for (int i = 0; i < 24; i++) {
-            var zombie = helper.spawnWithNoFreeWill(io.github.sirschrolli.kingdomsatwar.registry.ModEntities.ZOMBIE.get(),
-                    new net.minecraft.core.BlockPos(2 + i % 6, 1, 2 + i / 6));
-            zombie.hurtServer(level, level.damageSources().playerAttack(player), 1000.0f);
+        // jeder zehnte Zombie lässt eine Münze fallen: drei Wellen zu 24 (dass keiner von 72 etwas gibt, ist so gut wie
+        // ausgeschlossen – bei nur 24 käme es in jedem zwölften Lauf vor)
+        for (int wave = 0; wave < 3; wave++) {
+            helper.runAfterDelay(1 + wave * 4, () -> {
+                for (int i = 0; i < 24; i++) {
+                    var zombie = helper.spawnWithNoFreeWill(io.github.sirschrolli.kingdomsatwar.registry.ModEntities.ZOMBIE.get(),
+                            new net.minecraft.core.BlockPos(2 + i % 6, 1, 2 + i / 6));
+                    zombie.hurtServer(level, level.damageSources().playerAttack(player), 1000.0f);
+                }
+            });
         }
-        helper.succeedWhen(() -> {
+        helper.runAfterDelay(60, () -> {
             int coins = 0;
             for (var item : helper.getEntities(net.minecraft.world.entity.EntityTypes.ITEM)) {
                 coins += Coins.value(item.getItem());
             }
-            helper.assertTrue(coins > 0, "Keine Münzen von 24 Zombies");
+            helper.assertTrue(coins > 0, "Keine Münzen von 72 Zombies");
+            helper.succeed();
         });
     }
 

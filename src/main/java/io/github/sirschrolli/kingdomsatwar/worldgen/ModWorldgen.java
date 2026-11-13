@@ -149,6 +149,18 @@ public final class ModWorldgen {
     public static final int FIRE_OPAL_VEINS = 4;
     public static final int FIRE_OPAL_SIZE = 5;
 
+    /**
+     * Phasit (seit 1.4): Büschel im Endstein der äußeren Inseln (nicht auf der Hauptinsel des Sternenfressers) – sechs Versuche
+     * je Chunk zu höchstens vier Kristallen (mit der Härte bleibt etwa die Hälfte).
+     */
+    public static final ResourceKey<Feature> ORE_PHASIT = ResourceKey.create(Registries.FEATURE, KingdomsAtWar.id("ore_phasit"));
+    public static final ResourceKey<PlacedFeature> ORE_PHASIT_PLACED = ResourceKey.create(Registries.PLACED_FEATURE,
+            KingdomsAtWar.id("ore_phasit"));
+    public static final ResourceKey<BiomeModifier> ADD_ORE_PHASIT = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
+            KingdomsAtWar.id("add_ore_phasit"));
+    public static final int PHASIT_VEINS = 6;
+    public static final int PHASIT_SIZE = 4;
+
     /** Wilde Zierblumen (Bild "Nahrung & Pflanzen", Abschnitt 5). */
     public static final List<FlowerPatch> FLOWER_PATCHES = List.of(
             new FlowerPatch("lavender", ModBlocks.LAVENDER, 6, Tags.Biomes.IS_PLAINS),
@@ -211,6 +223,10 @@ public final class ModWorldgen {
                 BlockReplacement.replace(new net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest(
                         net.minecraft.world.level.block.Blocks.BLACKSTONE), io.github.sirschrolli.kingdomsatwar.registry.FlameGear.BLACKSTONE_FIRE_OPAL_ORE.get().defaultBlockState())),
                 FIRE_OPAL_SIZE, 0.2f));
+        context.register(ORE_PHASIT, new OreFeature(List.of(
+                BlockReplacement.replace(new net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest(
+                        net.minecraft.world.level.block.Blocks.END_STONE), io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT_ORE.get().defaultBlockState())),
+                PHASIT_SIZE, 0.0f));
 
         for (FlowerPatch patch : FLOWER_PATCHES) {
             context.register(patch.featureKey(), new SimpleBlockFeature(BlockStateProvider.of(patch.flower().get())));
@@ -250,6 +266,11 @@ public final class ModWorldgen {
                 CountPlacement.of(FIRE_OPAL_VEINS),
                 InSquarePlacement.spread(),
                 HeightRangePlacement.triangle(VerticalAnchor.absolute(8), VerticalAnchor.absolute(112)),
+                BiomeFilter.biome())));
+        context.register(ORE_PHASIT_PLACED, new PlacedFeature(features.getOrThrow(ORE_PHASIT), List.of(
+                CountPlacement.of(PHASIT_VEINS),
+                InSquarePlacement.spread(),
+                HeightRangePlacement.uniform(VerticalAnchor.absolute(10), VerticalAnchor.absolute(90)),
                 BiomeFilter.biome())));
 
         for (FlowerPatch patch : FLOWER_PATCHES) {
@@ -387,6 +408,13 @@ public final class ModWorldgen {
         context.register(ADD_ORE_FIRE_OPAL, new BiomeModifiers.AddFeaturesBiomeModifier(
                 biomes.getOrThrow(BiomeTags.IS_NETHER),
                 HolderSet.direct(placed.getOrThrow(ORE_FIRE_OPAL_PLACED)),
+                GenerationStep.Decoration.UNDERGROUND_ORES));
+        context.register(ADD_ORE_PHASIT, new BiomeModifiers.AddFeaturesBiomeModifier(
+                HolderSet.direct(biomes.getOrThrow(net.minecraft.world.level.biome.Biomes.END_HIGHLANDS),
+                        biomes.getOrThrow(net.minecraft.world.level.biome.Biomes.END_MIDLANDS),
+                        biomes.getOrThrow(net.minecraft.world.level.biome.Biomes.END_BARRENS),
+                        biomes.getOrThrow(net.minecraft.world.level.biome.Biomes.SMALL_END_ISLANDS)),
+                HolderSet.direct(placed.getOrThrow(ORE_PHASIT_PLACED)),
                 GenerationStep.Decoration.UNDERGROUND_ORES));
 
         for (CrystalVein vein : CRYSTAL_VEINS) {

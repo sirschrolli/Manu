@@ -278,6 +278,8 @@ final class Showcase {
                         ArmorPartsShowcase.armor(steps);
                     } else if (scene.equals("flame_gear")) {
                         FlameShowcase.gear(steps);
+                    } else if (scene.equals("phase_gear")) {
+                        PhaseShowcase.gear(steps);
                     } else if (scene.equals("fix_wings")) {
                         WingFixShowcase.wings(steps);
                     } else if (scene.equals("weapons_hand")) {

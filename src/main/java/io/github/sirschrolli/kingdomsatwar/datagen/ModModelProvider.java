@@ -40,7 +40,7 @@ public class ModModelProvider extends ModelProvider {
     private static final TextureSlot GLOW = TextureSlot.create("glow");
     /** Erze mit selbstleuchtendem Kern (eigene Glow-Textur, im Dunkeln voll hell). */
     private static final java.util.Set<String> GLOWING_ORES = java.util.Set.of("aetherit", "draconium", "soul_crystal", "abyssite", "moonstone", "aquamarine", "dusk_quartz", "sky_iron", "chronit",
-            "fire_opal");
+            "fire_opal", "phasit");
 
     /**
      * Erz-Modell aus zwei Schichten: unten die echte Vanilla-Textur (Stein oder Tiefenschiefer),
@@ -452,6 +452,7 @@ public class ModModelProvider extends ModelProvider {
         FaeModels.register(blocks, items);
         ForgeModels.register(blocks, items);
         FlameModels.register(blocks, items);
+        PhaseModels.register(blocks, items);
         StarModels.register(blocks, items);
         MystikModels.register(blocks, items);
         AnniModels.register(blocks, items);

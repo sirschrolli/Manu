@@ -304,6 +304,20 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         for (var piece : io.github.sirschrolli.kingdomsatwar.registry.FlameGear.emberwalkerSet()) {
             add(ItemTags.TRIMMABLE_ARMOR, piece);
         }
+        // Phasit und die Rüstung der Leerwandler (seit 1.4)
+        copy(ModTags.Blocks.ORES_PHASIT, ModTags.Items.ORES_PHASIT);
+        copy(ModTags.Blocks.STORAGE_BLOCKS_PHASIT, ModTags.Items.STORAGE_BLOCKS_PHASIT);
+        add(ModTags.Items.GEMS_PHASIT, io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT);
+        tag(Tags.Items.GEMS).addTag(ModTags.Items.GEMS_PHASIT);
+        add(ItemTags.BEACON_PAYMENT_ITEMS, io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT);
+        add(ModTags.Items.REPAIRS_VOIDWALKER_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT);
+        add(ItemTags.HEAD_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.VOIDWALKER_HELMET);
+        add(ItemTags.CHEST_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.VOIDWALKER_CHESTPLATE);
+        add(ItemTags.LEG_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.VOIDWALKER_LEGGINGS);
+        add(ItemTags.FOOT_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.VOIDWALKER_BOOTS);
+        for (var piece : io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.voidwalkerSet()) {
+            add(ItemTags.TRIMMABLE_ARMOR, piece);
+        }
         // der Minutenzeiger (1.1): ein Schwert, mit Chronit auszubessern
         add(ModTags.Items.REPAIRS_MINUTE_HAND, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT);
         add(ItemTags.SWORDS, io.github.sirschrolli.kingdomsatwar.registry.ClockTower.MINUTE_HAND);

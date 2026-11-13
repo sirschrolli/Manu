@@ -34,6 +34,11 @@
     zwei Schollen geschwärzten Stahls mit einer glühenden Fuge dazwischen und einem Opal obenauf, Armreife mit Glutfuge;
     eine Opalschnalle am Gürtel, Kniekacheln mit Feueropal; Stiefel mit dicken Glutsohlen, goldenen Kappen und kleinen
     Flammen an den Fersen
+  * Phasit (seit 1.4, die Rüstung der Leerwandler): eine tiefe Kapuze aus schwarzem Leerentuch mit Purpursaum, darüber eine
+    Krone aus drei schwebenden Phasitsplittern; ein langer Mantel bis an die Knie, unten zerschlissen und von türkisen Fäden
+    durchzogen, ein Phasit in Purpur auf der Brust, Schulterplatten aus Leerenstahl, über denen Splitter schweben, Armreife
+    mit leuchtender Naht; eine Phasitschnalle am Gürtel, Kniekacheln mit Phasit; Stiefel mit Stahlkappen und leuchtenden
+    Schwebesohlen, an den Fersen kleine Splitter
   * Aquamarin (seit 0.97, die Taucherrüstung): ein runder Taucherhelm aus Aquamarin mit Messingkragen, vorn ein großes
     Sichtfenster (man sieht das Gesicht dahinter), an den Seiten kleine Bullaugen, oben ein Ventil, hinten der Schlauch;
     zwei Luftflaschen auf dem Rücken mit Ventilen und Messingbändern, eine Druckanzeige auf der Brust, flache
@@ -52,7 +57,7 @@ from ..paint import Ctx, along, hash01, hexc, mix, noise3, pick, ramp, rel_y
 
 SETS = ["steel", "konterit", "nightsteel", "abyssite", "fire", "ice", "lightning", "nature", "earth", "water", "crown",
         "leather", "chainmail", "iron", "gold", "diamond", "netherite", "copper", "turtle", "moonstone", "aquamarine", "dusk", "starwalker",
-        "timewarden", "emberwalker"]
+        "timewarden", "emberwalker", "voidwalker"]
 SLOTS = {"head": ["head"], "chest": ["body", "left_arm", "right_arm"], "legs": ["body", "left_leg", "right_leg"],
          "feet": ["left_leg", "right_leg"]}
 
@@ -144,6 +149,14 @@ PALETTES = {
         "ew_opal": [hexc(c) for c in ("#6a1002", "#b02408", "#f0500e", "#ff8020", "#ffb040", "#ffe07a", "#fff6c8")],
         "ew_ember": [hexc(c) for c in ("#5c1404", "#a02806", "#de4a0c", "#ff7418", "#ff9c2c", "#ffc860", "#fff0b0")],
         "ew_flash": ramp("#1e8a52", "#c8ffd8", 4),
+        # Phasit (1.4): die Rüstung der Leerwandler
+        "vw_cloth": ramp("#0a0812", "#5e4c80", 8),
+        "vw_steel": ramp("#0e0c16", "#6a6290", 8),
+        "vw_purpur": ramp("#3a1846", "#f0c8f4", 8),
+        # Phasit und sein Leuchten von Hand gestuft (der lineare Verlauf würde in der Mitte grau-mintgrün)
+        "vw_phasit": [hexc(c) for c in ("#04403a", "#076a60", "#0c9888", "#19c4ac", "#3ce0c8", "#86f4e0", "#e0fff8")],
+        "vw_glow": [hexc(c) for c in ("#0f9c88", "#1fc8ae", "#3fe6cc", "#84f6e2", "#d8fff6")],
+        "vw_spark": ramp("#5a1e9a", "#f0d8ff", 4),
     }
 }
 
@@ -764,6 +777,66 @@ def _emberwalker(m: Model) -> None:
         _ew_tongue(m, f, f"ew_heel_{bone}", (0.9 * side, 11.2, 3.1), (-55.0, 0.0, 0.0), 3.0, 1.6)
 
 
+# ------------------------------------------------------------------ Phasit (1.4): die Rüstung der Leerwandler
+
+def _voidwalker(m: Model) -> None:
+    h = _slot(m, "voidwalker", "head", "head")
+    # die Kapuze: oben, an den Seiten und hinten etwas weiter als der Kopf, vorn offen; darüber ein Purpursaum
+    m.cube(h, (-5.5, -9.7, -5.3), (11.0, 1.1, 10.8), "vw_cloth")
+    for side in (1, -1):
+        m.cube(h, (_mx(5.0, 0.55, side), -8.8, -5.3), (0.55, 8.6, 10.8), "vw_cloth")
+    m.cube(h, (-5.0, -8.8, 5.0), (10.0, 8.8, 0.55), "vw_cloth")
+    m.cube(h, (-5.55, -9.2, -5.85), (11.1, 1.4, 0.6), "vw_rim")
+    for side in (1, -1):
+        m.cube(h, (_mx(4.3, 1.25, side), -8.0, -5.85), (1.25, 6.6, 0.6), "vw_rim")
+    # die Krone: drei Phasitsplitter, die über der Kapuze schweben (der mittlere am höchsten, die äußeren geneigt)
+    _spike(m, h, "vw_crown_mid", (0.0, -11.2, -0.6), (-6.0, 0.0, 0.0), 3.6, 1.3, "vw_shard")
+    _spike(m, h, "vw_crown_left", (2.6, -10.8, 0.2), (4.0, 0.0, 22.0), 2.6, 1.0, "vw_shard")
+    _spike(m, h, "vw_crown_right", (-2.6, -10.8, 0.2), (4.0, 0.0, -22.0), 2.6, 1.0, "vw_shard")
+
+    b = _slot(m, "voidwalker", "chest", "body")
+    # der Phasit auf der Brust in seiner Purpurfassung
+    m.cube(b, (-1.7, 2.3, -3.5), (3.4, 3.2, 0.5), "vw_purpur")
+    m.cube(b, (-1.15, 2.75, -3.95), (2.3, 2.3, 0.55), "vw_gem")
+    # der lange Mantel: über die Schultern gelegt, hinten bis an die Knie, unten zerschlissen
+    m.cube(b, (-5.4, -0.55, -3.55), (10.8, 1.1, 7.1), "vw_cloth")
+    m.bone("vw_coat", b, (0.0, 0.2, 3.25), (4.0, 0.0, 0.0))
+    m.cube("vw_coat", (-5.0, 0.0, 0.0), (10.0, 11.4, 0.6), "vw_coat")
+    m.bone("vw_coat_low", "vw_coat", (0.0, 11.2, 0.05), (6.0, 0.0, 0.0))
+    m.cube("vw_coat_low", (-4.8, 0.0, 0.0), (9.6, 6.2, 0.6), "vw_coat_low")
+    for x in (-4.6, 3.2):
+        m.cube(b, (x, -0.7, -3.6), (1.4, 1.4, 0.7), "vw_purpur")         # die Spangen des Mantels
+    for side, bone in ((1, "left_arm"), (-1, "right_arm")):
+        a = _slot(m, "voidwalker", "chest", bone)
+        p = f"vw_pauldron_{bone}"
+        m.bone(p, a, (1.0 * side, -3.1, 0.0), (0.0, 0.0, 12.0 * side))
+        m.cube(p, (_mx(-3.1, 6.8, side), -1.5, -3.6), (6.8, 1.6, 7.2), "vw_plate")
+        m.cube(p, (_mx(-2.0, 5.9, side), 0.1, -3.7), (5.9, 1.3, 7.4), "vw_plate")
+        # zwei Phasitsplitter, die über der Schulter schweben
+        _spike(m, p, f"vw_float_a_{bone}", (1.6 * side, -3.8, -1.1), (8.0, 0.0, 16.0 * side), 2.2, 0.9, "vw_shard")
+        _spike(m, p, f"vw_float_b_{bone}", (0.3 * side, -3.2, 1.6), (-10.0, 0.0, -8.0 * side), 1.6, 0.7, "vw_shard")
+        # der Armreif mit leuchtender Naht
+        m.cube(a, (_mx(-2.3, 6.6, side), 6.0, -3.3), (6.6, 1.7, 6.6), "vw_plate")
+        m.cube(a, (_mx(-2.35, 6.7, side), 6.7, -3.35), (6.7, 0.35, 6.7), "vw_seam")
+
+    t = _slot(m, "voidwalker", "legs", "body")
+    # die Phasitschnalle am Gürtel
+    m.cube(t, (-1.3, 10.0, -3.5), (2.6, 2.2, 0.45), "vw_purpur")
+    m.cube(t, (-0.8, 10.35, -3.9), (1.6, 1.5, 0.5), "vw_gem")
+    for side, bone in ((1, "left_leg"), (-1, "right_leg")):
+        g = _slot(m, "voidwalker", "legs", bone)
+        # Kniekachel mit Phasit
+        m.cube(g, (-2.2, 3.5, -3.15), (4.4, 2.9, 0.75), "vw_plate")
+        m.cube(g, (-0.65, 4.2, -3.65), (1.3, 1.3, 0.55), "vw_gem")
+
+    for side, bone in ((1, "left_leg"), (-1, "right_leg")):
+        f = _slot(m, "voidwalker", "feet", bone)
+        # die Stahlkappe, darunter die leuchtende Schwebesohle (ein Hauch über dem Boden abgesetzt) und an der Ferse ein Splitter
+        m.cube(f, (-2.5, 10.3, -4.1), (5.0, 1.9, 1.4), "vw_plate")
+        m.cube(f, (-2.8, 12.15, -3.5), (5.6, 0.45, 6.8), "vw_sole")
+        _spike(m, f, f"vw_heel_{bone}", (0.9 * side, 10.6, 3.0), (-58.0, 0.0, 0.0), 2.0, 0.8, "vw_shard")
+
+
 # ------------------------------------------------------------------ Dämmerquarz (0.98): die Rüstung der Schleicher
 
 def _quartz_points(m: Model, parent: str, name: str, pivot, rot, scale: float = 1.0) -> None:
@@ -1102,7 +1175,7 @@ def _turtle(m: Model) -> None:
 
 
 def build() -> Model:
-    m = Model("armor_parts", 256, 384)
+    m = Model("armor_parts", 256, 448)
     m.tex_res = 2
     _steel(m)
     _konterit(m)
@@ -1125,6 +1198,7 @@ def build() -> Model:
     _starwalker(m)
     _timewarden(m)
     _emberwalker(m)
+    _voidwalker(m)
     # Plätze ohne eigene Teile bekommen leere Knochen, damit Java jeden Namen findet
     for s in SETS:
         for slot, bones in SLOTS.items():
@@ -1872,6 +1946,75 @@ def _ew_sole(ctx: Ctx):
     return col
 
 
+def _vw_cloth(ctx: Ctx):
+    """Leerentuch: fast schwarz mit einem Hauch Violett, weiche Falten."""
+    ry = rel_y(ctx)
+    fold = 0.5 + 0.5 * math.sin((ctx.local[0] + ctx.local[2]) * 1.3 + ctx.local[1] * 0.4)
+    v = 0.28 + 0.3 * fold - 0.1 * ry + (_noise(ctx, 151) - 0.5) * 0.08
+    if ctx.face == "bottom":
+        v -= 0.12
+    return pick(ctx.pal["vw_cloth"], v)
+
+
+def _vw_rim(ctx: Ctx):
+    """Der Saum der Kapuze: Purpur, außen heller, mit einer feinen Naht."""
+    v = 0.52 + 0.14 * (1.0 - rel_y(ctx))
+    if ctx.t == 0 or ctx.s == 0:
+        v -= 0.16
+    return pick(ctx.pal["vw_purpur"], v)
+
+
+def _vw_coat(ctx: Ctx):
+    """Der Mantel: Leerentuch mit senkrechten Falten, innen dunkler; hier und da ein türkis leuchtender Faden."""
+    v = 0.26 + 0.3 * (0.5 + 0.5 * math.sin(ctx.local[0] * 1.7)) - 0.08 * rel_y(ctx)
+    if ctx.face == "front":
+        v -= 0.14                                         # Innenseite
+    col = pick(ctx.pal["vw_cloth"], v + (_noise(ctx, 157) - 0.5) * 0.06)
+    if ctx.face == "back" and (ctx.s % 7 == 3) and hash01(ctx.s, ctx.t // 3, 163) > 0.55:
+        col = pick(ctx.pal["vw_glow"], 0.45)
+        ctx.glow = mix((0, 0, 0, 255), col, 0.7)
+    return col
+
+
+def _vw_coat_low(ctx: Ctx):
+    """Der untere Mantel: wie oben, unten zerschlissen."""
+    if ctx.face in ("back", "front", "left", "right") and rel_y(ctx) > 0.7 and hash01(ctx.s, 0, 167) > 0.4 + (1.0 - rel_y(ctx)):
+        return None
+    return _vw_coat(ctx)
+
+
+def _vw_plate(ctx: Ctx):
+    """Leerenstahl: fast schwarz, unten ein Purpursaum, darüber feine türkis leuchtende Risse."""
+    col = _metal("vw_steel", rim="vw_purpur", rim_from=0.84)(ctx)
+    if ctx.face in ("top", "front", "back", "left", "right") and rel_y(ctx) < 0.84:
+        n = noise3(ctx.local[0] * 1.1, ctx.local[1] * 1.1, ctx.local[2] * 1.1, 29)
+        if abs(n - 0.5) < 0.016:
+            col = pick(ctx.pal["vw_glow"], 0.55 + (0.016 - abs(n - 0.5)) * 18.0)
+            ctx.glow = col
+    return col
+
+
+def _vw_seam(ctx: Ctx):
+    """Die leuchtende Naht im Armreif."""
+    col = pick(ctx.pal["vw_glow"], 0.65 + 0.3 * (1.0 - abs(rel_y(ctx) - 0.5) * 2.0))
+    ctx.glow = col
+    return col
+
+
+def _vw_sole(ctx: Ctx):
+    """Die Schwebesohle: türkises Licht, unten am hellsten, in der Mitte ein Ring wie ein Zeichen der Leerwandler."""
+    if ctx.face == "top":
+        return pick(ctx.pal["vw_steel"], 0.25)
+    v = 0.55
+    if ctx.face == "bottom":
+        cx, cy = (ctx.w - 1) / 2.0, (ctx.h - 1) / 2.0
+        d = math.hypot((ctx.s - cx) / max(cx, 0.5), (ctx.t - cy) / max(cy, 0.5))
+        v = 0.95 if abs(d - 0.6) < 0.18 else 0.6
+    col = pick(ctx.pal["vw_glow"], v)
+    ctx.glow = col
+    return col
+
+
 def materials(variant: str) -> dict:
     out = {
         "fur": _fur,
@@ -1962,6 +2105,16 @@ def materials(variant: str) -> dict:
         "ew_opal": _ew_opal,
         "ew_flame": _ew_flame,
         "ew_sole": _ew_sole,
+        "vw_cloth": _vw_cloth,
+        "vw_rim": _vw_rim,
+        "vw_coat": _vw_coat,
+        "vw_coat_low": _vw_coat_low,
+        "vw_plate": _vw_plate,
+        "vw_seam": _vw_seam,
+        "vw_sole": _vw_sole,
+        "vw_purpur": _gold("vw_purpur"),
+        "vw_gem": _gem("vw_phasit"),
+        "vw_shard": _crystal("vw_phasit", "vw_glow", 0.4),
     }
     for e in DRAGON:
         out["dragon_scale_" + e] = _scale(DRAGON[e][0])

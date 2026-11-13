@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "E": "minecraft:ender_pearl",
+    "P": "kingdomsatwar:phasit"
+  },
+  "pattern": [
+    "PEP",
+    "P P"
+  ],
+  "result": {
+    "id": "kingdomsatwar:voidwalker_helmet"
+  }
+}

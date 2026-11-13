@@ -205,6 +205,27 @@ FIRE_OPAL_NODES = [
     "................",
 ]
 
+# Phasiterz (1.4): Büschel aus türkisen Kristallprismen im Endstein (1-4, oben links das Licht), darin violette Funken
+# (5-8) – schräg nach oben gewachsen, wo die Leerwandler den Stein am häufigsten durchquert haben
+PHASIT_CLUSTERS = [
+    "................",
+    "...4.......4....",
+    "..443.....443...",
+    "..4532....4521..",
+    "..4321.....321..",
+    "...21.....4.....",
+    ".........443....",
+    "....4...45632...",
+    "...443..44321...",
+    "..45632..321....",
+    "..44321.....4...",
+    "...321.....443..",
+    "....1.....4532..",
+    ".43.......4321..",
+    ".4321......21...",
+    "..21............",
+]
+
 # Edelstein-Erz: grüne (1-4) und violette (5-8) Steine
 GEM_MIXED = [
     "................",
@@ -282,6 +303,8 @@ CHRONIT = tones("#7a3a0c", "#c8701e", "#f2aa40", "#ffe6a6")
 CHRONIT_SPARK = tones("#ffd27a", "#fff2c8", "#fff2c8", "#ffffff")
 FIRE_OPAL = tones("#a8260c", "#e85e18", "#ffa02e", "#ffe27a")
 FIRE_OPAL_FLASH = tones("#14784a", "#2fc070", "#7ff0a8", "#e6fff0")
+PHASIT = tones("#0c5a52", "#1a9e8c", "#3ce0c6", "#c8fff2")
+PHASIT_SPARK = tones("#5a1e9a", "#9a4ae0", "#d49cff", "#f6e6ff")
 
 
 def build(put: Callable[[str, Image.Image], None]) -> None:
@@ -321,6 +344,9 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     opal = overlay(FIRE_OPAL_NODES, FIRE_OPAL, FIRE_OPAL_FLASH)
     put("block/fire_opal_ore_overlay", opal)
     put("block/fire_opal_ore_glow", glow_of(opal, FIRE_OPAL[2:] + FIRE_OPAL_FLASH[1:]))
+    phasit = overlay(PHASIT_CLUSTERS, PHASIT, PHASIT_SPARK)
+    put("block/phasit_ore_overlay", phasit)
+    put("block/phasit_ore_glow", glow_of(phasit, PHASIT[2:] + PHASIT_SPARK[1:]))
 
 
 if __name__ == "__main__":

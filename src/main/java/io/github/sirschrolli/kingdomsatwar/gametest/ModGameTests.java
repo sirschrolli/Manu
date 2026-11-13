@@ -201,6 +201,7 @@ public final class ModGameTests {
         FlameGameTests.init(); // seit 1.1.6: Feueropal und die Rüstung der Glutwandler
         IgnaraGameTests.init(); // seit 1.2: Ignara, die Flammenpriesterin, ihr Altar, die Flammenpeitsche, das Flammenheiligtum
         HardnessGameTests.init(); // seit 1.3: das Härte-Paket
+        PhaseGameTests.init(); // seit 1.4: Phasit und die Rüstung der Leerwandler
         AnniGameTests.init();     // Anni der Troll, Fehlerkern, Wiederherstellung als Anni 2.0, Bannhammer, Fehlerflügel
         BeastGameTests.init();    // die neuen Monster: Werwolf, Moorschlurfer, Glutwurm, Aschengeist
         GearGameTests.init();     // Waffen und Rüstungen aus Monsterteilen
@@ -296,6 +297,7 @@ public final class ModGameTests {
         FlameGameTests.register(event, environment);
         IgnaraGameTests.register(event, environment);
         HardnessGameTests.register(event, environment);
+        PhaseGameTests.register(event, environment);
         AnniGameTests.register(event, environment);
         BeastGameTests.register(event, environment);
         GearGameTests.register(event, environment);

@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Version 1.3 – Das Härte-Paket.** Kingdoms at War ist jetzt **deutlich schwerer** – zwanzig Regeln, fest eingebaut: **Monster** haben **doppelt so viel Leben**, treffen **50 % härter**, wittern dich **doppelt so weit** (höchstens 48 Blöcke) und **heilen sich**, wenn man sie in Ruhe lässt (ein halbes Herz alle zwei Sekunden); **Bosse heilen sich**, wenn du vor ihnen fliehst (2 % je Sekunde, sobald niemand mehr in 32 Blöcken ist). **Giftige Treffer:** Zombies machen hungrig, Spinnen vergiften, Skelettpfeile lähmen, andere Monster schwächen. **Fallschaden** ist anderthalbmal so hoch, **jeder zweite Pfeil zersplittert**, wenn er in einen Block fährt. **Erze** – die eigenen wie Kohle, Eisen, Gold, Diamant – sind **halb so häufig**, **Herz- und Manakristalle** wachsen halb so oft, liegen halb so oft in Truhen und geben nur noch **ein halbes Herz bzw. 10 Mana**; **Truhen** sind karger, **Monster** lassen seltener etwas fallen (ihre Teile und Münzen nur halb so oft). **Tränke** wirken halb so lange, der **Zaubertisch** will **doppelt so viel Lapislazuli** (die Erfahrungsstufen bleiben gleich), **Händler** verlangen anderthalbmal so viel und zahlen weniger, **Karten** kosten noch einmal das Doppelte. **Felder** wachsen halb so schnell, **Jungtiere** brauchen doppelt so lange, **das Wild** flieht schon aus 16 Blöcken – und der **Hirsch wehrt sich**: Wer ihn angreift, den nimmt er mit gesenktem Geweih auf die Hörner. Die **Erfahrung**, die du bekommst, bleibt genau gleich.
+> **Version 1.4 – Phasit und die Rüstung der Leerwandler.** Auf den **äußeren Inseln des Ends** schimmert jetzt **Phasiterz** im Endstein – türkise Büschel, wo die Leerwandler seit Äonen hin und her springen (ab der Diamantspitzhacke; auf der Hauptinsel des Drachen nicht). Aus **Phasit**, einem türkisen Kristall mit einem violetten Funken darin, baut man den **Phasitblock** (Licht 8, Sockel für ein Leuchtfeuer) und die **Rüstung der Leerwandler** (mit Enderperlen, die Stiefel mit Chorusfrüchten; Schutz wie Diamant): eine Kapuze mit leuchtenden Augenschlitzen und einer **Krone aus Phasitsplittern**, ein langer **Mantel** mit türkis leuchtenden Fäden und einem Phasit auf der Brust, Schulterplatten mit **schwebenden Splittern**, Stiefel auf **Schwebesohlen** – alles in 3D. **Phasenschritt** (jeder Teil): Trifft dich ein Wesen im Nahkampf, weichst du mit 6 % je Teil (mit allen vier 24 %) **dem Hieb ganz aus** und springst vier bis acht Blöcke fort, weg vom Angreifer – zurück bleibt ein türkises Nachbild (höchstens alle drei Sekunden). **Schwebende Sohlen** (Stiefel): **Enderperlen** tun nicht mehr weh. **Einer von ihnen** (alle vier Teile): Die **Leerwandler** werden nicht wütend, wenn du sie ansiehst.
+> In 1.3 kam **das Härte-Paket**: Kingdoms at War wurde **deutlich schwerer** – zwanzig Regeln, fest eingebaut: **Monster** haben **doppelt so viel Leben**, treffen **50 % härter**, wittern dich **doppelt so weit** (höchstens 48 Blöcke) und **heilen sich**, wenn man sie in Ruhe lässt (ein halbes Herz alle zwei Sekunden); **Bosse heilen sich**, wenn du vor ihnen fliehst (2 % je Sekunde, sobald niemand mehr in 32 Blöcken ist). **Giftige Treffer:** Zombies machen hungrig, Spinnen vergiften, Skelettpfeile lähmen, andere Monster schwächen. **Fallschaden** ist anderthalbmal so hoch, **jeder zweite Pfeil zersplittert**, wenn er in einen Block fährt. **Erze** – die eigenen wie Kohle, Eisen, Gold, Diamant – sind **halb so häufig**, **Herz- und Manakristalle** wachsen halb so oft, liegen halb so oft in Truhen und geben nur noch **ein halbes Herz bzw. 10 Mana**; **Truhen** sind karger, **Monster** lassen seltener etwas fallen (ihre Teile und Münzen nur halb so oft). **Tränke** wirken halb so lange, der **Zaubertisch** will **doppelt so viel Lapislazuli** (die Erfahrungsstufen bleiben gleich), **Händler** verlangen anderthalbmal so viel und zahlen weniger, **Karten** kosten noch einmal das Doppelte. **Felder** wachsen halb so schnell, **Jungtiere** brauchen doppelt so lange, **das Wild** flieht schon aus 16 Blöcken – und der **Hirsch wehrt sich**: Wer ihn angreift, den nimmt er mit gesenktem Geweih auf die Hörner. Die **Erfahrung**, die du bekommst, bleibt genau gleich.
 > In 1.2 kam **Ignara, die Flammenpriesterin, und das Flammenheiligtum**: Mitten im **Lavameer des Nethers** steht jetzt das **Flammenheiligtum**: eine runde Plattform aus Schwarzstein auf Basaltstelzen, mit einer goldenen Sonne im Mosaikboden, acht Säulen mit **ewigem Feuer**, Stegen zum Fels und dem **Flammenaltar**. Vor ihm schwebt **Ignara** und betet – wer ihr zu nahe kommt, weckt sie. Sie kämpft mit ihrer **Flammenpeitsche** (Hieb, Flammenschlinge, die dich heranreißt), lässt eine **Lavawoge** über das Heiligtum rollen, **Feuersäulen** aus dem Boden brechen und **Feueropale vom Himmel regnen**, ruft **Glutgeister** – und unter halber Kraft wird sie zum **Phönix** mit Schwingen aus Flammen und stürzt sich auf dich. Ihre Beute: selten die **Flammenpeitsche** (reicht weiter als ein Schwert, setzt in Brand; Rechtsklick: der **Peitschenschlag**, der das erste Wesen bis zehn Blöcke weit trifft und heranreißt), sonst **Feueropale**. Ein Feueropal entzündet den erloschenen Altar und ruft sie zurück. Außerdem: **Herzkristalle sind nie mehr sicher** – Bosse, die wiederkommen, lassen sie bei jedem Sieg nur zu **25 %** fallen, einmalige Bosse (Drachen, Nyxar, Zerbrochener König, Weltenfresser) je Kristall zu **50 %**.
 > In 1.1.5 wurde **die Beute der Bosse, die wiederkommen,** knapper: Ihr **Sonderstück** (Waffe, Schwingen, Zylinder, Angel, Zaubertafel) fällt **nie mehr sicher** – auch beim ersten Sieg nur in etwa einem von fünf Kämpfen; sicher ist beim ersten eigenen Sieg nur noch der **Herz- oder Manakristall**, und **Münzen, Gold, Edelsteine** und die übrigen Schätze sind etwa auf die Hälfte gesunken. Die Drachen und die anderen einmaligen Bosse bleiben, wie sie waren, ebenso die Erfahrung.
 > In 1.1.4 kamen **neue Tierstimmen**: Wo sich Tiere bisher Laute von Minecraft liehen, die nicht zu ihnen passten, haben sie jetzt **eigene Stimmen**: Der **Hirsch** fiept leise durch die Nase und schnaubt, der **Urelch** grunzt tief, und sein **Brunftruf** schwingt sich von einem Grollen zu einem langen, hellen Pfeifen auf, das weit über das Land hallt; die **Gans** ruft ihr nasales „a-honk“ und faucht mit offenem Schnabel, der **Flamingo** schreit in seiner eigenen Stimme, der **Moorschnapper** knarrt kehlig, faucht und lässt den Hornschnabel zuschlagen. Im Meer beißen **Hai** und **Anglerfisch** mit Sog, Zähnen und Blasen, der **Mantarochen** schnellt mit Gischt aus dem Wasser und klatscht schwer zurück, die **Riesenkrabbe** tippt mit spitzen Beinen, und das Leuchten der **Leuchtqualle** erlischt in gläsernen Tönen; der **Leerenschlund** beißt, heult und fällt in sich zusammen. Der **Kommandostab** gibt ein kurzes **Hornsignal**, und der Drache, den man **in der Ferne** brüllen und mit schweren **Schwingen** über das Land ziehen hört, klingt jetzt wie die Drachen der Mod. Sehr tiefe Klänge – die Schritte und Schläge der großen Bosse, das Gebrüll des Kraken und des Karkinos, die Künste des Schöpfers – sind jetzt auch auf **kleinen Lautsprechern** (Laptop, Fernseher) gut zu hören, und zu leise Klänge (der Schmerz des Steinhüters, der Tod der Riesenkrabbe) sind lauter.
@@ -363,6 +364,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Feueropal** im Nether (Netherrack und Schwarzstein) und die **Rüstung der Glutwandler**: weniger Feuerschaden je Teil, weite Sicht in der Lava (Helm), über Lava gehen auf einer Glutkruste (Stiefel), 3D-Teile mit Flammenkamm und Glutsohlen (seit 1.1.6) | ✅ fertig |
 | **Ignara, die Flammenpriesterin** im **Flammenheiligtum** (Lavameer des Nethers): Gebet und Erwachen, Peitschenhieb, Flammenschlinge, Lavawoge, Feuersäulen, Opalregen, Glutgeister, Phönixgestalt mit Sturzflug; Flammenaltar, **Flammenpeitsche** mit Peitschenschlag (seit 1.2) | ✅ fertig |
 | **Härte-Paket** (seit 1.3): stärkere, wachsamere und heilende Monster, heilende Bosse, giftige Treffer, mehr Fallschaden, zersplitternde Pfeile, halb so viele Erze, seltenere Schätze, Kristalle und Monsterbeute, kürzere Tränke, teureres Verzaubern, teurere Händler und Karten, langsamere Felder und Tierzucht, scheues Wild, der Hirsch wehrt sich | ✅ fertig |
+| **Phasit** auf den äußeren Endinseln und die **Rüstung der Leerwandler** (seit 1.4): Phasitblock, 3D-Teile mit Splitterkrone, Mantel und Schwebesohlen; Phasenschritt (einem Nahkampfhieb ausweichen), Enderperlen ohne Schaden (Stiefel), ruhige Leerwandler (ganzer Satz) | ✅ fertig |
 | Ausrüstung: Stahl, Konterit, Draconium, Drachenschuppen (mit Set-Bonus), Gleiter, Krone, Trollkeule; Waffen und Rüstungen aus Monsterteilen (3D) | ✅ fertig |
 | Magie: Aetherit-Stab, sieben Zauber in drei Stufen, Zaubertafeln, Magietisch, Zauberkreis (Radialmenü) | ✅ fertig |
 | Sechs Erzmagier als Bosse, jeder in seinem eigenen Magierturm (sechs Bauweisen, je Element im passenden Land) | ✅ fertig |
@@ -479,7 +481,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.3.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.4.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -487,7 +489,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-1.3.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-1.4.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -1567,6 +1569,35 @@ Unterwelt suchten – das Gegenstück zur Glutpforte der Oberwelt. Zurück kamen
   Pforte auf dem Grund einer Höhle, die sie zu einer flachen Kuppel aushöhlt (Lava daneben erstarrt zu Schwarzstein) –
   in allen Biomen des Nethers.
 - Finden mit `/locate structure kingdomsatwar:lost_gate`; sie hat die Plätze der Portalruinen im Nether übernommen.
+
+### Phasit und die Rüstung der Leerwandler (seit 1.4)
+
+![Phasiterz in einer Endsteinklippe, ein Spieler in der Rüstung der Leerwandler zwischen zwei Leerwandlern, der Phasenschritt, die Rüstung von vorn und hinten, der Phasitblock und das Gepäck](docs/bilder/phasit.jpg)
+
+Auf den äußeren Inseln des Ends springen die Leerwandler seit Äonen zwischen den Orten hin und her. Wo sie den Endstein
+am häufigsten kreuzten, ist er zu Kristall geronnen: **Phasit**, türkis wie ihr Blick, mit einem violetten Funken darin –
+er flackert, als wäre er nicht ganz da. **Phasiterz** findet man als kleine Büschel, die im Dunkeln schimmern, im
+**Endstein der äußeren Inseln** (Endhochland, Endmittelland, Endödland und kleine Endinseln – auf der Hauptinsel des
+Drachen nicht), zwischen Höhe 10 und 90, etwa drei kleine Adern je Chunk. Es braucht eine **Diamantspitzhacke** und gibt
+einen **Phasit** (Glück wirkt; schmelzen geht auch) und etwas Erfahrung. Der Stein zahlt am Leuchtfeuer; neun ergeben
+einen **Phasitblock** – geschliffene Phasitprismen in Purpur gefasst, in denen das Licht reihum von Stein zu Stein
+springt (Lichtstärke 8, taugt als Sockel für ein Leuchtfeuer).
+
+**Die Rüstung der Leerwandler** – Phasit in schwarzem Leerenstahl (Kapuze, Mantel und Beinlinge aus Phasit und je einer
+**Enderperle**, die Stiefel aus Phasit und **Chorusfrüchten**; Schutz wie Diamant, etwas leichter zu verzaubern, mit
+Phasit auszubessern, mit Rüstungsbesatz zu schmücken). In 3D trägt die **Kapuze** einen Saum aus Purpur, leuchtende
+türkise Augenschlitze und eine **Krone aus drei Phasitsplittern**; auf der Brust sitzt ein **Phasit** in Purpur, über
+die Schulterplatten aus Leerenstahl laufen feine türkise Risse, und über jeder **schweben zwei Splitter**; hinten fällt
+ein **langer Mantel** mit türkis leuchtenden Fäden, unten zerschlissen. An den Armreifen und am Gürtel leuchtet eine
+Naht, an den Knien sitzen Phasite, und die **Stiefel** stehen auf **Schwebesohlen** aus türkisem Licht mit dem Ring der
+Leerwandler darunter, mit einem Splitter an jeder Ferse.
+- **Phasenschritt** (jeder Teil): Trifft dich ein Wesen **im Nahkampf**, weichst du mit **6 % je Teil** (mit allen vier
+  24 %) dem Hieb ganz aus – du springst wie ein Leerwandler **vier bis acht Blöcke** fort, weg vom Angreifer, auf festen
+  Boden und nie ins Wasser. Wo du eben noch standst, bleibt ein **türkises Nachbild** aus Staub und Funken. Höchstens
+  alle **drei Sekunden**; Pfeile, Zauber und Explosionen treffen wie immer.
+- **Schwebende Sohlen** (Stiefel): **Enderperlen** tun nicht mehr weh.
+- **Einer von ihnen** (alle vier Teile): Die **Leerwandler** (Endermen) werden **nicht wütend, wenn du sie ansiehst** –
+  wer sie angreift, hat sie trotzdem gegen sich.
 
 ### Bauwerke des Ends
 
@@ -4825,7 +4856,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.3.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.4.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |

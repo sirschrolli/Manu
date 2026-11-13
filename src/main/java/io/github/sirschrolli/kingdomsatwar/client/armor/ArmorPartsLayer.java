@@ -38,6 +38,9 @@ import org.jspecify.annotations.Nullable;
  *   <li><b>Edelsteinkrone:</b> Zacken mit Perlen und Edelsteine über dem Reif;</li>
  *   <li><b>Mondstein</b> (seit 0.96): ein Stirnreif mit leuchtender Mondsichel und Mondstein, ein Sternenmantel bis an die Knie,
  *   Mondsicheln auf den Schultern, Armreife und Gürtelschnalle mit Mondsteinen, Robenschöße und spitze, aufgebogene Schuhe;</li>
+ *   <li><b>Phasit</b> (seit 1.4, die Rüstung der Leerwandler): eine tiefe Kapuze mit einer Krone aus schwebenden
+ *   Phasitsplittern, ein langer Mantel bis an die Knie, Schulterplatten mit schwebenden Splittern, Armreife mit leuchtender
+ *   Naht, Phasitschnalle und -knie, Stiefel mit leuchtenden Schwebesohlen;</li>
  *   <li>die Rüstungen von <b>Minecraft</b>: Leder (Feder an der Kappe, Pelzkragen, Gürtel mit Tasche, Pelzstulpen),
  *   Kettenhemd (Kettenkragen am Helm, Kettenschultern, Kettenschurz), Eisen (Nasenschutz, Grat, Schulterstücke,
  *   Kniebuckel, Schuhkappen), Gold (Strahlenkamm, Rubine, Sonnenscheibe, Schulterstücke), Diamant (Kamm und Schultern
@@ -60,7 +63,7 @@ public class ArmorPartsLayer<S extends HumanoidRenderState, M extends HumanoidMo
             Map.entry("earth_dragon_scale", "earth"), Map.entry("water_dragon_scale", "water"),
             Map.entry("gemstone_crown", "crown"), Map.entry("moonstone", "moonstone"), Map.entry("aquamarine", "aquamarine"),
             Map.entry("dusk", "dusk"), Map.entry("starwalker", "starwalker"), Map.entry("timewarden", "timewarden"),
-            Map.entry("emberwalker", "emberwalker"));
+            Map.entry("emberwalker", "emberwalker"), Map.entry("voidwalker", "voidwalker"));
     /** Die Rüstungen von Minecraft (Ausrüstungs-Asset minecraft:…) → Name ihres Satzes. */
     private static final Map<String, String> VANILLA = Map.of("leather", "leather", "chainmail", "chainmail", "iron", "iron",
             "gold", "gold", "diamond", "diamond", "netherite", "netherite", "copper", "copper", "turtle_scute", "turtle");
