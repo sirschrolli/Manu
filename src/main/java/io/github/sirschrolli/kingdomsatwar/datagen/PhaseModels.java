@@ -116,7 +116,7 @@ final class PhaseModels {
         TextureMapping textures = new TextureMapping()
                 .put(OBSIDIAN, new Material(Identifier.withDefaultNamespace("block/obsidian")))
                 .put(PURPUR, new Material(Identifier.withDefaultNamespace("block/purpur_block")))
-                .put(PILLAR, new Material(Identifier.withDefaultNamespace("block/purpur_pillar")))
+                .put(PILLAR, new Material(Identifier.withDefaultNamespace("block/purpur_pillar_side")))
                 .put(CUSHION, new Material(Identifier.withDefaultNamespace("block/purple_wool")))
                 .put(GEM, lit ? new Material(KingdomsAtWar.id("block/phasit_block")) : new Material(Identifier.withDefaultNamespace("block/crying_obsidian")))
                 .put(TextureSlot.PARTICLE, new Material(Identifier.withDefaultNamespace("block/obsidian")));

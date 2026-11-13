@@ -35,8 +35,8 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 final class PhaseSanctum {
     /** Halbmesser der Plattform. */
     static final int R = 15;
-    /** So hoch schwebt die Plattform über der Insel. */
-    static final int LIFT = 9;
+    /** So hoch schwebt die Plattform (mindestens) über der Mitte der Insel. */
+    static final int LIFT = 11;
     /** So tief hängt der Zapfen unter der Plattform. */
     static final int DEPTH = 14;
     /** Höchstens so viele schwebende Stufen. */
@@ -57,6 +57,10 @@ final class PhaseSanctum {
     // =====================================================================================
 
     private static final int[][] PROBES = {{0, 0}, {10, 0}, {-10, 0}, {0, 10}, {0, -10}};
+    /** Weiter draußen (acht Richtungen): Die Insel ringsum darf nicht über die Plattform ragen – sie soll frei schweben. */
+    private static final int RING = 22;
+    /** Ist die Insel ringsum so viel höher als unter der Mitte, ist sie zu bergig für das Heiligtum. */
+    private static final int MAX_RISE = 14;
 
     static Optional<Structure.GenerationStub> plan(Structure.GenerationContext context, SiteTerrain terrain, long seed) {
         ChunkPos chunk = context.chunkPos();
@@ -77,7 +81,15 @@ final class PhaseSanctum {
             }
             top = Math.max(top, h);
         }
-        int y = top + LIFT;
+        for (int k = 0; k < 8; k++) {
+            double a = Math.PI / 4.0 * k;
+            top = Math.max(top, terrain.ground(x + (int) Math.round(Math.cos(a) * RING), z + (int) Math.round(Math.sin(a) * RING)));
+        }
+        if (top > center + MAX_RISE) {
+            return Optional.empty();
+        }
+        // hoch genug über der Mitte und ein gutes Stück über allem ringsum
+        int y = Math.max(center + LIFT, top + 5);
         if (!terrain.valid(x, center, z)) {
             return Optional.empty();
         }

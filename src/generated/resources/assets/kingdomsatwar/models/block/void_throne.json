@@ -880,7 +880,7 @@
     "gem": "kingdomsatwar:block/phasit_block",
     "obsidian": "minecraft:block/obsidian",
     "particle": "minecraft:block/obsidian",
-    "pillar": "minecraft:block/purpur_pillar",
+    "pillar": "minecraft:block/purpur_pillar_side",
     "purpur": "minecraft:block/purpur_block"
   }
 }
