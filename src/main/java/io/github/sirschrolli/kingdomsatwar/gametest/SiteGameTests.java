@@ -1033,6 +1033,19 @@ final class SiteGameTests {
         if (sand < 300) {
             problems.add("Sand der Arena: " + sand);
         }
+        // (seit 1.9) auf dem Podest unter dem Spawner der Böen das Arenasiegel – es findet die sechs Käfige
+        BlockPos sealPos = o.offset(0, 2, 0);
+        if (!(helper.getLevel().getBlockEntity(sealPos) instanceof io.github.sirschrolli.kingdomsatwar.block.arena.ArenaSealBlockEntity seal)) {
+            problems.add("kein Arenasiegel unter dem Spawner der Böen: " + helper.getLevel().getBlockState(sealPos));
+        } else {
+            seal.scan(helper.getLevel());
+            if (seal.cages().size() != 6) {
+                problems.add("das Arenasiegel findet " + seal.cages().size() + " Käfige");
+            }
+            if (!helper.getLevel().getBlockState(seal.spawner()).is(Blocks.TRIAL_SPAWNER)) {
+                problems.add("über dem Arenasiegel steht kein Spawner");
+            }
+        }
         helper.assertTrue(problems.isEmpty(), String.join("; ", problems));
         helper.succeed();
     }

@@ -57,6 +57,11 @@ public class ArenaSealBlockEntity extends BlockEntity {
     private boolean scanned;
     /** Ist er schon einmal besiegt worden? Dann zählt nur ein Käfig, der gerade (wieder) bezwungen wurde. */
     private boolean fought;
+    /**
+     * Käfige, deren Sieg schon für einen Kampf gezählt hat (Bit i: Käfig i): Sie zählen erst wieder, wenn ihre Prüfung neu
+     * begonnen hat (der Spawner wartet wieder auf Spieler oder kämpft) und erneut bezwungen ist.
+     */
+    private int spent;
     private @Nullable UUID ventor;
     private int missing;
 
@@ -176,6 +181,7 @@ public class ArenaSealBlockEntity extends BlockEntity {
             this.cages.removeLast();
         }
         this.conquered &= (1 << this.cages.size()) - 1;
+        this.spent &= (1 << this.cages.size()) - 1;
         this.scanned = true;
         this.sync(level);
     }
@@ -185,6 +191,7 @@ public class ArenaSealBlockEntity extends BlockEntity {
         this.cages.clear();
         cages.forEach(p -> this.cages.add(p.immutable()));
         this.conquered = 0;
+        this.spent = 0;
         this.scanned = true;
         this.sync(level);
     }
@@ -211,9 +218,16 @@ public class ArenaSealBlockEntity extends BlockEntity {
                 continue;
             }
             TrialSpawnerState s = state.getValue(TrialSpawnerBlock.STATE);
-            boolean won = s == TrialSpawnerState.WAITING_FOR_REWARD_EJECTION || s == TrialSpawnerState.EJECTING_REWARD
-                    || !this.fought && s == TrialSpawnerState.COOLDOWN;
-            if (won) {
+            boolean rewarding = s == TrialSpawnerState.WAITING_FOR_REWARD_EJECTION || s == TrialSpawnerState.EJECTING_REWARD;
+            if ((this.spent & (1 << i)) != 0) {
+                // sein Sieg zählte schon: erst wenn die Prüfung neu beginnt, kann er wieder zählen
+                if (!rewarding && s != TrialSpawnerState.COOLDOWN) {
+                    this.spent &= ~(1 << i);
+                    this.setChanged();
+                }
+                continue;
+            }
+            if (rewarding || !this.fought && s == TrialSpawnerState.COOLDOWN) {
                 this.conquer(level, i);
             }
         }
@@ -324,6 +338,7 @@ public class ArenaSealBlockEntity extends BlockEntity {
         this.ventor = null;
         this.fought = true;
         this.conquered = 0;
+        this.spent = (1 << this.cages.size()) - 1;
         this.setPhase(level, ArenaSealBlock.Phase.CONQUERED);
         level.playSound(null, this.spawner(), ModSounds.VENTOR_CROWD.get(), SoundSource.BLOCKS, 4.0f, 1.0f);
     }
@@ -338,6 +353,7 @@ public class ArenaSealBlockEntity extends BlockEntity {
         this.missing = 0;
         this.fought = false;
         this.conquered = 0;
+        this.spent = 0;
         this.scanned = false;
         this.setPhase(level, ArenaSealBlock.Phase.DORMANT);
     }
@@ -362,6 +378,7 @@ public class ArenaSealBlockEntity extends BlockEntity {
         this.writeShared(output);
         output.putBoolean("Scanned", this.scanned);
         output.putBoolean("Fought", this.fought);
+        output.putInt("Spent", this.spent);
         if (this.ventor != null) {
             output.store("Ventor", UUIDUtil.CODEC, this.ventor);
         }
@@ -381,6 +398,7 @@ public class ArenaSealBlockEntity extends BlockEntity {
         this.conquered = input.getIntOr("Conquered", 0);
         this.scanned = input.getBooleanOr("Scanned", this.scanned || !this.cages.isEmpty());
         this.fought = input.getBooleanOr("Fought", this.fought);
+        this.spent = input.getIntOr("Spent", this.spent);
         input.read("Ventor", UUIDUtil.CODEC).ifPresent(id -> this.ventor = id);
     }
 

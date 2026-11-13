@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Version 1.8 – Kuno von Rabenfels, der Raubritter.** Die **Raubritterburg** im dunklen Wald hat jetzt ihren Herrn: Vor dem Bergfried weht das neue **Rabenbanner** – Gold, darin ein schwarzer Rabe –, und unter ihm hält **Kuno von Rabenfels, der Raubritter**, zu Ross Hof: in Plattenrüstung mit goldenem Wappenrock, auf dem Topfhelm ein Rabe als Zimier, auf einem schwarzen Schlachtross mit goldener Schabracke, die Lanze aufrecht, den Schild am Arm. Wer ihm auf vierzehn Blöcke nahekommt (oder ihn angreift), den fordert er: Das Ross steigt, er reckt die Lanze – und senkt sie ein. **Zu Ross** kämpft er mit dem **Lanzengang** (er nimmt Anlauf und sprengt in gerader Linie heran; wer den Stoß mit einem erhobenen **Schild** auffängt, an dem **bricht die Lanze**, und er wankt im Sattel), dem **Lanzenstich**, dem **Steigen** des Rosses, dem **Hornruf** (seine Leute kommen ihm zu Hilfe) und dem **Bolzenhagel** (rote Zeichen am Boden – raus da!). Unter halber Kraft **wirft ihn das Ross ab** und flieht; **zu Fuß** zieht er den **Morgenstern**: Morgensternschlag, Wirbel, Schildstoß und der **Schildwall** (von vorn trifft ihn nichts – geh ihm in den Rücken). Eigene Bossleiste, eigene Klänge. Er lässt selten seinen **Morgenstern** fallen (eine 3D-Waffe und ein Schildbrecher; Rechtsklick: der **Schmetterschlag**) und sonst ein wenig Raubgut; ein **schwarzes Banner** am zerrissenen Pfahl ruft ihn zurück.
+> **Version 1.9 – Ventor, der Gladiator der Winde.** Die **Arena der Prüfungen** hat jetzt ihren Meister: Auf dem Podest unter dem Spawner der Böen liegt das neue **Arenasiegel**, und über dem Spawner schwebt für jeden der sechs Käfige ein kupfernes **Windsiegel**. Jeder Käfig, den du bezwingst, schickt einen Windstoß zum Podest und entzündet sein Siegel; sind alle bezwungen und betritt jemand den Sand, steigt aus dem Wirbel **Ventor, der Gladiator der Winde**, auf – ein Standbild aus Bronze, das der Wind füllt: Käfighelm mit Augenschlitzen und rotem Kamm, Armschiene und Schulterschild, statt der Beine ein Wirbelwind, in der Rechten der **Sturmdreizack**, in der Linken ein **Wurfnetz**. Er grüßt die Ränge – dann kämpft er wie ein Netzkämpfer: **Böe** (wer davonfliegt und an eine Wand prallt, den trifft es doppelt; solange sie weht, prallen Geschosse ab), **Dreizackstoß**, **Netzwurf** (wen es trifft, der steckt fest – und gleich kommt der Stoß, härter als sonst), **Dreizackwurf** (der Dreizack kehrt in seine Hand zurück), **Windkugeln**, **Windhosen**, die durch die Arena ziehen und jeden hochreißen, und der **Sturzflug** (ein Kreis am Boden – raus da!). Unter halber Kraft **entfesselt er den Sturm**: Alle acht Sekunden fegt eine Sturmböe quer durch die Arena (man sieht sie kommen – ducken!), und er dreht sich im **Zyklon**. Eigene Bossleiste, eigene Klänge. Er lässt selten den **Sturmdreizack** fallen (3D, geworfen entfesselt er eine Böe und kehrt immer zurück) und sonst **Wurfnetze**, Böenruten und Windkugeln; wer ihn noch einmal fordern will, muss die Käfige erneut bezwingen.
+> In 1.8 kam **Kuno von Rabenfels, der Raubritter**: Die **Raubritterburg** im dunklen Wald hat jetzt ihren Herrn: Vor dem Bergfried weht das neue **Rabenbanner** – Gold, darin ein schwarzer Rabe –, und unter ihm hält **Kuno von Rabenfels, der Raubritter**, zu Ross Hof: in Plattenrüstung mit goldenem Wappenrock, auf dem Topfhelm ein Rabe als Zimier, auf einem schwarzen Schlachtross mit goldener Schabracke, die Lanze aufrecht, den Schild am Arm. Wer ihm auf vierzehn Blöcke nahekommt (oder ihn angreift), den fordert er: Das Ross steigt, er reckt die Lanze – und senkt sie ein. **Zu Ross** kämpft er mit dem **Lanzengang** (er nimmt Anlauf und sprengt in gerader Linie heran; wer den Stoß mit einem erhobenen **Schild** auffängt, an dem **bricht die Lanze**, und er wankt im Sattel), dem **Lanzenstich**, dem **Steigen** des Rosses, dem **Hornruf** (seine Leute kommen ihm zu Hilfe) und dem **Bolzenhagel** (rote Zeichen am Boden – raus da!). Unter halber Kraft **wirft ihn das Ross ab** und flieht; **zu Fuß** zieht er den **Morgenstern**: Morgensternschlag, Wirbel, Schildstoß und der **Schildwall** (von vorn trifft ihn nichts – geh ihm in den Rücken). Eigene Bossleiste, eigene Klänge. Er lässt selten seinen **Morgenstern** fallen (eine 3D-Waffe und ein Schildbrecher; Rechtsklick: der **Schmetterschlag**) und sonst ein wenig Raubgut; ein **schwarzes Banner** am zerrissenen Pfahl ruft ihn zurück.
 > In 1.7 kam **Sordin, der Kantor der Stille**: In der Apsis der **Stillen Kathedrale**, tief im Reich des Sculk, steht jetzt **Sordin, der Kantor der Stille**, an der Kupferorgel und spielt – ohne dass ein Ton erklingt; vor ihm leuchten auf dem neuen **Orgelpult** die Noten. Er ist ein hagerer Mönch in einer dunklen Kutte, die Kapuze ein Spitzbogen wie die Fenster seiner Kathedrale, darin ein glühender, singender Mund; auf seinem Rücken ein Fächer aus Orgelpfeifen, in der Hand eine **Stimmgabel** aus Kupfer und Hallkristall. Er **hört wie der Tiefenhüter**: Wer ihm auf zehn Blöcke nahekommt, in Hörweite Lärm macht (Schritte, Sprünge, abgebaute Blöcke … – wer schleicht oder die Wollsohlen der Lauscher trägt, bleibt ungehört) oder einen **Notenblock** anschlägt, weckt ihn. Er kämpft mit Klang: **Gabelhieb**, die **Schallwelle** (durch Stein und jede Rüstung – nur **Wolle** hält sie auf), der **Akkord** (drei Ringe laufen über den Boden – springen!), der **Notenschwarm** (Noten, die ihr Ziel suchen) und **die Stille** (Dunkelheit, er verschwindet und trifft von hinten); unter halber Kraft das **Fortissimo** – ein Schlag in alle Richtungen, danach drei Schallwellen auf einmal. Doch Klang ist auch seine Schwäche: **Spielt jemand auf der Orgel**, hält er sich die Ohren zu und **taumelt** (drei Sekunden lang nimmt er mehr Schaden). Eigene Bossleiste, eigene Klänge. Er lässt selten seine **Stimmgabel** fallen (eine 3D-Waffe, Rechtsklick: die **Resonanz**, ein Schallschlag durch Stein und Rüstung) und sonst Hallkristall; **ein Hallkristall** auf dem verstummten Pult ruft ihn zurück.
 > In 1.6 kam **Hallkristall und die Rüstung der Lauscher**: Tief unten in der **Tiefen Dunkelheit**, im Reich des Sculk, wo die Stille Kathedrale steht, hallt der Gesang ihrer Orgel bis heute im Gestein nach – und wo er am längsten nachklang, ist der Tiefenschiefer zu **Hallkristall** geronnen: blass wie Eis, mit Ringen darin wie Wellen auf einem Teich. **Hallkristallerz** gibt es nur in der Tiefen Dunkelheit (ab der Diamantspitzhacke; seine Kristalle schimmern im Dunkeln). Neun Kristalle ergeben den **Hallkristallblock** (Licht 6, Wellen laufen durch ihn hindurch, Sockel für ein Leuchtfeuer). Daraus die **Rüstung der Lauscher** (Schutz wie Diamant), in 3D mit **Fühlern aus Sculk** am Helm, **Ohrscheiben** aus Kristall, einem **Sculkherz** auf der Brust und **Wollsohlen**: **Schallschutz** (jeder Teil fängt ein Fünftel des Schallschlags des Tiefenhüters ab), **klare Sicht** (Helm: die Dunkelheit von Tiefenhüter und Kreischern trübt den Blick nicht mehr), **Wollsohlen** (Stiefel: Schritte, Sprünge, Landungen und Schwimmzüge machen keine Erschütterung – Sculk-Sensoren, Kreischer und der Tiefenhüter hören sie nicht) und **Echoortung** (alle vier Teile: Wer schleicht, ruft alle zwei Sekunden leise in die Dunkelheit – ein Ring läuft über den Boden, und jedes Wesen in 16 Blöcken leuchtet kurz auf, auch hinter Wänden).
 > In 1.5 kam **Phasmor, der Leerwandlerkönig, und das Phasenheiligtum**: Über den **äußeren Inseln des Ends** schwebt jetzt das **Phasenheiligtum**: eine runde Plattform aus Endsteinziegeln mit einem Mosaik aus Purpur, Obsidian und **Phasit**, darunter ein Zapfen voller Phasiterz, acht Säulen mit Phasitkristallen, schwebende Stufen hinab zur Insel – und hinten, auf drei Stufen vor einer Wand mit einem **Auge aus Phasit**, der **Leerenthron**. Davor kniet **Phasmor, der Leerwandlerkönig**, und hält Wache, die Klinge vor sich im Boden – wer ihm zu nahe kommt, weckt ihn. Fast fünf Blöcke groß, eine Krone aus schwebenden Phasitsplittern, kämpft er mit seiner **Phasenklinge**: **Klingenhieb**, **Phasenstoß** (er zerfließt und steht hinter dir), **Trugbilder**, die aussehen wie er (jeder Treffer lässt eines zerfallen), **Blockwurf** (Brocken aus dem Heiligtum steigen um ihn auf und fliegen auf dich), **Leerenrisse** (wer darin steht, wird verschluckt und hoch über dem Heiligtum ausgespuckt) – und unter halber Kraft setzt er die **Krone** auf und rast im **Phasensturm** von Gegner zu Gegner. Geschossen weicht er oft aus, aber **Wasser** schadet ihm und lässt ihn sich krümmen. Eigene Bossleiste, eigene Klänge. Seine Beute: selten die **Phasenklinge** (ein Zweihänder aus einem einzigen Phasitkristall; Rechtsklick: der **Phasenhieb** – bis zu sieben Blöcke vorwärts phasen, wen du durchquerst, den triffst du), sonst **Phasit**. Ein Phasit auf dem erloschenen Thron ruft ihn zurück.
@@ -487,7 +488,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.8.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.9.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -495,7 +496,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-1.8.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-1.9.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -1378,7 +1379,7 @@ Funde und Münzen – aber karg (siehe unten).
 | **Korallenpalast** | Ozeanmonument | tiefe Ozeane | eine Halle unter einer Glaskuppel, vier Türme aus lebenden Korallen, ein Thron auf **acht Goldblöcken**, ein alter Wächter, die **Schwammgrotte** |
 | **Verschüttetes Kloster** | Pfadruinen | Taiga, Urwald, Dschungel | nur der Glockenturm schaut aus dem Waldboden; unten Kreuzgang, Skriptorium, Kapelle – und Funde im Kies für den Pinsel |
 | **Stille Kathedrale** | antike Stadt | tief im Reich des Sculk | eine Kathedrale aus Tiefenschiefer in einer riesigen Höhle: Türme, Fensterrose, Strebebögen, eine Kupferorgel, an der **Sordin, der Kantor der Stille**, spielt (seit 1.7) – und Kreischer, die den Wärter rufen |
-| **Arena der Prüfungen** | Prüfungskammern | tief unter der Erde | ein Kolosseum aus Sandstein in einer Höhle; sechs Käfige mit **Prüfungsspawnern**, der Spawner der Böen in der Mitte, **Tresore** (einer unheilvoll) auf der Ehrentribüne |
+| **Arena der Prüfungen** | Prüfungskammern | tief unter der Erde | ein Kolosseum aus Sandstein in einer Höhle; sechs Käfige mit **Prüfungsspawnern**, der Spawner der Böen in der Mitte, **Tresore** (einer unheilvoll) auf der Ehrentribüne; auf dem Podest das **Arenasiegel** – sind alle Käfige bezwungen, steigt **Ventor, der Gladiator der Winde**, aus dem Spawner der Böen (seit 1.9) |
 | **Raubritterburg** | Waldanwesen | dunkler Wald, Blasser Garten | eine Burg auf einem Hügel mit Graben und Brücke, Ringmauer, Rundtürme, Bergfried mit Verlies (gefangene Hellegeister), Palas – und die Leute des Raubritters (Diener, **Hexer**, Armbrustschützen); vor dem Bergfried das Rabenbanner, unter dem **Kuno von Rabenfels, der Raubritter**, zu Ross Hof hält (seit 1.8) |
 
 - Enderaugen finden den Sternensturz; Schatzkarten, Ozean-Entdeckerkarten, Waldkarten, Prüfungskarten und die
@@ -1549,6 +1550,57 @@ eine Kugel aus geschwärztem Eisen mit **siebzehn Stacheln** aus blankem Stahl; 
 erhobenen Schild trifft, macht ihn für eine Weile unbrauchbar. **Rechtsklick: der Schmetterschlag** – du schlägst den
 Morgenstern vor dir auf den Boden, der Boden reißt in einem Fächer bis fünf Blöcke weit auf; wer darin steht, nimmt Schaden
 (mit Schärfe mehr), wird fortgeworfen und ist kurz verlangsamt. Danach ruht der Morgenstern acht Sekunden.
+
+### Ventor, der Gladiator der Winde (seit 1.9)
+
+![Die Arena der Prüfungen mit dem Arenasiegel und den Windsiegeln, Ventors Aufstieg aus dem Spawner der Böen, Böe, Dreizackstoß, Netzwurf, Dreizackwurf, Windhosen, Sturzflug, der entfesselte Sturm und der Zyklon, sein Sturz und der Sturmdreizack](docs/bilder/ventor.jpg)
+
+Auf dem Podest der **Arena der Prüfungen**, unter dem Spawner der Böen, liegt jetzt das **Arenasiegel** (unzerstörbar): ein
+Block aus Sandstein mit einer kupfernen Scheibe, darin eine türkise Windspirale. Es zählt die **Käfige** in der Brüstung, und über dem Spawner schwebt für
+jeden ein kupfernes **Windsiegel**, seinem Käfig zugewandt – matt, solange der Käfig nicht bezwungen ist. Wer die Kämpfer eines
+Käfigs besiegt (der Prüfungsspawner wirft seine Belohnung aus), schickt einen Windstoß zum Podest, und das Siegel des Käfigs
+leuchtet türkis auf; ein Klick auf das Arenasiegel sagt, wie viele es schon sind. Sind **alle sechs** bezwungen, jubeln die
+Ränge, die Siegel kreisen um den Spawner – und sobald jemand den Sand betritt, steigt aus dem Wirbel
+**Ventor, der Gladiator der Winde**: ein Standbild aus Bronze, grün angelaufen und rissig, und durch die Risse scheint der Wind,
+der es füllt. Auf dem Kopf ein **Käfighelm** mit Augenschlitzen und rotem Kamm, an der Linken Armschiene und Schulterschild, um
+die Hüften ein Lendenschurz – und statt der Beine trägt ihn ein **Wirbelwind**. In der Rechten der **Sturmdreizack**, in der
+Linken ein **Wurfnetz** mit Bleigewichten. Er formt sich im Wirbel, breitet die Arme aus und grüßt die Ränge mit erhobenem
+Dreizack (dabei unverwundbar). Dann kämpft er wie ein Netzkämpfer (740 Lebenspunkte):
+- **Böe:** Die Linke holt quer vor dem Leib aus und fegt nach außen – wer vor ihm steht, **fliegt davon**; wer dabei gegen eine
+  Wand prallt, den trifft es noch einmal. Solange die Böe weht, **prallen Pfeile und andere Geschosse an ihm ab**.
+- **Dreizackstoß:** zurücknehmen, dann ein Ausfall nach vorn. Wer **im Netz steckt**, den trifft er anderthalbmal so hart.
+- **Netzwurf:** über dem Kopf geschwungen, dann geworfen (mit Vorhalt) – wen es trifft, der **steckt fest**, und gleich darauf
+  kommt der Stoß (oder der Wurf, wenn er zu fern steht). Ein Netz, das danebengeht, bleibt zehn Sekunden als **Falle** liegen.
+  Mit der Hand oder einer Klinge ist ein Netz schnell zerrissen.
+- **Dreizackwurf:** über der Schulter, dann geschleudert – wo der Dreizack einschlägt, entfesselt er eine Böe, dann kehrt er in
+  Ventors Hand zurück. Solange er fort ist, kämpft Ventor nur mit Wind und Netz.
+- **Windkugeln:** drei Windkugeln aus den Zinken.
+- **Windhosen:** Die Arme hoch – drei **Windhosen** erheben sich rings um dich und ziehen durch die Arena; wen sie erfassen, den
+  reißen sie hoch und schleudern ihn fort.
+- **Sturzflug:** Er steigt hoch über die Arena, ein **türkiser Kreis** zeichnet sich um dich am Boden – und er stürzt mit den
+  Zinken voran hinein. Raus aus dem Kreis!
+
+Unter **halber Kraft** reckt er die Arme, die Ränge toben: **Der Sturm ist entfesselt** (dabei ist er kurz unverwundbar, und wer
+zu nah steht, fliegt). Seine Pausen werden kürzer, die Windkugeln kommen zu dritt im Fächer, und **alle acht Sekunden fegt eine
+Sturmböe** quer durch die Arena – Windfäden zeigen eineinhalb Sekunden vorher, aus welcher Richtung (**geduckt** fliegt man nur
+halb so weit). Dazu der **Zyklon**: Er dreht sich mit ausgebreiteten Armen auf dich zu, alles ringsum zieht es zu ihm, und auch
+jetzt prallen Geschosse ab. Lockt man ihn aus der Arena, trägt ihn ein Windstoß in die Mitte zurück; findet er niemanden mehr,
+sinkt er in den Spawner der Böen zurück (und steigt beim nächsten Besuch wieder auf). Besiegt erlahmt der Wind: Er sinkt in sich
+zusammen, das Standbild stürzt vornüber, und der Rest verweht. Er lässt selten den **Sturmdreizack** fallen (zu einem Fünftel,
+auch beim ersten Sieg), einen Herzkristall nur zu einem Viertel, und sonst ein bis drei **Wurfnetze**, Böenruten, Windkugeln,
+etwas Kupfer und ein paar Goldmünzen. Wer ihn noch einmal fordern will, muss die Käfige **erneut bezwingen** (sie kühlen eine
+halbe Stunde ab). Eigene Bossleiste mit Dreizack, Netz und Windspirale, eigene Klänge (Wind, Bronze, die Rufe der Ränge).
+Finden mit `/kaw structure pruefungsarena`, wecken oder zurücksetzen mit `/kaw boss ventor awaken|reset`.
+
+**Der Sturmdreizack** (episch, verzauberbar wie ein Schwert, mit **Böenruten** auszubessern): ein Schaft aus Eschenholz mit
+einer Kupferspirale und Lederwicklung, ein Querstück aus Bronze mit einer leuchtenden Windrune und drei Zinken mit
+Widerhaken, deren Spitzen türkis glühen; im Inventar das Bild, in der Hand ein 3D-Modell, gehalten wie der Dreizack von
+Minecraft. Im Nahkampf schwer (mehr Schaden als ein Netheritschwert, langsam). **Gedrückt halten und loslassen: werfen** – wo er
+einschlägt, entfesselt er eine **Böe**, die alle ringsum trifft und fortwirft (nur dich nicht), und dann **kehrt er immer in
+deine Hand zurück**, auch ohne Treue.
+
+**Das Wurfnetz** (selten, bis zu 16 in einem Stapel): Rechtsklick wirft es – wen es trifft, der **steckt eine Weile fest** und
+ist verlangsamt; daneben bleibt es als Falle liegen. Danach anderthalb Sekunden Pause.
 
 ### Feueropal und die Rüstung der Glutwandler (seit 1.1.6)
 
@@ -5023,7 +5075,7 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 | `/kaw army xp <Menge>` | (mit Cheats) allen eigenen Soldaten in der Nähe Kampferfahrung geben |
 | `/kaw hero` · `/kaw hero xp add <Menge> [Spieler]` · `/kaw hero xp set <Menge> [Spieler]` · `/kaw hero level <Stufe> [Spieler]` · `/kaw hero reset [Spieler]` | (mit Cheats) Heldenstufe anzeigen, Heldenerfahrung geben oder setzen (mit Aufstiegs-Szene), auf eine Heldenstufe springen, von vorn anfangen |
 | `/kaw dim <oberwelt\|nether\|end\|schattenwelt\|leere\|abgrund\|urmeer\|feenreich>` | (im Kreativmodus oder mit Cheats) sofort in eine andere Dimension wechseln – vorgeschlagen werden nur die Namen der Dimensionen (seit 1.1.2 auch Abgrund, Urmeer und Feenreich); man landet an derselben Stelle (im Nether bei einem Achtel der Koordinaten) auf sicherem Boden: im Nether in einer Höhle, im End auf der Obsidianplattform, in der Leere auf dem nächsten Bruchstück |
-| `/kaw boss <Boss>` · `/kaw boss <Boss> tp` · `… awaken` · `… reset` · `/kaw boss pyrrhon\|nyxar summon` | (mit Cheats, seit 1.1.2) nur die Bosse: zeigt, wo der Hort des Bosses liegt – aus jeder Dimension heraus (z. B. findet `/kaw boss stundenwaechter` in der Oberwelt den nächsten Uhrturm im Abgrund); `tp` bringt einen hin, `awaken` weckt den Boss, `reset` setzt seinen Hort zurück, `summon` lässt Pyrrhon oder Nyxar vor einem erwachen. Die Bosse: `pyrrhon`, `glaciara`, `voltarion`, `verdantis`, `terragon`, `thalassa`, `nyxar`, `karkinos`, `anni`, `malleus`, `asteria`, `noctua`, `missmystik`, `steinhueter`, `seelenhirte`, `koenig`, `sternenweberin`, `weltenfresser`, `stundenwaechter`, `kraken`, `meerhexe`, `ignara`, `phasmor`, `sordin`, `raubritter` und die Erzmagier `ignatius`, `isolde`, `fulgor`, `sylvana`, `gorvan`, `marena` (nur `tp`) |
+| `/kaw boss <Boss>` · `/kaw boss <Boss> tp` · `… awaken` · `… reset` · `/kaw boss pyrrhon\|nyxar summon` | (mit Cheats, seit 1.1.2) nur die Bosse: zeigt, wo der Hort des Bosses liegt – aus jeder Dimension heraus (z. B. findet `/kaw boss stundenwaechter` in der Oberwelt den nächsten Uhrturm im Abgrund); `tp` bringt einen hin, `awaken` weckt den Boss, `reset` setzt seinen Hort zurück, `summon` lässt Pyrrhon oder Nyxar vor einem erwachen. Die Bosse: `pyrrhon`, `glaciara`, `voltarion`, `verdantis`, `terragon`, `thalassa`, `nyxar`, `karkinos`, `anni`, `malleus`, `asteria`, `noctua`, `missmystik`, `steinhueter`, `seelenhirte`, `koenig`, `sternenweberin`, `weltenfresser`, `stundenwaechter`, `kraken`, `meerhexe`, `ignara`, `phasmor`, `sordin`, `raubritter`, `ventor` und die Erzmagier `ignatius`, `isolde`, `fulgor`, `sylvana`, `gorvan`, `marena` (nur `tp`) |
 | `/kaw structure <Bauwerk>` · `/kaw structure <Bauwerk> tp` | (mit Cheats, seit 1.1.2) nur die Bauwerke: zeigt, wo das nächste liegt – aus jeder Dimension heraus, auch die, die `/locate` nicht findet (Atoll, Zitadelle, Nester, Lichtungen im Feenreich); `tp` bringt einen hin – sicher auf festen Boden vor das Bauwerk, mit freiem Blick darauf (in Bauwerke unter der Erde hinein, zu Bauwerken am Meeresgrund taucht man hinab und bekommt eine Weile Luft). Alle 60 Bauwerke der Mod, z. B. `uhrturm`, `sternennetz`, `thron`, `schlund_der_welten`, `zitadelle`, `seelenpferch`, `atoll`, `krakenschlund`, `hexengrotte`, `mondhain`, `zauberbuehne`, `mondsteinbruch`, `aschenesse`, `hortfeste`, `sternwarte`, `fehlerzone`, `sternensturz`, die sechs Nester (`vulkankrater`, `gletscherkessel`, `sturmgipfel`, `uralter_hain`, `felsschlucht`, `versunkene_grotte`), die Magiertürme (`magierturm_feuer` …), die Dörfer (`fachwerkdorf`, `nordisches_dorf`, `lehmdorf`, `pfahldorf`, `meeresdorf`, `umbrerdorf`), `stammburg` und `siegelkreis` |
 | **Koordinaten anklicken** | (mit Cheats, seit 1.1.2) die grünen Koordinaten in der Ausgabe von `/kaw boss`, `/kaw structure`, `/kaw seal` und `/kaw realms` anklicken – man reist sofort hin, auch in eine andere Dimension (ohne Cheats passiert nichts) |
 | `/kaw story reset\|card <Kapitel>\|chronicle` | (nur Operatoren) Geschichte zurücksetzen, eine Titelkarte zeigen, die Chronik als Buch geben (seit 0.79 sonst nur noch per Taste J) |
@@ -5056,7 +5108,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.8.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.9.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |

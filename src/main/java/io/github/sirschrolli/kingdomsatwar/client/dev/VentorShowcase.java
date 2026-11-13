@@ -47,8 +47,8 @@ final class VentorShowcase {
     private static final int OX = 0;
     private static final int OZ = 1500;
     /** Die Linie der Kämpfe im Sand (z), dort, wo hinter ihnen die Ehrentribüne steht; Ventor steht bei x = {@link #FIGHT_X}. */
-    private static final double FIGHT_Z = -5.0;
-    private static final double FIGHT_X = -7.5;
+    private static final double FIGHT_Z = -5.5;
+    private static final double FIGHT_X = -8.0;
 
     private VentorShowcase() {}
 
@@ -90,7 +90,7 @@ final class VentorShowcase {
         steps.add(Step.waitTicks(30));
         steps.add(Step.screenshot("arena_ventor_uebersicht"));
         // das Podest nah: drei Windsiegel leuchten, drei sind matt
-        steps.add(at(stage, 3.3, 5.9, 3.9, 0.0, 4.3, 0.0));
+        steps.add(at(stage, 3.3, 6.4, 3.9, 0.0, 4.5, 0.0));
         steps.add(Step.waitTicks(20));
         steps.add(Step.screenshot("arenasiegel_drei"));
         // alle Käfige bezwungen: die Siegel kreisen und leuchten
@@ -134,20 +134,20 @@ final class VentorShowcase {
         steps.add(Step.waitTicks(10));
         // seine Angriffe im Sand vor der Ehrentribüne (er im Westen, der Ritter östlich von ihm; die Kamera im Süden)
         // {Angriff, Tick des Bildes, Name, Blickwinkel zur Linie Ventor–Ritter (Grad), Abstand, Höhe, Abstand des Ritters}
-        for (String[] shot : new String[][] {{"GUST", "9", "ventor_boee_ausholen", "-62", "6.5", "0.4", "4.5"},
-                {"GUST", "14", "ventor_boee", "-70", "7.5", "0.6", "4.5"},
-                {"THRUST", "12", "ventor_dreizackstoss", "-75", "6.5", "0.4", "4.2"},
-                {"NET", "15", "ventor_netz_schwingen", "-60", "6.5", "0.6", "7.0"},
-                {"NET", "25", "ventor_netzwurf", "-80", "8.0", "0.8", "8.0"},
-                {"THROW", "14", "ventor_wurf_ausholen", "-58", "6.5", "0.4", "9.0"},
-                {"THROW", "21", "ventor_dreizackwurf", "-88", "8.5", "0.8", "10.0"},
-                {"CHARGES", "17", "ventor_windkugeln", "-75", "7.5", "0.6", "9.0"},
-                {"VORTEX", "18", "ventor_windhosen_ruf", "-50", "6.5", "0.4", "7.0"},
-                {"VORTEX", "44", "ventor_windhosen", "-80", "10.0", "3.0", "7.0"},
-                {"DIVE", "36", "ventor_sturzflug_kreis", "-80", "10.0", "2.0", "6.0"},
-                {"DIVE", "51", "ventor_sturzflug", "-75", "8.0", "0.8", "6.0"},
-                {"RAGE", "22", "ventor_sturm_entfesselt", "-60", "7.0", "0.6", "6.0"},
-                {"CYCLONE", "30", "ventor_zyklon", "-65", "7.5", "1.0", "5.0"}}) {
+        for (String[] shot : new String[][] {{"GUST", "9", "ventor_boee_ausholen", "-75", "5.8", "0.3", "4.5"},
+                {"GUST", "14", "ventor_boee", "-85", "6.8", "0.5", "4.5"},
+                {"THRUST", "12", "ventor_dreizackstoss", "-100", "5.8", "0.3", "4.2"},
+                {"NET", "15", "ventor_netz_schwingen", "-75", "5.8", "0.5", "7.0"},
+                {"NET", "25", "ventor_netzwurf", "-95", "7.5", "0.7", "8.0"},
+                {"THROW", "14", "ventor_wurf_ausholen", "-72", "5.8", "0.3", "9.0"},
+                {"THROW", "21", "ventor_dreizackwurf", "-100", "7.5", "0.7", "10.0"},
+                {"CHARGES", "17", "ventor_windkugeln", "-95", "7.0", "0.5", "9.0"},
+                {"VORTEX", "18", "ventor_windhosen_ruf", "-70", "5.8", "0.3", "7.0"},
+                {"VORTEX", "44", "ventor_windhosen", "-100", "10.0", "3.0", "7.0"},
+                {"DIVE", "36", "ventor_sturzflug_kreis", "-95", "10.0", "2.0", "6.0"},
+                {"DIVE", "51", "ventor_sturzflug", "-125", "7.0", "0.8", "6.0"},
+                {"RAGE", "22", "ventor_sturm_entfesselt", "-80", "6.2", "0.5", "6.0"},
+                {"CYCLONE", "30", "ventor_zyklon", "-125", "6.8", "1.0", "5.0"}}) {
             if (!Step.wanted(shot[2])) {
                 continue;
             }
@@ -187,8 +187,9 @@ final class VentorShowcase {
             if (level.getEntity(stage.ventor) instanceof VentorEntity ventor) {
                 Vec3 p = local(stage, -1.0, 1.0, 6.0);
                 ventor.teleportTo(p.x, p.y, p.z);
-                ventor.setYRot(160.0f);
-                ventor.setYBodyRot(160.0f);
+                ventor.setYRot(-75.0f);
+                ventor.setYBodyRot(-75.0f);
+                ventor.setYHeadRot(-75.0f);
                 ventor.forceAttack(VentorEntity.Attack.NONE);
                 ventor.setInvulnerableTime(0);
                 ventor.setHealth(1.0f);
@@ -219,7 +220,7 @@ final class VentorShowcase {
             stand.addTag(STAGE_TAG);
             level.addFreshEntity(stand);
         }));
-        steps.add(at(stage, 1.6, 2.9, 10.4, 1.0, 2.4, 7.0));
+        steps.add(at(stage, 1.9, 2.5, 9.3, 1.0, 2.2, 7.0));
         steps.add(Step.waitTicks(30));
         steps.add(Step.screenshot("sturmdreizack_staender"));
         steps.add(Step.quit());
@@ -241,7 +242,7 @@ final class VentorShowcase {
             }
         }
         BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
-        int top = o.getY() + 33;
+        int top = o.getY() + 40;
         for (int x = o.getX() - r; x <= o.getX() + r; x++) {
             for (int z = o.getZ() - r; z <= o.getZ() + r; z++) {
                 for (int y = Showcase.ground; y <= top; y++) {
@@ -333,9 +334,14 @@ final class VentorShowcase {
             if (toward.lengthSqr() < 1.0e-3) {
                 toward = new Vec3(1.0, 0.0, 0.0);
             }
-            Vec3 dir = toward.normalize().yRot((float) Math.toRadians(angle));
-            Vec3 focus = c.add(toward.normalize().scale(Math.min(2.5, toward.length() * 0.4)));
             Vec3 middle = Vec3.atBottomCenterOf(stage.origin);
+            // nicht über dem Podest (der Spawner stünde sonst groß im Bild): weiter nach Westen drehen
+            double a = angle;
+            for (int i = 0; i < 8 && horizontal(c.add(toward.normalize().yRot((float) Math.toRadians(a)).scale(distance)), middle) < 4.2; i++) {
+                a -= 12.0;
+            }
+            Vec3 dir = toward.normalize().yRot((float) Math.toRadians(a));
+            Vec3 focus = c.add(toward.normalize().scale(Math.min(2.5, toward.length() * 0.4)));
             double d = distance;
             while (d > 3.0 && horizontal(c.add(dir.scale(d)), middle) > 11.3) {
                 d -= 0.25;
