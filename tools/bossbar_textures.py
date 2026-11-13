@@ -65,6 +65,7 @@ PHASES = {
     "sordin": (0.5,),                    # unter halber Kraft das Fortissimo
     "robber_knight": (0.5,),             # unter halber Kraft wird er aus dem Sattel geworfen
     "ventor": (0.5,),                    # unter halber Kraft entfesselt er den Sturm
+    "quetzara": (0.5,),                  # unter halber Kraft streift sie ihre Haut ab
 }
 # die Erzmagier wechseln bei zwei Dritteln und einem Drittel die Phase
 MAGE_PHASES = (0.66, 0.33)
@@ -259,6 +260,15 @@ ELEMENTS = {
                    red="#a42620", red_dark="#5e0f10", red_light="#e2604a",
                    wood="#51341f", wood_light="#7a5230", steel="#bdb29c", steel_light="#fbf4e2", steel_dark="#6e675c",
                    rope="#ab925e", rope_dark="#685532", sand="#d4bc84", sand_light="#ecdcac", sand_dark="#927a4a"),
+    # Quetzara, die Gefiederte Schlange (seit 1.10): Jade und Gold; hinter dem Medaillon ein Fächer aus Quetzalfedern (wie ihre
+    # gespreizte Krause), über der Oberkante windet sich ihr Leib mit Federbüscheln, unter der Leiste liegen die langen
+    # Schleppfedern ihres Schwanzes, als Spitze ihr Kopf mit offenem Maul und Giftzähnen; die Füllung Schuppen mit Rauten
+    "quetzara": dict(m0="#06130c", m1="#1c5a3a", m2="#7cc89a", acc="#7cff4a", glow="#eaffd8", deep="#04140a",
+                     f0="#062a16", f1="#167a40", f2="#3fd98a", f3="#e8ffc8",
+                     gold="#f2c230", gold_dark="#8a5c10", gold_light="#fff0a8",
+                     scale="#1f8f58", scale_dark="#0d3d28", scale_light="#4fca7c",
+                     sheen="#3cbeb4", sheen_light="#86e2d6", red="#d4362a", red_dark="#8e1418",
+                     belly="#e6c262", belly_dark="#a2802a", fang="#f6f0e0", mouth="#962a32"),
 }
 
 OUTLINE = (12, 10, 12, 255)
@@ -3240,6 +3250,124 @@ def post_ventor(img: Image.Image, pal: dict) -> None:
             put(px, img, x - 1, y, g["verdigris_dark"])
 
 
+def _qz_feather(layer: Image.Image, g: dict, x0: float, y0: float, ang: float, length: int, width: float) -> None:
+    """Eine Quetzalfeder vom Kiel (x0, y0) in Richtung ang (Bogenmaß): goldener Kiel, Fahne smaragd bis türkis, Spitze rot."""
+    lp = layer.load()
+    dx, dy = math.cos(ang), math.sin(ang)
+    nx, ny = -dy, dx
+    for k in range(length):
+        t = k / max(1, length - 1)
+        half = width * math.sin(math.pi * min(1.0, 0.1 + t)) ** 0.6
+        for o in range(-int(half + 1), int(half + 1) + 1):
+            if abs(o) > half + 0.3:
+                continue
+            x, y = x0 + dx * k + nx * o, y0 + dy * k + ny * o
+            if o == 0:
+                col = g["gold_light"] if t < 0.5 else g["gold"]
+            elif t > 0.84:
+                col = g["red"] if o < 0 else g["red_dark"]
+            elif t > 0.55:
+                col = g["sheen_light"] if o < 0 else g["sheen"]
+            else:
+                col = g["scale_light"] if o < 0 else g["scale"]
+            put(lp, layer, int(round(x)), int(round(y)), col)
+
+
+def deco_quetzara(img: Image.Image, pal: dict) -> None:
+    """Quetzara, die Gefiederte Schlange: hinter dem Medaillon ein Fächer aus Quetzalfedern (ihre gespreizte Krause); über der
+    Oberkante windet sich ihr Leib (Schuppen, goldener Bauch) mit Federbüscheln; unter der Leiste liegen die langen
+    Schleppfedern ihres Schwanzes; als Spitze ihr Kopf mit offenem Maul, Giftzähnen und goldenem Auge."""
+    g = {k: c(pal, k) for k in pal}
+    top, bottom = BAR_Y - 3, BAR_Y + BAR_H + 2
+
+    # hinter dem Medaillon: der Federfächer (wie die gespreizte Krause)
+    behind = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    for k in range(11):
+        a = math.radians(-200 + k * 22)
+        _qz_feather(behind, g, EMB_X + math.cos(a) * 12, EMB_Y + math.sin(a) * 12, a, 9 if k in (0, 10) else 11, 2.2)
+    _outline(behind, OUTLINE)
+    img.alpha_composite(behind)
+
+    # über der Oberkante: der Leib, der sich windet (nicht über den Edelsteinen), mit Federbüscheln
+    body = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    bp = body.load()
+    x_from, x_to = BAR_X + 4, BAR_X + BAR_W - 6
+    for x in range(x_from, x_to):
+        if any(abs(x - (BAR_X + round(BAR_W * f))) < 7 for f in GEMS):
+            continue
+        cy = top - 3.0 - 1.6 * math.sin(math.tau * (x - x_from) / 46.0)
+        for y in range(int(cy) - 2, int(cy) + 3):
+            d = y - cy
+            if abs(d) > 2.2:
+                continue
+            if d > 1.2:
+                col = g["belly"] if x % 3 else g["belly_dark"]
+            elif d < -1.2:
+                col = g["scale_light"]
+            else:
+                col = g["scale"] if (x + y) % 3 else g["scale_dark"]
+            if abs(d) < 0.6 and (x - x_from) % 12 in (5, 6):
+                col = g["gold"]                                        # goldene Rauten auf dem Rücken
+            put(bp, body, x, y, col)
+        if (x - x_from) % 23 == 11:
+            _qz_feather(body, g, x, cy - 2, math.radians(-110), 6, 1.2)
+    _outline(body, OUTLINE)
+    img.alpha_composite(body)
+
+    # unter der Leiste: die Schleppfedern des Schwanzes
+    tail = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    for k, (yy, length) in enumerate(((bottom + 4, 150), (bottom + 7, 118), (bottom + 2, 96))):
+        _qz_feather(tail, g, BAR_X + 4 + k * 10, yy, math.radians(-1.0 + k * 0.6), length, 1.4)
+    _outline(tail, OUTLINE)
+    img.alpha_composite(tail)
+
+    # die Spitze: ihr Kopf mit offenem Maul (nach rechts), Giftzähne, goldenes Auge
+    head = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    hp = head.load()
+    cx, cy = 224, int(BAR_Y + BAR_H / 2)
+    for y in range(cy - 6, cy + 7):
+        for x in range(cx - 4, cx + 14):
+            u = (x - cx) / 13.0
+            upper = cy - 6 + u * 4.0
+            jaw_line = cy - 0.5 + u * 1.5
+            lower = cy + 6 - u * 2.0
+            if x < cx + 1:
+                inside = cy - 5 <= y <= cy + 5
+            else:
+                inside = upper <= y <= jaw_line - 1 or jaw_line + 2 <= y <= lower
+            if not inside:
+                continue
+            col = g["scale"] if y < cy else g["belly"]
+            if y < upper + 1.2:
+                col = g["scale_light"]
+            put(hp, head, x, y, col)
+    put(hp, head, cx + 2, cy - 3, g["gold_light"])                     # das Auge
+    put(hp, head, cx + 3, cy - 3, g["gold"])
+    for fx in (cx + 9, cx + 6):                                         # die Giftzähne
+        put(hp, head, fx, int(cy - 0.5 + (fx - cx) / 13.0 * 1.5), g["fang"])
+        put(hp, head, fx, int(cy + 0.5 + (fx - cx) / 13.0 * 1.5), g["fang"])
+    for x in range(cx + 3, cx + 12):                                    # das Maul innen
+        put(hp, head, x, int(cy - 0.5 + (x - cx) / 13.0 * 1.5) + 1, g["mouth"])
+    _qz_feather(head, g, cx - 1, cy - 5, math.radians(-150), 8, 1.4)    # der Federkamm
+    _qz_feather(head, g, cx + 1, cy - 5, math.radians(-125), 7, 1.2)
+    _outline(head, OUTLINE)
+    img.alpha_composite(head)
+
+
+def post_quetzara(img: Image.Image, pal: dict) -> None:
+    """Nach dem Rahmen: statt der Nieten kleine Smaragde in Ober- und Unterkante."""
+    g = {k: c(pal, k) for k in pal}
+    px = img.load()
+    x0, x1, y0, y1 = BAR_X - 3, BAR_X + BAR_W + 2, BAR_Y - 3, BAR_Y + BAR_H + 2
+    for x in range(x0 + 9, x1 - 4, 22):
+        if any(abs(x - (BAR_X + round(BAR_W * f))) < 7 for f in GEMS):
+            continue
+        for y in (y0 + 1, y1 - 1):
+            put(px, img, x, y, g["scale_light"])
+            put(px, img, x + 1, y, g["scale"])
+            put(px, img, x - 1, y, g["gold"])
+
+
 def post_phasmor(img: Image.Image, pal: dict) -> None:
     """Nach dem Rahmen: statt der Nieten kleine Phasite in Purpur in Ober- und Unterkante."""
     g = {k: c(pal, k) for k in pal}
@@ -3698,6 +3826,7 @@ BANNER_COLORS = {
     "sordin": dict(trim="#5aa58a", trim_dark="#25594b", fabric="#0a0d14"),
     "robber_knight": dict(trim="#e4c254", trim_dark="#8a6414", fabric="#121014"),
     "ventor": dict(trim="#bc9241", trim_dark="#6a481d", fabric="#0a1214"),
+    "quetzara": dict(trim="#f2c230", trim_dark="#8a5c10", fabric="#06140c"),
 }
 
 
@@ -3786,7 +3915,7 @@ def banner_cap(element: str) -> Image.Image:
 POST = {"schrolli": post_schrolli, "schrolli_true": post_schrolli, "schrolli_almighty": post_almighty,
         "world_eater": post_world_eater, "kraken": post_kraken, "keeper": post_keeper, "sea_witch": post_sea_witch,
         "soul_shepherd": post_soul_shepherd, "star_weaver": post_star_weaver, "ignara": post_ignara, "phasmor": post_phasmor,
-        "sordin": post_sordin, "robber_knight": post_robber_knight, "ventor": post_ventor}
+        "sordin": post_sordin, "robber_knight": post_robber_knight, "ventor": post_ventor, "quetzara": post_quetzara}
 BORDERS = {"world_eater": frame_border_stone, "keeper": frame_border_stone}
 
 
@@ -3795,7 +3924,7 @@ DECOS = {"schrolli": deco_schrolli, "schrolli_true": deco_schrolli, "schrolli_al
          "water": deco_water, "kraken": deco_kraken, "keeper": deco_keeper, "sea_witch": deco_sea_witch,
          "soul_shepherd": deco_soul_shepherd, "star_weaver": deco_star_weaver, "hour_warden": deco_hour_warden,
          "ignara": deco_ignara, "phasmor": deco_phasmor, "sordin": deco_sordin, "robber_knight": deco_robber_knight,
-         "ventor": deco_ventor}
+         "ventor": deco_ventor, "quetzara": deco_quetzara}
 
 
 def frame(element: str, phases: tuple | None = None) -> Image.Image:
@@ -3960,6 +4089,14 @@ def fill_value(element: str, x: int, y: int) -> float:
         if rel < h:
             return 0.62 + 0.33 * (1.0 - rel / h)
         return 0.32 - 0.14 * (rel - h)
+    if element == "quetzara":
+        # Schuppen mit einer Kette von Rauten (dunkel, goldener Saum), wie auf ihrem Rücken
+        u = abs((x % 16) - 7.5) / 7.5 + abs(y - 4.0) / 4.6
+        if 0.78 < u < 1.0:
+            return 0.98
+        if u <= 0.78:
+            return 0.22 + 0.06 * hash01(x, y, 2011)
+        return 0.5 + (0.12 if (x + 2 * y) % 4 == 0 else 0.0) + 0.08 * math.sin(math.tau * x / 64.0)
     if element == "ventor":
         # Wind: helle Fäden ziehen in Wellen über die Leiste, dazwischen hie und da ein Sandkorn
         lane = math.sin(math.tau * (y * 1.0 / 4.5 + x / 48.0) + 1.4 * math.sin(math.tau * x / 96.0))
@@ -4196,7 +4333,7 @@ def portrait(element: str) -> Image.Image:
     from entitygen.models import (asteria, boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water,
                                   glutschmied, kraken, miss_mystik, moth_queen, reef_colossus, shattered_king, anni_troll,
                                   schrolli, sea_witch, soul_shepherd, star_weaver, stone_keeper, world_eater, hour_warden, ignara,
-                                  phasmor, sordin, robber_knight, ventor)
+                                  phasmor, sordin, robber_knight, ventor, quetzara)
     from entitygen.paint import paint_model
     from entitygen.preview import render
     mod = {"fire": boss_fire, "ice": boss_ice, "lightning": boss_lightning, "nature": boss_nature, "earth": boss_earth,
@@ -4205,7 +4342,7 @@ def portrait(element: str) -> Image.Image:
            "schrolli": schrolli, "schrolli_true": schrolli, "schrolli_almighty": schrolli, "world_eater": world_eater,
            "kraken": kraken, "keeper": stone_keeper, "sea_witch": sea_witch, "soul_shepherd": soul_shepherd,
            "star_weaver": star_weaver, "hour_warden": hour_warden, "ignara": ignara, "phasmor": phasmor, "sordin": sordin,
-           "robber_knight": robber_knight, "ventor": ventor}[element]
+           "robber_knight": robber_knight, "ventor": ventor, "quetzara": quetzara}[element]
     m = mod.build()
     m.pack()
     variant = "anni_troll_v2" if element == "anni2" else element if element.startswith("schrolli") else next(iter(mod.PALETTES))
@@ -4289,6 +4426,14 @@ def portrait(element: str) -> Image.Image:
             for child in bone.children:
                 strip_ventor(child)
         strip_ventor(m.root)
+    if element == "quetzara":
+        # der Kopf mit gespreizter Krause und Federkamm, das Maul halb offen (ohne die Lider)
+        def strip_quetzara(bone):
+            if bone.name == "lids":
+                bone.cubes.clear()
+            for child in bone.children:
+                strip_quetzara(child)
+        strip_quetzara(m.root)
     if element == "forge":
         # der Widderschädel mit Hörnern, Flammen und Kiefer (ohne Arme, Waffen und Beine)
         def strip_forge(bone):
@@ -4379,11 +4524,11 @@ def portrait(element: str) -> Image.Image:
         strip_anni(m.root)
     zoom = {"kraken": 1.5, "schrolli": 1.0, "schrolli_true": 1.0, "schrolli_almighty": 1.0, "world_eater": 1.35, "nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86, "star": 0.92, "mystic": 0.95,
             "anni": 1.0, "anni2": 1.0, "keeper": 0.8, "sea_witch": 1.5, "soul_shepherd": 1.12, "star_weaver": 0.95, "hour_warden": 0.9, "ignara": 0.85, "phasmor": 0.88, "sordin": 0.72,
-            "robber_knight": 1.2, "ventor": 1.05}.get(element, 1.2)
+            "robber_knight": 1.2, "ventor": 1.05, "quetzara": 0.9}.get(element, 1.2)
     yaw = {"kraken": -20, "schrolli": -22, "schrolli_true": -22, "schrolli_almighty": -22, "world_eater": -6, "water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14, "star": -24, "mystic": -22, "anni": -24,
            "anni2": -24, "keeper": -20, "sea_witch": -22, "soul_shepherd": -14, "star_weaver": -20, "hour_warden": -16, "ignara": -18, "phasmor": -10, "sordin": -14,
-           "robber_knight": -24, "ventor": -22}.get(element, -42)
-    pitch = {"kraken": -18, "schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2, "keeper": -5, "sea_witch": 2, "soul_shepherd": 4, "star_weaver": 48, "hour_warden": 4, "ignara": 4, "phasmor": 8, "sordin": 6, "robber_knight": 6, "ventor": 6}.get(element, 6)
+           "robber_knight": -24, "ventor": -22, "quetzara": -34}.get(element, -42)
+    pitch = {"kraken": -18, "schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2, "keeper": -5, "sea_witch": 2, "soul_shepherd": 4, "star_weaver": 48, "hour_warden": 4, "ignara": 4, "phasmor": 8, "sordin": 6, "robber_knight": 6, "ventor": 6, "quetzara": 10}.get(element, 6)
     big = render(m, tex, glow, yaw, pitch, 448, pose=getattr(mod, "FOLD_POSE", None), background=(0, 0, 0, 0), zoom=zoom,
                  focus=["body"] if element in ("reef", "kraken", "star_weaver") else ["helm"] if element == "star"
                  else ["lock_l", "lock_r", "crown"] if element == "ignara" else ["helm"] if element == "robber_knight" else ["head"])
@@ -4394,7 +4539,7 @@ def portrait(element: str) -> Image.Image:
                                                  "schrolli_almighty": 1.45, "world_eater": 2.0, "keeper": 1.3, "sea_witch": 1.35,
                                                  "soul_shepherd": 1.7, "star_weaver": 2.3, "hour_warden": 1.6,
                                                  "ignara": 1.3, "phasmor": 1.45, "sordin": 1.9,
-                                                 "robber_knight": 1.5, "ventor": 1.35}.get(element, 1.4))
+                                                 "robber_knight": 1.5, "ventor": 1.35, "quetzara": 1.4}.get(element, 1.4))
     img = ImageEnhance.Color(img).enhance(1.15)
     img = ImageEnhance.Contrast(img).enhance(1.12)
     if element == "schrolli_almighty":

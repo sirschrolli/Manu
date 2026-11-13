@@ -277,6 +277,8 @@ public final class ModTags {
         public static final TagKey<Item> REPAIRS_MORNING_STAR = mod("repairs_morning_star");
         /** Womit sich der Sturmdreizack ausbessern lässt (Böenruten). */
         public static final TagKey<Item> REPAIRS_STORM_TRIDENT = mod("repairs_storm_trident");
+        /** Womit sich der Schlangenzahn ausbessern lässt (Quetzalfedern). */
+        public static final TagKey<Item> REPAIRS_SERPENT_FANG = mod("repairs_serpent_fang");
         public static final TagKey<Item> REPAIRS_MINUTE_HAND = mod("repairs_minute_hand");
         public static final TagKey<Item> REPAIRS_STAR_BOW = mod("repairs_star_bow");
         public static final TagKey<Item> REPAIRS_SHEPHERD_CROOK = mod("repairs_shepherd_crook");

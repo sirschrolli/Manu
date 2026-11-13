@@ -1408,6 +1408,51 @@ public class ModLanguageProvider extends LanguageProvider {
         subtitle("block.arena_seal.ready", "Arena awakens", "Arena erwacht");
         subtitle("item.storm_trident.burst", "Gust bursts", "Böe entlädt sich");
         subtitle("item.gladiator_net.snare", "Net ensnares", "Netz verfängt sich");
+        // Quetzara, die Gefiederte Schlange, der Schlangenaltar, der Schlangenzahn und die Quetzalfeder (1.10)
+        creature(ModEntities.QUETZARA, io.github.sirschrolli.kingdomsatwar.registry.SerpentGear.QUETZARA_SPAWN_EGG,
+                "Quetzara, the Feathered Serpent", "Quetzara, die Gefiederte Schlange", "Quetzara");
+        add(ModEntities.QUETZARA_FEATHER.get(), pick("Poisoned Feather", "Vergiftete Feder"));
+        add(ModEntities.VENOM_GLOB.get(), pick("Venom Glob", "Giftklumpen"));
+        add(ModEntities.SHED_SKIN.get(), pick("Shed Skin", "Abgestreifte Haut"));
+        text("boss.kingdomsatwar.quetzara", "Quetzara, the Feathered Serpent", "Quetzara, die Gefiederte Schlange");
+        text("boss.kingdomsatwar.quetzara.title", "Guardian of the Serpent Temple", "Die Hüterin des Schlangentempels");
+        text("boss.kingdomsatwar.quetzara.molt", "Quetzara sheds her skin – beware of what lies there!",
+                "Quetzara streift ihre Haut ab – trau nicht, was dort liegt!");
+        block(io.github.sirschrolli.kingdomsatwar.registry.SerpentGear.SERPENT_ALTAR, "Serpent Altar", "Schlangenaltar");
+        lore("serpent_altar", "Stands in the serpent pit beneath the Serpent Temple", "Steht in der Schlangengrube unter dem Schlangentempel");
+        text(ModItems.loreKey("serpent_altar", 2), "The Feathered Serpent sleeps coiled around it – a gold block calls her back",
+                "Um ihn schläft die Gefiederte Schlange – ein Goldblock ruft sie zurück");
+        text("block.kingdomsatwar.serpent_altar.warning", "A hiss echoes from the depths …", "Aus der Tiefe zischt es …");
+        text("block.kingdomsatwar.serpent_altar.hint", "The Feathered Serpent sleeps around the altar. Whoever descends into the pit wakes her.",
+                "Die Gefiederte Schlange schläft um den Altar. Wer in die Grube hinabsteigt, weckt sie.");
+        text("block.kingdomsatwar.serpent_altar.awake", "The Feathered Serpent is awake!", "Die Gefiederte Schlange ist erwacht!");
+        text("block.kingdomsatwar.serpent_altar.fallen", "The golden serpent idol lies shattered. A gold block on the altar would call the guardian back.",
+                "Das goldene Schlangenbild ist zerbrochen. Ein Goldblock auf dem Altar riefe die Hüterin zurück.");
+        text("block.kingdomsatwar.serpent_altar.peaceful", "In peace, the Feathered Serpent does not answer.",
+                "Im Frieden antwortet die Gefiederte Schlange nicht.");
+        item(io.github.sirschrolli.kingdomsatwar.registry.SerpentGear.SERPENT_FANG, "Serpent Fang", "Schlangenzahn");
+        lore("serpent_fang", "A venom fang of Quetzara, the Feathered Serpent", "Ein Giftzahn Quetzaras, der Gefiederten Schlange");
+        text(ModItems.loreKey("serpent_fang", 2), "Every hit poisons – the poisoned it strikes harder",
+                "Jeder Treffer vergiftet – wer schon vergiftet ist, den trifft er härter");
+        text(ModItems.loreKey("serpent_fang", 3), "Use: the serpent strike – lunge forward and bite",
+                "Benutzen: der Schlangenstoß – ein Satz nach vorn mit einem Biss");
+        item(io.github.sirschrolli.kingdomsatwar.registry.SerpentGear.QUETZAL_FEATHER, "Quetzal Feather", "Quetzalfeder");
+        lore("quetzal_feather", "Emerald green with a golden quill – it shimmers like a hummingbird",
+                "Smaragdgrün mit goldenem Kiel – sie schillert wie ein Kolibri");
+        for (String[] e : new String[][] {{"ambient", "Serpent hisses softly", "Schlange zischt leise"},
+                {"hiss", "Serpent hisses", "Schlange zischt"}, {"awaken", "Serpent awakens", "Schlange erwacht"},
+                {"screech", "Feathered serpent screeches", "Gefiederte Schlange kreischt"}, {"rattle", "Feathers rattle", "Federn rasseln"},
+                {"strike", "Serpent strikes", "Schlange schnellt vor"}, {"bite", "Serpent bites", "Schlange beißt"},
+                {"spit", "Serpent spits venom", "Schlange spuckt Gift"}, {"splash", "Venom splashes", "Gift spritzt"},
+                {"feathers", "Feathers fly", "Federn fliegen"}, {"feather_hit", "Feather strikes", "Feder trifft"},
+                {"whip", "Tail lashes", "Schwanz peitscht"}, {"squeeze", "Coils squeeze", "Windungen drücken zu"},
+                {"molt", "Skin tears", "Haut reißt"}, {"skin_burst", "Shed skin bursts", "Abgestreifte Haut platzt"},
+                {"slither", "Scales slither", "Schuppen gleiten"}, {"hurt", "Serpent hurts", "Schlange nimmt Schaden"},
+                {"death", "Serpent dies", "Schlange stirbt"}}) {
+            subtitle("entity.quetzara." + e[0], e[1], e[2]);
+        }
+        subtitle("block.serpent_altar.shatter", "Serpent idol shatters", "Schlangenbild zerspringt");
+        subtitle("block.serpent_altar.offer", "Gold is offered", "Gold wird geopfert");
         // Waffen und Rüstungen aus Monsterteilen (0.70)
         item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.WEREWOLF_PELT, "Werewolf Pelt", "Werwolfspelz");
         lore("werewolf_pelt", "Thick, dark fur – still warm", "Dichtes, dunkles Fell – noch warm");

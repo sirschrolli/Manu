@@ -360,6 +360,12 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         add(ItemTags.MELEE_WEAPON_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.ArenaGear.STORM_TRIDENT);
         add(ItemTags.SHARP_WEAPON_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.ArenaGear.STORM_TRIDENT);
         add(net.neoforged.neoforge.common.Tags.Items.MELEE_WEAPON_TOOLS, io.github.sirschrolli.kingdomsatwar.registry.ArenaGear.STORM_TRIDENT);
+        // der Schlangenzahn (1.10): ein Dolch (Schärfe, Haltbarkeit …, kein Schwung), mit Quetzalfedern auszubessern
+        add(ModTags.Items.REPAIRS_SERPENT_FANG, io.github.sirschrolli.kingdomsatwar.registry.SerpentGear.QUETZAL_FEATHER);
+        add(ItemTags.DURABILITY_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.SerpentGear.SERPENT_FANG);
+        add(ItemTags.MELEE_WEAPON_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.SerpentGear.SERPENT_FANG);
+        add(ItemTags.SHARP_WEAPON_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.SerpentGear.SERPENT_FANG);
+        add(net.neoforged.neoforge.common.Tags.Items.MELEE_WEAPON_TOOLS, io.github.sirschrolli.kingdomsatwar.registry.SerpentGear.SERPENT_FANG);
         add(ItemTags.HEAD_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_HELMET);
         add(ItemTags.CHEST_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_CHESTPLATE);
         add(ItemTags.LEG_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_LEGGINGS);

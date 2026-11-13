@@ -501,6 +501,11 @@ public class SkyBoltEntity extends Entity {
                 victim.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 80, 0), owner);
                 pull(victim, owner, 1.0);
             }
+            case SERPENT -> {
+                victim.addEffect(new MobEffectInstance(MobEffects.POISON, 120, 1), owner);
+                victim.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 80, 1), owner);
+                pull(victim, owner, 0.9);
+            }
             case GLITCH -> this.rubberBand(level, victim, owner);
             case VOID -> victim.addEffect(new MobEffectInstance(MobEffects.WITHER, 100, 1), owner);
             case MAW -> pull(victim, owner, 1.3);

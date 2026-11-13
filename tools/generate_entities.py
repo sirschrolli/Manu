@@ -38,6 +38,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               miss_mystik, light_dove, magic_sword, anni_troll,
                               werewolf, mire_shambler, ember_wyrm, ash_wraith, soul_heron, night_ram, rift_hound, chorus_maw,
                               world_eater, world_eater_segment, world_eater_tail, world_chunk,
+                              quetzara, quetzara_segment, quetzara_tail, quetzara_feather, venom_glob,
                               schrolli, seraphling, divine_spear, divine_feather, divine_halo, divine_planet,
                               snow_leopard, primeval_elk, storm_gull, griffin, ember_salamander, mire_snapper, flamingo, butterfly)
 from entitygen.paint import paint_model  # noqa: E402
@@ -125,6 +126,18 @@ def main():
     if not ONLY or "VentorWindGeometry" in ONLY:
         wind_img, _ = ventor_wind.full_texture()          # die Wind-Textur rollt: das ganze Bild, nicht nur die Flächen
         wind_img.save(TEX / "ventor" / "wind.png")
+    write_model(quetzara, "QuetzaraGeometry",
+                "Geometrie des Kopfs von Quetzara, der Gefiederten Schlange (1.10; im Spiel 1,5-fach vergrößert): Kiefer, Zähne, Zunge, Kamm, Krause.",
+                "quetzara", quetzara.PALETTES, preview, same_seed=True)
+    write_model(quetzara_segment, "QuetzaraSegmentGeometry",
+                "Geometrie eines Glieds von Quetzaras Leib (1.10; je nach Glied dicker oder dünner gezeichnet).",
+                "quetzara", quetzara_segment.PALETTES, preview, same_seed=True)
+    write_model(quetzara_tail, "QuetzaraTailGeometry", "Geometrie von Quetzaras Schwanz mit dem Federbusch (1.10).",
+                "quetzara", quetzara_tail.PALETTES, preview, same_seed=True)
+    write_model(quetzara_feather, "QuetzaraFeatherGeometry", "Geometrie einer vergifteten Feder aus Quetzaras Krause (1.10).",
+                "quetzara", quetzara_feather.PALETTES, preview)
+    write_model(venom_glob, "VenomGlobGeometry", "Geometrie eines Klumpens Gift, den Quetzara spuckt (1.10).", "quetzara",
+                venom_glob.PALETTES, preview)
     write_model(stone_keeper, "StoneKeeperGeometry", "Geometrie des Steinhüters (im Spiel 1,4-fach vergrößert).",
                 "stone_keeper", stone_keeper.PALETTES, preview)
     write_model(keeper_boulder, "KeeperBoulderGeometry", "Geometrie des Felsbrockens, den der Steinhüter schleudert.",

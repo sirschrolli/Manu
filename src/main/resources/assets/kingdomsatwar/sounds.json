@@ -2376,6 +2376,24 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.block.raven_banner.tear"
   },
+  "block.serpent_altar.offer": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/serpent/serpent_altar_offer1",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.block.serpent_altar.offer"
+  },
+  "block.serpent_altar.shatter": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/serpent/serpent_altar_shatter1",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.block.serpent_altar.shatter"
+  },
   "block.void_throne.kindle": {
     "sounds": [
       {
@@ -7027,6 +7045,272 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.primeval_elk.step"
+  },
+  "entity.quetzara.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_ambient1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_ambient2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_ambient3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.quetzara.ambient"
+  },
+  "entity.quetzara.awaken": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_awaken1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.quetzara.awaken"
+  },
+  "entity.quetzara.bite": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_bite1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_bite2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_bite3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.quetzara.bite"
+  },
+  "entity.quetzara.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_death1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.quetzara.death"
+  },
+  "entity.quetzara.feather_hit": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_feather_hit1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_feather_hit2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_feather_hit3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.quetzara.feather_hit"
+  },
+  "entity.quetzara.feathers": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_feathers1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_feathers2",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_feathers3",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.quetzara.feathers"
+  },
+  "entity.quetzara.hiss": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_hiss1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_hiss2",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_hiss3",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.quetzara.hiss"
+  },
+  "entity.quetzara.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_hurt1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_hurt2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_hurt3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.quetzara.hurt"
+  },
+  "entity.quetzara.molt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_molt1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_molt2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.quetzara.molt"
+  },
+  "entity.quetzara.rattle": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_rattle1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_rattle2",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_rattle3",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.quetzara.rattle"
+  },
+  "entity.quetzara.screech": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_screech1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_screech2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.quetzara.screech"
+  },
+  "entity.quetzara.skin_burst": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_skin_burst1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_skin_burst2",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.quetzara.skin_burst"
+  },
+  "entity.quetzara.slither": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_slither1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_slither2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_slither3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.quetzara.slither"
+  },
+  "entity.quetzara.spit": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_spit1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_spit2",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.quetzara.spit"
+  },
+  "entity.quetzara.splash": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_splash1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_splash2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.quetzara.splash"
+  },
+  "entity.quetzara.squeeze": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_squeeze1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_squeeze2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_squeeze3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.quetzara.squeeze"
+  },
+  "entity.quetzara.strike": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_strike1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_strike2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_strike3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.quetzara.strike"
+  },
+  "entity.quetzara.whip": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_whip1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/serpent/quetzara_whip2",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.quetzara.whip"
   },
   "entity.reef_colossus.ambient": {
     "sounds": [

@@ -471,6 +471,27 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_IMPACT = register("entity.ventor.impact");
     public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_CYCLONE = register("entity.ventor.cyclone");
     public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_RAGE = register("entity.ventor.rage");
+    // Quetzara, die Gefiederte Schlange, und der Schlangenaltar (1.10)
+    public static final DeferredHolder<SoundEvent, SoundEvent> QUETZARA_AMBIENT = register("entity.quetzara.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> QUETZARA_HISS = register("entity.quetzara.hiss");
+    public static final DeferredHolder<SoundEvent, SoundEvent> QUETZARA_AWAKEN = register("entity.quetzara.awaken");
+    public static final DeferredHolder<SoundEvent, SoundEvent> QUETZARA_SCREECH = register("entity.quetzara.screech");
+    public static final DeferredHolder<SoundEvent, SoundEvent> QUETZARA_RATTLE = register("entity.quetzara.rattle");
+    public static final DeferredHolder<SoundEvent, SoundEvent> QUETZARA_STRIKE = register("entity.quetzara.strike");
+    public static final DeferredHolder<SoundEvent, SoundEvent> QUETZARA_BITE = register("entity.quetzara.bite");
+    public static final DeferredHolder<SoundEvent, SoundEvent> QUETZARA_SPIT = register("entity.quetzara.spit");
+    public static final DeferredHolder<SoundEvent, SoundEvent> QUETZARA_SPLASH = register("entity.quetzara.splash");
+    public static final DeferredHolder<SoundEvent, SoundEvent> QUETZARA_FEATHERS = register("entity.quetzara.feathers");
+    public static final DeferredHolder<SoundEvent, SoundEvent> QUETZARA_FEATHER_HIT = register("entity.quetzara.feather_hit");
+    public static final DeferredHolder<SoundEvent, SoundEvent> QUETZARA_WHIP = register("entity.quetzara.whip");
+    public static final DeferredHolder<SoundEvent, SoundEvent> QUETZARA_SQUEEZE = register("entity.quetzara.squeeze");
+    public static final DeferredHolder<SoundEvent, SoundEvent> QUETZARA_MOLT = register("entity.quetzara.molt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> QUETZARA_SKIN_BURST = register("entity.quetzara.skin_burst");
+    public static final DeferredHolder<SoundEvent, SoundEvent> QUETZARA_SLITHER = register("entity.quetzara.slither");
+    public static final DeferredHolder<SoundEvent, SoundEvent> QUETZARA_HURT = register("entity.quetzara.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> QUETZARA_DEATH = register("entity.quetzara.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SERPENT_ALTAR_SHATTER = register("block.serpent_altar.shatter");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SERPENT_ALTAR_OFFER = register("block.serpent_altar.offer");
     public static final DeferredHolder<SoundEvent, SoundEvent> VENTOR_STORM = register("entity.ventor.storm");
     public static final DeferredHolder<SoundEvent, SoundEvent> WIND_VORTEX_HOWL = register("entity.wind_vortex.howl");
     public static final DeferredHolder<SoundEvent, SoundEvent> ARENA_SEAL_CAGE = register("block.arena_seal.cage");

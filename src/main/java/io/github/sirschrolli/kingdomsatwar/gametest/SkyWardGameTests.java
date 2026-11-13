@@ -200,6 +200,7 @@ final class SkyWardGameTests {
         expected.put(ModEntities.SORDIN.get(), SkyTheme.ECHO);
         expected.put(ModEntities.ROBBER_KNIGHT.get(), SkyTheme.RAVEN);
         expected.put(ModEntities.VENTOR.get(), SkyTheme.WIND);
+        expected.put(ModEntities.QUETZARA.get(), SkyTheme.SERPENT);
         expected.put(ModEntities.ASTERIA.get(), SkyTheme.STAR);
         expected.put(net.minecraft.world.entity.EntityTypes.ENDER_DRAGON, SkyTheme.STAR);
         expected.put(ModEntities.ANNI_TROLL.get(), SkyTheme.GLITCH);

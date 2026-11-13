@@ -56,6 +56,13 @@ SCULK_GLOW = st.fixed("#06343a", "#0b6f7c", "#139fac", "#29dfeb", "#8af4fb", "#c
 # der Morgenstern (1.8): geschwärztes Eisen, schwarzes Leder mit goldener Naht, blanker Stahl
 BLACK_IRON = st.ramp("#4a4852", dark=0.1, light=0.74, cool=240)
 BLACK_LEATHER = st.ramp("#2e2824", dark=0.08, light=0.56, cool=20)
+# der Schlangenzahn (1.10): Elfenbein, Jade, Gold, Smaragd, Quetzalfedern, Gift
+IVORY = st.ramp("#e8dcc0", dark=0.3, light=0.99, warm=80, chroma_light=0.5)
+JADE = st.ramp("#2f9a62", dark=0.12, light=0.88, cool=200)
+QUETZAL = st.fixed("#0a3020", "#125234", "#1b7448", "#28985c", "#3cbc78", "#6ed6a0", "#a8f0c8")
+QUETZAL_TIP = st.fixed("#4a0a0c", "#7a1214", "#b01e1c", "#d8402a", "#f07040", "#ffa060", "#ffd0a0")
+VENOM_GLOW = st.fixed("#14400a", "#226812", "#3a9a1e", "#5ccc32", "#8cf05a", "#c4ff9c", "#f0ffe0")
+EMERALD_GLOW = st.fixed("#06301a", "#0c5a30", "#14904a", "#24c866", "#5cf096", "#a8ffcc", "#eafff2")
 # der Minutenzeiger (1.01): gebläuter Stahl, Uhrmessing, Chronit
 BLUED = st.fixed("#0a0e2a", "#141c48", "#20306e", "#2e4896", "#4566b8", "#7290dc", "#b4c8f6")
 CLOCK_BRASS = st.ramp("#d0a040", dark=0.28, light=0.96, warm=90)
@@ -492,6 +499,56 @@ def nightsteel_dagger_atlas():
     return img, glow
 
 
+def serpent_fang_atlas():
+    R = _regions("serpent_fang")
+    img, glow = _blank()
+
+    def grip(x, y, w, h):
+        if (y + x) % 4 == 0:
+            return _lv(GOLD, 4)                                               # der Golddraht
+        return _lv(JADE, 4 if x == 0 else 3)
+    paint(img, R["grip"], grip)
+    paint(img, R["gold"], metal(GOLD))
+    paint(img, R["gold_top"], top(GOLD))
+    paint(glow, R["gem"], glow_fill(EMERALD_GLOW))
+
+    def guard(x, y, w, h):
+        if y == 0:
+            return _lv(GOLD, 6)
+        if y == h - 1:
+            return _lv(GOLD, 2)
+        if x in (1, w - 2):
+            return _lv(EMERALD_GLOW, 4)                                       # die Augen der Schlangenköpfe
+        return _lv(GOLD, 4 if (x // 2) % 2 else 5)
+    paint(img, R["guard"], guard)
+    paint(img, R["guard_side"], metal(GOLD, 3.5))
+
+    def feather(x, y, w, h):
+        t = y / max(1, h - 1)                                                 # 0 = Spitze
+        if t < 0.18:
+            return _lv(QUETZAL_TIP, 4 if x == 0 else 3)
+        if x == (w - 1) // 2 and w > 2:
+            return _lv(GOLD, 4)
+        return _lv(QUETZAL, 5 - t * 2.5 - (0.6 if x == w - 1 else 0.0))
+    paint(img, R["feather"], feather)
+    paint(img, R["feather_edge"], strand(QUETZAL, 5.0, 2.5, False))
+
+    def fang(x, y, w, h):
+        u = x / max(1, w - 1)
+        t = y / max(1, h - 1)
+        level = 6 if u < 0.12 else 5 if u < 0.32 else 4 if u < 0.7 else 3
+        if t < 0.08:
+            level = 6
+        if h01(x, y, 61) < 0.05 and level < 6:
+            level -= 1
+        return _lv(IVORY, level)
+    paint(img, R["blade"], fang)
+    paint(img, R["blade_edge"], strand(IVORY, 6.0, 3.5, False))
+    paint(glow, R["venom"], glow_strand(VENOM_GLOW))
+    paint(glow, R["venom_side"], glow_strand(VENOM_GLOW))
+    return img, glow
+
+
 def abyssite_greatsword_atlas():
     R = _regions("abyssite_greatsword")
     img, glow = _blank()
@@ -770,6 +827,7 @@ ATLASES = {
     "steel_halberd": steel_halberd_atlas, "draconium_warhammer": draconium_warhammer_atlas, "nightsteel_dagger": nightsteel_dagger_atlas,
     "abyssite_greatsword": abyssite_greatsword_atlas, "steel_double_axe": steel_double_axe_atlas, "miner_hammer": miner_hammer_atlas,
     "phase_blade": phase_blade_atlas,
+    "serpent_fang": serpent_fang_atlas,
     "tuning_fork": tuning_fork_atlas,
     "morning_star": morning_star_atlas,
     "ember_pickaxe": ember_pickaxe_atlas, "vein_breaker": vein_breaker_atlas, "ore_seeker": ore_seeker_atlas,
@@ -848,6 +906,25 @@ NIGHTSTEEL_DAGGER = """
 ................
 ................
 ................
+"""
+
+SERPENT_FANG = """
+................
+.............gd.
+............gfd.
+...........gFd..
+..........gFd...
+.........gEd....
+........gEd.....
+.......gEed.....
+..lm..gfed......
+...mlkfed.......
+....mlkd........
+....kLlm........
+...LK..lm.......
+..LK............
+.nTj............
+.RS.............
 """
 
 ABYSSITE_GREATSWORD = """
@@ -988,6 +1065,7 @@ ICON_ART = {
     "draconium_warhammer": (DRACONIUM_WARHAMMER, {"A": CHARRED, "C": GOLD, "D": DRACONIUM, "E": EMBER, "F": DARK_LEATHER},
                             ("E", "C", "D", "A", "F")),
     "nightsteel_dagger": (NIGHTSTEEL_DAGGER, {"B": NIGHTSTEEL, "D": VIOLET, "E": MOON, "F": DARK_LEATHER}, ("E", "D", "B", "F")),
+    "serpent_fang": (SERPENT_FANG, {"B": IVORY, "C": GOLD, "E": VENOM_GLOW, "F": JADE, "G": QUETZAL}, ("E", "C", "B", "G", "F")),
     "abyssite_greatsword": (ABYSSITE_GREATSWORD, {"B": ABYSS, "E": MAGENTA, "F": DARK_LEATHER}, ("E", "B", "F")),
     "phase_blade": (PHASE_BLADE, {"B": PHASIT, "C": PURPUR, "E": PHASIT_GLOW, "F": DARK_LEATHER, "G": PHASIT_GLOW},
                     ("E", "G", "B", "C", "F")),

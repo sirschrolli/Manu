@@ -173,6 +173,22 @@ REGIONS: dict[str, dict[str, UV]] = {
         "spike": (12, 4, 14, 10),       # die Stacheln: blanker Stahl, Spitze oben
         "spike_tip": (14, 4, 15, 6),
     },
+    # der Schlangenzahn (1.10): Quetzaras Giftzahn als Dolch – ein Griff aus Jade mit Golddraht, ein Smaragd im Knauf, zwei
+    # goldene Schlangenköpfe als Parierstange, die Klinge aus Elfenbein mit leuchtender Giftrinne, am Knauf zwei Quetzalfedern
+    "serpent_fang": {
+        "grip": (0, 0, 2, 6),           # Jade, mit Golddraht umwickelt
+        "gold": (0, 6, 2, 8),           # Gold (Knauf, Kragen)
+        "gold_top": (0, 8, 2, 10),
+        "gem": (0, 10, 2, 12),          # der Smaragd im Knauf (leuchtet)
+        "guard": (2, 0, 8, 2),          # die Parierstange von vorn: zwei Schlangenköpfe
+        "guard_side": (2, 2, 8, 3),
+        "feather": (2, 4, 4, 12),       # die Quetzalfedern am Knauf: Spitze oben
+        "feather_edge": (4, 4, 5, 12),
+        "blade": (8, 0, 12, 16),        # der Giftzahn: Elfenbein, Spitze oben
+        "blade_edge": (12, 0, 13, 16),
+        "venom": (13, 0, 14, 16),       # die Giftrinne (leuchtet)
+        "venom_side": (14, 0, 15, 16),
+    },
     # die Phasenklinge (1.5): Phasmors Zweihänder aus einem einzigen Phasitkristall
     "phase_blade": {
         "grip": (0, 0, 2, 8),           # violette Lederwicklung
@@ -444,6 +460,30 @@ def nightsteel_dagger() -> Shape:
     return s
 
 
+def serpent_fang() -> Shape:
+    """Der Schlangenzahn (1.10): ein Knauf aus Gold mit einem Smaragd, der Griff aus Jade, ein goldener Kragen, als Parierstange
+    zwei goldene Schlangenköpfe, die nach außen blicken, dann der Giftzahn – breit am Ansatz, leicht gekrümmt wie ein Fangzahn,
+    mit einer grün leuchtenden Giftrinne; am Knauf hängen zwei Quetzalfedern."""
+    s = Shape(REGIONS["serpent_fang"])
+    s.box(7.2, -3.6, 7.2, 8.8, -2.4, 8.8, "gold", cap="gold_top")
+    s.box(7.55, -4.0, 7.55, 8.45, -3.5, 8.45, "gem", glow=True)
+    s.box(7.4, -2.4, 7.4, 8.6, 1.7, 8.6, "grip", cap="gold_top")
+    s.box(7.25, 1.6, 7.25, 8.75, 2.2, 8.75, "gold", cap="gold_top")
+    # die Parierstange: Mitte und zwei Schlangenköpfe, die sich nach außen und oben recken
+    plate(s, 6.6, 2.0, 9.4, 3.0, 7.3, 8.7, "guard", (4.2, 2.0, 11.8, 3.0), side="guard_side", cap="guard_side")
+    s.chain(6.7, 2.5, 96, 24, [0.9, 0.8, 0.7], (-0.48, -0.32), (0.48, 0.32), (1.0, 0.75), "gold", "gold")
+    s.chain(9.3, 2.5, -96, -24, [0.9, 0.8, 0.7], (-0.48, -0.32), (0.48, 0.32), (1.0, 0.75), "gold", "gold")
+    # der Giftzahn: gekrümmt, zur Spitze schmal
+    lengths = [1.5, 1.5, 1.5, 1.4, 1.3, 1.1, 0.9, 0.7]
+    bends = [0, -3, -4, -5, -6, -7, -8, -9]
+    s.chain(8.0, 2.9, 0, bends, lengths, (-1.15, -0.1), (1.15, 0.1), (0.55, 0.2), "blade", "blade_edge")
+    s.chain(8.0, 2.9, 0, bends[:6], lengths[:6], (-0.24, -0.06), (0.24, 0.06), (0.62, 0.3), "venom", "venom_side", glow=True)
+    # zwei Quetzalfedern hängen vom Knauf
+    s.chain(7.6, -3.3, 158, 10, [1.3, 1.2, 1.0], (-0.55, -0.15), (0.55, 0.15), (0.2, 0.2), "feather", "feather_edge")
+    s.chain(8.4, -3.3, -166, -7, [1.2, 1.1, 0.9], (-0.5, -0.15), (0.5, 0.15), (0.2, 0.2), "feather", "feather_edge")
+    return s
+
+
 def abyssite_greatsword() -> Shape:
     """Abyssit-Großschwert: ein langer, zweihändiger Griff mit Kristallknauf, die breite Parierstange mit Kristallzacken und die
     gewaltige Klinge mit glühenden Runen in der Mitte."""
@@ -681,6 +721,7 @@ ITEMS = {
     "SHEPHERD_CROOK": ("shepherd_crook", shepherd_crook),
     "MINUTE_HAND": ("minute_hand", minute_hand),
     "NIGHTSTEEL_DAGGER": ("nightsteel_dagger", nightsteel_dagger),
+    "SERPENT_FANG": ("serpent_fang", serpent_fang),
     "ABYSSITE_GREATSWORD": ("abyssite_greatsword", abyssite_greatsword),
     "PHASE_BLADE": ("phase_blade", phase_blade),
     "TUNING_FORK": ("tuning_fork", tuning_fork),
@@ -711,14 +752,20 @@ def java() -> str:
         "final class ArmoryShapes {",
         "    private ArmoryShapes() {}",
     ]
+    # je Gegenstand eine eigene Methode (der statische Block einer Klasse darf höchstens 64 KB groß sein)
     for const, (name, fn) in ITEMS.items():
         out.append("")
         out.append(f"    /** {name} */")
-        out.append(f"    static final float[][] {const} = {{")
+        out.append(f"    static final float[][] {const} = {name}();")
+    for const, (name, fn) in ITEMS.items():
+        out.append("")
+        out.append(f"    private static float[][] {name}() {{")
+        out.append("        return new float[][] {")
         for p in fn().parts:
             vals = [*p.lo, *p.hi, *p.uv, *p.side, *p.cap, 1.0 if p.glow else 0.0, *p.rot, *p.pivot]
-            out.append("            {" + ", ".join(mg._f(v) for v in vals) + "},")
-        out.append("    };")
+            out.append("                {" + ", ".join(mg._f(v) for v in vals) + "},")
+        out.append("        };")
+        out.append("    }")
     out.append("}")
     return "\n".join(out) + "\n"
 

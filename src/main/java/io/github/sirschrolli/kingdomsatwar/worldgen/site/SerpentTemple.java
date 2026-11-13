@@ -12,7 +12,10 @@ import net.minecraft.world.level.block.CandleBlock;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.LanternBlock;
+import net.minecraft.world.level.block.MultifaceBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.SpeleothemBlock;
 import net.minecraft.world.level.block.TripWireBlock;
 import net.minecraft.world.level.block.TripWireHookBlock;
@@ -34,6 +37,20 @@ import net.minecraft.world.level.storage.loot.BuiltInLootTables;
  * <p>Eigene Koordinaten: die Schnauze vorn bei z = 0 (das Maul öffnet sich nach Norden), x quer, y = 0 ist der Boden.
  */
 final class SerpentTemple {
+    /** Mitte der Schlangengrube (z), Radius der Grube, der Insel und des Grabens. */
+    static final int PIT_Z = 40;
+    static final int PIT_R = 14;
+    static final double ISLAND_R = 6.0;
+    static final double MOAT_R = 8.5;
+    /** Bodenblöcke der Grube (man steht eine Höhe darüber), die Decke, der Boden der Empore. */
+    static final int PIT_FLOOR = -14;
+    static final int PIT_CEILING = -2;
+    static final int GALLERY_FLOOR = -8;
+    /** Hier beginnt die Treppe von der Empore hinab. */
+    static final int STAIRS_Z = 22;
+    /** Wo der Schlangenaltar steht: mitten auf der Insel. */
+    static final BlockPos ALTAR = new BlockPos(0, PIT_FLOOR + 2, PIT_Z);
+
     private SerpentTemple() {}
 
     static Optional<Structure.GenerationStub> plan(Structure.GenerationContext context, SiteTerrain terrain, long seed) {
@@ -47,8 +64,13 @@ final class SerpentTemple {
             return Optional.empty();
         }
         int y = terrain.ground(x, z);
+        // über der Grube muss Erde liegen (sonst ragte ihre Decke aus dem Boden)
+        BlockPos pit = new BlockPos(0, 0, PIT_Z).rotate(rotation);
+        if (terrain.span(x + pit.getX(), z + pit.getZ(), 15, 5)[0] < y - 2) {
+            return Optional.empty();
+        }
         BlockPos origin = new BlockPos(x, y, z);
-        BoundingBox box = SitePiece.box(origin, rotation, -17, -10, -13, 17, 32, 31);
+        BoundingBox box = SitePiece.box(origin, rotation, -18, PIT_FLOOR - 3, -13, 18, 32, PIT_Z + 17);
         return Optional.of(new Structure.GenerationStub(origin,
                 builder -> builder.addPiece(new SitePiece(SiteKind.SERPENT_TEMPLE, 0, origin, rotation, seed, new int[0], box))));
     }
@@ -111,7 +133,7 @@ final class SerpentTemple {
             this.head();
             this.mouth();
             this.throat();
-            this.hall();
+            this.pit();
             this.vines();
         }
 
@@ -293,73 +315,367 @@ final class SerpentTemple {
             }
         }
 
+        // =================================================================================
+        // Die Schlangengrube (seit 1.10)
+        // =================================================================================
+
+        /** Abstand (waagerecht) von der Mitte der Grube. */
+        static double radius(int x, int z) {
+            double dz = z - PIT_Z;
+            return Math.sqrt(x * x + dz * dz);
+        }
+
+        /** Winkel um die Mitte der Grube (0 = Süden, zur Rückwand). */
+        static double angle(int x, int z) {
+            return Math.atan2(x, z - PIT_Z);
+        }
+
         /**
-         * Die Halle der Schlangenpriester (unter dem Nacken): Säulen als aufgerichtete Schlangen, ein Graben um den Altar,
-         * zwei Opfertruhen; hinter rissigem Mauerwerk der Ostwand eine dritte, versteckte Truhe.
+         * Die Schlangengrube: eine runde Halle tief unter dem Tempel, umschlossen von doppelten Mauern. Oben eine Empore, von der
+         * eine Treppe hinabführt; unten ein Wassergraben um eine Insel, auf ihr der Schlangenaltar, um den Quetzara schläft. Acht
+         * Säulen, um die sich steinerne Schlangen winden, Augen in den Wänden, ein Fries aus Federn, an der Decke eine goldene
+         * Sonne. Die Opfertruhen stehen hinter dem Altar, eine weitere hinter rissigem Mauerwerk der Ostwand.
          */
-        void hall() {
-            int f = -7;
+        void pit() {
+            for (int x = -17; x <= 17; x++) {
+                for (int z = PIT_Z - 17; z <= PIT_Z + 17; z++) {
+                    double r = radius(x, z);
+                    if (r > PIT_R + 2.0) {
+                        continue;
+                    }
+                    boolean inner = r <= PIT_R;
+                    for (int y = PIT_FLOOR - 3; y <= PIT_CEILING; y++) {
+                        BlockState state;
+                        if (!inner) {
+                            state = r <= PIT_R + 1.0 ? this.wallStone(x, y, z) : Blocks.MOSSY_COBBLESTONE.defaultBlockState();
+                        } else if (y < PIT_FLOOR) {
+                            state = Blocks.MOSSY_COBBLESTONE.defaultBlockState();
+                        } else if (y == PIT_FLOOR) {
+                            state = this.floorStone(x, z, r);
+                        } else if (y == PIT_CEILING) {
+                            state = this.ceilingStone(x, z, r);
+                        } else {
+                            state = Blocks.AIR.defaultBlockState();
+                        }
+                        this.b.set(x, y, z, state);
+                    }
+                }
+            }
+            this.gallery();
+            this.moat();
+            this.island();
+            for (int k = 0; k < 8; k++) {
+                double a = Math.toRadians(22.5 + 45.0 * k);
+                this.pillar((int) Math.round(Math.sin(a) * 11.2), PIT_Z + (int) Math.round(Math.cos(a) * 11.2), a, k);
+            }
+            this.wallEyes();
+            this.hiddenChest();
+            this.overgrowth();
+        }
+
+        /** Die innere Mauer: bemooster Stein, ein Fries aus grünen und goldenen Federn, oben ein Band aus gemeißeltem Stein. */
+        BlockState wallStone(int x, int y, int z) {
+            if (y == PIT_FLOOR + 4 || y == PIT_FLOOR + 5) {
+                // der Fries: Federn im Zickzack, nach Winkel und Höhe
+                int k = (int) Math.floor((angle(x, z) + Math.PI) / (Math.PI * 2.0) * 72.0);
+                int band = Math.floorMod(k + (y == PIT_FLOOR + 5 ? 1 : 0), 3);
+                return switch (band) {
+                    case 0 -> Blocks.DYED_TERRACOTTA.pick(DyeColor.LIME).defaultBlockState();
+                    case 1 -> Blocks.DYED_TERRACOTTA.pick(DyeColor.GREEN).defaultBlockState();
+                    default -> Blocks.DYED_TERRACOTTA.pick(DyeColor.YELLOW).defaultBlockState();
+                };
+            }
+            if (y == PIT_FLOOR + 3 || y == PIT_FLOOR + 6 || y == PIT_CEILING - 1) {
+                return Blocks.CHISELED_STONE_BRICKS.defaultBlockState();
+            }
+            return this.scale(x, y, z + 160);
+        }
+
+        /** Der Boden: bemooste Ziegel, ein Ring aus gemeißeltem Stein um den Graben. */
+        BlockState floorStone(int x, int z, double r) {
+            if (r > MOAT_R + 0.6 && r <= MOAT_R + 1.6) {
+                return Blocks.CHISELED_STONE_BRICKS.defaultBlockState();
+            }
+            float n = this.b.noise(x, PIT_FLOOR, z + 200);
+            if (n < 0.45f) {
+                return Blocks.MOSSY_STONE_BRICKS.defaultBlockState();
+            }
+            if (n < 0.8f) {
+                return Blocks.STONE_BRICKS.defaultBlockState();
+            }
+            return n < 0.92f ? Blocks.CRACKED_STONE_BRICKS.defaultBlockState() : Blocks.MOSS_BLOCK.defaultBlockState();
+        }
+
+        /** Die Decke: Strahlen aus gemeißeltem Stein um eine goldene Sonne über dem Altar. */
+        BlockState ceilingStone(int x, int z, double r) {
+            if (r <= 1.6) {
+                return Blocks.OCHRE_FROGLIGHT.defaultBlockState();
+            }
+            if (r <= 2.7) {
+                return Blocks.DYED_TERRACOTTA.pick(DyeColor.YELLOW).defaultBlockState();
+            }
+            double a = angle(x, z);
+            double ray = Math.abs(((a / (Math.PI / 8.0)) % 1.0 + 1.0) % 1.0 - 0.5);
+            if (ray > 0.38 && r < PIT_R - 1.0) {
+                return Blocks.CHISELED_STONE_BRICKS.defaultBlockState();
+            }
+            return this.scale(x, PIT_CEILING, z + 260);
+        }
+
+        /**
+         * Die Empore am Ende der Treppe aus dem Schlund (man steht eine Ebene unter dem Schlund) und die Treppe hinab in die
+         * Grube; zu beiden Seiten der Treppe ragt die Empore als Balkon über die Grube (mit Brüstung).
+         */
+        void gallery() {
             for (int x = -6; x <= 6; x++) {
-                for (int z = 16; z <= 28; z++) {
-                    for (int y = f - 1; y <= f + 7; y++) {
-                        boolean shell = Math.abs(x) == 6 || z == 28 || y == f - 1 || y == f + 7 || z == 16 && Math.abs(x) > 1;
-                        this.b.set(x, y, z, shell ? this.scale(x, y, z + 80) : Blocks.AIR.defaultBlockState());
+                for (int z = 16; z <= PIT_Z - 13; z++) {
+                    if (radius(x, z) <= PIT_R) {
+                        continue;
                     }
-                    if (Math.abs(x) < 6 && z > 16 && z < 28) {
-                        this.b.set(x, f - 1, z, Math.floorMod(x + z, 2) == 0 ? Blocks.MOSSY_STONE_BRICKS.defaultBlockState()
-                                : Blocks.CHISELED_STONE_BRICKS.defaultBlockState());
-                    }
-                }
-            }
-            // Schlangensäulen: Schaft aus Mauern, Kopf aus grüner Keramik mit einer Laterne darunter
-            for (int[] c : new int[][] {{-4, 19}, {4, 19}, {-4, 24}, {4, 24}}) {
-                for (int y = f; y <= f + 4; y++) {
-                    this.b.set(c[0], y, c[1], y == f ? Blocks.CHISELED_STONE_BRICKS.defaultBlockState()
-                            : Blocks.MOSSY_STONE_BRICK_WALL.defaultBlockState());
-                }
-                this.b.set(c[0], f + 5, c[1], Blocks.GLAZED_TERRACOTTA.pick(DyeColor.GREEN).defaultBlockState());
-                this.b.set(c[0], f + 6, c[1], Blocks.MOSSY_STONE_BRICKS.defaultBlockState());
-                // der Oberkiefer ragt zum Gang hin vor, darunter hängt die Laterne
-                int jaw = c[0] + (c[0] < 0 ? 1 : -1);
-                this.b.set(jaw, f + 6, c[1], VillageBuilder.slab(Blocks.MOSSY_STONE_BRICK_SLAB,
-                        net.minecraft.world.level.block.state.properties.SlabType.BOTTOM));
-                this.b.set(jaw, f + 5, c[1], Blocks.LANTERN.defaultBlockState().setValue(LanternBlock.HANGING, true));
-            }
-            // Graben um den Altar (z 23..27), eine Brücke
-            for (int x = -3; x <= 3; x++) {
-                for (int z = 22; z <= 27; z++) {
-                    boolean moat = (Math.abs(x) == 3 || z == 22) && !(x == 0 && z == 22);
-                    if (moat) {
-                        this.b.set(x, f - 1, z, Blocks.WATER.defaultBlockState());
-                        this.b.set(x, f - 2, z, Blocks.MOSSY_COBBLESTONE.defaultBlockState());
+                    boolean side = Math.abs(x) == 6;
+                    for (int y = PIT_FLOOR - 3; y <= PIT_CEILING; y++) {
+                        BlockState state;
+                        if (z == 16) {
+                            // die Nordwand (die Öffnung zum Schlund in der Mitte)
+                            if (Math.abs(x) <= 2 && y > GALLERY_FLOOR - 2) {
+                                continue;
+                            }
+                            state = this.scale(x, y, z + 300);
+                        } else if (side || y == PIT_CEILING) {
+                            state = this.scale(x, y, z + 300);
+                        } else if (y < GALLERY_FLOOR) {
+                            state = Blocks.MOSSY_COBBLESTONE.defaultBlockState();
+                        } else if (y == GALLERY_FLOOR) {
+                            state = Math.floorMod(x + z, 2) == 0 ? Blocks.MOSSY_STONE_BRICKS.defaultBlockState()
+                                    : Blocks.CHISELED_STONE_BRICKS.defaultBlockState();
+                        } else {
+                            state = Blocks.AIR.defaultBlockState();
+                        }
+                        this.b.set(x, y, z, state);
                     }
                 }
             }
-            this.b.set(0, f - 1, 22, Blocks.MOSSY_STONE_BRICKS.defaultBlockState());
-            // Altar mit Opfergaben
+            // die Stufe aus dem Schlund herab
             for (int x = -1; x <= 1; x++) {
-                this.b.set(x, f, 26, Blocks.CHISELED_STONE_BRICKS.defaultBlockState());
-                this.b.set(x, f + 1, 26, x == 0 ? Blocks.GOLD_BLOCK.defaultBlockState() : Blocks.MOSSY_STONE_BRICK_SLAB.defaultBlockState());
+                this.b.set(x, GALLERY_FLOOR + 1, 17, VillageBuilder.stairs(Blocks.MOSSY_STONE_BRICK_STAIRS, Direction.NORTH, Half.BOTTOM));
             }
-            this.b.set(-1, f + 2, 26, Blocks.DYED_CANDLE.pick(DyeColor.LIME).defaultBlockState().setValue(CandleBlock.CANDLES, 3)
-                    .setValue(CandleBlock.LIT, true));
-            this.b.set(1, f + 2, 26, Blocks.DYED_CANDLE.pick(DyeColor.LIME).defaultBlockState().setValue(CandleBlock.CANDLES, 3)
-                    .setValue(CandleBlock.LIT, true));
-            this.b.chest(-2, f, 26, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH), ModLootTables.SITE_SERPENT_TEMPLE);
-            this.b.chest(2, f, 26, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH), ModLootTables.SITE_SERPENT_TEMPLE);
-            // versteckte Nische in der Ostwand
-            for (int y = f; y <= f + 1; y++) {
-                this.b.set(6, y, 20, Blocks.CRACKED_STONE_BRICKS.defaultBlockState());
-                this.b.set(7, y, 20, Blocks.AIR.defaultBlockState());
+            // die Treppe hinab (sechs Stufen), darunter voll
+            for (int k = 0; k <= 5; k++) {
+                int z = STAIRS_Z + k;
+                int top = GALLERY_FLOOR - k;
+                for (int x = -2; x <= 2; x++) {
+                    for (int y = PIT_FLOOR; y < top; y++) {
+                        this.b.set(x, y, z, Blocks.MOSSY_STONE_BRICKS.defaultBlockState());
+                    }
+                    this.b.set(x, top, z, VillageBuilder.stairs(Blocks.MOSSY_STONE_BRICK_STAIRS, Direction.NORTH, Half.BOTTOM));
+                    for (int y = top + 1; y < PIT_CEILING; y++) {
+                        this.b.set(x, y, z, Blocks.AIR.defaultBlockState());
+                    }
+                }
             }
-            for (int[] c : new int[][] {{8, 20}, {7, 19}, {7, 21}}) {
-                for (int y = f - 1; y <= f + 2; y++) {
+            // Brüstungen: an der Kante der Empore zur Grube und neben der Treppe
+            for (int x = -5; x <= 5; x++) {
+                for (int z = 17; z <= PIT_Z - 13; z++) {
+                    if (radius(x, z) <= PIT_R || Math.abs(x) <= 2 && z >= STAIRS_Z) {
+                        continue;
+                    }
+                    boolean edge = false;
+                    for (int[] d : new int[][] {{1, 0}, {-1, 0}, {0, 1}, {0, -1}}) {
+                        int nx = x + d[0];
+                        int nz = z + d[1];
+                        if (radius(nx, nz) <= PIT_R && !(Math.abs(nx) <= 2 && nz >= STAIRS_Z) || Math.abs(nx) <= 2 && nz >= STAIRS_Z && nz <= STAIRS_Z + 5
+                                && Math.abs(x) == 3) {
+                            edge = true;
+                        }
+                    }
+                    if (edge) {
+                        this.b.set(x, GALLERY_FLOOR + 1, z, Blocks.MOSSY_STONE_BRICK_WALL.defaultBlockState());
+                    }
+                }
+            }
+            // zwei Schlangenwächter an der Treppe: Säulen mit Köpfen aus grüner Keramik und Laternen
+            for (int side : new int[] {-1, 1}) {
+                int x = side * 4;
+                int z = STAIRS_Z - 2;
+                this.b.set(x, GALLERY_FLOOR + 1, z, Blocks.CHISELED_STONE_BRICKS.defaultBlockState());
+                this.b.set(x, GALLERY_FLOOR + 2, z, Blocks.MOSSY_STONE_BRICK_WALL.defaultBlockState());
+                this.b.set(x, GALLERY_FLOOR + 3, z, Blocks.GLAZED_TERRACOTTA.pick(DyeColor.GREEN).defaultBlockState());
+                this.b.set(x, GALLERY_FLOOR + 4, z, Blocks.LANTERN.defaultBlockState());
+            }
+        }
+
+        /** Der Wassergraben um die Insel (zwei tief), mit vier Brücken. */
+        void moat() {
+            for (int x = -10; x <= 10; x++) {
+                for (int z = PIT_Z - 10; z <= PIT_Z + 10; z++) {
+                    double r = radius(x, z);
+                    if (r <= ISLAND_R || r > MOAT_R) {
+                        continue;
+                    }
+                    boolean bridge = Math.abs(x) <= 1 || Math.abs(z - PIT_Z) <= 1;
+                    if (bridge) {
+                        this.b.set(x, PIT_FLOOR, z, Blocks.MOSSY_STONE_BRICKS.defaultBlockState());
+                        this.b.set(x, PIT_FLOOR - 1, z, Blocks.MOSSY_COBBLESTONE.defaultBlockState());
+                    } else {
+                        this.b.set(x, PIT_FLOOR, z, Blocks.WATER.defaultBlockState());
+                        this.b.set(x, PIT_FLOOR - 1, z, Blocks.WATER.defaultBlockState());
+                        this.b.set(x, PIT_FLOOR - 2, z, Blocks.MOSSY_COBBLESTONE.defaultBlockState());
+                    }
+                }
+            }
+        }
+
+        /**
+         * Die Insel, eine Stufe über dem Boden: in der Mitte der Schlangenaltar (das Schlangenbild blickt zur Treppe), ein Ring
+         * aus gemeißeltem Stein, Knochen früherer Opfer am Rand, hinter dem Altar die Opfertruhen.
+         */
+        void island() {
+            for (int x = -7; x <= 7; x++) {
+                for (int z = PIT_Z - 7; z <= PIT_Z + 7; z++) {
+                    double r = radius(x, z);
+                    if (r > ISLAND_R) {
+                        continue;
+                    }
+                    BlockState top;
+                    if (r > ISLAND_R - 0.8) {
+                        top = Blocks.CHISELED_STONE_BRICKS.defaultBlockState();
+                    } else if (r > 3.6 && r <= 4.4) {
+                        top = Blocks.DYED_TERRACOTTA.pick(DyeColor.GREEN).defaultBlockState();
+                    } else {
+                        top = this.b.noise(x, PIT_FLOOR + 1, z + 400) < 0.5f ? Blocks.MOSSY_STONE_BRICKS.defaultBlockState()
+                                : Blocks.MOSS_BLOCK.defaultBlockState();
+                    }
+                    this.b.set(x, PIT_FLOOR + 1, z, top);
+                }
+            }
+            // an den Brücken eine Stufe hinauf
+            for (int[] d : new int[][] {{0, -1}, {0, 1}, {-1, 0}, {1, 0}}) {
+                for (int w = -1; w <= 1; w++) {
+                    int x = d[0] * 6 + (d[0] == 0 ? w : 0);
+                    int z = PIT_Z + d[1] * 6 + (d[1] == 0 ? w : 0);
+                    Direction toward = d[0] < 0 ? Direction.EAST : d[0] > 0 ? Direction.WEST : d[1] < 0 ? Direction.SOUTH : Direction.NORTH;
+                    this.b.set(x, PIT_FLOOR + 1, z, VillageBuilder.stairs(Blocks.MOSSY_STONE_BRICK_STAIRS, toward, Half.BOTTOM));
+                }
+            }
+            // der Schlangenaltar
+            this.b.set(ALTAR.getX(), ALTAR.getY(), ALTAR.getZ(), io.github.sirschrolli.kingdomsatwar.registry.SerpentGear.SERPENT_ALTAR.get()
+                    .defaultBlockState().setValue(io.github.sirschrolli.kingdomsatwar.block.serpent.SerpentAltarBlock.FACING, Direction.NORTH));
+            // Knochen früherer Opfer
+            int[][] bones = {{-4, 3}, {5, -2}, {3, 4}, {-5, -2}};
+            for (int i = 0; i < bones.length; i++) {
+                int x = bones[i][0];
+                int z = PIT_Z + bones[i][1];
+                if (i % 2 == 0) {
+                    this.b.set(x, PIT_FLOOR + 2, z, Blocks.SKELETON_SKULL.defaultBlockState().setValue(SkullBlock.ROTATION, (i * 5 + 3) % 16));
+                } else {
+                    this.b.set(x, PIT_FLOOR + 2, z, Blocks.BONE_BLOCK.defaultBlockState().setValue(RotatedPillarBlock.AXIS,
+                            i == 1 ? Direction.Axis.X : Direction.Axis.Z));
+                }
+            }
+            // die Opfertruhen hinter dem Altar, Kerzen daneben
+            this.b.chest(-2, PIT_FLOOR + 2, PIT_Z + 5, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH),
+                    ModLootTables.SITE_SERPENT_TEMPLE);
+            this.b.chest(2, PIT_FLOOR + 2, PIT_Z + 5, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH),
+                    ModLootTables.SITE_SERPENT_TEMPLE);
+            for (int x : new int[] {-3, 0, 3}) {
+                this.b.set(x, PIT_FLOOR + 2, PIT_Z + 5, Blocks.DYED_CANDLE.pick(DyeColor.LIME).defaultBlockState()
+                        .setValue(CandleBlock.CANDLES, x == 0 ? 4 : 2).setValue(CandleBlock.LIT, true));
+            }
+        }
+
+        /**
+         * Eine Säule: ein Schaft aus bemoosten Ziegeln, um den sich eine steinerne Schlange windet (zwei Blöcke breit, einmal
+         * rundherum alle acht Blöcke); oben blickt ihr Kopf zur Mitte, vor ihm hängt eine Laterne von der Decke.
+         */
+        void pillar(int px, int pz, double a, int k) {
+            int[][] ring = {{1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
+            for (int y = PIT_FLOOR + 1; y < PIT_CEILING; y++) {
+                boolean cap = y == PIT_FLOOR + 1 || y == PIT_CEILING - 1;
+                this.b.set(px, y, pz, cap ? Blocks.CHISELED_STONE_BRICKS.defaultBlockState()
+                        : y % 3 == 0 ? Blocks.CRACKED_STONE_BRICKS.defaultBlockState() : Blocks.MOSSY_STONE_BRICKS.defaultBlockState());
+            }
+            for (int y = PIT_FLOOR + 2; y <= PIT_CEILING - 3; y++) {
+                for (int w = 0; w < 2; w++) {
+                    int[] d = ring[Math.floorMod(y + k * 3 + w, 8)];
+                    if (this.b.get(px + d[0], y, pz + d[1]).isAir()) {
+                        this.b.set(px + d[0], y, pz + d[1], w == 0 ? Blocks.DYED_TERRACOTTA.pick(DyeColor.GREEN).defaultBlockState()
+                                : Blocks.DYED_TERRACOTTA.pick(DyeColor.LIME).defaultBlockState());
+                    }
+                }
+            }
+            // der Kopf: zur Mitte der Grube
+            int dx = (int) Math.round(-Math.sin(a));
+            int dz = (int) Math.round(-Math.cos(a));
+            this.b.set(px + dx, PIT_CEILING - 2, pz + dz, Blocks.GLAZED_TERRACOTTA.pick(DyeColor.GREEN).defaultBlockState());
+            this.b.set(px + 2 * dx, PIT_CEILING - 1, pz + 2 * dz, Blocks.IRON_CHAIN.defaultBlockState());
+            this.b.set(px + 2 * dx, PIT_CEILING - 2, pz + 2 * dz, Blocks.LANTERN.defaultBlockState().setValue(LanternBlock.HANGING, true));
+        }
+
+        /** Acht Augen in der Wand (grünes Glas vor einem Licht), zwischen den Säulen. */
+        void wallEyes() {
+            for (int k = 0; k < 8; k++) {
+                double a = Math.toRadians(45.0 * k);
+                if (k == 4) {
+                    continue; // im Norden liegt die Empore
+                }
+                int x = (int) Math.round(Math.sin(a) * (PIT_R + 0.6));
+                int z = PIT_Z + (int) Math.round(Math.cos(a) * (PIT_R + 0.6));
+                int lx = (int) Math.round(Math.sin(a) * (PIT_R + 1.6));
+                int lz = PIT_Z + (int) Math.round(Math.cos(a) * (PIT_R + 1.6));
+                for (int y = PIT_FLOOR + 8; y <= PIT_FLOOR + 9; y++) {
+                    this.b.set(x, y, z, Blocks.STAINED_GLASS.pick(y == PIT_FLOOR + 9 ? DyeColor.LIME : DyeColor.GREEN).defaultBlockState());
+                }
+                this.b.set(lx, PIT_FLOOR + 8, lz, Blocks.SEA_LANTERN.defaultBlockState());
+                this.b.set(lx, PIT_FLOOR + 9, lz, Blocks.MOSSY_COBBLESTONE.defaultBlockState());
+            }
+        }
+
+        /** Hinter rissigem Mauerwerk der Ostwand: eine Nische mit einer Truhe. */
+        void hiddenChest() {
+            int z = PIT_Z;
+            for (int y = PIT_FLOOR + 1; y <= PIT_FLOOR + 2; y++) {
+                this.b.set(PIT_R + 1, y, z, Blocks.CRACKED_STONE_BRICKS.defaultBlockState());
+                this.b.set(PIT_R + 2, y, z, Blocks.AIR.defaultBlockState());
+            }
+            for (int[] c : new int[][] {{PIT_R + 3, z}, {PIT_R + 2, z - 1}, {PIT_R + 2, z + 1}}) {
+                for (int y = PIT_FLOOR; y <= PIT_FLOOR + 3; y++) {
                     this.b.set(c[0], y, c[1], this.scale(c[0], y, c[1] + 80));
                 }
             }
-            this.b.set(7, f - 1, 20, Blocks.MOSSY_STONE_BRICKS.defaultBlockState());
-            this.b.set(7, f + 2, 20, Blocks.MOSSY_STONE_BRICKS.defaultBlockState());
-            this.b.chest(7, f, 20, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.WEST), ModLootTables.SITE_SERPENT_TEMPLE);
+            this.b.set(PIT_R + 2, PIT_FLOOR, z, Blocks.MOSSY_STONE_BRICKS.defaultBlockState());
+            this.b.set(PIT_R + 2, PIT_FLOOR + 3, z, Blocks.MOSSY_STONE_BRICKS.defaultBlockState());
+            this.b.chest(PIT_R + 2, PIT_FLOOR + 1, z, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.WEST),
+                    ModLootTables.SITE_SERPENT_TEMPLE);
+        }
+
+        /** Ranken hängen von der Mauer, Wurzeln von der Decke, Leuchtflechten an den Wänden. */
+        void overgrowth() {
+            for (int x = -PIT_R; x <= PIT_R; x++) {
+                for (int z = PIT_Z - PIT_R; z <= PIT_Z + PIT_R; z++) {
+                    double r = radius(x, z);
+                    if (r > PIT_R || r <= MOAT_R + 1.0) {
+                        continue;
+                    }
+                    // an der Mauer: in welcher Richtung liegt sie?
+                    Direction wall = null;
+                    for (Direction d : Direction.Plane.HORIZONTAL) {
+                        if (radius(x + d.getStepX(), z + d.getStepZ()) > PIT_R) {
+                            wall = d;
+                        }
+                    }
+                    if (wall != null && this.b.chance(x, 7, z, 0.28f) && this.b.get(x, PIT_CEILING - 1, z).isAir()) {
+                        BlockState vine = Blocks.VINE.defaultBlockState().setValue(VineBlock.getPropertyForFace(wall), true);
+                        int len = 2 + (int) (this.b.noise(x, 9, z) * 5);
+                        for (int d = 1; d <= len && this.b.get(x, PIT_CEILING - d, z).isAir(); d++) {
+                            this.b.set(x, PIT_CEILING - d, z, vine);
+                        }
+                    } else if (wall != null && this.b.chance(x, 11, z, 0.12f) && this.b.get(x, PIT_FLOOR + 2, z).isAir()) {
+                        this.b.set(x, PIT_FLOOR + 2, z, Blocks.GLOW_LICHEN.defaultBlockState().setValue(MultifaceBlock.getFaceProperty(wall), true));
+                    } else if (wall == null && this.b.chance(x, 13, z, 0.05f) && this.b.get(x, PIT_CEILING - 1, z).isAir()) {
+                        this.b.set(x, PIT_CEILING - 1, z, Blocks.HANGING_ROOTS.defaultBlockState());
+                    }
+                }
+            }
         }
 
         /** Ranken an den Seiten des Kopfes. */

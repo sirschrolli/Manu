@@ -529,6 +529,15 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(net.minecraft.world.item.Items.WIND_CHARGE, 2, 6))
                 .withPool(drop(net.minecraft.world.item.Items.COPPER_INGOT, 2, 5))
                 .withPool(drop(ModItems.GOLD_COIN.get(), 1, 3)));
+        // Quetzara, die Gefiederte Schlange (ein Goldblock auf dem leeren Altar ruft sie zurück): der Schlangenzahn selten (auch beim
+        // ersten Sieg); der Herzkristall nur selten; dazu Quetzalfedern, Smaragde, etwas Gold und wenige Münzen
+        EntityType<?> quetzara = ModEntities.QUETZARA.get();
+        this.add(quetzara, signature(LootTable.lootTable(), quetzara, io.github.sirschrolli.kingdomsatwar.registry.SerpentGear.SERPENT_FANG.get())
+                .withPool(hearts(1))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.SerpentGear.QUETZAL_FEATHER.get(), 1, 3))
+                .withPool(drop(net.minecraft.world.item.Items.EMERALD, 1, 3))
+                .withPool(drop(net.minecraft.world.item.Items.GOLD_INGOT, 1, 2))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 1, 3)));
         // Asteria, die Sternenreiterin (ein Endkristall entzündet den Sternstein neu): Lanze und Schwingen ihres Rochens selten
         // (auch beim ersten Sieg); der Herzkristall nur selten; Sternsplitter und ein wenig aus dem End
         EntityType<?> asteria = ModEntities.ASTERIA.get();

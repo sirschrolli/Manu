@@ -201,6 +201,11 @@ public final class BossBarRenderer {
         // halber Kraft entfesselt er den Sturm
         STYLES.put("ventor", style("ventor", 0x62DBE8, new float[] {0.5f},
                 new Motes(Drift.GUST, 4.0f, 0xDCFCFF, 0xA4F0F6, 0x62DBE8), new Motes(Drift.DUST, 1.5f, 0xD4BC84, 0xB49A62)));
+        // Quetzara, die Gefiederte Schlange (seit 1.10): Jade und Gold, hinter dem Medaillon ein Fächer aus Quetzalfedern, über der
+        // Leiste windet sich ihr Leib, darunter die Schleppfedern ihres Schwanzes, als Spitze ihr Kopf; grüne Federn trudeln
+        // herab, Gift tropft; unter halber Kraft streift sie ihre Haut ab
+        STYLES.put("quetzara", style("quetzara", 0x3FD98A, new float[] {0.5f},
+                new Motes(Drift.LEAF, 2.5f, 0x1F8F58, 0x4FCA7C, 0x3CBEB4, 0xD4362A), new Motes(Drift.DRIP, 1.2f, 0x7CFF4A, 0xC4FF9C)));
         // Asteria, die Sternenreiterin: Silber mit Goldsaum, Sterne und Nachthimmel, ein Stern im Medaillon
         STYLES.put("star", style("star", 0x9AD8FF, new float[] {0.5f}, new Motes(Drift.TWINKLE, 4.5f, 0xFFFFFF, 0x9AD8FF, 0xE8C25A)));
         // MissMystik, die Feen-Zauberkünstlerin: violetter Samt mit Goldsaum, Zauberkarten, Harlekin-Rauten

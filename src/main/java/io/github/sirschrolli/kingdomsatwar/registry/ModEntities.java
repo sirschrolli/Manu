@@ -526,6 +526,24 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.arena.GladiatorNetEntity>> GLADIATOR_NET =
             ENTITIES.registerEntityType("gladiator_net", io.github.sirschrolli.kingdomsatwar.entity.arena.GladiatorNetEntity::new,
                     MobCategory.MISC, builder -> builder.sized(0.5f, 0.5f).noLootTable().clientTrackingRange(8).updateInterval(1));
+    /** Quetzara, die Gefiederte Schlange (1.10): schläft eingerollt um den Schlangenaltar in der Grube des Schlangentempels. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.serpent.QuetzaraEntity>> QUETZARA =
+            ENTITIES.registerEntityType("quetzara", io.github.sirschrolli.kingdomsatwar.entity.serpent.QuetzaraEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(1.4f, 1.3f).eyeHeight(0.9f).notInPeaceful()
+                            .clientTrackingRange(16).updateInterval(1));
+    /** Eine vergiftete Feder aus Quetzaras Krause. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.serpent.QuetzaraFeatherEntity>> QUETZARA_FEATHER =
+            ENTITIES.registerEntityType("quetzara_feather", io.github.sirschrolli.kingdomsatwar.entity.serpent.QuetzaraFeatherEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(0.4f, 0.4f).eyeHeight(0.1f).noLootTable().noSave().clientTrackingRange(8)
+                            .updateInterval(20));
+    /** Ein Klumpen Gift, den Quetzara spuckt (zerplatzt zu einer Giftwolke). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.serpent.VenomGlobEntity>> VENOM_GLOB =
+            ENTITIES.registerEntityType("venom_glob", io.github.sirschrolli.kingdomsatwar.entity.serpent.VenomGlobEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(0.5f, 0.5f).noLootTable().noSave().clientTrackingRange(8).updateInterval(2));
+    /** Quetzaras abgestreifte Haut: eine Täuschung, die als Giftwolke platzt. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.serpent.ShedSkinEntity>> SHED_SKIN =
+            ENTITIES.registerEntityType("shed_skin", io.github.sirschrolli.kingdomsatwar.entity.serpent.ShedSkinEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(1.0f, 1.0f).noLootTable().clientTrackingRange(12).updateInterval(20));
     /** Eine Windhose, die Ventor ruft. */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.arena.WindVortexEntity>> WIND_VORTEX =
             ENTITIES.registerEntityType("wind_vortex", io.github.sirschrolli.kingdomsatwar.entity.arena.WindVortexEntity::new,
@@ -1051,6 +1069,7 @@ public final class ModEntities {
         event.put(SORDIN.get(), io.github.sirschrolli.kingdomsatwar.entity.deep.SordinEntity.createAttributes().build());
         event.put(ROBBER_KNIGHT.get(), io.github.sirschrolli.kingdomsatwar.entity.castle.RobberKnightEntity.createAttributes().build());
         event.put(VENTOR.get(), io.github.sirschrolli.kingdomsatwar.entity.arena.VentorEntity.createAttributes().build());
+        event.put(QUETZARA.get(), io.github.sirschrolli.kingdomsatwar.entity.serpent.QuetzaraEntity.createAttributes().build());
         event.put(PHASMOR_ILLUSION.get(), io.github.sirschrolli.kingdomsatwar.entity.end.PhasmorIllusion.createAttributes().build());
         event.put(MISS_MYSTIK.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MissMystikEntity.createAttributes().build());
         event.put(MYSTIK_IMAGE.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MystikImageEntity.createAttributes().build());

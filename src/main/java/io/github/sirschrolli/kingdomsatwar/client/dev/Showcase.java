@@ -289,6 +289,8 @@ final class Showcase {
                         RobberKnightShowcase.boss(steps);
                     } else if (scene.equals("ventor_boss")) {
                         VentorShowcase.boss(steps);
+                    } else if (scene.equals("quetzara_boss")) {
+                        QuetzaraShowcase.boss(steps);
                     } else if (scene.equals("phasmor_boss")) {
                         PhasmorShowcase.boss(steps);
                     } else if (scene.equals("phasmor_pose")) {

@@ -141,6 +141,8 @@ final class BossLootGameTests {
                         List.of(), heart, 1, List.of(), 3, null),
                 new Boss(ModEntities.VENTOR.get(), List.of(io.github.sirschrolli.kingdomsatwar.registry.ArenaGear.STORM_TRIDENT.get()),
                         List.of(), heart, 1, List.of(), 3, null),
+                new Boss(ModEntities.QUETZARA.get(), List.of(io.github.sirschrolli.kingdomsatwar.registry.SerpentGear.SERPENT_FANG.get()),
+                        List.of(), heart, 1, List.of(), 3, null),
                 new Boss(ModEntities.ASTERIA.get(), List.of(StarBlocks.STAR_LANCE.get(), StarBlocks.STAR_WINGS.get()), List.of(), heart, 1,
                         List.of(), 3, null),
                 new Boss(ModEntities.MOTH_QUEEN.get(), List.of(FaeBlocks.FAE_ELYTRA.get()), List.of(), heart, 1, List.of(), 2, null),

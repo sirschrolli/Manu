@@ -261,6 +261,7 @@ public final class KawPlaces {
         boss(new Boss("sordin", ModEntities.SORDIN, SILENT_CATHEDRAL, KawPlaces::awakenSordin, KawPlaces::resetSordin, null));
         boss(new Boss("raubritter", ModEntities.ROBBER_KNIGHT, ROBBER_CASTLE, KawPlaces::awakenRobberKnight, KawPlaces::resetRobberKnight, null));
         boss(new Boss("ventor", ModEntities.VENTOR, TRIAL_ARENA, KawPlaces::awakenVentor, KawPlaces::resetVentor, null));
+        boss(new Boss("quetzara", ModEntities.QUETZARA, SERPENT_TEMPLE, KawPlaces::awakenQuetzara, KawPlaces::resetQuetzara, null));
         boss(new Boss("noctua", ModEntities.MOTH_QUEEN, MONDHAIN, KawPlaces::awakenNoctua, null, null));
         boss(new Boss("missmystik", ModEntities.MISS_MYSTIK, MYSTIK_STAGE, KawPlaces::awakenMystik, KawPlaces::resetMystik, null));
         boss(new Boss("steinhueter", ModEntities.STONE_KEEPER, MOONSTONE_QUARRY, KawPlaces::awakenKeeper, KawPlaces::resetKeeper, null));
@@ -1355,6 +1356,34 @@ public final class KawPlaces {
             return noLair(source, boss);
         }
         seal.reset(level);
+        return resetDone(source, boss);
+    }
+
+    private static io.github.sirschrolli.kingdomsatwar.block.serpent.@Nullable SerpentAltarBlockEntity serpentAltar(ServerLevel level, Spot spot) {
+        return nearest(level, spot.center(), 4, io.github.sirschrolli.kingdomsatwar.block.serpent.SerpentAltarBlockEntity.class, altar -> true);
+    }
+
+    /** Quetzara erwacht sofort (ist das Schlangenbild zerbrochen, wird es zuvor wieder ganz). */
+    private static int awakenQuetzara(CommandSourceStack source, ServerLevel level, Spot spot, Boss boss) {
+        var altar = serpentAltar(level, spot);
+        if (altar == null) {
+            return noLair(source, boss);
+        }
+        if (altar.phase() == io.github.sirschrolli.kingdomsatwar.block.serpent.SerpentAltarBlock.Phase.AWAKE && altar.serpent(level) != null) {
+            return alreadyAwake(source, boss);
+        }
+        if (altar.phase() == io.github.sirschrolli.kingdomsatwar.block.serpent.SerpentAltarBlock.Phase.FALLEN) {
+            altar.reset(level);
+        }
+        return altar.awaken(level) != null ? awakened(source, boss) : cannot(source, boss);
+    }
+
+    private static int resetQuetzara(CommandSourceStack source, ServerLevel level, Spot spot, Boss boss) {
+        var altar = serpentAltar(level, spot);
+        if (altar == null) {
+            return noLair(source, boss);
+        }
+        altar.reset(level);
         return resetDone(source, boss);
     }
 

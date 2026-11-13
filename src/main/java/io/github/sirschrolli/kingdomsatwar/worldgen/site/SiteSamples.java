@@ -69,7 +69,17 @@ public final class SiteSamples {
     /** Ein Schlangentempel: die Schnauze bei {@code origin} (y = Boden), der Kopf liegt nach Süden. */
     public static SitePiece serpentTemple(BlockPos origin) {
         return new SitePiece(SiteKind.SERPENT_TEMPLE, 0, origin, Rotation.NONE, 0x5E2BL, new int[0],
-                SitePiece.box(origin, Rotation.NONE, -17, -10, -13, 17, 32, 31));
+                SitePiece.box(origin, Rotation.NONE, -18, SerpentTemple.PIT_FLOOR - 3, -13, 18, 32, SerpentTemple.PIT_Z + 17));
+    }
+
+    /** Wo in einem so gebauten Schlangentempel der Schlangenaltar steht (mitten in der Grube). */
+    public static BlockPos serpentAltar(BlockPos origin) {
+        return origin.offset(SerpentTemple.ALTAR);
+    }
+
+    /** Wo man in einem so gebauten Schlangentempel auf der Empore über der Grube steht (an der Treppe). */
+    public static BlockPos serpentGallery(BlockPos origin) {
+        return origin.offset(0, SerpentTemple.GALLERY_FLOOR + 1, SerpentTemple.STAIRS_Z - 1);
     }
 
     /** Ein Hexenbaum mit der Mitte des Stamms bei {@code origin} (y = Boden der Hütte), die Tür im Süden. */

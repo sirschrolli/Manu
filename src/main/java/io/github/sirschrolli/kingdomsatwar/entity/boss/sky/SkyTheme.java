@@ -59,7 +59,9 @@ public enum SkyTheme {
     /** Kuno von Rabenfels, der Raubritter (1.8): ein Bolzen holt den Getroffenen vom Himmel – er ist eine Weile schwerfällig. */
     RAVEN(2, 0xE4C254, 0xFFF6CC, () -> ParticleTypes.CRIT),
     /** Ventor, der Gladiator der Winde (1.9): der Sturm wirbelt den Getroffenen herum – ihm wird schwindlig, er stürzt. */
-    WIND(2, 0x62DBE8, 0xE6FFFF, () -> ParticleTypes.SMALL_GUST);
+    WIND(2, 0x62DBE8, 0xE6FFFF, () -> ParticleTypes.SMALL_GUST),
+    /** Quetzara, die Gefiederte Schlange (1.10): Gift im Blut – der Getroffene ist vergiftet und schwerfällig. */
+    SERPENT(2, 0x3FD98A, 0xF2E27A, () -> ParticleTypes.HAPPY_VILLAGER);
 
     private static final SkyTheme[] VALUES = values();
 
