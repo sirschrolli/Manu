@@ -203,6 +203,26 @@ public final class SiteSamples {
         return flameSanctumAt(sanctum, FlameSanctum.ALTAR[0], FlameSanctum.ALTAR[1], FlameSanctum.ALTAR[2]);
     }
 
+    /** Das Phasenheiligtum (seit 1.5) mit der Mitte seines Bodens bei {@code center} (dort steht man), ohne Stufen hinab. */
+    public static SitePiece phaseSanctum(BlockPos center) {
+        return phaseSanctum(center, Rotation.NONE);
+    }
+
+    /** Das Phasenheiligtum, gedreht (der Thron und der Zugang drehen mit). */
+    public static SitePiece phaseSanctum(BlockPos center, Rotation rotation) {
+        return PhaseSanctum.piece(center, rotation, 0x9A5EL, 0);
+    }
+
+    /** Ein Punkt im Rahmen des Phasenheiligtums (Mitte bei 0, 0, 0; vorn ist +z) in Weltkoordinaten. */
+    public static BlockPos phaseSanctumAt(SitePiece sanctum, int x, int y, int z) {
+        return sanctum.origin().offset(new BlockPos(x, y, z).rotate(sanctum.rotation()));
+    }
+
+    /** Wo im Phasenheiligtum der Leerenthron steht. */
+    public static BlockPos phaseSanctumThrone(SitePiece sanctum) {
+        return phaseSanctumAt(sanctum, PhaseSanctum.THRONE[0], PhaseSanctum.THRONE[1], PhaseSanctum.THRONE[2]);
+    }
+
     /** Die Hortfeste mit der Mitte ihres Sockels bei {@code center} (Oberfläche des Sockels eine Schicht darunter). */
     public static SitePiece hortfeste(BlockPos center) {
         return Hortfeste.piece(center.below(), Rotation.NONE, 0x4F27L);

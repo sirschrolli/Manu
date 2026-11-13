@@ -200,6 +200,7 @@ public final class ModGameTests {
         ClockTowerGameTests.init(); // seit 1.1: Chronit, die Rüstung der Zeitwächter, der Uhrturm, der Stundenwächter
         FlameGameTests.init(); // seit 1.1.6: Feueropal und die Rüstung der Glutwandler
         IgnaraGameTests.init(); // seit 1.2: Ignara, die Flammenpriesterin, ihr Altar, die Flammenpeitsche, das Flammenheiligtum
+        PhasmorGameTests.init(); // seit 1.5: Phasmor, der Leerwandlerkönig, sein Thron, die Phasenklinge, das Phasenheiligtum
         HardnessGameTests.init(); // seit 1.3: das Härte-Paket
         PhaseGameTests.init(); // seit 1.4: Phasit und die Rüstung der Leerwandler
         AnniGameTests.init();     // Anni der Troll, Fehlerkern, Wiederherstellung als Anni 2.0, Bannhammer, Fehlerflügel
@@ -296,6 +297,7 @@ public final class ModGameTests {
         ClockTowerGameTests.register(event, environment);
         FlameGameTests.register(event, environment);
         IgnaraGameTests.register(event, environment);
+        PhasmorGameTests.register(event, environment);
         HardnessGameTests.register(event, environment);
         PhaseGameTests.register(event, environment);
         AnniGameTests.register(event, environment);

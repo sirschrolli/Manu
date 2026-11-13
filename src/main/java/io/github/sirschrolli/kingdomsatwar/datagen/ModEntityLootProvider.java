@@ -496,12 +496,12 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(hearts(1))
                 .withPool(material(io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL.get(), 2, 4)));
         // Phasmor, der Leerwandlerkönig (ein Phasit entzündet den Leerenthron neu): die Phasenklinge selten (auch beim ersten
-        // Sieg); der Herzkristall nur selten; Phasit, den Werkstoff der Rüstung der Leerwandler, maßvoll; ein paar Enderperlen
+        // Sieg); der Herzkristall nur selten; sonst nur Phasit – der Werkstoff der Rüstung der Leerwandler – in maßvoller Menge;
+        // seine Trugbilder zerfallen ohne Beute
         EntityType<?> phasmor = ModEntities.PHASMOR.get();
         this.add(phasmor, signature(LootTable.lootTable(), phasmor, io.github.sirschrolli.kingdomsatwar.registry.PhaseSanctuary.PHASE_BLADE.get())
                 .withPool(hearts(1))
-                .withPool(material(io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT.get(), 2, 4))
-                .withPool(drop(net.minecraft.world.item.Items.ENDER_PEARL, 1, 2)));
+                .withPool(material(io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT.get(), 2, 4)));
         // Asteria, die Sternenreiterin (ein Endkristall entzündet den Sternstein neu): Lanze und Schwingen ihres Rochens selten
         // (auch beim ersten Sieg); der Herzkristall nur selten; Sternsplitter und ein wenig aus dem End
         EntityType<?> asteria = ModEntities.ASTERIA.get();

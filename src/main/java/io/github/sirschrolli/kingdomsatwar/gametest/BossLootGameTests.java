@@ -133,6 +133,8 @@ final class BossLootGameTests {
                 new Boss(ModEntities.GLUTSCHMIED.get(), List.of(ForgeBlocks.GLUT_SPEAR.get()), List.of(), heart, 1, List.of(), 2, null),
                 new Boss(ModEntities.IGNARA.get(), List.of(io.github.sirschrolli.kingdomsatwar.registry.FlameSanctuary.FLAME_WHIP.get()), List.of(),
                         heart, 1, List.of(), 0, List.of(new Material(io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL.get(), 2, 4))),
+                new Boss(ModEntities.PHASMOR.get(), List.of(io.github.sirschrolli.kingdomsatwar.registry.PhaseSanctuary.PHASE_BLADE.get()),
+                        List.of(), heart, 1, List.of(), 0, List.of(new Material(io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT.get(), 2, 4))),
                 new Boss(ModEntities.ASTERIA.get(), List.of(StarBlocks.STAR_LANCE.get(), StarBlocks.STAR_WINGS.get()), List.of(), heart, 1,
                         List.of(), 3, null),
                 new Boss(ModEntities.MOTH_QUEEN.get(), List.of(FaeBlocks.FAE_ELYTRA.get()), List.of(), heart, 1, List.of(), 2, null),
