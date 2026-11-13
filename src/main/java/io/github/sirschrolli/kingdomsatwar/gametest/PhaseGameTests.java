@@ -158,8 +158,9 @@ final class PhaseGameTests {
         }
         helper.assertTrue(armor[0] >= 20.0, "Schutz wie Diamant fehlt: " + armor[0]);
 
-        // eine Plattform hoch über der Arena (andere Tests stehen am Boden)
-        BlockPos center = helper.absolutePos(new BlockPos(4, 110, 4));
+        // eine Plattform hoch über der Arena (andere Tests stehen am Boden) – in einer Höhe, in der kein anderer Test baut: Die
+        // Plattform reicht weit über das eigene Testfeld hinaus
+        BlockPos center = helper.absolutePos(new BlockPos(4, 140, 4));
         for (BlockPos p : BlockPos.betweenClosed(center.offset(-11, -1, -11), center.offset(11, -1, 11))) {
             level.setBlock(p, Blocks.STONE.defaultBlockState(), Block.UPDATE_CLIENTS);
         }
