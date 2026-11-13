@@ -196,6 +196,7 @@ final class SkyWardGameTests {
         expected.put(ModEntities.MISS_MYSTIK.get(), SkyTheme.MYSTIK);
         expected.put(ModEntities.GLUTSCHMIED.get(), SkyTheme.FORGE);
         expected.put(ModEntities.IGNARA.get(), SkyTheme.PRIEST);
+        expected.put(ModEntities.PHASMOR.get(), SkyTheme.PHASE);
         expected.put(ModEntities.ASTERIA.get(), SkyTheme.STAR);
         expected.put(net.minecraft.world.entity.EntityTypes.ENDER_DRAGON, SkyTheme.STAR);
         expected.put(ModEntities.ANNI_TROLL.get(), SkyTheme.GLITCH);

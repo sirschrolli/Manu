@@ -106,6 +106,7 @@ public final class ModLootTables {
     /** Die Gaben des Meervolks im Versunkenen Tempel (seit 0.89). */
     public static final ResourceKey<LootTable> SITE_SUNKEN_TEMPLE = site("sunken_temple");
     public static final ResourceKey<LootTable> SITE_FLAME_SANCTUARY = site("flame_sanctuary");
+    public static final ResourceKey<LootTable> SITE_PHASE_SANCTUARY = site("phase_sanctuary");
     public static final ResourceKey<LootTable> SITE_SEA_DRAGON_MAP = site("sea_dragon_map");
     public static final ResourceKey<LootTable> SITE_SEA_DRAGON_CARGO = site("sea_dragon_cargo");
     public static final ResourceKey<LootTable> SITE_SEA_DRAGON_HOARD = site("sea_dragon_hoard");

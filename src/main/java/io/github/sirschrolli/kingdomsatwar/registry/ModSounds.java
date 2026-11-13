@@ -399,6 +399,25 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> IGNARA_DIVE = register("entity.ignara.dive");
     public static final DeferredHolder<SoundEvent, SoundEvent> FLAME_ALTAR_IGNITE = register("block.flame_altar.ignite");
     public static final DeferredHolder<SoundEvent, SoundEvent> FLAME_WHIP_CRACK = register("item.flame_whip.crack");
+    // Phasmor, der Leerwandlerkönig (1.5)
+    public static final DeferredHolder<SoundEvent, SoundEvent> PHASMOR_AMBIENT = register("entity.phasmor.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PHASMOR_GUARD = register("entity.phasmor.guard");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PHASMOR_HURT = register("entity.phasmor.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PHASMOR_DEATH = register("entity.phasmor.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PHASMOR_AWAKEN = register("entity.phasmor.awaken");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PHASMOR_CROWN = register("entity.phasmor.crown");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PHASMOR_SWING = register("entity.phasmor.swing");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PHASMOR_SLASH = register("entity.phasmor.slash");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PHASMOR_BLINK = register("entity.phasmor.blink");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PHASMOR_ILLUSION = register("entity.phasmor.illusion");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PHASMOR_LIFT = register("entity.phasmor.lift");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PHASMOR_THROW = register("entity.phasmor.throw");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PHASMOR_IMPACT = register("entity.phasmor.impact");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PHASMOR_RIFT_OPEN = register("entity.phasmor.rift_open");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PHASMOR_RIFT_ERUPT = register("entity.phasmor.rift_erupt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PHASMOR_STAGGER = register("entity.phasmor.stagger");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VOID_THRONE_KINDLE = register("block.void_throne.kindle");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PHASE_BLADE_DASH = register("item.phase_blade.dash");
     public static final DeferredHolder<SoundEvent, SoundEvent> FAE_ELYTRA_FLAP = register("item.fae_elytra.flap");
     // Asteria, die Sternenreiterin (0.65)
     public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_CRY = register("entity.asteria.cry");

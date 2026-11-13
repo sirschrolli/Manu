@@ -338,6 +338,9 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.LOST_GATE)).addTag(BiomeTags.IS_NETHER);
         // das Flammenheiligtum (1.2) im Lavameer, überall im Nether
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.FLAME_SANCTUARY)).addTag(BiomeTags.IS_NETHER);
+        // das Phasenheiligtum (1.5): über den großen äußeren Inseln (nicht über der Hauptinsel des Drachen)
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.PHASE_SANCTUARY)).add(net.minecraft.world.level.biome.Biomes.END_HIGHLANDS)
+                .add(net.minecraft.world.level.biome.Biomes.END_MIDLANDS);
         this.tag(BiomeTags.HAS_RUINED_PORTAL_NETHER).replace();
         // die Sternwarte auf den äußeren Inseln des Ends (statt der Endstadt)
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.STARWATCH))

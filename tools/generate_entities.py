@@ -34,7 +34,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               star_weaver,
                               hour_warden, clock_gear, clock_pendulum,
                               armor_parts,
-                              fairy, mushroomling, thorn_wight, moth_queen, glutschmied, ignara, asteria, stone_keeper, keeper_boulder,
+                              fairy, mushroomling, thorn_wight, moth_queen, glutschmied, ignara, phasmor, asteria, stone_keeper, keeper_boulder,
                               miss_mystik, light_dove, magic_sword, anni_troll,
                               werewolf, mire_shambler, ember_wyrm, ash_wraith, soul_heron, night_ram, rift_hound, chorus_maw,
                               world_eater, world_eater_segment, world_eater_tail, world_chunk,
@@ -109,6 +109,8 @@ def main():
                 "glutschmied", glutschmied.PALETTES, preview)
     write_model(ignara, "IgnaraGeometry", "Geometrie von Ignara, der Flammenpriesterin (1.2).",
                 "ignara", ignara.PALETTES, preview)
+    write_model(phasmor, "PhasmorGeometry", "Geometrie von Phasmor, dem Leerwandlerkönig (1.5; im Spiel 1,35-fach vergrößert).",
+                "phasmor", phasmor.PALETTES, preview)
     write_model(stone_keeper, "StoneKeeperGeometry", "Geometrie des Steinhüters (im Spiel 1,4-fach vergrößert).",
                 "stone_keeper", stone_keeper.PALETTES, preview)
     write_model(keeper_boulder, "KeeperBoulderGeometry", "Geometrie des Felsbrockens, den der Steinhüter schleudert.",

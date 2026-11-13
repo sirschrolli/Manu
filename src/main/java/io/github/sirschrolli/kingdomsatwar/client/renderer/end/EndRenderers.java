@@ -21,6 +21,8 @@ public final class EndRenderers {
     public static final ModelLayerLocation SCHREINLING = layer("schreinling");
     public static final ModelLayerLocation SCHREINFUNKE = layer("schreinfunke");
     public static final ModelLayerLocation STERNENFRESSER = layer("sternenfresser");
+    /** Phasmor, der Leerwandlerkönig (1.5), und seine Trugbilder. */
+    public static final ModelLayerLocation PHASMOR = layer("phasmor");
 
     private EndRenderers() {}
 
@@ -38,6 +40,7 @@ public final class EndRenderers {
         event.registerLayerDefinition(SCHREINLING, SchreinlingGeometry::createLayer);
         event.registerLayerDefinition(SCHREINFUNKE, SchreinfunkeGeometry::createLayer);
         event.registerLayerDefinition(STERNENFRESSER, SternenfresserGeometry::createLayer);
+        event.registerLayerDefinition(PHASMOR, io.github.sirschrolli.kingdomsatwar.client.model.geom.PhasmorGeometry::createLayer);
     }
 
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -48,5 +51,9 @@ public final class EndRenderers {
         event.registerEntityRenderer(net.minecraft.world.entity.EntityTypes.SHULKER_BULLET, SchreinfunkeRenderer::new);
         // der Enderdrache bleibt der Vanilla-Drache (Kampf, Kristalle, Portal und Ei hängen an ihm) – mit eigenem Aussehen
         event.registerEntityRenderer(net.minecraft.world.entity.EntityTypes.ENDER_DRAGON, SternenfresserRenderer::new);
+        // Phasmor, der Leerwandlerkönig (1.5): er selbst, seine Trugbilder und seine Phasenbrocken
+        event.registerEntityRenderer(ModEntities.PHASMOR.get(), PhasmorRenderer::new);
+        event.registerEntityRenderer(ModEntities.PHASMOR_ILLUSION.get(), PhasmorRenderer::new);
+        event.registerEntityRenderer(ModEntities.PHASE_BOULDER.get(), PhaseBoulderRenderer::new);
     }
 }

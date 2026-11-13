@@ -498,6 +498,20 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.nether.OpalShardEntity>> OPAL_SHARD =
             ENTITIES.registerEntityType("opal_shard", io.github.sirschrolli.kingdomsatwar.entity.nether.OpalShardEntity::new,
                     MobCategory.MISC, builder -> builder.sized(0.4f, 0.4f).fireImmune().noLootTable().clientTrackingRange(8).updateInterval(2));
+    /** Phasmor, der Leerwandlerkönig (1.5): kniet vor dem Leerenthron im Phasenheiligtum und hält Wache, bis jemand näher kommt. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.end.PhasmorEntity>> PHASMOR =
+            ENTITIES.registerEntityType("phasmor", io.github.sirschrolli.kingdomsatwar.entity.end.PhasmorEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(1.0f, 4.1f).eyeHeight(3.7f).notInPeaceful()
+                            .clientTrackingRange(16).updateInterval(2));
+    /** Ein Trugbild Phasmors: sieht aus wie er, zerfällt beim ersten Treffer. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.end.PhasmorIllusion>> PHASMOR_ILLUSION =
+            ENTITIES.registerEntityType("phasmor_illusion", io.github.sirschrolli.kingdomsatwar.entity.end.PhasmorIllusion::new,
+                    MobCategory.MONSTER, builder -> builder.sized(1.0f, 4.1f).eyeHeight(3.7f).notInPeaceful().noLootTable()
+                            .clientTrackingRange(12).updateInterval(2));
+    /** Ein Phasenbrocken: ein Block, den Phasmor um sich kreisen lässt und schleudert. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.end.PhaseBoulderEntity>> PHASE_BOULDER =
+            ENTITIES.registerEntityType("phase_boulder", io.github.sirschrolli.kingdomsatwar.entity.end.PhaseBoulderEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(0.9f, 0.9f).fireImmune().noLootTable().clientTrackingRange(10).updateInterval(1));
     /** Asteria, die Sternenreiterin: stößt vom Himmel herab, wenn jemand an den Sternstein der Sternwarte tritt. */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.end.AsteriaEntity>> ASTERIA =
             ENTITIES.registerEntityType("asteria", io.github.sirschrolli.kingdomsatwar.entity.end.AsteriaEntity::new,
@@ -1007,6 +1021,8 @@ public final class ModEntities {
         event.put(GLUTSCHMIED.get(), io.github.sirschrolli.kingdomsatwar.entity.nether.GlutschmiedEntity.createAttributes().build());
         event.put(IGNARA.get(), io.github.sirschrolli.kingdomsatwar.entity.nether.IgnaraEntity.createAttributes().build());
         event.put(ASTERIA.get(), io.github.sirschrolli.kingdomsatwar.entity.end.AsteriaEntity.createAttributes().build());
+        event.put(PHASMOR.get(), io.github.sirschrolli.kingdomsatwar.entity.end.PhasmorEntity.createAttributes().build());
+        event.put(PHASMOR_ILLUSION.get(), io.github.sirschrolli.kingdomsatwar.entity.end.PhasmorIllusion.createAttributes().build());
         event.put(MISS_MYSTIK.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MissMystikEntity.createAttributes().build());
         event.put(MYSTIK_IMAGE.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MystikImageEntity.createAttributes().build());
         event.put(ANNI_TROLL.get(), io.github.sirschrolli.kingdomsatwar.entity.glitch.AnniTrollEntity.createAttributes().build());

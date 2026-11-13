@@ -478,6 +478,8 @@ public final class ModStructures {
                 case SUNKEN_TEMPLE -> spread(24, 8, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 58_913_117, castles);
                 // das Flammenheiligtum (1.2): im Lavameer der Unterwelt, ein seltener Fund
                 case FLAME_SANCTUARY -> spread(36, 12, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 61_220_903, castles);
+                // das Phasenheiligtum (1.5): über den äußeren Inseln des Ends – viele Plätze fallen ins Leere, daher dichter
+                case PHASE_SANCTUARY -> spread(22, 8, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 15_150_421, castles);
             };
             if (placement != null) {
                 context.register(siteSet(kind), new StructureSet(structure, placement));

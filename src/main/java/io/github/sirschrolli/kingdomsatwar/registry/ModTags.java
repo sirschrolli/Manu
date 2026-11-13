@@ -268,6 +268,8 @@ public final class ModTags {
         public static final TagKey<Item> REPAIRS_EMBERWALKER_ARMOR = mod("repairs_emberwalker_armor");
         public static final TagKey<Item> REPAIRS_VOIDWALKER_ARMOR = mod("repairs_voidwalker_armor");
         public static final TagKey<Item> REPAIRS_FLAME_WHIP = mod("repairs_flame_whip");
+        /** Womit sich die Phasenklinge (1.5) ausbessern lässt: Phasit. */
+        public static final TagKey<Item> REPAIRS_PHASE_BLADE = mod("repairs_phase_blade");
         public static final TagKey<Item> REPAIRS_MINUTE_HAND = mod("repairs_minute_hand");
         public static final TagKey<Item> REPAIRS_STAR_BOW = mod("repairs_star_bow");
         public static final TagKey<Item> REPAIRS_SHEPHERD_CROOK = mod("repairs_shepherd_crook");

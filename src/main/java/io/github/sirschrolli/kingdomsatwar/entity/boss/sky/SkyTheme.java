@@ -51,7 +51,9 @@ public enum SkyTheme {
     /** Der Stundenwächter (1.1): die Zeit stockt um den Getroffenen – langsam in Schritt und Schlag, und sie zieht ihn zurück. */
     TIME(2, 0xFFB347, 0xFFE7A0, () -> ParticleTypes.WAX_ON),
     /** Ignara, die Flammenpriesterin (1.2): die Flammenschlinge – der Getroffene brennt und wird zu ihr heruntergerissen. */
-    PRIEST(2, 0xFF6A1A, 0xFFE7A0, () -> ModParticles.BOSS_FLAME.get());
+    PRIEST(2, 0xFF6A1A, 0xFFE7A0, () -> ModParticles.BOSS_FLAME.get()),
+    /** Phasmor, der Leerwandlerkönig: der Getroffene wird zu ihm herangerissen und kann eine Weile kaum laufen. */
+    PHASE(2, 0x3FE6CC, 0xD8FFF8, () -> ParticleTypes.REVERSE_PORTAL);
 
     private static final SkyTheme[] VALUES = values();
 

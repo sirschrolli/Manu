@@ -89,7 +89,13 @@ public enum SiteKind implements StringRepresentable {
      * Mosaikboden, Feuerschalen und dem Flammenaltar, vor dem Ignara, die Flammenpriesterin, betet; Stege führen zum Fels
      * (ein eigenes Bauwerk, an keiner Vanilla-Stelle). Ganz zuletzt gebaut.
      */
-    FLAME_SANCTUARY(GenerationStep.Decoration.TOP_LAYER_MODIFICATION);
+    FLAME_SANCTUARY(GenerationStep.Decoration.TOP_LAYER_MODIFICATION),
+    /**
+     * Phasenheiligtum (seit 1.5): eine runde Plattform aus Endsteinziegeln, die über einer der äußeren Inseln des Ends schwebt,
+     * mit Mosaikboden, Phasitkristallen auf Purpursäulen und dem Leerenthron, vor dem Phasmor, der Leerwandlerkönig, kniet;
+     * schwebende Stufen führen hinab (ein eigenes Bauwerk, an keiner Vanilla-Stelle). Ganz zuletzt gebaut.
+     */
+    PHASE_SANCTUARY(GenerationStep.Decoration.TOP_LAYER_MODIFICATION);
 
     public static final Codec<SiteKind> CODEC = StringRepresentable.fromEnum(SiteKind::values);
 
