@@ -108,7 +108,7 @@ public final class ImmortalOverlay {
         float ey = cy - 10.0f * (1.0f - out);
         HeroGui.light(g, HeroGui.RAYS, cx, ey, 190.0f * scale, t * 0.25f, prism, 0.45f * alpha);
         HeroGui.light(g, HeroGui.RAYS, cx, ey, 150.0f * scale, -t * 0.4f, 0xFFFFF6DC, 0.3f * alpha);
-        HeroGui.emblem(g, font, HeroLevel.Rank.IMMORTAL, HeroLevel.MAX_LEVEL, cx, ey, scale, alpha, 1.0f, true);
+        HeroGui.emblem(g, font, HeroLevel.Rank.IMMORTAL, HeroLevel.IMMORTAL_LEVEL, cx, ey, scale, alpha, 1.0f, true);
         if (t > 0.7f && t < 1.15f) {
             HeroGui.light(g, HeroGui.GLOW, cx, ey, 100.0f * scale, 0.0f, 0xFFFFFFFF, 0.55f * (1.0f - HeroGui.span(t, 0.7f, 1.15f)));
         }

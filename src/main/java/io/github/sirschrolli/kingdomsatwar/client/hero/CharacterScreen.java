@@ -452,12 +452,11 @@ public class CharacterScreen extends Screen {
                 Math.round(HeroLevel.levelRegen(level) * 100.0f)).withStyle(ChatFormatting.AQUA));
         lines.add(Component.translatable("gui.kingdomsatwar.character.might.toughness", HeroGui.decimal(HeroLevel.levelToughness(level)))
                 .withStyle(ChatFormatting.WHITE));
-        if (level < HeroLevel.MAX_LEVEL) {
-            int next = ((level - 1) / HeroLevel.LEVELS_PER_HEART + 1) * HeroLevel.LEVELS_PER_HEART + 1;
-            lines.add(Component.translatable("gui.kingdomsatwar.character.might.next", Math.min(next, HeroLevel.MAX_LEVEL))
-                    .withStyle(ChatFormatting.DARK_GRAY));
+        int next = HeroLevel.nextHeartLevel(level);
+        if (next > 0) {
+            lines.add(Component.translatable("gui.kingdomsatwar.character.might.next", next).withStyle(ChatFormatting.DARK_GRAY));
         }
-        if (level >= HeroLevel.MAX_LEVEL) {
+        if (level >= HeroLevel.IMMORTAL_LEVEL) {
             long rest = HeroLevel.immortalCooldown(player);
             lines.add(rest <= 0L ? Component.translatable("gui.kingdomsatwar.character.immortal.ready").withStyle(ChatFormatting.GOLD)
                     : Component.translatable("gui.kingdomsatwar.character.immortal.rest", (rest + 1199L) / 1200L).withStyle(ChatFormatting.DARK_GRAY));

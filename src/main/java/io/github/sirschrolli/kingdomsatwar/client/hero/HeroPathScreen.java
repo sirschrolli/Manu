@@ -28,8 +28,9 @@ import com.mojang.blaze3d.platform.InputConstants;
  *       vorbeiziehen; jeder Rang färbt seinen Abschnitt und hat sein Wahrzeichen am Horizont (Dorf, Wachturm, Burg,
  *       Schrein im Wald, Festung, Gipfel mit Kronenburg – seit 0.77 dahinter ein Tempel mit schwebendem Kristall, ein
  *       Wolkenpalast, ein Koloss, eine Sternwarte und die Himmelszitadelle mit ihrem Lichtring).</li>
- *   <li>Der Weg aus Steinen schlängelt sich von Stufe 1 bis 200; jede Stufe ein Stein, jede zehnte ein großer, jeder Rang
- *       sein Abzeichen mit Band und Belohnung. Gegangen ist er golden und Licht fließt darauf zum Helden; voraus liegt
+ *   <li>Der Weg aus Steinen schlängelt sich von Stufe 1 bis 500 (bis 1.9: 200); jede Stufe ein Stein, jede zehnte ein
+ *       großer, jeder Rang sein Abzeichen mit Band und Belohnung – hinter dem Unsterblichen (200) geht er im Licht seines
+ *       Rangs weiter bis zum Polarlicht am Ende. Gegangen ist er golden und Licht fließt darauf zum Helden; voraus liegt
  *       er im Nebel.</li>
  *   <li>Über der eigenen Stufe schwebt der Kopf des Helden in einem Goldrahmen, das Stück bis zur nächsten Stufe leuchtet
  *       so weit, wie er gekommen ist.</li>
@@ -536,7 +537,9 @@ public class HeroPathScreen extends Screen {
             lines.add(Component.translatable("gui.kingdomsatwar.path.missing", HeroGui.number(HeroLevel.total(level) - hero.experience()))
                     .withStyle(ChatFormatting.DARK_GRAY));
         }
-        lines.add(Component.translatable("gui.kingdomsatwar.path.point").withStyle(ChatFormatting.YELLOW));
+        if (HeroLevel.pointsFor(level) > HeroLevel.pointsFor(level - 1)) {
+            lines.add(Component.translatable("gui.kingdomsatwar.path.point").withStyle(ChatFormatting.YELLOW));
+        }
         Component might = HeroGui.might(level - 1, level);
         if (level > 1 && !might.getString().isEmpty()) {
             lines.add(Component.translatable("hero.kingdomsatwar.level_up.might", might).withStyle(ChatFormatting.GOLD));

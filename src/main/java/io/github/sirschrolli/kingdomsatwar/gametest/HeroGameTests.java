@@ -57,9 +57,9 @@ import net.neoforged.neoforge.event.RegisterGameTestsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 /**
- * Tests zum eigenen Helden: Herz- und Manakristalle geben dauerhaft ein halbes Herz bzw. 10 Mana mehr (seit 0.77 höchstens 25
+ * Tests zum eigenen Helden: Herz- und Manakristalle geben dauerhaft ein halbes Herz bzw. 10 Mana mehr (seit 1.9.1 höchstens 50
  * jeder Sorte), sie wachsen auf Höhlenböden (nie unter freiem Himmel, im Wasser oder auf Erde), lassen sich abbauen, und
- * Schatztruhen, Drachenbosse und Erzmagier geben sie her. Dazu die Heldenstufen bis 200, die Talente mit ihrer
+ * Schatztruhen, Drachenbosse und Erzmagier geben sie her. Dazu die Heldenstufen bis 500, die Talente mit ihrer
  * Meisterschaft, die Heldenkraft und das Licht der Unsterblichkeit.
  */
 final class HeroGameTests {
@@ -124,9 +124,9 @@ final class HeroGameTests {
             for (int i = 1; i < Crystals.MAX; i++) {
                 player.getMainHandItem().use(level, player, InteractionHand.MAIN_HAND);
             }
-            helper.assertValueEqual(Crystals.MAX, 25, "so viele Kristalle jeder Sorte (seit 0.77)");
+            helper.assertValueEqual(Crystals.MAX, 50, "so viele Kristalle jeder Sorte (seit 1.9.1)");
             helper.assertTrue(Crystals.of(player).hearts() == Crystals.MAX && near(player.getMaxHealth(), 20.0f + 1.0f * Crystals.MAX),
-                    "Alle Herzkristalle sollten 22,5 Herzen geben (seit 1.3 halb so stark): " + player.getMaxHealth());
+                    "Alle Herzkristalle sollten 35 Herzen geben (je ein halbes): " + player.getMaxHealth());
             InteractionResult full = player.getMainHandItem().use(level, player, InteractionHand.MAIN_HAND);
             helper.assertTrue(!full.consumesAction() && player.getMainHandItem().getCount() == 2 && Crystals.of(player).hearts() == Crystals.MAX,
                     "Über alle Herzkristalle hinaus sollte nichts gehen: " + full + ", " + player.getMainHandItem().getCount());
@@ -315,9 +315,11 @@ final class HeroGameTests {
     }
 
     /**
-     * Heldenstufen: steigende Schwellen bis Stufe 100 (1.171.566 Heldenerfahrung), jede Stufe zu genau ihrer Erfahrung, ein
-     * Talentpunkt je Stufe und zwei für jeden neuen Rang (Recke 20, Ritter 40, Held 60, Kriegsherr 80, Legende 100); mit
-     * allen Punkten lässt sich nicht jedes Talent meistern.
+     * Heldenstufen: steigende Schwellen bis Stufe 500 (Stufe 100: 1.171.566 Heldenerfahrung, Stufe 200: 4.307.066, Stufe 500:
+     * 20.913.566), jede Stufe zu genau ihrer Erfahrung, ein Talentpunkt je Kraftstufe (199 bis Stufe 500, etwa alle zweieinhalb
+     * Stufen) und zwei für jeden neuen Rang (Recke 20 … Unsterblicher 200); mit allen Punkten lässt sich nicht jedes Talent
+     * meistern. Auf Stufe 500 ist der Held so stark wie bis 1.9 auf Stufe 200; alte Helden werden auf die Stufe gehoben, die sie
+     * genauso stark macht.
      */
     private static void levels(GameTestHelper helper) {
         helper.assertValueEqual(HeroLevel.total(1), 0, "Stufe 1 ohne Erfahrung");
@@ -328,13 +330,15 @@ final class HeroGameTests {
             helper.assertValueEqual(HeroLevel.levelFor(need - 1), level - 1, "Heldenstufe knapp unter der Schwelle " + need);
         }
         helper.assertValueEqual(HeroLevel.levelFor(Integer.MAX_VALUE / 2), HeroLevel.MAX_LEVEL, "höchste Heldenstufe");
-        HeroLevel.Hero hero = new HeroLevel.Hero(HeroLevel.total(12), List.of(3, 2), 0);
+        HeroLevel.Hero hero = new HeroLevel.Hero(HeroLevel.total(40), List.of(3, 2), 0);
         helper.assertValueEqual(hero.talents().size(), HeroLevel.Talent.values().length, "Talente werden aufgefüllt");
-        helper.assertValueEqual(hero.unspent(), 11 - 5, "freie Talentpunkte auf Stufe 12");
-        helper.assertValueEqual(HeroLevel.MAX_LEVEL, 200, "höchste Heldenstufe (seit 0.77)");
+        helper.assertValueEqual(HeroLevel.pointsFor(40), 15 + 2 * HeroLevel.RANK_BONUS, "Talentpunkte auf Stufe 40");
+        helper.assertValueEqual(hero.unspent(), HeroLevel.pointsFor(40) - 5, "freie Talentpunkte auf Stufe 40");
+        helper.assertValueEqual(HeroLevel.MAX_LEVEL, 500, "höchste Heldenstufe (seit 1.9.1)");
         helper.assertValueEqual(HeroLevel.total(HeroLevel.LEGEND_LEVEL), 1_171_566, "Heldenerfahrung für Stufe 100 (unverändert)");
         helper.assertValueEqual(HeroLevel.total(101) - HeroLevel.total(100), 25_295 + HeroLevel.LATE_GROWTH, "Stufe 101: sanft weiter");
-        helper.assertValueEqual(HeroLevel.total(HeroLevel.MAX_LEVEL), 4_307_066, "Heldenerfahrung für Stufe 200");
+        helper.assertValueEqual(HeroLevel.total(HeroLevel.IMMORTAL_LEVEL), 4_307_066, "Heldenerfahrung für Stufe 200 (unverändert)");
+        helper.assertValueEqual(HeroLevel.total(HeroLevel.MAX_LEVEL), 20_913_566, "Heldenerfahrung für Stufe 500");
         helper.assertTrue(HeroLevel.total(51) - HeroLevel.total(50) > 10_000, "eine Stufe um 50 ist zu schnell erreicht");
         // seit 0.61: alte Spielstände behalten Stufe und Fortschritt, nur der weitere Weg wird länger
         for (int level = 1; level < HeroLevel.LEGEND_LEVEL; level += 7) {
@@ -350,11 +354,52 @@ final class HeroGameTests {
         legacyTag.putInt("experience", 3240);
         legacyTag.putInt("discoveries", 4);
         HeroLevel.Hero legacy = HeroLevel.Hero.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, legacyTag).getOrThrow();
-        helper.assertValueEqual(legacy.level(), 10, "alter Held (Stufe 10) nach dem Laden");
-        helper.assertValueEqual(legacy.experience(), HeroLevel.total(10), "alter Held: Erfahrung auf die neue Kurve umgerechnet");
+        helper.assertValueEqual(legacy.level(), HeroLevel.stretched(10), "alter Held (Stufe 10) nach dem Laden");
+        helper.assertValueEqual(legacy.experience(), HeroLevel.total(HeroLevel.stretched(10)), "alter Held: Erfahrung auf die neue Kurve umgerechnet");
         net.minecraft.nbt.Tag saved = HeroLevel.Hero.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, legacy).getOrThrow();
         helper.assertValueEqual(HeroLevel.Hero.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, saved).getOrThrow().experience(),
                 legacy.experience(), "neuer Held wird beim Laden nicht noch einmal umgerechnet");
+        // seit 1.9.1: der Weg geht bis 500, die Kraft verteilt sich darauf – Stufe 500 ist so stark wie bisher Stufe 200
+        helper.assertValueEqual(HeroLevel.might(1), 0, "Kraftstufen auf Stufe 1");
+        helper.assertValueEqual(HeroLevel.might(HeroLevel.MAX_LEVEL), HeroLevel.MIGHT_STEPS, "Kraftstufen auf Stufe 500");
+        helper.assertValueEqual(HeroLevel.levelHealth(500), 38.0, "Heldenkraft auf Stufe 500: 19 Herzen");
+        helper.assertTrue(Math.abs(HeroLevel.levelDamage(500) - 7.96) < 1.0e-9, "Heldenkraft auf Stufe 500: Schaden " + HeroLevel.levelDamage(500));
+        helper.assertValueEqual(HeroLevel.levelToughness(500), 7.0, "Heldenkraft auf Stufe 500: Härte");
+        helper.assertValueEqual(HeroLevel.levelMana(500), 398, "Heldenkraft auf Stufe 500: Mana");
+        helper.assertTrue(Math.abs(HeroLevel.levelRegen(500) - 0.995f) < 1.0e-5f, "Heldenkraft auf Stufe 500: Erholung");
+        for (int level = 2; level <= HeroLevel.MAX_LEVEL; level++) {
+            int step = HeroLevel.might(level) - HeroLevel.might(level - 1);
+            helper.assertTrue(step == 0 || step == 1, "Stufe " + level + " bringt " + step + " Kraftstufen");
+            helper.assertTrue(HeroLevel.levelDamage(level) > HeroLevel.levelDamage(level - 1), "Stufe " + level + " bringt keinen Schaden");
+        }
+        // alte Helden (Fassung 2, Weg bis 200): auf die Stufe gehoben, die sie genauso stark macht – nichts geht verloren
+        for (int old = 1; old <= HeroLevel.IMMORTAL_LEVEL; old += old < 190 ? 7 : 1) {
+            int now = HeroLevel.stretched(old);
+            int oldRanks = HeroLevel.Rank.of(old).ordinal();
+            helper.assertValueEqual(HeroLevel.levelFor(HeroLevel.stretch(HeroLevel.total(old))), now, "Stufe nach dem Umrechnen (alte Stufe " + old + ")");
+            helper.assertTrue(HeroLevel.might(now) == old - 1 && (now == 1 || HeroLevel.might(now - 1) < old - 1),
+                    "alte Stufe " + old + " → " + now + ": nicht die erste gleich starke Stufe");
+            helper.assertTrue(HeroLevel.pointsFor(now) >= old - 1 + oldRanks * HeroLevel.RANK_BONUS, "Talentpunkte gehen verloren (alte Stufe " + old + ")");
+            helper.assertTrue(HeroLevel.levelHealth(now) >= 2.0 * ((old - 1) / 10) && HeroLevel.levelDamage(now) >= 0.04 * (old - 1) - 1.0e-9
+                    && HeroLevel.levelToughness(now) >= (old - 1) / 25 && HeroLevel.levelMana(now) >= 2 * (old - 1),
+                    "Heldenkraft geht verloren (alte Stufe " + old + " → " + now + ")");
+            helper.assertTrue(HeroLevel.Rank.of(now).ordinal() >= oldRanks, "Rang geht verloren (alte Stufe " + old + ")");
+            if (old < HeroLevel.IMMORTAL_LEVEL) {
+                int half = HeroLevel.total(old) + (HeroLevel.total(old + 1) - HeroLevel.total(old)) / 2;
+                int moved = HeroLevel.levelFor(HeroLevel.stretch(half));
+                helper.assertTrue(moved >= now && moved < HeroLevel.stretched(old + 1), "halbe alte Stufe " + old + " → " + moved);
+            }
+        }
+        helper.assertValueEqual(HeroLevel.stretched(200), 500, "Stufe 200 wird 500");
+        helper.assertValueEqual(HeroLevel.stretch(HeroLevel.total(200)), HeroLevel.total(500), "der Unsterbliche wird Stufe 500");
+        net.minecraft.nbt.CompoundTag oldTag = new net.minecraft.nbt.CompoundTag();
+        oldTag.putInt("experience", HeroLevel.total(100));
+        oldTag.putInt("curve", 2);
+        HeroLevel.Hero oldHero = HeroLevel.Hero.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, oldTag).getOrThrow();
+        helper.assertValueEqual(oldHero.level(), HeroLevel.stretched(100), "die alte Legende nach dem Laden");
+        net.minecraft.nbt.Tag again = HeroLevel.Hero.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, oldHero).getOrThrow();
+        helper.assertValueEqual(HeroLevel.Hero.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, again).getOrThrow().experience(), oldHero.experience(),
+                "umgerechneter Held wird beim Laden nicht noch einmal umgerechnet");
         // Ränge und ihre Punkte
         helper.assertValueEqual(HeroLevel.Rank.of(1), HeroLevel.Rank.SQUIRE, "Rang auf Stufe 1");
         helper.assertValueEqual(HeroLevel.Rank.of(19), HeroLevel.Rank.SQUIRE, "Rang auf Stufe 19");
@@ -369,11 +414,13 @@ final class HeroGameTests {
         helper.assertValueEqual(HeroLevel.Rank.of(160), HeroLevel.Rank.TITAN, "Rang auf Stufe 160");
         helper.assertValueEqual(HeroLevel.Rank.of(199), HeroLevel.Rank.STARWALKER, "Rang auf Stufe 199");
         helper.assertValueEqual(HeroLevel.Rank.of(200), HeroLevel.Rank.IMMORTAL, "Rang auf Stufe 200");
+        helper.assertValueEqual(HeroLevel.Rank.of(500), HeroLevel.Rank.IMMORTAL, "Rang auf Stufe 500");
         helper.assertTrue(HeroLevel.Rank.IMMORTAL.next() == null, "nach dem Unsterblichen kommt kein Rang mehr");
-        helper.assertValueEqual(HeroLevel.pointsFor(19), 18, "Talentpunkte auf Stufe 19");
-        helper.assertValueEqual(HeroLevel.pointsFor(20), 19 + HeroLevel.RANK_BONUS, "Talentpunkte auf Stufe 20 (mit Rangbonus)");
-        helper.assertValueEqual(HeroLevel.pointsFor(100), 99 + 5 * HeroLevel.RANK_BONUS, "Talentpunkte auf Stufe 100");
-        helper.assertValueEqual(HeroLevel.pointsFor(200), 199 + 10 * HeroLevel.RANK_BONUS, "Talentpunkte auf Stufe 200");
+        helper.assertValueEqual(HeroLevel.pointsFor(19), 7, "Talentpunkte auf Stufe 19");
+        helper.assertValueEqual(HeroLevel.pointsFor(20), 7 + HeroLevel.RANK_BONUS, "Talentpunkte auf Stufe 20 (mit Rangbonus)");
+        helper.assertValueEqual(HeroLevel.pointsFor(100), 39 + 5 * HeroLevel.RANK_BONUS, "Talentpunkte auf Stufe 100");
+        helper.assertValueEqual(HeroLevel.pointsFor(200), 79 + 10 * HeroLevel.RANK_BONUS, "Talentpunkte auf Stufe 200");
+        helper.assertValueEqual(HeroLevel.pointsFor(500), 199 + 10 * HeroLevel.RANK_BONUS, "Talentpunkte auf Stufe 500 (wie bisher auf 200)");
         helper.assertTrue(HeroLevel.pointsFor(HeroLevel.MAX_LEVEL) < HeroLevel.Talent.values().length * HeroLevel.MAX_TALENT,
                 "mit allen Punkten ließe sich jedes Talent meistern");
         helper.succeed();
@@ -398,23 +445,24 @@ final class HeroGameTests {
             float mana = Mana.maxFor(player);
             int vanilla = player.totalExperience;
             helper.assertTrue(!HeroLevel.spend(player, HeroLevel.Talent.STRENGTH), "Punkt ohne Heldenstufe");
-            HeroLevel.award(player, HeroLevel.total(7));
-            helper.assertValueEqual(HeroLevel.of(player).level(), 7, "Heldenstufe nach der Erfahrung");
+            HeroLevel.award(player, HeroLevel.total(17));
+            helper.assertValueEqual(HeroLevel.of(player).level(), 17, "Heldenstufe nach der Erfahrung");
+            helper.assertValueEqual(HeroLevel.pointsFor(17), HeroLevel.Talent.values().length, "Talentpunkte auf Stufe 17");
             helper.assertValueEqual(player.totalExperience, vanilla, "die Minecraft-Erfahrung darf sich nicht ändern");
             for (HeroLevel.Talent talent : HeroLevel.Talent.values()) {
                 helper.assertTrue(HeroLevel.spend(player, talent), "Punkt für " + talent + " geht nicht");
             }
             helper.assertTrue(!HeroLevel.spend(player, HeroLevel.Talent.STRENGTH), "mehr Punkte als die Stufe hergibt");
-            double might = HeroLevel.levelDamage(7);
+            double might = HeroLevel.levelDamage(17);
             helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - (damage + 0.3 + might)) < 1.0e-6, "Stärke");
-            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.MAX_HEALTH) - (health + 1.0 + HeroLevel.levelHealth(7))) < 1.0e-6,
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.MAX_HEALTH) - (health + 1.0 + HeroLevel.levelHealth(17))) < 1.0e-6,
                     "Lebenskraft");
             helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.MOVEMENT_SPEED) - speed * 1.0125) < 1.0e-6, "Gewandtheit");
             helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ARMOR) - (armor + 0.4)) < 1.0e-6, "Zähigkeit");
             helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.LUCK) - (luck + 0.2)) < 1.0e-6, "Glück");
-            helper.assertTrue(Math.abs(Mana.maxFor(player) - (mana + 8.0f + HeroLevel.levelMana(7))) < 1.0e-3f, "Zauberkunst");
+            helper.assertTrue(Math.abs(Mana.maxFor(player) - (mana + 8.0f + HeroLevel.levelMana(17))) < 1.0e-3f, "Zauberkunst");
             // höchstens vierzig Punkte je Talent (seit 0.77; die zweiten zwanzig sind die Meisterschaft)
-            HeroLevel.award(player, HeroLevel.total(60));
+            HeroLevel.award(player, HeroLevel.total(100));
             int spent = 0;
             while (HeroLevel.spend(player, HeroLevel.Talent.STRENGTH)) {
                 spent++;
@@ -516,16 +564,17 @@ final class HeroGameTests {
     private static void settle(GameTestHelper helper) {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         try {
-            // mehr verteilte Punkte, als die Stufe hergibt: Stufe 10 hat nur neun Punkte
-            int xp = HeroLevel.total(10) + 100;
-            HeroLevel.set(player, new HeroLevel.Hero(xp, List.of(5, 5, 2, 0, 0, 0), 4));
-            helper.assertValueEqual(HeroLevel.of(player).level(), 10, "Stufe mit " + xp + " Heldenerfahrung");
+            // mehr verteilte Punkte, als die Stufe hergibt: Stufe 30 hat nur dreizehn Punkte (elf Kraftstufen, zwei vom Recken)
+            int xp = HeroLevel.total(30) + 100;
+            helper.assertValueEqual(HeroLevel.pointsFor(30), 13, "Talentpunkte auf Stufe 30");
+            HeroLevel.set(player, new HeroLevel.Hero(xp, List.of(5, 5, 4, 0, 0, 0), 4));
+            helper.assertValueEqual(HeroLevel.of(player).level(), 30, "Stufe mit " + xp + " Heldenerfahrung");
             helper.assertTrue(HeroLevel.settle(player), "zu viele verteilte Punkte werden nicht zurückgegeben");
             HeroLevel.Hero hero = HeroLevel.of(player);
-            helper.assertTrue(hero.spent() == 0 && hero.experience() == xp && hero.discoveries() == 4 && hero.unspent() == 9,
+            helper.assertTrue(hero.spent() == 0 && hero.experience() == xp && hero.discoveries() == 4 && hero.unspent() == 13,
                     "nach dem Zurückgeben: " + hero);
-            HeroLevel.set(player, new HeroLevel.Hero(xp, List.of(5, 4, 0, 0, 0, 0), 4));
-            helper.assertTrue(!HeroLevel.settle(player) && HeroLevel.of(player).spent() == 9, "passende Verteilung wurde angetastet");
+            HeroLevel.set(player, new HeroLevel.Hero(xp, List.of(5, 5, 3, 0, 0, 0), 4));
+            helper.assertTrue(!HeroLevel.settle(player) && HeroLevel.of(player).spent() == 13, "passende Verteilung wurde angetastet");
             HeroLevel.set(player, HeroLevel.Hero.NONE);
             helper.succeed();
         } finally {
@@ -704,8 +753,9 @@ final class HeroGameTests {
     }
 
     /**
-     * Heldenkraft und Meisterschaft (seit 0.77): Auf Stufe 150 hat der Held von selbst 14 Herzen, knapp sechs Schaden, 298
-     * Mana und 5 Rüstungshärte mehr; in der Meisterschaft gibt die Gewandtheit weniger, die Zähigkeit dazu Härte.
+     * Heldenkraft und Meisterschaft (seit 0.77): Auf Stufe 375 (bis 1.9: Stufe 150) hat der Held von selbst 14 Herzen, knapp
+     * sechs Schaden, 298 Mana und 5 Rüstungshärte mehr; in der Meisterschaft gibt die Gewandtheit weniger, die Zähigkeit dazu
+     * Härte.
      */
     private static void might(GameTestHelper helper) {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
@@ -718,16 +768,16 @@ final class HeroGameTests {
             double toughness = player.getAttributeValue(Attributes.ARMOR_TOUGHNESS);
             double speed = player.getAttributeValue(Attributes.MOVEMENT_SPEED);
             float mana = Mana.maxFor(player);
-            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(150), List.of(), 0));
-            helper.assertValueEqual(HeroLevel.of(player).level(), 150, "Stufe");
-            helper.assertTrue(near(player.getMaxHealth(), 20.0f + 28.0f), "Heldenkraft: 14 Herzen mehr auf Stufe 150: " + player.getMaxHealth());
-            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - (damage + 149 * HeroLevel.LEVEL_DAMAGE)) < 1.0e-6,
-                    "Heldenkraft: Schaden");
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(375), List.of(), 0));
+            helper.assertValueEqual(HeroLevel.of(player).level(), 375, "Stufe");
+            helper.assertTrue(near(player.getMaxHealth(), 20.0f + 28.0f), "Heldenkraft: 14 Herzen mehr auf Stufe 375: " + player.getMaxHealth());
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - (damage + HeroLevel.levelDamage(375))) < 1.0e-6
+                    && HeroLevel.levelDamage(375) > 5.9 && HeroLevel.levelDamage(375) < 6.0, "Heldenkraft: Schaden");
             helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ARMOR_TOUGHNESS) - (toughness + 5.0)) < 1.0e-6, "Heldenkraft: Härte");
             helper.assertTrue(Math.abs(Mana.maxFor(player) - (mana + 298.0f)) < 1.0e-3f, "Heldenkraft: Mana " + Mana.maxFor(player));
-            helper.assertTrue(Math.abs(HeroLevel.manaRegenFactor(player) - (1.0f + 149 * HeroLevel.LEVEL_REGEN)) < 1.0e-4f, "Heldenkraft: Erholung");
+            helper.assertTrue(Math.abs(HeroLevel.manaRegenFactor(player) - (1.0f + HeroLevel.levelRegen(375))) < 1.0e-4f, "Heldenkraft: Erholung");
             // Meisterschaft: Gewandtheit 30 Punkte = 25 % + 10 · 0,5 %; Zähigkeit 30 Punkte = 12 Rüstung und 2,5 Härte
-            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(150), List.of(0, 0, 30, 30, 0, 0), 0));
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(375), List.of(0, 0, 30, 30, 0, 0), 0));
             helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.MOVEMENT_SPEED) - speed * 1.30) < 1.0e-6,
                     "Gewandtheit in der Meisterschaft: " + player.getAttributeValue(Attributes.MOVEMENT_SPEED) / speed);
             helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ARMOR_TOUGHNESS) - (toughness + 5.0 + 2.5)) < 1.0e-6,
@@ -735,13 +785,15 @@ final class HeroGameTests {
             helper.assertTrue(Math.abs(HeroLevel.Talent.TOUGHNESS.value(30) - 12.0) < 1.0e-9, "Zähigkeit: Rüstung");
             helper.assertValueEqual(HeroLevel.of(player).points(HeroLevel.Talent.AGILITY), 30, "Punkte über zwanzig bleiben");
             // ein Aufstieg bringt die Heldenkraft sofort (und füllt das neue Herz)
-            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(161) - 10, List.of(), 0));
+            int heart = HeroLevel.nextHeartLevel(400);
+            helper.assertValueEqual(heart, 403, "das sechzehnte Herz");
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(heart) - 10, List.of(), 0));
             player.setHealth(player.getMaxHealth());
             float before = player.getMaxHealth();
             HeroLevel.award(player, 20);
-            helper.assertValueEqual(HeroLevel.of(player).level(), 161, "Aufstieg auf 161");
+            helper.assertValueEqual(HeroLevel.of(player).level(), heart, "Aufstieg auf " + heart);
             helper.assertTrue(near(player.getMaxHealth(), before + 2.0f) && near(player.getHealth(), player.getMaxHealth()),
-                    "Stufe 161 bringt ein Herz (gleich gefüllt): " + before + " → " + player.getMaxHealth() + ", " + player.getHealth());
+                    "Stufe " + heart + " bringt ein Herz (gleich gefüllt): " + before + " → " + player.getMaxHealth() + ", " + player.getHealth());
             HeroLevel.set(player, HeroLevel.Hero.NONE);
             helper.succeed();
         } finally {

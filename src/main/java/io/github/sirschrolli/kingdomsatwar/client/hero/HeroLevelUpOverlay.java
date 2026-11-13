@@ -146,8 +146,8 @@ public final class HeroLevelUpOverlay {
                     s * (0.85f + 0.15f * in2));
         }
         float in3 = HeroGui.easeOutCubic(HeroGui.span(t, 1.05f, 1.45f));
-        if (in3 > 0.0f) {
-            int points = HeroLevel.pointsFor(to) - HeroLevel.pointsFor(from);
+        int points = HeroLevel.pointsFor(to) - HeroLevel.pointsFor(from);
+        if (in3 > 0.0f && points > 0) {
             Component line = Component.translatable(points == 1 ? "hero.kingdomsatwar.level_up.point" : "hero.kingdomsatwar.level_up.points", points,
                     Component.keybind("key.kingdomsatwar.character").copy().withStyle(ChatFormatting.GOLD));
             HeroGui.centered(g, font, line, cx, textTop + (rankUp ? 40.0f : 38.0f) + 6.0f * (1.0f - in3),
@@ -158,7 +158,8 @@ public final class HeroLevelUpOverlay {
         Component might = HeroGui.might(from, to);
         if (inMight > 0.0f && !might.getString().isEmpty()) {
             Component line = Component.translatable("hero.kingdomsatwar.level_up.might", might);
-            HeroGui.centered(g, font, line, cx, textTop + (rankUp ? 52.0f : 50.0f) + 6.0f * (1.0f - inMight),
+            // (bringt die Stufe keinen Talentpunkt, rückt die Heldenkraft an seine Stelle)
+            HeroGui.centered(g, font, line, cx, textTop + (points > 0 ? (rankUp ? 52.0f : 50.0f) : (rankUp ? 40.0f : 38.0f)) + 6.0f * (1.0f - inMight),
                     ARGB.color(Math.round(255 * inMight * out), 0xF2C14E), 1.0f);
         }
         boolean special = rankUp && (rank == HeroLevel.Rank.LEGEND || rank == HeroLevel.Rank.IMMORTAL);

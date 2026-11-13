@@ -18,7 +18,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 /**
  * Das Licht der Unsterblichkeit bewahrt auch das Hab und Gut (seit 0.78): Wer in einer Kampfdimension fällt, verliert dort
- * sonst alles, was er bei sich trägt – ein Unsterblicher (Heldenstufe {@value HeroLevel#MAX_LEVEL}) nicht. Beim Tod wird sein
+ * sonst alles, was er bei sich trägt – ein Unsterblicher (ab Heldenstufe {@value HeroLevel#IMMORTAL_LEVEL}) nicht. Beim Tod wird sein
  * Inventar (mit Rüstung, Zweithand, dem Gegenstand am Mauszeiger und dem Handwerksfeld) verwahrt, damit nichts zu Boden
  * fällt, und beim Wiedererscheinen liegt alles wieder an seinem Platz.
  */
@@ -45,7 +45,7 @@ public final class ImmortalKeep {
 
     /** Behält dieser Spieler sein Inventar, wenn er in einer Kampfdimension fällt? */
     public static boolean keeps(Player player) {
-        return HeroLevel.of(player).level() >= HeroLevel.MAX_LEVEL;
+        return HeroLevel.of(player).level() >= HeroLevel.IMMORTAL_LEVEL;
     }
 
     /** Verwahrt alles, was der Fallende bei sich trägt (danach ist sein Inventar leer – es fällt nichts zu Boden). */

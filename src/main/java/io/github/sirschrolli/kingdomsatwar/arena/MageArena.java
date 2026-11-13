@@ -426,7 +426,7 @@ public final class MageArena {
                 fights.save(level.getServer());
             }
         } else if (entity instanceof ServerPlayer player && !player.isCreative() && ArcaneSphere.is(level)) {
-            // ein Unsterblicher (Heldenstufe 200) behält, was er bei sich trägt
+            // ein Unsterblicher (ab Heldenstufe 200) behält, was er bei sich trägt
             if (io.github.sirschrolli.kingdomsatwar.hero.ImmortalKeep.keeps(player)) {
                 io.github.sirschrolli.kingdomsatwar.hero.ImmortalKeep.keep(player);
             } else {

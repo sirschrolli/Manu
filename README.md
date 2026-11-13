@@ -9,6 +9,7 @@ Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
 > **Version 1.9 – Ventor, der Gladiator der Winde.** Die **Arena der Prüfungen** hat jetzt ihren Meister: Auf dem Podest unter dem Spawner der Böen liegt das neue **Arenasiegel**, und über dem Spawner schwebt für jeden der sechs Käfige ein kupfernes **Windsiegel**. Jeder Käfig, den du bezwingst, schickt einen Windstoß zum Podest und entzündet sein Siegel; sind alle bezwungen und betritt jemand den Sand, steigt aus dem Wirbel **Ventor, der Gladiator der Winde**, auf – ein Standbild aus Bronze, das der Wind füllt: Käfighelm mit Augenschlitzen und rotem Kamm, Armschiene und Schulterschild, statt der Beine ein Wirbelwind, in der Rechten der **Sturmdreizack**, in der Linken ein **Wurfnetz**. Er grüßt die Ränge – dann kämpft er wie ein Netzkämpfer: **Böe** (wer davonfliegt und an eine Wand prallt, den trifft es doppelt; solange sie weht, prallen Geschosse ab), **Dreizackstoß**, **Netzwurf** (wen es trifft, der steckt fest – und gleich kommt der Stoß, härter als sonst), **Dreizackwurf** (der Dreizack kehrt in seine Hand zurück), **Windkugeln**, **Windhosen**, die durch die Arena ziehen und jeden hochreißen, und der **Sturzflug** (ein Kreis am Boden – raus da!). Unter halber Kraft **entfesselt er den Sturm**: Alle acht Sekunden fegt eine Sturmböe quer durch die Arena (man sieht sie kommen – ducken!), und er dreht sich im **Zyklon**. Eigene Bossleiste, eigene Klänge. Er lässt selten den **Sturmdreizack** fallen (3D, geworfen entfesselt er eine Böe und kehrt immer zurück) und sonst **Wurfnetze**, Böenruten und Windkugeln; wer ihn noch einmal fordern will, muss die Käfige erneut bezwingen.
+> **1.9.1 – Der Heldenweg bis Stufe 500 und doppelt so viele Kristalle:** Der Held steigt jetzt bis **Heldenstufe 500** auf (bisher 200) – aber stärker wird er dabei nicht: Die Heldenkraft und die Talentpunkte, die bisher die Stufen bis 200 brachten, verteilen sich auf den ganzen Weg; erst auf Stufe 500 ist man so stark wie bisher auf 200. Stufe 500 braucht rund 20,9 Millionen Heldenerfahrung. Der Unsterbliche (Stufe 200) bleibt der letzte Rang. Helden aus älteren Spielständen werden auf die Stufe gehoben, die sie genauso stark macht – aus 200 wird 500. Und weil ein Kristall seit 1.3 nur noch ein halbes Herz (bzw. 10 Mana) gibt, darf man jetzt **je 50 Herz- und Manakristalle** aufnehmen statt 25 – bis zu 25 Herzen und 500 Mana mehr.
 > In 1.8 kam **Kuno von Rabenfels, der Raubritter**: Die **Raubritterburg** im dunklen Wald hat jetzt ihren Herrn: Vor dem Bergfried weht das neue **Rabenbanner** – Gold, darin ein schwarzer Rabe –, und unter ihm hält **Kuno von Rabenfels, der Raubritter**, zu Ross Hof: in Plattenrüstung mit goldenem Wappenrock, auf dem Topfhelm ein Rabe als Zimier, auf einem schwarzen Schlachtross mit goldener Schabracke, die Lanze aufrecht, den Schild am Arm. Wer ihm auf vierzehn Blöcke nahekommt (oder ihn angreift), den fordert er: Das Ross steigt, er reckt die Lanze – und senkt sie ein. **Zu Ross** kämpft er mit dem **Lanzengang** (er nimmt Anlauf und sprengt in gerader Linie heran; wer den Stoß mit einem erhobenen **Schild** auffängt, an dem **bricht die Lanze**, und er wankt im Sattel), dem **Lanzenstich**, dem **Steigen** des Rosses, dem **Hornruf** (seine Leute kommen ihm zu Hilfe) und dem **Bolzenhagel** (rote Zeichen am Boden – raus da!). Unter halber Kraft **wirft ihn das Ross ab** und flieht; **zu Fuß** zieht er den **Morgenstern**: Morgensternschlag, Wirbel, Schildstoß und der **Schildwall** (von vorn trifft ihn nichts – geh ihm in den Rücken). Eigene Bossleiste, eigene Klänge. Er lässt selten seinen **Morgenstern** fallen (eine 3D-Waffe und ein Schildbrecher; Rechtsklick: der **Schmetterschlag**) und sonst ein wenig Raubgut; ein **schwarzes Banner** am zerrissenen Pfahl ruft ihn zurück.
 > In 1.7 kam **Sordin, der Kantor der Stille**: In der Apsis der **Stillen Kathedrale**, tief im Reich des Sculk, steht jetzt **Sordin, der Kantor der Stille**, an der Kupferorgel und spielt – ohne dass ein Ton erklingt; vor ihm leuchten auf dem neuen **Orgelpult** die Noten. Er ist ein hagerer Mönch in einer dunklen Kutte, die Kapuze ein Spitzbogen wie die Fenster seiner Kathedrale, darin ein glühender, singender Mund; auf seinem Rücken ein Fächer aus Orgelpfeifen, in der Hand eine **Stimmgabel** aus Kupfer und Hallkristall. Er **hört wie der Tiefenhüter**: Wer ihm auf zehn Blöcke nahekommt, in Hörweite Lärm macht (Schritte, Sprünge, abgebaute Blöcke … – wer schleicht oder die Wollsohlen der Lauscher trägt, bleibt ungehört) oder einen **Notenblock** anschlägt, weckt ihn. Er kämpft mit Klang: **Gabelhieb**, die **Schallwelle** (durch Stein und jede Rüstung – nur **Wolle** hält sie auf), der **Akkord** (drei Ringe laufen über den Boden – springen!), der **Notenschwarm** (Noten, die ihr Ziel suchen) und **die Stille** (Dunkelheit, er verschwindet und trifft von hinten); unter halber Kraft das **Fortissimo** – ein Schlag in alle Richtungen, danach drei Schallwellen auf einmal. Doch Klang ist auch seine Schwäche: **Spielt jemand auf der Orgel**, hält er sich die Ohren zu und **taumelt** (drei Sekunden lang nimmt er mehr Schaden). Eigene Bossleiste, eigene Klänge. Er lässt selten seine **Stimmgabel** fallen (eine 3D-Waffe, Rechtsklick: die **Resonanz**, ein Schallschlag durch Stein und Rüstung) und sonst Hallkristall; **ein Hallkristall** auf dem verstummten Pult ruft ihn zurück.
 > In 1.6 kam **Hallkristall und die Rüstung der Lauscher**: Tief unten in der **Tiefen Dunkelheit**, im Reich des Sculk, wo die Stille Kathedrale steht, hallt der Gesang ihrer Orgel bis heute im Gestein nach – und wo er am längsten nachklang, ist der Tiefenschiefer zu **Hallkristall** geronnen: blass wie Eis, mit Ringen darin wie Wellen auf einem Teich. **Hallkristallerz** gibt es nur in der Tiefen Dunkelheit (ab der Diamantspitzhacke; seine Kristalle schimmern im Dunkeln). Neun Kristalle ergeben den **Hallkristallblock** (Licht 6, Wellen laufen durch ihn hindurch, Sockel für ein Leuchtfeuer). Daraus die **Rüstung der Lauscher** (Schutz wie Diamant), in 3D mit **Fühlern aus Sculk** am Helm, **Ohrscheiben** aus Kristall, einem **Sculkherz** auf der Brust und **Wollsohlen**: **Schallschutz** (jeder Teil fängt ein Fünftel des Schallschlags des Tiefenhüters ab), **klare Sicht** (Helm: die Dunkelheit von Tiefenhüter und Kreischern trübt den Blick nicht mehr), **Wollsohlen** (Stiefel: Schritte, Sprünge, Landungen und Schwimmzüge machen keine Erschütterung – Sculk-Sensoren, Kreischer und der Tiefenhüter hören sie nicht) und **Echoortung** (alle vier Teile: Wer schleicht, ruft alle zwei Sekunden leise in die Dunkelheit – ein Ring läuft über den Boden, und jedes Wesen in 16 Blöcken leuchtet kurz auf, auch hinter Wänden).
@@ -488,7 +489,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.9.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.9.1.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -496,7 +497,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-1.9.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-1.9.1.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -2218,7 +2219,7 @@ dazwischen **sechs Reihen Laderaum** (so viel wie eine große Truhe) für Bausto
 | Pfeile zerbrechen | jeder zweite Pfeil, der in einen Block fährt, zersplittert (Pfeile in Wesen sind ohnehin verloren; Unendlichkeit bleibt unberührt) |
 | Seltenere Erze | nur jede zweite Erzader entsteht – bei allen Erzen der Mod und denen von Minecraft (Kohle, Kupfer, Eisen, Gold, Redstone, Lapis, Diamant, Smaragd, Netherquarz, Nethergold, antiker Schutt) |
 | Seltenere Schätze | Truhen: von dem, was gezogen wird, fallen 45 % weg (Wertvolles 70 %), die übrigen Stapel schrumpfen auf die Hälfte; Münzen in Truhen rund 40 % weniger; Herz- und Manakristalle halb so oft in Truhen und halb so oft in Höhlen |
-| Kristalle halb so stark | ein Herzkristall gibt ein halbes Herz, ein Manakristall 10 Mana (höchstens je 25: 12,5 Herzen und 250 Mana – auch die schon aufgenommenen zählen nur noch halb) |
+| Kristalle halb so stark | ein Herzkristall gibt ein halbes Herz, ein Manakristall 10 Mana (auch die schon aufgenommenen zählen nur noch halb; seit 1.9.1 darf man dafür je 50 aufnehmen: 25 Herzen und 500 Mana) |
 | Seltenere Monsterbeute | von dem, was Monster fallen lassen, bleibt gut ein Drittel aus (nie, was man für den Fortgang braucht: Lohenruten, Enderperlen, Ghasttränen, Shulkerschalen, Witherskelett-Schädel, Totems, Windruten); Münzen und die Teile der neuen Monster (Werwolfspelz, Moorherz …) halb so oft |
 | Kürzere Tränke | alle Tränke wirken halb so lange – getrunken, geworfen, verweilend und an Pfeilen |
 | Teurere Verzauberung | der Zaubertisch will doppelt so viel Lapislazuli (2, 4, 6); die Erfahrungsstufen bleiben gleich |
@@ -4296,14 +4297,14 @@ aufsteigende Zeichen) und tauchen ihre Höhle in Licht – so sieht man sie scho
 | | Herzkristall | Manakristall |
 |---|---|---|
 | Wirkung (seit 1.3) | ein halbes Herz mehr, gleich gefüllt (bis 1.2 ein ganzes) | 10 Mana mehr, gleich gefüllt (bis 1.2: 20) |
-| Höchstens (seit 0.77) | 25 – also 22,5 Herzen | 25 – also 250 Mana mehr (mit dem Stab eines Lehrlings 350) |
+| Höchstens (seit 1.9.1) | 50 – also 25 Herzen mehr, 35 Herzen in allem (bis 1.9: 25) | 50 – also 500 Mana mehr (mit dem Stab eines Lehrlings 600; bis 1.9: 25) |
 | In Höhlen | auf Gestein, von tief unten bis Höhe 48 | auf Gestein, eher in der Tiefe (bis Höhe 24) |
 | In Truhen | Schatzkammern der Stammburgen, Raubritterburg, Kathedrale, Schattenzitadelle, Ruinen … | Magiertürme (im Allerheiligsten fast jede vierte Truhe), Mondtempel, Sternwarte … |
 | Von Bossen | Drachenbosse und Nyxar je Kristall zur Hälfte, wiederkehrende Bosse zu einem Viertel | jeder Erzmagier beim ersten Sieg einen, Nyxar einen |
 
 - **Aufnehmen:** Rechtsklick mit dem Kristall in der Hand – ein heller Klang, ein Kranz aus Funken um dich herum, und
   über der Leiste steht, wie viele Herzen bzw. wie viel Mana du jetzt hast. Der Tooltip zeigt, wie viele du schon
-  aufgenommen hast; sind es alle 25, bleibt der Kristall in der Hand (bis 0.76 waren es höchstens zehn).
+  aufgenommen hast; sind es alle 50, bleibt der Kristall in der Hand (bis 0.76 waren es höchstens zehn, bis 1.9 25).
 
 **Heldenherzen (seit 0.77):** Mit Herzkristallen, Heldenkraft und Lebenskraft hat ein Held bald mehr als zwanzig Herzen –
 bis über siebzig. Statt sie zu einer Wand aus sieben, acht Herzreihen zu stapeln, zeigt die Lebensleiste ab 21 Herzen
@@ -4334,13 +4335,22 @@ Verzaubern bleiben genau, wie sie sind. Stattdessen sammelst du **Heldenerfahrun
 | ein Biom zum ersten Mal betreten | 20 |
 | eine Stammburg erobern | 500 |
 
-Damit steigst du seit 0.77 bis **Heldenstufe 200** auf – ein weiter Weg: Bis zur Legende braucht Stufe *L*
-60 · (*L* − 1)^2,15 Heldenerfahrung, also Stufe 10 6.757, Stufe 20 33.688, Stufe 50 258.269 und **Stufe 100 1.171.566**;
-der hundertste Schritt allein kostet 25.295. Dahinter kostet jede Stufe so viel wie die hundertste und 120 mehr je Stufe
-über 100 – Stufe 150 braucht 2.589.316, **Stufe 200 4.307.066**. (Bis 0.60 waren es 40 · (*L* − 1)², für Stufe 100 also
-392.040; bis 0.76 endete der Weg bei 100. Spielstände von damals behalten ihre Stufe und den Fortschritt zur nächsten,
-die Erfahrung für Monster, Erz und Fortschritte ist immer gleich geblieben.) Jede Stufe bringt einen **Talentpunkt**,
-und unterwegs steigst du im **Rang** auf – jeder neue Rang bringt ein eigenes Abzeichen und **zwei Talentpunkte extra**:
+Damit steigst du seit 1.9.1 bis **Heldenstufe 500** auf (seit 0.77 bis 200, davor bis 100) – ein sehr weiter Weg: Bis zur
+Legende braucht Stufe *L* 60 · (*L* − 1)^2,15 Heldenerfahrung, also Stufe 10 6.757, Stufe 20 33.688, Stufe 50 258.269 und
+**Stufe 100 1.171.566**; der hundertste Schritt allein kostet 25.295. Dahinter kostet jede Stufe so viel wie die
+hundertste und 120 mehr je Stufe über 100 – Stufe 150 braucht 2.589.316, **Stufe 200 4.307.066**, Stufe 300 8.642.566 und
+**Stufe 500 20.913.566** (der letzte Schritt allein 73.295). (Bis 0.60 waren es 40 · (*L* − 1)², für Stufe 100 also
+392.040; bis 0.76 endete der Weg bei 100, bis 1.9 bei 200. Die Erfahrung für Monster, Erz und Fortschritte ist immer gleich
+geblieben.)
+
+**Stärker wirst du dabei nicht als bisher – die Kraft verteilt sich nur auf den längeren Weg** (seit 1.9.1): Was bis 1.9
+die Stufen 2 bis 200 brachten, die 199 **Kraftstufen**, bringen jetzt die Stufen 2 bis 500 – eine etwa alle zweieinhalb
+Stufen. Erst auf **Stufe 500** bist du so stark wie bisher auf Stufe 200. Jede Kraftstufe bringt einen **Talentpunkt**,
+und unterwegs steigst du im **Rang** auf – jeder neue Rang bringt ein eigenes Abzeichen und **zwei Talentpunkte extra**;
+der Unsterbliche auf Stufe 200 bleibt der letzte Rang, dahinter geht der Weg in seinem Licht weiter bis 500. **Helden aus
+älteren Spielständen** werden beim ersten Laden auf die Stufe gehoben, die sie genauso stark macht wie bisher (samt dem
+Fortschritt zur nächsten) – aus Stufe 100 wird 250, aus Stufe 200 wird 500; niemand verliert Kraft, Talentpunkte oder
+Rang, und eine Nachricht sagt, auf welcher Stufe man jetzt steht.
 
 | Rang | ab Stufe | Abzeichen |
 |---|---|---|
@@ -4356,11 +4366,13 @@ und unterwegs steigst du im **Rang** auf – jeder neue Rang bringt ein eigenes 
 | Sternenwanderer | 180 | Sternenstahl mit Saphir und acht Sternenstrahlen |
 | Unsterblicher | 200 | Weißgold, das in allen Farben des Lichts schillert, mit Heiligenschein – und die Belohnung: das **Licht der Unsterblichkeit** |
 
-**Die Heldenkraft** (seit 0.77): Jede Stufe macht dich auch **von selbst** stärker, ohne Talentpunkte – alle zehn Stufen
-ein Herz (das erste auf Stufe 11), je Stufe +0,04 Schaden, +2 Mana und ein halbes Prozent schnellere Erholung des Manas,
-alle 25 Stufen ein Punkt Rüstungshärte. Auf Stufe 100 sind das 9 Herzen, fast 4 Schaden, 198 Mana und 3 Härte mehr, auf
-**Stufe 200 19 Herzen, fast 8 Schaden, 398 Mana, doppelt so schnelle Erholung und 7 Härte**. Das neue Herz ist beim
-Aufstieg gleich gefüllt; die Aufstiegs-Szene zeigt, was die Stufe an Heldenkraft bringt, und im Charakterfenster verrät
+**Die Heldenkraft** (seit 0.77): Der Weg macht dich auch **von selbst** stärker, ohne Talentpunkte – je Kraftstufe +0,04
+Schaden, +2 Mana und ein halbes Prozent schnellere Erholung des Manas (mit jeder Stufe ein wenig davon), je zehn
+Kraftstufen ein Herz (etwa alle 25 Stufen, das erste auf Stufe 27) und je 25 Kraftstufen ein Punkt Rüstungshärte (etwa
+alle 63 Stufen). Auf Stufe 200 sind das 7 Herzen, gut 3 Schaden, 158 Mana und 3 Härte mehr, auf Stufe 250 9 Herzen, fast
+4 Schaden, 198 Mana und 3 Härte, auf **Stufe 500 19 Herzen, fast 8 Schaden, 398 Mana, doppelt so schnelle Erholung und 7
+Härte** – genau so viel wie bis 1.9 auf Stufe 200. Das neue Herz ist beim Aufstieg gleich gefüllt; die Aufstiegs-Szene
+zeigt, was die Stufe an Heldenkraft (und, wenn sie einen bringt, an Talentpunkten) bringt, und im Charakterfenster verrät
 ein Hinweis über dem Abzeichen (und über deinen Werten) deine ganze Heldenkraft und wann das nächste Herz kommt.
 
 **Das Licht der Unsterblichkeit – die Belohnung des Unsterblichen.** Wer Stufe 200 erreicht, den bewahrt das Licht einmal
@@ -4384,8 +4396,8 @@ vorbeiziehen. Jede Stufe ist ein Stein, jede zehnte ein großer, jeder Rang sein
 jedem Rang steht sein Wahrzeichen am Horizont (Dorf, Wachturm, Burg, Schrein im Wald, Festung, Gipfel mit Kronenburg –
 seit 0.77 dahinter ein Tempel mit schwebendem Kristall, ein Wolkenpalast, ein Koloss mit glühenden Augen, eine Sternwarte
 mit Sternenstrahl und die Himmelszitadelle mit ihrem Lichtring) und färbt seinen Abschnitt. Der gegangene Weg glüht
-golden, Licht fließt auf ihm zu dir, erreichte Ränge tragen eine Lichtsäule; voraus liegt der Weg im Nebel, ganz am Ende
-leuchtet ein Polarlicht über dem Unsterblichen. Dein Kopf schwebt im
+golden, Licht fließt auf ihm zu dir, erreichte Ränge tragen eine Lichtsäule; voraus liegt der Weg im Nebel. Hinter dem
+Unsterblichen (Stufe 200) geht er in dessen Licht weiter, und ganz am Ende, auf Stufe 500, leuchtet ein Polarlicht. Dein Kopf schwebt im
 Goldrahmen über deiner Stufe, das Stück bis zur nächsten leuchtet so weit, wie du gekommen bist. Beim Öffnen fliegt die
 Ansicht von Stufe 1 bis zu dir, die Steine leuchten nacheinander auf, dann sprühen Funken. Mausrad, Ziehen oder die
 Pfeiltasten fahren den Weg ab, unten zeigt eine Übersicht den ganzen Weg (anklicken springt dorthin); jeder Stein sagt,
@@ -4406,8 +4418,8 @@ die Kästchen werden nacheinander golden, ein Schimmer wandert über sie:
 | Zauberkunst | +8 Mana und 4 % schnellere Erholung | ebenso | +320 Mana, +160 % |
 | Glück | +0,2 Glück – bessere Beute in Truhen | ebenso | +8 Glück |
 
-Bis Stufe 100 kommen 109 Punkte zusammen, bis Stufe 200 219, alle Talente fassen 240 – du entscheidest, was für ein Held
-du bist.
+Bis Stufe 100 kommen 49 Punkte zusammen, bis Stufe 200 99, bis Stufe 500 219 (wie bis 1.9 auf Stufe 200), alle Talente
+fassen 240 – du entscheidest, was für ein Held du bist.
 **Neu verteilen** kostet eine Silbermünze je verteiltem Punkt. Heldenerfahrung und Talente bleiben auch nach dem Tod.
 Wer aus 0.52 kommt, steht mit derselben Heldenerfahrung auf einer neuen Stufe und bekommt seine Punkte kostenlos
 zurück, falls er mehr verteilt hatte, als die neue Stufe hergibt.
@@ -5108,7 +5120,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.9.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.9.1.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |

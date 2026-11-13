@@ -42,7 +42,7 @@ import org.jspecify.annotations.Nullable;
  * Die Kämpfe in den Kampfdimensionen der großen Bosse (wie die Arkane Sphäre der Erzmagier): Betritt jemand den Hort,
  * zieht der Boss ihn, alle Mitstreiter am Hort und ihre Soldaten in seine Welt, wo ein Abbild seines Horts schwebt; wer
  * später an den Hort kommt, folgt ihnen. Dort lässt sich nichts bauen und nichts abbauen, und wer stirbt, verliert alles,
- * was er bei sich trägt (ein Unsterblicher – Heldenstufe 200 – behält es); wer vom Rand stürzt, wird verletzt zurückgeworfen.
+ * was er bei sich trägt (ein Unsterblicher – ab Heldenstufe 200 – behält es); wer vom Rand stürzt, wird verletzt zurückgeworfen.
  *
  * <p>Fällt der Boss, kehren alle mit der Beute an den Hort zurück, und der Hort gilt als besiegt (mit allem, was dazugehört,
  * etwa dem Riss hinter dem Thron). Steht niemand mehr, der ihm die Stirn bietet, ist der Kampf verloren: Der Boss vergeht,
@@ -480,7 +480,7 @@ public final class BossArenas {
             return;
         }
         if (BossArenaKind.isArena(level)) {
-            // ein Unsterblicher (Heldenstufe 200) behält, was er bei sich trägt
+            // ein Unsterblicher (ab Heldenstufe 200) behält, was er bei sich trägt
             if (io.github.sirschrolli.kingdomsatwar.hero.ImmortalKeep.keeps(player)) {
                 io.github.sirschrolli.kingdomsatwar.hero.ImmortalKeep.keep(player);
             } else {

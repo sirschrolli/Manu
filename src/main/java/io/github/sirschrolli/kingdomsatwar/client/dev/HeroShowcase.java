@@ -440,6 +440,46 @@ final class HeroShowcase {
         steps.add(Step.hud(false));
     }
 
+    /**
+     * Der Heldenweg bis Stufe 500 (seit 1.9.1): ein Held auf Stufe 320 – das Charakterfenster mit seiner Heldenkraft, der Weg
+     * beim Unsterblichen (200), bei ihm und am Ende (500).
+     */
+    static void path500(Deque<Step> steps) {
+        steps.add(Step.server(level -> {
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(320) + (HeroLevel.total(321) - HeroLevel.total(320)) * 2 / 5,
+                    java.util.List.of(30, 26, 12, 20, 18, 6), 44));
+            player.setData(io.github.sirschrolli.kingdomsatwar.registry.ModAttachments.HERO_IMMORTAL, -1L);
+        }));
+        steps.add(Step.command("gamemode survival"));
+        steps.add(Step.hud(true));
+        steps.add(Step.waitForChunks(200));
+        steps.add(Step.screen(minecraft -> new io.github.sirschrolli.kingdomsatwar.client.hero.CharacterScreen()));
+        steps.add(Step.waitTicks(6));
+        steps.add(Step.once(Showcase::parkMouse));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("hero500_0_screen"));
+        steps.add(Step.once(minecraft -> hoverCharacter(minecraft, 141, 37)));
+        steps.add(Step.waitTicks(8));
+        steps.add(Step.screenshot("hero500_1_might"));
+        steps.add(Step.screen(minecraft -> new io.github.sirschrolli.kingdomsatwar.client.hero.HeroPathScreen()));
+        steps.add(Step.once(Showcase::parkMouse));
+        steps.add(Step.waitTicks(70));
+        steps.add(Step.screenshot("hero500_2_path"));
+        for (float at : new float[] {196.0f, 480.0f}) {
+            steps.add(Step.once(minecraft -> {
+                if (minecraft.gui.screen() instanceof io.github.sirschrolli.kingdomsatwar.client.hero.HeroPathScreen path) {
+                    path.jumpTo(at);
+                }
+            }));
+            steps.add(Step.waitTicks(10));
+            steps.add(Step.screenshot("hero500_path_" + (int) at));
+        }
+        steps.add(Step.screen(minecraft -> null));
+        steps.add(Step.command("gamemode spectator"));
+        steps.add(Step.hud(false));
+    }
+
     /** Nur das Streicheln (schnell zu prüfen). */
     static void pat(Deque<Step> steps) {
         int oz = -80;

@@ -57,39 +57,53 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
  *
  * <p>Der Held sammelt <b>Heldenerfahrung</b>: für besiegte Monster und Bosse (auch ein Viertel dessen, was seine
  * Soldaten und gezähmten Drachen besiegen), für Erz, das er abbaut, für jeden Fortschritt (Aufgabe, Ziel, Herausforderung),
- * für jedes Biom, das er zum ersten Mal betritt, und für jede eroberte Burg. Damit steigt er seit 0.77 bis zur
- * <b>Heldenstufe {@value #MAX_LEVEL}</b> auf (vorher 100): Stufe 100, die Legende, braucht wie seit 0.61 rund 1,17 Millionen
- * Heldenerfahrung; dahinter wächst jede weitere Stufe nur noch sanft (von rund 25.000 auf 37.000), Stufe 200 braucht rund
- * 4,3 Millionen. Die Erfahrung je Sieg, Erz und Entdeckung ist dabei immer gleich geblieben.
- * Jede Stufe bringt einen <b>Talentpunkt</b>, jeder neue <b>Rang</b> (Knappe, Recke, Ritter, Held, Kriegsherr, Legende –
- * seit 0.77 dazu Mythos, Halbgott, Titan, Sternenwanderer und Unsterblicher) {@value #RANK_BONUS} Punkte dazu. Die Punkte
- * verteilt er im Charakterfenster (Taste K) auf sechs Talente – je Talent höchstens {@value #MAX_TALENT} Punkte (die
- * zweiten zwanzig sind die <b>Meisterschaft</b>), also lässt sich nicht alles meistern. Neu verteilen kostet eine
- * Silbermünze je verteiltem Punkt.
+ * für jedes Biom, das er zum ersten Mal betritt, und für jede eroberte Burg. Damit steigt er seit 1.9.1 bis zur
+ * <b>Heldenstufe {@value #MAX_LEVEL}</b> auf (bis 0.76: 100, bis 1.9: 200): Stufe 100, die Legende, braucht wie seit 0.61 rund
+ * 1,17 Millionen Heldenerfahrung; dahinter wird jede weitere Stufe nur noch sanft teurer (von rund 25.000 auf 73.000), Stufe 200
+ * braucht rund 4,3 Millionen, Stufe 500 rund 20,9 Millionen. Die Erfahrung je Sieg, Erz und Entdeckung ist dabei immer gleich
+ * geblieben.
  *
- * <p>Seit 0.77 macht jede Stufe auch von selbst stärker – die <b>Heldenkraft</b>: alle zehn Stufen ein Herz, je Stufe
- * {@value #LEVEL_DAMAGE} Schaden und {@value #LEVEL_MANA} Mana, alle fünfundzwanzig Stufen ein Punkt Rüstungshärte und je
- * Stufe ein halbes Prozent schnellere Erholung des Manas (Stufe 200: 19 Herzen, 8 Schaden, 398 Mana, 7 Härte, doppelte
- * Erholung). Wer Legende wird, darf streicheln ({@link HeroPat}); wer <b>Unsterblicher</b> wird, den bewahrt alle
- * {@value #IMMORTAL_MINUTES} Minuten das Licht einmal vor dem Tod.
+ * <p>Die Kraft ist dabei nicht gewachsen, sie verteilt sich nur auf den längeren Weg: Die {@value #MIGHT_STEPS}
+ * <b>Kraftstufen</b>, die bis 1.9 die Stufen 2 bis 200 brachten, bringen jetzt die Stufen 2 bis 500 (eine etwa alle
+ * zweieinhalb Stufen, {@link #might(int)}). Jede Kraftstufe gibt einen <b>Talentpunkt</b>, jeder neue <b>Rang</b> (Knappe,
+ * Recke, Ritter, Held, Kriegsherr, Legende – seit 0.77 dazu Mythos, Halbgott, Titan, Sternenwanderer und, ab Stufe
+ * {@value #IMMORTAL_LEVEL}, der Unsterbliche als letzter) {@value #RANK_BONUS} Punkte dazu. Die Punkte verteilt er im
+ * Charakterfenster (Taste K) auf sechs Talente – je Talent höchstens {@value #MAX_TALENT} Punkte (die zweiten zwanzig sind die
+ * <b>Meisterschaft</b>), also lässt sich nicht alles meistern. Neu verteilen kostet eine Silbermünze je verteiltem Punkt.
+ *
+ * <p>Seit 0.77 macht der Weg auch von selbst stärker – die <b>Heldenkraft</b>: je zehn Kraftstufen ein Herz, je Kraftstufe
+ * {@value #MIGHT_DAMAGE} Schaden und {@value #MIGHT_MANA} Mana, je fünfundzwanzig Kraftstufen ein Punkt Rüstungshärte und je
+ * Kraftstufe ein halbes Prozent schnellere Erholung des Manas (Stufe 500: 19 Herzen, 8 Schaden, 398 Mana, 7 Härte, doppelte
+ * Erholung – so viel wie bis 1.9 auf Stufe 200). Wer Legende wird, darf streicheln ({@link HeroPat}); wer <b>Unsterblicher</b>
+ * wird, den bewahrt alle {@value #IMMORTAL_MINUTES} Minuten das Licht einmal vor dem Tod. Helden aus älteren Spielständen
+ * werden beim Laden auf die Stufe gehoben, die sie genauso stark macht wie bisher ({@link #stretch(int)}).
  */
 @EventBusSubscriber(modid = KingdomsAtWar.MODID)
 public final class HeroLevel {
-    /** Die höchste Heldenstufe (bis 0.76: 100). */
-    public static final int MAX_LEVEL = 200;
+    /** Die höchste Heldenstufe (bis 0.76: 100, bis 1.9: 200). */
+    public static final int MAX_LEVEL = 500;
+    /** Ab dieser Stufe ist der Held Unsterblicher – der letzte Rang (Licht der Unsterblichkeit). */
+    public static final int IMMORTAL_LEVEL = 200;
+    /** Die höchste Stufe bis 1.9 – für das Umrechnen alter Helden. */
+    static final int OLD_MAX_LEVEL = 200;
+    /**
+     * So viele Kraftstufen hat der ganze Weg (bis 1.9 je Stufe eine, seit 1.9.1 über 500 Stufen verteilt): Sie geben die
+     * Heldenkraft und die Talentpunkte der Stufen.
+     */
+    public static final int MIGHT_STEPS = 199;
     /** Die Stufe der Legende – bis 0.76 die höchste (Streicheln, Umrechnung alter Helden). */
     public static final int LEGEND_LEVEL = 100;
     /** So viele Punkte fasst ein Talent (bis 0.76: 20). */
     public static final int MAX_TALENT = 40;
     /** Ab so vielen Punkten beginnt die Meisterschaft eines Talents (die zweiten zwanzig Kästchen leuchten golden). */
     public static final int MASTERY = 20;
-    /** Heldenkraft je Stufe über der ersten: Schaden und Mana; alle so viele Stufen ein Herz bzw. ein Punkt Rüstungshärte. */
-    public static final double LEVEL_DAMAGE = 0.04;
-    public static final int LEVEL_MANA = 2;
-    public static final int LEVELS_PER_HEART = 10;
-    public static final int LEVELS_PER_TOUGHNESS = 25;
-    /** Erholung des Manas je Stufe über der ersten (0,5 %). */
-    public static final float LEVEL_REGEN = 0.005f;
+    /** Heldenkraft je Kraftstufe: Schaden und Mana; je so viele Kraftstufen ein Herz bzw. ein Punkt Rüstungshärte. */
+    public static final double MIGHT_DAMAGE = 0.04;
+    public static final int MIGHT_MANA = 2;
+    public static final int MIGHT_PER_HEART = 10;
+    public static final int MIGHT_PER_TOUGHNESS = 25;
+    /** Erholung des Manas je Kraftstufe (0,5 %). */
+    public static final float MIGHT_REGEN = 0.005f;
     /** Licht der Unsterblichkeit: so viele Minuten, bis es wieder bereit ist. */
     public static final int IMMORTAL_MINUTES = 20;
     /** Talentpunkte, die jeder neue Rang zusätzlich bringt. */
@@ -97,8 +111,8 @@ public final class HeroLevel {
     /** Heldenerfahrung für Stufe L: 60 · (L − 1)^2,15 (gerundet), für Stufe 100 also rund 1,17 Millionen. */
     public static final int CURVE = 60;
     public static final double CURVE_POWER = 2.15;
-    /** Fassung der Stufenkurve in gespeicherten Helden (1: bis 0.60 – 40 · (L − 1)², 2: seit 0.61). */
-    public static final int CURVE_VERSION = 2;
+    /** Fassung der Stufenkurve in gespeicherten Helden (1: bis 0.60 – 40 · (L − 1)², 2: seit 0.61, 3: seit 1.9.1 bis Stufe 500). */
+    public static final int CURVE_VERSION = 3;
     /** Neu verteilen: eine Silbermünze (9 Bronze) je verteiltem Punkt. */
     public static final int RESET_PER_POINT = 9;
     /** Heldenerfahrung für einen Sieg: die Hälfte der Lebenspunkte, Bosse doppelt, höchstens so viel. */
@@ -190,7 +204,8 @@ public final class HeroLevel {
     /**
      * Die Ränge des Helden: Wer eine dieser Stufen erreicht, steigt im Rang auf, bekommt {@value #RANK_BONUS} Talentpunkte
      * dazu und ein neues Abzeichen. Die Legende (Stufe 100) darf außerdem streicheln; seit 0.77 geht der Weg weiter – über
-     * Mythos, Halbgott, Titan und Sternenwanderer bis zum Unsterblichen (Stufe 200), den das Licht vor dem Tod bewahrt.
+     * Mythos, Halbgott, Titan und Sternenwanderer bis zum Unsterblichen (Stufe 200), den das Licht vor dem Tod bewahrt. Er
+     * bleibt der letzte Rang, auch seit der Weg bis Stufe {@value #MAX_LEVEL} geht.
      */
     public enum Rank implements StringRepresentable {
         SQUIRE(1, 0xFFD08C52),
@@ -203,7 +218,7 @@ public final class HeroLevel {
         DEMIGOD(140, 0xFFFFE9A6),
         TITAN(160, 0xFFFF6B4A),
         STARWALKER(180, 0xFF7FB8FF),
-        IMMORTAL(MAX_LEVEL, 0xFFFFF4E0);
+        IMMORTAL(IMMORTAL_LEVEL, 0xFFFFF4E0);
 
         private final int minLevel;
         private final int color;
@@ -260,8 +275,8 @@ public final class HeroLevel {
                 Codec.INT.listOf().optionalFieldOf("talents", List.of()).forGetter(Hero::talents),
                 Codec.INT.optionalFieldOf("discoveries", 0).forGetter(Hero::discoveries),
                 Codec.INT.optionalFieldOf("curve", 1).forGetter(h -> CURVE_VERSION)).apply(i,
-                (experience, talents, discoveries, curve) -> new Hero(curve < CURVE_VERSION ? migrate(experience) : experience, talents,
-                        discoveries)));
+                (experience, talents, discoveries, curve) -> curve < CURVE_VERSION ? upgraded(new Hero(upgrade(curve, experience), talents,
+                        discoveries)) : new Hero(experience, talents, discoveries)));
         public static final StreamCodec<ByteBuf, Hero> STREAM_CODEC = StreamCodec.composite(
                 ByteBufCodecs.VAR_INT, Hero::experience,
                 ByteBufCodecs.VAR_INT.apply(ByteBufCodecs.list(Talent.values().length)), Hero::talents,
@@ -318,8 +333,8 @@ public final class HeroLevel {
 
     /**
      * Wie viel Heldenerfahrung man für diese Heldenstufe insgesamt braucht (Stufe 1: keine; Stufe 100: rund 1,17 Millionen;
-     * Stufe 200: rund 4,3 Millionen). Bis zur Legende 60 · (L − 1)^2,15; dahinter kostet jede Stufe so viel wie die
-     * hundertste und {@value #LATE_GROWTH} mehr je Stufe über 100.
+     * Stufe 200: rund 4,3 Millionen; Stufe 500: rund 20,9 Millionen). Bis zur Legende 60 · (L − 1)^2,15; dahinter kostet jede
+     * Stufe so viel wie die hundertste und {@value #LATE_GROWTH} mehr je Stufe über 100.
      */
     public static int total(int level) {
         if (level <= 1) {
@@ -371,9 +386,69 @@ public final class HeroLevel {
         return total(level) + (int) Math.floor(progress * (total(level + 1) - total(level)));
     }
 
-    /** Talentpunkte auf dieser Stufe: einer je Stufe über der ersten und {@value #RANK_BONUS} für jeden erreichten Rang. */
+    /**
+     * Rechnet einen Helden von vor 1.9.1 (Weg bis 200, je Stufe eine Kraftstufe) auf den Weg bis 500 um: auf die erste Stufe,
+     * die ihn genauso stark macht wie seine alte ({@link #stretched(int)}), und denselben Anteil des Wegs zur nächsten. Wer
+     * Stufe 200 hatte, ist jetzt Stufe 500. Niemand verliert Kraft, Talentpunkte oder Rang.
+     */
+    public static int stretch(int experience) {
+        int level = 1;
+        while (level < OLD_MAX_LEVEL && experience >= total(level + 1)) {
+            level++;
+        }
+        if (level >= OLD_MAX_LEVEL) {
+            return total(MAX_LEVEL);
+        }
+        float progress = Mth.clamp((experience - total(level)) / (float) (total(level + 1) - total(level)), 0.0f, 1.0f);
+        int from = total(stretched(level));
+        int to = total(stretched(level + 1));
+        return from + (int) Math.floor(progress * (to - from));
+    }
+
+    /** Die Stufe, die seit 1.9.1 so stark macht wie Stufe {@code oldLevel} bis dahin (200 wird 500). */
+    public static int stretched(int oldLevel) {
+        int steps = Math.max(0, Math.min(oldLevel, OLD_MAX_LEVEL) - 1);
+        return 1 + (steps * (MAX_LEVEL - 1) + MIGHT_STEPS - 1) / MIGHT_STEPS;
+    }
+
+    /** Hebt gespeicherte Heldenerfahrung einer älteren Fassung der Stufenkurve auf die heutige. */
+    static int upgrade(int curve, int experience) {
+        int xp = experience;
+        if (curve < 2) {
+            xp = migrate(xp);
+        }
+        if (curve < 3) {
+            xp = stretch(xp);
+        }
+        return xp;
+    }
+
+    /** Helden, die beim Laden umgerechnet wurden – sie erfahren es beim Einloggen. */
+    private static final Set<Hero> UPGRADED = java.util.Collections.newSetFromMap(new java.util.WeakHashMap<>());
+
+    private static Hero upgraded(Hero hero) {
+        synchronized (UPGRADED) {
+            UPGRADED.add(hero);
+        }
+        return hero;
+    }
+
+    /**
+     * Kraftstufen bis Heldenstufe {@code level}: 0 auf Stufe 1, {@value #MIGHT_STEPS} auf Stufe {@value #MAX_LEVEL} – etwa
+     * eine alle zweieinhalb Stufen.
+     */
+    public static int might(int level) {
+        return (Math.max(1, Math.min(level, MAX_LEVEL)) - 1) * MIGHT_STEPS / (MAX_LEVEL - 1);
+    }
+
+    /** Dasselbe ungerundet: Schaden, Mana und Erholung wachsen mit jeder Stufe ein wenig. */
+    public static double mightExact(int level) {
+        return (Math.max(1, Math.min(level, MAX_LEVEL)) - 1) * (double) MIGHT_STEPS / (MAX_LEVEL - 1);
+    }
+
+    /** Talentpunkte auf dieser Stufe: einer je Kraftstufe und {@value #RANK_BONUS} für jeden erreichten Rang. */
     public static int pointsFor(int level) {
-        return Math.max(0, Math.min(level, MAX_LEVEL) - 1) + RANK_BONUS * Rank.of(level).ordinal();
+        return might(level) + RANK_BONUS * Rank.of(level).ordinal();
     }
 
     public static int levelFor(int experience) {
@@ -750,29 +825,40 @@ public final class HeroLevel {
 
     // ------------------------------------------------------------------------------------------------ Heldenkraft
 
-    /** Lebenspunkte der Heldenkraft: alle zehn Stufen ein Herz (Stufe 200: 19 Herzen). */
+    /** Lebenspunkte der Heldenkraft: je zehn Kraftstufen ein Herz, etwa alle 25 Stufen (Stufe 500: 19 Herzen). */
     public static double levelHealth(int level) {
-        return 2.0 * ((Math.min(level, MAX_LEVEL) - 1) / LEVELS_PER_HEART);
+        return 2.0 * (might(level) / MIGHT_PER_HEART);
     }
 
-    /** Schaden der Heldenkraft: je Stufe über der ersten {@value #LEVEL_DAMAGE} (Stufe 200: knapp 8). */
+    /** Die nächste Stufe über {@code level}, die ein Herz dazugibt (0, wenn keine mehr). */
+    public static int nextHeartLevel(int level) {
+        double now = levelHealth(level);
+        for (int l = Math.max(1, level + 1); l <= MAX_LEVEL; l++) {
+            if (levelHealth(l) > now) {
+                return l;
+            }
+        }
+        return 0;
+    }
+
+    /** Schaden der Heldenkraft: je Kraftstufe {@value #MIGHT_DAMAGE}, mit jeder Stufe ein wenig (Stufe 500: knapp 8). */
     public static double levelDamage(int level) {
-        return LEVEL_DAMAGE * (Math.min(level, MAX_LEVEL) - 1);
+        return MIGHT_DAMAGE * mightExact(level);
     }
 
-    /** Rüstungshärte der Heldenkraft: alle fünfundzwanzig Stufen ein Punkt (Stufe 200: 7). */
+    /** Rüstungshärte der Heldenkraft: je fünfundzwanzig Kraftstufen ein Punkt, etwa alle 63 Stufen (Stufe 500: 7). */
     public static double levelToughness(int level) {
-        return (Math.min(level, MAX_LEVEL) - 1) / LEVELS_PER_TOUGHNESS;
+        return might(level) / MIGHT_PER_TOUGHNESS;
     }
 
-    /** Mana der Heldenkraft: je Stufe über der ersten {@value #LEVEL_MANA} (Stufe 200: 398). */
+    /** Mana der Heldenkraft: je Kraftstufe {@value #MIGHT_MANA} (Stufe 500: 398). */
     public static int levelMana(int level) {
-        return LEVEL_MANA * (Math.min(level, MAX_LEVEL) - 1);
+        return (int) Math.floor(MIGHT_MANA * mightExact(level) + 1.0e-9);
     }
 
-    /** Erholung des Manas durch die Heldenkraft: je Stufe ein halbes Prozent (Stufe 200: fast doppelt so schnell). */
+    /** Erholung des Manas durch die Heldenkraft: je Kraftstufe ein halbes Prozent (Stufe 500: fast doppelt so schnell). */
     public static float levelRegen(int level) {
-        return LEVEL_REGEN * (Math.min(level, MAX_LEVEL) - 1);
+        return (float) (MIGHT_REGEN * mightExact(level));
     }
 
     /** Kennungen der Steigerungen durch die Heldenkraft und die Meisterschaft der Zähigkeit. */
@@ -821,7 +907,7 @@ public final class HeroLevel {
     // ------------------------------------------------------------------------------------------------ Unsterblichkeit
 
     /**
-     * Licht der Unsterblichkeit: Wer Unsterblicher ist (Stufe {@value #MAX_LEVEL}), den bewahrt das Licht einmal alle
+     * Licht der Unsterblichkeit: Wer Unsterblicher ist (ab Stufe {@value #IMMORTAL_LEVEL}), den bewahrt das Licht einmal alle
      * {@value #IMMORTAL_MINUTES} Minuten vor dem Tod – wie ein Totem (es wirkt erst, wenn kein Totem mehr hilft): Er steht mit
      * der Hälfte seiner Herzen wieder auf, Regeneration, Absorption und Feuerschutz, ein Lichtring und eine Lichtsäule, ein
  * Klang – und auf seinem Bildschirm die Szene des Lichts ({@code ImmortalOverlay}).
@@ -833,7 +919,7 @@ public final class HeroLevel {
         if (!(event.getEntity() instanceof ServerPlayer player) || player.isSpectator() || player.isCreative()) {
             return;
         }
-        if (event.getSource().is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY) || of(player).level() < MAX_LEVEL) {
+        if (event.getSource().is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY) || of(player).level() < IMMORTAL_LEVEL) {
             return;
         }
         long now = player.level().getGameTime();
@@ -888,6 +974,14 @@ public final class HeroLevel {
     @SubscribeEvent
     static void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
+            boolean upgraded;
+            synchronized (UPGRADED) {
+                upgraded = UPGRADED.remove(of(player));
+            }
+            if (upgraded && of(player).level() > 1) {
+                player.sendSystemMessage(Component.translatable("hero.kingdomsatwar.stretched", MAX_LEVEL, of(player).level())
+                        .withStyle(ChatFormatting.GOLD));
+            }
             settle(player);
         }
         apply(event.getEntity());
