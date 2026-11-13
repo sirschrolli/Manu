@@ -940,9 +940,23 @@ final class SiteGameTests {
             problems.add("Orgelpfeifen: " + pipes);
         }
         int keys = count(helper, lo, hi, st -> st.is(Blocks.NOTE_BLOCK));
-        if (keys != 5) {
+        if (keys != 4) {
             problems.add("Spieltisch: " + keys);
         }
+        // seit 1.7: in der Mitte des Spieltischs das Orgelpult (Blick ins Schiff), unter den Tasten Ton (Flötentöne)
+        BlockPos desk = o.offset(0, 2, -19);
+        BlockState deskState = helper.getLevel().getBlockState(desk);
+        if (!deskState.is(io.github.sirschrolli.kingdomsatwar.registry.CathedralGear.ORGAN_DESK.get())
+                || deskState.getValue(io.github.sirschrolli.kingdomsatwar.block.deep.OrganDeskBlock.FACING) != net.minecraft.core.Direction.SOUTH) {
+            problems.add("kein Orgelpult am Spieltisch: " + deskState);
+        } else if (!helper.getLevel().getBlockState(desk.south()).isAir() || !helper.getLevel().getBlockState(desk.south().above(3)).isAir()) {
+            problems.add("der Platz des Kantors ist verbaut");
+        }
+        if (!helper.getLevel().getBlockState(o.offset(1, 1, -19)).is(Blocks.CLAY)) {
+            problems.add("kein Ton unter den Tasten");
+        }
+        // (das Pult riefe sonst einen Kantor, sobald ein Spieler eines anderen Tests in die Nähe käme)
+        helper.getLevel().setBlock(desk, Blocks.AIR.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
         int rose = count(helper, o.offset(-5, 8, 18), o.offset(5, 18, 18), st -> st.getBlock().getDescriptionId().contains("stained_glass"));
         if (rose < 30) {
             problems.add("Fensterrose: " + rose);

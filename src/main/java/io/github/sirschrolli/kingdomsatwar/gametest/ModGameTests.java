@@ -204,6 +204,7 @@ public final class ModGameTests {
         HardnessGameTests.init(); // seit 1.3: das Härte-Paket
         PhaseGameTests.init(); // seit 1.4: Phasit und die Rüstung der Leerwandler
         EchoGameTests.init(); // seit 1.6: Hallkristall und die Rüstung der Lauscher
+        SordinGameTests.init(); // seit 1.7: Sordin, der Kantor der Stille, sein Orgelpult und die Stimmgabel
         AnniGameTests.init();     // Anni der Troll, Fehlerkern, Wiederherstellung als Anni 2.0, Bannhammer, Fehlerflügel
         BeastGameTests.init();    // die neuen Monster: Werwolf, Moorschlurfer, Glutwurm, Aschengeist
         GearGameTests.init();     // Waffen und Rüstungen aus Monsterteilen
@@ -302,6 +303,7 @@ public final class ModGameTests {
         HardnessGameTests.register(event, environment);
         PhaseGameTests.register(event, environment);
         EchoGameTests.register(event, environment);
+        SordinGameTests.register(event, environment);
         AnniGameTests.register(event, environment);
         BeastGameTests.register(event, environment);
         GearGameTests.register(event, environment);

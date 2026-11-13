@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.GameEventTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -45,8 +46,9 @@ public final class SordinEvents {
         if (!(event.getLevel() instanceof ServerLevel level)) {
             return;
         }
+        Vec3 at = Vec3.atCenterOf(event.getPos());
         for (SordinEntity cantor : level.getEntitiesOfClass(SordinEntity.class, new AABB(event.getPos()).inflate(ORGAN_RADIUS),
-                e -> e.isAlive() && e.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(event.getPos())) <= ORGAN_RADIUS * ORGAN_RADIUS)) {
+                e -> e.hears(at, ORGAN_RADIUS))) {
             cantor.hearOrgan(level);
         }
     }

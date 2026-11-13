@@ -562,6 +562,12 @@ public class SordinEntity extends Monster implements SkyWarden {
         this.confine = radius;
     }
 
+    /** Hört er eine Orgel (einen Notenblock), die bei {@code at} erklingt? (Im Test nur innerhalb seines Kreises.) */
+    public boolean hears(Vec3 at, double radius) {
+        double r = Math.min(radius, this.confine);
+        return this.isAlive() && this.distanceToSqr(at) <= r * r;
+    }
+
     private @Nullable LivingEntity findTarget(ServerLevel level) {
         if (this.home != null && this.distanceToSqr(Vec3.atCenterOf(this.home)) > LEASH * LEASH) {
             return null;

@@ -742,6 +742,9 @@ final class SilentCathedral {
                 if (Math.abs(x) == 2) {
                     this.b.set(x, 2, -18, stair(Blocks.DARK_OAK_STAIRS, Direction.SOUTH, Half.BOTTOM));
                 }
+                if (x != 0) {
+                    this.b.set(x, 1, -19, state(Blocks.CLAY));                                       // darunter Ton: Flötentöne
+                }
             }
             this.b.set(-3, 2, -19, state(Blocks.DARK_OAK_PLANKS));
             this.b.set(3, 2, -19, state(Blocks.DARK_OAK_PLANKS));
