@@ -32,6 +32,7 @@ import sky_iron_textures as sky_tex
 import chronit_textures as tw_tex
 import flame_textures as ew_tex
 import phase_textures as vw_tex
+import echo_textures as ls_tex
 
 Rect = tuple[int, int, int, int]  # x, y, Breite, Höhe
 
@@ -797,9 +798,32 @@ def voidwalker() -> Design:
     })
 
 
+def listener() -> Design:
+    """Hallkristall (die Rüstung der Lauscher, 1.6): Platten aus Tiefenschiefer, gepolstert mit grauer Wolle, über die feine
+    Sculkadern laufen. Der Helm ist eine Maske mit einem türkis schimmernden Sehschlitz, an den Ohren Scheiben aus
+    Hallkristall, über der Stirn ein Kristall; auf der Brust ein Sculkherz in einem Ring aus Hallkristall, Kristall an der
+    Gürtelschnalle und an den Knien, Stiefel mit dicken Wollsohlen (Fühler, Ohrscheiben, Herz und Sohlen kommen auch als
+    3D-Teile)."""
+    return Design("listener", {"A": ls_tex.DEEPSLATE, "B": ls_tex.WOOL, "D": ls_tex.WAVE, "E": ls_tex.ECHO}, mask=True, d={
+        "head_top": [".", ".", "..q..q..", "..p..p..", ".", ".", ".", "."],
+        "head_front": [".", "...GF...", "...ED...", ".", "3rsttsr3", ".", ".", "bccccccb"],
+        "head_side": [".", ".", "...GF...", "..GFED..", "..FEDC..", "...DC...", ".", "bccccccb"],
+        "head_back": [".", ".", ".", "...q....", "....p...", "...p....", ".", "bccccccb"],
+        "body_front": [".", "...FE...", "..FtuE..", "..EusD..", "...DC...", "..q..q..", ".p....p.", ".", "."],
+        "body_back": [".", ".", ".", "...q....", "....p...", "...q....", "....p...", "."],
+        "arm_side": [".", ".", ".", "dccb", ".", "..q.", ".", ".", "dccb"],
+        "boot_side": ["."] * 6 + ["dccb", ".", ".", ".EC.", "cddc", "bccb"],
+        "boot_front": ["."] * 6 + ["dccb", ".", ".", ".EC.", "cddc", "bccb"],
+        "belt_front": ["."] * 7 + ["fedGFdcb"],
+        "belt_back": TRIM_BELT,
+        "belt_side": TRIM_BELT_SIDE,
+        "thigh_front": [".", ".", ".", ".", ".GF.", ".FE.", "..q."],
+    })
+
+
 def designs() -> list[Design]:
     return [steel(), nightsteel(), abyssite(), konterit(), werewolf_pelt(), ember_scale(), moonstone(), aquamarine(), dusk(), starwalker(),
-            timewarden(), emberwalker(), voidwalker()] + \
+            timewarden(), emberwalker(), voidwalker(), listener()] + \
         [dragon(k) for k in icons.DRAGONS]
 
 

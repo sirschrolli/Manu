@@ -76,6 +76,7 @@ import sky_iron_textures  # noqa: E402
 import chronit_textures  # noqa: E402
 import flame_textures  # noqa: E402
 import phase_textures  # noqa: E402
+import echo_textures  # noqa: E402
 import clocktower_textures  # noqa: E402
 import weaver_textures  # noqa: E402
 import shepherd_textures  # noqa: E402
@@ -401,6 +402,7 @@ def build_all() -> dict[str, Image.Image]:
     chronit_textures.build(put)
     flame_textures.build(put)
     phase_textures.build(put)
+    echo_textures.build(put)
     clocktower_textures.build(put)
     weaver_textures.build(put)
     shepherd_textures.build(put)
@@ -454,7 +456,7 @@ def main() -> None:
     # Bildfolgen der Meeresblöcke: .mcmeta daneben
     for key, (frames, frametime, interpolate) in {**sea_blocks.ANIMATIONS, **urmeer_textures.ANIMATIONS, **fae_textures.ANIMATIONS, **abyss_textures.ANIMATIONS,
                                                      **dusk_textures.ANIMATIONS, **shepherd_textures.ANIMATIONS,
-                                                     **sky_iron_textures.ANIMATIONS, **chronit_textures.ANIMATIONS, **flame_textures.ANIMATIONS, **phase_textures.ANIMATIONS,
+                                                     **sky_iron_textures.ANIMATIONS, **chronit_textures.ANIMATIONS, **flame_textures.ANIMATIONS, **phase_textures.ANIMATIONS, **echo_textures.ANIMATIONS,
                                                      **clocktower_textures.ANIMATIONS}.items():
         meta = {"animation": {"frametime": frametime, "interpolate": interpolate}}
         (TEXTURES / f"{key}.png.mcmeta").write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")

@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "minecraft:deep_dark",
+  "features": "kingdomsatwar:ore_echo_crystal",
+  "step": "underground_ores"
+}

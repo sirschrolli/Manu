@@ -713,6 +713,11 @@ public class ModRecipeProvider extends RecipeProvider {
         storage(phasit, io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT_BLOCK.get());
         smeltOre(phasit, 1.2f, io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT_ORE.get());
         this.voidwalkerArmor(phasit);
+        // Hallkristall (seit 1.6)
+        Item echo = io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL.get();
+        storage(echo, io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL_BLOCK.get());
+        smeltOre(echo, 1.2f, io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL_ORE.get());
+        this.listenerArmor(echo);
         // der Uhrturm (1.1): Uhrbronze aus Kupfer und Gold, Uhrwerk aus Uhrbronze und Chronit, Zifferblatt aus Kalzit und Knochenmehl
         ItemLike clockBronze = io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCK_BRONZE.base().get();
         shaped(RecipeCategory.BUILDING_BLOCKS, clockBronze, 4).pattern("CGC").pattern("GCG").pattern("CGC")
@@ -1232,6 +1237,24 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('P', gem).define('E', pearl).unlockedBy(has, has(gem)).save(output, key("voidwalker_leggings"));
         shaped(RecipeCategory.COMBAT, set.get(3).get()).pattern("P P").pattern("C C")
                 .define('P', gem).define('C', chorus).unlockedBy(has, has(gem)).save(output, key("voidwalker_boots"));
+    }
+
+    /**
+     * Die Rüstung der Lauscher (1.6): Hallkristall, in Helm, Harnisch und Beinschienen ein Stück Sculk (er lauscht), in den
+     * Stiefeln Wolle (sie verschluckt die Schritte).
+     */
+    private void listenerArmor(Item gem) {
+        String has = getHasName(gem);
+        var set = io.github.sirschrolli.kingdomsatwar.registry.EchoGear.listenerSet();
+        Item sculk = net.minecraft.world.item.Items.SCULK;
+        shaped(RecipeCategory.COMBAT, set.get(0).get()).pattern("PSP").pattern("P P")
+                .define('P', gem).define('S', sculk).unlockedBy(has, has(gem)).save(output, key("listener_helmet"));
+        shaped(RecipeCategory.COMBAT, set.get(1).get()).pattern("P P").pattern("PSP").pattern("PPP")
+                .define('P', gem).define('S', sculk).unlockedBy(has, has(gem)).save(output, key("listener_chestplate"));
+        shaped(RecipeCategory.COMBAT, set.get(2).get()).pattern("PSP").pattern("P P").pattern("P P")
+                .define('P', gem).define('S', sculk).unlockedBy(has, has(gem)).save(output, key("listener_leggings"));
+        shaped(RecipeCategory.COMBAT, set.get(3).get()).pattern("P P").pattern("W W")
+                .define('P', gem).define('W', net.minecraft.tags.ItemTags.WOOL).unlockedBy(has, has(gem)).save(output, key("listener_boots"));
     }
 
     /** Die Dämmerrüstung (0.98): Dämmerquarz mit weichem Leder. */

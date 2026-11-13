@@ -44,6 +44,7 @@ final class ReliefNames {
             "earth_rune",
             "earth_seal_shard",
             "earth_spell_tablet",
+            "echo_crystal",
             "ember_fang",
             "ember_scale",
             "fire_dragon_scale",

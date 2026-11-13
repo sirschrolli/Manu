@@ -39,6 +39,7 @@ public final class ModTags {
         public static final TagKey<Block> ORES_CHRONIT = common("ores/chronit");
         public static final TagKey<Block> ORES_FIRE_OPAL = common("ores/fire_opal");
         public static final TagKey<Block> ORES_PHASIT = common("ores/phasit");
+        public static final TagKey<Block> ORES_ECHO_CRYSTAL = common("ores/echo_crystal");
         public static final TagKey<Block> STORAGE_BLOCKS_MOONSILVER = common("storage_blocks/moonsilver");
         public static final TagKey<Block> STORAGE_BLOCKS_NIGHTSTEEL = common("storage_blocks/nightsteel");
         public static final TagKey<Block> STORAGE_BLOCKS_SOUL_CRYSTAL = common("storage_blocks/soul_crystal");
@@ -50,6 +51,7 @@ public final class ModTags {
         public static final TagKey<Block> STORAGE_BLOCKS_CHRONIT = common("storage_blocks/chronit");
         public static final TagKey<Block> STORAGE_BLOCKS_FIRE_OPAL = common("storage_blocks/fire_opal");
         public static final TagKey<Block> STORAGE_BLOCKS_PHASIT = common("storage_blocks/phasit");
+        public static final TagKey<Block> STORAGE_BLOCKS_ECHO_CRYSTAL = common("storage_blocks/echo_crystal");
         public static final TagKey<Block> ORES_CARBON = common("ores/carbon");
         public static final TagKey<Block> ORES_GEMSTONE = common("ores/gemstone");
         public static final TagKey<Block> ORES_KONTERIT = common("ores/konterit");
@@ -267,6 +269,7 @@ public final class ModTags {
         public static final TagKey<Item> REPAIRS_TIMEWARDEN_ARMOR = mod("repairs_timewarden_armor");
         public static final TagKey<Item> REPAIRS_EMBERWALKER_ARMOR = mod("repairs_emberwalker_armor");
         public static final TagKey<Item> REPAIRS_VOIDWALKER_ARMOR = mod("repairs_voidwalker_armor");
+        public static final TagKey<Item> REPAIRS_LISTENER_ARMOR = mod("repairs_listener_armor");
         public static final TagKey<Item> REPAIRS_FLAME_WHIP = mod("repairs_flame_whip");
         /** Womit sich die Phasenklinge (1.5) ausbessern lässt: Phasit. */
         public static final TagKey<Item> REPAIRS_PHASE_BLADE = mod("repairs_phase_blade");
@@ -329,6 +332,9 @@ public final class ModTags {
         public static final TagKey<Item> ORES_PHASIT = common("ores/phasit");
         public static final TagKey<Item> GEMS_PHASIT = common("gems/phasit");
         public static final TagKey<Item> STORAGE_BLOCKS_PHASIT = common("storage_blocks/phasit");
+        public static final TagKey<Item> ORES_ECHO_CRYSTAL = common("ores/echo_crystal");
+        public static final TagKey<Item> GEMS_ECHO_CRYSTAL = common("gems/echo_crystal");
+        public static final TagKey<Item> STORAGE_BLOCKS_ECHO_CRYSTAL = common("storage_blocks/echo_crystal");
         public static final TagKey<Item> RAW_MATERIALS_SKY_IRON = common("raw_materials/sky_iron");
         public static final TagKey<Item> INGOTS_SKY_IRON = common("ingots/sky_iron");
         public static final TagKey<Item> INGOTS_MOONSILVER = common("ingots/moonsilver");

@@ -113,6 +113,9 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         // Phasit (seit 1.4)
         ore(io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT_ORE, io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT.get());
         dropSelf(io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT_BLOCK.get());
+        // Hallkristall (seit 1.6)
+        ore(io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL_ORE, io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL.get());
+        dropSelf(io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL_BLOCK.get());
         // der Uhrturm (1.1)
         dropSelf(io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCKWORK.get());
         dropSelf(io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCK_FACE.get());

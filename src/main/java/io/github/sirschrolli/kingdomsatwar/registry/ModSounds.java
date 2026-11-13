@@ -418,6 +418,8 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> PHASMOR_STAGGER = register("entity.phasmor.stagger");
     public static final DeferredHolder<SoundEvent, SoundEvent> VOID_THRONE_KINDLE = register("block.void_throne.kindle");
     public static final DeferredHolder<SoundEvent, SoundEvent> PHASE_BLADE_DASH = register("item.phase_blade.dash");
+    // seit 1.6: die Echoortung der Rüstung der Lauscher
+    public static final DeferredHolder<SoundEvent, SoundEvent> LISTENER_ECHO = register("item.listener_armor.echo");
     public static final DeferredHolder<SoundEvent, SoundEvent> FAE_ELYTRA_FLAP = register("item.fae_elytra.flap");
     // Asteria, die Sternenreiterin (0.65)
     public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_CRY = register("entity.asteria.cry");

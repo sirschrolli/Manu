@@ -60,6 +60,7 @@ public final class KingdomsAtWar {
         io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.init();
         io.github.sirschrolli.kingdomsatwar.registry.FlameGear.init();   // seit 1.1.6: Feueropal und die Rüstung der Glutwandler
         io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.init();   // seit 1.4: Phasit und die Rüstung der Leerwandler
+        io.github.sirschrolli.kingdomsatwar.registry.EchoGear.init();    // seit 1.6: Hallkristall und die Rüstung der Lauscher
         io.github.sirschrolli.kingdomsatwar.registry.PhaseSanctuary.init();   // seit 1.5: Leerenthron, Phasenklinge, Phasmor
         io.github.sirschrolli.kingdomsatwar.registry.FlameSanctuary.init();   // seit 1.2: das Flammenheiligtum und Ignara
         io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.init();

@@ -161,6 +161,18 @@ public final class ModWorldgen {
     public static final int PHASIT_VEINS = 6;
     public static final int PHASIT_SIZE = 4;
 
+    /**
+     * Hallkristall (seit 1.6): Kristalle im Tiefenschiefer der Tiefen Dunkelheit (nur dort, wo der Sculk wuchert) – acht Versuche
+     * je Chunk zu höchstens vier Kristallen, gern an den Wänden der Höhlen (mit der Härte bleibt etwa die Hälfte).
+     */
+    public static final ResourceKey<Feature> ORE_ECHO_CRYSTAL = ResourceKey.create(Registries.FEATURE, KingdomsAtWar.id("ore_echo_crystal"));
+    public static final ResourceKey<PlacedFeature> ORE_ECHO_CRYSTAL_PLACED = ResourceKey.create(Registries.PLACED_FEATURE,
+            KingdomsAtWar.id("ore_echo_crystal"));
+    public static final ResourceKey<BiomeModifier> ADD_ORE_ECHO_CRYSTAL = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
+            KingdomsAtWar.id("add_ore_echo_crystal"));
+    public static final int ECHO_CRYSTAL_VEINS = 8;
+    public static final int ECHO_CRYSTAL_SIZE = 4;
+
     /** Wilde Zierblumen (Bild "Nahrung & Pflanzen", Abschnitt 5). */
     public static final List<FlowerPatch> FLOWER_PATCHES = List.of(
             new FlowerPatch("lavender", ModBlocks.LAVENDER, 6, Tags.Biomes.IS_PLAINS),
@@ -227,6 +239,9 @@ public final class ModWorldgen {
                 BlockReplacement.replace(new net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest(
                         net.minecraft.world.level.block.Blocks.END_STONE), io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT_ORE.get().defaultBlockState())),
                 PHASIT_SIZE, 0.0f));
+        context.register(ORE_ECHO_CRYSTAL, new OreFeature(List.of(
+                BlockReplacement.replace(deepslate, io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL_ORE.get().defaultBlockState())),
+                ECHO_CRYSTAL_SIZE, 0.0f));
 
         for (FlowerPatch patch : FLOWER_PATCHES) {
             context.register(patch.featureKey(), new SimpleBlockFeature(BlockStateProvider.of(patch.flower().get())));
@@ -271,6 +286,11 @@ public final class ModWorldgen {
                 CountPlacement.of(PHASIT_VEINS),
                 InSquarePlacement.spread(),
                 HeightRangePlacement.uniform(VerticalAnchor.absolute(10), VerticalAnchor.absolute(90)),
+                BiomeFilter.biome())));
+        context.register(ORE_ECHO_CRYSTAL_PLACED, new PlacedFeature(features.getOrThrow(ORE_ECHO_CRYSTAL), List.of(
+                CountPlacement.of(ECHO_CRYSTAL_VEINS),
+                InSquarePlacement.spread(),
+                HeightRangePlacement.uniform(VerticalAnchor.absolute(-60), VerticalAnchor.absolute(8)),
                 BiomeFilter.biome())));
 
         for (FlowerPatch patch : FLOWER_PATCHES) {
@@ -415,6 +435,10 @@ public final class ModWorldgen {
                         biomes.getOrThrow(net.minecraft.world.level.biome.Biomes.END_BARRENS),
                         biomes.getOrThrow(net.minecraft.world.level.biome.Biomes.SMALL_END_ISLANDS)),
                 HolderSet.direct(placed.getOrThrow(ORE_PHASIT_PLACED)),
+                GenerationStep.Decoration.UNDERGROUND_ORES));
+        context.register(ADD_ORE_ECHO_CRYSTAL, new BiomeModifiers.AddFeaturesBiomeModifier(
+                HolderSet.direct(biomes.getOrThrow(net.minecraft.world.level.biome.Biomes.DEEP_DARK)),
+                HolderSet.direct(placed.getOrThrow(ORE_ECHO_CRYSTAL_PLACED)),
                 GenerationStep.Decoration.UNDERGROUND_ORES));
 
         for (CrystalVein vein : CRYSTAL_VEINS) {

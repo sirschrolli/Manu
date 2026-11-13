@@ -10497,6 +10497,23 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.item.glitch_wings.blink"
   },
+  "item.listener_armor.echo": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:item/listener_echo1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:item/listener_echo2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:item/listener_echo3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.item.listener_armor.echo"
+  },
   "item.minute_hand.hour": {
     "sounds": [
       {

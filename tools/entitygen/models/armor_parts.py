@@ -39,6 +39,10 @@
     durchzogen, ein Phasit in Purpur auf der Brust, Schulterplatten aus Leerenstahl, über denen Splitter schweben, Armreife
     mit leuchtender Naht; eine Phasitschnalle am Gürtel, Kniekacheln mit Phasit; Stiefel mit Stahlkappen und leuchtenden
     Schwebesohlen, an den Fersen kleine Splitter
+  * Hallkristall (seit 1.6, die Rüstung der Lauscher): ein Helm aus Tiefenschiefer mit gepolstertem Wollrand, an den Ohren
+    Scheiben aus Hallkristall mit Ringen darin, oben vier Fühler aus Sculk (zwei lange, zwei kurze), deren Spitzen türkis
+    leuchten; auf der Brust ein pochendes Sculkherz in einem Kranz aus Hallkristall, Schulterplatten über Wollpolstern;
+    Kniekacheln mit Hallkristall; Stiefel mit dicken Sohlen aus grauer Wolle und Kristallen an den Knöcheln
   * Aquamarin (seit 0.97, die Taucherrüstung): ein runder Taucherhelm aus Aquamarin mit Messingkragen, vorn ein großes
     Sichtfenster (man sieht das Gesicht dahinter), an den Seiten kleine Bullaugen, oben ein Ventil, hinten der Schlauch;
     zwei Luftflaschen auf dem Rücken mit Ventilen und Messingbändern, eine Druckanzeige auf der Brust, flache
@@ -57,7 +61,7 @@ from ..paint import Ctx, along, hash01, hexc, mix, noise3, pick, ramp, rel_y
 
 SETS = ["steel", "konterit", "nightsteel", "abyssite", "fire", "ice", "lightning", "nature", "earth", "water", "crown",
         "leather", "chainmail", "iron", "gold", "diamond", "netherite", "copper", "turtle", "moonstone", "aquamarine", "dusk", "starwalker",
-        "timewarden", "emberwalker", "voidwalker"]
+        "timewarden", "emberwalker", "voidwalker", "listener"]
 SLOTS = {"head": ["head"], "chest": ["body", "left_arm", "right_arm"], "legs": ["body", "left_leg", "right_leg"],
          "feet": ["left_leg", "right_leg"]}
 
@@ -157,6 +161,12 @@ PALETTES = {
         "vw_phasit": [hexc(c) for c in ("#04403a", "#076a60", "#0c9888", "#19c4ac", "#3ce0c8", "#86f4e0", "#e0fff8")],
         "vw_glow": [hexc(c) for c in ("#0f9c88", "#1fc8ae", "#3fe6cc", "#84f6e2", "#d8fff6")],
         "vw_spark": ramp("#5a1e9a", "#f0d8ff", 4),
+        # Hallkristall (1.6): die Rüstung der Lauscher
+        "ls_slate": ramp("#141418", "#7c7c88", 8),
+        "ls_wool": ramp("#5c5c64", "#dadae0", 8),
+        "ls_sculk": [hexc(c) for c in ("#03141a", "#06262e", "#093842", "#0d4c58", "#11646e", "#188090", "#22a0b2")],
+        "ls_glow": [hexc(c) for c in ("#1898aa", "#26c0d2", "#4adcec", "#9cf0fa", "#e0fcff")],
+        "ls_echo": [hexc(c) for c in ("#1e3e58", "#2e5c80", "#4a82a8", "#6fa8d0", "#98cbec", "#c4e6fa", "#f0faff")],
     }
 }
 
@@ -837,6 +847,66 @@ def _voidwalker(m: Model) -> None:
         _spike(m, f, f"vw_heel_{bone}", (0.9 * side, 10.6, 3.0), (-58.0, 0.0, 0.0), 2.0, 0.8, "vw_shard")
 
 
+# ------------------------------------------------------------------ Hallkristall (1.6): die Rüstung der Lauscher
+
+def _ls_feeler(m: Model, parent: str, name: str, pivot, rot, length: float, width: float) -> None:
+    """Ein Fühler aus Sculk wie bei einem Sculk-Sensor: drei Glieder, die sich nach außen biegen, die Spitze leuchtet."""
+    _chain(m, parent, name, pivot, [(width, length * 0.42, width, rot), (width * 0.8, length * 0.33, width * 0.8, (0.0, 0.0, 0.0)),
+                                    (width * 0.6, length * 0.25, width * 0.6, (0.0, 0.0, 0.0))], "ls_tendril")
+
+
+def _listener(m: Model) -> None:
+    h = _slot(m, "listener", "head", "head")
+    # der gepolsterte Wollrand unten am Helm
+    m.cube(h, (-5.2, -1.2, -5.2), (10.4, 1.1, 10.4), "ls_wool")
+    # die Ohrscheiben: eine Platte aus Tiefenschiefer, darauf eine runde Scheibe aus Hallkristall mit Ringen
+    for side in (1, -1):
+        m.cube(h, (_mx(4.9, 0.7, side), -6.4, -2.6), (0.7, 5.2, 5.2), "ls_plate")
+        m.cube(h, (_mx(5.5, 0.6, side), -5.8, -2.0), (0.6, 4.0, 4.0), "ls_disc")
+    # der Kristall über der Stirn
+    m.cube(h, (-0.9, -8.0, -5.6), (1.8, 1.8, 0.6), "ls_gem")
+    # die Fühler: zwei lange außen, zwei kurze innen, nach außen gebogen
+    for side in (1, -1):
+        _ls_feeler(m, h, f"ls_feeler_long_{'l' if side > 0 else 'r'}", (2.8 * side, -8.6, 0.8), (-10.0, 0.0, 28.0 * side), 8.2, 1.1)
+        _ls_feeler(m, h, f"ls_feeler_short_{'l' if side > 0 else 'r'}", (1.0 * side, -8.6, -1.6), (8.0, 0.0, 14.0 * side), 4.6, 0.85)
+
+    b = _slot(m, "listener", "chest", "body")
+    # das Sculkherz auf der Brust und der Kranz aus Hallkristall darum
+    m.cube(b, (-1.9, 2.8, -3.6), (3.8, 3.8, 0.8), "ls_heart")
+    for (x, y, w, hh) in ((-0.7, 1.5, 1.4, 1.1), (-0.7, 6.8, 1.4, 1.1), (-3.3, 4.0, 1.1, 1.4), (2.2, 4.0, 1.1, 1.4)):
+        m.cube(b, (x, y, -3.8), (w, hh, 0.65), "ls_gem")
+    # die Schulterplatten über Wollpolstern
+    for side, bone in ((1, "left_arm"), (-1, "right_arm")):
+        a = _slot(m, "listener", "chest", bone)
+        p = f"ls_pauldron_{bone}"
+        m.bone(p, a, (1.0 * side, -3.0, 0.0), (0.0, 0.0, 10.0 * side))
+        m.cube(p, (_mx(-2.6, 6.2, side), -0.2, -3.5), (6.2, 1.0, 7.0), "ls_wool")
+        m.cube(p, (_mx(-3.0, 6.8, side), -1.6, -3.6), (6.8, 1.5, 7.2), "ls_plate")
+        m.cube(p, (_mx(0.6, 1.4, side), -2.2, -0.7), (1.4, 0.7, 1.4), "ls_gem")
+        # ein kurzer Fühler auf der Schulter, nach hinten gebogen
+        _ls_feeler(m, p, f"ls_shoulder_feeler_{bone}", (1.2 * side, -1.6, 1.8), (-30.0, 0.0, 10.0 * side), 3.0, 0.6)
+        # der Armreif mit Wollpolster
+        m.cube(a, (_mx(-2.3, 6.6, side), 6.0, -3.3), (6.6, 1.6, 6.6), "ls_plate")
+        m.cube(a, (_mx(-2.2, 6.4, side), 7.55, -3.2), (6.4, 0.6, 6.4), "ls_wool")
+
+    t = _slot(m, "listener", "legs", "body")
+    # die Kristallschnalle am Gürtel
+    m.cube(t, (-1.3, 10.0, -3.5), (2.6, 2.2, 0.45), "ls_plate")
+    m.cube(t, (-0.8, 10.35, -3.9), (1.6, 1.5, 0.5), "ls_gem")
+    for side, bone in ((1, "left_leg"), (-1, "right_leg")):
+        g = _slot(m, "listener", "legs", bone)
+        # Kniekachel mit Hallkristall
+        m.cube(g, (-2.2, 3.5, -3.15), (4.4, 2.9, 0.75), "ls_plate")
+        m.cube(g, (-0.7, 4.15, -3.65), (1.4, 1.4, 0.55), "ls_gem")
+
+    for side, bone in ((1, "left_leg"), (-1, "right_leg")):
+        f = _slot(m, "listener", "feet", bone)
+        # die dicke Wollsohle (sie verschluckt die Schritte), die Kappe aus Tiefenschiefer, ein Kristall am Knöchel
+        m.cube(f, (-2.7, 11.0, -3.4), (5.4, 1.4, 6.8), "ls_wool")
+        m.cube(f, (-2.5, 9.8, -4.0), (5.0, 1.6, 1.2), "ls_plate")
+        m.cube(f, (_mx(2.75, 0.6, side), 7.4, -0.7), (0.6, 1.4, 1.4), "ls_gem")
+
+
 # ------------------------------------------------------------------ Dämmerquarz (0.98): die Rüstung der Schleicher
 
 def _quartz_points(m: Model, parent: str, name: str, pivot, rot, scale: float = 1.0) -> None:
@@ -1199,6 +1269,7 @@ def build() -> Model:
     _timewarden(m)
     _emberwalker(m)
     _voidwalker(m)
+    _listener(m)
     # Plätze ohne eigene Teile bekommen leere Knochen, damit Java jeden Namen findet
     for s in SETS:
         for slot, bones in SLOTS.items():
@@ -2015,6 +2086,88 @@ def _vw_sole(ctx: Ctx):
     return col
 
 
+def _ls_plate(ctx: Ctx):
+    """Tiefenschiefer: dunkelgrau mit feinen Lagen, die Kanten heller; hier und da eine Sculkader, die schwach leuchtet."""
+    ry = rel_y(ctx)
+    v = 0.52 - 0.22 * ry
+    if ctx.face == "top":
+        v = 0.62
+    elif ctx.face == "bottom":
+        v = 0.24
+    if ctx.s == 0 or ctx.t == 0:
+        v += 0.1
+    if ctx.s == ctx.w - 1 or ctx.t == ctx.h - 1:
+        v -= 0.1
+    if ctx.t % 3 == 2:
+        v -= 0.05                                           # die Lagen des Gesteins
+    v += (_noise(ctx, 173) - 0.5) * 0.1
+    col = pick(ctx.pal["ls_slate"], v)
+    if ctx.face not in ("top", "bottom"):
+        n = noise3(ctx.local[0] * 0.9, ctx.local[1] * 0.9, ctx.local[2] * 0.9, 179)
+        if abs(n - 0.5) < 0.014:
+            col = pick(ctx.pal["ls_sculk"], 0.75)
+            if abs(n - 0.5) < 0.006:
+                col = pick(ctx.pal["ls_glow"], 0.3)
+                ctx.glow = mix((0, 0, 0, 255), col, 0.6)
+    return col
+
+
+def _ls_wool(ctx: Ctx):
+    """Graue Wolle: weich, mit feinen Maschen und Nähten."""
+    v = 0.58 - 0.16 * rel_y(ctx) + (_noise(ctx, 181) - 0.5) * 0.14
+    if (ctx.s + ctx.t * 2) % 4 == 0:
+        v -= 0.07                                            # die Maschen
+    if ctx.face == "bottom":
+        v -= 0.12
+    return pick(ctx.pal["ls_wool"], v)
+
+
+def _ls_tendril(ctx: Ctx):
+    """Ein Fühler: dunkler Sculk am Ansatz, zur Spitze hin heller; die Spitze leuchtet türkis."""
+    t = _seg_t(ctx)
+    v = 0.25 + 0.6 * t + (_noise(ctx, 187) - 0.5) * 0.08
+    if ctx.face in ("west", "back"):
+        v -= 0.06
+    col = pick(ctx.pal["ls_sculk"], v)
+    if t >= 0.62:
+        g = pick(ctx.pal["ls_glow"], (t - 0.62) / 0.38)
+        ctx.glow = g
+        col = mix(col, g, 0.7)
+    return col
+
+
+def _ls_heart(ctx: Ctx):
+    """Das Sculkherz: dunkler Sculk mit Adern; vorn in der Mitte ein leuchtender Kern."""
+    v = 0.35 + (_noise(ctx, 191) - 0.5) * 0.2
+    col = pick(ctx.pal["ls_sculk"], v)
+    if ctx.face == "front":
+        cx, cy = (ctx.w - 1) / 2.0, (ctx.h - 1) / 2.0
+        d = math.hypot(ctx.s - cx, ctx.t - cy) / max(1.0, min(cx, cy))
+        if d < 0.55:
+            col = pick(ctx.pal["ls_glow"], 0.95 - d)
+            ctx.glow = col
+        elif d < 0.85 and (ctx.s + ctx.t) % 2 == 0:
+            col = pick(ctx.pal["ls_glow"], 0.2)
+            ctx.glow = mix((0, 0, 0, 255), col, 0.5)
+    return col
+
+
+def _ls_disc(ctx: Ctx):
+    """Die Ohrscheibe: Hallkristall mit Ringen wie Wellen (auf den großen Flächen), am Rand dunkler."""
+    if ctx.face in ("west", "east"):
+        cx, cy = (ctx.w - 1) / 2.0, (ctx.h - 1) / 2.0
+        d = math.hypot(ctx.s - cx, ctx.t - cy) / max(1.0, min(cx, cy))
+        if d > 1.08:
+            return pick(ctx.pal["ls_echo"], 0.25)
+        ring = int(d * 3.2) % 2
+        v = (0.85 if ring == 0 else 0.55) - 0.15 * d + (0.08 if ctx.s + ctx.t < ctx.w else 0.0)
+        col = pick(ctx.pal["ls_echo"], v)
+        if ring == 0:
+            ctx.glow = mix((0, 0, 0, 255), col, 0.45)
+        return col
+    return pick(ctx.pal["ls_echo"], 0.4)
+
+
 def materials(variant: str) -> dict:
     out = {
         "fur": _fur,
@@ -2115,6 +2268,12 @@ def materials(variant: str) -> dict:
         "vw_purpur": _gold("vw_purpur"),
         "vw_gem": _gem("vw_phasit"),
         "vw_shard": _crystal("vw_phasit", "vw_glow", 0.4),
+        "ls_plate": _ls_plate,
+        "ls_wool": _ls_wool,
+        "ls_tendril": _ls_tendril,
+        "ls_heart": _ls_heart,
+        "ls_disc": _ls_disc,
+        "ls_gem": _gem("ls_echo"),
     }
     for e in DRAGON:
         out["dragon_scale_" + e] = _scale(DRAGON[e][0])

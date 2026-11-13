@@ -318,6 +318,20 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         for (var piece : io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.voidwalkerSet()) {
             add(ItemTags.TRIMMABLE_ARMOR, piece);
         }
+        // Hallkristall und die Rüstung der Lauscher (seit 1.6)
+        copy(ModTags.Blocks.ORES_ECHO_CRYSTAL, ModTags.Items.ORES_ECHO_CRYSTAL);
+        copy(ModTags.Blocks.STORAGE_BLOCKS_ECHO_CRYSTAL, ModTags.Items.STORAGE_BLOCKS_ECHO_CRYSTAL);
+        add(ModTags.Items.GEMS_ECHO_CRYSTAL, io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL);
+        tag(Tags.Items.GEMS).addTag(ModTags.Items.GEMS_ECHO_CRYSTAL);
+        add(ItemTags.BEACON_PAYMENT_ITEMS, io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL);
+        add(ModTags.Items.REPAIRS_LISTENER_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL);
+        add(ItemTags.HEAD_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.EchoGear.LISTENER_HELMET);
+        add(ItemTags.CHEST_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.EchoGear.LISTENER_CHESTPLATE);
+        add(ItemTags.LEG_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.EchoGear.LISTENER_LEGGINGS);
+        add(ItemTags.FOOT_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.EchoGear.LISTENER_BOOTS);
+        for (var piece : io.github.sirschrolli.kingdomsatwar.registry.EchoGear.listenerSet()) {
+            add(ItemTags.TRIMMABLE_ARMOR, piece);
+        }
         // der Minutenzeiger (1.1): ein Schwert, mit Chronit auszubessern
         add(ModTags.Items.REPAIRS_MINUTE_HAND, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT);
         add(ItemTags.SWORDS, io.github.sirschrolli.kingdomsatwar.registry.ClockTower.MINUTE_HAND);

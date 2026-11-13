@@ -226,6 +226,27 @@ PHASIT_CLUSTERS = [
     "..21............",
 ]
 
+# Hallkristallerz (1.6): blasse Kristalle im Tiefenschiefer (1-4, oben links das Licht), dazu ein Ring wie eine Welle auf einem
+# Teich (5-8) um einen Stern aus Kristall – hier hat der Gesang der Orgel am längsten im Gestein nachgeklungen
+ECHO_CLUSTERS = [
+    "................",
+    "...776.....4....",
+    "..7...6...443...",
+    ".7..4..6..4321..",
+    ".7.434.5...321..",
+    ".6..3..5....1...",
+    "..6...5.........",
+    "...655..........",
+    "................",
+    "..........4.....",
+    "..4......443....",
+    "..43.....4321...",
+    "..21......321...",
+    "......4....1.4..",
+    "......43.....43.",
+    "......21.....21.",
+]
+
 # Edelstein-Erz: grüne (1-4) und violette (5-8) Steine
 GEM_MIXED = [
     "................",
@@ -305,6 +326,8 @@ FIRE_OPAL = tones("#a8260c", "#e85e18", "#ffa02e", "#ffe27a")
 FIRE_OPAL_FLASH = tones("#14784a", "#2fc070", "#7ff0a8", "#e6fff0")
 PHASIT = tones("#0c5a52", "#1a9e8c", "#3ce0c6", "#c8fff2")
 PHASIT_SPARK = tones("#5a1e9a", "#9a4ae0", "#d49cff", "#f6e6ff")
+ECHO = tones("#2c5a80", "#6aa6d0", "#b4e0ff", "#f2fbff")
+ECHO_WAVE = tones("#1c5a72", "#2f98b8", "#6fd8f0", "#cff6ff")
 
 
 def build(put: Callable[[str, Image.Image], None]) -> None:
@@ -347,6 +370,9 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     phasit = overlay(PHASIT_CLUSTERS, PHASIT, PHASIT_SPARK)
     put("block/phasit_ore_overlay", phasit)
     put("block/phasit_ore_glow", glow_of(phasit, PHASIT[2:] + PHASIT_SPARK[1:]))
+    echo = overlay(ECHO_CLUSTERS, ECHO, ECHO_WAVE)
+    put("block/echo_crystal_ore_overlay", echo)
+    put("block/echo_crystal_ore_glow", glow_of(echo, ECHO[2:] + ECHO_WAVE[1:]))
 
 
 if __name__ == "__main__":

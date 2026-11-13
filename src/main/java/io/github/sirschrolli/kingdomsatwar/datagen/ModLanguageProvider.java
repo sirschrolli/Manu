@@ -863,6 +863,25 @@ public class ModLanguageProvider extends LanguageProvider {
                 "Stiefel: Enderperlen tun nicht mehr weh");
         text(ModItems.loreKey("voidwalker_armor", 3), "Full set: void walkers stay calm when you look at them",
                 "Ganzer Satz: Leerwandler bleiben ruhig, wenn du sie ansiehst");
+        // Hallkristall und die Rüstung der Lauscher (1.6)
+        block(io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL_ORE, "Echo Crystal Ore", "Hallkristallerz");
+        block(io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL_BLOCK, "Block of Echo Crystal", "Hallkristallblock");
+        item(io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL, "Echo Crystal", "Hallkristall");
+        lore("echo_crystal", "Hold it to your ear and you hear distant singing",
+                "Hält man ihn ans Ohr, hört man fernen Gesang");
+        item(io.github.sirschrolli.kingdomsatwar.registry.EchoGear.LISTENER_HELMET, "Listener's Helm", "Helm der Lauscher");
+        item(io.github.sirschrolli.kingdomsatwar.registry.EchoGear.LISTENER_CHESTPLATE, "Listener's Harness", "Harnisch der Lauscher");
+        item(io.github.sirschrolli.kingdomsatwar.registry.EchoGear.LISTENER_LEGGINGS, "Listener's Greaves", "Beinschienen der Lauscher");
+        item(io.github.sirschrolli.kingdomsatwar.registry.EchoGear.LISTENER_BOOTS, "Listener's Boots", "Stiefel der Lauscher");
+        lore("listener_armor", "Each piece: less harm from the Deep Warden's sonic boom",
+                "Jeder Teil: weniger Schaden durch den Schallschlag des Tiefenhüters");
+        text(ModItems.loreKey("listener_armor", 2), "Helm: darkness no longer clouds your eyes",
+                "Helm: Die Dunkelheit legt sich nicht mehr über die Augen");
+        text(ModItems.loreKey("listener_armor", 3), "Boots: woollen soles – your steps make no vibrations",
+                "Stiefel: Wollsohlen – deine Schritte machen keine Erschütterung");
+        text(ModItems.loreKey("listener_armor", 4), "Full set: sneak to send out an echo that reveals creatures nearby",
+                "Ganzer Satz: Wer schleicht, ruft ein Echo, das Wesen in der Nähe zeigt");
+        subtitle("item.listener_armor.echo", "Echo rings out", "Echo hallt");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_SOIL, "Fae Soil", "Feenerde");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_GRASS, "Fae Grass Block", "Feengrasblock");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_MOSS, "Fae Moss", "Feenmoos");

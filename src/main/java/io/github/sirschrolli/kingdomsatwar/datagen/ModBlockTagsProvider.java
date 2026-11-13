@@ -337,6 +337,16 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         tag(Tags.BlockItems.STORAGE_BLOCKS.block()).addTag(ModTags.Blocks.STORAGE_BLOCKS_PHASIT);
         add(BlockTags.BEACON_BASE_BLOCKS, io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT_BLOCK);
         add(BlockTags.CRYSTAL_SOUND_BLOCKS, io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT_BLOCK);
+        // Hallkristall (seit 1.6)
+        add(BlockTags.MINEABLE_WITH_PICKAXE, io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL_ORE, io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL_BLOCK);
+        add(BlockTags.NEEDS_DIAMOND_TOOL, io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL_ORE, io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL_BLOCK);
+        add(ModTags.Blocks.ORES_ECHO_CRYSTAL, io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL_ORE);
+        tag(Tags.BlockItems.ORES.block()).addTag(ModTags.Blocks.ORES_ECHO_CRYSTAL);
+        tag(BlockItemTags.ORES.block()).addTag(ModTags.Blocks.ORES_ECHO_CRYSTAL);
+        add(ModTags.Blocks.STORAGE_BLOCKS_ECHO_CRYSTAL, io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL_BLOCK);
+        tag(Tags.BlockItems.STORAGE_BLOCKS.block()).addTag(ModTags.Blocks.STORAGE_BLOCKS_ECHO_CRYSTAL);
+        add(BlockTags.BEACON_BASE_BLOCKS, io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL_BLOCK);
+        add(BlockTags.CRYSTAL_SOUND_BLOCKS, io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL_BLOCK);
         add(BlockTags.MINEABLE_WITH_SHOVEL, FaeBlocks.FAE_SOIL, FaeBlocks.FAE_GRASS);
         add(BlockTags.MINEABLE_WITH_HOE, FaeBlocks.FAE_MOSS, FaeBlocks.ROSE_GLIMMER_LEAVES, FaeBlocks.AZURE_GLIMMER_LEAVES,
                 FaeBlocks.THORN_HEDGE);
