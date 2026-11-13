@@ -454,6 +454,7 @@ public class ModModelProvider extends ModelProvider {
         FlameModels.register(blocks, items);
         PhaseModels.register(blocks, items);
         EchoModels.register(blocks, items);
+        CathedralModels.register(blocks, items);
         StarModels.register(blocks, items);
         MystikModels.register(blocks, items);
         AnniModels.register(blocks, items);

@@ -46,6 +46,11 @@ PHASIT = st.ramp("#2ad2b8", dark=0.3, light=0.98, cool=255, hue_dark=24, chroma_
 PURPUR = st.ramp("#a679a8", dark=0.24, light=0.94, cool=290, hue_dark=12, warm=330, hue_light=8, chroma_light=0.5)
 VOID_STEEL = st.ramp("#3a3450", dark=0.12, light=0.7, cool=280, hue_dark=8, warm=300, hue_light=10, chroma_light=0.7)
 PHASIT_GLOW = st.fixed("#064a44", "#0c7a6e", "#14a898", "#2ad2bc", "#6af0dc", "#b8fff2", "#f0fffc")
+# die Stimmgabel (1.7): grün angelaufenes Kupfer, seegrünes Leder, Hallkristall
+OX_COPPER = st.fixed("#2a3a30", "#3b5a4a", "#4f7d66", "#6aa286", "#b0663a", "#d88a52", "#f2b98a")
+SEA_LEATHER = st.ramp("#2d6a6e", dark=0.12, light=0.8, cool=190)
+ECHO_CRYSTAL = st.fixed("#1e3e5c", "#2c5a80", "#4a86b0", "#6aa6d0", "#94c8ea", "#c4e6ff", "#f2fbff")
+ECHO_GLOW = st.fixed("#0c3a52", "#16608a", "#2a90c0", "#5ec0ea", "#9cd8ff", "#d4f0ff", "#ffffff")
 # der Minutenzeiger (1.01): gebläuter Stahl, Uhrmessing, Chronit
 BLUED = st.fixed("#0a0e2a", "#141c48", "#20306e", "#2e4896", "#4566b8", "#7290dc", "#b4c8f6")
 CLOCK_BRASS = st.ramp("#d0a040", dark=0.28, light=0.96, warm=90)
@@ -551,6 +556,34 @@ def phase_blade_atlas():
     return img, glow
 
 
+def tuning_fork_atlas():
+    R = _regions("tuning_fork")
+    img, glow = _blank()
+    paint(img, R["grip"], wrap(SEA_LEATHER))
+
+    def copper(x, y, w, h):
+        # Grünspan in Flecken, wo er fehlt, glänzt das Kupfer
+        if h01(x, y, 61) < 0.3:
+            return _lv(OX_COPPER, 5 if y == 0 else 4)
+        return _lv(OX_COPPER, 3 if y == 0 else 2 + (x + y) % 2)
+    paint(img, R["copper"], copper)
+    paint(img, R["copper_top"], top(OX_COPPER))
+    paint(glow, R["gem"], glow_fill(ECHO_GLOW))
+    paint(img, R["yoke"], copper)
+    paint(img, R["yoke_side"], copper)
+
+    def prong(x, y, w, h):
+        # Hallkristall: an den Kanten hell, innen tiefer; Ringe wie Wellen auf einem Teich
+        level = 6 if x == 0 else 5 if x == w - 1 else 3 + (1 if (y // 3) % 2 else 0)
+        if y % 6 == 0:
+            level = min(6, level + 1)
+        return _lv(ECHO_CRYSTAL, level)
+    paint(img, R["prong"], prong)
+    paint(img, R["prong_edge"], strand(ECHO_CRYSTAL, 6.0, 4.0, False))
+    paint(glow, R["ring"], lambda x, y, w, h: _lv(ECHO_GLOW, 6 if y % 3 == 0 else 5))
+    return img, glow
+
+
 def steel_double_axe_atlas():
     R = _regions("steel_double_axe")
     img, glow = _blank()
@@ -679,6 +712,7 @@ ATLASES = {
     "steel_halberd": steel_halberd_atlas, "draconium_warhammer": draconium_warhammer_atlas, "nightsteel_dagger": nightsteel_dagger_atlas,
     "abyssite_greatsword": abyssite_greatsword_atlas, "steel_double_axe": steel_double_axe_atlas, "miner_hammer": miner_hammer_atlas,
     "phase_blade": phase_blade_atlas,
+    "tuning_fork": tuning_fork_atlas,
     "ember_pickaxe": ember_pickaxe_atlas, "vein_breaker": vein_breaker_atlas, "ore_seeker": ore_seeker_atlas,
     "keeper_maul": keeper_maul_atlas,
     "sea_witch_staff": sea_witch_staff_atlas,
@@ -1045,7 +1079,42 @@ def minute_hand_icon() -> Image.Image:
     return s.outline(prefer=("E", "C", "B", "F")).image({"B": BLUED, "C": CLOCK_BRASS, "E": CHRONIT_GLOW, "F": DARK_LEATHER})
 
 
+def tuning_fork_icon() -> Image.Image:
+    """Die Stimmgabel im Inventar: schräg von unten links nach oben rechts – der Knauf mit Hallkristall, der Griff in seegrünem
+    Leder, Kragen und Hals aus grün angelaufenem Kupfer, der Bügel und die beiden Zinken aus Hallkristall mit leuchtenden
+    Ringen (zwischen ihnen der Spalt). Gezeichnet entlang der Diagonale: u längs der Gabel, v quer dazu."""
+    s = st.Spr(16, 16)
+    r2 = math.sqrt(2.0)
+    for y in range(16):
+        for x in range(16):
+            dx, dy = x + 0.5 - 1.6, y + 0.5 - 14.4
+            u = (dx - dy) / r2                      # vom Knauf zur Spitze
+            v = (dx + dy) / r2                      # quer (nach unten rechts = +)
+            av = abs(v)
+            cell = None
+            if u < -0.2 or u > 18.6:
+                continue
+            if u < 1.3 and av < 1.0:
+                cell = ("E", 6 if v < 0 else 5)
+            elif u < 6.3 and av < 0.8:
+                cell = ("F", 4 if int(u * 1.2) % 2 else 3) if v < 0.2 else ("F", 2)
+            elif u < 7.3 and av < 1.05:
+                cell = ("C", 6 if v < 0 else 4)
+            elif u < 9.0 and av < 0.62:
+                cell = ("C", 5 if v < 0 else 3)
+            elif 9.0 <= u < 10.3 and av < 3.3:
+                cell = ("C", 5 if v < -0.5 else 4 if v < 1.0 else 3)
+            elif u >= 10.3 and 2.0 < av < 3.3:
+                ring = int(u) in (12, 15)
+                inner = (av - 2.0) < 0.6
+                cell = ("E", 5) if ring else ("B", (5 if inner else 3) + (1 if u > 17.4 else 0))
+            if cell is not None:
+                s.set(x, y, cell)
+    return s.outline(prefer=("E", "B", "C", "F")).image({"B": ECHO_CRYSTAL, "C": OX_COPPER, "E": ECHO_GLOW, "F": SEA_LEATHER})
+
+
 ICONS = {name: (lambda n=name: icon(n)) for name in ICON_ART}
+ICONS["tuning_fork"] = tuning_fork_icon
 ICONS["keeper_maul"] = keeper_maul_icon
 ICONS["sea_witch_staff"] = lambda: sea_witch_staff_icon()
 ICONS["shepherd_crook"] = lambda: shepherd_crook_icon()

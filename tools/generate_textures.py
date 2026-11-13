@@ -77,6 +77,7 @@ import chronit_textures  # noqa: E402
 import flame_textures  # noqa: E402
 import phase_textures  # noqa: E402
 import echo_textures  # noqa: E402
+import cathedral_textures  # noqa: E402
 import clocktower_textures  # noqa: E402
 import weaver_textures  # noqa: E402
 import shepherd_textures  # noqa: E402
@@ -403,6 +404,7 @@ def build_all() -> dict[str, Image.Image]:
     flame_textures.build(put)
     phase_textures.build(put)
     echo_textures.build(put)
+    cathedral_textures.build(put)
     clocktower_textures.build(put)
     weaver_textures.build(put)
     shepherd_textures.build(put)

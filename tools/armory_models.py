@@ -144,6 +144,18 @@ REGIONS: dict[str, dict[str, UV]] = {
         "crystal": (2, 4, 4, 10),       # Kristallzacken an der Parierstange (leuchten)
         "crystal_edge": (4, 4, 5, 10),
     },
+    # die Stimmgabel (1.7): Sordins Waffe – ein Griff aus Kupfer in seegrünem Leder, zwei Zinken aus Hallkristall
+    "tuning_fork": {
+        "grip": (0, 0, 2, 8),           # seegrüne Lederwicklung
+        "copper": (0, 8, 2, 10),        # grün angelaufenes Kupfer (Kappe, Kragen, Hals)
+        "copper_top": (0, 10, 2, 12),
+        "gem": (0, 12, 2, 14),          # der Hallkristall im Knauf (leuchtet)
+        "yoke": (2, 0, 9, 2),           # der Bügel von vorn (Kupfer)
+        "yoke_side": (2, 2, 9, 3),
+        "prong": (9, 0, 11, 16),        # die Zinken aus Hallkristall: Spitze oben
+        "prong_edge": (11, 0, 12, 16),
+        "ring": (12, 0, 13, 16),        # leuchtende Ringe um die Zinken
+    },
     # die Phasenklinge (1.5): Phasmors Zweihänder aus einem einzigen Phasitkristall
     "phase_blade": {
         "grip": (0, 0, 2, 8),           # violette Lederwicklung
@@ -463,6 +475,26 @@ def phase_blade() -> Shape:
     return s
 
 
+def tuning_fork() -> Shape:
+    """Die Stimmgabel (1.7): ein Griff in seegrünem Leder mit einem Hallkristall im Knauf, ein Kragen und ein Hals aus
+    grün angelaufenem Kupfer, der Bügel und zwei lange Zinken aus Hallkristall, um die leuchtende Ringe laufen."""
+    s = Shape(REGIONS["tuning_fork"])
+    s.box(7.4, -8.6, 7.4, 8.6, -7.4, 8.6, "gem", glow=True)
+    s.box(7.15, -7.5, 7.15, 8.85, -6.6, 8.85, "copper", cap="copper_top")
+    s.box(7.35, -6.6, 7.35, 8.65, 2.0, 8.65, "grip", cap="copper_top")
+    s.box(7.15, 1.4, 7.15, 8.85, 2.4, 8.85, "copper", cap="copper_top")
+    s.box(7.5, 2.4, 7.5, 8.5, 4.8, 8.5, "copper", cap="copper_top")
+    # der Bügel (ein flaches U) und die Zinken
+    frame = (4.6, 4.6, 11.4, 6.0)
+    plate(s, 4.6, 4.6, 11.4, 6.0, 7.35, 8.65, "yoke", frame, side="yoke_side", cap="yoke_side")
+    for x0 in (4.6, 9.9):
+        s.box(x0, 6.0, 7.4, x0 + 1.5, 19.2, 8.6, "prong", side="prong_edge", cap="prong_edge")
+        s.box(x0 + 0.2, 19.2, 7.6, x0 + 1.3, 20.2, 8.4, "prong", side="prong_edge", cap="prong_edge")
+        for y in (9.0, 13.0, 17.0):
+            s.box(x0 - 0.12, y, 7.28, x0 + 1.62, y + 0.6, 8.72, "ring", glow=True)
+    return s
+
+
 def steel_double_axe() -> Shape:
     """Stahl-Doppelaxt: ein Eichenstiel mit Lederwicklung, oben zwei halbmondförmige Blätter (links und rechts) und eine kurze
     Spitze."""
@@ -580,6 +612,7 @@ ITEMS = {
     "NIGHTSTEEL_DAGGER": ("nightsteel_dagger", nightsteel_dagger),
     "ABYSSITE_GREATSWORD": ("abyssite_greatsword", abyssite_greatsword),
     "PHASE_BLADE": ("phase_blade", phase_blade),
+    "TUNING_FORK": ("tuning_fork", tuning_fork),
     "STEEL_DOUBLE_AXE": ("steel_double_axe", steel_double_axe),
     "MINER_HAMMER": ("miner_hammer", miner_hammer),
     "EMBER_PICKAXE": ("ember_pickaxe", ember_pickaxe),

@@ -341,6 +341,12 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         // die Phasenklinge (1.5): ein Schwert (Schärfe, Schwung …), mit Phasit auszubessern
         add(ModTags.Items.REPAIRS_PHASE_BLADE, io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT);
         add(ItemTags.SWORDS, io.github.sirschrolli.kingdomsatwar.registry.PhaseSanctuary.PHASE_BLADE);
+        // die Stimmgabel (1.7): eine schwere Hiebwaffe wie der Bannhammer (Schärfe, Haltbarkeit …), mit Hallkristall auszubessern
+        add(ModTags.Items.REPAIRS_TUNING_FORK, io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL);
+        add(ItemTags.DURABILITY_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.CathedralGear.TUNING_FORK);
+        add(ItemTags.MELEE_WEAPON_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.CathedralGear.TUNING_FORK);
+        add(ItemTags.SHARP_WEAPON_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.CathedralGear.TUNING_FORK);
+        add(net.neoforged.neoforge.common.Tags.Items.MELEE_WEAPON_TOOLS, io.github.sirschrolli.kingdomsatwar.registry.CathedralGear.TUNING_FORK);
         add(ItemTags.HEAD_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_HELMET);
         add(ItemTags.CHEST_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_CHESTPLATE);
         add(ItemTags.LEG_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_LEGGINGS);

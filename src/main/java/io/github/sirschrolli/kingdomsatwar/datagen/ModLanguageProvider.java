@@ -1279,6 +1279,46 @@ public class ModLanguageProvider extends LanguageProvider {
         }
         subtitle("block.void_throne.kindle", "Void Throne glows", "Leerenthron leuchtet auf");
         subtitle("item.phase_blade.dash", "Phase strike", "Phasenhieb");
+        // Sordin, der Kantor der Stille, und das Orgelpult der Stillen Kathedrale (1.7)
+        creature(ModEntities.SORDIN, io.github.sirschrolli.kingdomsatwar.registry.CathedralGear.SORDIN_SPAWN_EGG,
+                "Sordin, the Cantor of Silence", "Sordin, der Kantor der Stille", "Kantor der Stille");
+        text("boss.kingdomsatwar.sordin", "Sordin, the Cantor of Silence", "Sordin, der Kantor der Stille");
+        text("boss.kingdomsatwar.sordin.title", "He who sang the deep to sleep", "Der die Tiefe in den Schlaf sang");
+        block(io.github.sirschrolli.kingdomsatwar.registry.CathedralGear.ORGAN_DESK, "Organ Desk", "Orgelpult");
+        lore("organ_desk", "The heart of the organ in the Silent Cathedral", "Das Herz der Orgel in der Stillen Kathedrale");
+        text(ModItems.loreKey("organ_desk", 2), "Silenced: an Echo Crystal makes its notes glow again – and calls the cantor back",
+                "Verstummt: Ein Hallkristall lässt seine Noten wieder leuchten – und ruft den Kantor zurück");
+        text("block.kingdomsatwar.organ_desk.hint", "A cantor plays without a sound … whoever comes close or makes noise wakes him.",
+                "Ein Kantor spielt, ohne dass ein Ton erklingt … wer näher kommt oder Lärm macht, weckt ihn.");
+        text("block.kingdomsatwar.organ_desk.awake", "The notes blaze – the cantor has turned around.",
+                "Die Noten leuchten auf – der Kantor hat sich umgewandt.");
+        text("block.kingdomsatwar.organ_desk.silenced", "The organ has fallen silent. An Echo Crystal might wake its notes.",
+                "Die Orgel ist verstummt. Ein Hallkristall könnte ihre Noten wecken.");
+        text("block.kingdomsatwar.organ_desk.warning", "Somewhere in the deep, an organ plays without a sound …",
+                "Irgendwo in der Tiefe spielt eine Orgel, ohne dass ein Ton erklingt …");
+        text("block.kingdomsatwar.organ_desk.peaceful", "The notes stay dark (the world is set to Peaceful).",
+                "Die Noten bleiben dunkel (die Welt steht auf „Friedlich“).");
+        item(io.github.sirschrolli.kingdomsatwar.registry.CathedralGear.TUNING_FORK, "Tuning Fork", "Stimmgabel");
+        lore("tuning_fork", "The fork of Sordin, the Cantor of Silence", "Die Stimmgabel von Sordin, dem Kantor der Stille");
+        text(ModItems.loreKey("tuning_fork", 2), "Copper and Echo Crystal – as heavy as a mace",
+                "Kupfer und Hallkristall – schwer wie ein Streitkolben");
+        text(ModItems.loreKey("tuning_fork", 3), "Use: resonance – a sonic boom through stone and armor (wool stops it)",
+                "Benutzen: Resonanz – ein Schallschlag durch Stein und Rüstung (Wolle hält ihn auf)");
+        for (String[] e : new String[][] {{"ambient", "Cantor hums", "Kantor summt"},
+                {"organ", "Organ plays without a sound", "Orgel spielt lautlos"},
+                {"hurt", "Cantor hurts", "Kantor nimmt Schaden"},
+                {"death", "Cantor falls silent", "Kantor verstummt"},
+                {"step", "Cantor glides", "Kantor gleitet"},
+                {"awaken", "Cantor wakes", "Kantor erwacht"},
+                {"swing", "Tuning fork whirs", "Stimmgabel schwirrt"}, {"fork", "Tuning fork rings", "Stimmgabel klingt"},
+                {"sonic", "Sonic wave", "Schallwelle"}, {"chord", "Chord resounds", "Akkord hallt"},
+                {"notes", "Cantor sings", "Kantor singt"}, {"hush", "Hush …", "Psst …"},
+                {"fortissimo", "All pipes roar", "Alle Pfeifen brausen"},
+                {"stagger", "Cantor covers his ears", "Kantor hält sich die Ohren zu"}}) {
+            subtitle("entity.sordin." + e[0], e[1], e[2]);
+        }
+        subtitle("block.organ_desk.kindle", "Organ notes glow", "Noten der Orgel leuchten auf");
+        subtitle("item.tuning_fork.resonate", "Tuning fork resonates", "Stimmgabel schwingt");
         // Waffen und Rüstungen aus Monsterteilen (0.70)
         item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.WEREWOLF_PELT, "Werewolf Pelt", "Werwolfspelz");
         lore("werewolf_pelt", "Thick, dark fur – still warm", "Dichtes, dunkles Fell – noch warm");

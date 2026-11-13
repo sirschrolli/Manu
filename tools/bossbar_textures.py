@@ -62,6 +62,7 @@ PHASES = {
     "world_eater": (0.66, 0.5, 0.33),    # Ruf der Welten, Zorn, Ruf der Welten
     "ignara": (0.5,),                    # unter halber Kraft steigt sie als Phönix auf
     "phasmor": (0.5,),                   # unter halber Kraft setzt er die Krone auf (Phasensturm)
+    "sordin": (0.5,),                    # unter halber Kraft das Fortissimo
 }
 # die Erzmagier wechseln bei zwei Dritteln und einem Drittel die Phase
 MAGE_PHASES = (0.66, 0.33)
@@ -228,6 +229,15 @@ ELEMENTS = {
                     crystal0="#04403a", crystal1="#0c9888", crystal2="#3ce0c8", crystal3="#d8fffa",
                     purpur="#c48ccc", purpur_dark="#6a3a74", purpur_light="#ecc8f0",
                     grip="#241c38", grip_light="#4a3e66", ray="#86f4e0"),
+    # Sordin, der Kantor der Stille (seit 1.7): Schiefer und grün angelaufenes Kupfer; hinter dem Medaillon der Fächer seiner
+    # Orgelpfeifen, über der Oberkante schweben Noten mit blassen Echoringen, darunter liegt die Stimmgabel, als Spitze ein
+    # Hallkristall in Kupfer; die Füllung Schallwellen, über die helle Kämme laufen
+    "sordin": dict(m0="#0a0d14", m1="#2e3646", m2="#8a96aa", acc="#29dfeb", glow="#e6ffff", deep="#021418",
+                   f0="#021a1e", f1="#0b6f7c", f2="#29dfeb", f3="#e6ffff",
+                   copper="#c8763e", copper_dark="#6a3a20", copper_light="#f2b98a",
+                   verdigris="#5aa58a", verdigris_dark="#25594b", verdigris_light="#9ed8bc",
+                   crystal0="#1e3e5c", crystal1="#4a86b0", crystal2="#9cd8ff", crystal3="#f2fbff",
+                   leather="#1e4e52", leather_light="#3a8286"),
 }
 
 OUTLINE = (12, 10, 12, 255)
@@ -2816,6 +2826,125 @@ def deco_phasmor(img: Image.Image, pal: dict) -> None:
     img.alpha_composite(tip)
 
 
+def _sordin_pipe(layer: Image.Image, g: dict, x0: int, base: int, height: int, width: int = 3) -> None:
+    """Eine Orgelpfeife: Kupfer, grün angelaufen, links im Licht; oben offen (dunkel), unten der Mund mit Sculk-Leuchten."""
+    lp = layer.load()
+    for y in range(base - height, base + 1):
+        for k in range(width):
+            x = x0 + k
+            if y == base - height:
+                col = g["copper_light"] if k == 0 else g["copper"]                     # der Rand oben
+            elif y == base - height + 1 and 0 < k < width - 1:
+                col = OUTLINE                                                          # oben offen
+            elif base - 4 <= y <= base - 3 and 0 < k < width - 1:
+                col = g["acc"] if y == base - 3 else OUTLINE                           # der Mund
+            else:
+                patina = hash01(x, y, 1621) > 0.55
+                col = (g["verdigris_light"] if k == 0 else g["verdigris"] if k < width - 1 else g["verdigris_dark"]) if patina \
+                    else (g["copper_light"] if k == 0 else g["copper"] if k < width - 1 else g["copper_dark"])
+            put(lp, layer, x, y, col)
+
+
+def _sordin_note(layer: Image.Image, g: dict, x: int, y: int, flag: bool) -> None:
+    """Eine Achtelnote (Kopf, Hals, Fähnchen) in Türkis."""
+    lp = layer.load()
+    for dx, dy in ((0, 0), (1, 0), (0, 1), (1, 1)):
+        put(lp, layer, x + dx, y + dy, g["glow"] if (dx, dy) == (0, 0) else g["acc"])
+    for k in range(1, 5):
+        put(lp, layer, x + 2, y + 1 - k, g["acc"])
+    if flag:
+        put(lp, layer, x + 3, y - 3, g["acc"])
+        put(lp, layer, x + 4, y - 2, g["f1"])
+
+
+def deco_sordin(img: Image.Image, pal: dict) -> None:
+    """Sordin, der Kantor der Stille: hinter dem Medaillon der Fächer seiner Orgelpfeifen (die Mitte am höchsten); über der
+    Oberkante schweben Noten, von blassen Echoringen umgeben; unter der Leiste liegt seine Stimmgabel (Knauf mit Hallkristall,
+    seegrüner Griff, Bügel aus Kupfer, zwei Zinken aus Hallkristall); als Spitze ein Hallkristall in Kupfer."""
+    g = {k: c(pal, k) for k in pal}
+    top, bottom = BAR_Y - 3, BAR_Y + BAR_H + 2
+
+    # der Pfeifenfächer hinter dem Medaillon
+    pipes = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    for i, (dx, h) in enumerate(((-14, 11), (-9, 15), (-4, 19), (1, 21), (6, 19), (11, 15), (16, 11))):
+        _sordin_pipe(pipes, g, EMB_X + dx - 1, EMB_Y - 10 + (3 if i in (0, 6) else 1 if i in (1, 5) else 0), h)
+    _outline(pipes, OUTLINE)
+    img.alpha_composite(pipes)
+
+    # schwebende Noten über der Oberkante, mit Echoringen
+    notes = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    rings = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    rp = rings.load()
+    for i, x in enumerate(range(BAR_X + 10, BAR_X + BAR_W - 8, 17)):
+        if any(abs(x - (BAR_X + round(BAR_W * f))) < 9 for f in GEMS):
+            continue
+        hover = 4 + round(hash01(x, 1623) * 3)
+        y = top - hover
+        _sordin_note(notes, g, x, y, i % 2 == 0)
+        r = 3.5 + hash01(x, 1625) * 1.5
+        for k in range(24):
+            a = math.tau * k / 24
+            put(rp, rings, int(x + 1 + math.cos(a) * r), int(y + math.sin(a) * r * 0.6), g["f1"][:3] + (110,))
+    img.alpha_composite(rings)
+    _outline(notes, OUTLINE)
+    img.alpha_composite(notes)
+
+    # die Stimmgabel unter der Leiste
+    fork = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    fp = fork.load()
+    cy = bottom + 6
+    for dx, dy, col in ((0, 0, g["crystal2"]), (1, 0, g["crystal3"]), (0, -1, g["crystal1"]), (1, -1, g["crystal2"]),
+                        (0, 1, g["crystal0"]), (1, 1, g["crystal1"]), (-1, 0, g["crystal1"])):
+        put(fp, fork, 31 + dx, cy + dy, col)
+    for x in range(33, 47):
+        put(fp, fork, x, cy - 1, g["leather_light"] if x % 3 == 0 else g["leather"])
+        put(fp, fork, x, cy, g["leather"] if x % 3 else g["leather_light"])
+        put(fp, fork, x, cy + 1, mix(g["leather"], OUTLINE, 0.4))
+    for x in range(47, 52):
+        for dy in (-1, 0, 1):
+            put(fp, fork, x, cy + dy, g["copper_light"] if dy < 0 else g["copper"] if dy == 0 else g["copper_dark"])
+    # der Bügel (senkrecht) und die beiden Zinken nach rechts
+    for y in range(cy - 4, cy + 5):
+        put(fp, fork, 52, y, g["copper_light"] if y < cy else g["copper"])
+        put(fp, fork, 53, y, g["copper"] if y < cy else g["copper_dark"])
+    x_end = BAR_X + 100
+    for zy in (cy - 3, cy + 3):
+        for x in range(54, x_end + 1):
+            ring = (x - 54) % 9 == 4
+            put(fp, fork, x, zy - 1, g["crystal3"] if ring else g["crystal2"])
+            put(fp, fork, x, zy, g["glow"] if ring else g["crystal1"])
+    _outline(fork, OUTLINE)
+    img.alpha_composite(fork)
+
+    # die Spitze: ein Hallkristall, gefasst von zwei Kupferkrallen
+    tip = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    ty = BAR_Y + BAR_H / 2
+    _keeper_crystal(tip, {**g, "crystal0": g["crystal0"], "crystal1": g["crystal1"], "crystal2": g["crystal2"], "crystal3": g["crystal3"]},
+                    229.0, ty, 0.0, 10.6, 2.6, 1631)
+    tp = tip.load()
+    for y in (int(ty) - 4, int(ty) + 4):
+        for x in (232, 233):
+            put(tp, tip, x, y, g["copper_light"] if y < ty else g["copper"])
+    put(tp, tip, 234, int(ty) - 4, g["copper_dark"])
+    put(tp, tip, 234, int(ty) + 4, g["copper_dark"])
+    _outline(tip, OUTLINE)
+    img.alpha_composite(tip)
+
+
+def post_sordin(img: Image.Image, pal: dict) -> None:
+    """Nach dem Rahmen: statt der Nieten kleine Kupferknöpfe mit Grünspan in Ober- und Unterkante."""
+    g = {k: c(pal, k) for k in pal}
+    px = img.load()
+    x0, x1, y0, y1 = BAR_X - 3, BAR_X + BAR_W + 2, BAR_Y - 3, BAR_Y + BAR_H + 2
+    for x in range(x0 + 9, x1 - 4, 22):
+        if any(abs(x - (BAR_X + round(BAR_W * f))) < 7 for f in GEMS):
+            continue
+        for y in (y0 + 1, y1 - 1):
+            put(px, img, x, y, g["copper_light"])
+            put(px, img, x + 1, y, g["verdigris"])
+            put(px, img, x - 1, y, g["copper_dark"])
+
+
 def post_phasmor(img: Image.Image, pal: dict) -> None:
     """Nach dem Rahmen: statt der Nieten kleine Phasite in Purpur in Ober- und Unterkante."""
     g = {k: c(pal, k) for k in pal}
@@ -3271,6 +3400,7 @@ BANNER_COLORS = {
     "star_weaver": dict(trim="#9ad8ff", trim_dark="#2c3052", fabric="#070a1c"),
     "hour_warden": dict(trim="#e8bc62", trim_dark="#6c4016", fabric="#140a04"),
     "phasmor": dict(trim="#c48ccc", trim_dark="#6a3a74", fabric="#08070f"),
+    "sordin": dict(trim="#5aa58a", trim_dark="#25594b", fabric="#0a0d14"),
 }
 
 
@@ -3358,7 +3488,8 @@ def banner_cap(element: str) -> Image.Image:
 
 POST = {"schrolli": post_schrolli, "schrolli_true": post_schrolli, "schrolli_almighty": post_almighty,
         "world_eater": post_world_eater, "kraken": post_kraken, "keeper": post_keeper, "sea_witch": post_sea_witch,
-        "soul_shepherd": post_soul_shepherd, "star_weaver": post_star_weaver, "ignara": post_ignara, "phasmor": post_phasmor}
+        "soul_shepherd": post_soul_shepherd, "star_weaver": post_star_weaver, "ignara": post_ignara, "phasmor": post_phasmor,
+        "sordin": post_sordin}
 BORDERS = {"world_eater": frame_border_stone, "keeper": frame_border_stone}
 
 
@@ -3366,7 +3497,7 @@ DECOS = {"schrolli": deco_schrolli, "schrolli_true": deco_schrolli, "schrolli_al
          "world_eater": deco_world_eater, "anni": deco_anni, "anni2": deco_anni, "mystic": deco_mystic, "star": deco_star, "forge": deco_forge, "moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
          "water": deco_water, "kraken": deco_kraken, "keeper": deco_keeper, "sea_witch": deco_sea_witch,
          "soul_shepherd": deco_soul_shepherd, "star_weaver": deco_star_weaver, "hour_warden": deco_hour_warden,
-         "ignara": deco_ignara, "phasmor": deco_phasmor}
+         "ignara": deco_ignara, "phasmor": deco_phasmor, "sordin": deco_sordin}
 
 
 def frame(element: str, phases: tuple | None = None) -> Image.Image:
@@ -3531,6 +3662,16 @@ def fill_value(element: str, x: int, y: int) -> float:
         if rel < h:
             return 0.62 + 0.33 * (1.0 - rel / h)
         return 0.32 - 0.14 * (rel - h)
+    if element == "sordin":
+        # Schallwellen: Kämme, die schräg über die Leiste laufen (wie Ringe auf dem Wasser); selten glimmt eine Note
+        wave = math.sin(math.tau * x / 22.0 + 1.3 * math.sin(math.tau * y / 9.0) + 0.6 * math.sin(math.tau * x / 70.0))
+        if hash01(x, y, 1611) > 0.985:
+            return 1.0
+        if wave > 0.9:
+            return 0.92
+        if wave > 0.6:
+            return 0.66
+        return 0.3 + 0.16 * (wave + 1.0) / 2.0 + 0.05 * math.sin(math.tau * y / 9.0)
     if element == "phasmor":
         # geschliffener Phasit: Facetten (Zellen) in verschiedener Helligkeit mit hellen Kanten, darüber zieht schräg ein
         # Schimmer; selten funkelt es
@@ -3736,7 +3877,7 @@ def portrait(element: str) -> Image.Image:
     from entitygen.models import (asteria, boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water,
                                   glutschmied, kraken, miss_mystik, moth_queen, reef_colossus, shattered_king, anni_troll,
                                   schrolli, sea_witch, soul_shepherd, star_weaver, stone_keeper, world_eater, hour_warden, ignara,
-                                  phasmor)
+                                  phasmor, sordin)
     from entitygen.paint import paint_model
     from entitygen.preview import render
     mod = {"fire": boss_fire, "ice": boss_ice, "lightning": boss_lightning, "nature": boss_nature, "earth": boss_earth,
@@ -3744,7 +3885,7 @@ def portrait(element: str) -> Image.Image:
            "forge": glutschmied, "star": asteria, "mystic": miss_mystik, "anni": anni_troll, "anni2": anni_troll,
            "schrolli": schrolli, "schrolli_true": schrolli, "schrolli_almighty": schrolli, "world_eater": world_eater,
            "kraken": kraken, "keeper": stone_keeper, "sea_witch": sea_witch, "soul_shepherd": soul_shepherd,
-           "star_weaver": star_weaver, "hour_warden": hour_warden, "ignara": ignara, "phasmor": phasmor}[element]
+           "star_weaver": star_weaver, "hour_warden": hour_warden, "ignara": ignara, "phasmor": phasmor, "sordin": sordin}[element]
     m = mod.build()
     m.pack()
     variant = "anni_troll_v2" if element == "anni2" else element if element.startswith("schrolli") else next(iter(mod.PALETTES))
@@ -3801,6 +3942,15 @@ def portrait(element: str) -> Image.Image:
             for child in bone.children:
                 strip_phasmor(child)
         strip_phasmor(m.root)
+    if element == "sordin":
+        # die Kapuze mit dem singenden Mund und den Fühlern vor dem Fächer der Pfeifen, darunter der Schulterkragen (ohne Arme,
+        # Gabel, Beine und Kutte)
+        def strip_sordin(bone):
+            if bone.name.startswith(("left_", "right_", "fork", "skirt")):
+                bone.cubes.clear()
+            for child in bone.children:
+                strip_sordin(child)
+        strip_sordin(m.root)
     if element == "forge":
         # der Widderschädel mit Hörnern, Flammen und Kiefer (ohne Arme, Waffen und Beine)
         def strip_forge(bone):
@@ -3890,10 +4040,10 @@ def portrait(element: str) -> Image.Image:
                 strip_anni(child)
         strip_anni(m.root)
     zoom = {"kraken": 1.5, "schrolli": 1.0, "schrolli_true": 1.0, "schrolli_almighty": 1.0, "world_eater": 1.35, "nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86, "star": 0.92, "mystic": 0.95,
-            "anni": 1.0, "anni2": 1.0, "keeper": 0.8, "sea_witch": 1.5, "soul_shepherd": 1.12, "star_weaver": 0.95, "hour_warden": 0.9, "ignara": 0.85, "phasmor": 0.88}.get(element, 1.2)
+            "anni": 1.0, "anni2": 1.0, "keeper": 0.8, "sea_witch": 1.5, "soul_shepherd": 1.12, "star_weaver": 0.95, "hour_warden": 0.9, "ignara": 0.85, "phasmor": 0.88, "sordin": 0.72}.get(element, 1.2)
     yaw = {"kraken": -20, "schrolli": -22, "schrolli_true": -22, "schrolli_almighty": -22, "world_eater": -6, "water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14, "star": -24, "mystic": -22, "anni": -24,
-           "anni2": -24, "keeper": -20, "sea_witch": -22, "soul_shepherd": -14, "star_weaver": -20, "hour_warden": -16, "ignara": -18, "phasmor": -10}.get(element, -42)
-    pitch = {"kraken": -18, "schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2, "keeper": -5, "sea_witch": 2, "soul_shepherd": 4, "star_weaver": 48, "hour_warden": 4, "ignara": 4, "phasmor": 8}.get(element, 6)
+           "anni2": -24, "keeper": -20, "sea_witch": -22, "soul_shepherd": -14, "star_weaver": -20, "hour_warden": -16, "ignara": -18, "phasmor": -10, "sordin": -14}.get(element, -42)
+    pitch = {"kraken": -18, "schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2, "keeper": -5, "sea_witch": 2, "soul_shepherd": 4, "star_weaver": 48, "hour_warden": 4, "ignara": 4, "phasmor": 8, "sordin": 6}.get(element, 6)
     big = render(m, tex, glow, yaw, pitch, 448, pose=getattr(mod, "FOLD_POSE", None), background=(0, 0, 0, 0), zoom=zoom,
                  focus=["body"] if element in ("reef", "kraken", "star_weaver") else ["helm"] if element == "star"
                  else ["lock_l", "lock_r", "crown"] if element == "ignara" else ["head"])
@@ -3903,7 +4053,7 @@ def portrait(element: str) -> Image.Image:
                                                  "anni": 1.45, "anni2": 1.45, "schrolli": 1.5, "schrolli_true": 1.5,
                                                  "schrolli_almighty": 1.45, "world_eater": 2.0, "keeper": 1.3, "sea_witch": 1.35,
                                                  "soul_shepherd": 1.7, "star_weaver": 2.3, "hour_warden": 1.6,
-                                                 "ignara": 1.3, "phasmor": 1.45}.get(element, 1.4))
+                                                 "ignara": 1.3, "phasmor": 1.45, "sordin": 1.9}.get(element, 1.4))
     img = ImageEnhance.Color(img).enhance(1.15)
     img = ImageEnhance.Contrast(img).enhance(1.12)
     if element == "schrolli_almighty":

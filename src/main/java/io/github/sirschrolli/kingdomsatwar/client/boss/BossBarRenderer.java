@@ -184,6 +184,11 @@ public final class BossBarRenderer {
         // Kraft setzt er die Krone auf
         STYLES.put("phasmor", style("phasmor", 0x6AF2DE, new float[] {0.5f}, new Motes(Drift.SHARD, 3.0f, 0xD8FFFA, 0x3CE0C8),
                 new Motes(Drift.TWINKLE, 1.5f, 0xE0FFF8, 0xC48CCC)));
+        // Sordin, der Kantor der Stille (seit 1.7): Schiefer und grün angelaufenes Kupfer, der Fächer seiner Orgelpfeifen, Noten
+        // mit Echoringen über der Leiste, darunter die Stimmgabel; Sculk-Seelen steigen auf, dazwischen funkelt es; unter halber
+        // Kraft das Fortissimo
+        STYLES.put("sordin", style("sordin", 0x29DFEB, new float[] {0.5f}, new Motes(Drift.SMOKE, 2.5f, 0x29DFEB, 0x8AF4FB, 0x0B6F7C),
+                new Motes(Drift.TWINKLE, 1.5f, 0xE6FFFF, 0x9CD8FF)));
         // Asteria, die Sternenreiterin: Silber mit Goldsaum, Sterne und Nachthimmel, ein Stern im Medaillon
         STYLES.put("star", style("star", 0x9AD8FF, new float[] {0.5f}, new Motes(Drift.TWINKLE, 4.5f, 0xFFFFFF, 0x9AD8FF, 0xE8C25A)));
         // MissMystik, die Feen-Zauberkünstlerin: violetter Samt mit Goldsaum, Zauberkarten, Harlekin-Rauten

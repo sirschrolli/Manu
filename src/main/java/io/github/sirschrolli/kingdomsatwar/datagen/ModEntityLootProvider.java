@@ -502,6 +502,12 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         this.add(phasmor, signature(LootTable.lootTable(), phasmor, io.github.sirschrolli.kingdomsatwar.registry.PhaseSanctuary.PHASE_BLADE.get())
                 .withPool(hearts(1))
                 .withPool(material(io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT.get(), 2, 4)));
+        // Sordin, der Kantor der Stille (ein Hallkristall weckt das Orgelpult neu): die Stimmgabel selten (auch beim ersten Sieg);
+        // der Herzkristall nur selten; sonst nur Hallkristall – der Werkstoff der Rüstung der Lauscher – in maßvoller Menge
+        EntityType<?> sordin = ModEntities.SORDIN.get();
+        this.add(sordin, signature(LootTable.lootTable(), sordin, io.github.sirschrolli.kingdomsatwar.registry.CathedralGear.TUNING_FORK.get())
+                .withPool(hearts(1))
+                .withPool(material(io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL.get(), 2, 4)));
         // Asteria, die Sternenreiterin (ein Endkristall entzündet den Sternstein neu): Lanze und Schwingen ihres Rochens selten
         // (auch beim ersten Sieg); der Herzkristall nur selten; Sternsplitter und ein wenig aus dem End
         EntityType<?> asteria = ModEntities.ASTERIA.get();
