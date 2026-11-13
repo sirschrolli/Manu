@@ -210,17 +210,18 @@ final class VentorShowcase {
             Vec3 at = local(stage, 1.0, 1.0, 7.0);
             ArmorStand stand = new ArmorStand(level, at.x, at.y, at.z);
             stand.setShowArms(true);
-            // wie ein Standbild: den Dreizack aufrecht vor sich, das Netz hängt in der Linken
+            // wie ein Standbild: den Dreizack aufrecht vor sich, das Netz hängt in der Linken; die Kamera sieht von seiner
+            // Rechten auf die Zinken
             stand.setRightArmPose(new Rotations(-95.0f, -8.0f, 0.0f));
             stand.setLeftArmPose(new Rotations(-12.0f, 0.0f, -14.0f));
-            stand.setYRot(-40.0f);
-            stand.setYBodyRot(-40.0f);
+            stand.setYRot(-110.0f);
+            stand.setYBodyRot(-110.0f);
             stand.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ArenaGear.STORM_TRIDENT.get()));
             stand.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ArenaGear.GLADIATOR_NET.get()));
             stand.addTag(STAGE_TAG);
             level.addFreshEntity(stand);
         }));
-        steps.add(at(stage, 1.9, 2.5, 9.3, 1.0, 2.2, 7.0));
+        steps.add(at(stage, 2.2, 2.6, 10.2, 1.4, 2.5, 7.0));
         steps.add(Step.waitTicks(30));
         steps.add(Step.screenshot("sturmdreizack_staender"));
         steps.add(Step.quit());

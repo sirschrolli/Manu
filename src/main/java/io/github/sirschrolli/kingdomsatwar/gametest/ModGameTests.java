@@ -390,14 +390,19 @@ public final class ModGameTests {
         helper.succeed();
     }
 
-    /** Jeder Block hat eine Loot-Table, die vom Server geladen wurde (außer den unzerstörbaren, dem Baugerüst und der Glutkruste). */
+    /**
+     * Jeder Block hat eine Loot-Table, die vom Server geladen wurde (außer den unzerstörbaren, dem Baugerüst, der Glutkruste und
+     * dem Gladiatorennetz).
+     */
     private static void lootTables(GameTestHelper helper) {
         var registries = helper.getLevel().getServer().reloadableRegistries();
         for (DeferredHolder<Block, ? extends Block> holder : ModBlocks.BLOCKS.getEntries()) {
             Block block = holder.value();
             if (block.defaultDestroyTime() < 0.0f || block == ModBlocks.BUILDER_SCAFFOLD.get()
-                    || block == io.github.sirschrolli.kingdomsatwar.registry.FlameGear.LAVA_CRUST.get()) {
-                continue;   // unzerstörbar (Nestkern, Teile des Siegelkreises), Baugerüst oder Glutkruste (wird wieder Lava): ohne Beute
+                    || block == io.github.sirschrolli.kingdomsatwar.registry.FlameGear.LAVA_CRUST.get()
+                    || block == io.github.sirschrolli.kingdomsatwar.registry.ArenaGear.GLADIATOR_NET_BLOCK.get()) {
+                continue;   // unzerstörbar (Nestkern, Teile des Siegelkreises), Baugerüst, Glutkruste (wird wieder Lava) oder ein
+                            // geworfenes Netz (löst sich von selbst): ohne Beute
             }
             ResourceKey<LootTable> key = block.getLootTable().orElseThrow(
                     () -> helper.assertionException("Block ohne Loot-Table: %s", holder.getId()));
