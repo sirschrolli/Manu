@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Version 1.6 – Hallkristall und die Rüstung der Lauscher.** Tief unten in der **Tiefen Dunkelheit**, im Reich des Sculk, wo die Stille Kathedrale steht, hallt der Gesang ihrer Orgel bis heute im Gestein nach – und wo er am längsten nachklang, ist der Tiefenschiefer zu **Hallkristall** geronnen: blass wie Eis, mit Ringen darin wie Wellen auf einem Teich. **Hallkristallerz** gibt es nur in der Tiefen Dunkelheit (ab der Diamantspitzhacke; seine Kristalle schimmern im Dunkeln). Neun Kristalle ergeben den **Hallkristallblock** (Licht 6, Wellen laufen durch ihn hindurch, Sockel für ein Leuchtfeuer). Daraus die **Rüstung der Lauscher** (Schutz wie Diamant), in 3D mit **Fühlern aus Sculk** am Helm, **Ohrscheiben** aus Kristall, einem **Sculkherz** auf der Brust und **Wollsohlen**: **Schallschutz** (jeder Teil fängt ein Fünftel des Schallschlags des Tiefenhüters ab), **klare Sicht** (Helm: die Dunkelheit von Tiefenhüter und Kreischern trübt den Blick nicht mehr), **Wollsohlen** (Stiefel: Schritte, Sprünge, Landungen und Schwimmzüge machen keine Erschütterung – Sculk-Sensoren, Kreischer und der Tiefenhüter hören sie nicht) und **Echoortung** (alle vier Teile: Wer schleicht, ruft alle zwei Sekunden leise in die Dunkelheit – ein Ring läuft über den Boden, und jedes Wesen in 16 Blöcken leuchtet kurz auf, auch hinter Wänden).
+> **Version 1.7 – Sordin, der Kantor der Stille.** In der Apsis der **Stillen Kathedrale**, tief im Reich des Sculk, steht jetzt **Sordin, der Kantor der Stille**, an der Kupferorgel und spielt – ohne dass ein Ton erklingt; vor ihm leuchten auf dem neuen **Orgelpult** die Noten. Er ist ein hagerer Mönch in einer dunklen Kutte, die Kapuze ein Spitzbogen wie die Fenster seiner Kathedrale, darin ein glühender, singender Mund; auf seinem Rücken ein Fächer aus Orgelpfeifen, in der Hand eine **Stimmgabel** aus Kupfer und Hallkristall. Er **hört wie der Tiefenhüter**: Wer ihm auf zehn Blöcke nahekommt, in Hörweite Lärm macht (Schritte, Sprünge, abgebaute Blöcke … – wer schleicht oder die Wollsohlen der Lauscher trägt, bleibt ungehört) oder einen **Notenblock** anschlägt, weckt ihn. Er kämpft mit Klang: **Gabelhieb**, die **Schallwelle** (durch Stein und jede Rüstung – nur **Wolle** hält sie auf), der **Akkord** (drei Ringe laufen über den Boden – springen!), der **Notenschwarm** (Noten, die ihr Ziel suchen) und **die Stille** (Dunkelheit, er verschwindet und trifft von hinten); unter halber Kraft das **Fortissimo** – ein Schlag in alle Richtungen, danach drei Schallwellen auf einmal. Doch Klang ist auch seine Schwäche: **Spielt jemand auf der Orgel**, hält er sich die Ohren zu und **taumelt** (drei Sekunden lang nimmt er mehr Schaden). Eigene Bossleiste, eigene Klänge. Er lässt selten seine **Stimmgabel** fallen (eine 3D-Waffe, Rechtsklick: die **Resonanz**, ein Schallschlag durch Stein und Rüstung) und sonst Hallkristall; **ein Hallkristall** auf dem verstummten Pult ruft ihn zurück.
+> In 1.6 kam **Hallkristall und die Rüstung der Lauscher**: Tief unten in der **Tiefen Dunkelheit**, im Reich des Sculk, wo die Stille Kathedrale steht, hallt der Gesang ihrer Orgel bis heute im Gestein nach – und wo er am längsten nachklang, ist der Tiefenschiefer zu **Hallkristall** geronnen: blass wie Eis, mit Ringen darin wie Wellen auf einem Teich. **Hallkristallerz** gibt es nur in der Tiefen Dunkelheit (ab der Diamantspitzhacke; seine Kristalle schimmern im Dunkeln). Neun Kristalle ergeben den **Hallkristallblock** (Licht 6, Wellen laufen durch ihn hindurch, Sockel für ein Leuchtfeuer). Daraus die **Rüstung der Lauscher** (Schutz wie Diamant), in 3D mit **Fühlern aus Sculk** am Helm, **Ohrscheiben** aus Kristall, einem **Sculkherz** auf der Brust und **Wollsohlen**: **Schallschutz** (jeder Teil fängt ein Fünftel des Schallschlags des Tiefenhüters ab), **klare Sicht** (Helm: die Dunkelheit von Tiefenhüter und Kreischern trübt den Blick nicht mehr), **Wollsohlen** (Stiefel: Schritte, Sprünge, Landungen und Schwimmzüge machen keine Erschütterung – Sculk-Sensoren, Kreischer und der Tiefenhüter hören sie nicht) und **Echoortung** (alle vier Teile: Wer schleicht, ruft alle zwei Sekunden leise in die Dunkelheit – ein Ring läuft über den Boden, und jedes Wesen in 16 Blöcken leuchtet kurz auf, auch hinter Wänden).
 > In 1.5 kam **Phasmor, der Leerwandlerkönig, und das Phasenheiligtum**: Über den **äußeren Inseln des Ends** schwebt jetzt das **Phasenheiligtum**: eine runde Plattform aus Endsteinziegeln mit einem Mosaik aus Purpur, Obsidian und **Phasit**, darunter ein Zapfen voller Phasiterz, acht Säulen mit Phasitkristallen, schwebende Stufen hinab zur Insel – und hinten, auf drei Stufen vor einer Wand mit einem **Auge aus Phasit**, der **Leerenthron**. Davor kniet **Phasmor, der Leerwandlerkönig**, und hält Wache, die Klinge vor sich im Boden – wer ihm zu nahe kommt, weckt ihn. Fast fünf Blöcke groß, eine Krone aus schwebenden Phasitsplittern, kämpft er mit seiner **Phasenklinge**: **Klingenhieb**, **Phasenstoß** (er zerfließt und steht hinter dir), **Trugbilder**, die aussehen wie er (jeder Treffer lässt eines zerfallen), **Blockwurf** (Brocken aus dem Heiligtum steigen um ihn auf und fliegen auf dich), **Leerenrisse** (wer darin steht, wird verschluckt und hoch über dem Heiligtum ausgespuckt) – und unter halber Kraft setzt er die **Krone** auf und rast im **Phasensturm** von Gegner zu Gegner. Geschossen weicht er oft aus, aber **Wasser** schadet ihm und lässt ihn sich krümmen. Eigene Bossleiste, eigene Klänge. Seine Beute: selten die **Phasenklinge** (ein Zweihänder aus einem einzigen Phasitkristall; Rechtsklick: der **Phasenhieb** – bis zu sieben Blöcke vorwärts phasen, wen du durchquerst, den triffst du), sonst **Phasit**. Ein Phasit auf dem erloschenen Thron ruft ihn zurück.
 > In 1.4 kam **Phasit und die Rüstung der Leerwandler**: Auf den **äußeren Inseln des Ends** schimmert jetzt **Phasiterz** im Endstein – türkise Büschel, wo die Leerwandler seit Äonen hin und her springen (ab der Diamantspitzhacke; auf der Hauptinsel des Drachen nicht). Aus **Phasit**, einem türkisen Kristall mit einem violetten Funken darin, baut man den **Phasitblock** (Licht 8, Sockel für ein Leuchtfeuer) und die **Rüstung der Leerwandler** (mit Enderperlen, die Stiefel mit Chorusfrüchten; Schutz wie Diamant): eine Kapuze mit leuchtenden Augenschlitzen und einer **Krone aus Phasitsplittern**, ein langer **Mantel** mit türkis leuchtenden Fäden und einem Phasit auf der Brust, Schulterplatten mit **schwebenden Splittern**, Stiefel auf **Schwebesohlen** – alles in 3D. **Phasenschritt** (jeder Teil): Trifft dich ein Wesen im Nahkampf, weichst du mit 6 % je Teil (mit allen vier 24 %) **dem Hieb ganz aus** und springst vier bis acht Blöcke fort, weg vom Angreifer – zurück bleibt ein türkises Nachbild (höchstens alle drei Sekunden). **Schwebende Sohlen** (Stiefel): **Enderperlen** tun nicht mehr weh. **Einer von ihnen** (alle vier Teile): Die **Leerwandler** werden nicht wütend, wenn du sie ansiehst.
 > In 1.3 kam **das Härte-Paket**: Kingdoms at War wurde **deutlich schwerer** – zwanzig Regeln, fest eingebaut: **Monster** haben **doppelt so viel Leben**, treffen **50 % härter**, wittern dich **doppelt so weit** (höchstens 48 Blöcke) und **heilen sich**, wenn man sie in Ruhe lässt (ein halbes Herz alle zwei Sekunden); **Bosse heilen sich**, wenn du vor ihnen fliehst (2 % je Sekunde, sobald niemand mehr in 32 Blöcken ist). **Giftige Treffer:** Zombies machen hungrig, Spinnen vergiften, Skelettpfeile lähmen, andere Monster schwächen. **Fallschaden** ist anderthalbmal so hoch, **jeder zweite Pfeil zersplittert**, wenn er in einen Block fährt. **Erze** – die eigenen wie Kohle, Eisen, Gold, Diamant – sind **halb so häufig**, **Herz- und Manakristalle** wachsen halb so oft, liegen halb so oft in Truhen und geben nur noch **ein halbes Herz bzw. 10 Mana**; **Truhen** sind karger, **Monster** lassen seltener etwas fallen (ihre Teile und Münzen nur halb so oft). **Tränke** wirken halb so lange, der **Zaubertisch** will **doppelt so viel Lapislazuli** (die Erfahrungsstufen bleiben gleich), **Händler** verlangen anderthalbmal so viel und zahlen weniger, **Karten** kosten noch einmal das Doppelte. **Felder** wachsen halb so schnell, **Jungtiere** brauchen doppelt so lange, **das Wild** flieht schon aus 16 Blöcken – und der **Hirsch wehrt sich**: Wer ihn angreift, den nimmt er mit gesenktem Geweih auf die Hörner. Die **Erfahrung**, die du bekommst, bleibt genau gleich.
@@ -485,7 +486,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.6.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.7.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -493,7 +494,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-1.6.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-1.7.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -1375,7 +1376,7 @@ Funde und Münzen – aber karg (siehe unten).
 | **Muschelfeld** | Ozeanruinen | Ozeane | Riesenmuscheln mit leuchtenden Perlen und Truhen, alte Scherben im Sand (warm mit Korallen, kalt mit Seetang) |
 | **Korallenpalast** | Ozeanmonument | tiefe Ozeane | eine Halle unter einer Glaskuppel, vier Türme aus lebenden Korallen, ein Thron auf **acht Goldblöcken**, ein alter Wächter, die **Schwammgrotte** |
 | **Verschüttetes Kloster** | Pfadruinen | Taiga, Urwald, Dschungel | nur der Glockenturm schaut aus dem Waldboden; unten Kreuzgang, Skriptorium, Kapelle – und Funde im Kies für den Pinsel |
-| **Stille Kathedrale** | antike Stadt | tief im Reich des Sculk | eine Kathedrale aus Tiefenschiefer in einer riesigen Höhle: Türme, Fensterrose, Strebebögen, eine Kupferorgel – und Kreischer, die den Wärter rufen |
+| **Stille Kathedrale** | antike Stadt | tief im Reich des Sculk | eine Kathedrale aus Tiefenschiefer in einer riesigen Höhle: Türme, Fensterrose, Strebebögen, eine Kupferorgel, an der **Sordin, der Kantor der Stille**, spielt (seit 1.7) – und Kreischer, die den Wärter rufen |
 | **Arena der Prüfungen** | Prüfungskammern | tief unter der Erde | ein Kolosseum aus Sandstein in einer Höhle; sechs Käfige mit **Prüfungsspawnern**, der Spawner der Böen in der Mitte, **Tresore** (einer unheilvoll) auf der Ehrentribüne |
 | **Raubritterburg** | Waldanwesen | dunkler Wald, Blasser Garten | eine Burg auf einem Hügel mit Graben und Brücke, Ringmauer, Rundtürme, Bergfried mit Verlies (gefangene Hellegeister), Palas – und die Leute des Raubritters (Diener, **Hexer**, Armbrustschützen) |
 
@@ -1435,6 +1436,60 @@ stehen auf dicken **Wollsohlen**.
 - **Echoortung** (alle vier Teile): Wer **schleicht**, ruft alle **zwei Sekunden** leise in die Dunkelheit – ein gläserner
   Ton mit Echo, ein blasser Ring läuft über den Boden, und **jedes Wesen in 16 Blöcken** leuchtet zweieinhalb Sekunden
   lang auf, **auch hinter Wänden**.
+
+### Sordin, der Kantor der Stille (seit 1.7)
+
+![Sordin an der Orgel der Stillen Kathedrale, sein Erwachen, die Schallwelle, der Akkord, die Stille, das Fortissimo, das verstummte Orgelpult und die Stimmgabel](docs/bilder/kantor_der_stille.jpg)
+
+In der Apsis der **Stillen Kathedrale** steht vor der großen Kupferorgel jetzt ihr Spieltisch mit dem **Orgelpult**: ein
+Kasten aus dunkler Eiche mit Registerknöpfen aus Bein, obenauf das Manual und ein Notenpult aus grün angelaufenem Kupfer,
+auf dem die Noten türkis leuchten; zu beiden Seiten Notenblöcke als Tasten (über Ton: Flötentöne). Davor steht **Sordin,
+der Kantor der Stille**, und spielt – ohne dass ein Ton erklingt. Wer sich der Kathedrale nähert, hört von fern eine Orgel,
+die nicht klingt. Sordin ist ein hagerer Mönch, fast vier Blöcke groß, in einer dunklen Kutte, an deren Saum Sculk wächst;
+seine Kapuze öffnet sich zu einem **Spitzbogen** wie die Fenster seiner Kathedrale, darin glimmen zwei Lichtpunkte über
+einem runden, **singenden Mund**, der leuchtet; zwei Fühler aus Sculk lauschen über der Kapuze. Auf der Brust trägt er eine
+kleine Fensterrose, um die Schultern eine seegrüne Stola, auf dem Rücken einen **Fächer aus Orgelpfeifen**, die beben, wenn
+er singt; seine Hände sind bleich und lang, in der Rechten die **Stimmgabel**.
+
+Solange er spielt, ist er unverwundbar. Er **hört wie der Tiefenhüter** – und weckt ihn, was ihn weckt:
+- wer ihm auf **zehn Blöcke** nahekommt (oder ihn angreift);
+- **Lärm** in Hörweite (24 Blöcke): Schritte, Sprünge, Landungen, abgebaute oder gesetzte Blöcke, geöffnete Truhen … – alles,
+  was ein Sculk-Sensor hört. Wer **schleicht**, dessen Schritte hört er nicht, und die **Wollsohlen der Lauscher**
+  verschlucken sie ganz;
+- ein **Notenblock**, der in seiner Nähe erklingt (etwa eine Taste des Spieltischs).
+
+Dann hält er inne, lauscht, wendet sich um, reckt die Stimmgabel empor und schlägt sie an – die Noten auf dem Pult lodern
+auf. Er kämpft mit Klang:
+- **Gabelhieb:** ausholen, dann ein Hieb in einem Bogen vor ihm.
+- **Schallwelle:** Er schlägt die Gabel an, zielt (eine feine Linie zeigt, wohin), dann fährt ein **Schallschlag** bis zu
+  24 Blöcke weit – **durch Stein und jede Rüstung** wie der des Tiefenhüters. Nur **Wolle** hält ihn auf.
+- **Akkord:** Er dirigiert, und mit jedem Schlag läuft ein **Ring** über den Boden davon – drei, im Fortissimo vier.
+  **Springen!** Wer in der Luft ist, dem tut er nichts.
+- **Notenschwarm:** Er singt, und Noten fliegen auf, die ihr Ziel suchen (acht, im Fortissimo zwölf).
+- **Die Stille:** Er legt den Finger an den Mund – **Dunkelheit** senkt sich über alle in der Nähe, er verschwindet (nur ein
+  paar Sculk-Seelen verraten ihn), gleitet heran und taucht **hinter dir** wieder auf, die Gabel schon ausholend. Wer ihn
+  vorher trifft, holt ihn aus der Stille.
+- **Fortissimo** (unter halber Kraft): Er holt Luft und breitet die Arme aus (unverwundbar), dann ein Schlag in alle
+  Richtungen, der jeden in neun Blöcken fortwirft. Danach greift er schneller an, seine Hiebe treffen härter, und jede
+  Schallwelle fährt **dreifach** in einem Fächer.
+- **Die Orgel ist seine Schwäche:** Spielt jemand während des Kampfs auf einem Notenblock in der Nähe (etwa auf den Tasten
+  des Spieltischs), hält er sich die Ohren zu und **taumelt** drei Sekunden lang – in dieser Zeit nimmt er **fast ein Drittel
+  mehr Schaden**. Danach lässt ihn die Orgel eine Viertelminute lang kalt.
+
+Sein eigener Schall und das Fallen schaden ihm nicht, Dunkelheit und Blindheit wirken nicht. Lockt man ihn aus der
+Kathedrale, kehrt er zurück; findet er niemanden mehr, stellt er sich nach einer Weile wieder ans Pult und spielt – geheilt und ohne Fortissimo. Besiegt
+sinkt er auf die Knie, die Pfeifen verstummen, und er zerfällt zu Sculk; **die Noten auf dem Pult erlöschen**. Er lässt
+selten seine **Stimmgabel** fallen (zu einem Fünftel, auch beim ersten Sieg) und sonst nur **zwei bis vier Hallkristalle** –
+den Werkstoff der Rüstung der Lauscher –, einen Herzkristall nur zu einem Viertel. **Ein Hallkristall** auf dem verstummten
+Pult lässt die Noten wieder leuchten und ruft den Kantor zurück. Finden mit `/kaw structure stille_kathedrale`, wecken oder
+zurücksetzen mit `/kaw boss sordin awaken|reset`.
+
+**Die Stimmgabel** (episch, verzauberbar wie ein Schwert, mit Hallkristall auszubessern): ein Griff aus Kupfer in seegrünem
+Leder mit einem Hallkristall im Knauf, ein Bügel aus grün angelaufenem Kupfer und zwei lange **Zinken aus Hallkristall**, um
+die türkise Ringe laufen – im Inventar das Bild, in der Hand ein 3D-Modell. Schwer wie ein Streitkolben (etwa so viel Schaden
+wie ein Netheritschwert, langsamer). **Rechtsklick: die Resonanz** – du schlägst die Gabel an, und ein Schallschlag fährt bis
+zu 16 Blöcke weit in Blickrichtung, **durch Stein und Rüstung**; jeden, den er durchquert, trifft er (mit Schärfe mehr). Nur
+Wolle hält ihn auf. Danach ruht die Gabel sechs Sekunden.
 
 ### Feueropal und die Rüstung der Glutwandler (seit 1.1.6)
 
@@ -4909,7 +4964,7 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 | `/kaw army xp <Menge>` | (mit Cheats) allen eigenen Soldaten in der Nähe Kampferfahrung geben |
 | `/kaw hero` · `/kaw hero xp add <Menge> [Spieler]` · `/kaw hero xp set <Menge> [Spieler]` · `/kaw hero level <Stufe> [Spieler]` · `/kaw hero reset [Spieler]` | (mit Cheats) Heldenstufe anzeigen, Heldenerfahrung geben oder setzen (mit Aufstiegs-Szene), auf eine Heldenstufe springen, von vorn anfangen |
 | `/kaw dim <oberwelt\|nether\|end\|schattenwelt\|leere\|abgrund\|urmeer\|feenreich>` | (im Kreativmodus oder mit Cheats) sofort in eine andere Dimension wechseln – vorgeschlagen werden nur die Namen der Dimensionen (seit 1.1.2 auch Abgrund, Urmeer und Feenreich); man landet an derselben Stelle (im Nether bei einem Achtel der Koordinaten) auf sicherem Boden: im Nether in einer Höhle, im End auf der Obsidianplattform, in der Leere auf dem nächsten Bruchstück |
-| `/kaw boss <Boss>` · `/kaw boss <Boss> tp` · `… awaken` · `… reset` · `/kaw boss pyrrhon\|nyxar summon` | (mit Cheats, seit 1.1.2) nur die Bosse: zeigt, wo der Hort des Bosses liegt – aus jeder Dimension heraus (z. B. findet `/kaw boss stundenwaechter` in der Oberwelt den nächsten Uhrturm im Abgrund); `tp` bringt einen hin, `awaken` weckt den Boss, `reset` setzt seinen Hort zurück, `summon` lässt Pyrrhon oder Nyxar vor einem erwachen. Die Bosse: `pyrrhon`, `glaciara`, `voltarion`, `verdantis`, `terragon`, `thalassa`, `nyxar`, `karkinos`, `anni`, `malleus`, `asteria`, `noctua`, `missmystik`, `steinhueter`, `seelenhirte`, `koenig`, `sternenweberin`, `weltenfresser`, `stundenwaechter`, `kraken`, `meerhexe` und die Erzmagier `ignatius`, `isolde`, `fulgor`, `sylvana`, `gorvan`, `marena` (nur `tp`) |
+| `/kaw boss <Boss>` · `/kaw boss <Boss> tp` · `… awaken` · `… reset` · `/kaw boss pyrrhon\|nyxar summon` | (mit Cheats, seit 1.1.2) nur die Bosse: zeigt, wo der Hort des Bosses liegt – aus jeder Dimension heraus (z. B. findet `/kaw boss stundenwaechter` in der Oberwelt den nächsten Uhrturm im Abgrund); `tp` bringt einen hin, `awaken` weckt den Boss, `reset` setzt seinen Hort zurück, `summon` lässt Pyrrhon oder Nyxar vor einem erwachen. Die Bosse: `pyrrhon`, `glaciara`, `voltarion`, `verdantis`, `terragon`, `thalassa`, `nyxar`, `karkinos`, `anni`, `malleus`, `asteria`, `noctua`, `missmystik`, `steinhueter`, `seelenhirte`, `koenig`, `sternenweberin`, `weltenfresser`, `stundenwaechter`, `kraken`, `meerhexe`, `ignara`, `phasmor`, `sordin` und die Erzmagier `ignatius`, `isolde`, `fulgor`, `sylvana`, `gorvan`, `marena` (nur `tp`) |
 | `/kaw structure <Bauwerk>` · `/kaw structure <Bauwerk> tp` | (mit Cheats, seit 1.1.2) nur die Bauwerke: zeigt, wo das nächste liegt – aus jeder Dimension heraus, auch die, die `/locate` nicht findet (Atoll, Zitadelle, Nester, Lichtungen im Feenreich); `tp` bringt einen hin – sicher auf festen Boden vor das Bauwerk, mit freiem Blick darauf (in Bauwerke unter der Erde hinein, zu Bauwerken am Meeresgrund taucht man hinab und bekommt eine Weile Luft). Alle 60 Bauwerke der Mod, z. B. `uhrturm`, `sternennetz`, `thron`, `schlund_der_welten`, `zitadelle`, `seelenpferch`, `atoll`, `krakenschlund`, `hexengrotte`, `mondhain`, `zauberbuehne`, `mondsteinbruch`, `aschenesse`, `hortfeste`, `sternwarte`, `fehlerzone`, `sternensturz`, die sechs Nester (`vulkankrater`, `gletscherkessel`, `sturmgipfel`, `uralter_hain`, `felsschlucht`, `versunkene_grotte`), die Magiertürme (`magierturm_feuer` …), die Dörfer (`fachwerkdorf`, `nordisches_dorf`, `lehmdorf`, `pfahldorf`, `meeresdorf`, `umbrerdorf`), `stammburg` und `siegelkreis` |
 | **Koordinaten anklicken** | (mit Cheats, seit 1.1.2) die grünen Koordinaten in der Ausgabe von `/kaw boss`, `/kaw structure`, `/kaw seal` und `/kaw realms` anklicken – man reist sofort hin, auch in eine andere Dimension (ohne Cheats passiert nichts) |
 | `/kaw story reset\|card <Kapitel>\|chronicle` | (nur Operatoren) Geschichte zurücksetzen, eine Titelkarte zeigen, die Chronik als Buch geben (seit 0.79 sonst nur noch per Taste J) |
@@ -4942,7 +4997,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.6.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.7.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
