@@ -170,7 +170,7 @@ public final class ModWorldgen {
             KingdomsAtWar.id("ore_echo_crystal"));
     public static final ResourceKey<BiomeModifier> ADD_ORE_ECHO_CRYSTAL = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
             KingdomsAtWar.id("add_ore_echo_crystal"));
-    public static final int ECHO_CRYSTAL_VEINS = 8;
+    public static final int ECHO_CRYSTAL_VEINS = 6;
     public static final int ECHO_CRYSTAL_SIZE = 4;
 
     /** Wilde Zierblumen (Bild "Nahrung & Pflanzen", Abschnitt 5). */
@@ -241,7 +241,7 @@ public final class ModWorldgen {
                 PHASIT_SIZE, 0.0f));
         context.register(ORE_ECHO_CRYSTAL, new OreFeature(List.of(
                 BlockReplacement.replace(deepslate, io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL_ORE.get().defaultBlockState())),
-                ECHO_CRYSTAL_SIZE, 0.0f));
+                ECHO_CRYSTAL_SIZE, 0.3f));
 
         for (FlowerPatch patch : FLOWER_PATCHES) {
             context.register(patch.featureKey(), new SimpleBlockFeature(BlockStateProvider.of(patch.flower().get())));

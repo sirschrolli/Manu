@@ -875,8 +875,8 @@ public class ModLanguageProvider extends LanguageProvider {
         item(io.github.sirschrolli.kingdomsatwar.registry.EchoGear.LISTENER_BOOTS, "Listener's Boots", "Stiefel der Lauscher");
         lore("listener_armor", "Each piece: less harm from the Deep Warden's sonic boom",
                 "Jeder Teil: weniger Schaden durch den Schallschlag des Tiefenhüters");
-        text(ModItems.loreKey("listener_armor", 2), "Helm: darkness no longer clouds your eyes",
-                "Helm: Die Dunkelheit legt sich nicht mehr über die Augen");
+        text(ModItems.loreKey("listener_armor", 2), "Helm: the darkness of wardens and shriekers no longer clouds your eyes",
+                "Helm: Die Dunkelheit von Tiefenhüter und Kreischer trübt den Blick nicht mehr");
         text(ModItems.loreKey("listener_armor", 3), "Boots: woollen soles – your steps make no vibrations",
                 "Stiefel: Wollsohlen – deine Schritte machen keine Erschütterung");
         text(ModItems.loreKey("listener_armor", 4), "Full set: sneak to send out an echo that reveals creatures nearby",

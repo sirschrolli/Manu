@@ -18,6 +18,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -30,6 +31,7 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.registries.DeferredItem;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Die Rüstung der Lauscher (seit 1.6) aus Hallkristall auf Platten aus Tiefenschiefer:
@@ -37,7 +39,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
  *     <li><b>Schallschutz</b> (jeder Teil): {@value #SONIC_PERCENT} % weniger Schaden je Teil durch den Schallschlag des
  *     Tiefenhüters;</li>
  *     <li><b>Klare Sicht</b> (Helm): Die Dunkelheit, die der Tiefenhüter und die Kreischer verbreiten, legt sich nicht mehr
- *     über die Augen;</li>
+ *     über die Augen (die Finsternis der Bossgegner schon);</li>
  *     <li><b>Wollsohlen</b> (Stiefel): Schritte, Sprünge, Landungen und Schwimmzüge machen keine Erschütterung mehr –
  *     Sculk-Sensoren, Kreischer und der Tiefenhüter hören sie nicht;</li>
  *     <li><b>Echoortung</b> (alle vier Teile): Wer schleicht, ruft alle {@value #ECHO_SECONDS} Sekunden leise in die
@@ -104,12 +106,20 @@ public final class ListenerArmor {
         }
     }
 
-    /** Klare Sicht: Mit dem Helm legt sich keine Dunkelheit über die Augen. */
+    /**
+     * Klare Sicht: Mit dem Helm legt sich die Dunkelheit des Tiefenhüters und der Kreischer nicht über die Augen. Die
+     * Finsternis, die Bossgegner wirken (Nyxar, die Mottenkönigin …), wirkt weiter.
+     */
     @SubscribeEvent
     static void onEffect(MobEffectEvent.Applicable event) {
-        if (event.getEffectInstance().is(MobEffects.DARKNESS) && hasHelmet(event.getEntity())) {
+        if (event.getEffectInstance().is(MobEffects.DARKNESS) && fromTheDeep(event.getEffectSource()) && hasHelmet(event.getEntity())) {
             event.setResult(MobEffectEvent.Applicable.Result.DO_NOT_APPLY);
         }
+    }
+
+    /** Kommt die Dunkelheit aus der Tiefe: vom Tiefenhüter (auch dem der Mod) oder von einem Kreischer (ohne Verursacher)? */
+    public static boolean fromTheDeep(@Nullable Entity source) {
+        return source == null || source instanceof Warden;
     }
 
     /** Schallschutz: Jeder Teil fängt einen Teil des Schallschlags ab. */
@@ -127,13 +137,17 @@ public final class ListenerArmor {
     /** Echoortung: Wer in der ganzen Rüstung schleicht, ruft alle zwei Sekunden in die Dunkelheit. */
     @SubscribeEvent
     static void onPlayerTick(PlayerTickEvent.Post event) {
-        Player player = event.getEntity();
-        if (!(player.level() instanceof ServerLevel level) || !player.isCrouching() || player.isSpectator() || pieces(player) < 4) {
-            return;
+        listen(event.getEntity());
+    }
+
+    /** Ruft der Spieler gerade (schleicht er in der ganzen Rüstung, und ist die Wartezeit um)? Dann ruft er. */
+    public static boolean listen(Player player) {
+        if (!(player.level() instanceof ServerLevel level) || !player.isCrouching() || player.isSpectator() || pieces(player) < 4
+                || !ready(player)) {
+            return false;
         }
-        if (ready(player)) {
-            echo(level, player);
-        }
+        echo(level, player);
+        return true;
     }
 
     /** Darf das Wesen wieder rufen (die Wartezeit ist um)? */
