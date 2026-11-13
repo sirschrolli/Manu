@@ -1081,6 +1081,24 @@ final class SiteGameTests {
         if (count(helper, o.offset(-1, 1, 11), o.offset(1, 3, 16), st -> !st.isAir()) > 0) {
             problems.add("die Durchfahrt ist zu");
         }
+        // seit 1.8: vor dem Bergfried das Rabenbanner (Blick zum Tor); sein Herr hält zwei Schritte davor und zwei zur Seite Hof –
+        // dort muss Platz für Ross und Reiter sein
+        BlockPos banner = o.offset(-2, 1, -6);
+        BlockState bannerState = level.getBlockState(banner);
+        if (!bannerState.is(io.github.sirschrolli.kingdomsatwar.registry.CastleGear.RAVEN_BANNER.get())
+                || bannerState.getValue(io.github.sirschrolli.kingdomsatwar.block.castle.RavenBannerBlock.FACING) != net.minecraft.core.Direction.SOUTH) {
+            problems.add("kein Rabenbanner im Hof: " + bannerState);
+        } else {
+            BlockPos home = banner.south(2).east(2);
+            if (count(helper, home.offset(-1, 0, -1), home.offset(1, 3, 1), st -> !st.isAir()) > 0) {
+                problems.add("der Platz des Raubritters ist verbaut");
+            }
+            if (!level.getBlockState(banner.above()).isAir()) {
+                problems.add("über dem Banner ist kein Platz");
+            }
+        }
+        // (das Banner riefe sonst den Raubritter, sobald ein Spieler eines anderen Tests in die Nähe käme)
+        level.setBlock(banner, Blocks.AIR.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
         // im Testbereich wehen die Fahnen über dem Torhaus (die auf Bergfried und Nordtürmen sind höher)
         int flags = count(helper, lo, hi, st -> st.is(Blocks.WOOL.pick(net.minecraft.world.item.DyeColor.RED)));
         if (flags < 4) {

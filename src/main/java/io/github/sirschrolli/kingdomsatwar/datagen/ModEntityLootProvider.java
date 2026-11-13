@@ -508,6 +508,16 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         this.add(sordin, signature(LootTable.lootTable(), sordin, io.github.sirschrolli.kingdomsatwar.registry.CathedralGear.TUNING_FORK.get())
                 .withPool(hearts(1))
                 .withPool(material(io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL.get(), 2, 4)));
+        // Kuno von Rabenfels, der Raubritter (ein schwarzes Banner am leeren Pfahl ruft ihn zurück): der Morgenstern selten (auch
+        // beim ersten Sieg); der Herzkristall nur selten; sonst ein wenig Raubgut – Stahl, etwas Gold und wenige Münzen
+        EntityType<?> robberKnight = ModEntities.ROBBER_KNIGHT.get();
+        this.add(robberKnight, signature(LootTable.lootTable(), robberKnight,
+                io.github.sirschrolli.kingdomsatwar.registry.CastleGear.MORNING_STAR.get())
+                .withPool(hearts(1))
+                .withPool(drop(ModItems.STEEL_INGOT.get(), 1, 3))
+                .withPool(drop(net.minecraft.world.item.Items.GOLD_INGOT, 1, 2))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 1, 3))
+                .withPool(drop(net.minecraft.world.item.Items.SADDLE, 0, 1)));
         // Asteria, die Sternenreiterin (ein Endkristall entzündet den Sternstein neu): Lanze und Schwingen ihres Rochens selten
         // (auch beim ersten Sieg); der Herzkristall nur selten; Sternsplitter und ein wenig aus dem End
         EntityType<?> asteria = ModEntities.ASTERIA.get();

@@ -189,6 +189,11 @@ public final class BossBarRenderer {
         // Kraft das Fortissimo
         STYLES.put("sordin", style("sordin", 0x29DFEB, new float[] {0.5f}, new Motes(Drift.SMOKE, 2.5f, 0x29DFEB, 0x8AF4FB, 0x0B6F7C),
                 new Motes(Drift.TWINKLE, 1.5f, 0xE6FFFF, 0x9CD8FF)));
+        // Kuno von Rabenfels, der Raubritter (seit 1.8): geschwärztes Eisen mit Gold, hinter dem Medaillon gekreuzte Lanzen mit
+        // Wimpeln, über der Leiste Zinnen und Raben, darunter seine Lanze; schwarze Federn trudeln herab, dazwischen blitzen goldene
+        // Funken; unter halber Kraft wird er aus dem Sattel geworfen
+        STYLES.put("robber_knight", style("robber_knight", 0xE4C254, new float[] {0.5f},
+                new Motes(Drift.LEAF, 2.5f, 0x141418, 0x3E404C, 0x26242A), new Motes(Drift.SPARK, 1.2f, 0xFFF0A8, 0xE4C254)));
         // Asteria, die Sternenreiterin: Silber mit Goldsaum, Sterne und Nachthimmel, ein Stern im Medaillon
         STYLES.put("star", style("star", 0x9AD8FF, new float[] {0.5f}, new Motes(Drift.TWINKLE, 4.5f, 0xFFFFFF, 0x9AD8FF, 0xE8C25A)));
         // MissMystik, die Feen-Zauberkünstlerin: violetter Samt mit Goldsaum, Zauberkarten, Harlekin-Rauten

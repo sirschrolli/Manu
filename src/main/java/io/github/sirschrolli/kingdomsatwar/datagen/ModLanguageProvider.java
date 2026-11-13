@@ -1319,6 +1319,45 @@ public class ModLanguageProvider extends LanguageProvider {
         }
         subtitle("block.organ_desk.kindle", "Organ notes glow", "Noten der Orgel leuchten auf");
         subtitle("item.tuning_fork.resonate", "Tuning fork resonates", "Stimmgabel schwingt");
+        // Kuno von Rabenfels, der Raubritter, das Rabenbanner der Raubritterburg und der Morgenstern (1.8)
+        creature(ModEntities.ROBBER_KNIGHT, io.github.sirschrolli.kingdomsatwar.registry.CastleGear.ROBBER_KNIGHT_SPAWN_EGG,
+                "Kuno of Ravenrock, the Robber Knight", "Kuno von Rabenfels, der Raubritter", "Raubritter");
+        text("boss.kingdomsatwar.robber_knight", "Kuno of Ravenrock, the Robber Knight", "Kuno von Rabenfels, der Raubritter");
+        text("boss.kingdomsatwar.robber_knight.title", "The terror of the trade roads", "Der Schrecken der Handelsstraßen");
+        block(io.github.sirschrolli.kingdomsatwar.registry.CastleGear.RAVEN_BANNER, "Raven Banner", "Rabenbanner");
+        lore("raven_banner", "The banner of the house of Ravenrock in the robber knight's castle",
+                "Das Banner derer von Rabenfels in der Raubritterburg");
+        text(ModItems.loreKey("raven_banner", 2), "Torn: a black banner on the empty pole calls the robber knight back",
+                "Zerrissen: Ein schwarzes Banner am leeren Pfahl ruft den Raubritter zurück");
+        text("block.kingdomsatwar.raven_banner.hint", "The raven banner flutters … beneath it, a knight on horseback keeps court. "
+                + "Whoever comes close is challenged.", "Das Rabenbanner flattert … unter ihm hält ein Ritter zu Ross Hof. "
+                + "Wer näher kommt, wird gefordert.");
+        text("block.kingdomsatwar.raven_banner.awake", "The robber knight has lowered his lance!", "Der Raubritter hat die Lanze gesenkt!");
+        text("block.kingdomsatwar.raven_banner.fallen", "Only a rag hangs from the pole. A black banner might call the robber knight back.",
+                "Nur ein Fetzen hängt noch am Pfahl. Ein schwarzes Banner könnte den Raubritter zurückrufen.");
+        text("block.kingdomsatwar.raven_banner.warning", "Hoofbeats in the castle yard … someone guards the gate.",
+                "Hufschläge im Burghof … jemand bewacht das Tor.");
+        text("block.kingdomsatwar.raven_banner.peaceful", "The banner hangs limp (the world is set to Peaceful).",
+                "Das Banner hängt schlaff herab (die Welt steht auf „Friedlich“).");
+        item(io.github.sirschrolli.kingdomsatwar.registry.CastleGear.MORNING_STAR, "Morning Star", "Morgenstern");
+        lore("morning_star", "The morning star of Kuno of Ravenrock, the robber knight", "Der Morgenstern Kunos von Rabenfels, des Raubritters");
+        text(ModItems.loreKey("morning_star", 2), "Breaks raised shields – heavier than any sword",
+                "Bricht erhobene Schilde – schwerer als jedes Schwert");
+        text(ModItems.loreKey("morning_star", 3), "Use: smash – the ground bursts open in front of you",
+                "Benutzen: Schmetterschlag – vor dir reißt der Boden auf");
+        for (String[] e : new String[][] {{"awaken", "Robber knight sounds his horn", "Raubritter stößt ins Horn"},
+                {"charge", "Robber knight charges", "Raubritter stürmt an"},
+                {"lance_hit", "Lance strikes", "Lanze trifft"}, {"lance_break", "Lance shatters", "Lanze zerbricht"},
+                {"stomp", "Warhorse stamps", "Schlachtross stampft"}, {"horn", "War horn calls", "Kriegshorn ruft"},
+                {"swing", "Morning star whooshes", "Morgenstern saust"}, {"smash", "Ground bursts open", "Boden reißt auf"},
+                {"whirl", "Morning star whirls", "Morgenstern wirbelt"}, {"bash", "Shield bash", "Schildstoß"},
+                {"fall", "Robber knight falls from the saddle", "Raubritter stürzt aus dem Sattel"},
+                {"hurt", "Robber knight hurts", "Raubritter nimmt Schaden"}, {"death", "Robber knight dies", "Raubritter stirbt"},
+                {"step", "Armor clanks", "Rüstung klirrt"}}) {
+            subtitle("entity.robber_knight." + e[0], e[1], e[2]);
+        }
+        subtitle("block.raven_banner.tear", "Banner tears", "Banner zerreißt");
+        subtitle("item.morning_star.smash", "Morning star smashes", "Morgenstern schmettert");
         // Waffen und Rüstungen aus Monsterteilen (0.70)
         item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.WEREWOLF_PELT, "Werewolf Pelt", "Werwolfspelz");
         lore("werewolf_pelt", "Thick, dark fur – still warm", "Dichtes, dunkles Fell – noch warm");

@@ -284,6 +284,8 @@ final class Showcase {
                         EchoShowcase.gear(steps);
                     } else if (scene.equals("sordin_boss")) {
                         SordinShowcase.boss(steps);
+                    } else if (scene.equals("raubritter_boss")) {
+                        RobberKnightShowcase.boss(steps);
                     } else if (scene.equals("phasmor_boss")) {
                         PhasmorShowcase.boss(steps);
                     } else if (scene.equals("phasmor_pose")) {

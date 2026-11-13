@@ -53,6 +53,9 @@ ECHO_CRYSTAL = st.fixed("#1e3e5c", "#2c5a80", "#4a86b0", "#6aa6d0", "#94c8ea", "
 ECHO_GLOW = st.fixed("#0c3a52", "#16608a", "#2a90c0", "#5ec0ea", "#9cd8ff", "#d4f0ff", "#ffffff")
 #: das Leuchten des Sculk (wie Sordins Augen und die Noten auf seinem Pult)
 SCULK_GLOW = st.fixed("#06343a", "#0b6f7c", "#139fac", "#29dfeb", "#8af4fb", "#c8fcff", "#ffffff")
+# der Morgenstern (1.8): geschwärztes Eisen, schwarzes Leder mit goldener Naht, blanker Stahl
+BLACK_IRON = st.ramp("#4a4852", dark=0.1, light=0.74, cool=240)
+BLACK_LEATHER = st.ramp("#2e2824", dark=0.08, light=0.56, cool=20)
 # der Minutenzeiger (1.01): gebläuter Stahl, Uhrmessing, Chronit
 BLUED = st.fixed("#0a0e2a", "#141c48", "#20306e", "#2e4896", "#4566b8", "#7290dc", "#b4c8f6")
 CLOCK_BRASS = st.ramp("#d0a040", dark=0.28, light=0.96, warm=90)
@@ -586,6 +589,59 @@ def tuning_fork_atlas():
     return img, glow
 
 
+def morning_star_atlas():
+    R = _regions("morning_star")
+    img, glow = _blank()
+    paint(img, R["shaft"], wood(ASHWOOD, 31))
+    paint(img, R["shaft_side"], wood(ASHWOOD, 33))
+
+    def wrap_gold(x, y, w, h):
+        # schwarzes Leder in schrägen Bändern, dazwischen die goldene Naht
+        k = (y + x // 2) % 4
+        if k == 0:
+            return _lv(GOLD, 4 if (x + y) % 2 == 0 else 3)
+        if k == 1:
+            return _lv(BLACK_LEATHER, 4 if 0 < x < w - 1 else 3)
+        return _lv(BLACK_LEATHER, 2 if x == w - 1 else 3)
+    paint(img, R["wrap"], wrap_gold)
+    paint(img, R["iron"], metal(BLACK_IRON, 3.0, rivets=True))
+    paint(img, R["iron_top"], top(BLACK_IRON))
+    paint(img, R["gold"], metal(GOLD))
+    paint(img, R["gold_top"], top(GOLD))
+
+    def langet(x, y, w, h):
+        # zwei Eisenschienen über dem Holz, je zwei Nieten
+        if x in (1, w - 2) and y in (2, h - 3):
+            return _lv(BLACK_IRON, 6)
+        if x == 0:
+            return _lv(BLACK_IRON, 4)
+        if x == w - 1:
+            return _lv(BLACK_IRON, 1)
+        return _lv(BLACK_IRON, 3 if y % 5 else 2)
+    paint(img, R["langet"], langet)
+
+    def hammered(shift: float):
+        # geschwärztes, gehämmertes Eisen: oben links im Licht, Dellen (dunkel mit hellem Rand)
+        def f(x, y, w, h):
+            u, v = x / max(1, w - 1), y / max(1, h - 1)
+            level = 3.4 + shift - (u + v) * 1.1
+            r = h01(x // 2, y // 2, 47)
+            if r < 0.18:
+                level -= 1.0
+            elif r > 0.86:
+                level += 0.9
+            if x == 0 or y == 0:
+                level += 0.8
+            return _lv(BLACK_IRON, level)
+        return f
+    paint(img, R["head"], hammered(0.4))
+    paint(img, R["head_side"], hammered(-0.3))
+    paint(img, R["head_top"], hammered(0.9))
+    paint(img, R["spike"], strand(STEEL, 6.0, 3.2, True, 41))
+    paint(img, R["spike_tip"], lambda x, y, w, h: _lv(STEEL, 6 if x == 0 else 5))
+    return img, glow
+
+
 def steel_double_axe_atlas():
     R = _regions("steel_double_axe")
     img, glow = _blank()
@@ -715,6 +771,7 @@ ATLASES = {
     "abyssite_greatsword": abyssite_greatsword_atlas, "steel_double_axe": steel_double_axe_atlas, "miner_hammer": miner_hammer_atlas,
     "phase_blade": phase_blade_atlas,
     "tuning_fork": tuning_fork_atlas,
+    "morning_star": morning_star_atlas,
     "ember_pickaxe": ember_pickaxe_atlas, "vein_breaker": vein_breaker_atlas, "ore_seeker": ore_seeker_atlas,
     "keeper_maul": keeper_maul_atlas,
     "sea_witch_staff": sea_witch_staff_atlas,
@@ -1115,8 +1172,53 @@ def tuning_fork_icon() -> Image.Image:
     return s.outline(prefer=("E", "B", "C", "F")).image({"B": ECHO_CRYSTAL, "C": OX_COPPER, "E": ECHO_GLOW, "F": SEA_LEATHER})
 
 
+def morning_star_icon() -> Image.Image:
+    """Der Morgenstern im Inventar: schräg von unten links nach oben rechts – ein goldener Knopf am Knauf, der Griff in schwarzem
+    Leder mit goldener Naht, ein goldener Kragen, der Stiel aus Eschenholz mit einem Eisenband, Eisenschienen unter dem Kopf;
+    oben die Kugel aus geschwärztem Eisen (oben links im Licht) mit acht Stacheln aus blankem Stahl."""
+    s = st.Spr(16, 16)
+    r2 = math.sqrt(2.0)
+    bx, by = 1.6 + 13.4 / r2, 14.4 - 13.4 / r2              # die Mitte der Kugel
+    for y in range(16):
+        for x in range(16):
+            px, py = x + 0.5, y + 0.5
+            dx, dy = px - 1.6, py - 14.4
+            u = (dx - dy) / r2                               # vom Knauf zur Spitze
+            v = (dx + dy) / r2                               # quer (nach unten rechts = +)
+            av = abs(v)
+            kx, ky = px - bx, py - by
+            d = math.hypot(kx, ky)
+            ang = math.degrees(math.atan2(-ky, kx)) % 45.0
+            off = min(ang, 45.0 - ang)                       # Abstand zur nächsten Stachelrichtung (Grad)
+            cell = None
+            if d < 2.75:
+                lit = (-kx - ky) / 2.75                      # oben links hell
+                cell = ("B", 4 if lit > 0.6 else 3 if lit > -0.2 else 2 if lit > -0.7 else 1)
+                if d < 1.0 and lit > 0.2:
+                    cell = ("B", 5)
+            elif d < 5.0 and off < (5.0 - d) * 6.0:
+                cell = ("S", 6 if d > 3.8 else 5 if kx - ky < 0 else 4)
+            elif -0.3 < u < 1.0 and av < 0.95:
+                cell = ("C", 5) if u < 0.35 else ("B", 4 if v < 0 else 2)
+            elif u < 5.2 and av < 0.8:
+                cell = ("C", 5 if v < 0 else 4) if int(u * 1.4) % 3 == 0 else ("F", 4 if v < 0 else 3)
+            elif u < 6.0 and av < 0.95:
+                cell = ("C", 6 if v < 0 else 4)
+            elif u < 11.4 and av < (0.95 if u > 9.0 else 0.7):
+                if u > 9.0:
+                    cell = ("B", 4 if v < -0.2 else 2)
+                elif 7.4 < u < 8.0:
+                    cell = ("B", 3)
+                else:
+                    cell = ("D", 5 if v < -0.2 else 3)
+            if cell is not None:
+                s.set(x, y, cell)
+    return s.outline(prefer=("S", "B", "C", "D", "F")).image({"B": BLACK_IRON, "C": GOLD, "D": ASHWOOD, "F": BLACK_LEATHER, "S": STEEL})
+
+
 ICONS = {name: (lambda n=name: icon(n)) for name in ICON_ART}
 ICONS["tuning_fork"] = tuning_fork_icon
+ICONS["morning_star"] = morning_star_icon
 ICONS["keeper_maul"] = keeper_maul_icon
 ICONS["sea_witch_staff"] = lambda: sea_witch_staff_icon()
 ICONS["shepherd_crook"] = lambda: shepherd_crook_icon()

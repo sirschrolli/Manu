@@ -2341,6 +2341,19 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.block.organ_desk.kindle"
   },
+  "block.raven_banner.tear": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/castle/raven_banner_tear1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/castle/raven_banner_tear2",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.block.raven_banner.tear"
+  },
   "block.void_throne.kindle": {
     "sounds": [
       {
@@ -7305,6 +7318,204 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.rift_hound.step"
   },
+  "entity.robber_knight.awaken": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_awaken1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.robber_knight.awaken"
+  },
+  "entity.robber_knight.bash": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_bash1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_bash2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_bash3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.robber_knight.bash"
+  },
+  "entity.robber_knight.charge": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_charge1",
+        "attenuation_distance": 56
+      },
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_charge2",
+        "attenuation_distance": 56
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.robber_knight.charge"
+  },
+  "entity.robber_knight.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_death1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.robber_knight.death"
+  },
+  "entity.robber_knight.fall": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_fall1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_fall2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.robber_knight.fall"
+  },
+  "entity.robber_knight.horn": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_horn1",
+        "attenuation_distance": 80
+      },
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_horn2",
+        "attenuation_distance": 80
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.robber_knight.horn"
+  },
+  "entity.robber_knight.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_hurt1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_hurt2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_hurt3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.robber_knight.hurt"
+  },
+  "entity.robber_knight.lance_break": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_lance_break1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_lance_break2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.robber_knight.lance_break"
+  },
+  "entity.robber_knight.lance_hit": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_lance_hit1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_lance_hit2",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_lance_hit3",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.robber_knight.lance_hit"
+  },
+  "entity.robber_knight.smash": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_smash1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_smash2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.robber_knight.smash"
+  },
+  "entity.robber_knight.step": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_step1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_step2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_step3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.robber_knight.step"
+  },
+  "entity.robber_knight.stomp": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_stomp1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_stomp2",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_stomp3",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.robber_knight.stomp"
+  },
+  "entity.robber_knight.swing": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_swing1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_swing2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_swing3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.robber_knight.swing"
+  },
+  "entity.robber_knight.whirl": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_whirl1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/castle/robber_knight_whirl2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.robber_knight.whirl"
+  },
   "entity.schrolli.ambient": {
     "sounds": [
       {
@@ -10746,6 +10957,23 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.item.minute_hand.jump"
+  },
+  "item.morning_star.smash": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/castle/morning_star_smash1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/castle/morning_star_smash2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/castle/morning_star_smash3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.item.morning_star.smash"
   },
   "item.mystic_deck.throw": {
     "sounds": [

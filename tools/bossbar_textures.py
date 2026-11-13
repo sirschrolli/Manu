@@ -63,6 +63,7 @@ PHASES = {
     "ignara": (0.5,),                    # unter halber Kraft steigt sie als Phönix auf
     "phasmor": (0.5,),                   # unter halber Kraft setzt er die Krone auf (Phasensturm)
     "sordin": (0.5,),                    # unter halber Kraft das Fortissimo
+    "robber_knight": (0.5,),             # unter halber Kraft wird er aus dem Sattel geworfen
 }
 # die Erzmagier wechseln bei zwei Dritteln und einem Drittel die Phase
 MAGE_PHASES = (0.66, 0.33)
@@ -238,6 +239,15 @@ ELEMENTS = {
                    verdigris="#5aa58a", verdigris_dark="#25594b", verdigris_light="#9ed8bc",
                    crystal0="#1e3e5c", crystal1="#4a86b0", crystal2="#9cd8ff", crystal3="#f2fbff",
                    leather="#1e4e52", leather_light="#3a8286"),
+    # Kuno von Rabenfels, der Raubritter (seit 1.8): geschwärztes Eisen mit Gold, hinter dem Medaillon zwei gekreuzte Lanzen
+    # mit Wimpeln (Gold und Schwarz), über der Oberkante Zinnen und zwei fliegende Raben, darunter liegt seine Lanze mit dem
+    # Wimpel, als Spitze ein Rabenkopf; die Füllung Gold mit Sparren, die nach vorn weisen (wie sein Ansturm)
+    "robber_knight": dict(m0="#0c0b0e", m1="#38343a", m2="#a49c94", acc="#e4c254", glow="#fff6cc", deep="#1a1206",
+                          f0="#2a1c04", f1="#8a6414", f2="#e4c254", f3="#fff6cc",
+                          gold="#e4c254", gold_dark="#8a6414", gold_light="#fff0a8",
+                          steel="#9aa2ac", steel_dark="#4a5058", steel_light="#e2e8ee",
+                          wood="#6e4a26", wood_dark="#3a2612", wood_light="#9a6e40",
+                          raven="#141418", raven_light="#3e404c", stone="#4a4648", stone_light="#7a7470", stone_dark="#26242a"),
 }
 
 OUTLINE = (12, 10, 12, 255)
@@ -2945,6 +2955,173 @@ def post_sordin(img: Image.Image, pal: dict) -> None:
             put(px, img, x - 1, y, g["copper_dark"])
 
 
+def _rk_pennant(layer: Image.Image, g: dict, x: int, y: int, w: int, h: int, right: bool) -> None:
+    """Ein Wimpel mit Schwalbenschwanz: oben Gold, unten Schwarz (geteilt), an der Stange bei (x, y), weht nach rechts oder
+    links."""
+    lp = layer.load()
+    for dx in range(w):
+        for dy in range(h):
+            # der Schwalbenschwanz: hinten ein Keil heraus
+            depth = dx - (w - 4)
+            if depth > 0 and abs(dy - (h - 1) / 2) < depth * 0.6:
+                continue
+            col = (g["gold_light"] if dy == 0 else g["gold"]) if dy < h / 2 else (g["raven_light"] if dy == h // 2 else g["raven"])
+            put(lp, layer, x + (dx if right else -dx), y + dy + (dx // 4 if right else dx // 4), col)
+
+
+def _rk_raven(layer: Image.Image, g: dict, x: int, y: int, flip: bool) -> None:
+    """Ein fliegender Rabe (von der Seite, Flügel hoch): schwarz, der Schnabel grau, ein goldener Augenpunkt."""
+    art = ["....##.......",
+           ".....###.....",
+           "......####...",
+           ".##..######..",
+           "#B#########..",
+           ".....#######.",
+           "......##..##.",
+           ]
+    lp = layer.load()
+    for dy, row in enumerate(art):
+        for dx, ch in enumerate(row):
+            if ch == ".":
+                continue
+            xx = x + (12 - dx if flip else dx)
+            if ch == "B":
+                col = g["gold"]
+            elif dx == 0:
+                col = g["steel_dark"]
+            else:
+                col = g["raven_light"] if dy <= 2 and ch == "#" and dx % 3 == 0 else g["raven"]
+            put(lp, layer, xx, y + dy, col)
+
+
+def deco_robber_knight(img: Image.Image, pal: dict) -> None:
+    """Kuno von Rabenfels, der Raubritter: hinter dem Medaillon zwei gekreuzte Lanzen, deren Spitzen oben mit Wimpeln
+    hervorschauen; über der Oberkante Zinnen aus dunklem Stein mit goldenen Deckeln und zwei fliegende Raben; unter der Leiste
+    liegt seine Lanze (Griff, Brechscheibe, Schaft mit goldenen Bändern, die Spitze, ein Wimpel); als Spitze ein Rabenkopf."""
+    g = {k: c(pal, k) for k in pal}
+    top, bottom = BAR_Y - 3, BAR_Y + BAR_H + 2
+
+    # zwei gekreuzte Lanzen hinter dem Medaillon (nur außerhalb des Medaillons zu sehen)
+    lances = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    lp = lances.load()
+    for sx in (-1, 1):
+        for k in range(-30, 31):
+            x = EMB_X + sx * k * 0.72
+            y = EMB_Y - k * 0.72
+            if k > 22:                                                 # die Spitze: Stahl, spitz zulaufend
+                for o in (-1, 0, 1)[: 3 if k < 27 else 1]:
+                    put(lp, lances, int(round(x + o * 0.7)), int(round(y + o * 0.7 * sx)),
+                        g["steel_light"] if o < 0 else g["steel"] if o == 0 else g["steel_dark"])
+                continue
+            band = k in (12, 18, 21)
+            for o in (0, 1):
+                col = (g["gold_light"] if o == 0 else g["gold_dark"]) if band else (g["wood_light"] if o == 0 else g["wood"])
+                put(lp, lances, int(round(x + o * 0.7 * sx)), int(round(y + o * 0.7)), col)
+    _rk_pennant(lances, g, EMB_X + 15, EMB_Y - 19, 9, 6, True)
+    _rk_pennant(lances, g, EMB_X - 15, EMB_Y - 19, 9, 6, False)
+    _outline(lances, OUTLINE)
+    img.alpha_composite(lances)
+
+    # Zinnen über der Oberkante (dunkler Stein, goldener Deckel), dazwischen frei; nicht über den Edelsteinen
+    merlons = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    mp = merlons.load()
+    for x0 in range(BAR_X + 4, BAR_X + BAR_W - 6, 13):
+        if any(abs(x0 + 3 - (BAR_X + round(BAR_W * f))) < 9 for f in GEMS):
+            continue
+        for y in range(top - 5, top):
+            for x in range(x0, x0 + 6):
+                if y == top - 5:
+                    col = g["gold_light"] if x == x0 else g["gold"] if x < x0 + 5 else g["gold_dark"]
+                elif x == x0:
+                    col = g["stone_light"]
+                elif x == x0 + 5:
+                    col = g["stone_dark"]
+                else:
+                    col = g["stone"] if hash01(x, y, 1801) > 0.25 else g["stone_dark"]
+                put(mp, merlons, x, y, col)
+    _outline(merlons, OUTLINE)
+    img.alpha_composite(merlons)
+
+    # zwei Raben fliegen über der Leiste
+    ravens = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    _rk_raven(ravens, g, BAR_X + 70, 1, False)
+    _rk_raven(ravens, g, BAR_X + 132, 3, True)
+    _outline(ravens, OUTLINE)
+    img.alpha_composite(ravens)
+
+    # die Lanze unter der Leiste
+    lance = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    lp = lance.load()
+    cy = bottom + 6
+    for x in range(BAR_X - 2, BAR_X + 14):                             # der Griff (Leder) mit Knauf
+        put(lp, lance, x, cy - 1, g["raven_light"] if x % 3 == 0 else g["raven"])
+        put(lp, lance, x, cy, g["raven"] if x % 3 else g["raven_light"])
+    for dy, half in ((-3, 1), (-2, 2), (-1, 3), (0, 3), (1, 3), (2, 2), (3, 1)):   # die Brechscheibe (ein Kegel aus Stahl)
+        for k in range(half + 2):
+            x = BAR_X + 14 + k
+            put(lp, lance, x, cy + dy, g["steel_light"] if dy < 0 else g["steel"] if dy == 0 else g["steel_dark"])
+    x_tip = BAR_X + 150
+    for x in range(BAR_X + 19, x_tip):                                 # der Schaft, zur Spitze hin dünner, mit goldenen Bändern
+        band = (x - BAR_X) % 24 < 2
+        thin = x > BAR_X + 110
+        put(lp, lance, x, cy - 1, (g["gold_light"] if band else g["wood_light"]))
+        if not thin:
+            put(lp, lance, x, cy, g["gold_dark"] if band else g["wood"])
+    for k in range(10):                                                # die Spitze
+        x = x_tip + k
+        put(lp, lance, x, cy - 1, g["steel_light"])
+        if k < 6:
+            put(lp, lance, x, cy, g["steel_dark"])
+        if k < 3:
+            put(lp, lance, x, cy - 2, g["steel"])
+    pen = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    _rk_pennant(pen, g, x_tip - 4, cy, 14, 5, False)
+    lance.alpha_composite(pen)
+    _outline(lance, OUTLINE)
+    img.alpha_composite(lance)
+
+    # die Spitze: ein goldener Rabenkopf von der Seite (das Wappentier, wie aus Messing gegossen), Auge und Schnabel dunkel
+    tip = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    tp = tip.load()
+    ty = int(BAR_Y + BAR_H / 2) - 5
+    head = ["...####......",
+            "..######.....",
+            ".###E####....",
+            "##########BB.",
+            "###########BB",
+            "##########BB.",
+            ".#######.....",
+            "..#####......",
+            "...###......."]
+    for dy, row in enumerate(head):
+        for dx, ch in enumerate(row):
+            if ch == ".":
+                continue
+            if ch == "E":
+                col = g["raven"]
+            elif ch == "B":
+                col = g["steel_light"] if dy < 4 else g["steel"] if dy == 4 else g["steel_dark"]
+            else:
+                col = g["gold_light"] if dy < 2 or dx == 0 else g["gold"] if dy < 6 else g["gold_dark"]
+            put(tp, tip, 226 + dx, ty + dy, col)
+    _outline(tip, OUTLINE)
+    img.alpha_composite(tip)
+
+
+def post_robber_knight(img: Image.Image, pal: dict) -> None:
+    """Nach dem Rahmen: statt der Nieten goldene Buckel in Ober- und Unterkante."""
+    g = {k: c(pal, k) for k in pal}
+    px = img.load()
+    x0, x1, y0, y1 = BAR_X - 3, BAR_X + BAR_W + 2, BAR_Y - 3, BAR_Y + BAR_H + 2
+    for x in range(x0 + 9, x1 - 4, 22):
+        if any(abs(x - (BAR_X + round(BAR_W * f))) < 7 for f in GEMS):
+            continue
+        for y in (y0 + 1, y1 - 1):
+            put(px, img, x, y, g["gold_light"])
+            put(px, img, x + 1, y, g["gold"])
+            put(px, img, x - 1, y, g["gold_dark"])
+
+
 def post_phasmor(img: Image.Image, pal: dict) -> None:
     """Nach dem Rahmen: statt der Nieten kleine Phasite in Purpur in Ober- und Unterkante."""
     g = {k: c(pal, k) for k in pal}
@@ -3401,6 +3578,7 @@ BANNER_COLORS = {
     "hour_warden": dict(trim="#e8bc62", trim_dark="#6c4016", fabric="#140a04"),
     "phasmor": dict(trim="#c48ccc", trim_dark="#6a3a74", fabric="#08070f"),
     "sordin": dict(trim="#5aa58a", trim_dark="#25594b", fabric="#0a0d14"),
+    "robber_knight": dict(trim="#e4c254", trim_dark="#8a6414", fabric="#121014"),
 }
 
 
@@ -3489,7 +3667,7 @@ def banner_cap(element: str) -> Image.Image:
 POST = {"schrolli": post_schrolli, "schrolli_true": post_schrolli, "schrolli_almighty": post_almighty,
         "world_eater": post_world_eater, "kraken": post_kraken, "keeper": post_keeper, "sea_witch": post_sea_witch,
         "soul_shepherd": post_soul_shepherd, "star_weaver": post_star_weaver, "ignara": post_ignara, "phasmor": post_phasmor,
-        "sordin": post_sordin}
+        "sordin": post_sordin, "robber_knight": post_robber_knight}
 BORDERS = {"world_eater": frame_border_stone, "keeper": frame_border_stone}
 
 
@@ -3497,7 +3675,7 @@ DECOS = {"schrolli": deco_schrolli, "schrolli_true": deco_schrolli, "schrolli_al
          "world_eater": deco_world_eater, "anni": deco_anni, "anni2": deco_anni, "mystic": deco_mystic, "star": deco_star, "forge": deco_forge, "moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
          "water": deco_water, "kraken": deco_kraken, "keeper": deco_keeper, "sea_witch": deco_sea_witch,
          "soul_shepherd": deco_soul_shepherd, "star_weaver": deco_star_weaver, "hour_warden": deco_hour_warden,
-         "ignara": deco_ignara, "phasmor": deco_phasmor, "sordin": deco_sordin}
+         "ignara": deco_ignara, "phasmor": deco_phasmor, "sordin": deco_sordin, "robber_knight": deco_robber_knight}
 
 
 def frame(element: str, phases: tuple | None = None) -> Image.Image:
@@ -3662,6 +3840,16 @@ def fill_value(element: str, x: int, y: int) -> float:
         if rel < h:
             return 0.62 + 0.33 * (1.0 - rel / h)
         return 0.32 - 0.14 * (rel - h)
+    if element == "robber_knight":
+        # Gold mit Sparren, die nach vorn weisen (wie sein Ansturm); selten blitzt es
+        s = (x + abs(y - (BAR_H - 1) / 2) * 2.0) % 16.0
+        if hash01(x, y, 1811) > 0.986:
+            return 1.0
+        if s < 1.6:
+            return 0.92
+        if s < 3.2:
+            return 0.7
+        return 0.46 + 0.1 * math.sin(math.tau * x / 64.0) + 0.04 * (1.0 if y < BAR_H / 2 else -1.0)
     if element == "sordin":
         # Schallwellen: Kämme, die schräg über die Leiste laufen (wie Ringe auf dem Wasser); selten glimmt eine Note
         wave = math.sin(math.tau * x / 22.0 + 1.3 * math.sin(math.tau * y / 9.0) + 0.6 * math.sin(math.tau * x / 70.0))
@@ -3877,7 +4065,7 @@ def portrait(element: str) -> Image.Image:
     from entitygen.models import (asteria, boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water,
                                   glutschmied, kraken, miss_mystik, moth_queen, reef_colossus, shattered_king, anni_troll,
                                   schrolli, sea_witch, soul_shepherd, star_weaver, stone_keeper, world_eater, hour_warden, ignara,
-                                  phasmor, sordin)
+                                  phasmor, sordin, robber_knight)
     from entitygen.paint import paint_model
     from entitygen.preview import render
     mod = {"fire": boss_fire, "ice": boss_ice, "lightning": boss_lightning, "nature": boss_nature, "earth": boss_earth,
@@ -3885,7 +4073,8 @@ def portrait(element: str) -> Image.Image:
            "forge": glutschmied, "star": asteria, "mystic": miss_mystik, "anni": anni_troll, "anni2": anni_troll,
            "schrolli": schrolli, "schrolli_true": schrolli, "schrolli_almighty": schrolli, "world_eater": world_eater,
            "kraken": kraken, "keeper": stone_keeper, "sea_witch": sea_witch, "soul_shepherd": soul_shepherd,
-           "star_weaver": star_weaver, "hour_warden": hour_warden, "ignara": ignara, "phasmor": phasmor, "sordin": sordin}[element]
+           "star_weaver": star_weaver, "hour_warden": hour_warden, "ignara": ignara, "phasmor": phasmor, "sordin": sordin,
+           "robber_knight": robber_knight}[element]
     m = mod.build()
     m.pack()
     variant = "anni_troll_v2" if element == "anni2" else element if element.startswith("schrolli") else next(iter(mod.PALETTES))
@@ -3951,6 +4140,16 @@ def portrait(element: str) -> Image.Image:
             for child in bone.children:
                 strip_sordin(child)
         strip_sordin(m.root)
+    if element == "robber_knight":
+        # der Topfhelm mit dem Raben auf der Zimier vor dem Mantel, darunter Kettenkragen und Wappenrock (ohne Ross, Arme,
+        # Beine, Lanze, Schild und Morgenstern)
+        def strip_knight(bone):
+            if bone.name.startswith(("horse", "trapper", "saddle", "neck", "mane", "head", "ear_", "leg_", "shin_", "tail", "tabard",
+                                     "horn", "arm_", "forearm_", "hand_", "thigh_", "lance", "pennant", "shield", "mace")):
+                bone.cubes.clear()
+            for child in bone.children:
+                strip_knight(child)
+        strip_knight(m.root)
     if element == "forge":
         # der Widderschädel mit Hörnern, Flammen und Kiefer (ohne Arme, Waffen und Beine)
         def strip_forge(bone):
@@ -4040,20 +4239,23 @@ def portrait(element: str) -> Image.Image:
                 strip_anni(child)
         strip_anni(m.root)
     zoom = {"kraken": 1.5, "schrolli": 1.0, "schrolli_true": 1.0, "schrolli_almighty": 1.0, "world_eater": 1.35, "nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86, "star": 0.92, "mystic": 0.95,
-            "anni": 1.0, "anni2": 1.0, "keeper": 0.8, "sea_witch": 1.5, "soul_shepherd": 1.12, "star_weaver": 0.95, "hour_warden": 0.9, "ignara": 0.85, "phasmor": 0.88, "sordin": 0.72}.get(element, 1.2)
+            "anni": 1.0, "anni2": 1.0, "keeper": 0.8, "sea_witch": 1.5, "soul_shepherd": 1.12, "star_weaver": 0.95, "hour_warden": 0.9, "ignara": 0.85, "phasmor": 0.88, "sordin": 0.72,
+            "robber_knight": 1.2}.get(element, 1.2)
     yaw = {"kraken": -20, "schrolli": -22, "schrolli_true": -22, "schrolli_almighty": -22, "world_eater": -6, "water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14, "star": -24, "mystic": -22, "anni": -24,
-           "anni2": -24, "keeper": -20, "sea_witch": -22, "soul_shepherd": -14, "star_weaver": -20, "hour_warden": -16, "ignara": -18, "phasmor": -10, "sordin": -14}.get(element, -42)
-    pitch = {"kraken": -18, "schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2, "keeper": -5, "sea_witch": 2, "soul_shepherd": 4, "star_weaver": 48, "hour_warden": 4, "ignara": 4, "phasmor": 8, "sordin": 6}.get(element, 6)
+           "anni2": -24, "keeper": -20, "sea_witch": -22, "soul_shepherd": -14, "star_weaver": -20, "hour_warden": -16, "ignara": -18, "phasmor": -10, "sordin": -14,
+           "robber_knight": -24}.get(element, -42)
+    pitch = {"kraken": -18, "schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2, "keeper": -5, "sea_witch": 2, "soul_shepherd": 4, "star_weaver": 48, "hour_warden": 4, "ignara": 4, "phasmor": 8, "sordin": 6, "robber_knight": 6}.get(element, 6)
     big = render(m, tex, glow, yaw, pitch, 448, pose=getattr(mod, "FOLD_POSE", None), background=(0, 0, 0, 0), zoom=zoom,
                  focus=["body"] if element in ("reef", "kraken", "star_weaver") else ["helm"] if element == "star"
-                 else ["lock_l", "lock_r", "crown"] if element == "ignara" else ["head"])
+                 else ["lock_l", "lock_r", "crown"] if element == "ignara" else ["helm"] if element == "robber_knight" else ["head"])
     img = big.resize((64, 64), Image.LANCZOS)
     img = ImageEnhance.Brightness(img).enhance({"kraken": 1.85, "fire": 1.9, "earth": 1.5, "lightning": 1.9, "nature": 1.6, "shadow": 2.4,
                                                  "void": 1.0, "reef": 1.35, "moth": 1.25, "forge": 1.65, "star": 1.15, "mystic": 1.2,
                                                  "anni": 1.45, "anni2": 1.45, "schrolli": 1.5, "schrolli_true": 1.5,
                                                  "schrolli_almighty": 1.45, "world_eater": 2.0, "keeper": 1.3, "sea_witch": 1.35,
                                                  "soul_shepherd": 1.7, "star_weaver": 2.3, "hour_warden": 1.6,
-                                                 "ignara": 1.3, "phasmor": 1.45, "sordin": 1.9}.get(element, 1.4))
+                                                 "ignara": 1.3, "phasmor": 1.45, "sordin": 1.9,
+                                                 "robber_knight": 1.5}.get(element, 1.4))
     img = ImageEnhance.Color(img).enhance(1.15)
     img = ImageEnhance.Contrast(img).enhance(1.12)
     if element == "schrolli_almighty":

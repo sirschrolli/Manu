@@ -455,6 +455,7 @@ public class ModModelProvider extends ModelProvider {
         PhaseModels.register(blocks, items);
         EchoModels.register(blocks, items);
         CathedralModels.register(blocks, items);
+        CastleModels.register(blocks, items);   // seit 1.8: Rabenbanner, Morgenstern, Spawn-Ei des Raubritters
         StarModels.register(blocks, items);
         MystikModels.register(blocks, items);
         AnniModels.register(blocks, items);

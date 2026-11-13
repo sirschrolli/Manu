@@ -137,6 +137,8 @@ final class BossLootGameTests {
                         List.of(), heart, 1, List.of(), 0, List.of(new Material(io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT.get(), 2, 4))),
                 new Boss(ModEntities.SORDIN.get(), List.of(io.github.sirschrolli.kingdomsatwar.registry.CathedralGear.TUNING_FORK.get()),
                         List.of(), heart, 1, List.of(), 0, List.of(new Material(io.github.sirschrolli.kingdomsatwar.registry.EchoGear.ECHO_CRYSTAL.get(), 2, 4))),
+                new Boss(ModEntities.ROBBER_KNIGHT.get(), List.of(io.github.sirschrolli.kingdomsatwar.registry.CastleGear.MORNING_STAR.get()),
+                        List.of(), heart, 1, List.of(), 3, null),
                 new Boss(ModEntities.ASTERIA.get(), List.of(StarBlocks.STAR_LANCE.get(), StarBlocks.STAR_WINGS.get()), List.of(), heart, 1,
                         List.of(), 3, null),
                 new Boss(ModEntities.MOTH_QUEEN.get(), List.of(FaeBlocks.FAE_ELYTRA.get()), List.of(), heart, 1, List.of(), 2, null),

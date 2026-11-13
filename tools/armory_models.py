@@ -156,6 +156,23 @@ REGIONS: dict[str, dict[str, UV]] = {
         "prong_edge": (11, 0, 12, 16),
         "ring": (12, 0, 13, 16),        # leuchtende Ringe um die Zinken
     },
+    # der Morgenstern (1.8): Kunos Waffe – ein Stiel aus Eschenholz, schwarzes Leder mit goldener Naht, Eisenschienen und eine
+    # Kugel aus geschwärztem Eisen voller Stacheln aus blankem Stahl
+    "morning_star": {
+        "shaft": (0, 0, 1, 16),         # Eschenholz
+        "shaft_side": (1, 0, 2, 16),
+        "wrap": (2, 0, 4, 6),           # schwarzes Leder mit goldener Naht
+        "iron": (2, 6, 4, 8),           # geschwärztes Eisen (Knauf, Bänder)
+        "iron_top": (2, 8, 4, 10),
+        "gold": (2, 10, 4, 12),         # Gold (Knopf, Kragen)
+        "gold_top": (2, 12, 4, 14),
+        "langet": (4, 0, 6, 6),         # die Eisenschienen unter dem Kopf, mit Nieten
+        "head": (6, 0, 12, 6),          # die Kugel: geschwärztes, gehämmertes Eisen
+        "head_side": (6, 6, 12, 12),
+        "head_top": (12, 0, 16, 4),
+        "spike": (12, 4, 14, 10),       # die Stacheln: blanker Stahl, Spitze oben
+        "spike_tip": (14, 4, 15, 6),
+    },
     # die Phasenklinge (1.5): Phasmors Zweihänder aus einem einzigen Phasitkristall
     "phase_blade": {
         "grip": (0, 0, 2, 8),           # violette Lederwicklung
@@ -495,6 +512,60 @@ def tuning_fork() -> Shape:
     return s
 
 
+def spike(s: Shape, c: tuple[float, float, float], d: tuple[float, float, float], base: float,
+          lengths: tuple[float, ...] = (0.75, 0.7, 0.55), widths: tuple[float, ...] = (1.0, 0.62, 0.26)) -> None:
+    """Ein vierkantiger Stachel aus sich verjüngenden Quadern: sein Fuß liegt im Abstand base vom Mittelpunkt c, er weist in
+    Richtung d (gedreht zuerst um X, dann um Z, um den Mittelpunkt)."""
+    import math
+    dx, dy, dz = d
+    n = math.sqrt(dx * dx + dy * dy + dz * dz)
+    dx, dy, dz = dx / n, dy / n, dz / n
+    rx = math.degrees(math.asin(max(-1.0, min(1.0, dz))))
+    rz = math.degrees(math.atan2(-dx, dy))
+    cx, cy, cz = c
+    y = cy + base
+    k = len(lengths)
+    for i, (ln, w) in enumerate(zip(lengths, widths)):
+        uv = _sub(s.r("spike"), 0.0, (k - 1 - i) / k, 1.0, (k - i) / k)
+        top = y + ln + (0.12 if i < k - 1 else 0.0)
+        s.box(cx - w / 2, y, cz - w / 2, cx + w / 2, top, cz + w / 2, uv, side=uv, cap="spike_tip", rot=(rx, 0.0, rz), pivot=c)
+        y += ln
+
+
+def morning_star() -> Shape:
+    """Der Morgenstern (1.8): ein goldener Knopf und ein Knauf aus geschwärztem Eisen, der Stiel aus Eschenholz, unten in schwarzem
+    Leder mit goldener Naht, darüber ein goldener Kragen und Eisenbänder, unter dem Kopf Eisenschienen mit Nieten; der Kopf eine
+    Kugel aus geschwärztem Eisen (drei sich kreuzende Quader und ein Würfel für die Rundung) mit siebzehn Stacheln aus blankem
+    Stahl – einer obenauf, vier ringsum, vier schräg dazwischen, je vier schräg nach oben und nach unten."""
+    s = Shape(REGIONS["morning_star"])
+    s.box(7.55, -7.2, 7.55, 8.45, -6.6, 8.45, "gold", cap="gold_top")
+    s.box(7.15, -6.6, 7.15, 8.85, -5.3, 8.85, "iron", cap="iron_top")
+    s.box(7.4, -5.3, 7.4, 8.6, 14.4, 8.6, "shaft", side="shaft_side", cap="iron_top")
+    s.box(7.25, -5.0, 7.25, 8.75, 1.4, 8.75, "wrap", cap="iron_top")
+    s.box(7.2, 1.4, 7.2, 8.8, 2.1, 8.8, "gold", cap="gold_top")
+    for y in (5.0, 8.2):
+        s.box(7.28, y, 7.28, 8.72, y + 0.6, 8.72, "iron", cap="iron_top")
+    s.box(7.22, 10.6, 7.22, 8.78, 14.2, 8.78, "langet", cap="iron_top")
+    # der Kopf
+    c = (8.0, 16.6, 8.0)
+    cx, cy, cz = c
+    s.box(cx - 2.6, cy - 1.6, cz - 1.7, cx + 2.6, cy + 1.6, cz + 1.7, "head", side="head_side", cap="head_top")
+    s.box(cx - 1.7, cy - 2.6, cz - 1.7, cx + 1.7, cy + 2.6, cz + 1.7, "head", side="head_side", cap="head_top")
+    s.box(cx - 1.7, cy - 1.6, cz - 2.6, cx + 1.7, cy + 1.6, cz + 2.6, "head", side="head_side", cap="head_top")
+    s.box(cx - 2.15, cy - 2.15, cz - 2.15, cx + 2.15, cy + 2.15, cz + 2.15, "head", side="head_side", cap="head_top")
+    # die Stacheln
+    spike(s, c, (0, 1, 0), 2.4, (0.85, 0.8, 0.65), (1.1, 0.68, 0.28))
+    for d in ((1, 0, 0), (-1, 0, 0), (0, 0, 1), (0, 0, -1)):
+        spike(s, c, d, 2.4)
+    for d in ((1, 0, 1), (-1, 0, 1), (1, 0, -1), (-1, 0, -1)):
+        spike(s, c, d, 2.75, (0.65, 0.6, 0.5), (0.9, 0.56, 0.24))
+    for d in ((1, 1, 0), (-1, 1, 0), (0, 1, 1), (0, 1, -1)):
+        spike(s, c, d, 2.75, (0.65, 0.6, 0.5), (0.9, 0.56, 0.24))
+    for d in ((1, -1, 0), (-1, -1, 0), (0, -1, 1), (0, -1, -1)):
+        spike(s, c, d, 2.75, (0.6, 0.55, 0.45), (0.86, 0.54, 0.22))
+    return s
+
+
 def steel_double_axe() -> Shape:
     """Stahl-Doppelaxt: ein Eichenstiel mit Lederwicklung, oben zwei halbmondförmige Blätter (links und rechts) und eine kurze
     Spitze."""
@@ -613,6 +684,7 @@ ITEMS = {
     "ABYSSITE_GREATSWORD": ("abyssite_greatsword", abyssite_greatsword),
     "PHASE_BLADE": ("phase_blade", phase_blade),
     "TUNING_FORK": ("tuning_fork", tuning_fork),
+    "MORNING_STAR": ("morning_star", morning_star),
     "STEEL_DOUBLE_AXE": ("steel_double_axe", steel_double_axe),
     "MINER_HAMMER": ("miner_hammer", miner_hammer),
     "EMBER_PICKAXE": ("ember_pickaxe", ember_pickaxe),
