@@ -7,6 +7,8 @@ import io.github.sirschrolli.kingdomsatwar.abyss.hoard.HoardPiece;
 import io.github.sirschrolli.kingdomsatwar.block.abyss.ClockHeartBlockEntity;
 import io.github.sirschrolli.kingdomsatwar.block.abyss.HoardSealBlockEntity;
 import io.github.sirschrolli.kingdomsatwar.block.end.StarstoneBlockEntity;
+import io.github.sirschrolli.kingdomsatwar.block.end.VoidThroneBlock;
+import io.github.sirschrolli.kingdomsatwar.block.end.VoidThroneBlockEntity;
 import io.github.sirschrolli.kingdomsatwar.block.entity.DragonLairCoreBlockEntity;
 import io.github.sirschrolli.kingdomsatwar.block.entity.ShadowThroneCoreBlockEntity;
 import io.github.sirschrolli.kingdomsatwar.block.fae.KeeperStoneBlockEntity;
@@ -194,6 +196,7 @@ public final class KawPlaces {
 
     // ---- End
     public static final Site STARWATCH = siteKind("sternwarte", Level.END, SiteKind.STARWATCH, Approach.FRONT, 40);
+    public static final Site PHASE_SANCTUARY = siteKind("phasenheiligtum", Level.END, SiteKind.PHASE_SANCTUARY, Approach.FRONT, 30);
 
     // ---- Schattenwelt
     public static final Site CITADEL = register(new Site("zitadelle", ShadowGate.SHADOW_WORLD, ModStructures.SHADOW_CITADEL_STRUCTURE,
@@ -254,6 +257,7 @@ public final class KawPlaces {
         boss(new Boss("malleus", ModEntities.GLUTSCHMIED, ASH_FORGE, KawPlaces::awakenMalleus, KawPlaces::resetMalleus, null));
         boss(new Boss("ignara", ModEntities.IGNARA, FLAME_SANCTUARY, KawPlaces::awakenIgnara, KawPlaces::resetIgnara, null));
         boss(new Boss("asteria", ModEntities.ASTERIA, STARWATCH, KawPlaces::awakenAsteria, KawPlaces::resetAsteria, null));
+        boss(new Boss("phasmor", ModEntities.PHASMOR, PHASE_SANCTUARY, KawPlaces::awakenPhasmor, KawPlaces::resetPhasmor, null));
         boss(new Boss("noctua", ModEntities.MOTH_QUEEN, MONDHAIN, KawPlaces::awakenNoctua, null, null));
         boss(new Boss("missmystik", ModEntities.MISS_MYSTIK, MYSTIK_STAGE, KawPlaces::awakenMystik, KawPlaces::resetMystik, null));
         boss(new Boss("steinhueter", ModEntities.STONE_KEEPER, MOONSTONE_QUARRY, KawPlaces::awakenKeeper, KawPlaces::resetKeeper, null));
@@ -1260,6 +1264,33 @@ public final class KawPlaces {
             return noLair(source, boss);
         }
         altar.reset(level);
+        return resetDone(source, boss);
+    }
+
+    private static @Nullable VoidThroneBlockEntity voidThrone(ServerLevel level, Spot spot) {
+        return nearest(level, spot.center(), 6, VoidThroneBlockEntity.class, throne -> true);
+    }
+
+    private static int awakenPhasmor(CommandSourceStack source, ServerLevel level, Spot spot, Boss boss) {
+        VoidThroneBlockEntity throne = voidThrone(level, spot);
+        if (throne == null) {
+            return noLair(source, boss);
+        }
+        if (throne.phase() == VoidThroneBlock.Phase.AWAKE) {
+            return alreadyAwake(source, boss);
+        }
+        if (throne.phase() == VoidThroneBlock.Phase.DEFEATED) {
+            throne.reset(level);
+        }
+        return throne.awaken(level) != null ? awakened(source, boss) : cannot(source, boss);
+    }
+
+    private static int resetPhasmor(CommandSourceStack source, ServerLevel level, Spot spot, Boss boss) {
+        VoidThroneBlockEntity throne = voidThrone(level, spot);
+        if (throne == null) {
+            return noLair(source, boss);
+        }
+        throne.reset(level);
         return resetDone(source, boss);
     }
 

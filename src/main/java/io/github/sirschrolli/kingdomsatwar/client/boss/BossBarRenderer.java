@@ -179,6 +179,11 @@ public final class BossBarRenderer {
         // Glut steigt auf, dazwischen blitzt es grün und blau wie in einem Opal; unter halber Kraft steigt sie als Phönix auf
         STYLES.put("ignara", style("ignara", 0xFF9A3A, new float[] {0.5f}, new Motes(Drift.EMBER, 4.5f, 0xFFE9A0, 0xFF8A24, 0xC8300E),
                 new Motes(Drift.GLITTER, 1.0f, 0x5AF0A0, 0x62C8FF, 0xFFE08A)));
+        // Phasmor, der Leerwandlerkönig (seit 1.5): Leerenstahl mit Purpur, der türkise Strahlenkranz seines Kragens, schwebende
+        // Phasitsplitter mit Nachbildern, darunter die Phasenklinge; Splitter treiben auf, dazwischen funkelt es; unter halber
+        // Kraft setzt er die Krone auf
+        STYLES.put("phasmor", style("phasmor", 0x6AF2DE, new float[] {0.5f}, new Motes(Drift.SHARD, 3.0f, 0xD8FFFA, 0x3CE0C8),
+                new Motes(Drift.TWINKLE, 1.5f, 0xE0FFF8, 0xC48CCC)));
         // Asteria, die Sternenreiterin: Silber mit Goldsaum, Sterne und Nachthimmel, ein Stern im Medaillon
         STYLES.put("star", style("star", 0x9AD8FF, new float[] {0.5f}, new Motes(Drift.TWINKLE, 4.5f, 0xFFFFFF, 0x9AD8FF, 0xE8C25A)));
         // MissMystik, die Feen-Zauberkünstlerin: violetter Samt mit Goldsaum, Zauberkarten, Harlekin-Rauten

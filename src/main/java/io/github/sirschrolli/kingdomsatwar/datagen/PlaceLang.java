@@ -91,6 +91,7 @@ final class PlaceLang {
         // Nether
         map.put("aschenesse", new String[] {"Ash Forge", "Aschenesse"});
         map.put("flammenheiligtum", new String[] {"Flame Sanctuary", "Flammenheiligtum"});
+        map.put("phasenheiligtum", new String[] {"Phase Sanctuary", "Phasenheiligtum"});
         map.put("hortfeste", new String[] {"Hoard Fortress", "Hortfeste"});
         map.put("riesengebeine", new String[] {"Giant Bones", "Riesengebeine"});
         map.put("verlorene_pforte", new String[] {"Lost Gate", "Verlorene Pforte"});

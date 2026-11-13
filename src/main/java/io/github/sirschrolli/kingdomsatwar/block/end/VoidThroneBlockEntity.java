@@ -65,9 +65,9 @@ public class VoidThroneBlockEntity extends BlockEntity {
         return state.hasProperty(VoidThroneBlock.FACING) ? state.getValue(VoidThroneBlock.FACING) : Direction.SOUTH;
     }
 
-    /** Der Platz des Königs vor dem Thron: drei Blöcke davor, auf dem Boden (der Thron steht auf Stufen). */
+    /** Der Platz des Königs vor dem Thron: fünf Blöcke davor, unten vor den Stufen auf dem Boden. */
     public BlockPos home() {
-        BlockPos p = this.worldPosition.relative(this.facing(), 3);
+        BlockPos p = this.worldPosition.relative(this.facing(), 5);
         if (this.level != null) {
             for (int i = 0; i < 4 && this.level.getBlockState(p.below()).getCollisionShape(this.level, p.below()).isEmpty(); i++) {
                 p = p.below();

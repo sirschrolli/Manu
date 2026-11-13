@@ -61,6 +61,7 @@ PHASES = {
     "schrolli_almighty": (0.66, 0.25),   # zweimal das Sonnengericht
     "world_eater": (0.66, 0.5, 0.33),    # Ruf der Welten, Zorn, Ruf der Welten
     "ignara": (0.5,),                    # unter halber Kraft steigt sie als Phönix auf
+    "phasmor": (0.5,),                   # unter halber Kraft setzt er die Krone auf (Phasensturm)
 }
 # die Erzmagier wechseln bei zwei Dritteln und einem Drittel die Phase
 MAGE_PHASES = (0.66, 0.33)
@@ -219,6 +220,14 @@ ELEMENTS = {
                    f0="#4a0806", f1="#b8280a", f2="#ff8a24", f3="#fff2b8", gold="#f2c45a", gold_dark="#8a5a18",
                    opal0="#5a0c0a", opal1="#c8300e", opal2="#ff8a2a", opal3="#ffe08a", flash_g="#5af0a0", flash_b="#62c8ff",
                    leather="#6a1e12", leather_light="#a8442a", leather_dark="#2e0a08"),
+    # Phasmor, der Leerwandlerkönig (seit 1.5): Leerenstahl mit Purpur; hinter dem Medaillon der türkise Strahlenkranz seines
+    # Kragens, über der Oberkante schweben Phasitsplitter mit blassen Nachbildern, darunter liegt die Phasenklinge, als Spitze
+    # ein Phasit in Purpur; die Füllung geschliffener Phasit, über dessen Facetten ein Schimmer zieht
+    "phasmor": dict(m0="#0b0912", m1="#3a3456", m2="#a9a2cc", acc="#3fe6cc", glow="#d8fff8", deep="#031816",
+                    f0="#03201c", f1="#0b6a5e", f2="#3ce0c8", f3="#e0fff8",
+                    crystal0="#04403a", crystal1="#0c9888", crystal2="#3ce0c8", crystal3="#d8fffa",
+                    purpur="#c48ccc", purpur_dark="#6a3a74", purpur_light="#ecc8f0",
+                    grip="#241c38", grip_light="#4a3e66", ray="#86f4e0"),
 }
 
 OUTLINE = (12, 10, 12, 255)
@@ -2656,6 +2665,173 @@ def fill_strip_ignara() -> Image.Image:
 
 
 # =============================================================================================
+# Phasmor, der Leerwandlerkönig (seit 1.5)
+# =============================================================================================
+
+def _phasmor_ghost(layer: Image.Image, g: dict, dx: int, dy: int, alpha: int) -> Image.Image:
+    """Das Nachbild einer Form: dieselben Pixel, verschoben und blass türkis (er springt durch die Phasen)."""
+    ghost = Image.new("RGBA", layer.size, CLEAR)
+    src, gp = layer.load(), ghost.load()
+    w, h = layer.size
+    for y in range(h):
+        for x in range(w):
+            if src[x, y][3] and 0 <= x + dx < w and 0 <= y + dy < h:
+                gp[x + dx, y + dy] = mix(g["acc"], g["glow"], 0.35)[:3] + (alpha,)
+    return ghost
+
+
+def _phasmor_shard(layer: Image.Image, g: dict, x0: float, y0: float, ang: float, length: float, width: float) -> None:
+    """Ein schwebender Phasitsplitter: an beiden Enden spitz (unten kurz, oben lang), links die helle Fläche, in der Mitte
+    die Kante im Licht, rechts die Schattenseite."""
+    lp = layer.load()
+    ca, sa = math.cos(ang), math.sin(ang)
+    waist = 0.32
+    reach = int(length + width + 2)
+    for y in range(max(0, int(y0) - reach), min(FRAME_H, int(y0) + reach + 1)):
+        for x in range(max(0, int(x0) - reach), min(FRAME_W, int(x0) + reach + 1)):
+            dx, dy = x + 0.5 - x0, y + 0.5 - y0
+            u = dx * ca + dy * sa
+            v = -dx * sa + dy * ca
+            if u < 0.0 or u > length:
+                continue
+            k = u / length
+            half = width * (k / waist if k < waist else (1.0 - k) / (1.0 - waist)) + 0.35
+            if abs(v) > half:
+                continue
+            s = v / max(half, 0.01)
+            if s < -0.25:
+                col = g["crystal2"]
+            elif s < 0.25:
+                col = g["crystal3"] if 0.15 < k < 0.85 else g["crystal2"]
+            else:
+                col = g["crystal1"]
+            if k < 0.12:
+                col = mix(col, g["crystal0"], 0.4)
+            lp[x, y] = col
+
+
+def deco_phasmor(img: Image.Image, pal: dict) -> None:
+    """Phasmor, der Leerwandlerkönig: hinter dem Medaillon strahlt der türkise Kranz seines Kragens; über der Oberkante
+    schweben Phasitsplitter (wie über seinen Schultern), jeder mit einem blassen Nachbild; unter der Leiste liegt seine
+    Phasenklinge (Knauf mit Phasit, umwickelter Griff, Parierstange aus Purpur mit Splittern, die Kristallklinge mit
+    leuchtendem Grat); als Spitze ein Phasit in einer Fassung aus Purpur, darüber und darunter seine Nachbilder."""
+    g = {k: c(pal, k) for k in pal}
+    top, bottom = BAR_Y - 3, BAR_Y + BAR_H + 2
+
+    # der Strahlenkranz hinter dem Medaillon: abwechselnd lange und kurze Strahlen, an der Wurzel breiter
+    rays = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    rp = rays.load()
+    for i, deg in enumerate(range(-68, 69, 12)):
+        if abs(deg) < 14:
+            continue                                     # dort sitzt die Brücke zur Leiste
+        a = math.radians(deg)
+        reach = EMB_R + (9.0 if i % 2 == 0 else 5.5)
+        r = EMB_R - 2.0
+        while r <= reach:
+            k = (r - EMB_R + 2.0) / (reach - EMB_R + 2.0)
+            x = EMB_X + math.cos(a) * r
+            y = EMB_Y + math.sin(a) * r
+            col = g["crystal3"] if k > 0.8 else (g["ray"] if k > 0.4 else g["crystal2"])
+            put(rp, rays, int(x), int(y), col)
+            if k < 0.45:
+                put(rp, rays, int(x + math.sin(a) * 0.9), int(y - math.cos(a) * 0.9), g["crystal1"])
+            r += 0.5
+    _outline(rays, OUTLINE)
+    img.alpha_composite(rays)
+
+    # schwebende Splitter über der Oberkante (nach rechts kleiner), mit Nachbild
+    shards = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    for i, x in enumerate(range(BAR_X + 8, BAR_X + BAR_W - 6, 15)):
+        if any(abs(x - (BAR_X + round(BAR_W * f))) < 9 for f in GEMS):
+            continue
+        rel = (x - BAR_X) / BAR_W
+        length = 10.5 - 4.5 * rel + 2.0 * hash01(x, 1521)
+        tilt = (hash01(x, 1523) - 0.5) * 34.0
+        hover = 4 + round(hash01(x, 1525) * 2)
+        _phasmor_shard(shards, g, x + 0.5, top - hover + 0.5, math.radians(-90.0 + tilt), length, 1.25 + 0.5 * (1.0 - rel))
+    img.alpha_composite(_phasmor_ghost(shards, g, -3, 1, 80))
+    _outline(shards, OUTLINE)
+    img.alpha_composite(shards)
+
+    # die Phasenklinge unter der Leiste
+    blade = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    bp = blade.load()
+    cy = bottom + 6
+    # Knauf (Phasit) und Griff (umwickelt)
+    for dx, dy, col in ((0, 0, g["crystal2"]), (1, 0, g["crystal3"]), (0, -1, g["crystal1"]), (1, -1, g["crystal2"]),
+                        (0, 1, g["crystal0"]), (1, 1, g["crystal1"]), (-1, 0, g["crystal1"])):
+        put(bp, blade, 31 + dx, cy + dy, col)
+    for x in range(33, 43):
+        put(bp, blade, x, cy - 1, g["grip_light"] if x % 3 == 0 else g["grip"])
+        put(bp, blade, x, cy, g["grip"] if x % 3 else g["grip_light"])
+        put(bp, blade, x, cy + 1, mix(g["grip"], OUTLINE, 0.4))
+    # Parierstange: Purpur, in der Mitte ein Phasit, oben und unten je ein Splitter
+    for y in range(cy - 4, cy + 5):
+        put(bp, blade, 43, y, g["purpur_light"] if y < cy else g["purpur"])
+        put(bp, blade, 44, y, g["purpur"] if y < cy else g["purpur_dark"])
+    put(bp, blade, 43, cy, g["crystal3"])
+    put(bp, blade, 44, cy, g["crystal2"])
+    for sx, sy, sd in ((44, cy - 5, -1), (44, cy + 5, 1)):
+        for k in range(3):
+            put(bp, blade, sx + k, sy + sd * k, g["crystal2"] if k < 2 else g["crystal3"])
+    # die Klinge: geschliffener Kristall, oben die helle Fase, in der Mitte der leuchtende Grat, unten die Schattenseite
+    x0, x_end = 45, BAR_X + 104
+    for x in range(x0, x_end + 1):
+        u = (x - x0) / (x_end - x0)
+        half = 2.4 if u < 0.82 else 2.4 * (1.0 - (u - 0.82) / 0.18)
+        for dy in range(-2, 3):
+            if abs(dy) > half + 0.25:
+                continue
+            if dy == -2:
+                col = g["crystal3"]
+            elif dy == -1:
+                col = g["crystal2"]
+            elif dy == 0:
+                col = g["glow"] if hash01(x, 1527) > 0.18 else (255, 255, 255, 255)
+            elif dy == 1:
+                col = g["crystal1"]
+            else:
+                col = g["crystal0"]
+            if u > 0.82 and dy != 0:
+                col = mix(col, g["crystal3"], 0.3)
+            put(bp, blade, x, cy + dy, col)
+    _outline(blade, OUTLINE)
+    img.alpha_composite(blade)
+
+    # die Spitze: ein Phasit, gefasst von zwei Purpurkrallen, darüber und darunter sein Nachbild
+    tip = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    ty = BAR_Y + BAR_H / 2
+    _keeper_crystal(tip, g, 229.0, ty, 0.0, 10.6, 2.6, 1541)
+    tp = tip.load()
+    for y in (int(ty) - 4, int(ty) + 4):
+        for x in (232, 233):
+            put(tp, tip, x, y, g["purpur_light"] if y < ty else g["purpur"])
+    put(tp, tip, 234, int(ty) - 4, g["purpur_dark"])
+    put(tp, tip, 234, int(ty) + 4, g["purpur_dark"])
+    ghosts = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    _keeper_crystal(ghosts, g, 230.0, ty - 3.5, math.radians(-30.0), 7.0, 1.6, 1543)
+    _keeper_crystal(ghosts, g, 230.0, ty + 3.5, math.radians(30.0), 6.0, 1.5, 1545)
+    img.alpha_composite(_phasmor_ghost(ghosts, g, 0, 0, 120))
+    _outline(tip, OUTLINE)
+    img.alpha_composite(tip)
+
+
+def post_phasmor(img: Image.Image, pal: dict) -> None:
+    """Nach dem Rahmen: statt der Nieten kleine Phasite in Purpur in Ober- und Unterkante."""
+    g = {k: c(pal, k) for k in pal}
+    px = img.load()
+    x0, x1, y0, y1 = BAR_X - 3, BAR_X + BAR_W + 2, BAR_Y - 3, BAR_Y + BAR_H + 2
+    for x in range(x0 + 9, x1 - 4, 22):
+        if any(abs(x - (BAR_X + round(BAR_W * f))) < 7 for f in GEMS):
+            continue
+        for y in (y0 + 1, y1 - 1):
+            put(px, img, x, y, g["crystal3"])
+            put(px, img, x + 1, y, g["crystal2"])
+            put(px, img, x - 1, y, g["purpur_dark"])
+            put(px, img, x + 2, y, g["purpur_dark"])
+
+
+# =============================================================================================
 # Die Sternenweberin (seit 0.99)
 # =============================================================================================
 
@@ -3094,6 +3270,7 @@ BANNER_COLORS = {
     "soul_shepherd": dict(trim="#4fe0d0", trim_dark="#3a3644", fabric="#0a1012"),
     "star_weaver": dict(trim="#9ad8ff", trim_dark="#2c3052", fabric="#070a1c"),
     "hour_warden": dict(trim="#e8bc62", trim_dark="#6c4016", fabric="#140a04"),
+    "phasmor": dict(trim="#c48ccc", trim_dark="#6a3a74", fabric="#08070f"),
 }
 
 
@@ -3181,7 +3358,7 @@ def banner_cap(element: str) -> Image.Image:
 
 POST = {"schrolli": post_schrolli, "schrolli_true": post_schrolli, "schrolli_almighty": post_almighty,
         "world_eater": post_world_eater, "kraken": post_kraken, "keeper": post_keeper, "sea_witch": post_sea_witch,
-        "soul_shepherd": post_soul_shepherd, "star_weaver": post_star_weaver, "ignara": post_ignara}
+        "soul_shepherd": post_soul_shepherd, "star_weaver": post_star_weaver, "ignara": post_ignara, "phasmor": post_phasmor}
 BORDERS = {"world_eater": frame_border_stone, "keeper": frame_border_stone}
 
 
@@ -3189,7 +3366,7 @@ DECOS = {"schrolli": deco_schrolli, "schrolli_true": deco_schrolli, "schrolli_al
          "world_eater": deco_world_eater, "anni": deco_anni, "anni2": deco_anni, "mystic": deco_mystic, "star": deco_star, "forge": deco_forge, "moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
          "water": deco_water, "kraken": deco_kraken, "keeper": deco_keeper, "sea_witch": deco_sea_witch,
          "soul_shepherd": deco_soul_shepherd, "star_weaver": deco_star_weaver, "hour_warden": deco_hour_warden,
-         "ignara": deco_ignara}
+         "ignara": deco_ignara, "phasmor": deco_phasmor}
 
 
 def frame(element: str, phases: tuple | None = None) -> Image.Image:
@@ -3354,6 +3531,18 @@ def fill_value(element: str, x: int, y: int) -> float:
         if rel < h:
             return 0.62 + 0.33 * (1.0 - rel / h)
         return 0.32 - 0.14 * (rel - h)
+    if element == "phasmor":
+        # geschliffener Phasit: Facetten (Zellen) in verschiedener Helligkeit mit hellen Kanten, darüber zieht schräg ein
+        # Schimmer; selten funkelt es
+        d1, d2 = _worley(x, y * 1.3, 8.0, 32, 1531)
+        if hash01(x, y, 1533) > 0.982:
+            return 1.0
+        if (x + 2 * y) % 64 < 5:
+            return 0.93
+        if d2 - d1 < 0.7:
+            return 0.86
+        cell = hash01(int(d1 * 7.0), int(d2 * 3.0), 1535)
+        return 0.3 + 0.24 * cell + 0.1 * math.sin(math.tau * x / 64 + 0.8 * math.sin(math.tau * y / 9))
     if element == "soul_shepherd":
         # Seelenfeuer: züngelnde Flammen, die nach oben dünner werden, dazwischen helle Funken
         tongue = 0.5 + 0.5 * math.sin(tau * x / 16 + 1.8 * math.sin(tau * x / 64) + 0.5 * math.sin(tau * y / 9 + tau * x / 32))
@@ -3546,7 +3735,8 @@ def portrait(element: str) -> Image.Image:
     mit dunkler Kontur (2 Pixel = 1 Pixel im Spiel), damit er sich vom Grund des Medaillons abhebt."""
     from entitygen.models import (asteria, boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water,
                                   glutschmied, kraken, miss_mystik, moth_queen, reef_colossus, shattered_king, anni_troll,
-                                  schrolli, sea_witch, soul_shepherd, star_weaver, stone_keeper, world_eater, hour_warden, ignara)
+                                  schrolli, sea_witch, soul_shepherd, star_weaver, stone_keeper, world_eater, hour_warden, ignara,
+                                  phasmor)
     from entitygen.paint import paint_model
     from entitygen.preview import render
     mod = {"fire": boss_fire, "ice": boss_ice, "lightning": boss_lightning, "nature": boss_nature, "earth": boss_earth,
@@ -3554,7 +3744,7 @@ def portrait(element: str) -> Image.Image:
            "forge": glutschmied, "star": asteria, "mystic": miss_mystik, "anni": anni_troll, "anni2": anni_troll,
            "schrolli": schrolli, "schrolli_true": schrolli, "schrolli_almighty": schrolli, "world_eater": world_eater,
            "kraken": kraken, "keeper": stone_keeper, "sea_witch": sea_witch, "soul_shepherd": soul_shepherd,
-           "star_weaver": star_weaver, "hour_warden": hour_warden, "ignara": ignara}[element]
+           "star_weaver": star_weaver, "hour_warden": hour_warden, "ignara": ignara, "phasmor": phasmor}[element]
     m = mod.build()
     m.pack()
     variant = "anni_troll_v2" if element == "anni2" else element if element.startswith("schrolli") else next(iter(mod.PALETTES))
@@ -3602,6 +3792,15 @@ def portrait(element: str) -> Image.Image:
             for child in bone.children:
                 strip_ignara(child)
         strip_ignara(m.root)
+    if element == "phasmor":
+        # der Kopf mit Krone und Kiefer vor dem Kragen mit dem Strahlenkranz, darunter Schultergrat und Brustpanzer (ohne Arme,
+        # Klinge, Beine, Mantel und Wappenrock)
+        def strip_phasmor(bone):
+            if bone.name.startswith(("left_", "right_", "blade", "mantle", "tabard")):
+                bone.cubes.clear()
+            for child in bone.children:
+                strip_phasmor(child)
+        strip_phasmor(m.root)
     if element == "forge":
         # der Widderschädel mit Hörnern, Flammen und Kiefer (ohne Arme, Waffen und Beine)
         def strip_forge(bone):
@@ -3691,10 +3890,10 @@ def portrait(element: str) -> Image.Image:
                 strip_anni(child)
         strip_anni(m.root)
     zoom = {"kraken": 1.5, "schrolli": 1.0, "schrolli_true": 1.0, "schrolli_almighty": 1.0, "world_eater": 1.35, "nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86, "star": 0.92, "mystic": 0.95,
-            "anni": 1.0, "anni2": 1.0, "keeper": 0.8, "sea_witch": 1.5, "soul_shepherd": 1.12, "star_weaver": 0.95, "hour_warden": 0.9, "ignara": 0.85}.get(element, 1.2)
+            "anni": 1.0, "anni2": 1.0, "keeper": 0.8, "sea_witch": 1.5, "soul_shepherd": 1.12, "star_weaver": 0.95, "hour_warden": 0.9, "ignara": 0.85, "phasmor": 0.88}.get(element, 1.2)
     yaw = {"kraken": -20, "schrolli": -22, "schrolli_true": -22, "schrolli_almighty": -22, "world_eater": -6, "water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14, "star": -24, "mystic": -22, "anni": -24,
-           "anni2": -24, "keeper": -20, "sea_witch": -22, "soul_shepherd": -14, "star_weaver": -20, "hour_warden": -16, "ignara": -18}.get(element, -42)
-    pitch = {"kraken": -18, "schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2, "keeper": -5, "sea_witch": 2, "soul_shepherd": 4, "star_weaver": 48, "hour_warden": 4, "ignara": 4}.get(element, 6)
+           "anni2": -24, "keeper": -20, "sea_witch": -22, "soul_shepherd": -14, "star_weaver": -20, "hour_warden": -16, "ignara": -18, "phasmor": -10}.get(element, -42)
+    pitch = {"kraken": -18, "schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2, "keeper": -5, "sea_witch": 2, "soul_shepherd": 4, "star_weaver": 48, "hour_warden": 4, "ignara": 4, "phasmor": 8}.get(element, 6)
     big = render(m, tex, glow, yaw, pitch, 448, pose=getattr(mod, "FOLD_POSE", None), background=(0, 0, 0, 0), zoom=zoom,
                  focus=["body"] if element in ("reef", "kraken", "star_weaver") else ["helm"] if element == "star"
                  else ["lock_l", "lock_r", "crown"] if element == "ignara" else ["head"])
@@ -3704,7 +3903,7 @@ def portrait(element: str) -> Image.Image:
                                                  "anni": 1.45, "anni2": 1.45, "schrolli": 1.5, "schrolli_true": 1.5,
                                                  "schrolli_almighty": 1.45, "world_eater": 2.0, "keeper": 1.3, "sea_witch": 1.35,
                                                  "soul_shepherd": 1.7, "star_weaver": 2.3, "hour_warden": 1.6,
-                                                 "ignara": 1.3}.get(element, 1.4))
+                                                 "ignara": 1.3, "phasmor": 1.45}.get(element, 1.4))
     img = ImageEnhance.Color(img).enhance(1.15)
     img = ImageEnhance.Contrast(img).enhance(1.12)
     if element == "schrolli_almighty":

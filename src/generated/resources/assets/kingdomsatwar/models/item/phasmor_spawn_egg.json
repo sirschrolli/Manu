@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "kingdomsatwar:item/phasmor_spawn_egg"
+  }
+}

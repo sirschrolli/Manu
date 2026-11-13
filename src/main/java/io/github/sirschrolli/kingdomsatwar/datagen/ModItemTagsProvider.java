@@ -324,6 +324,9 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         // die Flammenpeitsche (1.2): mit Feueropalen zu reparieren, verzauberbar wie ein Schwert
         add(ModTags.Items.REPAIRS_FLAME_WHIP, io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL);
         add(ItemTags.SWORDS, io.github.sirschrolli.kingdomsatwar.registry.FlameSanctuary.FLAME_WHIP);
+        // die Phasenklinge (1.5): ein Schwert (Schärfe, Schwung …), mit Phasit auszubessern
+        add(ModTags.Items.REPAIRS_PHASE_BLADE, io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT);
+        add(ItemTags.SWORDS, io.github.sirschrolli.kingdomsatwar.registry.PhaseSanctuary.PHASE_BLADE);
         add(ItemTags.HEAD_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_HELMET);
         add(ItemTags.CHEST_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_CHESTPLATE);
         add(ItemTags.LEG_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.TIMEWARDEN_LEGGINGS);

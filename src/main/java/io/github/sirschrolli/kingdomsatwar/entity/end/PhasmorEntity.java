@@ -33,8 +33,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
@@ -1180,23 +1178,13 @@ public class PhasmorEntity extends Monster implements PhasmorLike, io.github.sir
         return io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme.PHASE;
     }
 
-    /** Für die Vorführung und Tests: ein Kreis aus türkisem Licht dort, wo ein Riss klafft. */
-    public static void riftMark(ServerLevel level, Vec3 p) {
-        SpellFxEntity.create(level, SpellFxEntity.Kind.CIRCLE, p.add(0.0, 0.05, 0.0), null, PHASIT, 30, (float) RIFT_RADIUS).spawn();
-    }
-
-    /** Ein frisch gerufenes Trugbild (für Tests: wie viele es um ihn gibt). */
+    /** Für Tests: wie viele Trugbilder um ihn wandeln. */
     public int illusionCount() {
         return this.level() instanceof ServerLevel level ? this.illusions(level) : 0;
     }
 
-    /** Ein Schlag ins Leere (für Tests): Wirkt er gerade einen Riss? */
+    /** Für Tests: klaffen gerade Leerenrisse? */
     public boolean riftsOpen() {
         return !this.rifts.isEmpty();
-    }
-
-    /** Wirkung der Leerenrisse auf Gegner (für Tests): verschluckt und ausgespuckt. */
-    public static MobEffectInstance riftDaze() {
-        return new MobEffectInstance(MobEffects.NAUSEA, 60, 0);
     }
 }

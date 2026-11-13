@@ -144,6 +144,20 @@ REGIONS: dict[str, dict[str, UV]] = {
         "crystal": (2, 4, 4, 10),       # Kristallzacken an der Parierstange (leuchten)
         "crystal_edge": (4, 4, 5, 10),
     },
+    # die Phasenklinge (1.5): Phasmors Zweihänder aus einem einzigen Phasitkristall
+    "phase_blade": {
+        "grip": (0, 0, 2, 8),           # violette Lederwicklung
+        "metal": (0, 8, 2, 10),         # Leerenstahl (Knaufkappe, Kragen)
+        "metal_top": (0, 10, 2, 12),
+        "gem": (0, 12, 2, 14),          # der Phasit im Knauf (leuchtet)
+        "guard": (2, 0, 8, 2),          # die Parierstange aus Purpur von vorn, in der Mitte ein Phasit
+        "guard_side": (2, 2, 8, 3),
+        "shard": (2, 3, 4, 9),          # Phasitsplitter an den Enden der Parierstange (leuchten)
+        "shard_edge": (4, 3, 5, 9),
+        "blade": (8, 0, 13, 16),        # die Klinge aus Phasit: Spitze oben
+        "blade_edge": (13, 0, 14, 16),  # die Schneiden
+        "ridge": (14, 0, 15, 16),       # der Mittelgrat (leuchtet)
+    },
     "steel_double_axe": {
         "shaft": (0, 0, 1, 16),         # Eiche
         "shaft_side": (1, 0, 2, 16),
@@ -425,6 +439,30 @@ def abyssite_greatsword() -> Shape:
     return s
 
 
+def phase_blade() -> Shape:
+    """Die Phasenklinge (1.5): ein langer Griff in violettem Leder mit einem Phasit im Knauf, eine Parierstange aus Purpur mit
+    Phasitsplittern an den Enden und die Klinge aus einem einzigen Phasitkristall mit leuchtendem Mittelgrat."""
+    s = Shape(REGIONS["phase_blade"])
+    s.box(7.4, -8.7, 7.4, 8.6, -7.4, 8.6, "gem", glow=True)
+    s.box(7.15, -7.5, 7.15, 8.85, -6.6, 8.85, "metal", cap="metal_top")
+    s.box(7.35, -6.6, 7.35, 8.65, 1.5, 8.65, "grip", cap="metal_top")
+    s.box(7.2, 0.7, 7.2, 8.8, 1.6, 8.8, "metal", cap="metal_top")
+    # die Parierstange
+    frame = (2.4, 1.5, 13.6, 3.3)
+    plate(s, 4.4, 1.5, 11.6, 3.3, 7.0, 9.0, "guard", frame, side="guard_side", cap="guard_side")
+    plate(s, 2.4, 1.9, 4.4, 3.0, 7.2, 8.8, "guard", frame, side="guard_side", cap="guard_side")
+    plate(s, 11.6, 1.9, 13.6, 3.0, 7.2, 8.8, "guard", frame, side="guard_side", cap="guard_side")
+    s.chain(2.8, 3.0, 26, 12, [1.3, 1.0, 0.7], (-0.4, -0.1), (0.4, 0.1), (0.7, 0.3), "shard", "shard_edge", glow=True)
+    s.chain(13.2, 3.0, -26, -12, [1.3, 1.0, 0.7], (-0.4, -0.1), (0.4, 0.1), (0.7, 0.3), "shard", "shard_edge", glow=True)
+    s.chain(2.8, 1.9, 154, -12, [0.9, 0.6], (-0.3, -0.08), (0.3, 0.08), (0.6, 0.3), "shard", "shard_edge", glow=True)
+    s.chain(13.2, 1.9, -154, 12, [0.9, 0.6], (-0.3, -0.08), (0.3, 0.08), (0.6, 0.3), "shard", "shard_edge", glow=True)
+    # die Klinge und ihr leuchtender Mittelgrat
+    lengths = [3.2, 3.2, 3.2, 3.2, 3.0, 2.4, 1.4]
+    s.chain(8.0, 3.2, 0, 0, lengths, (-1.8, -0.2), (1.8, 0.2), (0.62, 0.24), "blade", "blade_edge")
+    s.chain(8.0, 3.6, 0, 0, [3.2, 3.2, 3.2, 3.0, 2.4], (-0.28, -0.22), (0.28, 0.22), (0.68, 0.5), "ridge", "ridge", glow=True)
+    return s
+
+
 def steel_double_axe() -> Shape:
     """Stahl-Doppelaxt: ein Eichenstiel mit Lederwicklung, oben zwei halbmondförmige Blätter (links und rechts) und eine kurze
     Spitze."""
@@ -541,6 +579,7 @@ ITEMS = {
     "MINUTE_HAND": ("minute_hand", minute_hand),
     "NIGHTSTEEL_DAGGER": ("nightsteel_dagger", nightsteel_dagger),
     "ABYSSITE_GREATSWORD": ("abyssite_greatsword", abyssite_greatsword),
+    "PHASE_BLADE": ("phase_blade", phase_blade),
     "STEEL_DOUBLE_AXE": ("steel_double_axe", steel_double_axe),
     "MINER_HAMMER": ("miner_hammer", miner_hammer),
     "EMBER_PICKAXE": ("ember_pickaxe", ember_pickaxe),

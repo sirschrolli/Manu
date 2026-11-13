@@ -2328,6 +2328,19 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.block.flame_altar.ignite"
   },
+  "block.void_throne.kindle": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/end/void_throne_kindle1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/end/void_throne_kindle2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.block.void_throne.kindle"
+  },
   "boss.sky_ward.charge": {
     "sounds": [
       {
@@ -6595,6 +6608,230 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.nyxar.shriek"
   },
+  "entity.phasmor.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_ambient1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_ambient2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_ambient3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.phasmor.ambient"
+  },
+  "entity.phasmor.awaken": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_awaken1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.phasmor.awaken"
+  },
+  "entity.phasmor.blink": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_blink1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_blink2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_blink3",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.phasmor.blink"
+  },
+  "entity.phasmor.crown": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_crown1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_crown2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.phasmor.crown"
+  },
+  "entity.phasmor.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_death1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.phasmor.death"
+  },
+  "entity.phasmor.guard": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_guard1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_guard2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.phasmor.guard"
+  },
+  "entity.phasmor.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_hurt1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_hurt2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_hurt3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.phasmor.hurt"
+  },
+  "entity.phasmor.illusion": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_illusion1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_illusion2",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.phasmor.illusion"
+  },
+  "entity.phasmor.impact": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_impact1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_impact2",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_impact3",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.phasmor.impact"
+  },
+  "entity.phasmor.lift": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_lift1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_lift2",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.phasmor.lift"
+  },
+  "entity.phasmor.rift_erupt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_rift_erupt1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_rift_erupt2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.phasmor.rift_erupt"
+  },
+  "entity.phasmor.rift_open": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_rift_open1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_rift_open2",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.phasmor.rift_open"
+  },
+  "entity.phasmor.slash": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_slash1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_slash2",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_slash3",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.phasmor.slash"
+  },
+  "entity.phasmor.stagger": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_stagger1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_stagger2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.phasmor.stagger"
+  },
+  "entity.phasmor.swing": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_swing1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_swing2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_swing3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.phasmor.swing"
+  },
+  "entity.phasmor.throw": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_throw1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/end/phasmor_throw2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.phasmor.throw"
+  },
   "entity.primeval_elk.ambient": {
     "sounds": [
       {
@@ -10315,6 +10552,23 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.item.mystic_top_hat.vanish"
+  },
+  "item.phase_blade.dash": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/end/phase_blade_dash1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/end/phase_blade_dash2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/end/phase_blade_dash3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.item.phase_blade.dash"
   },
   "item.star_wings.boost": {
     "sounds": [

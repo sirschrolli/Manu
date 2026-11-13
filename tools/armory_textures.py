@@ -41,6 +41,11 @@ VIOLET = st.fixed("#2a0c4a", "#4a1a7a", "#7a32b8", "#a85cf0", "#c88aff", "#e4c0f
 MOON = st.fixed("#2a3a5a", "#4a6a9a", "#7aa0d0", "#a8c8f0", "#cfe4ff", "#ecf6ff", "#ffffff")
 MAGENTA = st.fixed("#3a0632", "#6a0c5a", "#a01a8a", "#d02ab4", "#f05ad8", "#ff9cee", "#ffe0fa")
 CYAN = st.fixed("#06303a", "#0c5a6a", "#16909e", "#2ac8d0", "#6af0f0", "#b8fffa", "#f0ffff")
+# die Phasenklinge (1.5): Phasit, Purpur, Leerenstahl, violettes Leder
+PHASIT = st.ramp("#2ad2b8", dark=0.3, light=0.98, cool=255, hue_dark=24, chroma_dark=1.05, warm=165, hue_light=8, chroma_light=0.45)
+PURPUR = st.ramp("#a679a8", dark=0.24, light=0.94, cool=290, hue_dark=12, warm=330, hue_light=8, chroma_light=0.5)
+VOID_STEEL = st.ramp("#3a3450", dark=0.12, light=0.7, cool=280, hue_dark=8, warm=300, hue_light=10, chroma_light=0.7)
+PHASIT_GLOW = st.fixed("#064a44", "#0c7a6e", "#14a898", "#2ad2bc", "#6af0dc", "#b8fff2", "#f0fffc")
 # der Minutenzeiger (1.01): gebläuter Stahl, Uhrmessing, Chronit
 BLUED = st.fixed("#0a0e2a", "#141c48", "#20306e", "#2e4896", "#4566b8", "#7290dc", "#b4c8f6")
 CLOCK_BRASS = st.ramp("#d0a040", dark=0.28, light=0.96, warm=90)
@@ -511,6 +516,41 @@ def abyssite_greatsword_atlas():
     return img, glow
 
 
+def phase_blade_atlas():
+    R = _regions("phase_blade")
+    img, glow = _blank()
+    paint(img, R["grip"], wrap(DARK_LEATHER))
+    paint(img, R["metal"], metal(VOID_STEEL, 4.0))
+    paint(img, R["metal_top"], top(VOID_STEEL))
+    paint(glow, R["gem"], glow_fill(PHASIT_GLOW))
+
+    def guard(x, y, w, h):
+        if y == 0:
+            return _lv(PURPUR, 6)
+        if y == h - 1:
+            return _lv(PURPUR, 1)
+        cx = (w - 1) / 2
+        if abs(x - cx) <= 1:
+            return _lv(PHASIT_GLOW, 4)
+        return _lv(PURPUR, 4 if (x // 2) % 2 else 3)
+    paint(img, R["guard"], guard)
+    paint(img, R["guard_side"], metal(PURPUR, 3.0))
+
+    def crystal(x, y, w, h):
+        # Phasit: an den Schneiden hell, zur Mitte tiefer, schräge Facetten; hier und da ein violetter Funke
+        u = x / (w - 1)
+        level = 6 if u < 0.1 or u > 0.9 else 5 if u < 0.25 or u > 0.75 else 3 + ((x + y) // 3) % 2
+        if h01(x, y, 47) < 0.05:
+            level -= 1
+        return _lv(PHASIT, level)
+    paint(img, R["blade"], crystal)
+    paint(img, R["blade_edge"], strand(PHASIT, 6.0, 4.0, False))
+    paint(glow, R["ridge"], lambda x, y, w, h: _lv(PHASIT_GLOW, 6 if y % 5 == 0 else 5 if y % 5 in (1, 4) else 4))
+    paint(glow, R["shard"], glow_strand(PHASIT_GLOW))
+    paint(glow, R["shard_edge"], glow_strand(PHASIT_GLOW))
+    return img, glow
+
+
 def steel_double_axe_atlas():
     R = _regions("steel_double_axe")
     img, glow = _blank()
@@ -638,6 +678,7 @@ def ore_seeker_atlas():
 ATLASES = {
     "steel_halberd": steel_halberd_atlas, "draconium_warhammer": draconium_warhammer_atlas, "nightsteel_dagger": nightsteel_dagger_atlas,
     "abyssite_greatsword": abyssite_greatsword_atlas, "steel_double_axe": steel_double_axe_atlas, "miner_hammer": miner_hammer_atlas,
+    "phase_blade": phase_blade_atlas,
     "ember_pickaxe": ember_pickaxe_atlas, "vein_breaker": vein_breaker_atlas, "ore_seeker": ore_seeker_atlas,
     "keeper_maul": keeper_maul_atlas,
     "sea_witch_staff": sea_witch_staff_atlas,
@@ -732,6 +773,25 @@ ABYSSITE_GREATSWORD = """
 ..LJ....ED......
 .GK.............
 .ED.............
+................
+"""
+
+PHASE_BLADE = """
+................
+.............g..
+...........ggf..
+..........gfEb..
+.........gfEb...
+........gfEb....
+..nm...gfEb.....
+...lk.gfEb......
+....kkfEb.......
+.....jjb........
+....LJjk........
+...MK..ki.......
+..LJ....nm......
+.UK.............
+.SQ.............
 ................
 """
 
@@ -836,6 +896,8 @@ ICON_ART = {
                             ("E", "C", "D", "A", "F")),
     "nightsteel_dagger": (NIGHTSTEEL_DAGGER, {"B": NIGHTSTEEL, "D": VIOLET, "E": MOON, "F": DARK_LEATHER}, ("E", "D", "B", "F")),
     "abyssite_greatsword": (ABYSSITE_GREATSWORD, {"B": ABYSS, "E": MAGENTA, "F": DARK_LEATHER}, ("E", "B", "F")),
+    "phase_blade": (PHASE_BLADE, {"B": PHASIT, "C": PURPUR, "E": PHASIT_GLOW, "F": DARK_LEATHER, "G": PHASIT_GLOW},
+                    ("E", "G", "B", "C", "F")),
     "steel_double_axe": (STEEL_DOUBLE_AXE, {"B": STEEL, "C": OAK, "F": LEATHER}, ("B", "C", "F")),
     "miner_hammer": (MINER_HAMMER, {"B": STEEL, "C": ASHWOOD, "F": LEATHER, "G": BRASS}, ("B", "G", "C", "F")),
     "ember_pickaxe": (EMBER_PICKAXE, {"A": CHARRED, "C": GOLD, "D": DRACONIUM, "E": EMBER, "F": DARK_LEATHER}, ("E", "C", "D", "A", "F")),

@@ -1215,6 +1215,51 @@ public class ModLanguageProvider extends LanguageProvider {
         }
         subtitle("block.flame_altar.ignite", "Flame Altar ignites", "Flammenaltar entzündet sich");
         subtitle("item.flame_whip.crack", "Flame Whip cracks", "Flammenpeitsche knallt");
+        // Phasmor, der Leerwandlerkönig, und das Phasenheiligtum (1.5)
+        creature(ModEntities.PHASMOR, io.github.sirschrolli.kingdomsatwar.registry.PhaseSanctuary.PHASMOR_SPAWN_EGG,
+                "Phasmor, the Voidwalker King", "Phasmor, der Leerwandlerkönig", "Leerwandlerkönig");
+        add(ModEntities.PHASMOR_ILLUSION.get(), pick("Illusion of Phasmor", "Trugbild Phasmors"));
+        add(ModEntities.PHASE_BOULDER.get(), pick("Phase Boulder", "Phasenbrocken"));
+        text("boss.kingdomsatwar.phasmor", "Phasmor, the Voidwalker King", "Phasmor, der Leerwandlerkönig");
+        text("boss.kingdomsatwar.phasmor.title", "Lord of the Phase Leaps", "Herr der Phasensprünge");
+        block(io.github.sirschrolli.kingdomsatwar.registry.PhaseSanctuary.VOID_THRONE, "Void Throne", "Leerenthron");
+        lore("void_throne", "The throne of the Voidwalker King in the Phase Sanctuary", "Der Thron des Leerwandlerkönigs im Phasenheiligtum");
+        text(ModItems.loreKey("void_throne", 2), "Dark: a Phasit rekindles its gem – and calls the king back",
+                "Erloschen: Ein Phasit entzündet seinen Stein neu – und ruft den König zurück");
+        text("block.kingdomsatwar.void_throne.hint", "A king kneels before the throne, keeping watch … whoever comes close rouses him.",
+                "Vor dem Thron kniet ein König und hält Wache … wer näher kommt, weckt ihn.");
+        text("block.kingdomsatwar.void_throne.awake", "The throne blazes – the king has risen.",
+                "Der Thron leuchtet auf – der König hat sich erhoben.");
+        text("block.kingdomsatwar.void_throne.defeated", "The gem of the throne has gone dark. A Phasit might rekindle it.",
+                "Der Stein des Throns ist erloschen. Ein Phasit könnte ihn neu entzünden.");
+        text("block.kingdomsatwar.void_throne.warning", "A blade hums somewhere in the void …",
+                "Irgendwo in der Leere summt eine Klinge …");
+        text("block.kingdomsatwar.void_throne.peaceful", "The gem stays dark (the world is set to Peaceful).",
+                "Der Stein bleibt dunkel (die Welt steht auf „Friedlich“).");
+        item(io.github.sirschrolli.kingdomsatwar.registry.PhaseSanctuary.PHASE_BLADE, "Phase Blade", "Phasenklinge");
+        lore("phase_blade", "The blade of Phasmor, the Voidwalker King", "Die Klinge von Phasmor, dem Leerwandlerkönig");
+        text(ModItems.loreKey("phase_blade", 2), "A greatsword of a single Phasit crystal – heavier than Netherite",
+                "Ein Zweihänder aus einem einzigen Phasitkristall – schwerer als Netherit");
+        text(ModItems.loreKey("phase_blade", 3), "Use: phase strike – blink up to seven blocks ahead, cutting whoever you pass",
+                "Benutzen: Phasenhieb – bis zu sieben Blöcke vorwärts phasen, wen du durchquerst, triffst du");
+        for (String[] e : new String[][] {{"ambient", "Voidwalker King hums", "Leerwandlerkönig summt"},
+                {"guard", "Blade hums", "Klinge summt"},
+                {"hurt", "Voidwalker King hurts", "Leerwandlerkönig nimmt Schaden"},
+                {"death", "Voidwalker King dissolves", "Leerwandlerkönig zerfällt"},
+                {"awaken", "Voidwalker King roars", "Leerwandlerkönig brüllt"},
+                {"crown", "Crown of Phasit blazes", "Krone aus Phasit lodert auf"},
+                {"swing", "Phase blade whirs", "Phasenklinge schwirrt"}, {"slash", "Phase blade strikes", "Phasenklinge trifft"},
+                {"blink", "Voidwalker King phases", "Leerwandlerkönig phast"},
+                {"illusion", "Illusions shimmer", "Trugbilder flimmern"},
+                {"lift", "Stones rise", "Brocken steigen auf"}, {"throw", "Stone hurled", "Brocken fliegt"},
+                {"impact", "Stone shatters", "Brocken zerschellt"},
+                {"rift_open", "Void rifts open", "Leerenrisse öffnen sich"},
+                {"rift_erupt", "Void rifts burst", "Leerenrisse brechen auf"},
+                {"stagger", "Voidwalker King recoils from water", "Leerwandlerkönig krümmt sich im Wasser"}}) {
+            subtitle("entity.phasmor." + e[0], e[1], e[2]);
+        }
+        subtitle("block.void_throne.kindle", "Void Throne glows", "Leerenthron leuchtet auf");
+        subtitle("item.phase_blade.dash", "Phase strike", "Phasenhieb");
         // Waffen und Rüstungen aus Monsterteilen (0.70)
         item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.WEREWOLF_PELT, "Werewolf Pelt", "Werwolfspelz");
         lore("werewolf_pelt", "Thick, dark fur – still warm", "Dichtes, dunkles Fell – noch warm");

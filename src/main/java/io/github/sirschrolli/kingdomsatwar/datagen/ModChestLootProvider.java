@@ -401,6 +401,13 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         item(Items.GOLD_INGOT, 4, 1, 3), item(Items.GOLD_NUGGET, 4, 3, 9), item(Items.BLAZE_POWDER, 3, 2, 5),
                         item(Items.BLAZE_ROD, 2, 1, 2), item(Items.MAGMA_CREAM, 2, 1, 3), item(Items.DYED_CANDLE.pick(net.minecraft.world.item.DyeColor.RED), 3, 1, 3),
                         item(Items.GILDED_BLACKSTONE, 2, 1, 2), item(Items.FIRE_CHARGE, 2, 1, 3))));
+        // das Phasenheiligtum (1.5): der Schatz neben dem Leerenthron – Phasit, Enderperlen, Purpur, Chorusfrüchte, ein wenig
+        // Gold und Smaragd, selten ein Enderauge und ein Herzkristall
+        this.output.accept(ModLootTables.SITE_PHASE_SANCTUARY, coins(LootTable.lootTable().withPool(crystals(6, 6)), 2, 8, 0, 2, 0.1f)
+                .withPool(pool(2, 4, item(io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT.get(), 4, 1, 2),
+                        item(Items.ENDER_PEARL, 4, 1, 3), item(Items.POPPED_CHORUS_FRUIT, 3, 2, 5), item(Items.CHORUS_FRUIT, 3, 2, 6),
+                        item(Items.PURPUR_BLOCK, 2, 2, 6), item(Items.GOLD_INGOT, 3, 1, 3), item(Items.EMERALD, 2, 1, 2),
+                        item(Items.ENDER_EYE, 1, 1, 1), item(Items.END_ROD, 2, 1, 3))));
     }
 
     /**
