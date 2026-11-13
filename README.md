@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Version 1.5 – Phasmor, der Leerwandlerkönig, und das Phasenheiligtum.** Über den **äußeren Inseln des Ends** schwebt jetzt das **Phasenheiligtum**: eine runde Plattform aus Endsteinziegeln mit einem Mosaik aus Purpur, Obsidian und **Phasit**, darunter ein Zapfen voller Phasiterz, acht Säulen mit Phasitkristallen, schwebende Stufen hinab zur Insel – und hinten, auf drei Stufen vor einer Wand mit einem **Auge aus Phasit**, der **Leerenthron**. Davor kniet **Phasmor, der Leerwandlerkönig**, und hält Wache, die Klinge vor sich im Boden – wer ihm zu nahe kommt, weckt ihn. Fast fünf Blöcke groß, eine Krone aus schwebenden Phasitsplittern, kämpft er mit seiner **Phasenklinge**: **Klingenhieb**, **Phasenstoß** (er zerfließt und steht hinter dir), **Trugbilder**, die aussehen wie er (jeder Treffer lässt eines zerfallen), **Blockwurf** (Brocken aus dem Heiligtum steigen um ihn auf und fliegen auf dich), **Leerenrisse** (wer darin steht, wird verschluckt und hoch über dem Heiligtum ausgespuckt) – und unter halber Kraft setzt er die **Krone** auf und rast im **Phasensturm** von Gegner zu Gegner. Geschossen weicht er oft aus, aber **Wasser** schadet ihm und lässt ihn sich krümmen. Eigene Bossleiste, eigene Klänge. Seine Beute: selten die **Phasenklinge** (ein Zweihänder aus einem einzigen Phasitkristall; Rechtsklick: der **Phasenhieb** – bis zu sieben Blöcke vorwärts phasen, wen du durchquerst, den triffst du), sonst **Phasit**. Ein Phasit auf dem erloschenen Thron ruft ihn zurück.
+> **Version 1.6 – Hallkristall und die Rüstung der Lauscher.** Tief unten in der **Tiefen Dunkelheit**, im Reich des Sculk, wo die Stille Kathedrale steht, hallt der Gesang ihrer Orgel bis heute im Gestein nach – und wo er am längsten nachklang, ist der Tiefenschiefer zu **Hallkristall** geronnen: blass wie Eis, mit Ringen darin wie Wellen auf einem Teich. **Hallkristallerz** gibt es nur in der Tiefen Dunkelheit (ab der Diamantspitzhacke; seine Kristalle schimmern im Dunkeln). Neun Kristalle ergeben den **Hallkristallblock** (Licht 6, Wellen laufen durch ihn hindurch, Sockel für ein Leuchtfeuer). Daraus die **Rüstung der Lauscher** (Schutz wie Diamant), in 3D mit **Fühlern aus Sculk** am Helm, **Ohrscheiben** aus Kristall, einem **Sculkherz** auf der Brust und **Wollsohlen**: **Schallschutz** (jeder Teil fängt ein Fünftel des Schallschlags des Tiefenhüters ab), **klare Sicht** (Helm: die Dunkelheit von Tiefenhüter und Kreischern trübt den Blick nicht mehr), **Wollsohlen** (Stiefel: Schritte, Sprünge, Landungen und Schwimmzüge machen keine Erschütterung – Sculk-Sensoren, Kreischer und der Tiefenhüter hören sie nicht) und **Echoortung** (alle vier Teile: Wer schleicht, ruft alle zwei Sekunden leise in die Dunkelheit – ein Ring läuft über den Boden, und jedes Wesen in 16 Blöcken leuchtet kurz auf, auch hinter Wänden).
+> In 1.5 kam **Phasmor, der Leerwandlerkönig, und das Phasenheiligtum**: Über den **äußeren Inseln des Ends** schwebt jetzt das **Phasenheiligtum**: eine runde Plattform aus Endsteinziegeln mit einem Mosaik aus Purpur, Obsidian und **Phasit**, darunter ein Zapfen voller Phasiterz, acht Säulen mit Phasitkristallen, schwebende Stufen hinab zur Insel – und hinten, auf drei Stufen vor einer Wand mit einem **Auge aus Phasit**, der **Leerenthron**. Davor kniet **Phasmor, der Leerwandlerkönig**, und hält Wache, die Klinge vor sich im Boden – wer ihm zu nahe kommt, weckt ihn. Fast fünf Blöcke groß, eine Krone aus schwebenden Phasitsplittern, kämpft er mit seiner **Phasenklinge**: **Klingenhieb**, **Phasenstoß** (er zerfließt und steht hinter dir), **Trugbilder**, die aussehen wie er (jeder Treffer lässt eines zerfallen), **Blockwurf** (Brocken aus dem Heiligtum steigen um ihn auf und fliegen auf dich), **Leerenrisse** (wer darin steht, wird verschluckt und hoch über dem Heiligtum ausgespuckt) – und unter halber Kraft setzt er die **Krone** auf und rast im **Phasensturm** von Gegner zu Gegner. Geschossen weicht er oft aus, aber **Wasser** schadet ihm und lässt ihn sich krümmen. Eigene Bossleiste, eigene Klänge. Seine Beute: selten die **Phasenklinge** (ein Zweihänder aus einem einzigen Phasitkristall; Rechtsklick: der **Phasenhieb** – bis zu sieben Blöcke vorwärts phasen, wen du durchquerst, den triffst du), sonst **Phasit**. Ein Phasit auf dem erloschenen Thron ruft ihn zurück.
 > In 1.4 kam **Phasit und die Rüstung der Leerwandler**: Auf den **äußeren Inseln des Ends** schimmert jetzt **Phasiterz** im Endstein – türkise Büschel, wo die Leerwandler seit Äonen hin und her springen (ab der Diamantspitzhacke; auf der Hauptinsel des Drachen nicht). Aus **Phasit**, einem türkisen Kristall mit einem violetten Funken darin, baut man den **Phasitblock** (Licht 8, Sockel für ein Leuchtfeuer) und die **Rüstung der Leerwandler** (mit Enderperlen, die Stiefel mit Chorusfrüchten; Schutz wie Diamant): eine Kapuze mit leuchtenden Augenschlitzen und einer **Krone aus Phasitsplittern**, ein langer **Mantel** mit türkis leuchtenden Fäden und einem Phasit auf der Brust, Schulterplatten mit **schwebenden Splittern**, Stiefel auf **Schwebesohlen** – alles in 3D. **Phasenschritt** (jeder Teil): Trifft dich ein Wesen im Nahkampf, weichst du mit 6 % je Teil (mit allen vier 24 %) **dem Hieb ganz aus** und springst vier bis acht Blöcke fort, weg vom Angreifer – zurück bleibt ein türkises Nachbild (höchstens alle drei Sekunden). **Schwebende Sohlen** (Stiefel): **Enderperlen** tun nicht mehr weh. **Einer von ihnen** (alle vier Teile): Die **Leerwandler** werden nicht wütend, wenn du sie ansiehst.
 > In 1.3 kam **das Härte-Paket**: Kingdoms at War wurde **deutlich schwerer** – zwanzig Regeln, fest eingebaut: **Monster** haben **doppelt so viel Leben**, treffen **50 % härter**, wittern dich **doppelt so weit** (höchstens 48 Blöcke) und **heilen sich**, wenn man sie in Ruhe lässt (ein halbes Herz alle zwei Sekunden); **Bosse heilen sich**, wenn du vor ihnen fliehst (2 % je Sekunde, sobald niemand mehr in 32 Blöcken ist). **Giftige Treffer:** Zombies machen hungrig, Spinnen vergiften, Skelettpfeile lähmen, andere Monster schwächen. **Fallschaden** ist anderthalbmal so hoch, **jeder zweite Pfeil zersplittert**, wenn er in einen Block fährt. **Erze** – die eigenen wie Kohle, Eisen, Gold, Diamant – sind **halb so häufig**, **Herz- und Manakristalle** wachsen halb so oft, liegen halb so oft in Truhen und geben nur noch **ein halbes Herz bzw. 10 Mana**; **Truhen** sind karger, **Monster** lassen seltener etwas fallen (ihre Teile und Münzen nur halb so oft). **Tränke** wirken halb so lange, der **Zaubertisch** will **doppelt so viel Lapislazuli** (die Erfahrungsstufen bleiben gleich), **Händler** verlangen anderthalbmal so viel und zahlen weniger, **Karten** kosten noch einmal das Doppelte. **Felder** wachsen halb so schnell, **Jungtiere** brauchen doppelt so lange, **das Wild** flieht schon aus 16 Blöcken – und der **Hirsch wehrt sich**: Wer ihn angreift, den nimmt er mit gesenktem Geweih auf die Hörner. Die **Erfahrung**, die du bekommst, bleibt genau gleich.
 > In 1.2 kam **Ignara, die Flammenpriesterin, und das Flammenheiligtum**: Mitten im **Lavameer des Nethers** steht jetzt das **Flammenheiligtum**: eine runde Plattform aus Schwarzstein auf Basaltstelzen, mit einer goldenen Sonne im Mosaikboden, acht Säulen mit **ewigem Feuer**, Stegen zum Fels und dem **Flammenaltar**. Vor ihm schwebt **Ignara** und betet – wer ihr zu nahe kommt, weckt sie. Sie kämpft mit ihrer **Flammenpeitsche** (Hieb, Flammenschlinge, die dich heranreißt), lässt eine **Lavawoge** über das Heiligtum rollen, **Feuersäulen** aus dem Boden brechen und **Feueropale vom Himmel regnen**, ruft **Glutgeister** – und unter halber Kraft wird sie zum **Phönix** mit Schwingen aus Flammen und stürzt sich auf dich. Ihre Beute: selten die **Flammenpeitsche** (reicht weiter als ein Schwert, setzt in Brand; Rechtsklick: der **Peitschenschlag**, der das erste Wesen bis zehn Blöcke weit trifft und heranreißt), sonst **Feueropale**. Ein Feueropal entzündet den erloschenen Altar und ruft sie zurück. Außerdem: **Herzkristalle sind nie mehr sicher** – Bosse, die wiederkommen, lassen sie bei jedem Sieg nur zu **25 %** fallen, einmalige Bosse (Drachen, Nyxar, Zerbrochener König, Weltenfresser) je Kristall zu **50 %**.
@@ -367,6 +368,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Härte-Paket** (seit 1.3): stärkere, wachsamere und heilende Monster, heilende Bosse, giftige Treffer, mehr Fallschaden, zersplitternde Pfeile, halb so viele Erze, seltenere Schätze, Kristalle und Monsterbeute, kürzere Tränke, teureres Verzaubern, teurere Händler und Karten, langsamere Felder und Tierzucht, scheues Wild, der Hirsch wehrt sich | ✅ fertig |
 | **Phasit** auf den äußeren Endinseln und die **Rüstung der Leerwandler** (seit 1.4): Phasitblock, 3D-Teile mit Splitterkrone, Mantel und Schwebesohlen; Phasenschritt (einem Nahkampfhieb ausweichen), Enderperlen ohne Schaden (Stiefel), ruhige Leerwandler (ganzer Satz) | ✅ fertig |
 | **Phasmor, der Leerwandlerkönig** im **Phasenheiligtum** (über den äußeren Endinseln): Wache und Erwachen, Klingenhieb, Phasenstoß, Trugbilder, Blockwurf, Leerenrisse, Krönung mit Phasensturm, Wasser schadet ihm; Leerenthron, **Phasenklinge** mit Phasenhieb (seit 1.5) | ✅ fertig |
+| **Hallkristall** in der Tiefen Dunkelheit und die **Rüstung der Lauscher** (seit 1.6): Hallkristallblock, 3D-Teile mit Sculkfühlern, Ohrscheiben, Sculkherz und Wollsohlen; Schallschutz, klare Sicht (Helm), Wollsohlen gegen Sculk und Tiefenhüter (Stiefel), Echoortung beim Schleichen (ganzer Satz) | ✅ fertig |
 | Ausrüstung: Stahl, Konterit, Draconium, Drachenschuppen (mit Set-Bonus), Gleiter, Krone, Trollkeule; Waffen und Rüstungen aus Monsterteilen (3D) | ✅ fertig |
 | Magie: Aetherit-Stab, sieben Zauber in drei Stufen, Zaubertafeln, Magietisch, Zauberkreis (Radialmenü) | ✅ fertig |
 | Sechs Erzmagier als Bosse, jeder in seinem eigenen Magierturm (sechs Bauweisen, je Element im passenden Land) | ✅ fertig |
@@ -483,7 +485,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.5.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.6.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -491,7 +493,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-1.5.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-1.6.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -1401,6 +1403,38 @@ Funde und Münzen – aber karg (siehe unten).
   Stapel schrumpfen auf drei Fünftel.
   Ganz leer ist keine Truhe, und was man für den Fortgang braucht, liegt immer darin: das Herz des Meeres, die Netherit-
   und die Abyssit-Vorlage, der Drachenkompass, die Zaubertafeln und die Prüfungsschlüssel.
+
+### Hallkristall und die Rüstung der Lauscher (seit 1.6)
+
+![Eine Höhle der Tiefen Dunkelheit mit Hallkristallerz, die Echoortung, der Hallkristallblock, die Rüstung der Lauscher von vorn und hinten, ein Spieler neben dem Tiefenhüter und das Gepäck](docs/bilder/hallkristall.jpg)
+
+Tief unten, im Reich des Sculk, wo die Stille Kathedrale steht, hallt der Gesang ihrer Orgel bis heute im Gestein nach.
+Wo er am längsten nachklang, ist der Tiefenschiefer zu Kristall geronnen: **Hallkristall**, blass wie Eis, mit Ringen
+darin wie Wellen auf einem Teich – hält man ihn ans Ohr, hört man fernen Gesang. **Hallkristallerz** findet man nur in der
+**Tiefen Dunkelheit** (dem Biom des Sculk) im Tiefenschiefer zwischen Höhe −60 und 8, etwa sechs kleine Adern je Chunk;
+wo eine Ader an eine Höhle stößt, bleibt sie oft im Gestein verborgen. Seine Kristalle schimmern im Dunkeln, der Block
+selbst gibt kein Licht. Es braucht eine **Diamantspitzhacke** und gibt einen **Hallkristall** (Glück wirkt; schmelzen
+geht auch) und etwas Erfahrung. Der Kristall zahlt am Leuchtfeuer; neun ergeben einen **Hallkristallblock** – geschliffene
+Kristallscheiben in einem Rahmen aus Tiefenschiefer, durch die in einem fort Wellen laufen (Lichtstärke 6, klingt wie
+Amethyst, taugt als Sockel für ein Leuchtfeuer; unter einem Notenblock: Glockenspiel).
+
+**Die Rüstung der Lauscher** – Hallkristall auf Platten aus Tiefenschiefer (Helm, Harnisch und Beinschienen aus
+Hallkristall und je einem Block **Sculk**, die Stiefel aus Hallkristall und **Wolle**; Schutz wie Diamant, etwas leichter
+zu verzaubern, mit Hallkristall auszubessern, mit Rüstungsbesatz zu schmücken). In 3D trägt der **Helm** einen Rand aus
+Wolle, **Ohrscheiben** aus Hallkristall mit Ringen, einen Kristall über den Augen und **vier Fühler aus Sculk**, die jeder
+Erschütterung nachlauschen; auf der Brust pocht ein **Sculkherz** in einem Kranz aus Hallkristallen, die Schulterplatten
+aus Tiefenschiefer sitzen auf Wolle und tragen je einen Fühler, an den Knien sitzen Hallkristalle, und die **Stiefel**
+stehen auf dicken **Wollsohlen**.
+- **Schallschutz** (jeder Teil): Der **Schallschlag** des Tiefenhüters geht sonst durch jede Rüstung – jeder Teil fängt
+  **ein Fünftel** davon ab (mit allen vier Teilen vier Fünftel).
+- **Klare Sicht** (Helm): Die **Dunkelheit**, die der Tiefenhüter und die Kreischer verbreiten, trübt deinen Blick nicht
+  mehr. Die Finsternis der Bossgegner (etwa Nyxars oder der Mottenkönigin) wirkt weiter.
+- **Wollsohlen** (Stiefel): Deine **Schritte, Sprünge, Landungen, Schwimmzüge** und das Gleiten machen keine
+  Erschütterung mehr – Sculk-Sensoren, Kreischer und der Tiefenhüter hören sie nicht. Was du sonst tust (Blöcke abbauen
+  und setzen, Truhen öffnen, kämpfen), hören sie wie immer.
+- **Echoortung** (alle vier Teile): Wer **schleicht**, ruft alle **zwei Sekunden** leise in die Dunkelheit – ein gläserner
+  Ton mit Echo, ein blasser Ring läuft über den Boden, und **jedes Wesen in 16 Blöcken** leuchtet zweieinhalb Sekunden
+  lang auf, **auch hinter Wänden**.
 
 ### Feueropal und die Rüstung der Glutwandler (seit 1.1.6)
 
@@ -4908,7 +4942,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.5.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.6.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |

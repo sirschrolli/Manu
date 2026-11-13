@@ -135,6 +135,7 @@ public class SpellFxRenderer extends EntityRenderer<SpellFxEntity, SpellFxRender
             case CRESCENT -> this.crescent(state, poseStack, collector);
             case VORTEX -> this.vortex(state, poseStack, collector, camera);
             case SHOCKWAVE -> this.shockwave(state, poseStack, collector);
+            case ECHO -> this.echo(state, poseStack, collector);
             case FISSURE -> this.fissure(state, poseStack, collector);
             case BUBBLE -> this.bubble(state, poseStack, collector, camera);
             case SPIKE -> this.model(this.spike, "stone_spike", false, state, poseStack, collector, 1.0f);
@@ -538,6 +539,34 @@ public class SpellFxRenderer extends EntityRenderer<SpellFxEntity, SpellFxRender
         poseStack.scale(lensSize, lensSize, lensSize);
         collector.submitCustomGeometry(poseStack, lens, (pose, buffer) -> billboard(pose, buffer, ring));
         poseStack.popPose();
+    }
+
+    /**
+     * Der Ruf der Echoortung: ein flacher, heller Ring wie eine Welle auf einem Teich, ein zweiter, schwächerer folgt ihm; beide
+     * verblassen, je weiter sie laufen.
+     */
+    private void echo(SpellFxRenderState s, PoseStack poseStack, SubmitNodeCollector collector) {
+        float radius = s.size + s.param * s.age;
+        float appear = ease(s.age / 2.0f);
+        float fade = Mth.clamp((s.life - s.age) / 10.0f, 0.0f, 1.0f);
+        float intensity = appear * fade;
+        if (intensity <= 0.01f || radius <= 0.05f) {
+            return;
+        }
+        RenderType type = RenderTypes.energySwirl(BEAM, 0.0f, s.age * 0.08f);
+        int glow = scale(s.color, 0.55f * intensity);
+        int core = scale(ARGB.srgbLerp(0.55f, s.color, 0xFFFFFF), 0.75f * intensity);
+        float trail = radius * 0.6f;
+        int faint = scale(s.color, 0.4f * intensity);
+        collector.submitCustomGeometry(poseStack, type, (pose, buffer) -> {
+            ringWall(pose, buffer, radius, 0.0f, 0.42f, glow);
+            ringWall(pose, buffer, radius, 0.04f, 0.22f, core);
+            ringFloor(pose, buffer, radius - 0.55f, radius + 0.2f, 0.03f, core);
+            if (trail > 0.4f) {
+                ringWall(pose, buffer, trail, 0.0f, 0.28f, faint);
+                ringFloor(pose, buffer, trail - 0.35f, trail + 0.15f, 0.025f, faint);
+            }
+        });
     }
 
     /** Bebenring: eine niedrige, gleißende Wand, die sich am Boden ausbreitet, dazu ein Schein auf dem Boden. */

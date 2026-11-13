@@ -81,7 +81,12 @@ public class SpellFxEntity extends Entity {
         /** Mondsteinkristalle, die aus dem Boden brechen (Kristallspur des Steinhüters, seit 0.96). Größe = Maßstab. */
         CRYSTAL,
         /** Korallenspieße, die aus dem Grund brechen (die Meerhexe, seit 0.97). Größe = Maßstab. */
-        CORAL;
+        CORAL,
+        /**
+         * Der Ruf der Echoortung (Rüstung der Lauscher, seit 1.6): zwei flache Ringe wie Wellen auf einem Teich, die sich am
+         * Boden ausbreiten (der zweite folgt dem ersten); trifft niemanden. Größe = Anfangshalbmesser, Zusatz = Zuwachs je Tick.
+         */
+        ECHO;
 
         public static Kind of(int index) {
             return values()[Mth.clamp(index, 0, values().length - 1)];
@@ -487,6 +492,19 @@ public class SpellFxEntity extends Entity {
                             at.z + (this.random.nextDouble() - 0.5) * 0.3, 0.0, 0.03, 0.0);
                 }
             }
+            case ECHO -> {
+                // am Ring springen Sculk-Funken auf, dazu ein blasser Schimmer
+                double r = this.ringRadius(0.0f);
+                int count = 1 + (int) (r * 0.35);
+                for (int i = 0; i < count; i++) {
+                    double a = this.random.nextDouble() * Mth.TWO_PI;
+                    double ox = Math.cos(a);
+                    double oz = Math.sin(a);
+                    level.addParticle(this.random.nextInt(3) == 0 ? ParticleTypes.SCULK_CHARGE_POP : new DustParticleOptions(this.color(), 0.8f),
+                            this.getX() + ox * r, this.getY() + 0.05 + this.random.nextDouble() * 0.25, this.getZ() + oz * r,
+                            ox * 0.02, 0.02, oz * 0.02);
+                }
+            }
             case SHOCKWAVE -> {
                 double r = this.ringRadius(0.0f);
                 int count = 2 + (int) (r * 0.5);
@@ -559,7 +577,7 @@ public class SpellFxEntity extends Entity {
             case WAVE -> box.inflate(size * 0.6 + 1.0, 3.0, size * 0.6 + 1.0);
             case CRESCENT -> box.inflate(size * 0.6 + 1.5, 2.5, size * 0.6 + 1.5);
             case VORTEX -> box.inflate(size * 1.3 + 1.0);
-            case SHOCKWAVE -> box.inflate(size + this.param() * this.life() + 1.0, 2.0, size + this.param() * this.life() + 1.0);
+            case SHOCKWAVE, ECHO -> box.inflate(size + this.param() * this.life() + 1.0, 2.0, size + this.param() * this.life() + 1.0);
             case CIRCLE, CAST_CIRCLE -> box.inflate(size + 0.5, 1.0, size + 0.5);
             default -> box.inflate(Math.max(2.0, size * 2.5), 3.5 * Math.max(1.0, size), Math.max(2.0, size * 2.5));
         };

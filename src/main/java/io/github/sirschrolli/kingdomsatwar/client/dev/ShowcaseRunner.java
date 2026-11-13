@@ -43,6 +43,8 @@ public final class ShowcaseRunner {
     private static boolean worldRequested;
     /** Hand ausblenden (für Bilder mit Anzeige, aber ohne leere Hand im Bild). */
     static boolean hideHand;
+    /** Für Bilder der Hand ohne Anzeigen: Alle Schichten der Anzeige (Leiste, Herzen, Fadenkreuz …) bleiben weg, die Hand nicht. */
+    static boolean bareHud;
     private static boolean scenesQueued;
     private static int waitTicks;
     private static int stepTicks;
@@ -98,6 +100,13 @@ public final class ShowcaseRunner {
                     flat ? WorldPresets::createTestWorldDimensions : WorldPresets::createNormalWorldDimensions, title);
         } catch (IOException e) {
             LOGGER.error("[Showcase] Welt konnte nicht erzeugt werden", e);
+        }
+    }
+
+    @SubscribeEvent
+    static void onRenderGuiLayer(net.neoforged.neoforge.client.event.RenderGuiLayerEvent.Pre event) {
+        if (enabled() && bareHud) {
+            event.setCanceled(true);
         }
     }
 

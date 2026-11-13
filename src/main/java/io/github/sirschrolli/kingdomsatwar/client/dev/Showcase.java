@@ -280,6 +280,8 @@ final class Showcase {
                         FlameShowcase.gear(steps);
                     } else if (scene.equals("phase_gear")) {
                         PhaseShowcase.gear(steps);
+                    } else if (scene.equals("echo_gear")) {
+                        EchoShowcase.gear(steps);
                     } else if (scene.equals("phasmor_boss")) {
                         PhasmorShowcase.boss(steps);
                     } else if (scene.equals("phasmor_pose")) {

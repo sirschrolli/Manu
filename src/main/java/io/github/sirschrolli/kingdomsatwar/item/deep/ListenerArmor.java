@@ -165,7 +165,7 @@ public final class ListenerArmor {
         LAST_ECHO.put(source, level.getGameTime());
         Vec3 at = source.position();
         level.playSound(null, at.x, at.y, at.z, ModSounds.LISTENER_ECHO.get(), SoundSource.PLAYERS, 0.7f, 0.95f + level.getRandom().nextFloat() * 0.1f);
-        SpellFxEntity.create(level, SpellFxEntity.Kind.SHOCKWAVE, at.add(0.0, 0.1, 0.0), null, ECHO_COLOR, 20, 0.6f)
+        SpellFxEntity.create(level, SpellFxEntity.Kind.ECHO, at.add(0.0, 0.05, 0.0), null, ECHO_COLOR, 20, 0.6f)
                 .param((float) (ECHO_RADIUS / 20.0)).spawn();
         int found = 0;
         for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, new AABB(at, at).inflate(ECHO_RADIUS),
