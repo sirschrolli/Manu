@@ -55,7 +55,9 @@ public enum SkyTheme {
     /** Phasmor, der Leerwandlerkönig: der Getroffene wird zu ihm herangerissen und kann eine Weile kaum laufen. */
     PHASE(2, 0x3FE6CC, 0xD8FFF8, () -> ParticleTypes.REVERSE_PORTAL),
     /** Sordin, der Kantor der Stille (1.7): der Getroffene ist vom Klang benommen (Übelkeit) und wird zu ihm gezogen. */
-    ECHO(2, 0x29DFEB, 0xE6FFFF, () -> ParticleTypes.SCULK_SOUL);
+    ECHO(2, 0x29DFEB, 0xE6FFFF, () -> ParticleTypes.SCULK_SOUL),
+    /** Kuno von Rabenfels, der Raubritter (1.8): ein Bolzen holt den Getroffenen vom Himmel – er ist eine Weile schwerfällig. */
+    RAVEN(2, 0xE4C254, 0xFFF6CC, () -> ParticleTypes.CRIT);
 
     private static final SkyTheme[] VALUES = values();
 

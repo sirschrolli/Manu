@@ -62,6 +62,7 @@ public final class KingdomsAtWar {
         io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.init();   // seit 1.4: Phasit und die Rüstung der Leerwandler
         io.github.sirschrolli.kingdomsatwar.registry.EchoGear.init();    // seit 1.6: Hallkristall und die Rüstung der Lauscher
         io.github.sirschrolli.kingdomsatwar.registry.CathedralGear.init();   // seit 1.7: Orgelpult, Stimmgabel, Sordin
+        io.github.sirschrolli.kingdomsatwar.registry.CastleGear.init();      // seit 1.8: Rabenbanner, Morgenstern, Raubritter
         io.github.sirschrolli.kingdomsatwar.registry.PhaseSanctuary.init();   // seit 1.5: Leerenthron, Phasenklinge, Phasmor
         io.github.sirschrolli.kingdomsatwar.registry.FlameSanctuary.init();   // seit 1.2: das Flammenheiligtum und Ignara
         io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.init();

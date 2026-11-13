@@ -487,6 +487,11 @@ public class SkyBoltEntity extends Entity {
                 victim.addEffect(new MobEffectInstance(MobEffects.NAUSEA, 120, 0), owner);
                 pull(victim, owner, 1.0);
             }
+            case RAVEN -> {
+                victim.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 120, 1), owner);
+                victim.addEffect(new MobEffectInstance(MobEffects.MINING_FATIGUE, 120, 0), owner);
+                pull(victim, owner, 0.8);
+            }
             case STAR -> {
                 victim.addEffect(new MobEffectInstance(MobEffects.GLOWING, 160, 0), owner);
                 pull(victim, owner, 0.8);

@@ -259,6 +259,7 @@ public final class KawPlaces {
         boss(new Boss("asteria", ModEntities.ASTERIA, STARWATCH, KawPlaces::awakenAsteria, KawPlaces::resetAsteria, null));
         boss(new Boss("phasmor", ModEntities.PHASMOR, PHASE_SANCTUARY, KawPlaces::awakenPhasmor, KawPlaces::resetPhasmor, null));
         boss(new Boss("sordin", ModEntities.SORDIN, SILENT_CATHEDRAL, KawPlaces::awakenSordin, KawPlaces::resetSordin, null));
+        boss(new Boss("raubritter", ModEntities.ROBBER_KNIGHT, ROBBER_CASTLE, KawPlaces::awakenRobberKnight, KawPlaces::resetRobberKnight, null));
         boss(new Boss("noctua", ModEntities.MOTH_QUEEN, MONDHAIN, KawPlaces::awakenNoctua, null, null));
         boss(new Boss("missmystik", ModEntities.MISS_MYSTIK, MYSTIK_STAGE, KawPlaces::awakenMystik, KawPlaces::resetMystik, null));
         boss(new Boss("steinhueter", ModEntities.STONE_KEEPER, MOONSTONE_QUARRY, KawPlaces::awakenKeeper, KawPlaces::resetKeeper, null));
@@ -1311,6 +1312,33 @@ public final class KawPlaces {
             desk.reset(level);
         }
         return desk.awaken(level) != null ? awakened(source, boss) : cannot(source, boss);
+    }
+
+    private static io.github.sirschrolli.kingdomsatwar.block.castle.@Nullable RavenBannerBlockEntity ravenBanner(ServerLevel level, Spot spot) {
+        return nearest(level, spot.center(), 3, io.github.sirschrolli.kingdomsatwar.block.castle.RavenBannerBlockEntity.class, banner -> true);
+    }
+
+    private static int awakenRobberKnight(CommandSourceStack source, ServerLevel level, Spot spot, Boss boss) {
+        var banner = ravenBanner(level, spot);
+        if (banner == null) {
+            return noLair(source, boss);
+        }
+        if (banner.phase() == io.github.sirschrolli.kingdomsatwar.block.castle.RavenBannerBlock.Phase.AWAKE) {
+            return alreadyAwake(source, boss);
+        }
+        if (banner.phase() == io.github.sirschrolli.kingdomsatwar.block.castle.RavenBannerBlock.Phase.FALLEN) {
+            banner.reset(level);
+        }
+        return banner.awaken(level) != null ? awakened(source, boss) : cannot(source, boss);
+    }
+
+    private static int resetRobberKnight(CommandSourceStack source, ServerLevel level, Spot spot, Boss boss) {
+        var banner = ravenBanner(level, spot);
+        if (banner == null) {
+            return noLair(source, boss);
+        }
+        banner.reset(level);
+        return resetDone(source, boss);
     }
 
     private static int resetSordin(CommandSourceStack source, ServerLevel level, Spot spot, Boss boss) {

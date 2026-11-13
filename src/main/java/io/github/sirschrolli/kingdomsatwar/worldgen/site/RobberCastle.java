@@ -36,7 +36,8 @@ import net.minecraft.world.level.levelgen.structure.Structure;
  * Ringmauer mit Wehrgang und Zinnen verbindet vier Rundtürme (die beiden nördlichen mit spitzen Schieferdächern); im Norden
  * steht der Bergfried mit Kammern übereinander und einem Verlies, in dem Hellegeister gefangen sind. Im Hof der Palas mit
  * Tafel, Kamin und Thron, ein Brunnen, Übungspuppen und das Lager der Knechte. Diener, Hexer und Armbrustschützen des
- * Raubritters hausen hier – und die Truhen sind voll mit Raubgut.
+ * Raubritters hausen hier – und die Truhen sind voll mit Raubgut. Vor dem Bergfried weht das Rabenbanner; daneben hält Kuno von
+ * Rabenfels, der Raubritter, zu Ross Hof (seit 1.8).
  *
  * <p>Eigene Koordinaten: Mitte des Burghofs bei (0, 0, 0); y = 0 ist die oberste Schicht des Hofs (man steht auf y = 1).
  * Das Tor liegt im Süden (+z), der Bergfried im Norden (−z).
@@ -95,6 +96,7 @@ final class RobberCastle {
             this.hall();
             this.barracks();
             this.yard();
+            this.banner();
             this.garrison();
         }
 
@@ -668,6 +670,19 @@ final class RobberCastle {
                 this.b.set(p[0], 1, p[1], state(Blocks.SPRUCE_FENCE));
                 this.b.set(p[0], 2, p[1], state(Blocks.SPRUCE_FENCE));
                 this.lantern(p[0], 3, p[1], false);
+            }
+        }
+
+        /**
+         * Das Rabenbanner (seit 1.8): vor dem Bergfried, auf einem Sockel aus Pflaster; zwei Schritte davor und zur Seite hält
+         * Kuno von Rabenfels, der Raubritter, zu Ross Hof (das Banner ruft ihn, sobald jemand naht).
+         */
+        void banner() {
+            this.b.set(-2, 0, -6, state(Blocks.COBBLESTONE));
+            this.b.set(-2, 1, -6, io.github.sirschrolli.kingdomsatwar.registry.CastleGear.RAVEN_BANNER.get().defaultBlockState()
+                    .setValue(io.github.sirschrolli.kingdomsatwar.block.castle.RavenBannerBlock.FACING, Direction.SOUTH));
+            for (int y = 2; y <= 3; y++) {
+                this.b.set(-2, y, -6, Blocks.AIR.defaultBlockState());
             }
         }
 

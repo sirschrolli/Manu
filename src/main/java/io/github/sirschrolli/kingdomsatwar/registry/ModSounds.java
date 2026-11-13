@@ -433,6 +433,23 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> SORDIN_STAGGER = register("entity.sordin.stagger");
     public static final DeferredHolder<SoundEvent, SoundEvent> ORGAN_DESK_KINDLE = register("block.organ_desk.kindle");
     public static final DeferredHolder<SoundEvent, SoundEvent> TUNING_FORK_RESONATE = register("item.tuning_fork.resonate");
+    // Kuno von Rabenfels, der Raubritter (1.8)
+    public static final DeferredHolder<SoundEvent, SoundEvent> ROBBER_KNIGHT_AWAKEN = register("entity.robber_knight.awaken");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ROBBER_KNIGHT_HURT = register("entity.robber_knight.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ROBBER_KNIGHT_DEATH = register("entity.robber_knight.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ROBBER_KNIGHT_STEP = register("entity.robber_knight.step");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ROBBER_KNIGHT_CHARGE = register("entity.robber_knight.charge");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ROBBER_KNIGHT_LANCE_HIT = register("entity.robber_knight.lance_hit");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ROBBER_KNIGHT_LANCE_BREAK = register("entity.robber_knight.lance_break");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ROBBER_KNIGHT_STOMP = register("entity.robber_knight.stomp");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ROBBER_KNIGHT_HORN = register("entity.robber_knight.horn");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ROBBER_KNIGHT_SWING = register("entity.robber_knight.swing");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ROBBER_KNIGHT_SMASH = register("entity.robber_knight.smash");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ROBBER_KNIGHT_WHIRL = register("entity.robber_knight.whirl");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ROBBER_KNIGHT_BASH = register("entity.robber_knight.bash");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ROBBER_KNIGHT_FALL = register("entity.robber_knight.fall");
+    public static final DeferredHolder<SoundEvent, SoundEvent> RAVEN_BANNER_TEAR = register("block.raven_banner.tear");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MORNING_STAR_SMASH = register("item.morning_star.smash");
     public static final DeferredHolder<SoundEvent, SoundEvent> VOID_THRONE_KINDLE = register("block.void_throne.kindle");
     public static final DeferredHolder<SoundEvent, SoundEvent> PHASE_BLADE_DASH = register("item.phase_blade.dash");
     // seit 1.6: die Echoortung der Rüstung der Lauscher
