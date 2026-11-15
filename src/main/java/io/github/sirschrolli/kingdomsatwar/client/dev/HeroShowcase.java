@@ -665,6 +665,100 @@ final class HeroShowcase {
         steps.add(Step.hud(false));
     }
 
+    /**
+     * Prüft die Lesezeichen des Charakterfensters über den echten Weg der Maus (der Klick geht durch den MouseHandler wie
+     * beim Spielen) – auf einer niedrigen Stufe (noch keine Fähigkeit) und mit Fähigkeiten.
+     */
+    static void tabs(Deque<Step> steps) {
+        steps.add(Step.server(level -> HeroLevel.set(level.getServer().getPlayerList().getPlayers().getFirst(),
+                new HeroLevel.Hero(HeroLevel.total(7), List.of(), 0))));
+        steps.add(Step.command("gamemode survival"));
+        steps.add(Step.hud(true));
+        steps.add(Step.waitForChunks(200));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screen(minecraft -> new io.github.sirschrolli.kingdomsatwar.client.hero.CharacterScreen()));
+        steps.add(Step.waitTicks(10));
+        for (int i : new int[] {1, 2, 0}) {
+            clickTab(steps, i, "reiter_stufe7_" + i);
+        }
+        steps.add(Step.screen(minecraft -> null));
+        steps.add(Step.server(level -> HeroLevel.set(level.getServer().getPlayerList().getPlayers().getFirst(),
+                new HeroLevel.Hero(HeroLevel.total(60), List.of(), 0))));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screen(minecraft -> new io.github.sirschrolli.kingdomsatwar.client.hero.CharacterScreen()));
+        steps.add(Step.waitTicks(10));
+        for (int i : new int[] {1, 2, 0}) {
+            clickTab(steps, i, "reiter_stufe60_" + i);
+        }
+        steps.add(Step.screen(minecraft -> null));
+        steps.add(Step.command("gamemode spectator"));
+        steps.add(Step.hud(false));
+    }
+
+    /** Wie {@link #tabs}, aber die Klicks kommen von außen (echte Maus über X11): Das Fenster bleibt offen und meldet den Reiter. */
+    static void tabsExternal(Deque<Step> steps) {
+        steps.add(Step.server(level -> HeroLevel.set(level.getServer().getPlayerList().getPlayers().getFirst(),
+                new HeroLevel.Hero(HeroLevel.total(60), List.of(), 0))));
+        steps.add(Step.command("gamemode survival"));
+        steps.add(Step.hud(true));
+        steps.add(Step.waitForChunks(200));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screen(minecraft -> new io.github.sirschrolli.kingdomsatwar.client.hero.CharacterScreen()));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.once(minecraft -> KingdomsAtWar.LOGGER.info("[Showcase] Reiter bereit: Fenster {}x{}, GUI {}x{}, Maßstab {}",
+                minecraft.getWindow().getScreenWidth(), minecraft.getWindow().getScreenHeight(), minecraft.getWindow().getGuiScaledWidth(),
+                minecraft.getWindow().getGuiScaledHeight(), minecraft.getWindow().getGuiScale())));
+        for (int k = 0; k < 40; k++) {
+            int n = k;
+            steps.add(Step.waitTicks(10));
+            steps.add(Step.once(minecraft -> {
+                Object tab = null;
+                if (minecraft.gui.screen() instanceof io.github.sirschrolli.kingdomsatwar.client.hero.CharacterScreen screen) {
+                    try {
+                        java.lang.reflect.Field field = screen.getClass().getDeclaredField("tab");
+                        field.setAccessible(true);
+                        tab = field.get(screen);
+                    } catch (ReflectiveOperationException e) {
+                        tab = e;
+                    }
+                }
+                KingdomsAtWar.LOGGER.info("[Showcase] Reiter {}: {} (Maus {} {}, Fähigkeit {})", n, tab, minecraft.mouseHandler.xpos(), minecraft.mouseHandler.ypos(),
+                        minecraft.player == null ? null : io.github.sirschrolli.kingdomsatwar.hero.HeroAbilities.state(minecraft.player).selectedAbility());
+            }));
+            if (k % 8 == 4) {
+                steps.add(Step.screenshot("reiterx_" + k));
+            }
+        }
+        steps.add(Step.screen(minecraft -> null));
+        steps.add(Step.command("gamemode spectator"));
+        steps.add(Step.hud(false));
+    }
+
+    private static void clickTab(Deque<Step> steps, int index, String shot) {
+        steps.add(Step.once(minecraft -> {
+            hoverCharacter(minecraft, 324 - 6 + 13, 26 + index * 30 + 13);
+            long window = minecraft.getWindow().handle();
+            net.minecraft.client.input.MouseButtonInfo left = new net.minecraft.client.input.MouseButtonInfo(com.mojang.blaze3d.platform.InputConstants.MOUSE_BUTTON_LEFT, 0);
+            minecraft.mouseHandler.onButton(window, left, 1);
+            minecraft.mouseHandler.onButton(window, left, 0);
+        }));
+        steps.add(Step.waitTicks(15));
+        steps.add(Step.once(minecraft -> {
+            Object tab = null;
+            if (minecraft.gui.screen() instanceof io.github.sirschrolli.kingdomsatwar.client.hero.CharacterScreen screen) {
+                try {
+                    java.lang.reflect.Field field = screen.getClass().getDeclaredField("tab");
+                    field.setAccessible(true);
+                    tab = field.get(screen);
+                } catch (ReflectiveOperationException e) {
+                    tab = e;
+                }
+            }
+            KingdomsAtWar.LOGGER.info("[Showcase] Klick auf Lesezeichen {}: offen ist {} (Bildschirm {})", index, tab, minecraft.gui.screen());
+        }));
+        steps.add(Step.screenshot(shot));
+    }
+
     /** Öffnet im Charakterfenster einen Reiter (0 Kampf, 1 Handwerk, 2 Fähigkeiten). */
     private static void tab(net.minecraft.client.Minecraft minecraft, int index) {
         if (minecraft.gui.screen() instanceof io.github.sirschrolli.kingdomsatwar.client.hero.CharacterScreen screen) {

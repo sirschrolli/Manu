@@ -138,7 +138,7 @@ public class HeroPathScreen extends Screen {
 
     @Override
     public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
-        if (event.button() == 0 && event.y() > HEADER && event.y() < this.height - FOOTER) {
+        if (event.button() == InputConstants.MOUSE_BUTTON_LEFT && event.y() > HEADER && event.y() < this.height - FOOTER) {
             this.intro = false;
             this.target = Mth.clamp(this.target - (float) dx, 0.0f, this.maxScroll());
             this.scroll = this.target;
@@ -156,7 +156,7 @@ public class HeroPathScreen extends Screen {
         int mx0 = 150;
         int mx1 = this.width - 110;
         int my = this.height - FOOTER + 6;
-        if (event.button() == 0 && event.y() >= my - 5 && event.y() <= my + 7 && event.x() >= mx0 && event.x() <= mx1) {
+        if (event.button() == InputConstants.MOUSE_BUTTON_LEFT && event.y() >= my - 5 && event.y() <= my + 7 && event.x() >= mx0 && event.x() <= mx1) {
             this.intro = false;
             float level = 1.0f + (float) ((event.x() - mx0) / (mx1 - mx0)) * (HeroLevel.MAX_LEVEL - 1);
             this.target = this.scrollFor(level);

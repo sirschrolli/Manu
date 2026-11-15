@@ -172,6 +172,8 @@ final class Showcase {
                 case "crystals" -> HeroShowcase.crystals(steps);
                 case "character" -> HeroShowcase.character(steps);
                 case "pat" -> HeroShowcase.pat(steps);
+                case "reiter" -> HeroShowcase.tabs(steps);
+                case "reiterx" -> HeroShowcase.tabsExternal(steps);
                 case "path" -> HeroShowcase.path(steps);
                 case "path500" -> HeroShowcase.path500(steps);
                 case "ascension" -> HeroShowcase.ascension(steps);

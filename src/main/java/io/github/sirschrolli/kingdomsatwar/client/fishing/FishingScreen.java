@@ -149,9 +149,12 @@ public class FishingScreen extends Screen {
         if (this.devHeld) {
             return true;
         }
-        // nur, was hier gedrückt wurde und noch gedrückt ist (so bleibt nichts hängen, wenn das Loslassen verloren ging)
-        var mouse = this.minecraft.mouseHandler;
-        this.pressed &= (mouse.isLeftPressed() ? 1 : 0) | (mouse.isRightPressed() ? 2 : 0) | (mouse.isMiddlePressed() ? 4 : 0) | ~7;
+        // was hier gedrückt und noch nicht losgelassen wurde – verliert das Fenster den Fokus, gilt nichts mehr als gehalten (so
+        // bleibt nichts hängen). Die Merker des MouseHandlers taugen dafür nicht: Solange ein Bildschirm offen ist, setzt das Spiel
+        // sie gar nicht.
+        if (!this.minecraft.isWindowActive()) {
+            this.pressed = 0;
+        }
         return this.pressed != 0;
     }
 
@@ -268,8 +271,9 @@ public class FishingScreen extends Screen {
         return true;
     }
 
+    /** Ein Merker je Maustaste (welche, ist gleich: Jede Taste hält). */
     private static int bit(int button) {
-        return button >= 0 && button < 3 ? 1 << button : 8;
+        return 1 << Math.clamp(button, 0, 15);
     }
 
     @Override

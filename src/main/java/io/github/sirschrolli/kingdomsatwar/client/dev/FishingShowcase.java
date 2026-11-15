@@ -360,8 +360,8 @@ final class FishingShowcase {
             if (minecraft.gui.screen() instanceof FishingScreen screen) {
                 float before = screen.devFight().zonePos();
                 for (int i = 0; i < 4; i++) {
-                    screen.mouseClicked(new net.minecraft.client.input.MouseButtonEvent(0.0, 0.0, new net.minecraft.client.input.MouseButtonInfo(0, 0)), false);
-                    screen.mouseReleased(new net.minecraft.client.input.MouseButtonEvent(0.0, 0.0, new net.minecraft.client.input.MouseButtonInfo(0, 0)));
+                    screen.mouseClicked(new net.minecraft.client.input.MouseButtonEvent(0.0, 0.0, new net.minecraft.client.input.MouseButtonInfo(com.mojang.blaze3d.platform.InputConstants.MOUSE_BUTTON_LEFT, 0)), false);
+                    screen.mouseReleased(new net.minecraft.client.input.MouseButtonEvent(0.0, 0.0, new net.minecraft.client.input.MouseButtonInfo(com.mojang.blaze3d.platform.InputConstants.MOUSE_BUTTON_LEFT, 0)));
                 }
                 LOGGER.info("[Showcase] Vier Klicks: Zone bei {}, Schwung {}, Klicks gezählt {}", before, screen.devFight().zoneVel(), screen.devFight().kicks());
             }

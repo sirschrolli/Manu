@@ -367,7 +367,7 @@ public class FishBookScreen extends Screen {
             }
             return true;
         }
-        if (this.backAt(event.x(), event.y()) || (event.button() == 1 && this.water != null)) {
+        if (this.backAt(event.x(), event.y()) || (event.button() == InputConstants.MOUSE_BUTTON_RIGHT && this.water != null)) {
             this.closeWater();
             this.page();
             return true;

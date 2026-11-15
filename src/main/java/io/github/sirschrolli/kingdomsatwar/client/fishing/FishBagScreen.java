@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.client.fishing;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.economy.Coin;
 import io.github.sirschrolli.kingdomsatwar.economy.Reputation;
@@ -118,7 +119,7 @@ public class FishBagScreen extends Screen {
         List<FishBag.Entry> entries = bag.entries();
         int slot = this.slotAt(event.x(), event.y(), entries.size());
         if (slot >= 0) {
-            int mode = event.button() == 1 ? FishBag.TAKE_ONE : event.hasShiftDown() ? FishBag.TAKE_ALL : FishBag.TAKE_STACK;
+            int mode = event.button() == InputConstants.MOUSE_BUTTON_RIGHT ? FishBag.TAKE_ONE : event.hasShiftDown() ? FishBag.TAKE_ALL : FishBag.TAKE_STACK;
             this.send(entries.get(slot).species().ordinal() + 1, mode);
             return true;
         }

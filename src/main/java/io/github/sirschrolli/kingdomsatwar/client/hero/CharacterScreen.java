@@ -344,7 +344,8 @@ public class CharacterScreen extends Screen {
 
     @Override
     public boolean mouseClicked(net.minecraft.client.input.MouseButtonEvent event, boolean doubleClick) {
-        if (event.button() == 0) {
+        // (seit 26.x zählt das Spiel die Maustasten wie SDL: links 1, Mitte 2, rechts 3)
+        if (event.button() == com.mojang.blaze3d.platform.InputConstants.MOUSE_BUTTON_LEFT) {
             for (Tab t : Tab.values()) {
                 int x = this.left + WIDTH - 6;
                 int y = this.top + TAB_Y + t.ordinal() * (TAB_H + 4);
