@@ -806,6 +806,7 @@ public final class HeroLevel {
         }
         for (HeroAbility ability : HeroAbility.values()) {
             if (ability.level() > from && ability.level() <= level) {
+                HeroAbilities.introduced(player);
                 player.sendSystemMessage(Component.translatable("hero.kingdomsatwar.ability_up", Component.translatable(ability.translationKey())
                         .withColor(ability.color() & 0xFFFFFF).withStyle(ChatFormatting.BOLD), Component.keybind("key.kingdomsatwar.ability")
                         .copy().withStyle(ChatFormatting.YELLOW)).withStyle(ChatFormatting.AQUA));

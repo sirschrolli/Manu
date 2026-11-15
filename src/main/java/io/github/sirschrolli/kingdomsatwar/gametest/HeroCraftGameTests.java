@@ -344,6 +344,12 @@ final class HeroCraftGameTests {
                 helper.assertTrue(ability.level() > last && ability.level() <= HeroLevel.MAX_LEVEL, "Stufen der Fähigkeiten: " + ability);
                 last = ability.level();
             }
+            // wer die erste Fähigkeit bekommt, erfährt es (und bekommt beim Einloggen keinen Hinweis mehr)
+            player.setData(io.github.sirschrolli.kingdomsatwar.registry.ModAttachments.HERO_ABILITIES, HeroAbilities.State.NONE);
+            HeroLevel.set(player, with(9));
+            HeroLevel.award(player, HeroLevel.total(10) - HeroLevel.total(9));
+            helper.assertTrue(HeroLevel.of(player).level() == 10 && HeroAbilities.state(player).introduced(),
+                    "Mit der ersten Fähigkeit gilt der Held nicht als eingeführt");
             HeroLevel.set(player, with(9));
             helper.assertTrue(!HeroAbilities.use(player, HeroAbility.SPRINT), "Sturmlauf vor Stufe 10");
             helper.assertTrue(!HeroAbilities.select(player, HeroAbility.SKYFALL), "Himmelssturz lässt sich vor seiner Stufe wählen");

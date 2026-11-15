@@ -444,13 +444,20 @@ public class CharacterScreen extends Screen {
                 int h = Mth.ceil(24.0f * rest / ability.cooldownTicks());
                 g.fill(ix, iy + 24 - h, ix + 24, iy + 24, 0x9A0C0814);
             }
-            // Name und Zustand
+            // Name (zu lang für eine Zeile: auf zwei verteilt) und Zustand
             int tx = ix + 29;
-            g.pose().pushMatrix();
-            g.pose().translate(tx, y + 6);
-            g.pose().scale(0.8f, 0.8f);
-            g.text(this.font, Component.translatable(ability.translationKey()), 0, 0, unlocked ? ability.color() : HeroGui.MUTED, false);
-            g.pose().popMatrix();
+            Component abilityName = Component.translatable(ability.translationKey());
+            int room = x + cw - 3 - tx;
+            List<FormattedCharSequence> nameLines = this.font.width(abilityName) * 0.8f > room
+                    ? this.font.split(abilityName, Math.round(room / 0.8f)) : List.of(abilityName.getVisualOrderText());
+            int nameColor = unlocked ? ability.color() : HeroGui.MUTED;
+            for (int k = 0; k < Math.min(2, nameLines.size()); k++) {
+                g.pose().pushMatrix();
+                g.pose().translate(tx, y + (nameLines.size() > 1 ? 3 : 6) + k * 8);
+                g.pose().scale(0.8f, 0.8f);
+                g.text(this.font, nameLines.get(k), 0, 0, nameColor, false);
+                g.pose().popMatrix();
+            }
             Component line;
             int color;
             if (!unlocked) {
@@ -464,7 +471,7 @@ public class CharacterScreen extends Screen {
                 color = chosen ? HeroGui.GOLD : HeroGui.GOOD;
             }
             g.pose().pushMatrix();
-            g.pose().translate(tx, y + 19);
+            g.pose().translate(tx, y + (nameLines.size() > 1 ? 22 : 19));
             g.pose().scale(0.75f, 0.75f);
             g.text(this.font, line, 0, 0, color, false);
             g.pose().popMatrix();

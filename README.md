@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Version 1.10 – Quetzara, die Gefiederte Schlange.** Unter dem **Schlangentempel** im Dschungel liegt jetzt die **Schlangengrube**: Vom Schlund führt die Treppe weiter hinab auf eine Empore und von dort in eine runde Halle tief im Fels – acht Säulen, um die sich steinerne Schlangen winden, grüne Augen in den Wänden, ein Fries aus Federn, eine goldene Sonne an der Decke, Laternen an Ketten, ein **Wassergraben**, in dem Meeresgurken leuchten, und auf der Insel in der Mitte der **Schlangenaltar** mit einem goldenen Schlangenbild. Um ihn liegt **Quetzara, die Gefiederte Schlange**, eingerollt und schläft: gut fünfzehn Blöcke lang, smaragdgrün geschuppt mit goldenem Bauch, um den Kopf eine Krause aus Quetzalfedern. Wer in die Grube hinabsteigt, weckt sie – sie richtet sich hoch auf, spreizt die Krause und kreischt. Dann kämpft sie mit **Giftbiss**, **Giftspucke** (die Klumpen zerplatzen zu Giftwolken), **Federsturm** (Fächer aus vergifteten Federn), **Schwanzpeitsche** und dem **Würgegriff**: Sie umkreist dich, schließt den Ring und drückt zu – wer genug zurückschlägt, kommt frei, und sie ist benommen. Unter halber Kraft **häutet sie sich**: Die leere Haut bleibt liegen und zischt wie sie (wer zuschlägt, dem platzt eine Giftwolke entgegen), während sie getarnt davongleitet und aus dem Hinterhalt zubeißt; danach glänzt ihr neues Schuppenkleid, und sie ist schneller und wilder. Eigene Bossleiste, eigene Klänge. Sie lässt selten den **Schlangenzahn** fallen (ein Giftdolch mit dem **Schlangenstoß**) und sonst **Quetzalfedern**; besiegt zerspringt das Schlangenbild – ein **Goldblock** auf dem Altar ruft sie zurück. Und lange Boss-Titel passen jetzt immer auf den Bildschirm.
+> **Version 1.11 – Mehr zum Leveln: Handwerk, Bogenschießen, Fähigkeiten und Titel.** Das **Handwerk** hat jetzt **eigene Punkte** – alle vier Stufen einen **Handwerkspunkt** (auf Stufe 500: 125) – und vier Talente: die **Angelkunst** (wer schon Punkte darin hatte, behält sie und hat seine Talentpunkte für den Kampf wieder frei), **Bergbau** (die Spitzhacke baut schneller ab, gemeistert mitunter ein zweites Erz), **Holzfällen** (die Axt fällt schneller, gemeistert mitunter ein Stamm mehr) und **Ackerbau** (oft eine Ernte mehr, gemeistert sät man gleich wieder aus). Zu den Kampftalenten kommt das **Bogenschießen** (Pfeile treffen bis 75 % härter, gemeistert werden Pfeile gespart). Auf dem Weg bis 450 schaltest du **acht aktive Fähigkeiten** frei – **Sturmlauf**, **Kampfschrei**, **Eiserne Haut**, **Zweiter Atem**, **Wirbelschlag**, **Adlerblick**, **Himmelssturz** und **Letztes Gefecht** –, jede mit Abklingzeit, eingesetzt mit der **Fähigkeitstaste** (auf deutschen Tastaturen **Y**; gehalten öffnet sie das **Fähigkeitenrad**), angezeigt an der Schnellleiste. Hinter dem Unsterblichen, der der letzte Rang bleibt, gibt es alle fünfzig Stufen einen **Titel** mit eigenem Siegel: Lichtbringer, Drachenbezwinger, Sonnenwächter, Sternenschmied, Weltenhüter und Der Ewige. Das Charakterfenster hat dafür drei **Reiter** (Kampf, Handwerk, Fähigkeiten), der Heldenweg zeigt Titelsteine und Fähigkeiten, die Aufstiegs-Szene neue Fähigkeiten und Titel.
+> In 1.10 kam **Quetzara, die Gefiederte Schlange**: Unter dem **Schlangentempel** im Dschungel liegt jetzt die **Schlangengrube**: Vom Schlund führt die Treppe weiter hinab auf eine Empore und von dort in eine runde Halle tief im Fels – acht Säulen, um die sich steinerne Schlangen winden, grüne Augen in den Wänden, ein Fries aus Federn, eine goldene Sonne an der Decke, Laternen an Ketten, ein **Wassergraben**, in dem Meeresgurken leuchten, und auf der Insel in der Mitte der **Schlangenaltar** mit einem goldenen Schlangenbild. Um ihn liegt **Quetzara, die Gefiederte Schlange**, eingerollt und schläft: gut fünfzehn Blöcke lang, smaragdgrün geschuppt mit goldenem Bauch, um den Kopf eine Krause aus Quetzalfedern. Wer in die Grube hinabsteigt, weckt sie – sie richtet sich hoch auf, spreizt die Krause und kreischt. Dann kämpft sie mit **Giftbiss**, **Giftspucke** (die Klumpen zerplatzen zu Giftwolken), **Federsturm** (Fächer aus vergifteten Federn), **Schwanzpeitsche** und dem **Würgegriff**: Sie umkreist dich, schließt den Ring und drückt zu – wer genug zurückschlägt, kommt frei, und sie ist benommen. Unter halber Kraft **häutet sie sich**: Die leere Haut bleibt liegen und zischt wie sie (wer zuschlägt, dem platzt eine Giftwolke entgegen), während sie getarnt davongleitet und aus dem Hinterhalt zubeißt; danach glänzt ihr neues Schuppenkleid, und sie ist schneller und wilder. Eigene Bossleiste, eigene Klänge. Sie lässt selten den **Schlangenzahn** fallen (ein Giftdolch mit dem **Schlangenstoß**) und sonst **Quetzalfedern**; besiegt zerspringt das Schlangenbild – ein **Goldblock** auf dem Altar ruft sie zurück. Und lange Boss-Titel passen jetzt immer auf den Bildschirm.
 > In 1.9.2 kamen **die Angelkunst und der Fischbeutel im Urmeer**: Ein **siebtes Talent**, die **Angelkunst**: Die Fische beißen schneller (bis 50 %), die Fangzone im Drill wird größer (bis 40 %), und die Meisterschaft bringt Glück beim Angeln. Dazu erweitert jetzt **jede Händlerin des Meervolks** im Urmeer den **Fischbeutel** – und jede Erweiterung ist ein Kauf, der zur Handelsgrenze zählt (auch beim Fischer im Dorf): Nach einigen Käufen macht der Laden Pause.
 > In 1.9.1 kamen **der Heldenweg bis Stufe 500 und doppelt so viele Kristalle**: Der Held steigt jetzt bis **Heldenstufe 500** auf (bisher 200) – aber stärker wird er dabei nicht: Die Heldenkraft und die Talentpunkte, die bisher die Stufen bis 200 brachten, verteilen sich auf den ganzen Weg; erst auf Stufe 500 ist man so stark wie bisher auf 200. Stufe 500 braucht rund 20,9 Millionen Heldenerfahrung. Der Unsterbliche (Stufe 200) bleibt der letzte Rang. Helden aus älteren Spielständen werden auf die Stufe gehoben, die sie genauso stark macht – aus 200 wird 500. Und weil ein Kristall seit 1.3 nur noch ein halbes Herz (bzw. 10 Mana) gibt, darf man jetzt **je 50 Herz- und Manakristalle** aufnehmen statt 25 – bis zu 25 Herzen und 500 Mana mehr.
 > In 1.9 kam **Ventor, der Gladiator der Winde**: Die **Arena der Prüfungen** hat jetzt ihren Meister: Auf dem Podest unter dem Spawner der Böen liegt das neue **Arenasiegel**, und über dem Spawner schwebt für jeden der sechs Käfige ein kupfernes **Windsiegel**. Jeder Käfig, den du bezwingst, schickt einen Windstoß zum Podest und entzündet sein Siegel; sind alle bezwungen und betritt jemand den Sand, steigt aus dem Wirbel **Ventor, der Gladiator der Winde**, auf – ein Standbild aus Bronze, das der Wind füllt: Käfighelm mit Augenschlitzen und rotem Kamm, Armschiene und Schulterschild, statt der Beine ein Wirbelwind, in der Rechten der **Sturmdreizack**, in der Linken ein **Wurfnetz**. Er grüßt die Ränge – dann kämpft er wie ein Netzkämpfer: **Böe** (wer davonfliegt und an eine Wand prallt, den trifft es doppelt; solange sie weht, prallen Geschosse ab), **Dreizackstoß**, **Netzwurf** (wen es trifft, der steckt fest – und gleich kommt der Stoß, härter als sonst), **Dreizackwurf** (der Dreizack kehrt in seine Hand zurück), **Windkugeln**, **Windhosen**, die durch die Arena ziehen und jeden hochreißen, und der **Sturzflug** (ein Kreis am Boden – raus da!). Unter halber Kraft **entfesselt er den Sturm**: Alle acht Sekunden fegt eine Sturmböe quer durch die Arena (man sieht sie kommen – ducken!), und er dreht sich im **Zyklon**. Eigene Bossleiste, eigene Klänge. Er lässt selten den **Sturmdreizack** fallen (3D, geworfen entfesselt er eine Böe und kehrt immer zurück) und sonst **Wurfnetze**, Böenruten und Windkugeln; wer ihn noch einmal fordern will, muss die Käfige erneut bezwingen.
@@ -491,7 +492,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.10.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.11.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -499,7 +500,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-1.10.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-1.11.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -4375,6 +4376,8 @@ Minecraft lieber mag, schaltet *Herzen in Schichten* unter *Mods → Kingdoms at
 
 ![Der Weg zum Unsterblichen: Meisterschaft, Heldenkraft, die neuen Ränge und das Licht der Unsterblichkeit](docs/bilder/heldenstufe_200.jpg)
 
+![Das Leveln seit 1.11: Kampftalente mit Bogenschießen, das Handwerk mit eigenen Punkten, die Fähigkeiten, das Fähigkeitenrad, Wirbelschlag, Kampfschrei, Himmelssturz, der Heldenweg mit Titelsteinen und ein neuer Titel](docs/bilder/leveln.jpg)
+
 Dein Held hat ein **eigenes Levelsystem** – ganz getrennt von der Erfahrung von Minecraft: Erfahrungskugeln, Stufen und
 Verzaubern bleiben genau, wie sie sind. Stattdessen sammelst du **Heldenerfahrung**:
 
@@ -4437,8 +4440,9 @@ Kampfdimension (wo sonst alles verloren ist), liegt beim Wiedererscheinen alles 
 und Zweithand.
 
 **Der Aufstieg:** Eine Lichtwelle läuft über den Bildschirm, das Rangabzeichen springt herein, die Stufe zählt hoch,
-Strahlen drehen sich dahinter, Funken sprühen, darunter erscheinen Stufe, Rang und die neuen Talentpunkte; bei einem
-neuen Rang mit Fanfare, zweiter Welle und Feuerwerk. Wer dabeisteht, sieht einen Lichtring über den Boden laufen und
+Strahlen drehen sich dahinter, Funken sprühen, darunter erscheinen Stufe, Rang und die neuen Talentpunkte (seit 1.11 auch
+neue Handwerkspunkte, eine neue Fähigkeit mit ihrem Bild und ein neuer Titel mit seinem Siegel); bei einem neuen Rang mit
+Fanfare, zweiter Welle und Feuerwerk. Wer dabeisteht, sieht einen Lichtring über den Boden laufen und
 eine Spirale in der Farbe des Rangs am Helden aufsteigen. Was du an Heldenerfahrung bekommst, zeigt links über der
 Schnellleiste dein Abzeichen mit einer Leiste, die sich fließend füllt.
 
@@ -4449,17 +4453,21 @@ jedem Rang steht sein Wahrzeichen am Horizont (Dorf, Wachturm, Burg, Schrein im 
 seit 0.77 dahinter ein Tempel mit schwebendem Kristall, ein Wolkenpalast, ein Koloss mit glühenden Augen, eine Sternwarte
 mit Sternenstrahl und die Himmelszitadelle mit ihrem Lichtring) und färbt seinen Abschnitt. Der gegangene Weg glüht
 golden, Licht fließt auf ihm zu dir, erreichte Ränge tragen eine Lichtsäule; voraus liegt der Weg im Nebel. Hinter dem
-Unsterblichen (Stufe 200) geht er in dessen Licht weiter, und ganz am Ende, auf Stufe 500, leuchtet ein Polarlicht. Dein Kopf schwebt im
+Unsterblichen (Stufe 200) geht er in dessen Licht weiter – seit 1.11 alle fünfzig Stufen mit einem **Titelstein** –, und
+ganz am Ende, auf Stufe 500, leuchtet ein Polarlicht. Wo eine **Fähigkeit** freigeschaltet wird, schwebt ihr Bild über dem
+Stein. Dein Kopf schwebt im
 Goldrahmen über deiner Stufe, das Stück bis zur nächsten leuchtet so weit, wie du gekommen bist. Beim Öffnen fliegt die
 Ansicht von Stufe 1 bis zu dir, die Steine leuchten nacheinander auf, dann sprühen Funken. Mausrad, Ziehen oder die
 Pfeiltasten fahren den Weg ab, unten zeigt eine Übersicht den ganzen Weg (anklicken springt dorthin); jeder Stein sagt,
 wie viel Heldenerfahrung er braucht.
 
-**Talente & Werte** (Knopf auf dem Weg) – dunkel und gold: links dein Held, sein Rang, seine Werte, Kristalle und
-Biome; rechts das Abzeichen mit der Stufe, die Leiste bis zur nächsten (sie füllt sich beim Öffnen), die elf Ränge auf
-einer Linie und die sieben Talente als Karten mit je zwanzig Kästchen und einem goldenen Plus-Knopf, der pulsiert,
-solange Punkte frei sind. Seit 0.77 fasst jedes Talent **40 Punkte**: Die zweiten zwanzig sind die **Meisterschaft** –
-die Kästchen werden nacheinander golden, ein Schimmer wandert über sie:
+**Talente & Werte** (Knopf auf dem Weg) – dunkel und gold: links dein Held, sein Rang (ab Stufe 250 darunter sein
+**Titel** mit Siegel), seine Werte, Kristalle und Biome; rechts das Abzeichen mit der Stufe, die Leiste bis zur nächsten
+(sie füllt sich beim Öffnen), die elf Ränge auf einer Linie und darunter, je nach **Reiter** (seit 1.11 hängen drei
+Lesezeichen am rechten Rand: Kampf, Handwerk, Fähigkeiten), die Talente als Karten mit je zwanzig Kästchen und einem
+goldenen Plus-Knopf, der pulsiert, solange Punkte frei sind – oder die Fähigkeiten. Seit 0.77 fasst jedes Talent
+**40 Punkte**: Die zweiten zwanzig sind die **Meisterschaft** – die Kästchen werden nacheinander golden, ein Schimmer
+wandert über sie. Die **Kampftalente** nehmen die Talentpunkte:
 
 | Talent | je Punkt (1–20) | in der Meisterschaft (21–40) | mit 40 Punkten |
 |---|---|---|---|
@@ -4469,11 +4477,59 @@ die Kästchen werden nacheinander golden, ein Schimmer wandert über sie:
 | Zähigkeit | +0,4 Rüstung | +0,4 Rüstung und +0,25 Rüstungshärte | +16 Rüstung, +5 Härte |
 | Zauberkunst | +8 Mana und 4 % schnellere Erholung | ebenso | +320 Mana, +160 % |
 | Glück | +0,2 Glück – bessere Beute in Truhen | ebenso | +8 Glück |
+| **Bogenschießen** (seit 1.11) | Pfeile aus Bogen und Armbrust treffen 2,5 % härter | 1,25 % härter, und je Punkt werden 1,5 % der Pfeile gespart | 75 % härter, 30 % der Pfeile gespart |
+
+Bis Stufe 100 kommen 49 Talentpunkte zusammen, bis Stufe 200 99, bis Stufe 500 219 (wie bis 1.9 auf Stufe 200), alle
+sieben Kampftalente fassen 280 – du entscheidest, was für ein Held du bist.
+
+**Das Handwerk** (seit 1.11) hat **eigene Punkte**: alle vier Stufen einen **Handwerkspunkt** (auf Stufe 100 sind es 25,
+auf Stufe 500 125 – alle vier fassen 160, also lässt sich auch hier nicht alles meistern). So macht das Handwerk dich im
+Kampf weder stärker noch schwächer. Die Angelkunst gehört seit 1.11 dazu: Wer schon Punkte in ihr hatte, behält sie und
+hat seine Talentpunkte für den Kampf wieder frei.
+
+| Handwerk | je Punkt (1–20) | in der Meisterschaft (21–40) | mit 40 Punkten |
+|---|---|---|---|
 | **Angelkunst** (seit 1.9.2) | die Fische beißen 1,5 % schneller, die Fangzone im Drill wird 1 % größer | 1 % schneller, 1 % mehr Zone und +0,1 Glück beim Angeln (seltenere Fische, weniger Kram, öfter eine Truhe) | 50 % schnellerer Biss, 40 % größere Fangzone, +2 Glück beim Angeln |
+| **Bergbau** | die Spitzhacke baut 2 % schneller ab | 1 % schneller, und je Punkt 0,75 % Aussicht auf ein zweites Erz | 60 % schneller, 15 % ein zweites Erz |
+| **Holzfällen** | die Axt fällt Stämme 2,5 % schneller | 1,25 % schneller, und je Punkt 1 % Aussicht auf einen Stamm mehr | 75 % schneller, 20 % ein Stamm mehr |
+| **Ackerbau** | reife Feldfrüchte geben mit 2,5 % Aussicht eine Ernte mehr | 1,5 % mehr, und je Punkt 2,5 % Aussicht, gleich wieder auszusäen | 80 % eine Ernte mehr, 50 % gleich wieder gesät |
 
 Die Angelkunst wirkt mit Köder, Angel und Verzauberung zusammen (jedes kürzt die Wartezeit, die das andere übrig lässt);
-die Fangzone wächst auch mit ihr nie über 60 %. Bis Stufe 100 kommen 49 Punkte zusammen, bis Stufe 200 99, bis Stufe 500
-219 (wie bis 1.9 auf Stufe 200), alle sieben Talente fassen 280 – du entscheidest, was für ein Held du bist.
+die Fangzone wächst auch mit ihr nie über 60 %. Ein zweites Erz gibt es nicht mit Behutsamkeit; der Ackerbau gilt für
+Weizen, Karotten, Kartoffeln, Rote Bete, Netherwarzen und Kakao (und sät nur aus, wenn ein Same in der Ernte ist).
+
+**Die Fähigkeiten** (seit 1.11): Unterwegs schaltest du acht **aktive Fähigkeiten** frei. Die gewählte setzt du mit der
+**Fähigkeitstaste** ein (Standard: die Taste links unten neben der Umschalttaste – auf deutschen Tastaturen **Y**); hältst du
+sie gedrückt, öffnet sich das **Fähigkeitenrad** (Maus zur Fähigkeit, loslassen – sie liegt dann auf der Taste; Ziffern 1–8
+wählen direkt). Im Reiter „Fähigkeiten“ des Charakterfensters lässt sich eine auch anklicken. Nach jedem Einsatz **ruht**
+sie eine Weile; neben der Schnellleiste (auf der Seite der Nebenhand) zeigt eine goldene Fassung die gewählte Fähigkeit,
+wie lange sie noch ruht und die Taste.
+
+| Fähigkeit | ab Stufe | ruht | was sie bewirkt |
+|---|---|---|---|
+| **Sturmlauf** | 10 | 45 s | sechs Sekunden lang viel schneller (Tempo II) und höhere Sprünge |
+| **Kampfschrei** | 30 | 60 s | Monster bis acht Blöcke sind sechs Sekunden geschwächt und langsam; deine Soldaten und gezähmten Tiere bis 16 Blöcke werden stärker |
+| **Eiserne Haut** | 60 | 90 s | sechs Sekunden lang Resistenz II |
+| **Zweiter Atem** | 100 | 120 s | heilt sofort drei Zehntel deiner Lebenspunkte und nimmt alle schädlichen Wirkungen |
+| **Wirbelschlag** | 150 | 30 s | ein Rundumschlag: jeder Feind bis vier Blöcke nimmt anderthalbfachen Waffenschaden und fliegt zurück |
+| **Adlerblick** | 250 | 60 s | Feinde bis 48 Blöcke leuchten zwölf Sekunden lang durch Wände |
+| **Himmelssturz** | 350 | 45 s | ein Satz hoch und weit nach vorn; wo du landest, trifft eine Schockwelle alle Feinde bis fünf Blöcke (6 + halber Waffenschaden) und wirft sie hoch – kein Fallschaden |
+| **Letztes Gefecht** | 450 | 300 s | acht Sekunden lang sinkst du nicht unter ein halbes Herz – danach bist du sechs Sekunden erschöpft |
+
+Fähigkeiten treffen nur Monster (und wer dich gerade angreift) – nie deine Soldaten, deine Tiere oder andere Spieler.
+
+**Die Titel** (seit 1.11): Der Unsterbliche bleibt der letzte Rang, aber hinter ihm erwirbst du alle fünfzig Stufen einen
+**Titel** mit eigenem Siegel – auf dem Heldenweg als Titelstein, im Charakterfenster unter dem Rang, beim Aufstieg mit einer
+eigenen Zeile. Titel bringen keine Punkte; sie zeigen, wie weit du gekommen bist.
+
+| Titel | ab Stufe | Siegel |
+|---|---|---|
+| Lichtbringer | 250 | eine Strahlensonne in Gold |
+| Drachenbezwinger | 300 | ein Drachenkopf mit Schwert in Rot |
+| Sonnenwächter | 350 | eine Sonne über einem Schild |
+| Sternenschmied | 400 | ein Stern über einem Hammer |
+| Weltenhüter | 450 | eine Welt mit Ring |
+| Der Ewige | 500 | eine ewige Flamme in einem Lichtkranz |
 **Neu verteilen** kostet eine Silbermünze je verteiltem Punkt. Heldenerfahrung und Talente bleiben auch nach dem Tod.
 Wer aus 0.52 kommt, steht mit derselben Heldenerfahrung auf einer neuen Stufe und bekommt seine Punkte kostenlos
 zurück, falls er mehr verteilt hatte, als die neue Stufe hergibt.
@@ -5174,7 +5230,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.10.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.11.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |

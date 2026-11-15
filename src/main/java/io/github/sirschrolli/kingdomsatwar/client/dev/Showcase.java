@@ -175,6 +175,7 @@ final class Showcase {
                 case "path" -> HeroShowcase.path(steps);
                 case "path500" -> HeroShowcase.path500(steps);
                 case "ascension" -> HeroShowcase.ascension(steps);
+                case "leveln" -> HeroShowcase.leveln(steps);
                 case "veterans" -> VeteranShowcase.veterans(steps);
                 case "siteworld" -> SitesShowcase.siteWorld(steps);
                 case "townplans" -> TownShowcase.plans(steps, "");

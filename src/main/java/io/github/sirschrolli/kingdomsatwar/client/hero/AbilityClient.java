@@ -88,7 +88,7 @@ public final class AbilityClient {
     public static void select(Player player, HeroAbility ability) {
         HeroAbilities.State state = HeroAbilities.state(player);
         if (state.selectedAbility() != ability) {
-            player.setData(ModAttachments.HERO_ABILITIES, new HeroAbilities.State(ability.ordinal(), state.readyAt()));
+            player.setData(ModAttachments.HERO_ABILITIES, new HeroAbilities.State(ability.ordinal(), state.readyAt(), state.introduced()));
             ClientPacketDistributor.sendToServer(new HeroAbilityPayload(HeroAbilityPayload.SELECT, ability.ordinal()));
             AbilityHud.announce(ability);
         }

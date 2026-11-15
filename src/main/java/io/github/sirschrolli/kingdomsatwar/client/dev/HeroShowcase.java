@@ -480,6 +480,198 @@ final class HeroShowcase {
         steps.add(Step.hud(false));
     }
 
+    /**
+     * Das Leveln seit 1.11: das Charakterfenster mit seinen drei Reitern (Kampftalente mit Bogenschießen, das Handwerk mit
+     * eigenen Punkten, die Fähigkeiten), das Fähigkeitenrad, die Anzeige an der Schnellleiste, einige Fähigkeiten in der Welt
+     * (von hinten gesehen), der Heldenweg mit Titelsteinen und Fähigkeiten und ein Aufstieg zu einem neuen Titel.
+     */
+    static void leveln(Deque<Step> steps) {
+        int oz = -80;
+        steps.add(Step.server(level -> {
+            int ground = Showcase.ground;
+            Showcase.fill(level, new BlockPos(-14, ground - 1, oz - 20), new BlockPos(14, ground - 1, oz + 8), Blocks.GRASS_BLOCK.defaultBlockState());
+            Showcase.fill(level, new BlockPos(-14, ground, oz - 20), new BlockPos(14, ground + 10, oz + 8), Blocks.AIR.defaultBlockState());
+            for (int i = 0; i < 26; i++) {
+                int x = -12 + (i * 7) % 25;
+                int z = oz - 18 + (i * 5) % 24;
+                if (Math.abs(x) > 4 || z < oz - 10 || z > oz + 1) {
+                    level.setBlock(new BlockPos(x, ground, z), (i % 3 == 0 ? Blocks.FERN : Blocks.SHORT_GRASS).defaultBlockState(), 2);
+                }
+            }
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            Crystals.set(player, new Crystals.Count(18, 12));
+            // Heldenstufe 320 (Unsterblicher, Drachenbezwinger): Kampf mit Bogenschießen, Handwerk mit Angeln und Bergbau
+            java.util.List<Integer> points = new java.util.ArrayList<>(java.util.List.of(30, 22, 12, 20, 14, 6, 26, 18, 22, 12, 8));
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(320) + (HeroLevel.total(321) - HeroLevel.total(320)) * 2 / 5, points, 44));
+            player.setData(io.github.sirschrolli.kingdomsatwar.registry.ModAttachments.HERO_IMMORTAL, -1L);
+            io.github.sirschrolli.kingdomsatwar.hero.HeroAbilities.refresh(player);
+            io.github.sirschrolli.kingdomsatwar.hero.HeroAbilities.select(player, io.github.sirschrolli.kingdomsatwar.hero.HeroAbility.WHIRLWIND);
+            player.setHealth(player.getMaxHealth());
+        }));
+        steps.add(Step.command("gamemode survival"));
+        steps.add(Step.command("clear @s"));
+        steps.add(Step.command("effect clear @s"));
+        steps.add(Step.command("item replace entity @s weapon.mainhand with minecraft:diamond_sword"));
+        steps.add(Step.command("item replace entity @s weapon.offhand with minecraft:shield"));
+        steps.add(Step.command("item replace entity @s armor.head with minecraft:iron_helmet"));
+        steps.add(Step.command("item replace entity @s armor.chest with minecraft:diamond_chestplate"));
+        steps.add(Step.command("item replace entity @s armor.legs with minecraft:iron_leggings"));
+        steps.add(Step.command("item replace entity @s armor.feet with minecraft:iron_boots"));
+        steps.add(Step.command("item replace entity @s hotbar.1 with minecraft:bow"));
+        steps.add(Step.command("item replace entity @s hotbar.2 with minecraft:diamond_pickaxe"));
+        steps.add(Step.command("item replace entity @s hotbar.3 with minecraft:bread 12"));
+        steps.add(Showcase.tp(0.5, 0.0, oz + 0.5, 180, 12));
+        steps.add(Step.hud(true));
+        steps.add(Step.once(minecraft -> minecraft.options.chatVisibility().set(net.minecraft.world.entity.player.ChatVisiblity.HIDDEN)));
+        steps.add(Step.waitForChunks(200));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.once(minecraft -> minecraft.gui.toastManager().clear()));
+        // der Kampfschrei ruht noch eine Weile (für die Anzeige im Reiter)
+        steps.add(Step.server(level -> io.github.sirschrolli.kingdomsatwar.hero.HeroAbilities.use(level.getServer().getPlayerList().getPlayers()
+                .getFirst(), io.github.sirschrolli.kingdomsatwar.hero.HeroAbility.WAR_CRY)));
+        steps.add(Step.waitTicks(10));
+
+        // 1. das Charakterfenster: Kampftalente (mit Bogenschießen), der Titel unter dem Rang
+        steps.add(Step.screen(minecraft -> {
+            io.github.sirschrolli.kingdomsatwar.client.hero.CharacterScreen screen = new io.github.sirschrolli.kingdomsatwar.client.hero.CharacterScreen();
+            return screen;
+        }));
+        steps.add(Step.waitTicks(4));
+        steps.add(Step.once(minecraft -> tab(minecraft, 0)));
+        steps.add(Step.once(Showcase::parkMouse));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("leveln_0_kampf"));
+        steps.add(Step.once(minecraft -> hoverCharacter(minecraft, 176, 108 + 6 * 22 + 8)));
+        steps.add(Step.waitTicks(8));
+        steps.add(Step.screenshot("leveln_1_bogen"));
+        // 2. das Handwerk
+        steps.add(Step.once(Showcase::parkMouse));
+        steps.add(Step.once(minecraft -> tab(minecraft, 1)));
+        steps.add(Step.waitTicks(25));
+        steps.add(Step.screenshot("leveln_2_handwerk"));
+        steps.add(Step.once(minecraft -> hoverCharacter(minecraft, 176, 108 + 22 + 8)));
+        steps.add(Step.waitTicks(8));
+        steps.add(Step.screenshot("leveln_3_bergbau"));
+        // 3. die Fähigkeiten
+        steps.add(Step.once(Showcase::parkMouse));
+        steps.add(Step.once(minecraft -> tab(minecraft, 2)));
+        steps.add(Step.waitTicks(25));
+        steps.add(Step.screenshot("leveln_4_faehigkeiten"));
+        steps.add(Step.once(minecraft -> hoverCharacter(minecraft, 116 + 50, 108 + 3 * 38 + 18)));
+        steps.add(Step.waitTicks(8));
+        steps.add(Step.screenshot("leveln_5_gesperrt"));
+        // 4. das Fähigkeitenrad
+        steps.add(Step.once(Showcase::parkMouse));
+        steps.add(Step.screen(minecraft -> {
+            io.github.sirschrolli.kingdomsatwar.client.hero.AbilityWheelScreen wheel = new io.github.sirschrolli.kingdomsatwar.client.hero.AbilityWheelScreen();
+            wheel.devHover(4);
+            return wheel;
+        }));
+        steps.add(Step.waitTicks(12));
+        steps.add(Step.screenshot("leveln_6_rad"));
+        steps.add(Step.screen(minecraft -> null));
+        // 5. in der Welt (von hinten gesehen): Zombies ringsum, die Anzeige an der Schnellleiste
+        steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_BACK)));
+        steps.add(Step.server(level -> {
+            for (int i = 0; i < 5; i++) {
+                var zombie = io.github.sirschrolli.kingdomsatwar.registry.ModEntities.ZOMBIE.get().create(level,
+                        net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+                if (zombie != null) {
+                    double a = Math.toRadians(-60 + i * 30);
+                    zombie.snapTo(0.5 + Math.sin(a) * 2.6, Showcase.ground, oz + 0.5 - Math.cos(a) * 2.6, 0.0f, 0.0f);
+                    zombie.setNoAi(true);
+                    zombie.setItemSlot(net.minecraft.world.entity.EquipmentSlot.HEAD, new net.minecraft.world.item.ItemStack(
+                            net.minecraft.world.item.Items.LEATHER_HELMET));
+                    zombie.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH).setBaseValue(400.0);
+                    zombie.setHealth(400.0f);
+                    zombie.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, new net.minecraft.world.phys.Vec3(0.5,
+                            Showcase.ground + 1.6, oz + 0.5));
+                    zombie.addTag("kaw_showcase_foe");
+                    level.addFreshEntity(zombie);
+                }
+            }
+        }));
+        steps.add(Showcase.tp(0.5, 0.0, oz + 0.5, 180, 18));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("leveln_7_leiste"));
+        // für die späten Fähigkeiten: Stufe 500 (die Punkte bleiben)
+        steps.add(Step.server(level -> {
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            HeroLevel.Hero hero = HeroLevel.of(player);
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(500), hero.talents(), hero.discoveries()));
+        }));
+        steps.add(Step.waitTicks(5));
+        for (String[] shot : new String[][] {{"WHIRLWIND", "3", "leveln_8_wirbelschlag"}, {"WAR_CRY", "6", "leveln_9_kampfschrei"},
+                {"IRON_SKIN", "4", "leveln_10_eiserne_haut"}, {"EAGLE_EYE", "24", "leveln_10b_adlerblick"},
+                {"LAST_STAND", "8", "leveln_11_letztes_gefecht"}}) {
+            steps.add(Step.server(level -> {
+                ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+                io.github.sirschrolli.kingdomsatwar.hero.HeroAbilities.refresh(player);
+                io.github.sirschrolli.kingdomsatwar.hero.HeroAbilities.use(player, io.github.sirschrolli.kingdomsatwar.hero.HeroAbility.valueOf(shot[0]));
+            }));
+            steps.add(Step.waitTicks(Integer.parseInt(shot[1])));
+            steps.add(Step.screenshot(shot[2]));
+            steps.add(Step.waitTicks(30));
+        }
+        // der Himmelssturz: hoch hinaus, dann die Landung
+        steps.add(Step.command("effect clear @s"));
+        steps.add(Step.server(level -> {
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            io.github.sirschrolli.kingdomsatwar.hero.HeroAbilities.refresh(player);
+            io.github.sirschrolli.kingdomsatwar.hero.HeroAbilities.use(player, io.github.sirschrolli.kingdomsatwar.hero.HeroAbility.SKYFALL);
+        }));
+        steps.add(Step.waitTicks(9));
+        steps.add(Step.screenshot("leveln_12_himmelssturz"));
+        steps.add(Step.until(() -> {
+            var player = net.minecraft.client.Minecraft.getInstance().player;
+            return player != null && player.onGround();
+        }, 100));
+        steps.add(Step.waitTicks(2));
+        steps.add(Step.screenshot("leveln_13_landung"));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON)));
+        steps.add(Step.server(level -> level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, new net.minecraft.world.phys.AABB(
+                new BlockPos(0, Showcase.ground, oz)).inflate(30)).forEach(net.minecraft.world.entity.Entity::discard)));
+        // 6. der Heldenweg: Titelsteine und Fähigkeiten hinter dem Unsterblichen (wieder auf Stufe 320)
+        steps.add(Step.server(level -> {
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            HeroLevel.Hero hero = HeroLevel.of(player);
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(320) + (HeroLevel.total(321) - HeroLevel.total(320)) * 2 / 5, hero.talents(),
+                    hero.discoveries()));
+        }));
+        steps.add(Step.screen(minecraft -> new io.github.sirschrolli.kingdomsatwar.client.hero.HeroPathScreen()));
+        steps.add(Step.once(Showcase::parkMouse));
+        steps.add(Step.waitTicks(70));
+        steps.add(Step.once(minecraft -> {
+            if (minecraft.gui.screen() instanceof io.github.sirschrolli.kingdomsatwar.client.hero.HeroPathScreen path) {
+                path.jumpTo(251.0f);
+            }
+        }));
+        steps.add(Step.waitTicks(12));
+        steps.add(Step.screenshot("leveln_14_weg"));
+        steps.add(Step.screen(minecraft -> null));
+        // 7. ein Aufstieg: von 249 auf 250 – Lichtbringer und Adlerblick
+        steps.add(Step.server(level -> {
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(250) - 30, java.util.List.of(), 44));
+        }));
+        // (die Anzeige der Heldenerfahrung über der Schnellleiste soll erst verblassen)
+        steps.add(Step.waitTicks(140));
+        steps.add(Step.server(level -> HeroLevel.award(level.getServer().getPlayerList().getPlayers().getFirst(), 45)));
+        steps.add(Step.waitTicks(46));
+        steps.add(Step.screenshot("leveln_15_titel"));
+        steps.add(Step.waitTicks(80));
+        steps.add(Step.command("gamemode spectator"));
+        steps.add(Step.hud(false));
+    }
+
+    /** Öffnet im Charakterfenster einen Reiter (0 Kampf, 1 Handwerk, 2 Fähigkeiten). */
+    private static void tab(net.minecraft.client.Minecraft minecraft, int index) {
+        if (minecraft.gui.screen() instanceof io.github.sirschrolli.kingdomsatwar.client.hero.CharacterScreen screen) {
+            screen.devTab(index);
+        }
+    }
+
     /** Nur das Streicheln (schnell zu prüfen). */
     static void pat(Deque<Step> steps) {
         int oz = -80;
@@ -560,7 +752,8 @@ final class HeroShowcase {
 
     /** Mauszeiger über eine Stelle des Charakterfensters (Koordinaten im Fenster). */
     private static void hoverCharacter(net.minecraft.client.Minecraft minecraft, int guiX, int guiY) {
-        int left = (minecraft.getWindow().getGuiScaledWidth() - 324) / 2;
+        // (seit 1.11 ragen rechts die Lesezeichen heraus: das Fenster rückt ein Stück nach links)
+        int left = (minecraft.getWindow().getGuiScaledWidth() - 324 - 26 + 6) / 2;
         int top = (minecraft.getWindow().getGuiScaledHeight() - 268) / 2;
         double scale = minecraft.getWindow().getGuiScale();
         try {

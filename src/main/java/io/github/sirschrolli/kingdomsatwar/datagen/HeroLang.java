@@ -184,7 +184,7 @@ final class HeroLang {
         text.add("hero.kingdomsatwar.talent.fishing.effect_mastery", "+%s %% bite · +%s luck", "+%s %% Biss · +%s Glück");
 
         // --- seit 1.11: Bogenschießen und das Handwerk mit eigenen Punkten ---
-        talent(text, "archery", "Archery", "Bogenschießen", "+%s %% arrow damage", "+%s %% Pfeilschaden",
+        talent(text, "archery", "Archery", "Bogenschießen", "+%s %% arrow damage", "+%s %% Pfeile",
                 "Arrows from bow and crossbow hit 2.5 % harder per point (1.25 % in mastery); in mastery each point also saves 1.5 % "
                         + "of your arrows",
                 "Pfeile aus Bogen und Armbrust treffen je Punkt 2,5 % härter (in der Meisterschaft 1,25 %); in der Meisterschaft spart "
@@ -230,7 +230,7 @@ final class HeroLang {
         text.add("gui.kingdomsatwar.character.ability.from", "from level %s", "ab Stufe %s");
         text.add("gui.kingdomsatwar.character.ability.rest", "resting: %s s", "ruht noch %s s");
         text.add("gui.kingdomsatwar.character.ability.ready", "ready", "bereit");
-        text.add("gui.kingdomsatwar.character.ability.chosen", "★ on the key", "★ auf der Taste");
+        text.add("gui.kingdomsatwar.character.ability.chosen", "★ chosen", "★ gewählt");
         text.add("gui.kingdomsatwar.character.ability.cooldown", "Rests %s seconds after use", "Ruht nach dem Einsatz %s Sekunden");
         text.add("gui.kingdomsatwar.character.ability.click", "Click: put it on the key (%s)", "Klicken: auf die Taste legen (%s)");
         text.add("gui.kingdomsatwar.character.ability.on_key", "On the key (%s) – tap it to use", "Liegt auf der Taste (%s) – kurz tippen");
@@ -265,6 +265,10 @@ final class HeroLang {
                 "Das Letzte Gefecht ist vorbei – du bist erschöpft");
         text.add("hero.kingdomsatwar.ability_up", "New ability: %s – use it with %s", "Neue Fähigkeit: %s – einsetzen mit %s");
         text.add("hero.kingdomsatwar.title_up", "New title: %s!", "Neuer Titel: %s!");
+        text.add("hero.kingdomsatwar.news_111", "New since 1.11: craft points for angling, mining, woodcutting and farming, the archery talent, "
+                + "titles beyond the Immortal and active abilities – open the character window with %s, use an ability with %s (hold it for the "
+                + "wheel).", "Neu seit 1.11: Handwerkspunkte für Angeln, Bergbau, Holzfällen und Ackerbau, das Bogenschießen, Titel hinter dem "
+                + "Unsterblichen und aktive Fähigkeiten – das Charakterfenster öffnest du mit %s, eine Fähigkeit setzt du mit %s ein (halten: Rad).");
         text.add("hero.kingdomsatwar.settled.craft", "Your craft points no longer fit hero level %s – you get them back and can spend them anew.",
                 "Deine Handwerkspunkte passten nicht mehr zu Heldenstufe %s – du bekommst sie zurück und verteilst neu.");
         text.add("hero.kingdomsatwar.level_up.craft_point", "+%s craft point", "+%s Handwerkspunkt");

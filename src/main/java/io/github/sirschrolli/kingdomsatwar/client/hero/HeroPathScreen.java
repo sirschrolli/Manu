@@ -342,14 +342,19 @@ public class HeroPathScreen extends Screen {
             HeroLevel.Title title = titleAt(level);
             io.github.sirschrolli.kingdomsatwar.hero.HeroAbility ability = io.github.sirschrolli.kingdomsatwar.hero.HeroAbility.unlockedAt(level);
             if (ability != null) {
-                // eine neue Fähigkeit: ihr Bild schwebt hoch über dem Stein
+                // eine neue Fähigkeit: ihr Bild schwebt hoch über dem Stein, darunter klein ihr Name – über einem Rang- oder
+                // Titelstein noch über dessen Belohnung, damit beides nicht wie eins aussieht; steht der Held darauf, über seinem Kopf
+                boolean marked = rank != null || title != null;
                 float bob = Mth.sin(time * 1.7f + level) * 2.0f;
-                float ay = sy - (rank != null || title != null ? 64 : 40) + bob;
+                float ay = sy - (marked ? 82 : current ? 68 : 48) + bob;
                 HeroGui.light(g, HeroGui.GLOW, sx, ay, 40.0f, 0.0f, ability.color(), done ? 0.55f : 0.25f);
                 g.blitSprite(RenderPipelines.GUI_TEXTURED, ability.icon(), Math.round(sx - 10), Math.round(ay - 10), 20, 20, done ? 0xFFFFFFFF : 0xFF77708A);
-                g.fill(Math.round(sx), Math.round(ay + 11), Math.round(sx) + 1, Math.round(sy - (rank != null || title != null ? 44 : 9)),
-                        done ? 0x80F2C14E : 0x405A5468);
-                if (Math.abs(mouseX - sx) <= 11 && Math.abs(mouseY - ay) <= 11) {
+                HeroGui.centered(g, this.font, Component.translatable(ability.translationKey()), sx, ay + 12, done ? ability.color() : 0xFFB8B0C8, 0.75f);
+                float stemEnd = sy - (current ? (marked ? 42 : 34) : marked ? 44 : 9);
+                if (stemEnd > ay + 21) {
+                    g.fill(Math.round(sx), Math.round(ay + 21), Math.round(sx) + 1, Math.round(stemEnd), done ? 0x80F2C14E : 0x405A5468);
+                }
+                if (Math.abs(mouseX - sx) <= 11 && mouseY >= ay - 11 && mouseY <= ay + 19) {
                     tooltip = this.abilityTooltip(ability, hero);
                 }
             }
@@ -396,7 +401,7 @@ public class HeroPathScreen extends Screen {
         // der Held auf seiner Stufe
         if (!this.intro) {
             float sx = worldX(Math.min(hero.level(), HeroLevel.MAX_LEVEL)) - this.scroll;
-            float sy = this.pathY(hero.level()) - (rankAt(hero.level()) != null ? 30 : 22) + Mth.sin(time * 3.0f) * 2.0f;
+            float sy = this.pathY(hero.level()) - (rankAt(hero.level()) != null || titleAt(hero.level()) != null ? 30 : 22) + Mth.sin(time * 3.0f) * 2.0f;
             float burst = 1.0f - HeroGui.span(age, 0.15f + INTRO, 0.15f + INTRO + 0.9f);
             if (burst > 0.0f && burst < 1.0f) {
                 for (int i = 0; i < 18; i++) {

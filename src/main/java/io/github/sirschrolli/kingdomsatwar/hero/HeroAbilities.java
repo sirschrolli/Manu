@@ -16,6 +16,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -71,16 +72,25 @@ public final class HeroAbilities {
     public static final int LAST_STAND_TICKS = 160;
     public static final int EXHAUSTED_TICKS = 120;
 
-    /** Die gewählte Fähigkeit und wann jede wieder bereit ist (Spielzeit; in der Reihenfolge von {@link HeroAbility}). */
-    public record State(int selected, List<Long> readyAt) {
-        public static final State NONE = new State(0, List.of());
+    /**
+     * Die gewählte Fähigkeit, wann jede wieder bereit ist (Spielzeit; in der Reihenfolge von {@link HeroAbility}) und ob der
+     * Held schon erfahren hat, dass es Fähigkeiten gibt.
+     */
+    public record State(int selected, List<Long> readyAt, boolean introduced) {
+        public static final State NONE = new State(0, List.of(), false);
         public static final Codec<State> CODEC = RecordCodecBuilder.create(i -> i.group(
                 Codec.INT.optionalFieldOf("selected", 0).forGetter(State::selected),
-                Codec.LONG.listOf().optionalFieldOf("ready_at", List.of()).forGetter(State::readyAt)).apply(i, State::new));
+                Codec.LONG.listOf().optionalFieldOf("ready_at", List.of()).forGetter(State::readyAt),
+                Codec.BOOL.optionalFieldOf("introduced", false).forGetter(State::introduced)).apply(i, State::new));
         public static final StreamCodec<ByteBuf, State> STREAM_CODEC = StreamCodec.composite(
                 ByteBufCodecs.VAR_INT, State::selected,
                 ByteBufCodecs.VAR_LONG.apply(ByteBufCodecs.list(HeroAbility.values().length)), State::readyAt,
+                ByteBufCodecs.BOOL, State::introduced,
                 State::new);
+
+        public State(int selected, List<Long> readyAt) {
+            this(selected, readyAt, false);
+        }
 
         public State {
             selected = Math.floorMod(selected, HeroAbility.values().length);
@@ -100,13 +110,17 @@ public final class HeroAbilities {
         }
 
         State select(HeroAbility ability) {
-            return new State(ability.ordinal(), this.readyAt);
+            return new State(ability.ordinal(), this.readyAt, this.introduced);
         }
 
         State used(HeroAbility ability, long readyAt) {
             List<Long> list = new ArrayList<>(this.readyAt);
             list.set(ability.ordinal(), readyAt);
-            return new State(this.selected, list);
+            return new State(this.selected, list, this.introduced);
+        }
+
+        State introduce() {
+            return new State(this.selected, this.readyAt, true);
         }
     }
 
@@ -158,7 +172,28 @@ public final class HeroAbilities {
 
     /** Für Tests und Befehle: alle Fähigkeiten sofort wieder bereit. */
     public static void refresh(ServerPlayer player) {
-        player.setData(ModAttachments.HERO_ABILITIES, new State(state(player).selected(), List.of()));
+        State state = state(player);
+        player.setData(ModAttachments.HERO_ABILITIES, new State(state.selected(), List.of(), state.introduced()));
+    }
+
+    /** Der Held weiß jetzt, dass es Fähigkeiten gibt (bei der ersten oder beim ersten Einloggen seit 1.11). */
+    static void introduced(ServerPlayer player) {
+        player.setData(ModAttachments.HERO_ABILITIES, state(player).introduce());
+    }
+
+    /**
+     * Wer aus einem älteren Spielstand kommt und schon Fähigkeiten hat (oder Handwerkspunkte), erfährt beim Einloggen einmal,
+     * was es Neues gibt.
+     */
+    @SubscribeEvent
+    static void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player && !state(player).introduced()
+                && HeroAbility.count(HeroLevel.of(player).level()) > 0) {
+            introduced(player);
+            player.sendSystemMessage(Component.translatable("hero.kingdomsatwar.news_111", Component.keybind("key.kingdomsatwar.character")
+                    .copy().withStyle(ChatFormatting.YELLOW), Component.keybind("key.kingdomsatwar.ability").copy().withStyle(ChatFormatting.YELLOW))
+                    .withStyle(ChatFormatting.GOLD));
+        }
     }
 
     // ------------------------------------------------------------------------------------------------ Wirkungen
@@ -238,7 +273,8 @@ public final class HeroAbilities {
                 Vec3 look = player.getViewVector(1.0f).multiply(1.0, 0.0, 1.0);
                 look = look.lengthSqr() < 1.0e-4 ? Vec3.ZERO : look.normalize();
                 player.setDeltaMovement(look.x * 1.3, 1.05, look.z * 1.3);
-                player.needsSync = true;
+                // (die Bewegung eines Spielers bestimmt sein Spiel: der Satz muss ihm geschickt werden, wie beim Streitkolben)
+                player.connection.send(new ClientboundSetEntityMotionPacket(player));
                 player.resetFallDistance();
                 SKYFALL.put(player.getUUID(), level.getGameTime());
                 level.sendParticles(ParticleTypes.GUST, x, y + 0.2, z, 1, 0.0, 0.0, 0.0, 0.0);
