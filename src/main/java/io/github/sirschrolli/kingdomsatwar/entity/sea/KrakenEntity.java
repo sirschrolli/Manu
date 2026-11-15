@@ -558,11 +558,16 @@ public class KrakenEntity extends Monster implements io.github.sirschrolli.kingd
         }
     }
 
-    /** In voller Fahrt blickt er dorthin, wohin er schwimmt; sonst zu seinem Ziel. */
+    /**
+     * In voller Fahrt blickt er dorthin, wohin er schwimmt; sonst zu seinem Ziel. Liegt sein Blick weit neben der Fahrt (nach
+     * einer Wende oder am Rand seines Bereichs), dreht er schneller nach – sonst schöbe er sich eine Weile seitwärts durchs Wasser.
+     */
     private void faceSwim(@Nullable LivingEntity target) {
         double speed = this.swimVel.horizontalDistance();
         if (speed > 0.05) {
-            this.face(this.position().add(this.swimVel.scale(10.0 / speed)), 2.0f + (float) (speed * 10.0));
+            float course = -((float) Mth.atan2(this.swimVel.x, this.swimVel.z)) * Mth.RAD_TO_DEG;
+            float off = Math.abs(Mth.wrapDegrees(course - this.getYRot()));
+            this.face(this.position().add(this.swimVel.scale(10.0 / speed)), 2.0f + (float) (speed * 10.0) + off * 0.05f);
         } else if (target != null) {
             this.face(target.position(), 4.0f);
         }
