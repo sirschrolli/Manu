@@ -41,6 +41,13 @@ public final class ModKeyMappings {
     public static final KeyMapping FISH_BOOK = new KeyMapping("key.kingdomsatwar.fish_book", KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYBOARD, InputConstants.KEY_H, HERO);
 
+    /**
+     * Die gewählte Heldenfähigkeit einsetzen; gehalten öffnet sie das Fähigkeitenrad (seit 1.11, Standard: die Taste links
+     * unten neben der Umschalttaste – Z, auf deutschen Tastaturen Y).
+     */
+    public static final KeyMapping ABILITY = new KeyMapping("key.kingdomsatwar.ability", KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYBOARD, InputConstants.KEY_Z, HERO);
+
     private ModKeyMappings() {}
 
     @SubscribeEvent
@@ -54,6 +61,7 @@ public final class ModKeyMappings {
         event.register(PAT);
         event.register(CHRONICLE);
         event.register(FISH_BOOK);
+        event.register(ABILITY);
     }
 
     @SubscribeEvent

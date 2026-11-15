@@ -40,6 +40,7 @@ public final class ModNetwork {
                 .playToServer(CampaignPayload.TYPE, CampaignPayload.STREAM_CODEC, CampaignPayload::handle)
                 .playToServer(TrainPayload.TYPE, TrainPayload.STREAM_CODEC, TrainPayload::handle)
                 .playToServer(HeroTalentPayload.TYPE, HeroTalentPayload.STREAM_CODEC, HeroTalentPayload::handle)
+                .playToServer(HeroAbilityPayload.TYPE, HeroAbilityPayload.STREAM_CODEC, HeroAbilityPayload::handle)
                 .playToServer(HeroPatPayload.TYPE, HeroPatPayload.STREAM_CODEC, HeroPatPayload::handle)
                 .playToServer(HirePayload.TYPE, HirePayload.STREAM_CODEC, HirePayload::handle)
                 .playToServer(TradePayload.TYPE, TradePayload.STREAM_CODEC, TradePayload::handle)

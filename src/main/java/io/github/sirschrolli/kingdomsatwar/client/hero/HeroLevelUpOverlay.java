@@ -1,6 +1,7 @@
 package io.github.sirschrolli.kingdomsatwar.client.hero;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.hero.HeroAbility;
 import io.github.sirschrolli.kingdomsatwar.hero.HeroLevel;
 import io.github.sirschrolli.kingdomsatwar.network.HeroLevelUpPayload;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
@@ -26,7 +28,8 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
  *   <li>das Rangabzeichen springt herein (mit Überschwingen), dahinter drehen sich zwei Strahlenkränze gegeneinander,</li>
  *   <li>die Zahl zählt bis zur neuen Stufe hoch und hüpft, Funken sprühen nach allen Seiten und fallen,</li>
  *   <li>darunter gleiten "Heldenstufe N", der Rang und die neuen Talentpunkte herein;</li>
- *   <li>bei einem neuen Rang: eine zweite Welle, doppelt so viele Funken, "Neuer Rang", und als Legende die Belohnung.</li>
+ *   <li>bei einem neuen Rang: eine zweite Welle, doppelt so viele Funken, "Neuer Rang", und als Legende die Belohnung;</li>
+ *   <li>seit 1.11 auch neue Handwerkspunkte, neue Fähigkeiten (mit ihrem Bild) und ein neuer Titel (mit seinem Siegel).</li>
  * </ol>
  */
 public final class HeroLevelUpOverlay {
@@ -145,22 +148,67 @@ public final class HeroLevelUpOverlay {
             HeroGui.centered(g, font, line, cx, textTop + 24.0f, ARGB.color(Math.round(255 * Mth.clamp(in2, 0.0f, 1.0f) * out), color & 0xFFFFFF),
                     s * (0.85f + 0.15f * in2));
         }
+        // darunter Zeile um Zeile: Talentpunkte, Heldenkraft, Handwerkspunkte, neue Fähigkeiten, ein neuer Titel, die Belohnung
+        float y = textTop + (rankUp ? 40.0f : 38.0f);
         float in3 = HeroGui.easeOutCubic(HeroGui.span(t, 1.05f, 1.45f));
         int points = HeroLevel.pointsFor(to) - HeroLevel.pointsFor(from);
-        if (in3 > 0.0f && points > 0) {
-            Component line = Component.translatable(points == 1 ? "hero.kingdomsatwar.level_up.point" : "hero.kingdomsatwar.level_up.points", points,
-                    Component.keybind("key.kingdomsatwar.character").copy().withStyle(ChatFormatting.GOLD));
-            HeroGui.centered(g, font, line, cx, textTop + (rankUp ? 40.0f : 38.0f) + 6.0f * (1.0f - in3),
-                    ARGB.color(Math.round(255 * in3 * out), 0xEDE3C8), 1.0f);
+        if (points > 0) {
+            if (in3 > 0.0f) {
+                Component line = Component.translatable(points == 1 ? "hero.kingdomsatwar.level_up.point" : "hero.kingdomsatwar.level_up.points", points,
+                        Component.keybind("key.kingdomsatwar.character").copy().withStyle(ChatFormatting.GOLD));
+                HeroGui.centered(g, font, line, cx, y + 6.0f * (1.0f - in3), ARGB.color(Math.round(255 * in3 * out), 0xEDE3C8), 1.0f);
+            }
+            y += 12.0f;
         }
         // die Heldenkraft, die diese Stufe(n) mitbringen
         float inMight = HeroGui.easeOutCubic(HeroGui.span(t, 1.25f, 1.65f));
         Component might = HeroGui.might(from, to);
-        if (inMight > 0.0f && !might.getString().isEmpty()) {
-            Component line = Component.translatable("hero.kingdomsatwar.level_up.might", might);
-            // (bringt die Stufe keinen Talentpunkt, rückt die Heldenkraft an seine Stelle)
-            HeroGui.centered(g, font, line, cx, textTop + (points > 0 ? (rankUp ? 52.0f : 50.0f) : (rankUp ? 40.0f : 38.0f)) + 6.0f * (1.0f - inMight),
-                    ARGB.color(Math.round(255 * inMight * out), 0xF2C14E), 1.0f);
+        if (!might.getString().isEmpty()) {
+            if (inMight > 0.0f) {
+                Component line = Component.translatable("hero.kingdomsatwar.level_up.might", might);
+                HeroGui.centered(g, font, line, cx, y + 6.0f * (1.0f - inMight), ARGB.color(Math.round(255 * inMight * out), 0xF2C14E), 1.0f);
+            }
+            y += 12.0f;
+        }
+        int craft = HeroLevel.craftPointsFor(to) - HeroLevel.craftPointsFor(from);
+        if (craft > 0) {
+            float in = HeroGui.easeOutCubic(HeroGui.span(t, 1.35f, 1.75f));
+            if (in > 0.0f) {
+                Component line = Component.translatable(craft == 1 ? "hero.kingdomsatwar.level_up.craft_point" : "hero.kingdomsatwar.level_up.craft_points",
+                        craft);
+                HeroGui.centered(g, font, line, cx, y + 6.0f * (1.0f - in), ARGB.color(Math.round(255 * in * out), 0x7FD8E8), 1.0f);
+            }
+            y += 12.0f;
+        }
+        for (HeroAbility ability : HeroAbility.values()) {
+            if (ability.level() <= from || ability.level() > to) {
+                continue;
+            }
+            float in = HeroGui.easeOutBack(HeroGui.span(t, 1.45f, 1.9f));
+            if (in > 0.0f) {
+                float a = Mth.clamp(in, 0.0f, 1.0f) * out;
+                Component line = Component.translatable("hero.kingdomsatwar.level_up.ability", Component.translatable(ability.translationKey()),
+                        Component.keybind("key.kingdomsatwar.ability").copy().withStyle(ChatFormatting.GOLD));
+                float w = font.width(line);
+                HeroGui.light(g, HeroGui.GLOW, cx - w / 2.0f - 10.0f, y + 6.0f, 34.0f, 0.0f, ability.color(), 0.5f * a);
+                g.blitSprite(RenderPipelines.GUI_TEXTURED, ability.icon(), Math.round(cx - w / 2.0f - 18.0f), Math.round(y - 2.0f), 16, 16,
+                        ARGB.white(a));
+                HeroGui.centered(g, font, line, cx + 2.0f, y + 2.0f, ARGB.color(Math.round(255 * a), ability.color() & 0xFFFFFF), 1.0f);
+            }
+            y += 16.0f;
+        }
+        HeroLevel.Title title = HeroLevel.Title.of(to);
+        if (title != null && title != HeroLevel.Title.of(from)) {
+            float in = HeroGui.easeOutBack(HeroGui.span(t, 1.55f, 2.0f));
+            if (in > 0.0f) {
+                float a = Mth.clamp(in, 0.0f, 1.0f) * out;
+                Component line = Component.translatable("hero.kingdomsatwar.level_up.title_new", Component.translatable(title.translationKey()));
+                float w = font.width(line) * 1.2f;
+                HeroGui.light(g, HeroGui.GLOW, cx, y + 8.0f, 160.0f, 0.0f, title.color(), 0.35f * a);
+                g.blitSprite(RenderPipelines.GUI_TEXTURED, title.sprite(), Math.round(cx - w / 2.0f - 22.0f), Math.round(y - 3.0f), 20, 20, ARGB.white(a));
+                HeroGui.centered(g, font, line, cx, y + 2.0f, ARGB.color(Math.round(255 * a), title.color() & 0xFFFFFF), 1.2f);
+            }
+            y += 18.0f;
         }
         boolean special = rankUp && (rank == HeroLevel.Rank.LEGEND || rank == HeroLevel.Rank.IMMORTAL);
         if (special) {
@@ -170,9 +218,9 @@ public final class HeroLevelUpOverlay {
                 Component line = immortal ? Component.translatable("hero.kingdomsatwar.level_up.reward.immortal")
                         : Component.translatable("hero.kingdomsatwar.level_up.reward",
                                 Component.keybind("key.kingdomsatwar.pat").copy().withStyle(ChatFormatting.GOLD));
-                float y = textTop + 66.0f + 6.0f * (1.0f - in4);
-                HeroGui.light(g, HeroGui.GLOW, cx, y + 4.0f, 150.0f, 0.0f, immortal ? 0xFFFFE27A : 0xFFB070FF, 0.35f * in4 * out);
-                HeroGui.centered(g, font, line, cx, y, ARGB.color(Math.round(255 * in4 * out), immortal ? 0xFFF0C0 : 0xE0B8FF), 1.0f);
+                float ry = y + 4.0f + 6.0f * (1.0f - in4);
+                HeroGui.light(g, HeroGui.GLOW, cx, ry + 4.0f, 150.0f, 0.0f, immortal ? 0xFFFFE27A : 0xFFB070FF, 0.35f * in4 * out);
+                HeroGui.centered(g, font, line, cx, ry, ARGB.color(Math.round(255 * in4 * out), immortal ? 0xFFF0C0 : 0xE0B8FF), 1.0f);
             }
         }
     }

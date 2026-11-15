@@ -140,6 +140,13 @@ public final class ModAttachments {
                     .serialize(com.mojang.serialization.Codec.STRING.listOf().fieldOf("biomes"))
                     .copyOnDeath()
                     .build());
+    /** Die aktiven Fähigkeiten (seit 1.11): welche gewählt ist und wann jede wieder bereit ist – nur der Spieler selbst sieht es. */
+    public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.hero.HeroAbilities.State>> HERO_ABILITIES =
+            ATTACHMENTS.register("hero_abilities", () -> AttachmentType.builder(() -> io.github.sirschrolli.kingdomsatwar.hero.HeroAbilities.State.NONE)
+                    .serialize(io.github.sirschrolli.kingdomsatwar.hero.HeroAbilities.State.CODEC.fieldOf("abilities"))
+                    .sync((holder, to) -> holder == to, io.github.sirschrolli.kingdomsatwar.hero.HeroAbilities.State.STREAM_CODEC)
+                    .copyOnDeath()
+                    .build());
     /** Was ein Unsterblicher bei sich trug, als er in einer Kampfdimension fiel – liegt beim Wiedererscheinen wieder im Inventar. */
     public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.hero.ImmortalKeep.Kept>> KEPT_INVENTORY =
             ATTACHMENTS.register("kept_inventory", () -> AttachmentType.builder(() -> io.github.sirschrolli.kingdomsatwar.hero.ImmortalKeep.Kept.NONE)

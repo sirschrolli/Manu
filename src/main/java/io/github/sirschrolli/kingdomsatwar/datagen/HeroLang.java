@@ -182,6 +182,122 @@ final class HeroLang {
                 "Die Fische beißen je Punkt 1,5 % schneller, und die Fangzone im Drill wird 1 % größer; in der Meisterschaft 1 % schneller, "
                         + "1 % mehr Zone und 0,1 Glück beim Angeln je Punkt (seltenere Fische, weniger Kram, öfter eine Truhe)");
         text.add("hero.kingdomsatwar.talent.fishing.effect_mastery", "+%s %% bite · +%s luck", "+%s %% Biss · +%s Glück");
+
+        // --- seit 1.11: Bogenschießen und das Handwerk mit eigenen Punkten ---
+        talent(text, "archery", "Archery", "Bogenschießen", "+%s %% arrow damage", "+%s %% Pfeilschaden",
+                "Arrows from bow and crossbow hit 2.5 % harder per point (1.25 % in mastery); in mastery each point also saves 1.5 % "
+                        + "of your arrows",
+                "Pfeile aus Bogen und Armbrust treffen je Punkt 2,5 % härter (in der Meisterschaft 1,25 %); in der Meisterschaft spart "
+                        + "jeder Punkt dazu 1,5 % der Pfeile");
+        text.add("hero.kingdomsatwar.talent.archery.effect_mastery", "+%s %% damage · %s %% saved", "+%s %% Schaden · %s %% gespart");
+        talent(text, "mining", "Mining", "Bergbau", "+%s %% mining speed", "+%s %% Abbautempo",
+                "The pickaxe digs 2 % faster per point (1 % in mastery); in mastery each point gives a 0.75 % chance of a second ore",
+                "Die Spitzhacke baut je Punkt 2 % schneller ab (in der Meisterschaft 1 %); in der Meisterschaft bringt jeder Punkt "
+                        + "0,75 % Aussicht auf ein zweites Erz");
+        text.add("hero.kingdomsatwar.talent.mining.effect_mastery", "+%s %% speed · %s %% second ore", "+%s %% Tempo · %s %% zweites Erz");
+        talent(text, "woodcutting", "Woodcutting", "Holzfällen", "+%s %% chopping speed", "+%s %% Fälltempo",
+                "The axe fells logs 2.5 % faster per point (1.25 % in mastery); in mastery each point gives a 1 % chance of an extra log",
+                "Die Axt fällt Stämme je Punkt 2,5 % schneller (in der Meisterschaft 1,25 %); in der Meisterschaft bringt jeder Punkt "
+                        + "1 % Aussicht auf einen Stamm mehr");
+        text.add("hero.kingdomsatwar.talent.woodcutting.effect_mastery", "+%s %% speed · %s %% extra log", "+%s %% Tempo · %s %% Stamm mehr");
+        talent(text, "farming", "Farming", "Ackerbau", "+%s %% extra harvest", "+%s %% Mehrernte",
+                "Ripe crops (also nether wart and cocoa) give one more harvest with a 2.5 % chance per point (1.5 % in mastery); in "
+                        + "mastery each point gives a 2.5 % chance to sow again at once",
+                "Reife Feldfrüchte (auch Netherwarzen und Kakao) geben je Punkt mit 2,5 % Aussicht eine Ernte mehr (in der "
+                        + "Meisterschaft 1,5 %); in der Meisterschaft sät jeder Punkt mit 2,5 % Aussicht gleich wieder aus");
+        text.add("hero.kingdomsatwar.talent.farming.effect_mastery", "+%s %% harvest · %s %% replanted", "+%s %% Ernte · %s %% Aussaat");
+        text.add("hero.kingdomsatwar.pot.combat", "Combat", "Kampf");
+        text.add("hero.kingdomsatwar.pot.craft", "Craft", "Handwerk");
+        text.add("gui.kingdomsatwar.character.craft_points", "Craft points: %s", "Handwerkspunkte: %s");
+        text.add("gui.kingdomsatwar.character.craft_points.none", "All craft points spent", "Alle Handwerkspunkte verteilt");
+        text.add("gui.kingdomsatwar.character.craft.hint", "One craft point every %s levels (%s at level 500). Craft makes you no stronger "
+                + "in battle – and no weaker either: it has points of its own.", "Alle %s Stufen ein Handwerkspunkt (auf Stufe 500: %s). Handwerk "
+                + "macht dich im Kampf nicht stärker – aber auch nicht schwächer: Es hat eigene Punkte.");
+        text.add("gui.kingdomsatwar.character.talent.no_craft", "No craft points left", "Keine Handwerkspunkte frei");
+        text.add("gui.kingdomsatwar.character.reset.hint_craft", "Take back all craft points – costs %s", "Alle Handwerkspunkte zurücknehmen – kostet %s");
+        text.add("gui.kingdomsatwar.character.talent.now", "Now: %s", "Jetzt: %s");
+        text.add("gui.kingdomsatwar.character.tab.combat", "Combat talents", "Kampftalente");
+        text.add("gui.kingdomsatwar.character.tab.combat.hint", "Strength, vitality … and archery – from your talent points",
+                "Stärke, Lebenskraft … und Bogenschießen – aus den Talentpunkten");
+        text.add("gui.kingdomsatwar.character.tab.craft", "Craft", "Handwerk");
+        text.add("gui.kingdomsatwar.character.tab.craft.hint", "Angling, mining, woodcutting and farming – from craft points of their own",
+                "Angeln, Bergbau, Holzfällen und Ackerbau – aus eigenen Handwerkspunkten");
+        text.add("gui.kingdomsatwar.character.tab.abilities", "Abilities", "Fähigkeiten");
+        text.add("gui.kingdomsatwar.character.tab.abilities.hint", "They come along the hero's path – click one to put it on the ability key",
+                "Kommen auf dem Heldenweg dazu – ein Klick legt eine auf die Fähigkeitstaste");
+        text.add("gui.kingdomsatwar.character.abilities", "Abilities: %s of %s", "Fähigkeiten: %s von %s");
+        text.add("gui.kingdomsatwar.character.abilities.key", "Key %s · hold: wheel", "Taste %s · halten: Rad");
+        text.add("gui.kingdomsatwar.character.ability.from", "from level %s", "ab Stufe %s");
+        text.add("gui.kingdomsatwar.character.ability.rest", "resting: %s s", "ruht noch %s s");
+        text.add("gui.kingdomsatwar.character.ability.ready", "ready", "bereit");
+        text.add("gui.kingdomsatwar.character.ability.chosen", "★ on the key", "★ auf der Taste");
+        text.add("gui.kingdomsatwar.character.ability.cooldown", "Rests %s seconds after use", "Ruht nach dem Einsatz %s Sekunden");
+        text.add("gui.kingdomsatwar.character.ability.click", "Click: put it on the key (%s)", "Klicken: auf die Taste legen (%s)");
+        text.add("gui.kingdomsatwar.character.ability.on_key", "On the key (%s) – tap it to use", "Liegt auf der Taste (%s) – kurz tippen");
+        text.add("gui.kingdomsatwar.character.ability.locked", "Unlocked at hero level %s", "Ab Heldenstufe %s");
+        text.add("gui.kingdomsatwar.character.title.hint", "Title from hero level %s – it shows how far you have come",
+                "Titel ab Heldenstufe %s – er zeigt, wie weit du gekommen bist");
+        text.add("key.kingdomsatwar.ability", "Hero ability (hold: wheel)", "Heldenfähigkeit (halten: Rad)");
+        ability(text, "sprint", "Storm Run", "Sturmlauf", "Six seconds of great speed and higher jumps.",
+                "Sechs Sekunden lang viel schneller und höhere Sprünge.");
+        ability(text, "war_cry", "War Cry", "Kampfschrei",
+                "Monsters within 8 blocks are weakened and slowed for 6 seconds; your soldiers and tamed creatures grow stronger.",
+                "Monster bis acht Blöcke sind sechs Sekunden geschwächt und langsam; deine Soldaten und gezähmten Tiere werden stärker.");
+        ability(text, "iron_skin", "Iron Skin", "Eiserne Haut", "For six seconds you take much less damage (Resistance II).",
+                "Sechs Sekunden lang viel weniger Schaden (Resistenz II).");
+        ability(text, "second_wind", "Second Wind", "Zweiter Atem", "Heals three tenths of your health at once and removes every harmful effect.",
+                "Heilt sofort drei Zehntel deiner Lebenspunkte und nimmt alle schädlichen Wirkungen.");
+        ability(text, "whirlwind", "Whirlwind", "Wirbelschlag",
+                "A spinning strike: every foe within 4 blocks takes one and a half times your weapon damage and is thrown back.",
+                "Ein Rundumschlag: Jeder Feind bis vier Blöcke nimmt anderthalbfachen Waffenschaden und fliegt zurück.");
+        ability(text, "eagle_eye", "Eagle Eye", "Adlerblick", "Foes within 48 blocks glow through walls for 12 seconds.",
+                "Feinde bis 48 Blöcke leuchten zwölf Sekunden lang durch Wände.");
+        ability(text, "skyfall", "Skyfall", "Himmelssturz",
+                "A leap high and far ahead – where you land, a shockwave strikes all foes around you; no fall damage.",
+                "Ein Satz hoch und weit nach vorn – wo du landest, trifft eine Schockwelle alle Feinde ringsum; kein Fallschaden.");
+        ability(text, "last_stand", "Last Stand", "Letztes Gefecht",
+                "For eight seconds you cannot fall below half a heart – then you are exhausted for a while.",
+                "Acht Sekunden lang sinkst du nicht unter ein halbes Herz – danach bist du eine Weile erschöpft.");
+        text.add("hero.kingdomsatwar.ability.locked", "%s: from hero level %s", "%s: ab Heldenstufe %s");
+        text.add("hero.kingdomsatwar.ability.resting", "%s is resting – %s s", "%s ruht noch %s s");
+        text.add("hero.kingdomsatwar.ability.none", "Your first ability comes at hero level %s", "Deine erste Fähigkeit kommt auf Heldenstufe %s");
+        text.add("hero.kingdomsatwar.ability.last_stand.over", "The last stand is over – you are exhausted",
+                "Das Letzte Gefecht ist vorbei – du bist erschöpft");
+        text.add("hero.kingdomsatwar.ability_up", "New ability: %s – use it with %s", "Neue Fähigkeit: %s – einsetzen mit %s");
+        text.add("hero.kingdomsatwar.title_up", "New title: %s!", "Neuer Titel: %s!");
+        text.add("hero.kingdomsatwar.settled.craft", "Your craft points no longer fit hero level %s – you get them back and can spend them anew.",
+                "Deine Handwerkspunkte passten nicht mehr zu Heldenstufe %s – du bekommst sie zurück und verteilst neu.");
+        text.add("hero.kingdomsatwar.level_up.craft_point", "+%s craft point", "+%s Handwerkspunkt");
+        text.add("hero.kingdomsatwar.level_up.craft_points", "+%s craft points", "+%s Handwerkspunkte");
+        text.add("hero.kingdomsatwar.level_up.ability", "New ability: %s – %s", "Neue Fähigkeit: %s – %s");
+        text.add("hero.kingdomsatwar.level_up.title_new", "New title: %s", "Neuer Titel: %s");
+        text.add("hero.kingdomsatwar.title.lightbringer", "Lightbringer", "Lichtbringer");
+        text.add("hero.kingdomsatwar.title.dragonslayer", "Dragonslayer", "Drachenbezwinger");
+        text.add("hero.kingdomsatwar.title.sunwarden", "Sunwarden", "Sonnenwächter");
+        text.add("hero.kingdomsatwar.title.starforger", "Starforger", "Sternenschmied");
+        text.add("hero.kingdomsatwar.title.worldkeeper", "Worldkeeper", "Weltenhüter");
+        text.add("hero.kingdomsatwar.title.eternal", "The Eternal", "Der Ewige");
+        text.add("gui.kingdomsatwar.path.reward.title", "Title", "Titel");
+        text.add("gui.kingdomsatwar.path.title_from", "From hero level %s (%s hero experience)", "Ab Heldenstufe %s (%s Heldenerfahrung)");
+        text.add("gui.kingdomsatwar.path.title_hint", "A title for the long road – no points, but everyone sees how far you have come",
+                "Ein Titel für den langen Weg – keine Punkte, aber jeder sieht, wie weit du gekommen bist");
+        text.add("gui.kingdomsatwar.path.ability", "New ability: %s", "Neue Fähigkeit: %s");
+        text.add("gui.kingdomsatwar.path.craft_point", "+1 craft point", "+1 Handwerkspunkt");
+        text.add("gui.kingdomsatwar.ability_wheel", "Ability wheel", "Fähigkeitenrad");
+        text.add("gui.kingdomsatwar.ability_wheel.hint_hold", "Release over an ability to put it on the key",
+                "Über einer Fähigkeit loslassen: Sie liegt dann auf der Taste");
+        text.add("gui.kingdomsatwar.ability_wheel.hint_click", "Click an ability – right-click or Esc closes",
+                "Eine Fähigkeit anklicken – Rechtsklick oder Esc schließt");
+        text.add("gui.kingdomsatwar.ability_wheel.cooldown", "Rests %s s after use", "Ruht %s s nach dem Einsatz");
+        text.add("gui.kingdomsatwar.ability_wheel.locked", "from hero level %s", "ab Heldenstufe %s");
+        text.add("gui.kingdomsatwar.ability_wheel.resting", "resting: %s s", "ruht noch %s s");
+        text.add("gui.kingdomsatwar.ability_wheel.ready", "Ready", "Bereit");
+    }
+
+    private static void ability(Text text, String id, String english, String deutsch, String descEn, String descDe) {
+        String key = "hero.kingdomsatwar.ability." + id;
+        text.add(key, english, deutsch);
+        text.add(key + ".desc", descEn, descDe);
     }
 
     private static void talent(Text text, String id, String english, String deutsch, String effectEn, String effectDe, String descEn,

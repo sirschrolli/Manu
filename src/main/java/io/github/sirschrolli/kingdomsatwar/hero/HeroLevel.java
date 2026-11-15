@@ -113,6 +113,8 @@ public final class HeroLevel {
     public static final double CURVE_POWER = 2.15;
     /** Fassung der Stufenkurve in gespeicherten Helden (1: bis 0.60 – 40 · (L − 1)², 2: seit 0.61, 3: seit 1.9.1 bis Stufe 500). */
     public static final int CURVE_VERSION = 3;
+    /** Alle so vielen Stufen ein Handwerkspunkt (seit 1.11). */
+    public static final int CRAFT_EVERY = 4;
     /** Neu verteilen: eine Silbermünze (9 Bronze) je verteiltem Punkt. */
     public static final int RESET_PER_POINT = 9;
     /** Heldenerfahrung für einen Sieg: die Hälfte der Lebenspunkte, Bosse doppelt, höchstens so viel. */
@@ -125,39 +127,92 @@ public final class HeroLevel {
     public static final int CONQUEST = 500;
 
     /**
-     * Die sechs Talente: was ein Punkt bringt (in der Meisterschaft, ab Punkt {@value #MASTERY}, mitunter etwas anderes),
-     * welches Bild und welche Farbe sie im Charakterfenster haben.
+     * Woraus ein Talent seine Punkte nimmt (seit 1.11): die Kampftalente aus den Talentpunkten der Stufen und Ränge, das
+     * Handwerk (Angeln, Bergbau, Holzfällen, Ackerbau) aus eigenen Handwerkspunkten – eine je {@value #CRAFT_EVERY} Stufen.
+     * So macht das Handwerk den Helden nicht schwächer im Kampf.
+     */
+    public enum Pot implements StringRepresentable {
+        COMBAT,
+        CRAFT;
+
+        @Override
+        public String getSerializedName() {
+            return this.name().toLowerCase(Locale.ROOT);
+        }
+
+        public String translationKey() {
+            return "hero.kingdomsatwar.pot." + this.getSerializedName();
+        }
+    }
+
+    /**
+     * Die Talente: was ein Punkt bringt (in der Meisterschaft, ab Punkt {@value #MASTERY}, mitunter etwas anderes), welches
+     * Bild und welche Farbe sie im Charakterfenster haben und aus welchem Topf ihre Punkte kommen. Die Reihenfolge ist die
+     * der gespeicherten Punkte (neue Talente kommen hinten dazu).
      */
     public enum Talent implements StringRepresentable {
         /** +0,3 Schaden je Punkt (20 Punkte: +6, 40 Punkte: +12). */
-        STRENGTH(() -> Items.IRON_SWORD, 0.3, 0.3, 0xFFE0584A),
+        STRENGTH(() -> Items.IRON_SWORD, 0.3, 0.3, 0xFFE0584A, Pot.COMBAT),
         /** +1 Lebenspunkt je Punkt (20 Punkte: zehn Herzen, 40 Punkte: zwanzig). */
-        VITALITY(() -> Items.GOLDEN_APPLE, 1.0, 1.0, 0xFFF06A8A),
+        VITALITY(() -> Items.GOLDEN_APPLE, 1.0, 1.0, 0xFFF06A8A, Pot.COMBAT),
         /** +1,25 % Lauftempo je Punkt, in der Meisterschaft +0,5 % (20 Punkte: +25 %, 40 Punkte: +35 %). */
-        AGILITY(() -> Items.FEATHER, 1.25, 0.5, 0xFF8FE07A),
+        AGILITY(() -> Items.FEATHER, 1.25, 0.5, 0xFF8FE07A, Pot.COMBAT),
         /** +0,4 Rüstung je Punkt, in der Meisterschaft dazu +0,25 Rüstungshärte (40 Punkte: +16 Rüstung, +5 Härte). */
-        TOUGHNESS(() -> Items.IRON_CHESTPLATE, 0.4, 0.4, 0xFFB8C4D6),
+        TOUGHNESS(() -> Items.IRON_CHESTPLATE, 0.4, 0.4, 0xFFB8C4D6, Pot.COMBAT),
         /** +8 Mana und +4 % Erholung je Punkt (20 Punkte: +160 Mana, +80 %; 40 Punkte: +320 Mana, +160 %). */
-        ARCANA(() -> io.github.sirschrolli.kingdomsatwar.registry.ModItems.MANA_CRYSTAL.get(), 8.0, 8.0, 0xFF6FA8FF),
+        ARCANA(() -> io.github.sirschrolli.kingdomsatwar.registry.ModItems.MANA_CRYSTAL.get(), 8.0, 8.0, 0xFF6FA8FF, Pot.COMBAT),
         /** +0,2 Glück je Punkt (bessere Beute in Truhen; 20 Punkte: +4, 40 Punkte: +8). */
-        FORTUNE(() -> Items.RABBIT_FOOT, 0.2, 0.2, 0xFFF2C14E),
+        FORTUNE(() -> Items.RABBIT_FOOT, 0.2, 0.2, 0xFFF2C14E, Pot.COMBAT),
         /**
          * Angelkunst (seit 1.9.2): Die Fische beißen je Punkt 1,5 % schneller (in der Meisterschaft 1 %; 20 Punkte: 30 %, 40
          * Punkte: 50 %), die Fangzone im Drill wird je Punkt 1 % größer, und die Meisterschaft gibt je Punkt 0,1 Glück beim
-         * Angeln (seltenere Fische, weniger Kram, öfter eine Truhe).
+         * Angeln (seltenere Fische, weniger Kram, öfter eine Truhe). Seit 1.11 ein Handwerk.
          */
-        FISHING(() -> Items.FISHING_ROD, 1.5, 1.0, 0xFF4FC8D8);
+        FISHING(() -> Items.FISHING_ROD, 1.5, 1.0, 0xFF4FC8D8, Pot.CRAFT),
+        /**
+         * Bogenschießen (seit 1.11, ein Kampftalent): Pfeile aus Bogen und Armbrust treffen je Punkt 2,5 % härter (in der
+         * Meisterschaft 1,25 %; 20 Punkte: 50 %, 40 Punkte: 75 %), und die Meisterschaft spart je Punkt 1,5 % der Pfeile.
+         */
+        ARCHERY(() -> Items.BOW, 2.5, 1.25, 0xFFD9A05B, Pot.COMBAT),
+        /**
+         * Bergbau (seit 1.11, ein Handwerk): mit der Spitzhacke je Punkt 2 % schneller (in der Meisterschaft 1 %; 40 Punkte:
+         * 60 %), und die Meisterschaft bringt je Punkt 0,75 % Aussicht auf ein zweites Erz.
+         */
+        MINING(() -> Items.IRON_PICKAXE, 2.0, 1.0, 0xFFD08B5B, Pot.CRAFT),
+        /**
+         * Holzfällen (seit 1.11, ein Handwerk): Stämme fallen mit der Axt je Punkt 2,5 % schneller (in der Meisterschaft
+         * 1,25 %; 40 Punkte: 75 %), und die Meisterschaft bringt je Punkt 1 % Aussicht auf einen Stamm mehr.
+         */
+        WOODCUTTING(() -> Items.IRON_AXE, 2.5, 1.25, 0xFF9CC25A, Pot.CRAFT),
+        /**
+         * Ackerbau (seit 1.11, ein Handwerk): Reife Feldfrüchte geben je Punkt mit 2,5 % Aussicht eine Ernte mehr (in der
+         * Meisterschaft 1,5 %; 40 Punkte: 80 %), und die Meisterschaft sät je Punkt mit 2,5 % Aussicht gleich wieder aus.
+         */
+        FARMING(() -> Items.IRON_HOE, 2.5, 1.5, 0xFFF0D060, Pot.CRAFT);
 
         private final Supplier<Item> icon;
         private final double perPoint;
         private final double perMastery;
         private final int color;
+        private final Pot pot;
 
-        Talent(Supplier<Item> icon, double perPoint, double perMastery, int color) {
+        Talent(Supplier<Item> icon, double perPoint, double perMastery, int color, Pot pot) {
             this.icon = icon;
             this.perPoint = perPoint;
             this.perMastery = perMastery;
             this.color = color;
+            this.pot = pot;
+        }
+
+        /** Aus welchem Topf seine Punkte kommen. */
+        public Pot pot() {
+            return this.pot;
+        }
+
+        /** Die Talente eines Topfs in der Reihenfolge des Charakterfensters (Bogenschießen nach dem Glück). */
+        public static List<Talent> of(Pot pot) {
+            return pot == Pot.COMBAT ? List.of(STRENGTH, VITALITY, AGILITY, TOUGHNESS, ARCANA, FORTUNE, ARCHERY)
+                    : List.of(FISHING, MINING, WOODCUTTING, FARMING);
         }
 
         public ItemStack icon() {
@@ -217,6 +272,60 @@ public final class HeroLevel {
     /** Angelkunst: Fangzone je Punkt und Glück je Punkt der Meisterschaft. */
     public static final float FISHING_ZONE = 0.01f;
     public static final float FISHING_LUCK = 0.1f;
+
+    /** Bogenschießen, Bergbau, Holzfällen und Ackerbau: was ein Punkt der Meisterschaft bringt (seit 1.11). */
+    public static final float ARCHERY_SAVE = 0.015f;
+    public static final float MINING_DOUBLE = 0.0075f;
+    public static final float WOOD_EXTRA = 0.01f;
+    public static final float FARM_REPLANT = 0.025f;
+
+    private static int mastery(Player player, Talent talent) {
+        return Math.max(0, of(player).points(talent) - MASTERY);
+    }
+
+    private static float share(Player player, Talent talent) {
+        return (float) (talent.value(of(player).points(talent)) / 100.0);
+    }
+
+    /** Bogenschießen: um welchen Anteil Pfeile härter treffen (40 Punkte: 75 %). */
+    public static float archeryBonus(Player player) {
+        return share(player, Talent.ARCHERY);
+    }
+
+    /** Bogenschießen in der Meisterschaft: Aussicht, dass ein Pfeil nicht verbraucht wird (40 Punkte: 30 %). */
+    public static float archerySave(Player player) {
+        return ARCHERY_SAVE * mastery(player, Talent.ARCHERY);
+    }
+
+    /** Bergbau: um welchen Anteil die Spitzhacke schneller abbaut (40 Punkte: 60 %). */
+    public static float miningSpeed(Player player) {
+        return share(player, Talent.MINING);
+    }
+
+    /** Bergbau in der Meisterschaft: Aussicht auf ein zweites Erz (40 Punkte: 15 %). */
+    public static float miningDouble(Player player) {
+        return MINING_DOUBLE * mastery(player, Talent.MINING);
+    }
+
+    /** Holzfällen: um welchen Anteil die Axt Stämme schneller fällt (40 Punkte: 75 %). */
+    public static float woodSpeed(Player player) {
+        return share(player, Talent.WOODCUTTING);
+    }
+
+    /** Holzfällen in der Meisterschaft: Aussicht auf einen Stamm mehr (40 Punkte: 20 %). */
+    public static float woodExtra(Player player) {
+        return WOOD_EXTRA * mastery(player, Talent.WOODCUTTING);
+    }
+
+    /** Ackerbau: Aussicht auf eine Ernte mehr (40 Punkte: 80 %). */
+    public static float farmingExtra(Player player) {
+        return share(player, Talent.FARMING);
+    }
+
+    /** Ackerbau in der Meisterschaft: Aussicht, dass gleich wieder ausgesät wird (40 Punkte: 50 %). */
+    public static float farmingReplant(Player player) {
+        return FARM_REPLANT * mastery(player, Talent.FARMING);
+    }
 
     /** Rüstungshärte durch die Meisterschaft der Zähigkeit: +0,25 je Punkt über {@value #MASTERY}. */
     public static final double MASTERY_TOUGHNESS = 0.25;
@@ -289,6 +398,63 @@ public final class HeroLevel {
     }
 
     /**
+     * Die Titel hinter dem Unsterblichen (seit 1.11): Der Unsterbliche bleibt der letzte Rang, aber alle fünfzig Stufen bis
+     * 500 erwirbt er einen Titel – mit eigenem Siegel auf dem Heldenweg und im Charakterfenster. Titel bringen keine Punkte;
+     * sie zeigen, wie weit einer gegangen ist.
+     */
+    public enum Title implements StringRepresentable {
+        LIGHTBRINGER(250, 0xFFFFF0A0),
+        DRAGONSLAYER(300, 0xFFFF8A6A),
+        SUNWARDEN(350, 0xFFFFB84A),
+        STARFORGER(400, 0xFFC0B0FF),
+        WORLDKEEPER(450, 0xFF7AE8D8),
+        ETERNAL(500, 0xFFFFF4E0);
+
+        private final int minLevel;
+        private final int color;
+
+        Title(int minLevel, int color) {
+            this.minLevel = minLevel;
+            this.color = color;
+        }
+
+        /** Ab dieser Heldenstufe. */
+        public int minLevel() {
+            return this.minLevel;
+        }
+
+        /** Die Farbe des Titels (ARGB). */
+        public int color() {
+            return this.color;
+        }
+
+        /** Sein Siegel ({@code textures/gui/sprites/hero/title/<name>.png}). */
+        public Identifier sprite() {
+            return KingdomsAtWar.id("hero/title/" + this.getSerializedName());
+        }
+
+        /** Der höchste Titel, den diese Stufe trägt (oder null). */
+        public static @org.jspecify.annotations.Nullable Title of(int level) {
+            Title title = null;
+            for (Title t : values()) {
+                if (level >= t.minLevel) {
+                    title = t;
+                }
+            }
+            return title;
+        }
+
+        @Override
+        public String getSerializedName() {
+            return this.name().toLowerCase(Locale.ROOT);
+        }
+
+        public String translationKey() {
+            return "hero.kingdomsatwar.title." + this.getSerializedName();
+        }
+    }
+
+    /**
      * Was der Held gesammelt hat: Heldenerfahrung, die Punkte in jedem Talent (in der Reihenfolge von {@link Talent}) und
      * wie viele Biome er schon entdeckt hat.
      */
@@ -325,9 +491,20 @@ public final class HeroLevel {
             return levelFor(this.experience);
         }
 
-        /** Verteilte Punkte. */
+        /** Verteilte Talentpunkte (die Kampftalente). */
         public int spent() {
-            return this.talents.stream().mapToInt(Integer::intValue).sum();
+            return this.spent(Pot.COMBAT);
+        }
+
+        /** Verteilte Punkte eines Topfs. */
+        public int spent(Pot pot) {
+            int sum = 0;
+            for (Talent talent : Talent.values()) {
+                if (talent.pot() == pot) {
+                    sum += this.points(talent);
+                }
+            }
+            return sum;
         }
 
         /** Sein Rang. */
@@ -335,19 +512,45 @@ public final class HeroLevel {
             return Rank.of(this.level());
         }
 
+        /** Sein Titel hinter dem Unsterblichen (oder null). */
+        public @org.jspecify.annotations.Nullable Title title() {
+            return Title.of(this.level());
+        }
+
         /** Alle Talentpunkte, die seine Stufe und seine Ränge hergeben. */
         public int earned() {
             return pointsFor(this.level());
         }
 
-        /** Noch zu verteilende Talentpunkte. */
+        /** Alle Punkte eines Topfs, die seine Stufe hergibt. */
+        public int earned(Pot pot) {
+            return pot == Pot.COMBAT ? pointsFor(this.level()) : craftPointsFor(this.level());
+        }
+
+        /** Noch zu verteilende Talentpunkte (Kampf). */
         public int unspent() {
-            return Math.max(0, this.earned() - this.spent());
+            return this.unspent(Pot.COMBAT);
+        }
+
+        /** Noch zu verteilende Punkte eines Topfs. */
+        public int unspent(Pot pot) {
+            return Math.max(0, this.earned(pot) - this.spent(pot));
         }
 
         Hero with(Talent talent, int points) {
             List<Integer> list = new ArrayList<>(this.talents);
             list.set(talent.ordinal(), points);
+            return new Hero(this.experience, list, this.discoveries);
+        }
+
+        /** Derselbe Held mit leerem Topf (alle Punkte dieses Topfs zurück). */
+        Hero without(Pot pot) {
+            List<Integer> list = new ArrayList<>(this.talents);
+            for (Talent talent : Talent.values()) {
+                if (talent.pot() == pot) {
+                    list.set(talent.ordinal(), 0);
+                }
+            }
             return new Hero(this.experience, list, this.discoveries);
         }
     }
@@ -476,6 +679,11 @@ public final class HeroLevel {
         return might(level) + RANK_BONUS * Rank.of(level).ordinal();
     }
 
+    /** Handwerkspunkte auf dieser Stufe (seit 1.11): einer je {@value #CRAFT_EVERY} Stufen – auf Stufe 500 also 125. */
+    public static int craftPointsFor(int level) {
+        return Math.max(1, Math.min(level, MAX_LEVEL)) / CRAFT_EVERY;
+    }
+
     public static int levelFor(int experience) {
         int level = 1;
         while (level < MAX_LEVEL && experience >= total(level + 1)) {
@@ -587,6 +795,20 @@ public final class HeroLevel {
             if (rank == Rank.IMMORTAL) {
                 player.sendSystemMessage(Component.translatable("hero.kingdomsatwar.reward.immortal", IMMORTAL_MINUTES)
                         .withStyle(ChatFormatting.GOLD));
+            }
+        }
+        // neue Titel und Fähigkeiten auf dem Weg
+        Title title = Title.of(level);
+        if (title != null && title != Title.of(from)) {
+            world.playSound(null, x, y, z, SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 0.8f, 1.3f);
+            player.sendSystemMessage(Component.translatable("hero.kingdomsatwar.title_up", Component.translatable(title.translationKey())
+                    .withColor(title.color() & 0xFFFFFF).withStyle(ChatFormatting.BOLD)).withStyle(ChatFormatting.GOLD));
+        }
+        for (HeroAbility ability : HeroAbility.values()) {
+            if (ability.level() > from && ability.level() <= level) {
+                player.sendSystemMessage(Component.translatable("hero.kingdomsatwar.ability_up", Component.translatable(ability.translationKey())
+                        .withColor(ability.color() & 0xFFFFFF).withStyle(ChatFormatting.BOLD), Component.keybind("key.kingdomsatwar.ability")
+                        .copy().withStyle(ChatFormatting.YELLOW)).withStyle(ChatFormatting.AQUA));
             }
         }
         io.github.sirschrolli.kingdomsatwar.network.ModNetwork.send(player,
@@ -709,7 +931,7 @@ public final class HeroLevel {
     /** Einen Talentpunkt in {@code talent} stecken (wenn noch einer frei ist und das Talent nicht voll). */
     public static boolean spend(ServerPlayer player, Talent talent) {
         Hero hero = of(player);
-        if (hero.unspent() <= 0 || hero.points(talent) >= MAX_TALENT) {
+        if (hero.unspent(talent.pot()) <= 0 || hero.points(talent) >= MAX_TALENT) {
             return false;
         }
         player.setData(ModAttachments.HERO, hero.with(talent, hero.points(talent) + 1));
@@ -719,22 +941,32 @@ public final class HeroLevel {
         return true;
     }
 
-    /** Was das Neuverteilen kostet (in Bronze). */
+    /** Was das Neuverteilen der Kampftalente kostet (in Bronze). */
     public static int resetCost(Hero hero) {
-        return hero.spent() * RESET_PER_POINT;
+        return resetCost(hero, Pot.COMBAT);
     }
 
-    /** Alle Punkte zurück – gegen eine Silbermünze je Punkt. */
+    /** Was das Neuverteilen eines Topfs kostet (in Bronze). */
+    public static int resetCost(Hero hero, Pot pot) {
+        return hero.spent(pot) * RESET_PER_POINT;
+    }
+
+    /** Alle Talentpunkte (Kampf) zurück – gegen eine Silbermünze je Punkt. */
     public static boolean reset(ServerPlayer player) {
+        return reset(player, Pot.COMBAT);
+    }
+
+    /** Alle Punkte eines Topfs zurück – gegen eine Silbermünze je Punkt (der andere Topf bleibt, wie er ist). */
+    public static boolean reset(ServerPlayer player, Pot pot) {
         Hero hero = of(player);
-        int cost = resetCost(hero);
-        if (hero.spent() == 0 || !player.hasInfiniteMaterials() && !Coins.canAfford(player, cost)) {
+        int cost = resetCost(hero, pot);
+        if (hero.spent(pot) == 0 || !player.hasInfiniteMaterials() && !Coins.canAfford(player, cost)) {
             return false;
         }
         if (!player.hasInfiniteMaterials()) {
             Coins.pay(player, cost);
         }
-        player.setData(ModAttachments.HERO, new Hero(hero.experience(), List.of(), hero.discoveries()));
+        player.setData(ModAttachments.HERO, hero.without(pot));
         apply(player);
         player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 1.0f, 0.9f);
         return true;
@@ -1017,13 +1249,18 @@ public final class HeroLevel {
      * Stufe, und ein Talent fasste weniger Punkte), bekommt der Held seine Punkte kostenlos zurück und verteilt neu.
      */
     public static boolean settle(ServerPlayer player) {
-        Hero hero = of(player);
-        if (hero.spent() <= hero.earned()) {
-            return false;
+        boolean settled = false;
+        for (Pot pot : Pot.values()) {
+            Hero hero = of(player);
+            if (hero.spent(pot) <= hero.earned(pot)) {
+                continue;
+            }
+            player.setData(ModAttachments.HERO, hero.without(pot));
+            player.sendSystemMessage(Component.translatable(pot == Pot.COMBAT ? "hero.kingdomsatwar.settled" : "hero.kingdomsatwar.settled.craft",
+                    hero.level()).withStyle(ChatFormatting.GOLD));
+            settled = true;
         }
-        player.setData(ModAttachments.HERO, new Hero(hero.experience(), List.of(), hero.discoveries()));
-        player.sendSystemMessage(Component.translatable("hero.kingdomsatwar.settled", hero.level()).withStyle(ChatFormatting.GOLD));
-        return true;
+        return settled;
     }
 
     @SubscribeEvent

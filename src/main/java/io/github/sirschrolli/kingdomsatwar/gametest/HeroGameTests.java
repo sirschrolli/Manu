@@ -421,8 +421,8 @@ final class HeroGameTests {
         helper.assertValueEqual(HeroLevel.pointsFor(100), 39 + 5 * HeroLevel.RANK_BONUS, "Talentpunkte auf Stufe 100");
         helper.assertValueEqual(HeroLevel.pointsFor(200), 79 + 10 * HeroLevel.RANK_BONUS, "Talentpunkte auf Stufe 200");
         helper.assertValueEqual(HeroLevel.pointsFor(500), 199 + 10 * HeroLevel.RANK_BONUS, "Talentpunkte auf Stufe 500 (wie bisher auf 200)");
-        helper.assertTrue(HeroLevel.pointsFor(HeroLevel.MAX_LEVEL) < HeroLevel.Talent.values().length * HeroLevel.MAX_TALENT,
-                "mit allen Punkten ließe sich jedes Talent meistern");
+        helper.assertTrue(HeroLevel.pointsFor(HeroLevel.MAX_LEVEL) < HeroLevel.Talent.of(HeroLevel.Pot.COMBAT).size() * HeroLevel.MAX_TALENT,
+                "mit allen Punkten ließe sich jedes Kampftalent meistern");
         helper.succeed();
     }
 
@@ -447,12 +447,16 @@ final class HeroGameTests {
             helper.assertTrue(!HeroLevel.spend(player, HeroLevel.Talent.STRENGTH), "Punkt ohne Heldenstufe");
             HeroLevel.award(player, HeroLevel.total(19));
             helper.assertValueEqual(HeroLevel.of(player).level(), 19, "Heldenstufe nach der Erfahrung");
-            helper.assertValueEqual(HeroLevel.pointsFor(19), HeroLevel.Talent.values().length, "Talentpunkte auf Stufe 19 (je Talent einer)");
+            helper.assertValueEqual(HeroLevel.pointsFor(19), HeroLevel.Talent.of(HeroLevel.Pot.COMBAT).size(),
+                    "Talentpunkte auf Stufe 19 (je Kampftalent einer)");
+            helper.assertValueEqual(HeroLevel.craftPointsFor(19), HeroLevel.Talent.of(HeroLevel.Pot.CRAFT).size(),
+                    "Handwerkspunkte auf Stufe 19 (je Handwerk einer)");
             helper.assertValueEqual(player.totalExperience, vanilla, "die Minecraft-Erfahrung darf sich nicht ändern");
             for (HeroLevel.Talent talent : HeroLevel.Talent.values()) {
                 helper.assertTrue(HeroLevel.spend(player, talent), "Punkt für " + talent + " geht nicht");
             }
             helper.assertTrue(!HeroLevel.spend(player, HeroLevel.Talent.STRENGTH), "mehr Punkte als die Stufe hergibt");
+            helper.assertTrue(!HeroLevel.spend(player, HeroLevel.Talent.MINING), "mehr Handwerkspunkte als die Stufe hergibt");
             double might = HeroLevel.levelDamage(19);
             helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - (damage + 0.3 + might)) < 1.0e-6, "Stärke");
             helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.MAX_HEALTH) - (health + 1.0 + HeroLevel.levelHealth(19))) < 1.0e-6,
@@ -490,6 +494,8 @@ final class HeroGameTests {
             helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player), before - cost, "Münzen nach dem Neuverteilen");
             HeroLevel.Hero hero = HeroLevel.of(player);
             helper.assertTrue(hero.spent() == 0 && hero.unspent() == HeroLevel.pointsFor(hero.level()), "nach dem Neuverteilen sind alle Punkte frei");
+            helper.assertTrue(hero.spent(HeroLevel.Pot.CRAFT) == HeroLevel.Talent.of(HeroLevel.Pot.CRAFT).size(),
+                    "das Neuverteilen der Kampftalente nimmt auch das Handwerk zurück");
             helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - (damage + mightNow)) < 1.0e-6,
                     "Stärke nach dem Neuverteilen (die Heldenkraft bleibt)");
             helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.MAX_HEALTH) - (health + HeroLevel.levelHealth(hero.level()))) < 1.0e-6,

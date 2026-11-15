@@ -30,7 +30,8 @@ import com.mojang.blaze3d.platform.InputConstants;
  *       Wolkenpalast, ein Koloss, eine Sternwarte und die Himmelszitadelle mit ihrem Lichtring).</li>
  *   <li>Der Weg aus Steinen schlängelt sich von Stufe 1 bis 500 (bis 1.9: 200); jede Stufe ein Stein, jede zehnte ein
  *       großer, jeder Rang sein Abzeichen mit Band und Belohnung – hinter dem Unsterblichen (200) geht er im Licht seines
- *       Rangs weiter bis zum Polarlicht am Ende. Gegangen ist er golden und Licht fließt darauf zum Helden; voraus liegt
+ *       Rangs weiter bis zum Polarlicht am Ende, alle fünfzig Stufen ein Titelstein mit seinem Siegel (seit 1.11); wo eine
+ *       Fähigkeit freigeschaltet wird, schwebt ihr Bild über dem Stein. Gegangen ist er golden und Licht fließt darauf zum Helden; voraus liegt
  *       er im Nebel.</li>
  *   <li>Über der eigenen Stufe schwebt der Kopf des Helden in einem Goldrahmen, das Stück bis zur nächsten Stufe leuchtet
  *       so weit, wie er gekommen ist.</li>
@@ -338,7 +339,29 @@ public class HeroPathScreen extends Screen {
             boolean done = level <= lit;
             boolean current = level == hero.level() && !this.intro;
             HeroLevel.Rank rank = rankAt(level);
-            if (rank != null) {
+            HeroLevel.Title title = titleAt(level);
+            io.github.sirschrolli.kingdomsatwar.hero.HeroAbility ability = io.github.sirschrolli.kingdomsatwar.hero.HeroAbility.unlockedAt(level);
+            if (ability != null) {
+                // eine neue Fähigkeit: ihr Bild schwebt hoch über dem Stein
+                float bob = Mth.sin(time * 1.7f + level) * 2.0f;
+                float ay = sy - (rank != null || title != null ? 64 : 40) + bob;
+                HeroGui.light(g, HeroGui.GLOW, sx, ay, 40.0f, 0.0f, ability.color(), done ? 0.55f : 0.25f);
+                g.blitSprite(RenderPipelines.GUI_TEXTURED, ability.icon(), Math.round(sx - 10), Math.round(ay - 10), 20, 20, done ? 0xFFFFFFFF : 0xFF77708A);
+                g.fill(Math.round(sx), Math.round(ay + 11), Math.round(sx) + 1, Math.round(sy - (rank != null || title != null ? 44 : 9)),
+                        done ? 0x80F2C14E : 0x405A5468);
+                if (Math.abs(mouseX - sx) <= 11 && Math.abs(mouseY - ay) <= 11) {
+                    tooltip = this.abilityTooltip(ability, hero);
+                }
+            }
+            if (title != null) {
+                if (done) {
+                    HeroGui.lightRect(g, HeroGui.GLOW, sx, sy - 70, 30.0f, 200.0f, title.color(), 0.3f + 0.1f * Mth.sin(time * 2.0f + level));
+                }
+                this.drawTitleNode(g, title, sx, sy, done, current, time);
+                if (Math.abs(mouseX - sx) <= 18 && Math.abs(mouseY - sy) <= 18) {
+                    tooltip = this.titleTooltip(title, hero);
+                }
+            } else if (rank != null) {
                 if (done) {
                     HeroGui.lightRect(g, HeroGui.GLOW, sx, sy - 70, 30.0f, 200.0f, HeroGui.rankColor(rank), 0.3f + 0.1f * Mth.sin(time * 2.0f + level));
                 }
@@ -395,6 +418,63 @@ public class HeroPathScreen extends Screen {
         if (tooltip != null) {
             g.setTooltipForNextFrame(this.font, this.lines(tooltip), mouseX, mouseY);
         }
+    }
+
+    private static HeroLevel.@org.jspecify.annotations.Nullable Title titleAt(int level) {
+        for (HeroLevel.Title title : HeroLevel.Title.values()) {
+            if (title.minLevel() == level) {
+                return title;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Ein Titelstein (seit 1.11, hinter dem Unsterblichen alle fünfzig Stufen): das Siegel des Titels in einem Lichtkranz,
+     * darunter das Band mit dem Namen, darüber „Titel“.
+     */
+    private void drawTitleNode(GuiGraphicsExtractor g, HeroLevel.Title title, float x, float y, boolean done, boolean here, float time) {
+        int tint = done ? 0xFFFFFFFF : 0xFF77708A;
+        if (done) {
+            HeroGui.light(g, HeroGui.RAYS, x, y, 64.0f, time * 0.25f, title.color(), 0.35f);
+        }
+        HeroGui.light(g, HeroGui.GLOW, x, y, 46.0f, 0.0f, title.color(), done ? 0.6f : 0.2f);
+        g.blitSprite(RenderPipelines.GUI_TEXTURED, title.sprite(), Math.round(x - 16), Math.round(y - 16), 32, 32, tint);
+        Component name = Component.translatable(title.translationKey());
+        int w = this.font.width(name) + 22;
+        int by = Math.round(y + 20);
+        g.blitSprite(RenderPipelines.GUI_TEXTURED, BANNER, Math.round(x - w / 2.0f), by, w, 14, done ? 0xFFFFFFFF : 0xFF8A8499);
+        g.text(this.font, name, Math.round(x - this.font.width(name) / 2.0f) + 1, by + 4, 0xFF0B0910, false);
+        g.text(this.font, name, Math.round(x - this.font.width(name) / 2.0f), by + 3, done ? title.color() : 0xFFB8B0C8, false);
+        float bob = Mth.sin(time * 2.0f + title.ordinal()) * 1.5f + (here ? 76.0f : 0.0f);
+        HeroGui.centered(g, this.font, Component.translatable("gui.kingdomsatwar.path.reward.title"), x, y - 36 + bob, done ? title.color() : 0xFFB8B0C8,
+                1.0f);
+    }
+
+    private List<Component> titleTooltip(HeroLevel.Title title, HeroLevel.Hero hero) {
+        List<Component> lines = new ArrayList<>();
+        boolean got = hero.level() >= title.minLevel();
+        lines.add(Component.translatable(title.translationKey()).withColor(title.color() & 0xFFFFFF).withStyle(ChatFormatting.BOLD));
+        lines.add(Component.translatable("gui.kingdomsatwar.path.title_from", title.minLevel(), HeroGui.number(HeroLevel.total(title.minLevel())))
+                .withStyle(ChatFormatting.GRAY));
+        lines.add(Component.translatable("gui.kingdomsatwar.path.title_hint").withStyle(ChatFormatting.DARK_AQUA));
+        lines.add(got ? Component.translatable("gui.kingdomsatwar.character.rank.reached").withStyle(ChatFormatting.GOLD)
+                : Component.translatable("gui.kingdomsatwar.path.missing", HeroGui.number(HeroLevel.total(title.minLevel()) - hero.experience()))
+                        .withStyle(ChatFormatting.DARK_GRAY));
+        return lines;
+    }
+
+    private List<Component> abilityTooltip(io.github.sirschrolli.kingdomsatwar.hero.HeroAbility ability, HeroLevel.Hero hero) {
+        List<Component> lines = new ArrayList<>();
+        boolean got = ability.unlocked(hero.level());
+        lines.add(Component.translatable("gui.kingdomsatwar.path.ability", Component.translatable(ability.translationKey())
+                .withColor(ability.color() & 0xFFFFFF)).withStyle(ChatFormatting.BOLD));
+        lines.add(Component.translatable(ability.translationKey() + ".desc").withStyle(ChatFormatting.GRAY));
+        lines.add(Component.translatable("gui.kingdomsatwar.character.ability.cooldown", ability.cooldownSeconds()).withStyle(ChatFormatting.DARK_AQUA));
+        lines.add(got ? Component.translatable("gui.kingdomsatwar.character.rank.reached").withStyle(ChatFormatting.GOLD)
+                : Component.translatable("gui.kingdomsatwar.path.missing", HeroGui.number(HeroLevel.total(ability.level()) - hero.experience()))
+                        .withStyle(ChatFormatting.DARK_GRAY));
+        return lines;
     }
 
     private static HeroLevel.Rank rankAt(int level) {
@@ -539,6 +619,9 @@ public class HeroPathScreen extends Screen {
         }
         if (HeroLevel.pointsFor(level) > HeroLevel.pointsFor(level - 1)) {
             lines.add(Component.translatable("gui.kingdomsatwar.path.point").withStyle(ChatFormatting.YELLOW));
+        }
+        if (HeroLevel.craftPointsFor(level) > HeroLevel.craftPointsFor(level - 1)) {
+            lines.add(Component.translatable("gui.kingdomsatwar.path.craft_point").withStyle(ChatFormatting.AQUA));
         }
         Component might = HeroGui.might(level - 1, level);
         if (level > 1 && !might.getString().isEmpty()) {

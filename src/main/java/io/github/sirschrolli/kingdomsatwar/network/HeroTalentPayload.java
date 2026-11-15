@@ -10,11 +10,14 @@ import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 /**
- * Spiel an Server: Der Spieler steckt einen Talentpunkt in das Talent {@code talent} (Nummer in {@link HeroLevel.Talent})
- * – oder verteilt mit {@code talent = -1} alle Punkte neu. Der Server prüft alles noch einmal.
+ * Spiel an Server: Der Spieler steckt einen Punkt in das Talent {@code talent} (Nummer in {@link HeroLevel.Talent}) – oder
+ * verteilt mit {@code talent = -1} alle Talentpunkte (Kampf), mit {@code -2} alle Handwerkspunkte neu. Der Server prüft alles
+ * noch einmal.
  */
 public record HeroTalentPayload(int talent) implements CustomPacketPayload {
     public static final int RESET = -1;
+    /** Die Handwerkspunkte neu verteilen (seit 1.11). */
+    public static final int RESET_CRAFT = -2;
     public static final CustomPacketPayload.Type<HeroTalentPayload> TYPE = new CustomPacketPayload.Type<>(KingdomsAtWar.id("hero_talent"));
     public static final StreamCodec<RegistryFriendlyByteBuf, HeroTalentPayload> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_INT, HeroTalentPayload::talent, HeroTalentPayload::new);
@@ -30,7 +33,9 @@ public record HeroTalentPayload(int talent) implements CustomPacketPayload {
         }
         HeroLevel.Talent[] talents = HeroLevel.Talent.values();
         if (payload.talent() == RESET) {
-            HeroLevel.reset(player);
+            HeroLevel.reset(player, HeroLevel.Pot.COMBAT);
+        } else if (payload.talent() == RESET_CRAFT) {
+            HeroLevel.reset(player, HeroLevel.Pot.CRAFT);
         } else if (payload.talent() >= 0 && payload.talent() < talents.length) {
             HeroLevel.spend(player, talents[payload.talent()]);
         }
