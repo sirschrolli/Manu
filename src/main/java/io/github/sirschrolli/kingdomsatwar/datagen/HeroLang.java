@@ -258,6 +258,19 @@ final class HeroLang {
         ability(text, "last_stand", "Last Stand", "Letztes Gefecht",
                 "For eight seconds you cannot fall below half a heart – then you are exhausted for a while.",
                 "Acht Sekunden lang sinkst du nicht unter ein halbes Herz – danach bist du eine Weile erschöpft.");
+        // kurz für die Mitte des Fähigkeitenrads
+        text.add("hero.kingdomsatwar.ability.sprint.short", "Six seconds of speed and higher jumps", "Sechs Sekunden schneller, höhere Sprünge");
+        text.add("hero.kingdomsatwar.ability.war_cry.short", "Monsters around weakened and slowed, allies stronger",
+                "Monster ringsum schwach und langsam, Verbündete stärker");
+        text.add("hero.kingdomsatwar.ability.iron_skin.short", "Six seconds of much less damage", "Sechs Sekunden viel weniger Schaden");
+        text.add("hero.kingdomsatwar.ability.second_wind.short", "Heals three tenths and clears harmful effects",
+                "Heilt drei Zehntel und nimmt schädliche Wirkungen");
+        text.add("hero.kingdomsatwar.ability.whirlwind.short", "Spinning strike for one and a half times the damage",
+                "Rundumschlag mit anderthalbfachem Schaden");
+        text.add("hero.kingdomsatwar.ability.eagle_eye.short", "Foes glow through walls for twelve seconds",
+                "Feinde leuchten zwölf Sekunden durch Wände");
+        text.add("hero.kingdomsatwar.ability.skyfall.short", "Leap ahead – a shockwave where you land", "Satz nach vorn – Schockwelle bei der Landung");
+        text.add("hero.kingdomsatwar.ability.last_stand.short", "Eight seconds unbeatable, then exhausted", "Acht Sekunden unbesiegbar, danach erschöpft");
         text.add("hero.kingdomsatwar.ability.locked", "%s: from hero level %s", "%s: ab Heldenstufe %s");
         text.add("hero.kingdomsatwar.ability.resting", "%s is resting – %s s", "%s ruht noch %s s");
         text.add("hero.kingdomsatwar.ability.none", "Your first ability comes at hero level %s", "Deine erste Fähigkeit kommt auf Heldenstufe %s");
@@ -292,7 +305,7 @@ final class HeroLang {
                 "Über einer Fähigkeit loslassen: Sie liegt dann auf der Taste");
         text.add("gui.kingdomsatwar.ability_wheel.hint_click", "Click an ability – right-click or Esc closes",
                 "Eine Fähigkeit anklicken – Rechtsklick oder Esc schließt");
-        text.add("gui.kingdomsatwar.ability_wheel.cooldown", "Rests %s s after use", "Ruht %s s nach dem Einsatz");
+        text.add("gui.kingdomsatwar.ability_wheel.cooldown", "Cooldown %s s", "Abklingzeit %s s");
         text.add("gui.kingdomsatwar.ability_wheel.locked", "from hero level %s", "ab Heldenstufe %s");
         text.add("gui.kingdomsatwar.ability_wheel.resting", "resting: %s s", "ruht noch %s s");
         text.add("gui.kingdomsatwar.ability_wheel.ready", "Ready", "Bereit");

@@ -38,6 +38,8 @@ public class AbilityWheelScreen extends Screen {
     private static final int TEX = 256;
     private static final int SIZE = 200;
     private static final int RADIUS = 74;
+    /** Halbmesser der dunklen Scheibe in der Mitte. */
+    private static final float INNER = 47.0f;
     private static final int DEAD_ZONE = 22;
     private static final int RUNES = 24;
     private static final HeroAbility[] ORDER = HeroAbility.values();
@@ -229,27 +231,46 @@ public class AbilityWheelScreen extends Screen {
         HeroAbility ability = ORDER[index];
         boolean unlocked = ability.unlocked(level);
         int alpha = Math.round(255 * open);
-        int y = -34;
-        g.centeredText(this.font, Component.translatable(ability.translationKey()), 0, y, ARGB.color(alpha, unlocked ? ability.color() : 0x9A90A8));
-        y += 11;
-        g.centeredText(this.font, unlocked ? Component.translatable("gui.kingdomsatwar.ability_wheel.cooldown", ability.cooldownSeconds())
-                : Component.translatable("gui.kingdomsatwar.ability_wheel.locked", ability.level()), 0, y, ARGB.color(alpha, unlocked ? GOLD : MUTED));
-        y += 13;
-        List<FormattedCharSequence> lines = this.font.split(Component.translatable(ability.translationKey() + ".desc"), 120);
-        g.pose().pushMatrix();
-        g.pose().scale(0.75f, 0.75f);
-        int ly = Math.round(y / 0.75f);
-        for (FormattedCharSequence line : lines.subList(0, Math.min(4, lines.size()))) {
-            g.centeredText(this.font, line, 0, ly, ARGB.color(alpha, unlocked ? TEXT : MUTED));
-            ly += 10;
-        }
-        g.pose().popMatrix();
+        // kurz, was sie tut (die ganze Beschreibung steht im Charakterfenster)
+        List<FormattedCharSequence> lines = this.font.split(Component.translatable(ability.translationKey() + ".short"), 108);
+        lines = lines.subList(0, Math.min(3, lines.size()));
+        Component cooldown = unlocked ? Component.translatable("gui.kingdomsatwar.ability_wheel.cooldown", ability.cooldownSeconds())
+                : Component.translatable("gui.kingdomsatwar.ability_wheel.locked", ability.level());
+        Component status = null;
+        int statusColor = 0;
         if (unlocked) {
             long rest = HeroAbilities.cooldown(player, ability);
-            Component status = rest > 0L ? Component.translatable("gui.kingdomsatwar.ability_wheel.resting", (rest + 19L) / 20L)
+            status = rest > 0L ? Component.translatable("gui.kingdomsatwar.ability_wheel.resting", (rest + 19L) / 20L)
                     : Component.translatable("gui.kingdomsatwar.ability_wheel.ready").withStyle(ChatFormatting.BOLD);
-            g.centeredText(this.font, status, 0, 30, ARGB.color(alpha, rest > 0L ? 0xFFE0A0 : 0x9CF08A));
+            statusColor = rest > 0L ? 0xFFE0A0 : 0x9CF08A;
         }
+        float y = -(13.0f + lines.size() * 7.5f + 3.0f + 7.0f + (status != null ? 14.0f : 0.0f)) / 2.0f;
+        this.fitted(g, Component.translatable(ability.translationKey()).getVisualOrderText(), y, 1.0f,
+                ARGB.color(alpha, unlocked ? ability.color() : 0x9A90A8));
+        y += 13.0f;
+        for (FormattedCharSequence line : lines) {
+            this.fitted(g, line, y, 0.75f, ARGB.color(alpha, unlocked ? TEXT : MUTED));
+            y += 7.5f;
+        }
+        y += 3.0f;
+        this.fitted(g, cooldown.getVisualOrderText(), y, 0.75f, ARGB.color(alpha, unlocked ? GOLD : MUTED));
+        y += 12.0f;
+        if (status != null) {
+            this.fitted(g, status.getVisualOrderText(), y, 1.0f, ARGB.color(alpha, statusColor));
+        }
+    }
+
+    /** Eine Zeile mittig auf Höhe {@code y} – kleiner, wenn sie dort nicht in die dunkle Scheibe passt. */
+    private void fitted(GuiGraphicsExtractor g, FormattedCharSequence text, float y, float scale, int color) {
+        int width = Math.max(1, this.font.width(text));
+        float edge = Math.max(Math.abs(y), Math.abs(y + 9.0f * scale));
+        float room = 2.0f * Mth.sqrt(Math.max(0.0f, INNER * INNER - edge * edge)) - 6.0f;
+        float fit = Math.max(0.4f, Math.min(scale, room / width));
+        g.pose().pushMatrix();
+        g.pose().translate(0.0f, y + 4.5f * (scale - fit));
+        g.pose().scale(fit, fit);
+        g.centeredText(this.font, text, 0, 0, color);
+        g.pose().popMatrix();
     }
 
     // =====================================================================================
