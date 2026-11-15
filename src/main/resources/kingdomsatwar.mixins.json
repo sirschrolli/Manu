@@ -18,6 +18,7 @@
     "client.EnchantmentScreenMixin",
     "client.FirstPersonHandsAccess",
     "client.FishingHookRendererMixin",
+    "client.HudTitleMixin",
     "client.LivingEntityRendererInvoker",
     "client.SkullBlockRendererMixin"
   ],

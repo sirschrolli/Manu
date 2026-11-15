@@ -207,6 +207,7 @@ public final class ModGameTests {
         SordinGameTests.init(); // seit 1.7: Sordin, der Kantor der Stille, sein Orgelpult und die Stimmgabel
         RobberKnightGameTests.init(); // seit 1.8: Kuno von Rabenfels, der Raubritter, sein Rabenbanner und der Morgenstern
         VentorGameTests.init(); // seit 1.9: Ventor, der Gladiator der Winde, das Arenasiegel, Sturmdreizack und Wurfnetz
+        QuetzaraGameTests.init(); // seit 1.10: Quetzara, die Gefiederte Schlange, der Schlangenaltar und der Schlangenzahn
         AnniGameTests.init();     // Anni der Troll, Fehlerkern, Wiederherstellung als Anni 2.0, Bannhammer, Fehlerflügel
         BeastGameTests.init();    // die neuen Monster: Werwolf, Moorschlurfer, Glutwurm, Aschengeist
         GearGameTests.init();     // Waffen und Rüstungen aus Monsterteilen
@@ -308,6 +309,7 @@ public final class ModGameTests {
         SordinGameTests.register(event, environment);
         RobberKnightGameTests.register(event, environment);
         VentorGameTests.register(event, environment);
+        QuetzaraGameTests.register(event, environment);
         AnniGameTests.register(event, environment);
         BeastGameTests.register(event, environment);
         GearGameTests.register(event, environment);

@@ -18,6 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Ein Klumpen Gift, den Quetzara spuckt (seit 1.10): Er fliegt im Bogen und zerplatzt beim Aufschlag zu einer Giftwolke; wen
@@ -90,7 +91,7 @@ public class VenomGlobEntity extends ThrowableProjectile {
     }
 
     /** Die Giftwolke: Wer darin steht, wird vergiftet; sie schrumpft und verweht nach sechs Sekunden. */
-    public static void splash(ServerLevel level, Vec3 at, LivingEntity owner) {
+    public static void splash(ServerLevel level, Vec3 at, @Nullable LivingEntity owner) {
         AreaEffectCloud cloud = new AreaEffectCloud(level, at.x, at.y, at.z);
         if (owner != null) {
             cloud.setOwner(owner);

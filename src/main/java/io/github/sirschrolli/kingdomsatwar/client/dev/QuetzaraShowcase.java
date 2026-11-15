@@ -89,12 +89,12 @@ final class QuetzaraShowcase {
         steps.add(Step.screenshot("schlangentempel"));
         // die Grube von der Empore: die Insel im Graben, darauf der Altar, um ihn schläft sie
         steps.add(Step.once(minecraft -> minecraft.options.fov().set(80)));
-        steps.add(at(stage, 0.0, -5.2, 20.0, 0.0, -12.0, 38.0));
+        steps.add(at(stage, 0.0, -4.2, 27.5, 0.0, -12.5, 41.0));
         steps.add(Step.waitTicks(40));
         steps.add(Step.screenshot("schlangengrube"));
         steps.add(Step.once(minecraft -> minecraft.options.fov().set(70)));
         // sie schläft, aus der Nähe
-        steps.add(at(stage, -4.6, -9.6, 33.4, 0.0, -11.6, 39.6));
+        steps.add(at(stage, -5.0, -7.2, 34.0, 0.0, -12.2, 40.0));
         steps.add(Step.waitTicks(20));
         steps.add(Step.screenshot("quetzara_schlaf"));
         // sie erwacht: richtet sich auf, spreizt die Krause, kreischt

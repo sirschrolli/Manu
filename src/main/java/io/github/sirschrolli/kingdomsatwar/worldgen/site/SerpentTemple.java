@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.MultifaceBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SeaPickleBlock;
 import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.SpeleothemBlock;
 import net.minecraft.world.level.block.TripWireBlock;
@@ -369,8 +370,43 @@ final class SerpentTemple {
                 this.pillar((int) Math.round(Math.sin(a) * 11.2), PIT_Z + (int) Math.round(Math.cos(a) * 11.2), a, k);
             }
             this.wallEyes();
+            this.lights();
             this.hiddenChest();
             this.overgrowth();
+        }
+
+        /**
+         * Licht für den Kampf: Meeresgurken leuchten grün auf dem Grund des Grabens, Froschlichter liegen im Ring aus gemeißeltem
+         * Stein um den Graben und im grünen Ring der Insel (bündig im Boden – die Schlange liegt darüber).
+         */
+        void lights() {
+            // zwölf Gruppen Meeresgurken im Graben (nicht unter den Brücken)
+            for (int k = 0; k < 16; k++) {
+                if (k % 4 == 0) {
+                    continue;
+                }
+                double a = Math.toRadians(22.5 * k);
+                int x = (int) Math.round(Math.sin(a) * 7.3);
+                int z = PIT_Z + (int) Math.round(Math.cos(a) * 7.3);
+                double r = radius(x, z);
+                if (r <= ISLAND_R || r > MOAT_R || Math.abs(x) <= 1 || Math.abs(z - PIT_Z) <= 1) {
+                    continue;
+                }
+                this.b.set(x, PIT_FLOOR - 1, z, Blocks.SEA_PICKLE.defaultBlockState().setValue(SeaPickleBlock.PICKLES, 4)
+                        .setValue(SeaPickleBlock.WATERLOGGED, true));
+            }
+            // acht Froschlichter im Ring um den Graben
+            for (int k = 0; k < 8; k++) {
+                double a = Math.toRadians(45.0 * k);
+                this.b.set((int) Math.round(Math.sin(a) * 9.6), PIT_FLOOR, PIT_Z + (int) Math.round(Math.cos(a) * 9.6),
+                        Blocks.VERDANT_FROGLIGHT.defaultBlockState());
+            }
+            // vier im grünen Ring der Insel
+            for (int k = 0; k < 4; k++) {
+                double a = Math.toRadians(45.0 + 90.0 * k);
+                this.b.set((int) Math.round(Math.sin(a) * 4.0), PIT_FLOOR + 1, PIT_Z + (int) Math.round(Math.cos(a) * 4.0),
+                        Blocks.VERDANT_FROGLIGHT.defaultBlockState());
+            }
         }
 
         /** Die innere Mauer: bemooster Stein, ein Fries aus grünen und goldenen Federn, oben ein Band aus gemeißeltem Stein. */

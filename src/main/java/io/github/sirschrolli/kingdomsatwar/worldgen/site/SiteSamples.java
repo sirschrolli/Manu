@@ -77,6 +77,11 @@ public final class SiteSamples {
         return origin.offset(SerpentTemple.ALTAR);
     }
 
+    /** Die Stufen der Treppe von der Empore hinab in die Grube (0: die oberste, 5: die unterste; darunter der Boden der Grube). */
+    public static BlockPos serpentStair(BlockPos origin, int step) {
+        return origin.offset(0, SerpentTemple.GALLERY_FLOOR - step, SerpentTemple.STAIRS_Z + step);
+    }
+
     /** Wo man in einem so gebauten Schlangentempel auf der Empore über der Grube steht (an der Treppe). */
     public static BlockPos serpentGallery(BlockPos origin) {
         return origin.offset(0, SerpentTemple.GALLERY_FLOOR + 1, SerpentTemple.STAIRS_Z - 1);

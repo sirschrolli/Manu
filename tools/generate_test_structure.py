@@ -17,7 +17,8 @@ ROOT = Path(__file__).resolve().parent.parent
 STRUCTURES = ROOT / "src" / "main" / "resources" / "data" / "kingdomsatwar" / "structure"
 
 DATA_VERSION = 5023  # Minecraft 26.3
-PLATFORMS = {"test_platform": (5, 3, 5), "test_arena": (9, 6, 9), "test_village": (14, 32, 14), "test_town": (48, 30, 48)}
+PLATFORMS = {"test_platform": (5, 3, 5), "test_arena": (9, 6, 9), "test_village": (14, 32, 14), "test_town": (48, 30, 48),
+             "test_temple": (40, 34, 64)}
 
 
 def write_platform(name: str, size_x: int, size_y: int, size_z: int) -> None:

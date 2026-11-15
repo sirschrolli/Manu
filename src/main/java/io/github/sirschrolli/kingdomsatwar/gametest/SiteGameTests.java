@@ -55,6 +55,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
  */
 final class SiteGameTests {
     private static final Identifier TOWN = KingdomsAtWar.id("test_town");
+    /** Größer und tiefer: der Kopf des Schlangentempels und die Grube darunter. */
+    private static final Identifier TEMPLE = KingdomsAtWar.id("test_temple");
 
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> FALLEN_STAR_PORTAL =
             ModGameTests.TEST_FUNCTIONS.register("site_fallen_star_portal", () -> SiteGameTests::fallenStarPortal);
@@ -124,7 +126,8 @@ final class SiteGameTests {
         add(event, environment, AQUEDUCT, 100);
         add(event, environment, SEA_DRAGON_AND_SHRINE, 100);
         add(event, environment, CARAVANSERAI, 100);
-        add(event, environment, SERPENT_TEMPLE, 200);
+        event.registerTest(SERPENT_TEMPLE.getId(), new FunctionGameTestInstance(SERPENT_TEMPLE.key(),
+                new TestData<>(environment, Level.OVERWORLD, TEMPLE, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         add(event, environment, WITCH_TREE, 100);
         add(event, environment, FROST_GROTTO, 100);
         add(event, environment, BANDIT_CAMP, 100);
@@ -165,11 +168,15 @@ final class SiteGameTests {
 
     /** Baut ein Bauteil in einem Zug, aber nur innerhalb des Testbereichs (die Nachbartests bleiben unberührt). */
     private static void build(GameTestHelper helper, SitePiece piece) {
+        build(helper, piece, area(helper));
+    }
+
+    /** Wie oben, in einem anderen Testbereich. */
+    private static void build(GameTestHelper helper, SitePiece piece, BoundingBox a) {
         ServerLevel level = helper.getLevel();
-        piece.postProcess(level, level.structureManager(), level.getChunkSource().getGenerator(), RandomSource.create(5), area(helper),
+        piece.postProcess(level, level.structureManager(), level.getChunkSource().getGenerator(), RandomSource.create(5), a,
                 ChunkPos.containing(piece.origin()), piece.origin());
         BoundingBox p = piece.getBoundingBox();
-        BoundingBox a = area(helper);
         if (p.intersects(a)) {
             BoundingBox box = new BoundingBox(Math.max(p.minX(), a.minX()), Math.max(p.minY(), a.minY()), Math.max(p.minZ(), a.minZ()),
                     Math.min(p.maxX(), a.maxX()), Math.min(p.maxY(), a.maxY()), Math.min(p.maxZ(), a.maxZ()));
@@ -491,18 +498,22 @@ final class SiteGameTests {
     }
 
     /**
-     * Der Schlangentempel: drei Truhen (zwei am Altar, eine versteckt), vier Pfeilwerfer mit Beute am Stolperdraht im
-     * Schlund – und die Falle löst aus, wenn jemand über den Draht geht (es fliegen Pfeile).
+     * Der Schlangentempel (seit 1.10 mit der Schlangengrube; eigener, größerer Testbereich): drei Truhen (zwei am Altar, eine
+     * versteckt), vier Pfeilwerfer mit Beute am Stolperdraht im Schlund – und die Falle löst aus, wenn jemand über den Draht
+     * geht (es fliegen Pfeile). Unten in der Grube der Schlangenaltar (das Schlangenbild blickt zur Treppe), die Augen in Kopf
+     * und Wänden, Meeresgurken im Graben und Froschlichter im Boden; die Treppe von der Empore führt bis auf den Grund.
      */
     private static void serpentTemple(GameTestHelper helper) {
-        clear(helper);
-        fill(helper, new BlockPos(0, 1, 0), new BlockPos(47, 13, 47), Blocks.DIRT.defaultBlockState());
-        fill(helper, new BlockPos(0, 14, 0), new BlockPos(47, 14, 47), Blocks.GRASS_BLOCK.defaultBlockState());
-        BlockPos o = helper.absolutePos(new BlockPos(24, 14, 6));
-        build(helper, SiteSamples.serpentTemple(o));
+        BlockPos min = new BlockPos(0, 1, 0);
+        BlockPos max = new BlockPos(39, 33, 63);
+        fill(helper, min, max, Blocks.AIR.defaultBlockState());
+        fill(helper, min, new BlockPos(39, 17, 63), Blocks.DIRT.defaultBlockState());
+        fill(helper, new BlockPos(0, 18, 0), new BlockPos(39, 18, 63), Blocks.GRASS_BLOCK.defaultBlockState());
+        BlockPos o = helper.absolutePos(new BlockPos(20, 18, 3));
+        BlockPos lo = helper.absolutePos(min);
+        BlockPos hi = helper.absolutePos(max);
+        build(helper, SiteSamples.serpentTemple(o), BoundingBox.fromCorners(lo, hi));
         List<String> problems = new ArrayList<>();
-        BlockPos lo = o.offset(-9, -10, -3);
-        BlockPos hi = o.offset(9, 12, 29);
         int chests = lootChests(helper, lo, hi, s -> s.is(Blocks.CHEST));
         if (chests != 3) {
             problems.add("Truhen: " + chests);
@@ -516,8 +527,30 @@ final class SiteGameTests {
             problems.add("Stolperdraht: " + wire);
         }
         int eyes = count(helper, lo, hi, s -> s.is(Blocks.SEA_LANTERN));
-        if (eyes != 8) {
-            problems.add("Augen: " + eyes + " Lichter");
+        if (eyes != 15) {
+            problems.add("Augen: " + eyes + " Lichter (8 im Kopf, 7 in der Grube)");
+        }
+        BlockState altar = helper.getLevel().getBlockState(SiteSamples.serpentAltar(o));
+        if (!altar.is(io.github.sirschrolli.kingdomsatwar.registry.SerpentGear.SERPENT_ALTAR.get())
+                || altar.getValue(io.github.sirschrolli.kingdomsatwar.block.serpent.SerpentAltarBlock.FACING) != net.minecraft.core.Direction.NORTH) {
+            problems.add("Schlangenaltar: " + altar);
+        }
+        int pickles = count(helper, lo, hi, s -> s.is(Blocks.SEA_PICKLE));
+        int froglights = count(helper, lo, hi, s -> s.is(Blocks.VERDANT_FROGLIGHT));
+        if (pickles != 12 || froglights != 12) {
+            problems.add("Lichter der Grube: " + pickles + " Meeresgurken, " + froglights + " Froschlichter");
+        }
+        for (int step = 0; step <= 5; step++) {
+            BlockPos s = SiteSamples.serpentStair(o, step);
+            if (!(helper.getLevel().getBlockState(s).getBlock() instanceof net.minecraft.world.level.block.StairBlock)
+                    || !helper.getLevel().getBlockState(s.above()).isAir() || !helper.getLevel().getBlockState(s.above(2)).isAir()) {
+                problems.add("Treppe in die Grube, Stufe " + step + ": " + helper.getLevel().getBlockState(s));
+            }
+        }
+        BlockPos bottom = SiteSamples.serpentStair(o, 5).offset(0, -1, 1);
+        if (helper.getLevel().getBlockState(bottom).isAir() || !helper.getLevel().getBlockState(bottom.above()).isAir()
+                || !helper.getLevel().getBlockState(bottom.above(2)).isAir()) {
+            problems.add("Am Fuß der Treppe kein Boden: " + helper.getLevel().getBlockState(bottom));
         }
         helper.assertTrue(problems.isEmpty(), String.join("; ", problems));
         // über den Draht gehen: die Falle muss auslösen
