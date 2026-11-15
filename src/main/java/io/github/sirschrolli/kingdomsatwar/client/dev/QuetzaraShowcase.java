@@ -89,7 +89,7 @@ final class QuetzaraShowcase {
         steps.add(Step.screenshot("schlangentempel"));
         // die Grube von der Empore: die Insel im Graben, darauf der Altar, um ihn schläft sie
         steps.add(Step.once(minecraft -> minecraft.options.fov().set(80)));
-        steps.add(at(stage, 0.0, -4.2, 27.5, 0.0, -12.5, 41.0));
+        steps.add(at(stage, 0.0, -7.6, 29.0, 0.0, -12.0, 40.5));
         steps.add(Step.waitTicks(40));
         steps.add(Step.screenshot("schlangengrube"));
         steps.add(Step.once(minecraft -> minecraft.options.fov().set(70)));
@@ -166,6 +166,11 @@ final class QuetzaraShowcase {
             }
         }));
         steps.add(calm(stage));
+        steps.add(Step.server(level -> {
+            if (level.getEntity(stage.serpent) instanceof QuetzaraEntity serpent) {
+                serpent.reveal();
+            }
+        }));
         steps.add(place(stage, "FEATHERS", "0,43,0,9", "0,-13,52"));
         steps.add(Step.waitTicks(20));
         steps.add(at(stage, -5.5, -9.2, 47.5, 0.0, -8.6, 44.5));

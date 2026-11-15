@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.MultifaceBlock;
-import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SeaPickleBlock;
 import net.minecraft.world.level.block.SkullBlock;
@@ -376,8 +375,9 @@ final class SerpentTemple {
         }
 
         /**
-         * Licht für den Kampf: Meeresgurken leuchten grün auf dem Grund des Grabens, Froschlichter liegen im Ring aus gemeißeltem
-         * Stein um den Graben und im grünen Ring der Insel (bündig im Boden – die Schlange liegt darüber).
+         * Licht für den Kampf: Meeresgurken leuchten grün auf dem Grund des Grabens, über dem Graben hängen acht Laternen an
+         * Ketten von der Decke, und unter Moosteppichen liegen Froschlichter im Ring um den Graben und im grünen Ring der Insel
+         * (man sieht nur ihr Licht).
          */
         void lights() {
             // zwölf Gruppen Meeresgurken im Graben (nicht unter den Brücken)
@@ -395,17 +395,30 @@ final class SerpentTemple {
                 this.b.set(x, PIT_FLOOR - 1, z, Blocks.SEA_PICKLE.defaultBlockState().setValue(SeaPickleBlock.PICKLES, 4)
                         .setValue(SeaPickleBlock.WATERLOGGED, true));
             }
-            // acht Froschlichter im Ring um den Graben
+            // acht Laternen an Ketten über dem Graben (zwischen den Brücken)
+            for (int k = 0; k < 8; k++) {
+                double a = Math.toRadians(22.5 + 45.0 * k);
+                int x = (int) Math.round(Math.sin(a) * 7.3);
+                int z = PIT_Z + (int) Math.round(Math.cos(a) * 7.3);
+                for (int y = PIT_FLOOR + 8; y < PIT_CEILING; y++) {
+                    this.b.set(x, y, z, Blocks.IRON_CHAIN.defaultBlockState());
+                }
+                this.b.set(x, PIT_FLOOR + 7, z, Blocks.LANTERN.defaultBlockState().setValue(LanternBlock.HANGING, true));
+            }
+            // acht Froschlichter im Ring um den Graben, vier im grünen Ring der Insel – unter Moos
             for (int k = 0; k < 8; k++) {
                 double a = Math.toRadians(45.0 * k);
-                this.b.set((int) Math.round(Math.sin(a) * 9.6), PIT_FLOOR, PIT_Z + (int) Math.round(Math.cos(a) * 9.6),
-                        Blocks.VERDANT_FROGLIGHT.defaultBlockState());
+                int x = (int) Math.round(Math.sin(a) * 9.6);
+                int z = PIT_Z + (int) Math.round(Math.cos(a) * 9.6);
+                this.b.set(x, PIT_FLOOR, z, Blocks.VERDANT_FROGLIGHT.defaultBlockState());
+                this.b.set(x, PIT_FLOOR + 1, z, Blocks.MOSS_CARPET.defaultBlockState());
             }
-            // vier im grünen Ring der Insel
             for (int k = 0; k < 4; k++) {
                 double a = Math.toRadians(45.0 + 90.0 * k);
-                this.b.set((int) Math.round(Math.sin(a) * 4.0), PIT_FLOOR + 1, PIT_Z + (int) Math.round(Math.cos(a) * 4.0),
-                        Blocks.VERDANT_FROGLIGHT.defaultBlockState());
+                int x = (int) Math.round(Math.sin(a) * 4.0);
+                int z = PIT_Z + (int) Math.round(Math.cos(a) * 4.0);
+                this.b.set(x, PIT_FLOOR + 1, z, Blocks.VERDANT_FROGLIGHT.defaultBlockState());
+                this.b.set(x, PIT_FLOOR + 2, z, Blocks.MOSS_CARPET.defaultBlockState());
             }
         }
 
@@ -596,17 +609,11 @@ final class SerpentTemple {
             // der Schlangenaltar
             this.b.set(ALTAR.getX(), ALTAR.getY(), ALTAR.getZ(), io.github.sirschrolli.kingdomsatwar.registry.SerpentGear.SERPENT_ALTAR.get()
                     .defaultBlockState().setValue(io.github.sirschrolli.kingdomsatwar.block.serpent.SerpentAltarBlock.FACING, Direction.NORTH));
-            // Knochen früherer Opfer
+            // Schädel früherer Opfer am Rand der Insel
             int[][] bones = {{-4, 3}, {5, -2}, {3, 4}, {-5, -2}};
             for (int i = 0; i < bones.length; i++) {
-                int x = bones[i][0];
-                int z = PIT_Z + bones[i][1];
-                if (i % 2 == 0) {
-                    this.b.set(x, PIT_FLOOR + 2, z, Blocks.SKELETON_SKULL.defaultBlockState().setValue(SkullBlock.ROTATION, (i * 5 + 3) % 16));
-                } else {
-                    this.b.set(x, PIT_FLOOR + 2, z, Blocks.BONE_BLOCK.defaultBlockState().setValue(RotatedPillarBlock.AXIS,
-                            i == 1 ? Direction.Axis.X : Direction.Axis.Z));
-                }
+                this.b.set(bones[i][0], PIT_FLOOR + 2, PIT_Z + bones[i][1], Blocks.SKELETON_SKULL.defaultBlockState()
+                        .setValue(SkullBlock.ROTATION, (i * 5 + 3) % 16));
             }
             // die Opfertruhen hinter dem Altar, Kerzen daneben
             this.b.chest(-2, PIT_FLOOR + 2, PIT_Z + 5, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH),

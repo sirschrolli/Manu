@@ -8,9 +8,10 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Version 1.9 – Ventor, der Gladiator der Winde.** Die **Arena der Prüfungen** hat jetzt ihren Meister: Auf dem Podest unter dem Spawner der Böen liegt das neue **Arenasiegel**, und über dem Spawner schwebt für jeden der sechs Käfige ein kupfernes **Windsiegel**. Jeder Käfig, den du bezwingst, schickt einen Windstoß zum Podest und entzündet sein Siegel; sind alle bezwungen und betritt jemand den Sand, steigt aus dem Wirbel **Ventor, der Gladiator der Winde**, auf – ein Standbild aus Bronze, das der Wind füllt: Käfighelm mit Augenschlitzen und rotem Kamm, Armschiene und Schulterschild, statt der Beine ein Wirbelwind, in der Rechten der **Sturmdreizack**, in der Linken ein **Wurfnetz**. Er grüßt die Ränge – dann kämpft er wie ein Netzkämpfer: **Böe** (wer davonfliegt und an eine Wand prallt, den trifft es doppelt; solange sie weht, prallen Geschosse ab), **Dreizackstoß**, **Netzwurf** (wen es trifft, der steckt fest – und gleich kommt der Stoß, härter als sonst), **Dreizackwurf** (der Dreizack kehrt in seine Hand zurück), **Windkugeln**, **Windhosen**, die durch die Arena ziehen und jeden hochreißen, und der **Sturzflug** (ein Kreis am Boden – raus da!). Unter halber Kraft **entfesselt er den Sturm**: Alle acht Sekunden fegt eine Sturmböe quer durch die Arena (man sieht sie kommen – ducken!), und er dreht sich im **Zyklon**. Eigene Bossleiste, eigene Klänge. Er lässt selten den **Sturmdreizack** fallen (3D, geworfen entfesselt er eine Böe und kehrt immer zurück) und sonst **Wurfnetze**, Böenruten und Windkugeln; wer ihn noch einmal fordern will, muss die Käfige erneut bezwingen.
-> **1.9.2 – Angelkunst und der Fischbeutel im Urmeer:** Ein **siebtes Talent**, die **Angelkunst**: Die Fische beißen schneller (bis 50 %), die Fangzone im Drill wird größer (bis 40 %), und die Meisterschaft bringt Glück beim Angeln. Dazu erweitert jetzt **jede Händlerin des Meervolks** im Urmeer den **Fischbeutel** – und jede Erweiterung ist ein Kauf, der zur Handelsgrenze zählt (auch beim Fischer im Dorf): Nach einigen Käufen macht der Laden Pause.
-> **1.9.1 – Der Heldenweg bis Stufe 500 und doppelt so viele Kristalle:** Der Held steigt jetzt bis **Heldenstufe 500** auf (bisher 200) – aber stärker wird er dabei nicht: Die Heldenkraft und die Talentpunkte, die bisher die Stufen bis 200 brachten, verteilen sich auf den ganzen Weg; erst auf Stufe 500 ist man so stark wie bisher auf 200. Stufe 500 braucht rund 20,9 Millionen Heldenerfahrung. Der Unsterbliche (Stufe 200) bleibt der letzte Rang. Helden aus älteren Spielständen werden auf die Stufe gehoben, die sie genauso stark macht – aus 200 wird 500. Und weil ein Kristall seit 1.3 nur noch ein halbes Herz (bzw. 10 Mana) gibt, darf man jetzt **je 50 Herz- und Manakristalle** aufnehmen statt 25 – bis zu 25 Herzen und 500 Mana mehr.
+> **Version 1.10 – Quetzara, die Gefiederte Schlange.** Unter dem **Schlangentempel** im Dschungel liegt jetzt die **Schlangengrube**: Vom Schlund führt die Treppe weiter hinab auf eine Empore und von dort in eine runde Halle tief im Fels – acht Säulen, um die sich steinerne Schlangen winden, grüne Augen in den Wänden, ein Fries aus Federn, eine goldene Sonne an der Decke, Laternen an Ketten, ein **Wassergraben**, in dem Meeresgurken leuchten, und auf der Insel in der Mitte der **Schlangenaltar** mit einem goldenen Schlangenbild. Um ihn liegt **Quetzara, die Gefiederte Schlange**, eingerollt und schläft: gut fünfzehn Blöcke lang, smaragdgrün geschuppt mit goldenem Bauch, um den Kopf eine Krause aus Quetzalfedern. Wer in die Grube hinabsteigt, weckt sie – sie richtet sich hoch auf, spreizt die Krause und kreischt. Dann kämpft sie mit **Giftbiss**, **Giftspucke** (die Klumpen zerplatzen zu Giftwolken), **Federsturm** (Fächer aus vergifteten Federn), **Schwanzpeitsche** und dem **Würgegriff**: Sie umkreist dich, schließt den Ring und drückt zu – wer genug zurückschlägt, kommt frei, und sie ist benommen. Unter halber Kraft **häutet sie sich**: Die leere Haut bleibt liegen und zischt wie sie (wer zuschlägt, dem platzt eine Giftwolke entgegen), während sie getarnt davongleitet und aus dem Hinterhalt zubeißt; danach glänzt ihr neues Schuppenkleid, und sie ist schneller und wilder. Eigene Bossleiste, eigene Klänge. Sie lässt selten den **Schlangenzahn** fallen (ein Giftdolch mit dem **Schlangenstoß**) und sonst **Quetzalfedern**; besiegt zerspringt das Schlangenbild – ein **Goldblock** auf dem Altar ruft sie zurück. Und lange Boss-Titel passen jetzt immer auf den Bildschirm.
+> In 1.9.2 kamen **die Angelkunst und der Fischbeutel im Urmeer**: Ein **siebtes Talent**, die **Angelkunst**: Die Fische beißen schneller (bis 50 %), die Fangzone im Drill wird größer (bis 40 %), und die Meisterschaft bringt Glück beim Angeln. Dazu erweitert jetzt **jede Händlerin des Meervolks** im Urmeer den **Fischbeutel** – und jede Erweiterung ist ein Kauf, der zur Handelsgrenze zählt (auch beim Fischer im Dorf): Nach einigen Käufen macht der Laden Pause.
+> In 1.9.1 kamen **der Heldenweg bis Stufe 500 und doppelt so viele Kristalle**: Der Held steigt jetzt bis **Heldenstufe 500** auf (bisher 200) – aber stärker wird er dabei nicht: Die Heldenkraft und die Talentpunkte, die bisher die Stufen bis 200 brachten, verteilen sich auf den ganzen Weg; erst auf Stufe 500 ist man so stark wie bisher auf 200. Stufe 500 braucht rund 20,9 Millionen Heldenerfahrung. Der Unsterbliche (Stufe 200) bleibt der letzte Rang. Helden aus älteren Spielständen werden auf die Stufe gehoben, die sie genauso stark macht – aus 200 wird 500. Und weil ein Kristall seit 1.3 nur noch ein halbes Herz (bzw. 10 Mana) gibt, darf man jetzt **je 50 Herz- und Manakristalle** aufnehmen statt 25 – bis zu 25 Herzen und 500 Mana mehr.
+> In 1.9 kam **Ventor, der Gladiator der Winde**: Die **Arena der Prüfungen** hat jetzt ihren Meister: Auf dem Podest unter dem Spawner der Böen liegt das neue **Arenasiegel**, und über dem Spawner schwebt für jeden der sechs Käfige ein kupfernes **Windsiegel**. Jeder Käfig, den du bezwingst, schickt einen Windstoß zum Podest und entzündet sein Siegel; sind alle bezwungen und betritt jemand den Sand, steigt aus dem Wirbel **Ventor, der Gladiator der Winde**, auf – ein Standbild aus Bronze, das der Wind füllt: Käfighelm mit Augenschlitzen und rotem Kamm, Armschiene und Schulterschild, statt der Beine ein Wirbelwind, in der Rechten der **Sturmdreizack**, in der Linken ein **Wurfnetz**. Er grüßt die Ränge – dann kämpft er wie ein Netzkämpfer: **Böe** (wer davonfliegt und an eine Wand prallt, den trifft es doppelt; solange sie weht, prallen Geschosse ab), **Dreizackstoß**, **Netzwurf** (wen es trifft, der steckt fest – und gleich kommt der Stoß, härter als sonst), **Dreizackwurf** (der Dreizack kehrt in seine Hand zurück), **Windkugeln**, **Windhosen**, die durch die Arena ziehen und jeden hochreißen, und der **Sturzflug** (ein Kreis am Boden – raus da!). Unter halber Kraft **entfesselt er den Sturm**: Alle acht Sekunden fegt eine Sturmböe quer durch die Arena (man sieht sie kommen – ducken!), und er dreht sich im **Zyklon**. Eigene Bossleiste, eigene Klänge. Er lässt selten den **Sturmdreizack** fallen (3D, geworfen entfesselt er eine Böe und kehrt immer zurück) und sonst **Wurfnetze**, Böenruten und Windkugeln; wer ihn noch einmal fordern will, muss die Käfige erneut bezwingen.
 > In 1.8 kam **Kuno von Rabenfels, der Raubritter**: Die **Raubritterburg** im dunklen Wald hat jetzt ihren Herrn: Vor dem Bergfried weht das neue **Rabenbanner** – Gold, darin ein schwarzer Rabe –, und unter ihm hält **Kuno von Rabenfels, der Raubritter**, zu Ross Hof: in Plattenrüstung mit goldenem Wappenrock, auf dem Topfhelm ein Rabe als Zimier, auf einem schwarzen Schlachtross mit goldener Schabracke, die Lanze aufrecht, den Schild am Arm. Wer ihm auf vierzehn Blöcke nahekommt (oder ihn angreift), den fordert er: Das Ross steigt, er reckt die Lanze – und senkt sie ein. **Zu Ross** kämpft er mit dem **Lanzengang** (er nimmt Anlauf und sprengt in gerader Linie heran; wer den Stoß mit einem erhobenen **Schild** auffängt, an dem **bricht die Lanze**, und er wankt im Sattel), dem **Lanzenstich**, dem **Steigen** des Rosses, dem **Hornruf** (seine Leute kommen ihm zu Hilfe) und dem **Bolzenhagel** (rote Zeichen am Boden – raus da!). Unter halber Kraft **wirft ihn das Ross ab** und flieht; **zu Fuß** zieht er den **Morgenstern**: Morgensternschlag, Wirbel, Schildstoß und der **Schildwall** (von vorn trifft ihn nichts – geh ihm in den Rücken). Eigene Bossleiste, eigene Klänge. Er lässt selten seinen **Morgenstern** fallen (eine 3D-Waffe und ein Schildbrecher; Rechtsklick: der **Schmetterschlag**) und sonst ein wenig Raubgut; ein **schwarzes Banner** am zerrissenen Pfahl ruft ihn zurück.
 > In 1.7 kam **Sordin, der Kantor der Stille**: In der Apsis der **Stillen Kathedrale**, tief im Reich des Sculk, steht jetzt **Sordin, der Kantor der Stille**, an der Kupferorgel und spielt – ohne dass ein Ton erklingt; vor ihm leuchten auf dem neuen **Orgelpult** die Noten. Er ist ein hagerer Mönch in einer dunklen Kutte, die Kapuze ein Spitzbogen wie die Fenster seiner Kathedrale, darin ein glühender, singender Mund; auf seinem Rücken ein Fächer aus Orgelpfeifen, in der Hand eine **Stimmgabel** aus Kupfer und Hallkristall. Er **hört wie der Tiefenhüter**: Wer ihm auf zehn Blöcke nahekommt, in Hörweite Lärm macht (Schritte, Sprünge, abgebaute Blöcke … – wer schleicht oder die Wollsohlen der Lauscher trägt, bleibt ungehört) oder einen **Notenblock** anschlägt, weckt ihn. Er kämpft mit Klang: **Gabelhieb**, die **Schallwelle** (durch Stein und jede Rüstung – nur **Wolle** hält sie auf), der **Akkord** (drei Ringe laufen über den Boden – springen!), der **Notenschwarm** (Noten, die ihr Ziel suchen) und **die Stille** (Dunkelheit, er verschwindet und trifft von hinten); unter halber Kraft das **Fortissimo** – ein Schlag in alle Richtungen, danach drei Schallwellen auf einmal. Doch Klang ist auch seine Schwäche: **Spielt jemand auf der Orgel**, hält er sich die Ohren zu und **taumelt** (drei Sekunden lang nimmt er mehr Schaden). Eigene Bossleiste, eigene Klänge. Er lässt selten seine **Stimmgabel** fallen (eine 3D-Waffe, Rechtsklick: die **Resonanz**, ein Schallschlag durch Stein und Rüstung) und sonst Hallkristall; **ein Hallkristall** auf dem verstummten Pult ruft ihn zurück.
 > In 1.6 kam **Hallkristall und die Rüstung der Lauscher**: Tief unten in der **Tiefen Dunkelheit**, im Reich des Sculk, wo die Stille Kathedrale steht, hallt der Gesang ihrer Orgel bis heute im Gestein nach – und wo er am längsten nachklang, ist der Tiefenschiefer zu **Hallkristall** geronnen: blass wie Eis, mit Ringen darin wie Wellen auf einem Teich. **Hallkristallerz** gibt es nur in der Tiefen Dunkelheit (ab der Diamantspitzhacke; seine Kristalle schimmern im Dunkeln). Neun Kristalle ergeben den **Hallkristallblock** (Licht 6, Wellen laufen durch ihn hindurch, Sockel für ein Leuchtfeuer). Daraus die **Rüstung der Lauscher** (Schutz wie Diamant), in 3D mit **Fühlern aus Sculk** am Helm, **Ohrscheiben** aus Kristall, einem **Sculkherz** auf der Brust und **Wollsohlen**: **Schallschutz** (jeder Teil fängt ein Fünftel des Schallschlags des Tiefenhüters ab), **klare Sicht** (Helm: die Dunkelheit von Tiefenhüter und Kreischern trübt den Blick nicht mehr), **Wollsohlen** (Stiefel: Schritte, Sprünge, Landungen und Schwimmzüge machen keine Erschütterung – Sculk-Sensoren, Kreischer und der Tiefenhüter hören sie nicht) und **Echoortung** (alle vier Teile: Wer schleicht, ruft alle zwei Sekunden leise in die Dunkelheit – ein Ring läuft über den Boden, und jedes Wesen in 16 Blöcken leuchtet kurz auf, auch hinter Wänden).
@@ -490,7 +491,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.9.2.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.10.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -498,7 +499,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-1.9.2.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-1.10.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -1371,7 +1372,7 @@ Funde und Münzen – aber karg (siehe unten).
 | **Gezeitenschrein** | vergrabener Schatz | Strände und Korallenküste | ein Schrein mit Säulen und einem Dreizack aus Prismarin, unter dem Altar das **Herz des Meeres** |
 | **Gebeine eines Seedrachen** | Schiffswrack | im Meer und an Stränden | ein riesiges Drachenskelett, im Brustkorb die verschluckte Fracht (Karten, Ladung, Schatz) |
 | **Karawanserei** | Wüstentempel | Wüste | eine verfallene Herberge mit Arkadenhof und Brunnen; darunter der Schatzkeller – mit Falle |
-| **Schlangentempel** | Dschungeltempel | Dschungel | ein steinerner Schlangenkopf auf einer Lichtung, eine Pfeilfalle im Schlund, eine Halle mit Wassergraben darunter |
+| **Schlangentempel** | Dschungeltempel | Dschungel | ein steinerner Schlangenkopf auf einer Lichtung, eine Pfeilfalle im Schlund, darunter (seit 1.10) die **Schlangengrube**: Empore, Säulen mit steinernen Schlangen, Wassergraben um eine Insel mit dem **Schlangenaltar** – dort schläft **Quetzara** |
 | **Hexenbaum** | Sumpfhütte | Sumpf und Nebelmoor | ein hohler, abgestorbener Riesenbaum, unten die Höhle der Hexe, oben eine Plattform in der Krone |
 | **Frostgrotte** | Iglu | verschneite Ebenen, Taiga und Hänge | die Felsgrotte eines Einsiedlers mit Holzvorbau, unter dem Teppich eine Luke zum Keller |
 | **Räuberlager** | Plünderer-Außenposten | Ebenen, Savanne, Taiga, Wüste … | eine Palisade mit Wachturm und Zelten, ein Gefangener im Käfig, Wegelagerer mit Armbrüsten |
@@ -1603,6 +1604,52 @@ deine Hand zurück**, auch ohne Treue.
 
 **Das Wurfnetz** (selten, bis zu 16 in einem Stapel): Rechtsklick wirft es – wen es trifft, der **steckt eine Weile fest** und
 ist verlangsamt; daneben bleibt es als Falle liegen. Danach anderthalb Sekunden Pause.
+
+### Quetzara, die Gefiederte Schlange (seit 1.10)
+
+![Der Schlangentempel im Dschungel, die Schlangengrube, Quetzara schlafend um den Schlangenaltar, ihr Erwachen, Giftbiss, Giftspucke, Federsturm, Schwanzpeitsche, Würgegriff, die Häutung mit der leeren Haut, ihr Tod und der Schlangenzahn](docs/bilder/quetzara.jpg)
+
+Unter dem **Schlangentempel** im Dschungel führt die Treppe aus dem Schlund jetzt weiter hinab: auf eine **Empore** und von
+dort in die **Schlangengrube**, eine runde Halle tief im Fels, fast dreißig Blöcke weit. Acht Säulen tragen die Decke, um jede
+windet sich eine steinerne Schlange, deren Kopf zur Mitte blickt; in den Wänden leuchten grüne Augen, ein Fries aus grünen und
+goldenen Federn läuft rundum, an der Decke strahlt eine goldene Sonne. Laternen hängen an Ketten über einem **Wassergraben**, in
+dem Meeresgurken leuchten, vier Brücken führen auf die Insel in der Mitte – und dort steht der **Schlangenaltar** (unzerstörbar):
+ein Stein mit einer Reliefschlange, darauf ein **goldenes Schlangenbild** mit Federkamm und Smaragdaugen. Hinter dem Altar stehen
+die Opfertruhen, Knochen früherer Opfer liegen am Rand, und hinter rissigem Mauerwerk der Ostwand ist eine weitere Truhe versteckt.
+
+Kommt jemand in die Nähe, liegt um den Altar **Quetzara, die Gefiederte Schlange**, eingerollt und schläft (aus der Tiefe
+zischt es, wer sich nähert, wird gewarnt): gut fünfzehn Blöcke lang, aus einem Kopf und dreizehn Gliedern, die ihrer Spur über
+den Boden folgen – smaragdgrün geschuppt mit dunklen Rauten und goldenen Säumen, der Bauch golden, um den Kopf eine **Krause aus
+Quetzalfedern** mit roten Spitzen. Schlafend ist sie unverwundbar und heilt. Wer in die Grube hinabsteigt (oder sie schlägt),
+weckt sie: Die Augen öffnen sich, sie richtet sich hoch auf, spreizt die Krause und kreischt (dabei unverwundbar). Dann kämpft
+sie (780 Lebenspunkte; Treffer auf den Leib zählen nur halb, auf den Kopf voll):
+- **Giftbiss:** Sie zieht den Kopf zurück und schnellt vor – ein schwerer Biss mit lange wirkendem Gift.
+- **Giftspucke:** zurückgelehnt, dann ein Klumpen Gift im Bogen; wo er aufschlägt, steht eine **Giftwolke**.
+- **Federsturm:** hoch aufgerichtet spreizt sie die Krause und schleudert Fächer aus **vergifteten Federn**.
+- **Schwanzpeitsche:** Wer hinter ihr steht, nah am Schwanz, den fegt ein Hieb im weiten Bogen davon.
+- **Würgegriff:** Sie umkreist dich – du wirst schwerfällig –, schließt den Ring und **drückt zu**: jede Sekunde ein Würgen,
+  nach fünf Sekunden ein Biss. Wer ihr in der Umschlingung genug Schaden zufügt, **kommt frei**: Sie lässt los und ist kurz
+  **benommen**, der Kopf liegt am Boden – jetzt trifft man ihn anderthalbmal so hart.
+
+Unter **halber Kraft häutet sie sich** (solange die Haut reißt, unverwundbar): Die **leere Haut** bleibt liegen, wo sie lag, und
+zischt dann und wann wie sie selbst – wer sie trifft, dem **platzt eine Giftwolke** entgegen. Sie selbst gleitet **getarnt**
+auf die andere Seite der Grube und lauert; ihr erster Biss aus dem Hinterhalt trifft anderthalbmal so hart. Danach glänzt ihr
+**neues Schuppenkleid**, und sie ist wilder: schneller, kürzere Pausen, drei Giftklumpen auf einmal, vier Fächer zu je sieben
+Federn, stärkeres Gift. Lockt man sie aus der Grube, kriecht sie zurück; findet sie niemanden mehr, rollt sie sich wieder um den
+Altar und schläft (und heilt). Besiegt bäumt sie sich auf, sinkt nieder und zerfällt von der Schwanzspitze an zu Staub – und
+das goldene Schlangenbild auf dem Altar **zerspringt**. Sie lässt selten den **Schlangenzahn** fallen (zu einem Fünftel, auch
+beim ersten Sieg), einen Herzkristall nur zu einem Viertel, und sonst ein bis drei **Quetzalfedern**, Smaragde, etwas Gold und
+ein paar Goldmünzen. Wer sie noch einmal fordern will, legt einen **Goldblock** auf den zerbrochenen Altar: Das Schlangenbild ist
+wieder ganz, und sie kehrt zurück – sofort wach. Eigene Bossleiste mit Federkrause und Schuppen, eigene Klänge (Zischen,
+Federrasseln, Schuppen auf Stein). Finden mit `/kaw structure schlangentempel`, wecken oder zurücksetzen mit
+`/kaw boss quetzara awaken|reset`.
+
+**Der Schlangenzahn** (episch, verzauberbar, mit **Quetzalfedern** auszubessern): ein Dolch aus einem Giftzahn Quetzaras – die
+Klinge elfenbeinweiß mit einer grün schimmernden Giftrinne, das Heft aus Jade mit Gold, am Knauf zwei Quetzalfedern; im Inventar
+das Bild, in der Hand ein 3D-Modell. Schnell und scharf (kein Schwungangriff), **jeder Treffer vergiftet**, und wer schon
+vergiftet ist, den trifft er ein Viertel härter. **Rechtsklick: der Schlangenstoß** – ein Satz nach vorn wie die Schlange beim
+Zubeißen; wer bis fünf Blöcke vor dir steht, den beißt der Zahn (anderthalbfacher Schaden, schweres Gift). Danach ruht er sechs
+Sekunden.
 
 ### Feueropal und die Rüstung der Glutwandler (seit 1.1.6)
 
@@ -5127,7 +5174,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.9.2.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.10.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |

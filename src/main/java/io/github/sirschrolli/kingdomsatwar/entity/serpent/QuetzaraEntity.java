@@ -905,6 +905,13 @@ public class QuetzaraEntity extends Monster implements SkyWarden {
         }
     }
 
+    /** Für Tests und die Vorführung: Die Tarnung nach der Häutung ist sofort fort (und mit ihr der Lauerbiss). */
+    public void reveal() {
+        this.camoTicks = 0;
+        this.ambush = false;
+        this.entityData.set(DATA_CAMO, false);
+    }
+
     /** Für Tests und die Vorführung: gehäutet (neues Schuppenkleid, wütend), ohne die Häutung selbst. */
     public void setMolted(boolean molted) {
         this.entityData.set(DATA_MOLTED, molted);
