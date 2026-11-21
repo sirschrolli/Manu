@@ -285,7 +285,7 @@ final class EconomyLang {
         t.add("gui.kingdomsatwar.town.state.2", "asleep", "schläft");
         t.add("gui.kingdomsatwar.town.state.3", "far away", "weit weg");
         t.add("gui.kingdomsatwar.town.state.4", "hungry", "hungrig");
-        t.add("gui.kingdomsatwar.town.food.none_needed", "Food: nobody to feed yet", "Essen: noch niemand zu versorgen");
+        t.add("gui.kingdomsatwar.town.food.none_needed", "Food: no one to feed", "Essen: noch kein Bedarf");
         t.add("gui.kingdomsatwar.town.food.day", "Food for %s day", "Essen für %s Tag");
         t.add("gui.kingdomsatwar.town.food.days", "Food for %s days", "Essen für %s Tage");
         t.add("gui.kingdomsatwar.town.food.hint",

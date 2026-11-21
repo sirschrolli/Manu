@@ -190,10 +190,16 @@ public class MagicTableScreen extends AbstractContainerScreen<MagicTableMenu> {
         Inscription plan = this.menu.plan();
         int ty = y + 71;
         if (plan.status() == Inscription.Status.NO_STAFF) {
-            for (FormattedCharSequence line : this.font.split(Component.translatable(plan.status().key()), width)) {
-                g.text(this.font, line, left, ty, MUTED, false);
-                ty += 10;
+            // etwas kleiner, damit der Hinweis ganz über den Knopf passt
+            g.pose().pushMatrix();
+            g.pose().translate(left, ty);
+            g.pose().scale(0.75f, 0.75f);
+            int ly = 0;
+            for (FormattedCharSequence line : this.font.split(Component.translatable(plan.status().key()), Math.round(width / 0.75f))) {
+                g.text(this.font, line, 0, ly, MUTED, false);
+                ly += 10;
             }
+            g.pose().popMatrix();
         } else if (plan.spell() != null) {
             Spell spell = plan.spell();
             Component name = spell.displayName().withColor(spell.color());

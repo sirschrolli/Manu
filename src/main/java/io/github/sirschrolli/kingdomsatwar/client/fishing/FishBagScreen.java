@@ -223,8 +223,18 @@ public class FishBagScreen extends Screen {
             }
         }
         if (entries.isEmpty()) {
-            int ty = y0 + GRID_Y + 30;
-            for (FormattedCharSequence line : this.font.split(Component.translatable("gui.kingdomsatwar.fish_bag.empty"), 150)) {
+            // der Hinweis auf einem Pergamentstreifen, damit die Fächer nicht durch die Schrift laufen
+            List<FormattedCharSequence> lines = this.font.split(Component.translatable("gui.kingdomsatwar.fish_bag.empty"), 150);
+            int ty = y0 + GRID_Y + ROWS * SLOT / 2 - lines.size() * 5;
+            int bw = 0;
+            for (FormattedCharSequence line : lines) {
+                bw = Math.max(bw, this.font.width(line));
+            }
+            int bx = x0 + (W - bw) / 2;
+            g.fill(bx - 6, ty - 5, bx + bw + 6, ty + lines.size() * 10 + 3, 0xF2E9D8B4);
+            g.fill(bx - 6, ty - 5, bx + bw + 6, ty - 4, 0xFFB8A27A);
+            g.fill(bx - 6, ty + lines.size() * 10 + 2, bx + bw + 6, ty + lines.size() * 10 + 3, 0xFFB8A27A);
+            for (FormattedCharSequence line : lines) {
                 g.text(this.font, line, x0 + (W - this.font.width(line)) / 2, ty, MUTED, false);
                 ty += 10;
             }

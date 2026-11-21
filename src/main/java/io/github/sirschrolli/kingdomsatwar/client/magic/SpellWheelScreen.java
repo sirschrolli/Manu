@@ -119,6 +119,14 @@ public class SpellWheelScreen extends Screen {
     // Zeichnen
     // =====================================================================================
 
+    /** Platz, den die Schnellleiste unten braucht. */
+    private static final int HOTBAR = 26;
+
+    /** Mitte des Rads: in der Mitte – auf niedrigen Bildschirmen so weit oben, dass es nicht auf der Schnellleiste liegt. */
+    private int centerY() {
+        return Math.max(SIZE / 2 + 2, Math.min(this.height / 2, this.height - HOTBAR - SIZE / 2 - 2));
+    }
+
     @Override
     public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         float open = this.openProgress();
@@ -133,7 +141,7 @@ public class SpellWheelScreen extends Screen {
         this.lastFrame = now;
         KnownSpells spells = this.spells();
         int cx = this.width / 2;
-        int cy = this.height / 2;
+        int cy = this.centerY();
         if (this.forcedHover >= 0) {
             float angle = this.forcedHover * Mth.TWO_PI / ORDER.length;
             mouseX = cx + Math.round(Mth.sin(angle) * RADIUS);
@@ -163,7 +171,12 @@ public class SpellWheelScreen extends Screen {
         g.pose().popMatrix();
 
         Component hint = Component.translatable(this.holding ? "gui.kingdomsatwar.spell_wheel.hint_hold" : "gui.kingdomsatwar.spell_wheel.hint_click");
-        g.centeredText(this.font, hint, cx, cy + Math.round(SIZE / 2.0f * scale) + 6, ARGB.color(Math.round(open * 200), 0xC8B8E0));
+        int hintY = cy + Math.round(SIZE / 2.0f * scale) + 6;
+        if (hintY + 9 > this.height - HOTBAR) {
+            // unten läge der Hinweis auf der Schnellleiste: dann über dem Rad
+            hintY = Math.max(2, cy - Math.round(SIZE / 2.0f * scale) - 12);
+        }
+        g.centeredText(this.font, hint, cx, hintY, ARGB.color(Math.round(open * 200), 0xC8B8E0));
     }
 
     /** Runenzeichen, die langsam um den Rand kreisen und nacheinander aufglimmen. */
@@ -368,7 +381,7 @@ public class SpellWheelScreen extends Screen {
             return true;
         }
         if (event.button() == InputConstants.MOUSE_BUTTON_LEFT) {
-            this.hovered = pick(event.x() - this.width / 2.0, event.y() - this.height / 2.0);
+            this.hovered = pick(event.x() - this.width / 2.0, event.y() - this.centerY());
             if (this.hovered < 0) {
                 this.onClose();
             } else {

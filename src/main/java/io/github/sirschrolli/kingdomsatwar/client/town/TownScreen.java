@@ -549,13 +549,13 @@ public class TownScreen extends Screen {
         y += 5;
         // Betten, Gebiet, Herr
         this.itemScaled(g, new ItemStack(Items.BED.red()), x, y - 3, 0.75f);
-        g.text(this.font, Component.translatable("gui.kingdomsatwar.town.beds", residents, v.capacity()), x + 15, y, TEXT, false);
+        this.fitted(g, Component.translatable("gui.kingdomsatwar.town.beds", residents, v.capacity()), x + 15, y, 125, TEXT);
         y += 13;
         this.itemScaled(g, new ItemStack(Items.FILLED_MAP), x, y - 3, 0.75f);
-        g.text(this.font, Component.translatable("gui.kingdomsatwar.town.radius", v.radius()), x + 15, y, TEXT, false);
+        this.fitted(g, Component.translatable("gui.kingdomsatwar.town.radius", v.radius()), x + 15, y, 125, TEXT);
         y += 13;
         this.itemScaled(g, new ItemStack(ModBlocks.THRONE.get()), x, y - 3, 0.75f);
-        g.text(this.font, Component.translatable("gui.kingdomsatwar.town.owner", v.owner()), x + 15, y, TEXT, false);
+        this.fitted(g, Component.translatable("gui.kingdomsatwar.town.owner", v.owner()), x + 15, y, 125, TEXT);
         y += 13;
         // Essen im Lager: für wie viele Tage es die Bürger satt macht
         this.itemScaled(g, new ItemStack(Items.BREAD), x, y - 3, 0.75f);
@@ -563,7 +563,7 @@ public class TownScreen extends Screen {
         boolean hungry = v.residents().stream().anyMatch(r -> r.state() == 4);
         Component food = v.residents().isEmpty() ? Component.translatable("gui.kingdomsatwar.town.food.none_needed")
                 : Component.translatable(days == 1 ? "gui.kingdomsatwar.town.food.day" : "gui.kingdomsatwar.town.food.days", days);
-        g.text(this.font, food, x + 15, y, hungry || days < 1 && !v.residents().isEmpty() ? BAD : days < 3 ? 0xFF8A6A10 : TEXT, false);
+        this.fitted(g, food, x + 15, y, 125, hungry || days < 1 && !v.residents().isEmpty() ? BAD : days < 3 ? 0xFF8A6A10 : TEXT);
         if (mouseX >= x && mouseX < x + 140 && mouseY >= y - 3 && mouseY < y + 10) {
             List<FormattedCharSequence> tip = new ArrayList<>(this.font.split(Component.translatable("gui.kingdomsatwar.town.food.hint",
                     v.food() / io.github.sirschrolli.kingdomsatwar.economy.town.TownFood.MEAL), 220));
@@ -1363,6 +1363,26 @@ public class TownScreen extends Screen {
     }
 
     /** Text mit Zeilenumbruch; gibt die Zeile unter dem Text zurück. */
+    /** Eine Zeile, die höchstens {@code width} breit wird: sonst etwas kleiner, notfalls gekürzt („…“). */
+    private void fitted(GuiGraphicsExtractor g, Component text, int x, int y, int width, int color) {
+        int w = this.font.width(text);
+        if (w <= width) {
+            g.text(this.font, text, x, y, color, false);
+            return;
+        }
+        float scale = Math.max(0.8f, width / (float) w);
+        g.pose().pushMatrix();
+        g.pose().translate(x, y + 4.0f * (1.0f - scale));
+        g.pose().scale(scale, scale);
+        if (w * scale <= width) {
+            g.text(this.font, text, 0, 0, color, false);
+        } else {
+            g.text(this.font, Component.literal(this.ellipsize(text.getString(), Math.round(width / scale))).withStyle(text.getStyle()), 0, 0, color,
+                    false);
+        }
+        g.pose().popMatrix();
+    }
+
     private int wrapped(GuiGraphicsExtractor g, Component text, int x, int y, int width, int color) {
         for (FormattedCharSequence line : this.font.split(text, width)) {
             g.text(this.font, line, x, y, color, false);

@@ -14,6 +14,7 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -70,6 +71,8 @@ public class CharacterScreen extends Screen {
 
     private int left;
     private int top;
+    /** Maßstab, in dem das Fenster gezeichnet wird (kleiner als 1, wenn der Bildschirm zu klein ist). */
+    private float fit = 1.0f;
     private long openedAt;
     private long tabAt;
     private Tab tab = lastTab;
@@ -87,9 +90,14 @@ public class CharacterScreen extends Screen {
 
     @Override
     protected void init() {
+        // passt das Fenster nicht ganz auf den Bildschirm (große GUI-Skalierung), wird alles etwas kleiner gezeichnet; gerechnet
+        // wird dann in der größeren, gedachten Fläche
+        this.fit = HeroGui.fit(WIDTH + TAB_W + 2, HEIGHT + 6);
+        int w = Mth.floor(this.width / this.fit);
+        int h = Mth.floor(this.height / this.fit);
         // die Lesezeichen ragen rechts heraus: das Ganze bleibt mittig
-        this.left = (this.width - WIDTH - TAB_W + 6) / 2;
-        this.top = (this.height - HEIGHT) / 2;
+        this.left = (w - WIDTH - TAB_W + 6) / 2;
+        this.top = (h - HEIGHT) / 2;
         if (this.openedAt == 0L) {
             this.openedAt = Util.getMillis();
             this.tabAt = this.openedAt;
@@ -203,9 +211,25 @@ public class CharacterScreen extends Screen {
 
     // ------------------------------------------------------------------------------------------------ Zeichnen
 
+    /** Mausstelle in der gedachten Fläche des Fensters. */
+    private int virtual(double screen) {
+        return Mth.floor(screen / this.fit);
+    }
+
+    private MouseButtonEvent virtual(MouseButtonEvent event) {
+        return this.fit >= 1.0f ? event : new MouseButtonEvent(event.x() / this.fit, event.y() / this.fit, event.buttonInfo());
+    }
+
     @Override
     public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         super.extractBackground(g, mouseX, mouseY, a);
+        g.pose().pushMatrix();
+        g.pose().scale(this.fit, this.fit);
+        this.background(g, this.virtual(mouseX), this.virtual(mouseY));
+        g.pose().popMatrix();
+    }
+
+    private void background(GuiGraphicsExtractor g, int mouseX, int mouseY) {
         // die Lesezeichen: die anderen hinter dem Fenster, der offene davor
         for (Tab t : Tab.values()) {
             if (t != this.tab) {
@@ -242,21 +266,31 @@ public class CharacterScreen extends Screen {
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
+    public void extractRenderState(GuiGraphicsExtractor g, int realX, int realY, float a) {
+        int mouseX = this.virtual(realX);
+        int mouseY = this.virtual(realY);
+        g.pose().pushMatrix();
+        g.pose().scale(this.fit, this.fit);
         Player player = this.minecraft.player;
         if (player != null) {
-            this.drawContent(g, player, mouseX, mouseY);
+            this.drawContent(g, player, mouseX, mouseY, realX, realY);
         }
         // die Knöpfe zuletzt: über den Karten
         super.extractRenderState(g, mouseX, mouseY, a);
+        if (this.fit < 1.0f) {
+            // Tooltips gleich hier, im selben Maßstab und an der richtigen Stelle
+            g.extractDeferredElements(mouseX, mouseY, a);
+        }
+        g.pose().popMatrix();
     }
 
-    private void drawContent(GuiGraphicsExtractor g, Player player, int mouseX, int mouseY) {
+    private void drawContent(GuiGraphicsExtractor g, Player player, int mouseX, int mouseY, int realX, int realY) {
         HeroLevel.Hero hero = HeroLevel.of(player);
         int x0 = this.left;
         int y0 = this.top;
-        InventoryScreen.extractEntityInInventoryFollowsMouse(g, x0 + 13, y0 + 13, x0 + 12 + LEFT_W - 1, y0 + 109, 40, 0.0625f, mouseX, mouseY,
-                player);
+        // die Figur wird als eigenes Bild eingesetzt (ohne den Maßstab): Lage und Größe auf dem echten Bildschirm
+        InventoryScreen.extractEntityInInventoryFollowsMouse(g, this.real(x0 + 13), this.real(y0 + 13), this.real(x0 + 12 + LEFT_W - 1),
+                this.real(y0 + 109), Math.round(40 * this.fit), 0.0625f, realX, realY, player);
         this.drawLeft(g, player, hero, x0 + 12, y0 + 114, mouseX, mouseY);
         int rx = x0 + RIGHT_X;
         int rw = WIDTH - RIGHT_X - 12;
@@ -342,8 +376,34 @@ public class CharacterScreen extends Screen {
         }
     }
 
+    /** Stelle der gedachten Fläche auf dem echten Bildschirm. */
+    private int real(int virtual) {
+        return Math.round(virtual * this.fit);
+    }
+
     @Override
-    public boolean mouseClicked(net.minecraft.client.input.MouseButtonEvent event, boolean doubleClick) {
+    public boolean mouseReleased(MouseButtonEvent event) {
+        return super.mouseReleased(this.virtual(event));
+    }
+
+    @Override
+    public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
+        return super.mouseDragged(this.virtual(event), dx / this.fit, dy / this.fit);
+    }
+
+    @Override
+    public boolean mouseScrolled(double x, double y, double scrollX, double scrollY) {
+        return super.mouseScrolled(x / this.fit, y / this.fit, scrollX, scrollY);
+    }
+
+    @Override
+    public void mouseMoved(double x, double y) {
+        super.mouseMoved(x / this.fit, y / this.fit);
+    }
+
+    @Override
+    public boolean mouseClicked(MouseButtonEvent real, boolean doubleClick) {
+        MouseButtonEvent event = this.virtual(real);
         // (seit 26.x zählt das Spiel die Maustasten wie SDL: links 1, Mitte 2, rechts 3)
         if (event.button() == com.mojang.blaze3d.platform.InputConstants.MOUSE_BUTTON_LEFT) {
             for (Tab t : Tab.values()) {

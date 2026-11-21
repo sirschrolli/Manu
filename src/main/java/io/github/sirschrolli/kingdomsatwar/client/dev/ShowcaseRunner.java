@@ -131,6 +131,10 @@ public final class ShowcaseRunner {
             return;
         }
         Minecraft minecraft = Minecraft.getInstance();
+        // fehlende Übersetzungen der Mod im Protokoll (nach jedem Neuladen der Ressourcen wieder einhängen)
+        if (!(net.minecraft.locale.Language.getInstance() instanceof MissingKeys)) {
+            net.minecraft.locale.Language.inject(new MissingKeys(net.minecraft.locale.Language.getInstance()));
+        }
         if (minecraft.level == null || minecraft.player == null || minecraft.getSingleplayerServer() == null) {
             return;
         }
@@ -151,6 +155,39 @@ public final class ShowcaseRunner {
         if (step.run(minecraft, stepTicks)) {
             STEPS.poll();
             stepTicks = 0;
+        }
+    }
+
+    /** Meldet jeden Schlüssel der Mod, der angezeigt werden soll, aber keine Übersetzung hat (einmal je Schlüssel). */
+    private static final class MissingKeys extends net.minecraft.locale.Language {
+        private final net.minecraft.locale.Language inner;
+        private final java.util.Set<String> reported = java.util.concurrent.ConcurrentHashMap.newKeySet();
+
+        MissingKeys(net.minecraft.locale.Language inner) {
+            this.inner = inner;
+        }
+
+        @Override
+        public String getOrDefault(String key, String fallback) {
+            if (key.contains(KingdomsAtWar.MODID) && !this.inner.has(key) && this.reported.add(key)) {
+                LOGGER.warn("[Showcase] Übersetzung fehlt: {}", key);
+            }
+            return this.inner.getOrDefault(key, fallback);
+        }
+
+        @Override
+        public boolean has(String key) {
+            return this.inner.has(key);
+        }
+
+        @Override
+        public boolean isDefaultRightToLeft() {
+            return this.inner.isDefaultRightToLeft();
+        }
+
+        @Override
+        public net.minecraft.util.FormattedCharSequence getVisualOrder(net.minecraft.network.chat.FormattedText text) {
+            return this.inner.getVisualOrder(text);
         }
     }
 

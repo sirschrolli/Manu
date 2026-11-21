@@ -59,6 +59,25 @@ public final class HeroGui {
         return sprite("badge/" + rank.getSerializedName());
     }
 
+    /**
+     * Wie groß ein Fenster von {@code w}×{@code h} gezeichnet werden kann, damit es ganz auf den Bildschirm passt: 1, wenn Platz
+     * ist; sonst so, als wäre die GUI-Skalierung eine Stufe kleiner (so bleiben die Pixel scharf) – z. B. bei 1440p, 4K oder 720p
+     * mit „Auto“, wo die Fläche nur 240 hoch ist. Nur wenn auch Skalierung 1 nicht reicht, ein krummer Faktor.
+     */
+    public static float fit(int w, int h) {
+        com.mojang.blaze3d.platform.Window window = Minecraft.getInstance().getWindow();
+        if (window.getGuiScaledWidth() >= w && window.getGuiScaledHeight() >= h) {
+            return 1.0f;
+        }
+        int scale = window.getGuiScale();
+        for (int s = scale - 1; s >= 1; s--) {
+            if (window.getWidth() / s >= w && window.getHeight() / s >= h) {
+                return s / (float) scale;
+            }
+        }
+        return Math.min(window.getGuiScaledWidth() / (float) w, window.getGuiScaledHeight() / (float) h);
+    }
+
     /** Sekunden seit Spielstart (für gleichmäßige Bewegungen). */
     public static float seconds() {
         return (Util.getMillis() % 3_600_000L) / 1000.0f;
@@ -214,7 +233,12 @@ public final class HeroGui {
 
     /** Text mit dunklem Schatten links bündig. */
     public static void text(GuiGraphicsExtractor g, Font font, Component text, int x, int y, int color) {
-        g.text(font, text, x + 1, y + 1, ARGB.color(ARGB.alpha(color), 11, 9, 16), false);
+        // der Schatten ganz dunkel – auch dort, wo ein Teil eine eigene Farbe hat (sonst läge z. B. der Rangname doppelt und
+        // verschmiert übereinander)
+        net.minecraft.util.FormattedCharSequence plain = text.getVisualOrderText();
+        net.minecraft.util.FormattedCharSequence shadow = sink -> plain.accept((index, style, codePoint) ->
+                sink.accept(index, style.withColor((net.minecraft.network.chat.TextColor) null), codePoint));
+        g.text(font, shadow, x + 1, y + 1, ARGB.color(ARGB.alpha(color), 11, 9, 16), false);
         g.text(font, text, x, y, color, false);
     }
 

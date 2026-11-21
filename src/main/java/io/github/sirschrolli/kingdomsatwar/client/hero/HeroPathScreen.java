@@ -550,24 +550,49 @@ public class HeroPathScreen extends Screen {
         g.text(this.font, title, 1, 1, 0xFF0B0910, false);
         g.text(this.font, title, 0, 0, 0xFFFFE7A0, false);
         g.pose().popMatrix();
+        // rechts: Abzeichen, Stufe, Rang, Leiste (auf schmalen Bildschirmen etwas schmaler)
+        HeroLevel.Rank rank = hero.rank();
+        int bw = Mth.clamp(this.width / 2 - 50, 110, 170);
+        int rx = this.width - 14 - bw;
         float total = HeroLevel.total(HeroLevel.MAX_LEVEL);
         int percent = Math.min(100, Math.round(hero.experience() * 100.0f / total));
-        HeroGui.text(g, this.font, Component.translatable("gui.kingdomsatwar.path.total", percent, HeroGui.number(hero.experience()),
-                HeroGui.number((long) total)), 14, 30, HeroGui.MUTED);
-        // rechts: Abzeichen, Stufe, Rang, Leiste
-        HeroLevel.Rank rank = hero.rank();
-        int rx = this.width - 14 - 170;
+        // links unter dem Titel: wie weit der ganze Weg gegangen ist – passt die Zeile nicht bis vor das Abzeichen, kleiner und
+        // notfalls auf zwei Zeilen
+        Component progress = Component.translatable("gui.kingdomsatwar.path.total", percent, HeroGui.number(hero.experience()),
+                HeroGui.number((long) total));
+        int room = rx - 40 - 14;
+        if (this.font.width(progress) <= room) {
+            HeroGui.text(g, this.font, progress, 14, 30, HeroGui.MUTED);
+        } else {
+            List<FormattedCharSequence> lines = this.font.split(progress, Math.round(room / 0.75f));
+            g.pose().pushMatrix();
+            g.pose().translate(14, lines.size() > 1 ? 27 : 31);
+            g.pose().scale(0.75f, 0.75f);
+            for (int i = 0; i < Math.min(2, lines.size()); i++) {
+                g.text(this.font, lines.get(i), 0, i * 9, HeroGui.MUTED, true);
+            }
+            g.pose().popMatrix();
+        }
         HeroGui.emblem(g, this.font, rank, hero.level(), rx - 20, 22, 0.62f, 1.0f, 1.0f, true);
         Component level = Component.translatable("gui.kingdomsatwar.character.level", hero.level()).append(" · ")
                 .append(Component.translatable(rank.translationKey()).withColor(HeroGui.rankColor(rank) & 0xFFFFFF));
-        HeroGui.text(g, this.font, level, rx, 8, 0xFFFFE7A0);
-        HeroGui.bar(g, rx, 20, 170, 8, HeroLevel.progress(hero.experience()), 1.0f, 0.0f, HeroGui.rankColor(rank));
+        float fit = Math.min(1.0f, bw / (float) this.font.width(level));
+        if (fit < 1.0f) {
+            g.pose().pushMatrix();
+            g.pose().translate(rx, 8 + 4.0f * (1.0f - fit));
+            g.pose().scale(fit, fit);
+            HeroGui.text(g, this.font, level, 0, 0, 0xFFFFE7A0);
+            g.pose().popMatrix();
+        } else {
+            HeroGui.text(g, this.font, level, rx, 8, 0xFFFFE7A0);
+        }
+        HeroGui.bar(g, rx, 20, bw, 8, HeroLevel.progress(hero.experience()), 1.0f, 0.0f, HeroGui.rankColor(rank));
         boolean max = hero.level() >= HeroLevel.MAX_LEVEL;
         Component numbers = max ? Component.translatable("gui.kingdomsatwar.character.experience.max", HeroGui.number(hero.experience()))
                 : Component.translatable("gui.kingdomsatwar.character.next", HeroGui.number(HeroLevel.total(hero.level() + 1) - hero.experience()),
                         hero.level() + 1);
         g.pose().pushMatrix();
-        g.pose().translate(rx + 170, 31);
+        g.pose().translate(rx + bw, 31);
         g.pose().scale(0.75f, 0.75f);
         g.text(this.font, numbers, -this.font.width(numbers), 0, HeroGui.MUTED, false);
         g.pose().popMatrix();
@@ -604,11 +629,14 @@ public class HeroPathScreen extends Screen {
         }
         HeroGui.light(g, HeroGui.GLOW, heroX, y + 1, 16.0f, 0.0f, 0xFFFFE58A, 0.9f);
         g.fill(heroX - 1, y - 2, heroX + 2, y + 4, 0xFFFFFFFF);
-        Component hint = Component.translatable("gui.kingdomsatwar.path.hint");
+        // der Hinweis bleibt zwischen den Knöpfen (auf schmalen Bildschirmen auf zwei Zeilen)
+        List<FormattedCharSequence> hint = this.font.split(Component.translatable("gui.kingdomsatwar.path.hint"), Math.round((x1 - x0) / 0.75f));
         g.pose().pushMatrix();
         g.pose().translate((x0 + x1) / 2.0f, y + 9);
         g.pose().scale(0.75f, 0.75f);
-        g.text(this.font, hint, -this.font.width(hint) / 2, 0, HeroGui.MUTED, false);
+        for (int i = 0; i < Math.min(2, hint.size()); i++) {
+            g.text(this.font, hint.get(i), -this.font.width(hint.get(i)) / 2, i * 9, HeroGui.MUTED, false);
+        }
         g.pose().popMatrix();
     }
 
