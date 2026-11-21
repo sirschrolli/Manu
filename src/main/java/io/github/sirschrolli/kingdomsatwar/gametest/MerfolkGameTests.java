@@ -259,6 +259,8 @@ final class MerfolkGameTests {
         triton.setTarget(null);
         helper.assertTrue(ModEntities.SHARK.get().builtInRegistryHolder().is(ModTags.EntityTypes.MERFOLK_THREATS), "Haie bedrohen das Meervolk nicht");
         SharkEntity shark = helper.spawn(ModEntities.SHARK.get(), new BlockPos(9, 3, 4));
+        // der Hai bleibt im Becken (sonst schwimmt er mitunter aus der Sicht der Wache, ehe sie ihn bemerkt)
+        shark.setNoAi(true);
         helper.succeedWhen(() -> helper.assertTrue(!shark.isAlive() || triton.getTarget() == shark || shark.getLastHurtByMob() == triton,
                 "Die Wache greift den Hai nicht an"));
     }
