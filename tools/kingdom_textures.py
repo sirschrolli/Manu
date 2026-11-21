@@ -223,16 +223,110 @@ def separator(img: Image.Image, x0: int, y0: int, w: int):
         px[x, y0 + 1] = LIGHT
 
 
-def recruit_gui() -> Image.Image:
-    img = container_panel(306, 176)
-    inset(img, 128, 18, 68, 96)                                  # Bild des Soldaten
-    separator(img, 128, 116, 170)                                # Linie über der Beschreibung
-    # dezente Rahmenlinie um die Liste
+def _portrait(img: Image.Image, x0: int, y0: int, w: int, h: int) -> None:
+    """Bilderrahmen für den Soldaten (68x96): Eichenleiste mit Goldecken, innen ein warmes, dunkles Zelt mit Lampenschein."""
+    import random
+
+    from pixelart import mix
+    from town_textures import FRAME, TRIM
+
     px = img.load()
-    for y in range(17, 162):
-        px[125, y] = hexc("#8b8b8b")
-        px[126, y] = LIGHT
-    return img
+    rnd = random.Random(1207)
+    grain = [rnd.random() for _ in range(w + h)]
+    bayer = ((0.0, 0.5), (0.75, 0.25))
+    top, bottom = hexc("#4a3826"), hexc("#1b130b")
+
+    def shade(a, b, f, x, y):
+        # sanfter Verlauf in 8 Stufen, mit 2x2-Rastern dazwischen (keine Streifen, kein Rauschen)
+        steps = 8
+        v = f * steps
+        base = int(v)
+        if v - base > bayer[y % 2][x % 2]:
+            base += 1
+        return mix(a, b, min(steps, base) / steps)
+
+    for y in range(h):
+        for x in range(w):
+            d = min(x, y, w - 1 - x, h - 1 - y)
+            if d == 0:
+                c = FRAME[0]
+            elif d == 1:
+                # Licht von oben links: obere und linke Kante hell, untere und rechte dunkel
+                c = FRAME[5] if (y == 1 and x < w - 2) or (x == 1 and y < h - 2) else FRAME[2]
+            elif d == 2:
+                along = x if y in (2, h - 3) else y
+                c = FRAME[4] if grain[along % len(grain)] > 0.25 else FRAME[3]
+            elif d == 3:
+                c = FRAME[1]
+            else:
+                f = min(1.0, max(0.0, (y - 4) / (h - 9) * 1.1))
+                # Lampenschein hinter dem Kopf
+                gx, gy = (x - w / 2) / (w * 0.55), (y - h * 0.36) / (h * 0.42)
+                glow = max(0.0, 1.0 - (gx * gx + gy * gy))
+                f = max(0.0, f - glow * 0.45)
+                # Boden: dunkler Schatten als Ellipse unten
+                fx, fy = (x - w / 2) / (w * 0.42), (y - (h - 12)) / 5.0
+                if fx * fx + fy * fy < 1.0:
+                    f = min(1.0, f + 0.35)
+                c = shade(top, bottom, f, x, y)
+                if glow > 0.55:
+                    c = mix(c, hexc("#7a5c38"), (glow - 0.55) * 0.5)
+                # innen ein Hauch Schatten unter der Leiste
+                if d == 4:
+                    c = mix(c, hexc("#0e0904"), 0.45)
+            px[x0 + x, y0 + y] = c
+    # Goldecken
+    for (cx, cy, sx, sy) in ((0, 0, 1, 1), (w - 1, 0, -1, 1), (0, h - 1, 1, -1), (w - 1, h - 1, -1, -1)):
+        for i in range(4):
+            px[x0 + cx + sx * i, y0 + cy] = TRIM[4] if i < 2 else TRIM[2]
+            px[x0 + cx, y0 + cy + sy * i] = TRIM[4] if i < 2 else TRIM[2]
+        px[x0 + cx + sx, y0 + cy + sy] = TRIM[3]
+
+
+def _parchment_slot(img: Image.Image, x0: int, y0: int) -> None:
+    """Ein Fach auf Pergament (18x18): eingedrückt, dunkle Kante oben/links, helle unten/rechts (wie im Fischbeutel)."""
+    from pixelart import mix
+
+    S = 18
+    px = img.load()
+    for y in range(S):
+        for x in range(S):
+            rx, ry = min(x, S - 1 - x), min(y, S - 1 - y)
+            if rx == 0 and ry == 0:
+                continue
+            if rx == 0 or ry == 0:
+                c = hexc("#7a6444") if (x == 0 or y == 0) else hexc("#f6ead0")
+            elif rx == 1 or ry == 1:
+                c = hexc("#9c8660") if (x == 1 or y == 1) else hexc("#d8c8a0")
+            else:
+                c = mix(hexc("#d2be92"), hexc("#c4ae80"), y / (S - 1))
+                if (x * 3 + y * 5) % 17 == 0:
+                    c = mix(c, hexc("#a89468"), 0.35)
+            px[x0 + x, y0 + y] = c
+
+
+def recruit_gui() -> Image.Image:
+    """
+    Feldherrentisch und Söldnertafel (Atlas 512x256): das Fenster (320x218) im Stil des Stadtfensters – Eichenrahmen mit
+    Goldbeschlägen, blaues Band für den Titel, Pergament –, daneben der Bilderrahmen für den Soldaten (68x96, bei 322/0)
+    und ein Fach für Münzen und Ausrüstung (18x18, bei 392/0).
+    """
+    import town_textures as tt
+
+    atlas = Image.new("RGBA", (512, 256), CLEAR)
+    w, h, t = 320, 218, 7
+    img = Image.new("RGBA", (w, h), CLEAR)
+    tt.parchment(img, t, t, w - 2 * t, h - 2 * t, seed=1201)
+    tt.ribbon(img, t, t, w - 2 * t, 22)
+    tt.wood_frame(img, w, h, t, seed=97)
+    tt.gold_corner(img, 1, 1, False, False)
+    tt.gold_corner(img, w - 10, 1, True, False)
+    tt.gold_corner(img, 1, h - 10, False, True)
+    tt.gold_corner(img, w - 10, h - 10, True, True)
+    atlas.alpha_composite(img, (0, 0))
+    _portrait(atlas, 322, 0, 68, 96)
+    _parchment_slot(atlas, 392, 0)
+    return atlas
 
 
 def build(put) -> None:

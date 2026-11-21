@@ -90,7 +90,72 @@ final class UiCheckShowcase {
         steps.add(Step.until(() -> army[1] != null, 40));
         steps.add(Step.waitTicks(10));
         shot(steps, minecraft -> new io.github.sirschrolli.kingdomsatwar.client.army.WarTableScreen(army[0], 32, 4, true), tag + "kriegstisch", 15);
+        // erst eine leere Tafel (wer schon wartet, geht)
+        steps.add(Step.server(level -> level.getEntitiesOfClass(io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity.class,
+                new net.minecraft.world.phys.AABB(army[1]).inflate(24), io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity::isMercenary)
+                .forEach(net.minecraft.world.entity.Entity::discard)));
+        steps.add(Step.waitTicks(5));
+        shot(steps, minecraft -> new io.github.sirschrolli.kingdomsatwar.client.army.MercenaryScreen(army[1], 32, "Lindenau"), tag + "soeldner_leer",
+                15);
+        // jetzt warten Söldner an der Tafel
+        steps.add(Step.server(level -> {
+            if (level.getBlockEntity(army[1]) instanceof io.github.sirschrolli.kingdomsatwar.block.entity.MercenaryBoardBlockEntity entity) {
+                entity.setup(java.util.List.of(army[1].offset(-2, 0, 2), army[1].offset(-3, 0, 1), army[1].offset(-1, 0, 3),
+                        army[1].offset(-4, 0, 2)), "Lindenau");
+                entity.refill(level, false);
+            }
+        }));
+        steps.add(Step.waitTicks(20));
         shot(steps, minecraft -> new io.github.sirschrolli.kingdomsatwar.client.army.MercenaryScreen(army[1], 32, "Lindenau"), tag + "soeldner", 15);
+        // ein volles Feldlager: verwundet, hungrig, einer auf dem Schlachtzug, verschiedene Ränge und Stufen
+        steps.add(Step.server(level -> {
+            ServerPlayer player = first(level);
+            io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType[] types = {
+                    io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType.SWORDSMAN,
+                    io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType.KNIGHT,
+                    io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType.ARCHER,
+                    io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType.CAPTAIN,
+                    io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType.SPEARMAN,
+                    io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType.SHIELDBEARER};
+            for (int i = 0; i < types.length; i++) {
+                var soldier = io.github.sirschrolli.kingdomsatwar.registry.ModEntities.SOLDIERS.get(types[i]).get().create(level,
+                        net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+                if (soldier == null) {
+                    continue;
+                }
+                soldier.equip();
+                soldier.setVariant(Math.min(i % 3, types[i].variants() - 1));
+                soldier.giveRandomName();
+                soldier.setRank(i % 4 == 3 ? 2 : i % 3);
+                soldier.setCombatExperience(i * 180);
+                soldier.setNoAi(true);
+                soldier.setOwner(player);
+                soldier.snapTo(player.getX() + 4.0 + (i % 3) * 1.5, player.getY(), player.getZ() + 4.0 + (i / 3) * 1.5, 180.0f, 0.0f);
+                soldier.setMode(io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity.MODE_HOLD, soldier.blockPosition());
+                soldier.setHealth(soldier.getMaxHealth() * (i == 0 ? 0.3f : i == 2 ? 0.6f : 1.0f));
+                soldier.setRations(i == 1 ? 0 : i == 4 ? 1 : 5);
+                soldier.setHungry(i == 1);
+                soldier.setCampaign(i == 3);
+                level.addFreshEntity(soldier);
+            }
+        }));
+        steps.add(Step.waitTicks(20));
+        shot(steps, minecraft -> new io.github.sirschrolli.kingdomsatwar.client.army.WarTableScreen(army[0], 32, 10, true), tag + "kriegstisch_voll",
+                20);
+        // weiter unten in der Liste (gerollt), mit dem Ausbilden eines anderen Soldaten
+        steps.add(Step.screen(minecraft -> new io.github.sirschrolli.kingdomsatwar.client.army.WarTableScreen(army[0], 32, 10, true)));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.once(minecraft -> {
+            if (minecraft.gui.screen() instanceof io.github.sirschrolli.kingdomsatwar.client.army.WarTableScreen screen) {
+                screen.mouseScrolled(0, 0, 0, -1);
+                screen.mouseScrolled(0, 0, 0, -1);
+            }
+            Showcase.parkMouse(minecraft);
+        }));
+        steps.add(Step.waitTicks(15));
+        steps.add(Step.screenshot(tag + "kriegstisch_gerollt"));
+        steps.add(Step.screen(minecraft -> null));
+        steps.add(Step.waitTicks(5));
         shot(steps, minecraft -> new io.github.sirschrolli.kingdomsatwar.client.architect.SavePlanScreen(here, here.offset(8, 6, 10)), tag + "bauplan", 15);
         shot(steps, minecraft -> new io.github.sirschrolli.kingdomsatwar.client.fishing.FishBookScreen(new io.github.sirschrolli.kingdomsatwar.fishing.FishLog()),
                 tag + "fischbuch", 15);

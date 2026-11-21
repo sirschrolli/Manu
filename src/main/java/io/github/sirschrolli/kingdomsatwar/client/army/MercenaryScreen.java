@@ -1,9 +1,11 @@
 package io.github.sirschrolli.kingdomsatwar.client.army;
 
-import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.army.Mercenaries;
 import io.github.sirschrolli.kingdomsatwar.army.Recruitment;
 import io.github.sirschrolli.kingdomsatwar.block.MercenaryBoardBlock;
+import io.github.sirschrolli.kingdomsatwar.client.town.Parchment;
+import io.github.sirschrolli.kingdomsatwar.client.town.WoodButton;
+import io.github.sirschrolli.kingdomsatwar.economy.Coin;
 import io.github.sirschrolli.kingdomsatwar.economy.Coins;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
@@ -12,7 +14,6 @@ import java.util.List;
 import java.util.Locale;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -22,33 +23,41 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Die Söldnertafel im Söldnerhaus eines Dorfs: links die Söldner, die heute warten (Gesicht, Name, Art, Rang), in der
- * Mitte der ausgewählte zum Anschauen, rechts seine Werte und sein Sold, darunter "Anheuern". Ausbilden und befördern
- * lassen sie sich später am eigenen Feldherrentisch.
+ * Die Söldnertafel im Söldnerhaus eines Dorfs (Pergament wie das Stadtfenster): links die Söldner, die heute warten
+ * (Gesicht, Name, Art, Rang), in der Mitte der ausgewählte im Bilderrahmen, rechts seine Werte und sein Sold, darunter was
+ * er kann; unten die eigene Börse und "Anheuern". Ausbilden und befördern lassen sie sich später am eigenen
+ * Feldherrentisch.
  */
 public class MercenaryScreen extends Screen {
-    private static final Identifier BACKGROUND = KingdomsAtWar.id("textures/gui/recruitment_table.png");
-    private static final int WIDTH = 306;
-    private static final int HEIGHT = 176;
-    private static final int LIST_X = 7;
-    private static final int LIST_Y = 18;
-    private static final int ENTRY_W = 116;
-    private static final int ENTRY_H = 36;
-    private static final int PREVIEW_X = 128;
-    private static final int PREVIEW_Y = 18;
+    private static final int WIDTH = ArmyWidgets.WIDTH;
+    private static final int HEIGHT = ArmyWidgets.HEIGHT;
+    private static final int LIST_X = 12;
+    private static final int LIST_Y = 34;
+    private static final int ENTRY_W = 122;
+    private static final int ENTRY_H = 37;
+    private static final int VISIBLE = 4;
+    private static final int DIVIDER_X = 136;
+    private static final int PREVIEW_X = 140;
+    private static final int PREVIEW_Y = 34;
     private static final int PREVIEW_W = 68;
     private static final int PREVIEW_H = 96;
-    private static final int INFO_X = 203;
+    private static final int INFO_X = 213;
+    private static final int INFO_W = 95;
+    /** Linie über der Beschreibung, darunter (bis zur Leiste unten) was der Söldner kann. */
+    private static final int TEXT_Y = 137;
+    /** Die Leiste unten (Börse und "Anheuern") und die Linie darüber. */
+    private static final int BAR_Y = 188;
+    private static final int BUTTON_H = 18;
 
     private final BlockPos board;
     private final int armyLimit;
@@ -56,9 +65,9 @@ public class MercenaryScreen extends Screen {
     private int selected = -1;
     private int left;
     private int top;
-    private @Nullable Button hireButton;
+    private @Nullable WoodButton hireButton;
     private @Nullable Component feedback;
-    private int feedbackColor;
+    private boolean feedbackGood;
     private int feedbackTicks;
 
     public MercenaryScreen(BlockPos board, int armyLimit, String village) {
@@ -72,8 +81,8 @@ public class MercenaryScreen extends Screen {
     protected void init() {
         this.left = (this.width - WIDTH) / 2;
         this.top = (this.height - HEIGHT) / 2;
-        this.hireButton = this.addRenderableWidget(Button.builder(Component.translatable("gui.kingdomsatwar.mercenaries.hire"),
-                button -> this.hire()).bounds(this.left + INFO_X, this.top + 149, 96, 20).build());
+        this.hireButton = this.addRenderableWidget(new WoodButton(this.left + INFO_X, this.top + BAR_Y, INFO_W, BUTTON_H,
+                Component.translatable("gui.kingdomsatwar.mercenaries.hire"), button -> this.hire()));
         this.updateButton();
     }
 
@@ -107,7 +116,8 @@ public class MercenaryScreen extends Screen {
                 : !room ? Tooltip.create(Component.translatable("message.kingdomsatwar.recruit.army_full"))
                 : !affordable ? Tooltip.create(Component.translatable("message.kingdomsatwar.recruit.not_enough"))
                 : Tooltip.create(Component.translatable("gui.kingdomsatwar.mercenaries.hire.hint", soldier.getDisplayName(),
-                        Coins.format(soldier.hirePrice()))));
+                        Coins.format(soldier.hirePrice())).append("\n").append(Component.translatable("gui.kingdomsatwar.mercenaries.hint")
+                        .withStyle(ChatFormatting.GRAY))));
     }
 
     private void hire() {
@@ -120,7 +130,7 @@ public class MercenaryScreen extends Screen {
     /** Antwort des Servers. */
     public void onResult(Recruitment.Result result) {
         this.feedback = Component.translatable("gui.kingdomsatwar.recruitment.result." + result.name().toLowerCase(Locale.ROOT));
-        this.feedbackColor = result == Recruitment.Result.HIRED ? ArmyWidgets.GOOD : ArmyWidgets.BAD;
+        this.feedbackGood = result == Recruitment.Result.HIRED;
         this.feedbackTicks = 70;
         if (result == Recruitment.Result.HIRED) {
             this.selected = -1;
@@ -166,7 +176,7 @@ public class MercenaryScreen extends Screen {
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
         List<SoldierEntity> list = this.mercenaries();
-        for (int i = 0; i < Math.min(Mercenaries.MAX_AT_HALL + 1, list.size()); i++) {
+        for (int i = 0; i < Math.min(VISIBLE, list.size()); i++) {
             int x = this.left + LIST_X;
             int y = this.top + LIST_Y + i * ENTRY_H;
             if (event.x() >= x && event.x() < x + ENTRY_W && event.y() >= y && event.y() < y + ENTRY_H - 2) {
@@ -218,7 +228,7 @@ public class MercenaryScreen extends Screen {
     @Override
     public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         super.extractBackground(g, mouseX, mouseY, a);
-        g.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND, this.left, this.top, 0.0f, 0.0f, WIDTH, HEIGHT, WIDTH, HEIGHT);
+        ArmyWidgets.window(g, this.left, this.top);
     }
 
     @Override
@@ -226,44 +236,78 @@ public class MercenaryScreen extends Screen {
         super.extractRenderState(g, mouseX, mouseY, a);
         int x0 = this.left;
         int y0 = this.top;
-        Component title = this.village.isEmpty() ? Component.translatable("gui.kingdomsatwar.mercenaries.title")
-                : Component.translatable("gui.kingdomsatwar.mercenaries.title.village", this.village);
+        Component title = (this.village.isEmpty() ? Component.translatable("gui.kingdomsatwar.mercenaries.title")
+                : Component.translatable("gui.kingdomsatwar.mercenaries.title.village", this.village)).withStyle(ChatFormatting.BOLD);
         Component army = Component.translatable("gui.kingdomsatwar.recruitment.army", this.armySize(), this.armyLimit);
-        g.text(this.font, this.font.plainSubstrByWidth(title.getString(), WIDTH - 24 - this.font.width(army)), x0 + 8, y0 + 6,
-                ArmyWidgets.LABEL, false);
-        g.text(this.font, army, x0 + WIDTH - 8 - this.font.width(army), y0 + 6, ArmyWidgets.LABEL, false);
+        ArmyWidgets.header(g, this.font, x0, y0, new ItemStack(Coin.GOLD.item()), title, army,
+                this.feedback != null && this.feedbackTicks > 0 ? this.feedback : null, this.feedbackGood);
         List<SoldierEntity> list = this.mercenaries();
         SoldierEntity chosen = this.soldier();
-        int shown = Math.min(4, list.size());
+        int shown = Math.min(VISIBLE, list.size());
         for (int i = 0; i < shown; i++) {
             this.drawEntry(g, list.get(i), chosen, x0 + LIST_X, y0 + LIST_Y + i * ENTRY_H, mouseX, mouseY);
         }
-        // darunter (oder statt der Liste) ein Hinweis
+        // darunter (oder statt der Liste) ein Hinweis – nur, wenn er ganz hinpasst (sonst steht er im Tooltip von "Anheuern")
         Component hint = list.isEmpty() ? Component.translatable("gui.kingdomsatwar.mercenaries.none")
                 : Component.translatable("gui.kingdomsatwar.mercenaries.hint");
-        int hy = y0 + LIST_Y + shown * ENTRY_H + 4;
+        int hy = y0 + LIST_Y + shown * ENTRY_H + 2;
+        int room = y0 + LIST_Y + VISIBLE * ENTRY_H - hy;
         List<FormattedCharSequence> lines = this.font.split(hint, ENTRY_W - 4);
-        for (int i = 0; i < lines.size() && hy + i * 10 < y0 + HEIGHT - 10; i++) {
-            g.text(this.font, lines.get(i), x0 + LIST_X + 2, hy + i * 10, ArmyWidgets.MUTED, false);
+        int spacing = lines.size() * 10 - 2 <= room ? 10 : 9;
+        if (lines.size() * spacing - spacing + 8 <= room) {
+            for (int i = 0; i < lines.size(); i++) {
+                g.text(this.font, lines.get(i), x0 + LIST_X + 2, hy + i * spacing, ArmyWidgets.MUTED, false);
+            }
         }
+        Parchment.vLine(g, x0 + DIVIDER_X, y0 + LIST_Y, VISIBLE * ENTRY_H - 2);
+        // unten: die eigene Börse (links neben "Anheuern")
+        Parchment.hLine(g, x0 + LIST_X, y0 + BAR_Y - 5, WIDTH - 2 * LIST_X);
+        Component purse = Component.translatable("gui.kingdomsatwar.town.purse");
+        g.text(this.font, purse, x0 + LIST_X + 2, y0 + BAR_Y + 5, ArmyWidgets.MUTED, false);
+        if (this.minecraft.player != null) {
+            Parchment.price(g, this.font, x0 + LIST_X + 6 + this.font.width(purse), y0 + BAR_Y + 3, Coins.total(this.minecraft.player),
+                    ArmyWidgets.LABEL);
+        }
+        ArmyWidgets.portrait(g, x0 + PREVIEW_X, y0 + PREVIEW_Y);
         if (chosen == null) {
-            // niemand da: statt des leeren, schwarzen Bildrahmens ein blasses Schild (wie ein leerer Aushang)
-            g.fill(x0 + PREVIEW_X, y0 + PREVIEW_Y, x0 + PREVIEW_X + PREVIEW_W, y0 + PREVIEW_Y + PREVIEW_H, 0xFFC6C6C6);
-            g.pose().pushMatrix();
-            g.pose().translate(x0 + PREVIEW_X + PREVIEW_W / 2.0f - 16, y0 + PREVIEW_Y + PREVIEW_H / 2.0f - 16);
-            g.pose().scale(2.0f, 2.0f);
-            g.item(new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.OAK_SIGN), 0, 0);
-            g.pose().popMatrix();
-            g.fill(x0 + PREVIEW_X, y0 + PREVIEW_Y, x0 + PREVIEW_X + PREVIEW_W, y0 + PREVIEW_Y + PREVIEW_H, 0x88C6C6C6);
-        } else {
-            InventoryScreen.extractEntityInInventoryFollowsMouse(g, x0 + PREVIEW_X + 1, y0 + PREVIEW_Y + 1, x0 + PREVIEW_X + PREVIEW_W - 1,
-                    y0 + PREVIEW_Y + PREVIEW_H - 1, 34, 0.0625f, mouseX, mouseY, chosen);
-            this.drawInfo(g, chosen, x0 + INFO_X, y0 + PREVIEW_Y, mouseX, mouseY);
-            ArmyWidgets.description(g, this.font, Component.translatable(chosen.getSoldierType().descriptionKey()), x0 + PREVIEW_X, y0 + 117,
-                    WIDTH - PREVIEW_X - 8, INFO_X - PREVIEW_X - 4, ArmyWidgets.LABEL);
+            // niemand da: im Rahmen ein blasses Schild (wie ein leerer Aushang)
+            Parchment.item(g, new ItemStack(net.minecraft.world.item.Items.OAK_SIGN), x0 + PREVIEW_X + PREVIEW_W / 2 - 16,
+                    y0 + PREVIEW_Y + PREVIEW_H / 2 - 18, 2.0f);
+            g.fill(x0 + PREVIEW_X + 4, y0 + PREVIEW_Y + 4, x0 + PREVIEW_X + PREVIEW_W - 4, y0 + PREVIEW_Y + PREVIEW_H - 4, 0x88140C06);
+            // rechts daneben, wozu Söldner gut sind
+            g.text(this.font, Component.translatable("gui.kingdomsatwar.mercenaries.title").withStyle(ChatFormatting.BOLD), x0 + INFO_X,
+                    y0 + PREVIEW_Y + 2, ArmyWidgets.LABEL, false);
+            List<FormattedCharSequence> about = this.font.split(Component.translatable("gui.kingdomsatwar.mercenaries.hint"), INFO_W);
+            for (int i = 0; i < Math.min(8, about.size()); i++) {
+                g.text(this.font, about.get(i), x0 + INFO_X, y0 + PREVIEW_Y + 16 + i * 10, ArmyWidgets.MUTED, false);
+            }
+            return;
         }
-        if (this.feedback != null && this.feedbackTicks > 0) {
-            g.text(this.font, this.feedback, x0 + PREVIEW_X, y0 + 155, this.feedbackColor, false);
+        InventoryScreen.extractEntityInInventoryFollowsMouse(g, x0 + PREVIEW_X + 4, y0 + PREVIEW_Y + 4, x0 + PREVIEW_X + PREVIEW_W - 4,
+                y0 + PREVIEW_Y + PREVIEW_H - 4, 33, 0.0625f, mouseX, mouseY, chosen);
+        this.drawInfo(g, chosen, x0 + INFO_X, y0 + PREVIEW_Y, mouseX, mouseY);
+        // was er kann – unter Bild und Werten, über die ganze Breite
+        Parchment.hLine(g, x0 + PREVIEW_X, y0 + TEXT_Y, WIDTH - LIST_X - PREVIEW_X);
+        List<FormattedCharSequence> text = this.font.split(Component.translatable(chosen.getSoldierType().descriptionKey()),
+                WIDTH - LIST_X - PREVIEW_X);
+        int rows = Math.min(4, text.size());
+        int width = WIDTH - LIST_X - PREVIEW_X;
+        for (int i = 0; i < rows; i++) {
+            FormattedCharSequence line = text.get(i);
+            int ly = y0 + TEXT_Y + 4 + i * 10;
+            if (i == rows - 1 && text.size() > rows) {
+                // mehr als vier Zeilen: die letzte endet mit "…"
+                StringBuilder sb = new StringBuilder();
+                line.accept((index, style, codePoint) -> {
+                    sb.appendCodePoint(codePoint);
+                    return true;
+                });
+                String last = sb.toString().stripTrailing();
+                g.text(this.font, this.font.width(last + " …") <= width ? last + " …" : ArmyWidgets.shorten(this.font, last, width),
+                        x0 + PREVIEW_X, ly, ArmyWidgets.LABEL, false);
+            } else {
+                g.text(this.font, line, x0 + PREVIEW_X, ly, ArmyWidgets.LABEL, false);
+            }
         }
     }
 
@@ -273,27 +317,31 @@ public class MercenaryScreen extends Screen {
         String name = soldier.getPersonalName().isEmpty() ? soldier.getDisplayName().getString() : soldier.getPersonalName();
         ArmyWidgets.entry(g, this.font, x, y, ENTRY_W, ENTRY_H - 2, hovered, isSelected, soldier.getSoldierType(), soldier.getVariant(), name,
                 Component.translatable(soldier.getSoldierType().translationKey()), soldier.getRank());
-        ArmyWidgets.levelBadge(g, this.font, x + 5, y + 5, soldier.getCombatLevel());
+        ArmyWidgets.levelBadge(g, this.font, x + 4, y + 5, soldier.getCombatLevel());
+        // dritte Zeile: der Sold als kleine Münzen
+        Parchment.price(g, this.font, x + ArmyWidgets.TEXT_X - 1, y + ArmyWidgets.ROW3 - 2, soldier.hirePrice(), ArmyWidgets.MUTED);
     }
 
     private void drawInfo(GuiGraphicsExtractor g, SoldierEntity soldier, int x, int y, int mouseX, int mouseY) {
         SoldierType type = soldier.getSoldierType();
         int rank = soldier.getRank();
-        g.text(this.font, Component.translatable(type.translationKey()).withStyle(ChatFormatting.BOLD), x, y + 2, ArmyWidgets.LABEL, false);
+        ArmyWidgets.fitText(g, this.font, Component.translatable(type.translationKey()).withStyle(ChatFormatting.BOLD), x, y + 2, INFO_W,
+                ArmyWidgets.LABEL, false);
         g.text(this.font, ArmyWidgets.rank(rank, SoldierEntity.MAX_RANK), x, y + 13, rank == 0 ? ArmyWidgets.MUTED : ArmyWidgets.GOLD, false);
         int level = soldier.getCombatLevel();
-        ArmyWidgets.levelLine(g, this.font, x, y + 23, 96, level, soldier.getCombatExperience(), mouseX, mouseY);
+        ArmyWidgets.levelLine(g, this.font, x, y + 23, INFO_W, level, soldier.getCombatExperience(), mouseX, mouseY);
         int sy = y + 34;
         g.blitSprite(RenderPipelines.GUI_TEXTURED, ArmyWidgets.HEART, x, sy, 9, 9);
         ArmyWidgets.stat(g, this.font, x + 12, sy + 1, String.valueOf(Mth.ceil(soldier.getAttributeValue(Attributes.MAX_HEALTH))), null);
-        g.blitSprite(RenderPipelines.GUI_TEXTURED, ArmyWidgets.ARMOR, x, sy + 12, 9, 9);
-        ArmyWidgets.stat(g, this.font, x + 12, sy + 13, String.valueOf((int) Math.round(type.armor() + 2.0 * rank
+        g.blitSprite(RenderPipelines.GUI_TEXTURED, ArmyWidgets.ARMOR, x, sy + 11, 9, 9);
+        ArmyWidgets.stat(g, this.font, x + 12, sy + 12, String.valueOf((int) Math.round(type.armor() + 2.0 * rank
                 + io.github.sirschrolli.kingdomsatwar.army.Veterancy.ARMOR_PER_LEVEL * (level - 1))), null);
-        ArmyWidgets.weaponIcon(g, type, x - 1, sy + 23);
-        g.text(this.font, Component.translatable(type.ranged() ? "gui.kingdomsatwar.recruitment.ranged" : "gui.kingdomsatwar.recruitment.melee")
-                .append(" " + (int) Math.round(type.attack() + rank + io.github.sirschrolli.kingdomsatwar.army.Veterancy.DAMAGE_PER_LEVEL * (level - 1))),
-                x + 12, sy + 25, ArmyWidgets.LABEL, false);
-        int py = y + 72;
+        ArmyWidgets.weaponIcon(g, type, x - 1, sy + 21);
+        ArmyWidgets.fitText(g, this.font, Component.translatable(type.ranged() ? "gui.kingdomsatwar.recruitment.ranged"
+                : "gui.kingdomsatwar.recruitment.melee").append(" " + (int) Math.round(type.attack() + rank
+                + io.github.sirschrolli.kingdomsatwar.army.Veterancy.DAMAGE_PER_LEVEL * (level - 1))), x + 12, sy + 23, INFO_W - 12,
+                ArmyWidgets.LABEL, false);
+        int py = y + 70;
         g.text(this.font, Component.translatable("gui.kingdomsatwar.mercenaries.wage"), x, py, ArmyWidgets.LABEL, false);
         ArmyWidgets.costRow(g, this.font, this.minecraft.player, x, py + 10, soldier.hirePrice(), List.of(), List.of(), mouseX, mouseY);
     }

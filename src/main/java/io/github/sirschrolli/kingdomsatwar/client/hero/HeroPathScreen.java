@@ -212,8 +212,14 @@ public class HeroPathScreen extends Screen {
             }
         }
         float moonX = this.width * 0.78f - this.scroll * 0.03f;
-        HeroGui.light(g, HeroGui.GLOW, moonX + 20, HEADER + 34, 140.0f, 0.0f, 0xFF8C86C8, 0.35f);
-        g.blitSprite(RenderPipelines.GUI_TEXTURED, MOON, Math.round(moonX), HEADER + 14, 40, 40);
+        // in niedrigen Fenstern reichen die fernen Berge bis unter die Kopfzeile: dann steht der Mond hinter ihnen, und
+        // nur sein Schein leuchtet über die Gipfel (halb verdeckt sah er aus wie angebissen)
+        float peaks = horizon - 66 + 13;
+        boolean moon = HEADER + 14 + 40 <= peaks + 6;
+        HeroGui.light(g, HeroGui.GLOW, moonX + 20, moon ? HEADER + 34 : peaks + 4, 140.0f, 0.0f, 0xFF8C86C8, moon ? 0.35f : 0.42f);
+        if (moon) {
+            g.blitSprite(RenderPipelines.GUI_TEXTURED, MOON, Math.round(moonX), HEADER + 14, 40, 40);
+        }
         // ferne Berge und nahe Hügel (verschieden schnell)
         tile(g, MOUNTAINS, 256, 80, this.scroll * 0.25f, Math.round(horizon - 66));
         this.regionTint(g, horizon);

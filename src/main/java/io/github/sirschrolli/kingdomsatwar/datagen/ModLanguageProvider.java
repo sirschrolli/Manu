@@ -3042,6 +3042,13 @@ public class ModLanguageProvider extends LanguageProvider {
         text("gui.kingdomsatwar.recruitment.return.no_town", "Without a settlement there is no garrison – found one with a town banner.",
                 "Ohne Siedlung gibt es keine Garnison – gründe eine mit einem Stadtbanner.");
         text("gui.kingdomsatwar.recruitment.rations", "Provisions for %s days", "Proviant für %s Tage");
+        // kurze Beschriftungen der Holzknöpfe unten im Fenster (das Ausführliche steht im Tooltip)
+        text("gui.kingdomsatwar.recruitment.heal.short", "Heal", "Heilen");
+        text("gui.kingdomsatwar.recruitment.heal.none.short", "All unhurt", "Alle unverletzt");
+        text("gui.kingdomsatwar.recruitment.provisions.short", "%s rations", "%s Rationen");
+        text("gui.kingdomsatwar.recruitment.provisions.full.short", "Provisions full", "Proviant voll");
+        text("gui.kingdomsatwar.recruitment.march.short", "Campaign (%s)", "Schlachtzug (%s)");
+        text("gui.kingdomsatwar.recruitment.villages_title", "How your army grows", "So wächst dein Heer");
         text("gui.kingdomsatwar.recruitment.rations.hungry", "Hungry – no provisions left", "Hungrig – kein Proviant mehr");
         text("gui.kingdomsatwar.recruitment.on_campaign", " – on campaign", " – auf dem Schlachtzug");
         text("gui.kingdomsatwar.recruitment.in_garrison", " – in the garrison", " – in der Garnison");

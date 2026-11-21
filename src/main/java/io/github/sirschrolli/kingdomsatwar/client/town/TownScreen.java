@@ -474,19 +474,33 @@ public class TownScreen extends Screen {
 
     private void drawTabs(GuiGraphicsExtractor g, int mouseX, int mouseY) {
         Tab[] tabs = this.view.isOwner() ? Tab.values() : new Tab[] {Tab.OVERVIEW, Tab.RESIDENTS, Tab.BUILD};
+        // Alle Reiter müssen aufs Pergament passen (deutsch sind sie breit): erst wird der Rand innen schmaler, dann die
+        // Schrift kleiner; übriger Platz wird gleichmäßig verteilt, der letzte Reiter endet bündig am rechten Rand.
+        int gap = 2;
+        int room = CONTENT_W - gap * (tabs.length - 1);
+        int[] text = new int[tabs.length];
+        int natural = 0;
+        for (int i = 0; i < tabs.length; i++) {
+            text[i] = this.font.width(tabs[i].title());
+            natural += text[i];
+        }
+        int pad = natural + tabs.length * (10 + 3 + 8) <= room ? 4 : 2;
+        float textScale = Math.min(1.0f, (room - tabs.length * (10 + 3 + 2 * pad)) / (float) Math.max(1, natural));
         int[] widths = new int[tabs.length];
         int total = 0;
         for (int i = 0; i < tabs.length; i++) {
-            widths[i] = 4 + 10 + 3 + this.font.width(tabs[i].title()) + 4;
+            widths[i] = pad + 10 + 3 + (int) Math.ceil(text[i] * textScale) + pad;
             total += widths[i];
         }
-        int gap = 2;
-        int extra = Math.max(0, CONTENT_W - total - gap * (tabs.length - 1)) / tabs.length;
+        int spare = Math.max(0, room - total);
+        for (int i = 0; i < tabs.length; i++) {
+            widths[i] += spare / tabs.length + (i < spare % tabs.length ? 1 : 0);
+        }
         int x = this.left + CONTENT_X;
         int y = this.top + 32;
         for (int i = 0; i < tabs.length; i++) {
             Tab t = tabs[i];
-            int w = widths[i] + extra;
+            int w = widths[i];
             boolean active = t == this.tab;
             boolean hover = mouseX >= x && mouseX < x + w && mouseY >= y && mouseY < y + 17;
             int fill = active ? 0xFFF1E2BC : hover ? 0xFFE3CE9E : 0xFFD6BF8C;
@@ -499,10 +513,18 @@ public class TownScreen extends Screen {
             } else {
                 g.fill(x, y + 16, x + w, y + 17, 0xFF9C7F52);
             }
-            int inner = 10 + 3 + this.font.width(t.title());
+            int inner = 10 + 3 + Math.round(this.font.width(t.title()) * textScale);
             int ix = x + (w - inner) / 2;
             this.itemScaled(g, t.icon(), ix, y + 3, 0.625f);
-            g.text(this.font, t.title(), ix + 13, y + 5, active ? TEXT : MUTED, false);
+            if (textScale < 1.0f) {
+                g.pose().pushMatrix();
+                g.pose().translate(ix + 13, y + 5 + 4.0f * (1.0f - textScale));
+                g.pose().scale(textScale, textScale);
+                g.text(this.font, t.title(), 0, 0, active ? TEXT : MUTED, false);
+                g.pose().popMatrix();
+            } else {
+                g.text(this.font, t.title(), ix + 13, y + 5, active ? TEXT : MUTED, false);
+            }
             if (!active) {
                 this.hotspots.add(new Hotspot(x, y, w, 17, true, () -> {
                     this.tab = t;
@@ -613,7 +635,9 @@ public class TownScreen extends Screen {
                 ry += 10;
             }
         }
-        int storageY = y0 + CONTENT_H - (v.storage() ? 16 : 26);
+        // unten das Lager (eine Zeile) oder der Hinweis, wie man eins anlegt (so viele Zeilen, wie er braucht)
+        int storageY = y0 + CONTENT_H - (v.storage() ? 16
+                : 6 + 10 * this.font.split(Component.translatable("gui.kingdomsatwar.town.storage.none"), 140).size());
         for (int i = 0; i < v.projects().size(); i++) {
             TownView.ProjectView p = v.projects().get(i);
             if (ry + 30 > storageY - 4) {

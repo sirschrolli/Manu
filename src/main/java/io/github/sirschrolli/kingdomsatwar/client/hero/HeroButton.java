@@ -15,10 +15,19 @@ import net.minecraft.util.Mth;
  */
 public class HeroButton extends Button {
     private final boolean round;
+    /** Die Schrift, wie sie gesetzt wurde (das Spiel färbt die Nachricht abgeschalteter Knöpfe sonst grau ein). */
+    private Component label;
 
     protected HeroButton(int x, int y, int width, int height, Component message, OnPress onPress, boolean round) {
         super(x, y, width, height, message, onPress, DEFAULT_NARRATION);
         this.round = round;
+        this.label = message;
+    }
+
+    @Override
+    public void setMessage(Component message) {
+        super.setMessage(message);
+        this.label = message;
     }
 
     /** Ein breiter Knopf mit Text. */
@@ -33,7 +42,8 @@ public class HeroButton extends Button {
 
     @Override
     protected void extractContents(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
-        boolean hover = this.isHoveredOrFocused();
+        // nach einem Mausklick bleibt der Knopf "fokussiert" – hervorgehoben wird er dann nur unter der Maus
+        boolean hover = this.isHovered() || this.isFocused() && Minecraft.getInstance().getLastInputType().isKeyboard();
         if (this.round) {
             float pulse = this.active ? 0.5f + 0.5f * Mth.sin(HeroGui.seconds() * 4.0f) : 0.0f;
             if (this.active) {
@@ -46,7 +56,7 @@ public class HeroButton extends Button {
         g.blitSprite(RenderPipelines.GUI_TEXTURED, !this.active ? HeroGui.BUTTON_DISABLED : hover ? HeroGui.BUTTON_HIGHLIGHTED : HeroGui.BUTTON,
                 this.getX(), this.getY(), this.getWidth(), this.getHeight(), ARGB.white(this.alpha));
         Font font = Minecraft.getInstance().font;
-        Component label = this.getMessage();
+        Component label = this.label;
         int color = !this.active ? 0xFF6E6880 : hover ? 0xFFFFE7A0 : HeroGui.TEXT;
         int x = this.getX() + (this.getWidth() - font.width(label)) / 2;
         int y = this.getY() + (this.getHeight() - 8) / 2;

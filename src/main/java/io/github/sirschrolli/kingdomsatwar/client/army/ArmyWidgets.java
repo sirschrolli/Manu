@@ -1,6 +1,8 @@
 package io.github.sirschrolli.kingdomsatwar.client.army;
 
+import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.client.renderer.SoldierRenderer;
+import io.github.sirschrolli.kingdomsatwar.client.town.Parchment;
 import io.github.sirschrolli.kingdomsatwar.economy.Coins;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
 import java.util.ArrayList;
@@ -14,28 +16,62 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import org.jspecify.annotations.Nullable;
 
-/** Gemeinsame Bausteine der Armee-Fenster (Feldherrentisch und Söldnertafel). */
+/**
+ * Gemeinsame Bausteine der Armee-Fenster (Feldherrentisch und Söldnertafel) im Pergament-Stil des Stadtfensters:
+ * Fensterbild, Bilderrahmen für den Soldaten, Einträge der Liste, Fächer für Preise.
+ */
 final class ArmyWidgets {
-    static final Identifier SLOT = Identifier.withDefaultNamespace("container/slot");
+    /** Atlas: Fenster (320 × 218), Bilderrahmen (68 × 96 bei 322/0), Fach (18 × 18 bei 392/0). */
+    static final Identifier ATLAS = KingdomsAtWar.id("textures/gui/recruitment_table.png");
+    static final int ATLAS_W = 512;
+    static final int ATLAS_H = 256;
+    static final int WIDTH = 320;
+    static final int HEIGHT = 218;
     static final Identifier HEART = Identifier.withDefaultNamespace("hud/heart/full");
     static final Identifier ARMOR = Identifier.withDefaultNamespace("hud/armor_full");
-    static final Identifier BUTTON = Identifier.withDefaultNamespace("widget/button");
-    static final Identifier BUTTON_HIGHLIGHTED = Identifier.withDefaultNamespace("widget/button_highlighted");
-    static final int LABEL = 0xFF404040;
-    static final int MUTED = 0xFF6B6B6B;
-    static final int GOOD = 0xFF2E7D32;
-    static final int BAD = 0xFFB3261E;
-    static final int GOLD = 0xFF8A6A10;
+    static final int LABEL = Parchment.TEXT;
+    static final int MUTED = Parchment.MUTED;
+    static final int GOOD = Parchment.GOOD;
+    static final int BAD = Parchment.BAD;
+    static final int GOLD = Parchment.GOLD;
+    /** Rückmeldungen im blauen Band (hell genug für den dunklen Grund). */
+    static final int RIBBON_GOOD = 0xFFB4EC8C;
+    static final int RIBBON_BAD = 0xFFFFA08C;
 
     private ArmyWidgets() {}
 
-    /** Gesicht aus der Textur (Kopf und Helm), 24 × 24 mit dunklem Rand. */
+    /** Das Fenster selbst (Rahmen, Band, Pergament). */
+    static void window(GuiGraphicsExtractor g, int x, int y) {
+        g.blit(RenderPipelines.GUI_TEXTURED, ATLAS, x, y, 0.0f, 0.0f, WIDTH, HEIGHT, ATLAS_W, ATLAS_H);
+    }
+
+    /** Der Bilderrahmen für den Soldaten (68 × 96; innen 3 Pixel Leiste). */
+    static void portrait(GuiGraphicsExtractor g, int x, int y) {
+        g.blit(RenderPipelines.GUI_TEXTURED, ATLAS, x, y, 322.0f, 0.0f, 68, 96, ATLAS_W, ATLAS_H);
+    }
+
+    /**
+     * Titel im blauen Band: links ein Bild und der Name (golden), rechts die Armee – für ein paar Sekunden steht dort
+     * stattdessen die Antwort des Servers (grün oder rot).
+     */
+    static void header(GuiGraphicsExtractor g, Font font, int x0, int y0, ItemStack icon, Component title, Component right,
+            @Nullable Component feedback, boolean good) {
+        Parchment.item(g, icon, x0 + 11, y0 + 10, 1.0f);
+        Component side = feedback != null ? feedback : right;
+        int sideW = font.width(side);
+        int titleMax = WIDTH - 31 - 12 - Math.max(sideW, font.width(right)) - 8;
+        Component shown = font.width(title) <= titleMax ? title
+                : Component.literal(Parchment.ellipsize(font, title.getString(), titleMax)).withStyle(title.getStyle());
+        g.text(font, shown, x0 + 31, y0 + 14, Parchment.GOLD_TEXT, true);
+        g.text(font, side, x0 + WIDTH - 12 - sideW, y0 + 14, feedback == null ? Parchment.RIBBON_TEXT : good ? RIBBON_GOOD : RIBBON_BAD, true);
+    }
+
+    /** Gesicht aus der Textur (Kopf und Helm), 24 × 24 mit dunklem Rahmen. */
     static void face(GuiGraphicsExtractor g, SoldierType type, int variant, int x, int y) {
         Identifier skin = SoldierRenderer.texture(type, variant);
-        g.fill(x - 1, y - 1, x + 25, y + 25, 0xFF1E1E1E);
+        g.fill(x - 1, y - 1, x + 25, y + 25, 0xFF5A4126);
         g.blit(RenderPipelines.GUI_TEXTURED, skin, x, y, 8.0f, 8.0f, 24, 24, 8, 8, 128, 64);
         g.blit(RenderPipelines.GUI_TEXTURED, skin, x, y, 40.0f, 8.0f, 24, 24, 8, 8, 128, 64);
     }
@@ -60,28 +96,21 @@ final class ArmyWidgets {
         int bx = x + font.width(text) + 5;
         int bw = width - (bx - x) - 1;
         float progress = io.github.sirschrolli.kingdomsatwar.army.Veterancy.progress(experience);
-        g.fill(bx - 1, y + 1, bx + bw + 1, y + 7, 0xFF3A3122);
-        g.fill(bx, y + 2, bx + bw, y + 6, 0xFF6E6250);
-        g.fill(bx, y + 2, bx + Math.round(bw * progress), y + 6, 0xFFE0A93A);
-        g.fill(bx, y + 2, bx + Math.round(bw * progress), y + 3, 0xFFF6D27A);
+        Parchment.bar(g, bx, y + 1, bw, 6, progress, 0xFFD39A2C);
         if (mouseX >= x && mouseX < x + width && mouseY >= y - 1 && mouseY < y + 9) {
             boolean max = level >= io.github.sirschrolli.kingdomsatwar.army.Veterancy.MAX_LEVEL;
             Component numbers = max ? Component.translatable("gui.kingdomsatwar.soldier.experience.max", experience)
                     : Component.translatable("gui.kingdomsatwar.soldier.experience", experience,
                             io.github.sirschrolli.kingdomsatwar.army.Veterancy.total(level + 1));
-            g.setTooltipForNextFrame(font, java.util.stream.Stream.of(numbers.copy().withStyle(net.minecraft.ChatFormatting.GOLD),
-                    Component.translatable("gui.kingdomsatwar.soldier.experience.hint").withStyle(net.minecraft.ChatFormatting.GRAY))
+            g.setTooltipForNextFrame(font, java.util.stream.Stream.of(numbers.copy().withStyle(ChatFormatting.GOLD),
+                    Component.translatable("gui.kingdomsatwar.soldier.experience.hint").withStyle(ChatFormatting.GRAY))
                     .flatMap(c -> font.split(c, 200).stream()).toList(), mouseX, mouseY);
         }
     }
 
     /** Kleines Waffen-Symbol (Schwert, Bogen, Armbrust, Speer, Streitkolben, Axt) für die Angriffswerte. */
     static void weaponIcon(GuiGraphicsExtractor g, SoldierType type, int x, int y) {
-        g.pose().pushMatrix();
-        g.pose().translate(x, y);
-        g.pose().scale(0.6875f, 0.6875f);
-        g.item(new ItemStack(type.weaponIcon()), 0, 0);
-        g.pose().popMatrix();
+        Parchment.item(g, new ItemStack(type.weaponIcon()), x, y, 0.6875f);
     }
 
     /** Ein Text, der in {@code width} Pixel passen muss: notfalls etwas kleiner gesetzt (bis 70 %), dann gekürzt. */
@@ -106,48 +135,32 @@ final class ArmyWidgets {
     }
 
     /**
-     * Ein Eintrag der Liste: Knopf, Gesicht, oben der Name (ausgewählt in Gold) mit den Rangsternen rechtsbündig, darunter
-     * eine zweite Zeile (Art oder Rolle).
+     * Ein Eintrag der Liste: Karte auf dem Pergament (ausgewählt mit Goldrand), Gesicht, oben der Name mit den Rangsternen
+     * rechtsbündig, darunter eine zweite Zeile (Art oder Rolle) über die ganze Breite; die dritte Zeile ({@link #ROW3})
+     * füllt das Fenster selbst (Gesundheit und Proviant bzw. der Sold).
      */
     static void entry(GuiGraphicsExtractor g, Font font, int x, int y, int width, int height, boolean hovered, boolean selected, SoldierType type,
             int variant, String name, Component sub, int rank) {
-        entry(g, font, x, y, width, height, hovered, selected, type, variant, name, sub, rank, width - 34);
-    }
-
-    /** Wie oben; die zweite Zeile ist höchstens {@code subWidth} breit (sonst mit "…" gekürzt), rechts daneben ist Platz. */
-    static void entry(GuiGraphicsExtractor g, Font font, int x, int y, int width, int height, boolean hovered, boolean selected, SoldierType type,
-            int variant, String name, Component sub, int rank, int subWidth) {
-        g.blitSprite(RenderPipelines.GUI_TEXTURED, hovered || selected ? BUTTON_HIGHLIGHTED : BUTTON, x, y, width, height);
-        face(g, type, variant, x + 5, y + 5);
+        Parchment.card(g, x, y, width, height, hovered, selected);
+        face(g, type, variant, x + 4, y + 5);
         String stars = "★".repeat(rank);
         int starsWidth = rank > 0 ? font.width(stars) + 3 : 0;
-        int nameWidth = width - 36 - starsWidth;
-        g.text(font, font.plainSubstrByWidth(name, nameWidth), x + 33, y + 7, selected ? 0xFFFFE08A : 0xFFFFFFFF, true);
+        int nameWidth = width - TEXT_X - 3 - starsWidth;
+        g.text(font, shorten(font, name, nameWidth), x + TEXT_X, y + 6, selected ? 0xFF5A3608 : LABEL, false);
         if (rank > 0) {
-            g.text(font, stars, x + width - 4 - font.width(stars), y + 7, 0xFFF2C14E, true);
+            g.text(font, stars, x + width - 3 - font.width(stars), y + 6, 0xFFB8862A, false);
         }
-        g.text(font, shorten(font, sub.getString(), subWidth), x + 33, y + 19, 0xFFC8C8C8, true);
+        g.text(font, shorten(font, sub.getString(), width - TEXT_X - 3), x + TEXT_X, y + 16, MUTED, false);
     }
+
+    /** Wo im Eintrag die Schrift beginnt (rechts neben dem Gesicht). */
+    static final int TEXT_X = 31;
+    /** Die dritte Zeile eines Eintrags (Abstand von oben). */
+    static final int ROW3 = 26;
 
     /** Kürzt einen Text auf {@code width} Pixel – mit "…", wenn etwas fehlt. */
     static String shorten(Font font, String text, int width) {
-        if (font.width(text) <= width) {
-            return text;
-        }
-        return font.plainSubstrByWidth(text, Math.max(0, width - font.width("…"))) + "…";
-    }
-
-    /**
-     * Beschreibung unter dem Vorschaubild: bis zu drei Zeilen der vollen Breite, eine vierte (enger gesetzt) nur, wenn
-     * sie links neben den Knopf unten rechts passt.
-     */
-    static void description(GuiGraphicsExtractor g, Font font, Component text, int x, int y, int width, int lastWidth, int color) {
-        java.util.List<net.minecraft.util.FormattedCharSequence> lines = font.split(text, width);
-        boolean four = lines.size() > 3 && font.width(lines.get(3)) <= lastWidth;
-        int spacing = four ? 9 : 10;
-        for (int i = 0; i < Math.min(four ? 4 : 3, lines.size()); i++) {
-            g.text(font, lines.get(i), x, y + i * spacing, color, false);
-        }
+        return Parchment.ellipsize(font, text, width);
     }
 
     /** Ein Wert und – wenn es einen gibt – der Wert danach in Grün ("30 → 38"). */
@@ -155,6 +168,21 @@ final class ArmyWidgets {
         g.text(font, now, x, y, LABEL, false);
         if (next != null) {
             g.text(font, " → " + next, x + font.width(now), y, GOOD, false);
+        }
+    }
+
+    /** Rollbalken auf dem Pergament: helle Rinne, Griff aus Holz (golden umrandet, solange man ihn anfasst). */
+    static void scrollbar(GuiGraphicsExtractor g, int x, int y, int w, int h, int thumbY, int thumbH, boolean hot) {
+        g.fill(x, y, x + w, y + h, 0xFF8C7650);
+        g.fill(x + 1, y + 1, x + w - 1, y + h - 1, 0xFFC9B48A);
+        g.fill(x, thumbY, x + w, thumbY + thumbH, hot ? 0xFFE0B04A : 0xFF2E1D10);
+        g.fill(x + 1, thumbY + 1, x + w - 1, thumbY + thumbH - 1, hot ? 0xFF8E6038 : 0xFF74492A);
+        g.fill(x + 1, thumbY + 1, x + w - 1, thumbY + 2, 0xFFA4744A);
+        g.fill(x + 1, thumbY + thumbH - 2, x + w - 1, thumbY + thumbH - 1, 0xFF4A2E18);
+        // Griffrillen in der Mitte
+        int my = thumbY + thumbH / 2;
+        for (int i = -1; i <= 1; i++) {
+            g.fill(x + 1, my + i * 2, x + w - 1, my + i * 2 + 1, 0xFF4A2E18);
         }
     }
 
@@ -172,16 +200,16 @@ final class ArmyWidgets {
         for (int i = 0; i < shown.size(); i++) {
             ItemStack stack = shown.get(i);
             int sx = x + i * 20;
-            g.blitSprite(RenderPipelines.GUI_TEXTURED, SLOT, sx, y, 18, 18);
-            g.item(stack, sx + 1, y + 1);
-            g.itemDecorations(font, stack, sx + 1, y + 1);
+            g.blit(RenderPipelines.GUI_TEXTURED, ATLAS, sx, y, 392.0f, 0.0f, 18, 18, ATLAS_W, ATLAS_H);
             boolean coin = i < coinStacks;
             int have = coin ? purse : player == null ? 0 : player.getInventory().countItem(stack.getItem());
             int need = coin ? coins : counts.get(i - coinStacks);
             boolean enough = creative || have >= need;
             if (!enough) {
-                g.fill(sx + 1, y + 1, sx + 17, y + 17, 0x55FF3030);
+                g.fill(sx + 2, y + 2, sx + 16, y + 16, 0x66D03A28);
             }
+            g.item(stack, sx + 1, y + 1);
+            g.itemDecorations(font, stack, sx + 1, y + 1);
             if (mouseX >= sx && mouseX < sx + 18 && mouseY >= y && mouseY < y + 18) {
                 List<Component> tooltip = new ArrayList<>();
                 if (coin) {

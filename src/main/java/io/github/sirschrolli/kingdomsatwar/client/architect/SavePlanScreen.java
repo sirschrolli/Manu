@@ -88,10 +88,15 @@ public class SavePlanScreen extends Screen {
         this.left = (this.width - WIDTH) / 2;
         this.top = (this.height - HEIGHT) / 2;
         String name = this.nameBox != null ? this.nameBox.getValue() : Component.translatable("gui.kingdomsatwar.architect.default_name").getString();
-        this.nameBox = new EditBox(this.font, this.left + 170, this.top + 47, 140, 15, Component.translatable("gui.kingdomsatwar.architect.name"));
+        // ohne den schwarzen Kasten des Spiels: das Feld zeichnet das Fenster selbst (helles Papier mit Holzrand, siehe nameField)
+        this.nameBox = new EditBox(this.font, this.left + 174, this.top + 51, 132, 10, Component.translatable("gui.kingdomsatwar.architect.name"));
+        this.nameBox.setBordered(false);
+        this.nameBox.setTextColor(TEXT);
+        this.nameBox.setTextColorUneditable(MUTED);
+        this.nameBox.setTextShadow(false);
         this.nameBox.setMaxLength(PlanInfo.MAX_NAME);
         this.nameBox.setValue(name);
-        this.nameBox.setHint(Component.translatable("gui.kingdomsatwar.architect.name"));
+        this.nameBox.setHint(Component.translatable("gui.kingdomsatwar.architect.name").withStyle(ChatFormatting.ITALIC).withColor(MUTED));
         this.addRenderableWidget(this.nameBox);
         this.setInitialFocus(this.nameBox);
         if (this.scan == null && this.minecraft.level != null) {
@@ -279,7 +284,17 @@ public class SavePlanScreen extends Screen {
 
         this.drawPictures(g, x0 + 10, y0 + 36, mouseX, mouseY);
         this.drawSettings(g, x0 + 170, y0 + 36, mouseX, mouseY);
+        this.nameField(g, x0 + 170, y0 + 47, 140, 15);
         super.extractRenderState(g, mouseX, mouseY, a);
+    }
+
+    /** Das Namensfeld: helles Papier, eingelassen in einen dunklen Holzrand (golden, solange man schreibt). */
+    private void nameField(GuiGraphicsExtractor g, int x, int y, int w, int h) {
+        boolean focused = this.nameBox != null && this.nameBox.isFocused();
+        g.fill(x, y, x + w, y + h, focused ? 0xFFC8932C : 0xFF5A4126);
+        g.fill(x + 1, y + 1, x + w - 1, y + h - 1, 0xFFF6EBD0);
+        g.fill(x + 1, y + 1, x + w - 1, y + 2, 0xFFD8C8A0);
+        g.fill(x + 1, y + 1, x + 2, y + h - 1, 0xFFE4D6B2);
     }
 
     /** Links: Ansicht (mit Bodenlinie) und Grundriss (mit Eingang). */
@@ -417,7 +432,7 @@ public class SavePlanScreen extends Screen {
         int by = this.top + 180;
         boolean paper = this.hasPaper();
         boolean creative = this.minecraft.player != null && this.minecraft.player.hasInfiniteMaterials();
-        this.button(g, x, by, 54, 18, Component.translatable("gui.kingdomsatwar.architect.cancel"), true, mouseX, mouseY, this::onClose, null);
+        this.button(g, x, by, 62, 18, Component.translatable("gui.kingdomsatwar.architect.cancel"), true, mouseX, mouseY, this::onClose, null);
         List<Component> why = new ArrayList<>();
         if (this.scanner != null) {
             why.add(Component.translatable("gui.kingdomsatwar.architect.scanning", Math.round(this.scanner.progress() * 100.0f)));
@@ -428,7 +443,7 @@ public class SavePlanScreen extends Screen {
         } else {
             why.add(Component.translatable(creative ? "gui.kingdomsatwar.architect.paper_free" : "gui.kingdomsatwar.architect.paper"));
         }
-        this.button(g, x + 58, by, 82, 18, Component.translatable("gui.kingdomsatwar.architect.save"), this.canSave(), mouseX, mouseY,
+        this.button(g, x + 66, by, 74, 18, Component.translatable("gui.kingdomsatwar.architect.save"), this.canSave(), mouseX, mouseY,
                 this::save, why, creative ? null : new ItemStack(Items.PAPER));
     }
 
@@ -463,19 +478,7 @@ public class SavePlanScreen extends Screen {
     private void button(GuiGraphicsExtractor g, int x, int y, int w, int h, Component label, boolean active, int mouseX, int mouseY, Runnable action,
             @Nullable List<Component> tooltip, @Nullable ItemStack icon) {
         boolean hover = mouseX >= x && mouseX < x + w && mouseY >= y && mouseY < y + h;
-        int border = active && hover ? 0xFFE0B04A : 0xFF2E1D10;
-        int fill = !active ? 0xFF8C826E : hover ? 0xFF8E6038 : 0xFF74492A;
-        g.fill(x, y, x + w, y + h, border);
-        g.fill(x + 1, y + 1, x + w - 1, y + h - 1, fill);
-        g.fill(x + 1, y + 1, x + w - 1, y + 2, !active ? 0xFFA49A86 : 0xFFA4744A);
-        g.fill(x + 1, y + h - 2, x + w - 1, y + h - 1, !active ? 0xFF6E6656 : 0xFF4A2E18);
-        int tw = this.font.width(label);
-        int lx = x + (w - tw) / 2;
-        if (icon != null) {
-            this.item(g, icon, x + 4, y + (h - 12) / 2, 0.75f);
-            lx = x + 16 + (w - 16 - tw) / 2;
-        }
-        g.text(this.font, label, lx, y + (h - 8) / 2, active ? 0xFFF3E6C4 : 0xFFD5CCB6, active);
+        io.github.sirschrolli.kingdomsatwar.client.town.Parchment.woodButton(g, this.font, x, y, w, h, label, active, hover, icon);
         this.hotspots.add(new Hotspot(x, y, w, h, active, action));
         if (hover && tooltip != null && !tooltip.isEmpty()) {
             g.setComponentTooltipForNextFrame(this.font, tooltip, mouseX, mouseY);

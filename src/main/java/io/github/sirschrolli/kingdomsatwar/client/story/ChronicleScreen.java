@@ -449,7 +449,11 @@ public class ChronicleScreen extends Screen {
         int y = areaTop - (int) this.scroll;
         for (Line line : this.lines) {
             y += line.gap();
-            if (y > areaTop - 12 && y < areaBottom) {
+            // nur ganze Zeilen: was oben oder unten nur halb hineinpasst, bleibt weg (statt mitten durch die Schrift
+            // abgeschnitten zu werden)
+            int lineTop = line.icon() >= 0 && line.icon() < 100 ? y - 2 : y;
+            int lineBottom = line.icon() >= 0 && line.icon() < 100 ? y + 10 : y + 9;
+            if (lineTop >= areaTop - 2 && lineBottom <= areaBottom + 1) {
                 if (line.icon() == 200) {
                     g.blit(RenderPipelines.GUI_TEXTURED, BOOK, x0 + PAGE_W / 2 - 55, y + 1, 320.0f, 94.0f, 110, 7, TEX_W, TEX_H);
                 } else if (line.icon() >= 100) {
