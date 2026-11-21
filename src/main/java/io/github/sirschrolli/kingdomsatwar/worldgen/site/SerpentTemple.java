@@ -730,7 +730,9 @@ final class SerpentTemple {
                         while (Math.abs(x) > 0 && !this.inside(x - side, y, z)) {
                             x -= side;
                         }
-                        if (!this.inside(x - side, y, z) || this.inside(x, y, z) || !this.b.chance(x, y, z, 0.3f)) {
+                        // nur an festem Stein (nicht vor einer Öffnung des Kopfes – dort hätte die Ranke keinen Halt)
+                        if (!this.inside(x - side, y, z) || this.inside(x, y, z) || !this.b.get(x - side, y, z).isSolidRender()
+                                || !this.b.chance(x, y, z, 0.3f)) {
                             continue;
                         }
                         Direction toWall = side > 0 ? Direction.WEST : Direction.EAST;

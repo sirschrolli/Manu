@@ -518,9 +518,11 @@ public class WarTableScreen extends Screen {
             for (int i = 0; i < Math.min(14, hint.size()); i++) {
                 g.text(this.font, hint.get(i), x0 + LIST_X + 2, y0 + LIST_Y + 4 + i * 10, ArmyWidgets.MUTED, false);
             }
+            // ohne Soldaten kein Bild: der dunkle Rahmen verschwindet, der Hinweis steht auf dem Pergament
+            g.fill(x0 + PREVIEW_X, y0 + PREVIEW_Y, x0 + PREVIEW_X + PREVIEW_W, y0 + PREVIEW_Y + PREVIEW_H, 0xFFC6C6C6);
             List<FormattedCharSequence> villages = this.font.split(Component.translatable("gui.kingdomsatwar.recruitment.villages_hint"),
                     WIDTH - PREVIEW_X - 8);
-            for (int i = 0; i < Math.min(5, villages.size()); i++) {
+            for (int i = 0; i < Math.min(11, villages.size()); i++) {
                 g.text(this.font, villages.get(i), x0 + PREVIEW_X, y0 + PREVIEW_Y + 4 + i * 10, ArmyWidgets.MUTED, false);
             }
         }

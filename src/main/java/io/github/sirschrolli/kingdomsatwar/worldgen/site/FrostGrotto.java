@@ -157,6 +157,27 @@ final class FrostGrotto {
             this.entrance();
             this.furnish();
             this.cellar();
+            this.settleSnow();
+        }
+
+        /**
+         * Schnee bleibt nur, wo er auch liegen kann: nicht auf Eis oder Packeis (dort schmilzt er im Spiel beim nächsten
+         * Anstoß weg) und nicht über Luft, wo der Eingang den Hügel aufgeschnitten hat.
+         */
+        void settleSnow() {
+            for (int x = -10; x <= 10; x++) {
+                for (int z = -10; z <= 10; z++) {
+                    for (int y = 0; y <= 11; y++) {
+                        if (this.b.get(x, y, z).is(Blocks.SNOW)) {
+                            BlockState below = this.b.get(x, y - 1, z);
+                            if (below.isAir() || below.is(net.minecraft.tags.BlockTags.CANNOT_SUPPORT_SNOW_LAYER) || !below.isSolidRender()
+                                    && !below.is(net.minecraft.tags.BlockTags.SUPPORT_OVERRIDE_SNOW_LAYER)) {
+                                this.b.set(x, y, z, Blocks.AIR.defaultBlockState());
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         void floor() {

@@ -521,7 +521,7 @@ public final class RealmCastle {
                 }
                 // Tür vom Hof, Leiter bis auf die Wehrplatte
                 this.b.door(side * 6, 1, GZ0, this.s.door(), Direction.SOUTH);
-                this.b.ladder(side * 8, 1, GATE_TOP, GZ0 + 2, side > 0 ? Direction.WEST : Direction.EAST);
+                this.b.ladder(side * 8, 1, GATE_TOP, GZ0 + 3, side > 0 ? Direction.WEST : Direction.EAST);   // neben dem Durchgang zum Wehrgang (dort fehlte der Halt)
                 // Durchgänge zum Wehrgang, in die Torstube und auf ihr Dach
                 this.b.air(xb, WALK + 1, WALL - 2, xb, WALK + 2, WALL - 1);
                 this.b.air(xa, WALK + 1, WALL, xa - side, WALK + 2, WALL);

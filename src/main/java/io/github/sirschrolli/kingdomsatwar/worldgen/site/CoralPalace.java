@@ -226,8 +226,11 @@ final class CoralPalace {
                         }
                     }
                 }
+                // oben ein Deckel aus Seelaterne (sonst säßen die Seegurken auf Wasser), die Gurken obenauf – nicht an die Stelle
+                // eines Turmblocks, sonst fehlte dem Fächer daneben der Halt
+                this.put(c[0], height, c[1], Blocks.SEA_LANTERN.defaultBlockState());
                 this.put(c[0], height + 1, c[1], Blocks.SEA_PICKLE.defaultBlockState().setValue(SeaPickleBlock.PICKLES, 4));
-                this.put(c[0] + 1, height, c[1], Blocks.SEA_PICKLE.defaultBlockState().setValue(SeaPickleBlock.PICKLES, 3));
+                this.put(c[0] + 1, height + 1, c[1], Blocks.SEA_PICKLE.defaultBlockState().setValue(SeaPickleBlock.PICKLES, 3));
                 // ein Strebebogen von der Ecke der Halle zum Turm
                 int sx = Integer.signum(c[0]);
                 int sz = Integer.signum(c[1]);

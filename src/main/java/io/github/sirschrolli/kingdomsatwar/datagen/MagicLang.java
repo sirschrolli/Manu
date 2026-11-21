@@ -125,6 +125,20 @@ final class MagicLang {
         t.add("gui.kingdomsatwar.spell_wheel.learn",
                 "Defeat the archmage of this element in his tower and inscribe his spell tablet at the Magic Table.",
                 "Besiege den Erzmagier dieses Elements in seinem Turm und schreibe seine Zaubertafel am Magietisch ein.");
+        t.add("gui.kingdomsatwar.spell_wheel.learn_short", "Defeat the archmage, inscribe his tablet",
+                "Erzmagier besiegen, seine Tafel einschreiben");
+        // kurz für die Mitte des Zauberkreises (die ganze Beschreibung steht am Stab und am Magietisch)
+        String[][] shorts = {
+                {"aether_bolt", "A bolt of pure magic at your target", "Ein Strahl reiner Magie aufs Ziel"},
+                {"earth", "The ground bursts and hurls foes away", "Der Boden bricht auf, Feinde fliegen"},
+                {"fire", "A fireball sets foes ablaze", "Ein Flammenball setzt Feinde in Brand"},
+                {"ice", "Frost slows foes and freezes water", "Frost bremst Feinde, friert Wasser"},
+                {"lightning", "Lightning strikes your target", "Ein Blitz schlägt am Ziel ein"},
+                {"nature", "Heals you and allies, plants sprout", "Heilt dich und Verbündete, Pflanzen sprießen"},
+                {"water", "A wave pushes back and douses fire", "Eine Woge drängt zurück, löscht Feuer"}};
+        for (String[] s : shorts) {
+            t.add("spell.kingdomsatwar." + s[0] + ".short", s[1], s[2]);
+        }
         t.add("gui.kingdomsatwar.spell_wheel.cooldown", "Recharging: %s s", "Lädt: %s s");
         t.add("gui.kingdomsatwar.spell_wheel.ready", "Ready", "Bereit");
     }

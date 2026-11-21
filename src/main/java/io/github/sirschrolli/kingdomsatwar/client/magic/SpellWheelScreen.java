@@ -265,41 +265,54 @@ public class SpellWheelScreen extends Screen {
         Spell spell = ORDER[index];
         boolean known = spells.knows(spell);
         int alpha = Math.round(255 * open);
-        int y = -34;
-        g.centeredText(this.font, spell.displayName(), 0, y, ARGB.color(alpha, known ? spell.color() : 0x9A90A8));
-        y += 11;
-        if (known) {
-            int level = spells.level(spell);
-            g.centeredText(this.font, Component.translatable("gui.kingdomsatwar.spell_wheel.level", Spell.numeral(level)), 0, y,
-                    ARGB.color(alpha, GOLD));
-        } else {
-            g.centeredText(this.font, Component.translatable("gui.kingdomsatwar.spell_wheel.locked"), 0, y, ARGB.color(alpha, MUTED));
-        }
-        y += 13;
-        Component text = known ? spell.description() : Component.translatable("gui.kingdomsatwar.spell_wheel.learn");
-        List<FormattedCharSequence> lines = this.font.split(text, 120);
-        g.pose().pushMatrix();
-        g.pose().scale(0.75f, 0.75f);
-        int ly = Math.round(y / 0.75f);
-        for (FormattedCharSequence line : lines.subList(0, Math.min(4, lines.size()))) {
-            g.centeredText(this.font, line, 0, ly, ARGB.color(alpha, known ? TEXT : MUTED));
-            ly += 10;
-        }
-        g.pose().popMatrix();
+        // kurz, was er tut (die ganze Beschreibung steht am Stab und am Magietisch)
+        Component text = known ? Component.translatable("spell.kingdomsatwar." + spell.id() + ".short")
+                : Component.translatable("gui.kingdomsatwar.spell_wheel.learn_short");
+        List<FormattedCharSequence> lines = this.font.split(text, 108);
+        lines = lines.subList(0, Math.min(3, lines.size()));
+        Component second = known ? Component.translatable("gui.kingdomsatwar.spell_wheel.level", Spell.numeral(spells.level(spell)))
+                : Component.translatable("gui.kingdomsatwar.spell_wheel.locked");
+        Component state = null;
+        int stateColor = 0;
         if (known) {
             float cooldown = this.minecraft.player.getCooldowns().getCooldownPercent(this.probes[index], partial);
-            Component state;
-            int color;
             if (cooldown > 0.0f) {
                 float seconds = cooldown * spell.cooldown(spells.level(spell)) / 20.0f;
                 state = Component.translatable("gui.kingdomsatwar.spell_wheel.cooldown", String.format(java.util.Locale.ROOT, "%.1f", seconds));
-                color = 0xFFE0A0;
+                stateColor = 0xFFE0A0;
             } else {
                 state = Component.translatable("gui.kingdomsatwar.spell_wheel.ready").withStyle(ChatFormatting.BOLD);
-                color = 0x9CF08A;
+                stateColor = 0x9CF08A;
             }
-            g.centeredText(this.font, state, 0, 30, ARGB.color(alpha, color));
         }
+        float y = -(13.0f + 10.0f + lines.size() * 7.5f + (state != null ? 14.0f : 0.0f)) / 2.0f;
+        this.fitted(g, spell.displayName().getVisualOrderText(), y, 1.0f, ARGB.color(alpha, known ? spell.color() : 0x9A90A8));
+        y += 12.0f;
+        this.fitted(g, second.getVisualOrderText(), y, 0.75f, ARGB.color(alpha, known ? GOLD : MUTED));
+        y += 10.0f;
+        for (FormattedCharSequence line : lines) {
+            this.fitted(g, line, y, 0.75f, ARGB.color(alpha, known ? TEXT : MUTED));
+            y += 7.5f;
+        }
+        if (state != null) {
+            this.fitted(g, state.getVisualOrderText(), y + 5.0f, 1.0f, ARGB.color(alpha, stateColor));
+        }
+    }
+
+    /** Halbmesser der dunklen Scheibe in der Mitte. */
+    private static final float INNER = 47.0f;
+
+    /** Eine Zeile mittig auf Höhe {@code y} – kleiner, wenn sie dort nicht in die dunkle Scheibe passt. */
+    private void fitted(GuiGraphicsExtractor g, FormattedCharSequence text, float y, float scale, int color) {
+        int width = Math.max(1, this.font.width(text));
+        float edge = Math.max(Math.abs(y), Math.abs(y + 9.0f * scale));
+        float room = 2.0f * Mth.sqrt(Math.max(0.0f, INNER * INNER - edge * edge)) - 6.0f;
+        float fit = Math.max(0.4f, Math.min(scale, room / width));
+        g.pose().pushMatrix();
+        g.pose().translate(0.0f, y + 4.5f * (scale - fit));
+        g.pose().scale(fit, fit);
+        g.centeredText(this.font, text, 0, 0, color);
+        g.pose().popMatrix();
     }
 
     // =====================================================================================

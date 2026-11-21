@@ -100,13 +100,29 @@ public final class VillageBuilder {
     /** Setzt einen Block in Weltkoordinaten (ohne Drehung), wenn er im aktuellen Chunk liegt. */
     public void setWorld(BlockPos pos, BlockState state) {
         if (this.inside(pos)) {
+            // ein Trampelpfad unter einem festen Block würde beim nächsten Anstoß zu Erde: dann gleich Erde (unter Wänden,
+            // Zelten, Fässern …) – in beiden Reihenfolgen, Pfad zuerst oder Block darüber zuerst
+            BlockState place = state;
+            if (state.is(Blocks.DIRT_PATH) && coversPath(this.level.getBlockState(pos.above()))) {
+                place = Blocks.DIRT.defaultBlockState();
+            } else if (coversPath(state)) {
+                BlockPos below = pos.below();
+                if (this.inside(below) && this.level.getBlockState(below).is(Blocks.DIRT_PATH)) {
+                    this.level.setBlock(below, Blocks.DIRT.defaultBlockState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
+                }
+            }
             // wie bei der Weltgenerierung: keine Formänderungen der Nachbarn (sonst fielen in Tests und Vorführungen,
             // die direkt in die Welt bauen, Wandbanner und Fackeln ab, deren Halt erst ein später gebauter Chunk setzt)
-            this.level.setBlock(pos, state, Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
-            if (needsShape(state)) {
+            this.level.setBlock(pos, place, Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
+            if (needsShape(place)) {
                 this.shaped.add(pos.immutable());
             }
         }
+    }
+
+    /** Ließe {@code above} einen Trampelpfad darunter zu Erde werden (wie im Spiel: alles Feste außer Zauntoren)? */
+    private static boolean coversPath(BlockState above) {
+        return above.isSolid() && !(above.getBlock() instanceof net.minecraft.world.level.block.FenceGateBlock);
     }
 
     public BlockState get(int x, int y, int z) {

@@ -10402,7 +10402,7 @@
   "gui.kingdomsatwar.town.food.day": "Essen für %s Tag",
   "gui.kingdomsatwar.town.food.days": "Essen für %s Tage",
   "gui.kingdomsatwar.town.food.hint": "%s Mahlzeiten im Lager. Jeder Bürger nimmt sich jeden Morgen eine Mahlzeit aus dem Lager – Brot, Fleisch, Fisch, Gemüse: alles Essbare zählt nach seinem Nährwert. Weizen, Kartoffeln und rohes Fleisch oder roher Fisch zählen wie gebacken und gebraten – das bereiten die Bürger selbst zu. Hungrige Bürger arbeiten und handeln nicht, bis wieder Essen da ist.",
-  "gui.kingdomsatwar.town.food.none_needed": "Essen: noch niemand zu versorgen",
+  "gui.kingdomsatwar.town.food.none_needed": "Essen: noch kein Bedarf",
   "gui.kingdomsatwar.town.foreign": "Dies ist die Siedlung von %s.",
   "gui.kingdomsatwar.town.free": "umsonst",
   "gui.kingdomsatwar.town.free_beds": "Freie Betten: %s",

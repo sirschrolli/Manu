@@ -151,9 +151,10 @@ final class TideShrine {
         for (int y = 7; y <= 9; y++) {
             b.set(0, y, -2, Blocks.PRISMARINE_WALL.defaultBlockState());
         }
-        // Gaben und Schmuck: Seegurken auf den Platten, Korallenfächer an den Säulen
-        b.set(1, 2, -1, Blocks.SEA_PICKLE.defaultBlockState().setValue(SeaPickleBlock.PICKLES, 2).setValue(BlockStateProperties.WATERLOGGED, false));
-        b.set(-1, 2, 1, Blocks.SEA_PICKLE.defaultBlockState().setValue(SeaPickleBlock.PICKLES, 1).setValue(BlockStateProperties.WATERLOGGED, false));
+        // Gaben und Schmuck: Seegurken in zwei Ecken der Einfassung (statt der Platte – auf einer halben Platte hielten sie nicht),
+        // Korallenfächer an den Säulen
+        b.set(1, 1, -1, Blocks.SEA_PICKLE.defaultBlockState().setValue(SeaPickleBlock.PICKLES, 2).setValue(BlockStateProperties.WATERLOGGED, false));
+        b.set(-1, 1, 1, Blocks.SEA_PICKLE.defaultBlockState().setValue(SeaPickleBlock.PICKLES, 1).setValue(BlockStateProperties.WATERLOGGED, false));
         for (int i = 0; i < PILLARS.length; i += 2) {
             int[] p = PILLARS[i];
             Direction out = Math.abs(p[0]) > Math.abs(p[1]) ? (p[0] > 0 ? Direction.EAST : Direction.WEST) : (p[1] > 0 ? Direction.SOUTH : Direction.NORTH);

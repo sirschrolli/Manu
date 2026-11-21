@@ -176,7 +176,8 @@ final class BanditCamp {
             }
             this.b.set(cx, 6, cz + 1, Blocks.AIR.defaultBlockState());
             this.b.set(cx, 5, cz + 1, Blocks.AIR.defaultBlockState());
-            for (int y = 0; y <= 5; y++) {
+            // bis an die Bühne (die oberste Sprosse vor der Luke hätte keinen Halt)
+            for (int y = 0; y <= 4; y++) {
                 this.b.set(cx, y, cz + 2, Blocks.LADDER.defaultBlockState().setValue(LadderBlock.FACING, Direction.SOUTH));
             }
             this.b.set(cx, 0, cz + 1, Blocks.SPRUCE_PLANKS.defaultBlockState());

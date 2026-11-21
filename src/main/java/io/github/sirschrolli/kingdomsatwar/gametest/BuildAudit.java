@@ -45,7 +45,7 @@ final class BuildAudit {
             } else if (state.getBlock() instanceof DoorBlock) {
                 door(level, pos, state, where, problems);
             } else if (state.getBlock() instanceof ChestBlock && ChestBlock.isChestBlockedAt(level, pos)) {
-                problems.add("Truhe lässt sich nicht öffnen (Block darüber) bei " + where.apply(pos));
+                problems.add("Truhe lässt sich nicht öffnen (darüber " + name(level.getBlockState(pos.above())) + ") bei " + where.apply(pos));
             } else if (state.getBlock() instanceof AbstractFurnaceBlock) {
                 BlockPos front = pos.relative(state.getValue(HorizontalDirectionalBlock.FACING));
                 if (level.getBlockState(front).isCollisionShapeFullBlock(level, front)) {

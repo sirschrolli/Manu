@@ -246,7 +246,16 @@ public class MercenaryScreen extends Screen {
         for (int i = 0; i < lines.size() && hy + i * 10 < y0 + HEIGHT - 10; i++) {
             g.text(this.font, lines.get(i), x0 + LIST_X + 2, hy + i * 10, ArmyWidgets.MUTED, false);
         }
-        if (chosen != null) {
+        if (chosen == null) {
+            // niemand da: statt des leeren, schwarzen Bildrahmens ein blasses Schild (wie ein leerer Aushang)
+            g.fill(x0 + PREVIEW_X, y0 + PREVIEW_Y, x0 + PREVIEW_X + PREVIEW_W, y0 + PREVIEW_Y + PREVIEW_H, 0xFFC6C6C6);
+            g.pose().pushMatrix();
+            g.pose().translate(x0 + PREVIEW_X + PREVIEW_W / 2.0f - 16, y0 + PREVIEW_Y + PREVIEW_H / 2.0f - 16);
+            g.pose().scale(2.0f, 2.0f);
+            g.item(new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.OAK_SIGN), 0, 0);
+            g.pose().popMatrix();
+            g.fill(x0 + PREVIEW_X, y0 + PREVIEW_Y, x0 + PREVIEW_X + PREVIEW_W, y0 + PREVIEW_Y + PREVIEW_H, 0x88C6C6C6);
+        } else {
             InventoryScreen.extractEntityInInventoryFollowsMouse(g, x0 + PREVIEW_X + 1, y0 + PREVIEW_Y + 1, x0 + PREVIEW_X + PREVIEW_W - 1,
                     y0 + PREVIEW_Y + PREVIEW_H - 1, 34, 0.0625f, mouseX, mouseY, chosen);
             this.drawInfo(g, chosen, x0 + INFO_X, y0 + PREVIEW_Y, mouseX, mouseY);

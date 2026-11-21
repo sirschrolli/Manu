@@ -338,7 +338,9 @@ final class RobberCastle {
                         } else if ((y == 6 || y == 10) && !shell) {
                             s = state(Blocks.SPRUCE_PLANKS);
                         } else if (shell) {
-                            boolean slit = (y == 8) && (z == 16 || z == 11) && (ax == 3 || ax == 4) || y == 3 && ax == 5 && z == 13;
+                            // (keine Scharte direkt hinter der Leiter in die Torstube – sonst fehlte ihr dort der Halt)
+                            boolean slit = (y == 8) && (z == 16 || z == 11) && (ax == 3 || ax == 4) && !(x == -4 && z == 16)
+                                    || y == 3 && ax == 5 && z == 13;
                             s = slit ? Blocks.AIR.defaultBlockState() : this.stone(x, y, z);
                         } else {
                             s = Blocks.AIR.defaultBlockState();

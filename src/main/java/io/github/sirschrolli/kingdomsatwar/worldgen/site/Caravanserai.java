@@ -298,7 +298,10 @@ final class Caravanserai {
             this.b.set(4, 1, 4, Blocks.BARREL.defaultBlockState().setValue(BarrelBlock.FACING, Direction.UP));
             this.b.set(-4, 1, 4, Blocks.DECORATED_POT);
             this.b.set(-4, 1, 3, Blocks.DECORATED_POT);
+            // tote Büsche im Sand (auf Sandstein hielten sie nicht)
+            this.b.set(4, 0, -1, Blocks.SAND);
             this.b.set(4, 1, -1, Blocks.DEAD_BUSH);
+            this.b.set(-3, 0, 1, Blocks.SAND);
             this.b.set(-3, 1, 1, Blocks.DEAD_BUSH);
             // Grube der Schatzsucher (Nordwestecke)
             for (int x = -4; x <= -2; x++) {

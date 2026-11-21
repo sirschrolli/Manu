@@ -347,8 +347,10 @@ final class Aqueduct {
                 }
                 // Glimmflechte an den Wänden: ein mattes, grünes Licht
                 for (int x : new int[] {-2, 2}) {
-                    if (this.b.chance(x, 2, z, 0.08f)) {
-                        this.b.set(x, 1 + (int) (this.b.noise(x, 3, z) * 2), z, Blocks.GLOW_LICHEN.defaultBlockState()
+                    int y = 1 + (int) (this.b.noise(x, 3, z) * 2);
+                    // nur an der Wand (an einer Öffnung hätte die Flechte keinen Halt)
+                    if (this.b.chance(x, 2, z, 0.08f) && this.b.get(x + Integer.signum(x), y, z).isSolidRender()) {
+                        this.b.set(x, y, z, Blocks.GLOW_LICHEN.defaultBlockState()
                                 .setValue(MultifaceBlock.getFaceProperty(x < 0 ? Direction.WEST : Direction.EAST), true));
                     }
                 }

@@ -1179,8 +1179,9 @@ public final class MageTowerBuilder {
                 this.set(x, y + 3, z, s(TowerPalette.copper(Blocks.LIGHTNING_ROD, net.minecraft.world.level.block.WeatheringCopper.WeatherState.UNAFFECTED)));
             }
             case NATURE -> {
+                // auf der Leuchte eine Krone aus blühendem Azaleenlaub (ein Busch hielte auf dem Pilzlicht nicht)
                 this.set(x, y + 2, z, s(Blocks.SHROOMLIGHT));
-                this.set(x, y + 3, z, s(Blocks.FLOWERING_AZALEA));
+                this.set(x, y + 3, z, s(Blocks.FLOWERING_AZALEA_LEAVES).setValue(LeavesBlock.PERSISTENT, true));
             }
             case EARTH -> {
                 this.set(x, y + 2, z, s(ModBlocks.AMBER_CRYSTAL.get()));
@@ -1357,7 +1358,7 @@ public final class MageTowerBuilder {
             case ICE -> this.set(x, 5, z, s(ModBlocks.FROST_CRYSTAL.get()));
             case LIGHTNING -> this.set(x, 5, z, s(TowerPalette.copper(Blocks.LIGHTNING_ROD,
                     net.minecraft.world.level.block.WeatheringCopper.WeatherState.WEATHERED)));
-            case NATURE -> this.set(x, 5, z, s(Blocks.FLOWERING_AZALEA));
+            case NATURE -> this.set(x, 5, z, s(Blocks.POTTED_FLOWERING_AZALEA));        // im Topf: auf Holz hielte der Busch nicht
             case EARTH -> this.set(x, 5, z, s(ModBlocks.AMBER_CLUSTER.get()));
             case WATER -> this.set(x, 5, z, s(Blocks.SEA_LANTERN));
         }
@@ -1400,8 +1401,9 @@ public final class MageTowerBuilder {
                 this.set(x + 1, y, z, pillar(ModBlocks.FULGURITE.get(), Direction.Axis.Y));
             }
             case NATURE -> {
-                // Blumenbeete und Azaleenbüsche
+                // Blumenbeete und Azaleenbüsche (der Busch auf einem Polster aus Moos – auf Sandstein hielte er nicht)
                 if (k % 3 == 0) {
+                    this.set(x, y - 1, z, s(Blocks.MOSS_BLOCK));
                     this.set(x, y, z, s(Blocks.FLOWERING_AZALEA));
                 } else {
                     Block[] flowers = {ModBlocks.LAVENDER.get(), ModBlocks.GARDEN_ROSE.get(), ModBlocks.GROVE_BELL.get(), ModBlocks.LIFE_BLOSSOM.get()};

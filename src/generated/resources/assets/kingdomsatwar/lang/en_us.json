@@ -10402,7 +10402,7 @@
   "gui.kingdomsatwar.town.food.day": "Food for %s day",
   "gui.kingdomsatwar.town.food.days": "Food for %s days",
   "gui.kingdomsatwar.town.food.hint": "%s meals in storage. Every citizen takes one meal from the storage each morning – bread, meat, fish, vegetables: anything edible counts by its nutrition. Wheat, potatoes and raw meat or fish count as baked or roasted – the citizens prepare them themselves. Hungry citizens neither work nor trade until food arrives.",
-  "gui.kingdomsatwar.town.food.none_needed": "Food: nobody to feed yet",
+  "gui.kingdomsatwar.town.food.none_needed": "Food: no one to feed",
   "gui.kingdomsatwar.town.foreign": "This is the settlement of %s.",
   "gui.kingdomsatwar.town.free": "free",
   "gui.kingdomsatwar.town.free_beds": "Free beds: %s",
