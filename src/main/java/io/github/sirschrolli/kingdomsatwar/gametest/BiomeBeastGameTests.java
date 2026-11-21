@@ -143,13 +143,49 @@ final class BiomeBeastGameTests {
                 Vec3.atLowerCornerOf(helper.absolutePos(new BlockPos(11, 40, 11))));
     }
 
+    /**
+     * Räumt die eigene Arena auf – aber nur, was diesem Test gehört (oder niemandem, wie liegengebliebene Gegenstände):
+     * Möwen und Falter fliegen weit, und früher räumte der Nachbartest sie mitunter einfach mit ab.
+     */
     private static void cleanup(GameTestHelper helper, Entity... extra) {
+        String mine = owner(helper);
         for (Entity e : helper.getLevel().getEntitiesOfClass(Entity.class, area(helper), e -> !(e instanceof Player))) {
-            e.discard();
+            boolean foreign = e.entityTags().stream().anyMatch(tag -> tag.startsWith(OWNER_TAG) && !tag.equals(mine));
+            if (!foreign) {
+                e.discard();
+            }
         }
         for (Entity e : extra) {
             e.discard();
         }
+    }
+
+    private static final String OWNER_TAG = "kaw_test_";
+
+    /**
+     * Fliegende Tiere kreisen weit über die Arena hinaus – die Chunks rundherum (gut 30 Blöcke weit) ticken deshalb für den
+     * Test mit (sonst blieb eine Möwe mitunter in einem ungeladenen Chunk mitten in der Luft stehen). Freigegeben wird nicht:
+     * Nachbartests teilen sich die Chunks, und die Testwelt wird ohnehin verworfen.
+     */
+    private static void keepLoaded(GameTestHelper helper) {
+        BlockPos center = helper.absolutePos(new BlockPos(4, 0, 4));
+        int cx = center.getX() >> 4;
+        int cz = center.getZ() >> 4;
+        for (int dx = -2; dx <= 2; dx++) {
+            for (int dz = -2; dz <= 2; dz++) {
+                helper.getLevel().setChunkForced(cx + dx, cz + dz, true);
+            }
+        }
+    }
+
+    /** Kennzeichnet ein Wesen als zu diesem Test gehörig (siehe {@link #cleanup}). */
+    private static <T extends Entity> T own(GameTestHelper helper, T entity) {
+        entity.addTag(owner(helper));
+        return entity;
+    }
+
+    private static String owner(GameTestHelper helper) {
+        return OWNER_TAG + helper.absolutePos(BlockPos.ZERO).asLong();
     }
 
     private static ServerPlayer player(GameTestHelper helper, BlockPos pos, float yaw) {
@@ -207,7 +243,7 @@ final class BiomeBeastGameTests {
             helper.assertTrue(type.getCategory() == MobCategory.CREATURE, name + ": keine Tiergruppe");
             helper.assertTrue(type.getDefaultLootTable().isPresent(), name + ": keine Beute");
             helper.assertTrue(BuiltInRegistries.ITEM.containsKey(KingdomsAtWar.id(name + "_spawn_egg")), name + ": kein Spawn-Ei");
-            Mob mob = helper.spawnWithNoFreeWill(type, new BlockPos(1 + i * 2, 1, 4));
+            Mob mob = own(helper, helper.spawnWithNoFreeWill(type, new BlockPos(1 + i * 2, 1, 4)));
             helper.assertTrue(Math.abs(mob.getAttributeValue(Attributes.MAX_HEALTH) - health[i]) < 1.0e-3,
                     name + ": Lebenspunkte " + mob.getAttributeValue(Attributes.MAX_HEALTH) + " statt " + health[i]);
         }
@@ -238,7 +274,7 @@ final class BiomeBeastGameTests {
     /** Mit rohem Hammelfleisch lässt er sich zähmen (nicht beim ersten Versuch sicher, aber bald). */
     private static void leopardTaming(GameTestHelper helper) {
         pen(helper, Blocks.SNOW_BLOCK);
-        SnowLeopardEntity leopard = helper.spawnWithNoFreeWill(BiomeBeasts.SNOW_LEOPARD.get(), new BlockPos(4, 1, 5));
+        SnowLeopardEntity leopard = own(helper, helper.spawnWithNoFreeWill(BiomeBeasts.SNOW_LEOPARD.get(), new BlockPos(4, 1, 5)));
         ServerPlayer owner = player(helper, new BlockPos(4, 1, 3), 0.0f);
         for (int i = 0; i < 60 && !leopard.isTame(); i++) {
             owner.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.MUTTON, 4));
@@ -255,8 +291,8 @@ final class BiomeBeastGameTests {
     /** Hungrig springt er einen Hasen an und erlegt ihn. */
     private static void leopardHunt(GameTestHelper helper) {
         pen(helper, Blocks.SNOW_BLOCK);
-        Hare rabbit = helper.spawnWithNoFreeWill(ModEntities.HARE.get(), new BlockPos(6, 1, 6));
-        SnowLeopardEntity leopard = helper.spawn(BiomeBeasts.SNOW_LEOPARD.get(), new BlockPos(2, 1, 2));
+        Hare rabbit = own(helper, helper.spawnWithNoFreeWill(ModEntities.HARE.get(), new BlockPos(6, 1, 6)));
+        SnowLeopardEntity leopard = own(helper, helper.spawn(BiomeBeasts.SNOW_LEOPARD.get(), new BlockPos(2, 1, 2)));
         leopard.setHungry(true);
         helper.succeedWhen(() -> {
             helper.assertFalse(rabbit.isAlive(), "Der Hase lebt noch");
@@ -271,7 +307,7 @@ final class BiomeBeastGameTests {
     /** Gezähmt nimmt er eine Truhe, mit Sattel lässt er sich reiten (der Reiter lenkt). */
     private static void elkRide(GameTestHelper helper) {
         pen(helper, Blocks.GRASS_BLOCK);
-        PrimevalElkEntity elk = helper.spawnWithNoFreeWill(BiomeBeasts.PRIMEVAL_ELK.get(), new BlockPos(4, 1, 4));
+        PrimevalElkEntity elk = own(helper, helper.spawnWithNoFreeWill(BiomeBeasts.PRIMEVAL_ELK.get(), new BlockPos(4, 1, 4)));
         ServerPlayer rider = player(helper, new BlockPos(2, 1, 4), 270.0f);
         helper.assertTrue(elk.tameWithName(rider), "Der Elch lässt sich nicht zähmen");
         rider.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.CHEST));
@@ -290,8 +326,8 @@ final class BiomeBeastGameTests {
     /** Ein wilder Bulle stürmt mit gesenkten Schaufeln auf den, der ihn angreift. */
     private static void elkCharge(GameTestHelper helper) {
         pen(helper, Blocks.GRASS_BLOCK);
-        Mob attacker = helper.spawnWithNoFreeWill(ModEntities.HUSK.get(), new BlockPos(6, 1, 6));
-        PrimevalElkEntity elk = helper.spawn(BiomeBeasts.PRIMEVAL_ELK.get(), new BlockPos(2, 1, 2));
+        Mob attacker = own(helper, helper.spawnWithNoFreeWill(ModEntities.HUSK.get(), new BlockPos(6, 1, 6)));
+        PrimevalElkEntity elk = own(helper, helper.spawn(BiomeBeasts.PRIMEVAL_ELK.get(), new BlockPos(2, 1, 2)));
         elk.setBull(true);
         float before = attacker.getHealth();
         // nicht im allerersten Takt (sonst gleicht der Zeitstempel dem Anfangswert des Ziels und es greift nicht)
@@ -309,7 +345,8 @@ final class BiomeBeastGameTests {
     /** Kommt man ihr zu nahe (ohne zu schleichen), fliegt sie auf. */
     private static void gullFlee(GameTestHelper helper) {
         pen(helper, Blocks.GRAVEL);
-        StormGullEntity gull = helper.spawn(BiomeBeasts.STORM_GULL.get(), new BlockPos(4, 1, 5));
+        keepLoaded(helper);
+        StormGullEntity gull = own(helper, helper.spawn(BiomeBeasts.STORM_GULL.get(), new BlockPos(4, 1, 5)));
         ServerPlayer walker = player(helper, new BlockPos(4, 1, 3), 0.0f);
         helper.succeedWhen(() -> {
             helper.assertTrue(gull.isFlying(), "Die Möwe fliegt nicht auf");
@@ -321,9 +358,10 @@ final class BiomeBeastGameTests {
     /** Wer einen Kabeljau in der Hand hält, dem schnappt sie ihn weg – und fliegt mit ihm davon. */
     private static void gullSteal(GameTestHelper helper) {
         pen(helper, Blocks.GRAVEL);
+        keepLoaded(helper);
         ServerPlayer fisher = survivor(helper, new BlockPos(4, 1, 2), 0.0f);
         fisher.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.COD));
-        StormGullEntity gull = helper.spawn(BiomeBeasts.STORM_GULL.get(), new BlockPos(4, 4, 6));
+        StormGullEntity gull = own(helper, helper.spawn(BiomeBeasts.STORM_GULL.get(), new BlockPos(4, 4, 6)));
         gull.setFlying(true);
         gull.setStealCooldown(0);
         helper.succeedWhen(() -> {
@@ -341,8 +379,9 @@ final class BiomeBeastGameTests {
     /** Hungrig steigt er auf und stößt im Sturzflug auf einen Hasen herab. */
     private static void griffinHunt(GameTestHelper helper) {
         pen(helper, Blocks.COARSE_DIRT);
-        Hare rabbit = helper.spawnWithNoFreeWill(ModEntities.HARE.get(), new BlockPos(5, 1, 5));
-        GriffinEntity griffin = helper.spawn(BiomeBeasts.GRIFFIN.get(), new BlockPos(1, 1, 1));
+        keepLoaded(helper);
+        Hare rabbit = own(helper, helper.spawnWithNoFreeWill(ModEntities.HARE.get(), new BlockPos(5, 1, 5)));
+        GriffinEntity griffin = own(helper, helper.spawn(BiomeBeasts.GRIFFIN.get(), new BlockPos(1, 1, 1)));
         griffin.setHungry(true);
         boolean[] dived = new boolean[1];
         helper.onEachTick(() -> dived[0] |= griffin.isDiving());
@@ -356,8 +395,9 @@ final class BiomeBeastGameTests {
     /** Am Boden angegriffen wehrt er sich mit den Krallen (satt: Beute kümmert ihn nicht). */
     private static void griffinDefend(GameTestHelper helper) {
         pen(helper, Blocks.COARSE_DIRT);
-        Mob attacker = helper.spawnWithNoFreeWill(ModEntities.HUSK.get(), new BlockPos(5, 1, 4));
-        GriffinEntity griffin = helper.spawn(BiomeBeasts.GRIFFIN.get(), new BlockPos(3, 1, 4));
+        keepLoaded(helper);
+        Mob attacker = own(helper, helper.spawnWithNoFreeWill(ModEntities.HUSK.get(), new BlockPos(5, 1, 4)));
+        GriffinEntity griffin = own(helper, helper.spawn(BiomeBeasts.GRIFFIN.get(), new BlockPos(3, 1, 4)));
         griffin.setHungry(false);
         float before = attacker.getHealth();
         helper.runAfterDelay(5, () -> griffin.hurtServer(helper.getLevel(), helper.getLevel().damageSources().mobAttack(attacker), 1.0f));
@@ -385,7 +425,7 @@ final class BiomeBeastGameTests {
             helper.assertTrue(type.getCategory() == (i == 3 ? MobCategory.AMBIENT : MobCategory.CREATURE), name + ": falsche Gruppe");
             helper.assertTrue(type.getDefaultLootTable().isPresent(), name + ": keine Beute");
             helper.assertTrue(BuiltInRegistries.ITEM.containsKey(KingdomsAtWar.id(name + "_spawn_egg")), name + ": kein Spawn-Ei");
-            Mob mob = helper.spawnWithNoFreeWill(type, new BlockPos(1 + i * 2, 1, 4));
+            Mob mob = own(helper, helper.spawnWithNoFreeWill(type, new BlockPos(1 + i * 2, 1, 4)));
             helper.assertTrue(Math.abs(mob.getAttributeValue(Attributes.MAX_HEALTH) - health[i]) < 1.0e-3,
                     name + ": Lebenspunkte " + mob.getAttributeValue(Attributes.MAX_HEALTH) + " statt " + health[i]);
         }
@@ -429,7 +469,7 @@ final class BiomeBeastGameTests {
                 helper.setBlock(x, 0, z, Blocks.LAVA);
             }
         }
-        EmberSalamanderEntity salamander = helper.spawn(BiomeBeasts.EMBER_SALAMANDER.get(), new BlockPos(4, 1, 4));
+        EmberSalamanderEntity salamander = own(helper, helper.spawn(BiomeBeasts.EMBER_SALAMANDER.get(), new BlockPos(4, 1, 4)));
         double floor = helper.absoluteVec(Vec3.ZERO).y + 0.4;                    // er steht einen halben Block tief auf der Lava
         helper.runAfterDelay(100, () -> {
             helper.assertTrue(salamander.isAlive(), "Der Salamander ist in der Lava umgekommen");
@@ -443,7 +483,7 @@ final class BiomeBeastGameTests {
     /** Wer ihn mit der Hand schlägt, verbrennt sich an seiner glühenden Haut. */
     private static void salamanderBurns(GameTestHelper helper) {
         pen(helper, Blocks.STONE);
-        EmberSalamanderEntity salamander = helper.spawnWithNoFreeWill(BiomeBeasts.EMBER_SALAMANDER.get(), new BlockPos(4, 1, 5));
+        EmberSalamanderEntity salamander = own(helper, helper.spawnWithNoFreeWill(BiomeBeasts.EMBER_SALAMANDER.get(), new BlockPos(4, 1, 5)));
         ServerPlayer player = survivor(helper, new BlockPos(4, 1, 3), 0.0f);
         helper.runAfterDelay(5, () -> {
             player.attack(salamander);
@@ -457,12 +497,12 @@ final class BiomeBeastGameTests {
     /** Der Moorschnapper schnappt nach dem, der vor seine Nase gerät. */
     private static void snapperSnap(GameTestHelper helper) {
         pen(helper, Blocks.MUD);
-        MireSnapperEntity snapper = helper.spawn(BiomeBeasts.MIRE_SNAPPER.get(), new BlockPos(4, 1, 3));
+        MireSnapperEntity snapper = own(helper, helper.spawn(BiomeBeasts.MIRE_SNAPPER.get(), new BlockPos(4, 1, 3)));
         Vec3 at = helper.absoluteVec(Vec3.atBottomCenterOf(new BlockPos(4, 1, 3)));
         snapper.snapTo(at.x, at.y, at.z, 0.0f, 0.0f);
         snapper.setYBodyRot(0.0f);
         snapper.setYHeadRot(0.0f);
-        Mob victim = helper.spawnWithNoFreeWill(ModEntities.HUSK.get(), new BlockPos(4, 1, 5));
+        Mob victim = own(helper, helper.spawnWithNoFreeWill(ModEntities.HUSK.get(), new BlockPos(4, 1, 5)));
         float before = victim.getHealth();
         helper.succeedWhen(() -> {
             helper.assertTrue(victim.getHealth() < before || !victim.isAlive(), "Er hat nicht zugeschnappt");
@@ -473,8 +513,8 @@ final class BiomeBeastGameTests {
     /** Getroffen zieht er sich in den Panzer zurück; dort richtet man kaum etwas aus. */
     private static void snapperShell(GameTestHelper helper) {
         pen(helper, Blocks.MUD);
-        MireSnapperEntity snapper = helper.spawnWithNoFreeWill(BiomeBeasts.MIRE_SNAPPER.get(), new BlockPos(4, 1, 4));
-        Mob attacker = helper.spawnWithNoFreeWill(ModEntities.HUSK.get(), new BlockPos(4, 1, 7));
+        MireSnapperEntity snapper = own(helper, helper.spawnWithNoFreeWill(BiomeBeasts.MIRE_SNAPPER.get(), new BlockPos(4, 1, 4)));
+        Mob attacker = own(helper, helper.spawnWithNoFreeWill(ModEntities.HUSK.get(), new BlockPos(4, 1, 7)));
         ServerLevel level = helper.getLevel();
         helper.runAfterDelay(5, () -> {
             snapper.hurtServer(level, level.damageSources().mobAttack(attacker), 4.0f);
@@ -498,7 +538,7 @@ final class BiomeBeastGameTests {
                 helper.setBlock(x, 1, z, Blocks.WATER);
             }
         }
-        FlamingoEntity flamingo = helper.spawn(BiomeBeasts.FLAMINGO.get(), new BlockPos(4, 1, 4));
+        FlamingoEntity flamingo = own(helper, helper.spawn(BiomeBeasts.FLAMINGO.get(), new BlockPos(4, 1, 4)));
         double bottom = helper.absoluteVec(Vec3.ZERO).y + 1.0;
         helper.runAfterDelay(80, () -> {
             helper.assertFalse(flamingo.isFlying(), "Er ist aufgeflogen");
@@ -511,12 +551,13 @@ final class BiomeBeastGameTests {
     /** Ein Schmetterling setzt sich bald auf eine Blume. */
     private static void butterflyPerch(GameTestHelper helper) {
         pen(helper, Blocks.GRASS_BLOCK);
+        keepLoaded(helper);
         for (int x = 1; x < 8; x++) {
             for (int z = 1; z < 8; z++) {
                 helper.setBlock(x, 1, z, (x + z) % 2 == 0 ? Blocks.POPPY : Blocks.DANDELION);
             }
         }
-        ButterflyEntity butterfly = helper.spawn(BiomeBeasts.BUTTERFLY.get(), new BlockPos(4, 3, 4));
+        ButterflyEntity butterfly = own(helper, helper.spawn(BiomeBeasts.BUTTERFLY.get(), new BlockPos(4, 3, 4)));
         helper.succeedWhen(() -> {
             helper.assertTrue(butterfly.isPerched(), "Er setzt sich nicht");
             cleanup(helper, butterfly);

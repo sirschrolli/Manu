@@ -45,6 +45,8 @@ public class ButterflyEntity extends AmbientCreature {
 
     private @Nullable Vec3 target;
     private @Nullable BlockPos flower;
+    /** Wo er zu Hause ist (die letzte Blume, sonst wo er auftauchte): dort gaukelt er umher, statt davonzutreiben. */
+    private @Nullable BlockPos home;
     private int perchTicks;
     private int flightTicks;
 
@@ -180,8 +182,9 @@ public class ButterflyEntity extends AmbientCreature {
             return;
         }
         this.flightTicks++;
-        // nach einer Weile (und nachts oder bei Regen sofort) eine Blume suchen
-        if (this.flower == null && (!calm || this.flightTicks > 140 && this.random.nextInt(30) == 0)) {
+        // nach einer Weile (und nachts oder bei Regen sofort) eine Blume suchen – die Suche sieht sich jeden Block der Umgebung
+        // an, also nicht in jedem Tick
+        if (this.flower == null && (!calm ? (this.tickCount + this.getId()) % 10 == 0 : this.flightTicks > 140 && this.random.nextInt(30) == 0)) {
             this.flower = this.findPerch(level);
         }
         if (this.flower != null) {
@@ -192,14 +195,19 @@ public class ButterflyEntity extends AmbientCreature {
             Vec3 seat = Vec3.atBottomCenterOf(this.flower).add(0.0, perchHeight(level.getBlockState(this.flower)), 0.0);
             this.target = seat;
             if (this.position().distanceToSqr(seat) < 0.12 * 0.12) {
+                this.home = this.flower;
                 this.setPerched(true);
                 this.snapTo(seat.x, seat.y, seat.z, this.random.nextFloat() * 360.0f, 0.0f);
                 this.perchTicks = calm ? 100 + this.random.nextInt(300) : 400;
                 return;
             }
         } else if (this.target == null || this.random.nextInt(40) == 0 || this.position().distanceToSqr(this.target) < 1.0) {
-            int x = Mth.floor(this.getX()) + this.random.nextInt(11) - 5;
-            int z = Mth.floor(this.getZ()) + this.random.nextInt(11) - 5;
+            // um sein Zuhause herum (bei den Blumen) – ist er weit davon fort, dort, wo er gerade ist
+            if (this.home == null || this.home.distSqr(this.blockPosition()) > 24 * 24) {
+                this.home = this.blockPosition();
+            }
+            int x = this.home.getX() + this.random.nextInt(11) - 5;
+            int z = this.home.getZ() + this.random.nextInt(11) - 5;
             int ground = level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z);
             this.target = new Vec3(x + 0.5, ground + 0.6 + this.random.nextDouble() * 2.2, z + 0.5);
         }
@@ -221,21 +229,30 @@ public class ButterflyEntity extends AmbientCreature {
         }
     }
 
-    /** Eine Blume oder ein Grasbüschel in der Nähe, auf der man sitzen kann. */
+    /**
+     * Eine Blume oder ein Grasbüschel in der Nähe, auf der man sitzen kann: die nächste (Blumen zählen näher als Gras),
+     * aus allen Blöcken bis 6 weit und 4 tiefer – früher nur 40 zufällige, und auf einer kleinen Wiese fand er so oft keine.
+     */
     private @Nullable BlockPos findPerch(ServerLevel level) {
         BlockPos best = null;
         double bestScore = Double.MAX_VALUE;
         BlockPos here = this.blockPosition();
-        for (int i = 0; i < 40; i++) {
-            BlockPos p = here.offset(this.random.nextInt(13) - 6, this.random.nextInt(7) - 4, this.random.nextInt(13) - 6);
-            BlockState s = level.getBlockState(p);
-            if (!isPerch(s)) {
-                continue;
-            }
-            double score = p.distSqr(here) - (s.is(BlockTags.FLOWERS) ? 40.0 : 0.0);
-            if (score < bestScore) {
-                bestScore = score;
-                best = p.immutable();
+        BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
+        for (int dy = -4; dy <= 2; dy++) {
+            for (int dx = -6; dx <= 6; dx++) {
+                for (int dz = -6; dz <= 6; dz++) {
+                    p.set(here.getX() + dx, here.getY() + dy, here.getZ() + dz);
+                    BlockState s = level.getBlockState(p);
+                    if (!isPerch(s)) {
+                        continue;
+                    }
+                    // ein wenig Zufall, damit nicht alle Falter dieselbe Blüte wählen
+                    double score = dx * dx + dy * dy + dz * dz - (s.is(BlockTags.FLOWERS) ? 40.0 : 0.0) + this.random.nextDouble() * 6.0;
+                    if (score < bestScore) {
+                        bestScore = score;
+                        best = p.immutable();
+                    }
+                }
             }
         }
         return best;

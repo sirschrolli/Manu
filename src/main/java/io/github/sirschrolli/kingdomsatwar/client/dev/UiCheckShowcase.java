@@ -91,9 +91,15 @@ final class UiCheckShowcase {
         steps.add(Step.waitTicks(10));
         shot(steps, minecraft -> new io.github.sirschrolli.kingdomsatwar.client.army.WarTableScreen(army[0], 32, 4, true), tag + "kriegstisch", 15);
         // erst eine leere Tafel (wer schon wartet, geht)
-        steps.add(Step.server(level -> level.getEntitiesOfClass(io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity.class,
-                new net.minecraft.world.phys.AABB(army[1]).inflate(24), io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity::isMercenary)
-                .forEach(net.minecraft.world.entity.Entity::discard)));
+        steps.add(Step.server(level -> {
+            // der Tag ist schon "versorgt" – sonst kämen gleich wieder welche
+            if (level.getBlockEntity(army[1]) instanceof io.github.sirschrolli.kingdomsatwar.block.entity.MercenaryBoardBlockEntity entity) {
+                entity.refreshIfDue(level);
+            }
+            level.getEntitiesOfClass(io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity.class,
+                    new net.minecraft.world.phys.AABB(army[1]).inflate(24), io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity::isMercenary)
+                    .forEach(net.minecraft.world.entity.Entity::discard);
+        }));
         steps.add(Step.waitTicks(5));
         shot(steps, minecraft -> new io.github.sirschrolli.kingdomsatwar.client.army.MercenaryScreen(army[1], 32, "Lindenau"), tag + "soeldner_leer",
                 15);

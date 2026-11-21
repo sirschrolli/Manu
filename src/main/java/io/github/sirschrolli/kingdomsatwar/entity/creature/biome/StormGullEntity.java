@@ -356,9 +356,12 @@ public class StormGullEntity extends SoaringBird {
             if (gull.stealCooldown > 0 || !gull.getCarried().isEmpty() || gull.isBaby() || gull.random.nextInt(20) != 0) {
                 return false;
             }
-            Player player = gull.level().getNearestPlayer(gull.getX(), gull.getY(), gull.getZ(), 16.0,
+            // aus der Höhe erspäht sie einen Fisch von weiter her: sie kreist gut zehn Blöcke hoch in weiten Bögen (mit 16 Blöcken
+            // Sicht sah sie den Fischer unter sich oft gar nicht) – und durch Glas hindurch
+            Player player = gull.level().getNearestPlayer(gull.getX(), gull.getY(), gull.getZ(), 24.0,
                     e -> e instanceof Player p && !p.isCreative() && !p.isSpectator() && isStealable(p.getMainHandItem()));
-            if (player == null || !gull.hasLineOfSight(player)) {
+            if (player == null || !gull.hasLineOfSight(player, net.minecraft.world.level.ClipContext.Block.VISUAL,
+                    net.minecraft.world.level.ClipContext.Fluid.NONE, player.getEyeY())) {
                 return false;
             }
             this.victim = player;
