@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "kingdomsatwar:block/azure_mushroom_cap_bottom",
+    "side": "kingdomsatwar:block/azure_mushroom_cap_side",
+    "top": "kingdomsatwar:block/azure_mushroom_cap_top"
+  }
+}

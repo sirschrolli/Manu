@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=east,half=lower": {
+      "model": "kingdomsatwar:block/town_banner_lower",
+      "y": 90
+    },
+    "facing=east,half=upper": {
+      "model": "kingdomsatwar:block/town_banner_upper",
+      "y": 90
+    },
+    "facing=north,half=lower": {
+      "model": "kingdomsatwar:block/town_banner_lower"
+    },
+    "facing=north,half=upper": {
+      "model": "kingdomsatwar:block/town_banner_upper"
+    },
+    "facing=south,half=lower": {
+      "model": "kingdomsatwar:block/town_banner_lower",
+      "y": 180
+    },
+    "facing=south,half=upper": {
+      "model": "kingdomsatwar:block/town_banner_upper",
+      "y": 180
+    },
+    "facing=west,half=lower": {
+      "model": "kingdomsatwar:block/town_banner_lower",
+      "y": 270
+    },
+    "facing=west,half=upper": {
+      "model": "kingdomsatwar:block/town_banner_upper",
+      "y": 270
+    }
+  }
+}

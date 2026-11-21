@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "kingdomsatwar:night_crystal_shard",
+    "E": "kingdomsatwar:shadow_essence",
+    "T": "minecraft:totem_of_undying"
+  },
+  "pattern": [
+    "CEC",
+    "ETE",
+    "CEC"
+  ],
+  "result": {
+    "id": "kingdomsatwar:totem_shadow"
+  }
+}

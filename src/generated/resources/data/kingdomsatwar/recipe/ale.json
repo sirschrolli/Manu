@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kingdomsatwar:barley",
+    "kingdomsatwar:barley",
+    "kingdomsatwar:hops",
+    "minecraft:glass_bottle"
+  ],
+  "result": {
+    "id": "kingdomsatwar:ale"
+  }
+}

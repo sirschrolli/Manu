@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:shale",
+  "result": {
+    "count": 2,
+    "id": "kingdomsatwar:shale_slab"
+  }
+}

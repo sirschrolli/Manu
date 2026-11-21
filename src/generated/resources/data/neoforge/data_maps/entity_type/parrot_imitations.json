@@ -1,0 +1,127 @@
+{
+  "values": {
+    "kingdomsatwar:blaze": {
+      "sound": "minecraft:entity.parrot.imitate.blaze"
+    },
+    "kingdomsatwar:bogged": {
+      "sound": "minecraft:entity.parrot.imitate.bogged"
+    },
+    "kingdomsatwar:breeze": {
+      "sound": "minecraft:entity.parrot.imitate.breeze"
+    },
+    "kingdomsatwar:camel_husk": {
+      "sound": "minecraft:entity.parrot.imitate.camel_husk"
+    },
+    "kingdomsatwar:cave_spider": {
+      "sound": "minecraft:entity.parrot.imitate.spider"
+    },
+    "kingdomsatwar:creaking": {
+      "sound": "minecraft:entity.parrot.imitate.creaking"
+    },
+    "kingdomsatwar:creeper": {
+      "sound": "minecraft:entity.parrot.imitate.creeper"
+    },
+    "kingdomsatwar:drowned": {
+      "sound": "minecraft:entity.parrot.imitate.drowned"
+    },
+    "kingdomsatwar:elder_guardian": {
+      "sound": "minecraft:entity.parrot.imitate.elder_guardian"
+    },
+    "kingdomsatwar:endermite": {
+      "sound": "minecraft:entity.parrot.imitate.endermite"
+    },
+    "kingdomsatwar:evoker": {
+      "sound": "minecraft:entity.parrot.imitate.evoker"
+    },
+    "kingdomsatwar:ghast": {
+      "sound": "minecraft:entity.parrot.imitate.ghast"
+    },
+    "kingdomsatwar:guardian": {
+      "sound": "minecraft:entity.parrot.imitate.guardian"
+    },
+    "kingdomsatwar:happy_ghast": {
+      "sound": "minecraft:intentionally_empty"
+    },
+    "kingdomsatwar:hoglin": {
+      "sound": "minecraft:entity.parrot.imitate.hoglin"
+    },
+    "kingdomsatwar:husk": {
+      "sound": "minecraft:entity.parrot.imitate.husk"
+    },
+    "kingdomsatwar:illusioner": {
+      "sound": "minecraft:entity.parrot.imitate.illusioner"
+    },
+    "kingdomsatwar:magma_cube": {
+      "sound": "minecraft:entity.parrot.imitate.magma_cube"
+    },
+    "kingdomsatwar:parched": {
+      "sound": "minecraft:entity.parrot.imitate.parched"
+    },
+    "kingdomsatwar:phantom": {
+      "sound": "minecraft:entity.parrot.imitate.phantom"
+    },
+    "kingdomsatwar:piglin": {
+      "sound": "minecraft:entity.parrot.imitate.piglin"
+    },
+    "kingdomsatwar:piglin_brute": {
+      "sound": "minecraft:entity.parrot.imitate.piglin_brute"
+    },
+    "kingdomsatwar:pillager": {
+      "sound": "minecraft:entity.parrot.imitate.pillager"
+    },
+    "kingdomsatwar:ravager": {
+      "sound": "minecraft:entity.parrot.imitate.ravager"
+    },
+    "kingdomsatwar:shulker": {
+      "sound": "minecraft:entity.parrot.imitate.shulker"
+    },
+    "kingdomsatwar:silverfish": {
+      "sound": "minecraft:entity.parrot.imitate.silverfish"
+    },
+    "kingdomsatwar:skeleton": {
+      "sound": "minecraft:entity.parrot.imitate.skeleton"
+    },
+    "kingdomsatwar:slime": {
+      "sound": "minecraft:entity.parrot.imitate.slime"
+    },
+    "kingdomsatwar:spider": {
+      "sound": "minecraft:entity.parrot.imitate.spider"
+    },
+    "kingdomsatwar:stray": {
+      "sound": "minecraft:entity.parrot.imitate.stray"
+    },
+    "kingdomsatwar:vex": {
+      "sound": "minecraft:entity.parrot.imitate.vex"
+    },
+    "kingdomsatwar:vindicator": {
+      "sound": "minecraft:entity.parrot.imitate.vindicator"
+    },
+    "kingdomsatwar:warden": {
+      "sound": "minecraft:entity.parrot.imitate.warden"
+    },
+    "kingdomsatwar:witch": {
+      "sound": "minecraft:entity.parrot.imitate.witch"
+    },
+    "kingdomsatwar:wither": {
+      "sound": "minecraft:entity.parrot.imitate.wither"
+    },
+    "kingdomsatwar:wither_skeleton": {
+      "sound": "minecraft:entity.parrot.imitate.wither_skeleton"
+    },
+    "kingdomsatwar:zoglin": {
+      "sound": "minecraft:entity.parrot.imitate.zoglin"
+    },
+    "kingdomsatwar:zombie": {
+      "sound": "minecraft:entity.parrot.imitate.zombie"
+    },
+    "kingdomsatwar:zombie_horse": {
+      "sound": "minecraft:entity.parrot.imitate.zombie_horse"
+    },
+    "kingdomsatwar:zombie_nautilus": {
+      "sound": "minecraft:entity.parrot.imitate.zombie_nautilus"
+    },
+    "kingdomsatwar:zombie_villager": {
+      "sound": "minecraft:entity.parrot.imitate.zombie_villager"
+    }
+  }
+}

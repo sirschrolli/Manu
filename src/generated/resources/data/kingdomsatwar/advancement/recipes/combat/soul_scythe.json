@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_ash_veil": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:ash_veil"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:soul_scythe"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_ash_veil"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:soul_scythe"
+    ]
+  }
+}

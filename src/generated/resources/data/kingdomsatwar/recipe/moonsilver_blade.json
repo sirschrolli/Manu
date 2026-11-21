@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "kingdomsatwar:soul_crystal",
+    "M": "kingdomsatwar:moonsilver_ingot",
+    "S": "minecraft:stick"
+  },
+  "pattern": [
+    " M ",
+    " M ",
+    "CSC"
+  ],
+  "result": {
+    "id": "kingdomsatwar:moonsilver_blade"
+  }
+}

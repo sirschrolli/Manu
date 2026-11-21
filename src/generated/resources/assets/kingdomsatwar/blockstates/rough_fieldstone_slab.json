@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "kingdomsatwar:block/rough_fieldstone_slab"
+    },
+    "type=double": {
+      "model": "kingdomsatwar:block/rough_fieldstone"
+    },
+    "type=top": {
+      "model": "kingdomsatwar:block/rough_fieldstone_slab_top"
+    }
+  }
+}

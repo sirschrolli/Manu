@@ -1,0 +1,52 @@
+{
+  "anvil_cost": 4,
+  "description": {
+    "translate": "enchantment.kingdomsatwar.thunderstrike"
+  },
+  "effects": {
+    "minecraft:post_attack": [
+      {
+        "affected": "victim",
+        "effect": {
+          "type": "kingdomsatwar:thunderstrike",
+          "chance": {
+            "type": "minecraft:linear",
+            "base": 0.15,
+            "per_level_above_first": 0.07
+          },
+          "damage": {
+            "type": "minecraft:linear",
+            "base": 2.5,
+            "per_level_above_first": 1.5
+          }
+        },
+        "enchanted": "attacker",
+        "requirements": {
+          "type": "minecraft:damage_source_properties",
+          "predicate": {
+            "is_direct": true
+          }
+        }
+      }
+    ]
+  },
+  "exclusive_set": [
+    "minecraft:fire_aspect",
+    "kingdomsatwar:frostbite"
+  ],
+  "max_cost": {
+    "base": 62,
+    "per_level_above_first": 18
+  },
+  "max_level": 2,
+  "min_cost": {
+    "base": 12,
+    "per_level_above_first": 18
+  },
+  "primary_items": "#minecraft:enchantable/melee_weapon",
+  "slots": [
+    "mainhand"
+  ],
+  "supported_items": "#minecraft:enchantable/sharp_weapon",
+  "weight": 2
+}

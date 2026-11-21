@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_stripped_shadow_log": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:stripped_shadow_log"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:stripped_shadow_wood"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_stripped_shadow_log"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:stripped_shadow_wood"
+    ]
+  }
+}

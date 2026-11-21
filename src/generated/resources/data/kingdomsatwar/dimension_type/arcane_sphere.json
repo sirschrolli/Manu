@@ -1,0 +1,59 @@
+{
+  "ambient_light": 0.12,
+  "attributes": {
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "minecraft:music.end"
+      }
+    },
+    "minecraft:gameplay/bed_rule": {
+      "can_set_spawn": "never",
+      "can_sleep": "never",
+      "error_message": {
+        "translate": "block.kingdomsatwar.bed.arcane_sphere"
+      }
+    },
+    "minecraft:gameplay/can_start_raid": false,
+    "minecraft:gameplay/nether_portal_spawns_piglin": false,
+    "minecraft:gameplay/respawn_anchor_works": false,
+    "minecraft:gameplay/sky_light_level": 11.0,
+    "minecraft:visual/ambient_light_color": "#3c2e66",
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:end_rod"
+        },
+        "probability": 8.0E-4
+      }
+    ],
+    "minecraft:visual/cloud_color": "#b06a4aa0",
+    "minecraft:visual/cloud_height": 58.0,
+    "minecraft:visual/fog_color": "#2a1a4c",
+    "minecraft:visual/fog_end_distance": 150.0,
+    "minecraft:visual/fog_start_distance": 28.0,
+    "minecraft:visual/moon_phase": "new_moon",
+    "minecraft:visual/sky_color": "#120a26",
+    "minecraft:visual/sky_light_color": "#d8c8ff",
+    "minecraft:visual/sky_light_factor": 0.9,
+    "minecraft:visual/star_angle": 23.0,
+    "minecraft:visual/star_brightness": 1.0,
+    "minecraft:visual/sun_angle": 180.0
+  },
+  "coordinate_scale": 1.0,
+  "has_ceiling": false,
+  "has_ender_dragon_fight": false,
+  "has_fixed_time": true,
+  "has_skylight": true,
+  "height": 256,
+  "infiniburn": "#minecraft:infiniburn_overworld",
+  "logical_height": 256,
+  "min_y": 0,
+  "monster_spawn_block_light_limit": 0,
+  "monster_spawn_light_level": {
+    "type": "minecraft:uniform",
+    "max_inclusive": 7,
+    "min_inclusive": 0
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:mage_tower",
+  "biomes": "#kingdomsatwar:has_fire_mage_tower",
+  "element": "fire",
+  "spawn_overrides": {},
+  "step": "surface_structures"
+}

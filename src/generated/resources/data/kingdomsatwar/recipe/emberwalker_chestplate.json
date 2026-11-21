@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "F": "kingdomsatwar:fire_opal",
+    "S": "minecraft:netherite_scrap"
+  },
+  "pattern": [
+    "F F",
+    "FSF",
+    "FFF"
+  ],
+  "result": {
+    "id": "kingdomsatwar:emberwalker_chestplate"
+  }
+}

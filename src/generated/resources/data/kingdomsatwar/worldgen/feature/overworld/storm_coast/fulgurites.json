@@ -1,0 +1,12 @@
+{
+  "type": "kingdomsatwar:spire",
+  "band": "kingdomsatwar:fulgurite",
+  "band_every": 64,
+  "base_radius": 0.5,
+  "body": "kingdomsatwar:fulgurite",
+  "in_water": false,
+  "lean": 0.0,
+  "max_height": 2,
+  "min_height": 1,
+  "tip": "kingdomsatwar:storm_crystal"
+}

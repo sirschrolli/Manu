@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "kingdomsatwar:block/grapes_stage3"
+  }
+}

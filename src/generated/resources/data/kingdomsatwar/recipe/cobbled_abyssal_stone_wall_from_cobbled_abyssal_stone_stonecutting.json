@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:cobbled_abyssal_stone",
+  "result": {
+    "id": "kingdomsatwar:cobbled_abyssal_stone_wall"
+  }
+}

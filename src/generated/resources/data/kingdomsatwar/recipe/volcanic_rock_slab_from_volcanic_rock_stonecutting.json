@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:volcanic_rock",
+  "result": {
+    "count": 2,
+    "id": "kingdomsatwar:volcanic_rock_slab"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "kingdomsatwar:moonstone"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "kingdomsatwar:moonstone"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "kingdomsatwar:moonstone"
+      }
+    ]
+  }
+}

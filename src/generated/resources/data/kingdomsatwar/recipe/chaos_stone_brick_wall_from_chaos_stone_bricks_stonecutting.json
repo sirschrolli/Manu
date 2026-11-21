@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:chaos_stone_bricks",
+  "result": {
+    "id": "kingdomsatwar:chaos_stone_brick_wall"
+  }
+}

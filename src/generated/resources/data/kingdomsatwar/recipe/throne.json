@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "P": "minecraft:dark_oak_planks",
+    "W": "minecraft:red_wool"
+  },
+  "pattern": [
+    "GWG",
+    "PWP",
+    "PPP"
+  ],
+  "result": {
+    "id": "kingdomsatwar:throne"
+  }
+}

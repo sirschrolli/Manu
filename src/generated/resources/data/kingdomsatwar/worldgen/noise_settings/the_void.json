@@ -1,0 +1,45 @@
+{
+  "debug_functions": [
+    {
+      "function": "kingdomsatwar:void/final_density",
+      "label": "N"
+    },
+    {
+      "function": "kingdomsatwar:void/temperature",
+      "label": "T"
+    },
+    {
+      "function": "kingdomsatwar:void/vegetation",
+      "label": "V"
+    },
+    {
+      "function": "kingdomsatwar:void/archipelago",
+      "label": "C"
+    },
+    {
+      "function": "kingdomsatwar:void/zone",
+      "label": "E"
+    }
+  ],
+  "default_block": "kingdomsatwar:void_stone",
+  "default_fluid": "minecraft:air",
+  "disable_mob_generation": false,
+  "legacy_random_source": false,
+  "material_rule": "kingdomsatwar:the_void",
+  "noise": {
+    "height": 384,
+    "min_y": -64
+  },
+  "noise_router": {
+    "chunk_surface_level": 64.0,
+    "continents": "kingdomsatwar:void/archipelago",
+    "depth": 0.0,
+    "erosion": "kingdomsatwar:void/zone",
+    "final_density": "kingdomsatwar:void/final_density",
+    "ridges": 0.0,
+    "temperature": "kingdomsatwar:void/temperature",
+    "vegetation": "kingdomsatwar:void/vegetation"
+  },
+  "sea_level": -64,
+  "spawn_target": []
+}

@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "kingdomsatwar:block/glow_algae"
+      },
+      {
+        "model": "kingdomsatwar:block/glow_algae",
+        "y": 90
+      },
+      {
+        "model": "kingdomsatwar:block/glow_algae",
+        "y": 180
+      },
+      {
+        "model": "kingdomsatwar:block/glow_algae",
+        "y": 270
+      }
+    ]
+  }
+}

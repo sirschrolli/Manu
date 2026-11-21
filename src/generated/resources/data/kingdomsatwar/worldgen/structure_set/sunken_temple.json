@@ -1,0 +1,18 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "exclusion_zone": {
+      "chunk_count": 10,
+      "other_set": "kingdomsatwar:realm_castles"
+    },
+    "salt": 58913117,
+    "separation": 17,
+    "spacing": 38
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:sunken_temple",
+      "weight": 1
+    }
+  ]
+}

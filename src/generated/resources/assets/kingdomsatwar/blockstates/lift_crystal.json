@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "kingdomsatwar:block/lift_crystal",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "kingdomsatwar:block/lift_crystal",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "kingdomsatwar:block/lift_crystal",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "kingdomsatwar:block/lift_crystal",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "kingdomsatwar:block/lift_crystal"
+    },
+    "facing=west": {
+      "model": "kingdomsatwar:block/lift_crystal",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

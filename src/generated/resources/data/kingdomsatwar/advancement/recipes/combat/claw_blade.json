@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:claw_blade"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_werewolf_claw": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:werewolf_claw"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_werewolf_claw"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:claw_blade"
+    ]
+  }
+}

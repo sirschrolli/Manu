@@ -1,0 +1,19 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "exclusion_zone": {
+      "chunk_count": 10,
+      "other_set": "kingdomsatwar:realm_castles"
+    },
+    "salt": 10387321,
+    "separation": 58,
+    "spacing": 128,
+    "spread_type": "triangular"
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:robber_castle",
+      "weight": 1
+    }
+  ]
+}

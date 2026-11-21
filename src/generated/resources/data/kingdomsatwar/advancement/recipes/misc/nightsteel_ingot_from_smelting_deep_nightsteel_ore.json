@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_deep_nightsteel_ore": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:deep_nightsteel_ore"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:nightsteel_ingot_from_smelting_deep_nightsteel_ore"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_deep_nightsteel_ore"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:nightsteel_ingot_from_smelting_deep_nightsteel_ore"
+    ]
+  }
+}

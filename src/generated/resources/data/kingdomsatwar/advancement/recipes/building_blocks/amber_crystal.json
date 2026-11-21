@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_amber_cluster": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:amber_cluster"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:amber_crystal"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_amber_cluster"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:amber_crystal"
+    ]
+  }
+}

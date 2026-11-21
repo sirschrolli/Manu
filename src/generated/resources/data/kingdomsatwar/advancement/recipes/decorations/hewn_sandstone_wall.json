@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_hewn_sandstone": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:hewn_sandstone"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:hewn_sandstone_wall"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_hewn_sandstone"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:hewn_sandstone_wall"
+    ]
+  }
+}

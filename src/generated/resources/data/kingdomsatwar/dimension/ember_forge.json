@@ -1,0 +1,18 @@
+{
+  "type": "kingdomsatwar:ember_forge",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "kingdomsatwar:ember_forge",
+      "features": false,
+      "lakes": false,
+      "layers": [
+        {
+          "block": "minecraft:air",
+          "height": 1
+        }
+      ],
+      "structure_overrides": []
+    }
+  }
+}

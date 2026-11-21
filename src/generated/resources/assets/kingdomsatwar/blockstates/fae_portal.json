@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "kingdomsatwar:block/fae_portal_ns"
+    },
+    "axis=z": {
+      "model": "kingdomsatwar:block/fae_portal_ew"
+    }
+  }
+}

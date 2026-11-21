@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "minecraft:rotten_flesh",
+    "minecraft:dirt",
+    "minecraft:wheat_seeds"
+  ],
+  "result": {
+    "count": 6,
+    "id": "kingdomsatwar:bait_worm"
+  }
+}

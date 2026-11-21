@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_copper_roof": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:copper_roof"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:copper_roof_slab_from_copper_roof_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_copper_roof"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:copper_roof_slab_from_copper_roof_stonecutting"
+    ]
+  }
+}

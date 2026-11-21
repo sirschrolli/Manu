@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "phase=awake": {
+      "model": "kingdomsatwar:block/witch_cauldron"
+    },
+    "phase=defeated": {
+      "model": "kingdomsatwar:block/witch_cauldron_cold"
+    },
+    "phase=sleeping": {
+      "model": "kingdomsatwar:block/witch_cauldron"
+    }
+  }
+}

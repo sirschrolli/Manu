@@ -1,0 +1,22 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "exclusion_zone": {
+      "chunk_count": 12,
+      "other_set": "kingdomsatwar:dragon_lairs"
+    },
+    "salt": 14357621,
+    "separation": 8,
+    "spacing": 20
+  },
+  "structures": [
+    {
+      "structure": "minecraft:ocean_ruin_cold",
+      "weight": 1
+    },
+    {
+      "structure": "minecraft:ocean_ruin_warm",
+      "weight": 1
+    }
+  ]
+}

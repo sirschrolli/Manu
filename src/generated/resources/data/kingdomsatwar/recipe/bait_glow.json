@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "kingdomsatwar:bait_worm",
+    "kingdomsatwar:bait_worm",
+    "kingdomsatwar:bait_worm",
+    "kingdomsatwar:bait_worm",
+    "minecraft:glow_ink_sac",
+    "minecraft:glow_berries"
+  ],
+  "result": {
+    "count": 4,
+    "id": "kingdomsatwar:bait_glow"
+  }
+}

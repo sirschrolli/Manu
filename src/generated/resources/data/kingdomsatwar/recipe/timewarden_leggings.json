@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "kingdomsatwar:chronit",
+    "G": "minecraft:gold_ingot"
+  },
+  "pattern": [
+    "CGC",
+    "C C",
+    "C C"
+  ],
+  "result": {
+    "id": "kingdomsatwar:timewarden_leggings"
+  }
+}

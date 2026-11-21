@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "kingdomsatwar:werewolf_claw",
+    "I": "minecraft:iron_ingot",
+    "P": "kingdomsatwar:werewolf_pelt"
+  },
+  "pattern": [
+    "CCC",
+    " P ",
+    " I "
+  ],
+  "result": {
+    "id": "kingdomsatwar:claw_blade"
+  }
+}

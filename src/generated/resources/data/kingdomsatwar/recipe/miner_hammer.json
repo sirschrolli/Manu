@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "kingdomsatwar:steel_block",
+    "R": "minecraft:stick",
+    "S": "kingdomsatwar:steel_ingot"
+  },
+  "pattern": [
+    "SBS",
+    " R ",
+    " R "
+  ],
+  "result": {
+    "id": "kingdomsatwar:miner_hammer"
+  }
+}

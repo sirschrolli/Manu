@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "kingdomsatwar:block/kelpwood_log",
+    "side": "kingdomsatwar:block/kelpwood_log"
+  }
+}

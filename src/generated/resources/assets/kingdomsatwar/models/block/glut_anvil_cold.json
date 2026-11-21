@@ -1,0 +1,306 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#body"
+        },
+        "east": {
+          "texture": "#body"
+        },
+        "north": {
+          "texture": "#body"
+        },
+        "south": {
+          "texture": "#body"
+        },
+        "up": {
+          "texture": "#body"
+        },
+        "west": {
+          "texture": "#body"
+        }
+      },
+      "from": [
+        1,
+        0,
+        2
+      ],
+      "to": [
+        15,
+        4,
+        14
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#body"
+        },
+        "east": {
+          "texture": "#body"
+        },
+        "north": {
+          "texture": "#body"
+        },
+        "south": {
+          "texture": "#body"
+        },
+        "up": {
+          "texture": "#body"
+        },
+        "west": {
+          "texture": "#body"
+        }
+      },
+      "from": [
+        3,
+        4,
+        4
+      ],
+      "to": [
+        13,
+        5,
+        12
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#body"
+        },
+        "east": {
+          "texture": "#body"
+        },
+        "north": {
+          "texture": "#body"
+        },
+        "south": {
+          "texture": "#body"
+        },
+        "up": {
+          "texture": "#body"
+        },
+        "west": {
+          "texture": "#body"
+        }
+      },
+      "from": [
+        4,
+        5,
+        5.5
+      ],
+      "to": [
+        12,
+        10,
+        10.5
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#body"
+        },
+        "east": {
+          "texture": "#body"
+        },
+        "north": {
+          "texture": "#body"
+        },
+        "south": {
+          "texture": "#body"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "west": {
+          "texture": "#body"
+        }
+      },
+      "from": [
+        0,
+        10,
+        3
+      ],
+      "to": [
+        16,
+        16,
+        13
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#body",
+          "uv": [
+            0.0,
+            5.0,
+            3.0,
+            11.0
+          ]
+        },
+        "east": {
+          "texture": "#body"
+        },
+        "north": {
+          "texture": "#body",
+          "uv": [
+            0.0,
+            0.5,
+            3.0,
+            4.0
+          ]
+        },
+        "south": {
+          "texture": "#body",
+          "uv": [
+            0.0,
+            0.5,
+            3.0,
+            4.0
+          ]
+        },
+        "up": {
+          "texture": "#top",
+          "uv": [
+            0.0,
+            5.0,
+            3.0,
+            11.0
+          ]
+        },
+        "west": {
+          "texture": "#body"
+        }
+      },
+      "from": [
+        -3,
+        12,
+        5
+      ],
+      "to": [
+        0,
+        15.5,
+        11
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#body",
+          "uv": [
+            0.0,
+            6.5,
+            2.5,
+            9.5
+          ]
+        },
+        "east": {
+          "texture": "#body"
+        },
+        "north": {
+          "texture": "#body",
+          "uv": [
+            0.0,
+            1.0,
+            2.5,
+            2.8000002
+          ]
+        },
+        "south": {
+          "texture": "#body",
+          "uv": [
+            0.0,
+            1.0,
+            2.5,
+            2.8000002
+          ]
+        },
+        "up": {
+          "texture": "#top",
+          "uv": [
+            0.0,
+            6.5,
+            2.5,
+            9.5
+          ]
+        },
+        "west": {
+          "texture": "#body"
+        }
+      },
+      "from": [
+        -5.5,
+        13.2,
+        6.5
+      ],
+      "to": [
+        -3,
+        15,
+        9.5
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#body",
+          "uv": [
+            14.5,
+            4.0,
+            16.0,
+            12.0
+          ]
+        },
+        "east": {
+          "texture": "#body"
+        },
+        "north": {
+          "texture": "#body",
+          "uv": [
+            14.5,
+            0.0,
+            16.0,
+            3.0
+          ]
+        },
+        "south": {
+          "texture": "#body",
+          "uv": [
+            14.5,
+            0.0,
+            16.0,
+            3.0
+          ]
+        },
+        "up": {
+          "texture": "#top",
+          "uv": [
+            14.5,
+            4.0,
+            16.0,
+            12.0
+          ]
+        },
+        "west": {
+          "texture": "#body"
+        }
+      },
+      "from": [
+        16,
+        13,
+        4
+      ],
+      "to": [
+        17.5,
+        16,
+        12
+      ]
+    }
+  ],
+  "textures": {
+    "body": "kingdomsatwar:block/glut_anvil_cold",
+    "particle": "kingdomsatwar:block/glut_anvil_cold",
+    "top": "kingdomsatwar:block/glut_anvil_top_cold"
+  }
+}

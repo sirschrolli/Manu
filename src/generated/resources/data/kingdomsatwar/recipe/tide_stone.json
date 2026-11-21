@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "P": "minecraft:prismarine_shard",
+    "S": "minecraft:stone"
+  },
+  "pattern": [
+    " S ",
+    "SPS",
+    " S "
+  ],
+  "result": {
+    "count": 4,
+    "id": "kingdomsatwar:tide_stone"
+  }
+}

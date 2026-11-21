@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:honeycomb",
+    "minecraft:honeycomb",
+    "kingdomsatwar:hops",
+    "minecraft:glass_bottle"
+  ],
+  "result": {
+    "id": "kingdomsatwar:mead"
+  }
+}

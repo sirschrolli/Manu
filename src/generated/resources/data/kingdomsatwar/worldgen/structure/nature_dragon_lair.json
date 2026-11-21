@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:dragon_lair",
+  "biomes": "#minecraft:is_overworld",
+  "element": "nature",
+  "spawn_overrides": {},
+  "step": "top_layer_modification"
+}

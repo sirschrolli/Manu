@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:astral_marble",
+  "result": {
+    "count": 2,
+    "id": "kingdomsatwar:astral_marble_slab"
+  }
+}

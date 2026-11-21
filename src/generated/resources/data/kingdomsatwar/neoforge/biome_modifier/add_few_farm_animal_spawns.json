@@ -1,0 +1,24 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#kingdomsatwar:has_few_sheep",
+  "spawners": [
+    {
+      "type": "kingdomsatwar:sheep",
+      "count": {
+        "type": "minecraft:uniform",
+        "max_inclusive": 4,
+        "min_inclusive": 2
+      },
+      "weight": 2
+    },
+    {
+      "type": "kingdomsatwar:pig",
+      "count": {
+        "type": "minecraft:uniform",
+        "max_inclusive": 2,
+        "min_inclusive": 1
+      },
+      "weight": 1
+    }
+  ]
+}

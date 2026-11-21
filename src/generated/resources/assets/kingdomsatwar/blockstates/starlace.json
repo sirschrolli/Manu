@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "kingdomsatwar:block/starlace_bottom"
+    },
+    "half=upper": {
+      "model": "kingdomsatwar:block/starlace_top"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "type": "kingdomsatwar:add_spawns_in_category",
+  "biomes": [
+    "minecraft:forest",
+    "minecraft:birch_forest",
+    "minecraft:dark_forest",
+    "minecraft:old_growth_birch_forest",
+    "minecraft:dappled_forest",
+    "kingdomsatwar:primeval_forest"
+  ],
+  "category": "monster",
+  "spawners": [
+    {
+      "type": "kingdomsatwar:wildcat",
+      "count": {
+        "type": "minecraft:uniform",
+        "max_inclusive": 1,
+        "min_inclusive": 1
+      },
+      "weight": 2
+    }
+  ]
+}

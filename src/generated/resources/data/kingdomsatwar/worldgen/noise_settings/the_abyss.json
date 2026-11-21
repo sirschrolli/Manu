@@ -1,0 +1,41 @@
+{
+  "debug_functions": [
+    {
+      "function": "kingdomsatwar:abyss/final_density",
+      "label": "N"
+    },
+    {
+      "function": "kingdomsatwar:abyss/temperature",
+      "label": "T"
+    },
+    {
+      "function": "kingdomsatwar:abyss/vegetation",
+      "label": "V"
+    },
+    {
+      "function": "kingdomsatwar:abyss/mask",
+      "label": "C"
+    }
+  ],
+  "default_block": "kingdomsatwar:chaos_stone",
+  "default_fluid": "minecraft:air",
+  "disable_mob_generation": false,
+  "legacy_random_source": false,
+  "material_rule": "kingdomsatwar:the_abyss",
+  "noise": {
+    "height": 384,
+    "min_y": -64
+  },
+  "noise_router": {
+    "chunk_surface_level": 64.0,
+    "continents": "kingdomsatwar:abyss/mask",
+    "depth": 0.0,
+    "erosion": 0.0,
+    "final_density": "kingdomsatwar:abyss/final_density",
+    "ridges": 0.0,
+    "temperature": "kingdomsatwar:abyss/temperature",
+    "vegetation": "kingdomsatwar:abyss/vegetation"
+  },
+  "sea_level": -64,
+  "spawn_target": []
+}

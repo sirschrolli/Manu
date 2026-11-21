@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_clock_bronze": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:clock_bronze"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:clock_bronze_wall_from_clock_bronze_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_clock_bronze"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:clock_bronze_wall_from_clock_bronze_stonecutting"
+    ]
+  }
+}

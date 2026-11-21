@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": "kingdomsatwar:steel_boots",
+    "S": "kingdomsatwar:lightning_dragon_scale"
+  },
+  "pattern": [
+    "SAS",
+    "S S"
+  ],
+  "result": {
+    "id": "kingdomsatwar:lightning_dragon_scale_boots"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:cobbled_stormstone",
+  "result": {
+    "id": "kingdomsatwar:cobbled_stormstone_stairs"
+  }
+}

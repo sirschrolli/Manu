@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "kingdomsatwar:block/volcanic_rock",
+    "side": "kingdomsatwar:block/volcanic_rock",
+    "top": "kingdomsatwar:block/volcanic_rock"
+  }
+}

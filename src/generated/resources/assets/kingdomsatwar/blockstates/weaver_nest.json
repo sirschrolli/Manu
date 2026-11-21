@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "phase=awake": {
+      "model": "kingdomsatwar:block/weaver_nest"
+    },
+    "phase=defeated": {
+      "model": "kingdomsatwar:block/weaver_nest_cold"
+    },
+    "phase=sleeping": {
+      "model": "kingdomsatwar:block/weaver_nest"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "kingdomsatwar:block/limestone_bricks",
+    "side": "kingdomsatwar:block/limestone_bricks",
+    "top": "kingdomsatwar:block/limestone_bricks"
+  }
+}

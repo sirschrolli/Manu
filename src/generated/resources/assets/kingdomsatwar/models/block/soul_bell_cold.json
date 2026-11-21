@@ -1,0 +1,403 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#crown",
+          "uv": [
+            6.0,
+            0.0,
+            10.0,
+            3.0
+          ]
+        },
+        "east": {
+          "texture": "#crown"
+        },
+        "north": {
+          "texture": "#crown"
+        },
+        "south": {
+          "texture": "#crown"
+        },
+        "up": {
+          "texture": "#crown",
+          "uv": [
+            6.0,
+            0.0,
+            10.0,
+            3.0
+          ]
+        },
+        "west": {
+          "texture": "#crown"
+        }
+      },
+      "from": [
+        6,
+        13,
+        6
+      ],
+      "to": [
+        10,
+        16,
+        10
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#inside"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "west": {
+          "texture": "#side"
+        }
+      },
+      "from": [
+        4,
+        11,
+        4
+      ],
+      "to": [
+        12,
+        13,
+        12
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#mouth"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "west": {
+          "texture": "#side"
+        }
+      },
+      "from": [
+        2,
+        4,
+        2
+      ],
+      "to": [
+        14,
+        11,
+        14
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#lip",
+          "uv": [
+            1.0,
+            1.0,
+            15.0,
+            2.0
+          ]
+        },
+        "east": {
+          "texture": "#side",
+          "uv": [
+            1.0,
+            12.0,
+            15.0,
+            14.0
+          ]
+        },
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#inside"
+        },
+        "up": {
+          "texture": "#lip"
+        },
+        "west": {
+          "texture": "#side",
+          "uv": [
+            1.0,
+            12.0,
+            15.0,
+            14.0
+          ]
+        }
+      },
+      "from": [
+        1,
+        2,
+        1
+      ],
+      "to": [
+        15,
+        4,
+        2
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#lip",
+          "uv": [
+            1.0,
+            14.0,
+            15.0,
+            15.0
+          ]
+        },
+        "east": {
+          "texture": "#side",
+          "uv": [
+            1.0,
+            12.0,
+            15.0,
+            14.0
+          ]
+        },
+        "north": {
+          "texture": "#inside"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#lip"
+        },
+        "west": {
+          "texture": "#side",
+          "uv": [
+            1.0,
+            12.0,
+            15.0,
+            14.0
+          ]
+        }
+      },
+      "from": [
+        1,
+        2,
+        14
+      ],
+      "to": [
+        15,
+        4,
+        15
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#lip"
+        },
+        "east": {
+          "texture": "#inside",
+          "uv": [
+            1.0,
+            12.0,
+            15.0,
+            14.0
+          ]
+        },
+        "north": {
+          "texture": "#inside",
+          "uv": [
+            1.0,
+            12.0,
+            15.0,
+            14.0
+          ]
+        },
+        "south": {
+          "texture": "#inside",
+          "uv": [
+            1.0,
+            12.0,
+            15.0,
+            14.0
+          ]
+        },
+        "up": {
+          "texture": "#lip"
+        },
+        "west": {
+          "texture": "#side",
+          "uv": [
+            1.0,
+            12.0,
+            15.0,
+            14.0
+          ]
+        }
+      },
+      "from": [
+        1,
+        2,
+        2
+      ],
+      "to": [
+        2,
+        4,
+        14
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#lip"
+        },
+        "east": {
+          "texture": "#side",
+          "uv": [
+            1.0,
+            12.0,
+            15.0,
+            14.0
+          ]
+        },
+        "north": {
+          "texture": "#inside",
+          "uv": [
+            1.0,
+            12.0,
+            15.0,
+            14.0
+          ]
+        },
+        "south": {
+          "texture": "#inside",
+          "uv": [
+            1.0,
+            12.0,
+            15.0,
+            14.0
+          ]
+        },
+        "up": {
+          "texture": "#lip"
+        },
+        "west": {
+          "texture": "#inside",
+          "uv": [
+            1.0,
+            12.0,
+            15.0,
+            14.0
+          ]
+        }
+      },
+      "from": [
+        14,
+        2,
+        2
+      ],
+      "to": [
+        15,
+        4,
+        14
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#crown",
+          "uv": [
+            7.0,
+            10.0,
+            9.0,
+            14.0
+          ]
+        },
+        "east": {
+          "texture": "#crown",
+          "uv": [
+            7.0,
+            10.0,
+            9.0,
+            14.0
+          ]
+        },
+        "north": {
+          "texture": "#crown",
+          "uv": [
+            7.0,
+            10.0,
+            9.0,
+            14.0
+          ]
+        },
+        "south": {
+          "texture": "#crown",
+          "uv": [
+            7.0,
+            10.0,
+            9.0,
+            14.0
+          ]
+        },
+        "up": {
+          "texture": "#crown",
+          "uv": [
+            7.0,
+            10.0,
+            9.0,
+            14.0
+          ]
+        },
+        "west": {
+          "texture": "#crown",
+          "uv": [
+            7.0,
+            10.0,
+            9.0,
+            14.0
+          ]
+        }
+      },
+      "from": [
+        7,
+        0,
+        7
+      ],
+      "to": [
+        9,
+        4,
+        9
+      ]
+    }
+  ],
+  "textures": {
+    "crown": "kingdomsatwar:block/soul_bell_crown",
+    "inside": "kingdomsatwar:block/soul_bell_inside",
+    "lip": "kingdomsatwar:block/soul_bell_lip",
+    "mouth": "kingdomsatwar:block/soul_bell_mouth_cold",
+    "particle": "kingdomsatwar:block/soul_bell_side",
+    "side": "kingdomsatwar:block/soul_bell_side",
+    "top": "kingdomsatwar:block/soul_bell_top"
+  }
+}

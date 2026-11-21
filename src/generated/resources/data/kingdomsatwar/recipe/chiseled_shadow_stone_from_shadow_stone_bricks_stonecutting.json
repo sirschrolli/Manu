@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:shadow_stone_bricks",
+  "result": {
+    "id": "kingdomsatwar:chiseled_shadow_stone"
+  }
+}

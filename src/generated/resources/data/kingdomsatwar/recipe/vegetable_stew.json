@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kingdomsatwar:tomato",
+    "kingdomsatwar:cabbage",
+    "kingdomsatwar:onion",
+    "minecraft:carrot",
+    "minecraft:bowl"
+  ],
+  "result": {
+    "id": "kingdomsatwar:vegetable_stew"
+  }
+}

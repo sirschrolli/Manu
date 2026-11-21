@@ -1,0 +1,24 @@
+{
+  "type": "kingdomsatwar:add_spawns_in_category",
+  "biomes": [
+    "minecraft:beach",
+    "minecraft:stony_shore",
+    "minecraft:mangrove_swamp",
+    "minecraft:warm_ocean",
+    "minecraft:lukewarm_ocean",
+    "kingdomsatwar:coral_coast",
+    "kingdomsatwar:storm_coast"
+  ],
+  "category": "creature",
+  "spawners": [
+    {
+      "type": "kingdomsatwar:giant_crab",
+      "count": {
+        "type": "minecraft:uniform",
+        "max_inclusive": 4,
+        "min_inclusive": 2
+      },
+      "weight": 6
+    }
+  ]
+}

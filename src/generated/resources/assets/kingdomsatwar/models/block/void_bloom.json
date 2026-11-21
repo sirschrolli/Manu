@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross_emissive",
+  "textures": {
+    "cross": "kingdomsatwar:block/void_bloom",
+    "cross_emissive": "kingdomsatwar:block/void_bloom_emissive"
+  }
+}

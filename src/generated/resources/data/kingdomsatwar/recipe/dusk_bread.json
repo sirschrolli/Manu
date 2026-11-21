@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": "kingdomsatwar:duskgrain"
+  },
+  "pattern": [
+    "###"
+  ],
+  "result": {
+    "id": "kingdomsatwar:dusk_bread"
+  }
+}

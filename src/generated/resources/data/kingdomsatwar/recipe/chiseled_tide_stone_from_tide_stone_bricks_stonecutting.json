@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:tide_stone_bricks",
+  "result": {
+    "id": "kingdomsatwar:chiseled_tide_stone"
+  }
+}

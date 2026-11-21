@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "kingdomsatwar:block/void_moss_bottom",
+    "side": "kingdomsatwar:block/void_moss_side",
+    "top": "kingdomsatwar:block/void_moss_top"
+  }
+}

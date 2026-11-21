@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross_emissive",
+  "textures": {
+    "cross": "kingdomsatwar:block/glow_vines",
+    "cross_emissive": "kingdomsatwar:block/glow_vines_emissive"
+  }
+}

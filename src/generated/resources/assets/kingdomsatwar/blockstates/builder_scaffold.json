@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "kingdomsatwar:block/builder_scaffold"
+    }
+  }
+}

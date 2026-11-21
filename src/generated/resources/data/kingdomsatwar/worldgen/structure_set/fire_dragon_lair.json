@@ -1,0 +1,17 @@
+{
+  "placement": {
+    "type": "kingdomsatwar:unique_nest",
+    "biomes": "#kingdomsatwar:has_fire_dragon_nests",
+    "element": "fire",
+    "inland": true,
+    "max_distance": 2800,
+    "min_distance": 1200,
+    "salt": 17
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:fire_dragon_lair",
+      "weight": 1
+    }
+  ]
+}

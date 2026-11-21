@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_stripped_abysswood_log": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:stripped_abysswood_log"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:stripped_abysswood_wood"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_stripped_abysswood_log"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:stripped_abysswood_wood"
+    ]
+  }
+}

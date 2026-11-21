@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "kingdomsatwar:item/sea_witch_staff"
+  }
+}

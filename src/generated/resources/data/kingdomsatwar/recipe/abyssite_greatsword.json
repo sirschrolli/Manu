@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": "kingdomsatwar:abyssite_ingot",
+    "N": "kingdomsatwar:nightsteel_ingot",
+    "R": "minecraft:stick"
+  },
+  "pattern": [
+    " A ",
+    " A ",
+    "NRN"
+  ],
+  "result": {
+    "id": "kingdomsatwar:abyssite_greatsword"
+  }
+}

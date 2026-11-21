@@ -1,0 +1,39 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "east": {
+          "texture": "#portal"
+        },
+        "west": {
+          "texture": "#portal"
+        }
+      },
+      "from": [
+        6,
+        0,
+        0
+      ],
+      "light_emission": 15,
+      "neoforge_data": {
+        "ambient_occlusion": false
+      },
+      "to": [
+        10,
+        16,
+        16
+      ]
+    }
+  ],
+  "textures": {
+    "particle": {
+      "force_translucent": true,
+      "sprite": "kingdomsatwar:block/void_rift"
+    },
+    "portal": {
+      "force_translucent": true,
+      "sprite": "kingdomsatwar:block/void_rift"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:sealstone",
+  "result": {
+    "count": 2,
+    "id": "kingdomsatwar:sealstone_slab"
+  }
+}

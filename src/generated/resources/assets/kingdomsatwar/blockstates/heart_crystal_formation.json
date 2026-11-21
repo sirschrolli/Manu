@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "kingdomsatwar:block/heart_crystal_formation",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "kingdomsatwar:block/heart_crystal_formation"
+    },
+    "facing=south": {
+      "model": "kingdomsatwar:block/heart_crystal_formation",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "kingdomsatwar:block/heart_crystal_formation",
+      "y": 270
+    }
+  }
+}

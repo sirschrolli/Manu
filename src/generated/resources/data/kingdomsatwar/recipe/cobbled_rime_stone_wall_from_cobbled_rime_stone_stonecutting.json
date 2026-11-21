@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:cobbled_rime_stone",
+  "result": {
+    "id": "kingdomsatwar:cobbled_rime_stone_wall"
+  }
+}

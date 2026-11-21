@@ -1,0 +1,587 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#base"
+        },
+        "east": {
+          "texture": "#base"
+        },
+        "north": {
+          "texture": "#base"
+        },
+        "south": {
+          "texture": "#base"
+        },
+        "up": {
+          "texture": "#base_top"
+        },
+        "west": {
+          "texture": "#base"
+        }
+      },
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        3,
+        14
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#crystal"
+        },
+        "east": {
+          "texture": "#crystal"
+        },
+        "north": {
+          "texture": "#crystal"
+        },
+        "south": {
+          "texture": "#crystal"
+        },
+        "up": {
+          "texture": "#crystal"
+        },
+        "west": {
+          "texture": "#crystal"
+        }
+      },
+      "from": [
+        5.5,
+        3,
+        5.5
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "x": 0.0,
+        "y": 45.0,
+        "z": 0.0
+      },
+      "to": [
+        10.5,
+        11.5,
+        10.5
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#crystal"
+        },
+        "east": {
+          "texture": "#crystal"
+        },
+        "north": {
+          "texture": "#crystal"
+        },
+        "south": {
+          "texture": "#crystal"
+        },
+        "up": {
+          "texture": "#crystal"
+        },
+        "west": {
+          "texture": "#crystal"
+        }
+      },
+      "from": [
+        6.3,
+        11.5,
+        6.3
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "x": 0.0,
+        "y": 45.0,
+        "z": 0.0
+      },
+      "to": [
+        9.7,
+        14.2,
+        9.7
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#crystal",
+          "uv": [
+            7.15,
+            7.15,
+            8.85,
+            8.85
+          ]
+        },
+        "east": {
+          "texture": "#crystal",
+          "uv": [
+            7.15,
+            0.0,
+            8.85,
+            1.8000002
+          ]
+        },
+        "north": {
+          "texture": "#crystal",
+          "uv": [
+            7.15,
+            0.0,
+            8.85,
+            1.8000002
+          ]
+        },
+        "south": {
+          "texture": "#crystal"
+        },
+        "up": {
+          "texture": "#crystal"
+        },
+        "west": {
+          "texture": "#crystal"
+        }
+      },
+      "from": [
+        7.15,
+        14.2,
+        7.15
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "x": 0.0,
+        "y": 45.0,
+        "z": 0.0
+      },
+      "to": [
+        8.85,
+        16,
+        8.85
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#crystal",
+          "uv": [
+            3.2,
+            3.2,
+            5.2,
+            5.2
+          ]
+        },
+        "east": {
+          "texture": "#crystal",
+          "uv": [
+            3.2,
+            8.5,
+            5.2,
+            13.0
+          ]
+        },
+        "north": {
+          "texture": "#crystal",
+          "uv": [
+            3.2,
+            8.5,
+            5.2,
+            13.0
+          ]
+        },
+        "south": {
+          "texture": "#crystal"
+        },
+        "up": {
+          "texture": "#crystal"
+        },
+        "west": {
+          "texture": "#crystal"
+        }
+      },
+      "from": [
+        3.2,
+        3,
+        3.2
+      ],
+      "to": [
+        5.2,
+        7.5,
+        5.2
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#crystal",
+          "uv": [
+            10.8,
+            3.2,
+            12.8,
+            5.2
+          ]
+        },
+        "east": {
+          "texture": "#crystal",
+          "uv": [
+            3.2,
+            9.5,
+            5.2,
+            13.0
+          ]
+        },
+        "north": {
+          "texture": "#crystal",
+          "uv": [
+            10.8,
+            9.5,
+            12.8,
+            13.0
+          ]
+        },
+        "south": {
+          "texture": "#crystal"
+        },
+        "up": {
+          "texture": "#crystal"
+        },
+        "west": {
+          "texture": "#crystal"
+        }
+      },
+      "from": [
+        10.8,
+        3,
+        3.2
+      ],
+      "to": [
+        12.8,
+        6.5,
+        5.2
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#crystal",
+          "uv": [
+            3.2,
+            10.8,
+            5.2,
+            12.8
+          ]
+        },
+        "east": {
+          "texture": "#crystal",
+          "uv": [
+            10.8,
+            9.5,
+            12.8,
+            13.0
+          ]
+        },
+        "north": {
+          "texture": "#crystal",
+          "uv": [
+            3.2,
+            9.5,
+            5.2,
+            13.0
+          ]
+        },
+        "south": {
+          "texture": "#crystal"
+        },
+        "up": {
+          "texture": "#crystal"
+        },
+        "west": {
+          "texture": "#crystal"
+        }
+      },
+      "from": [
+        3.2,
+        3,
+        10.8
+      ],
+      "to": [
+        5.2,
+        6.5,
+        12.8
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#crystal",
+          "uv": [
+            10.8,
+            10.8,
+            12.8,
+            12.8
+          ]
+        },
+        "east": {
+          "texture": "#crystal",
+          "uv": [
+            10.8,
+            8.0,
+            12.8,
+            13.0
+          ]
+        },
+        "north": {
+          "texture": "#crystal",
+          "uv": [
+            10.8,
+            8.0,
+            12.8,
+            13.0
+          ]
+        },
+        "south": {
+          "texture": "#crystal"
+        },
+        "up": {
+          "texture": "#crystal"
+        },
+        "west": {
+          "texture": "#crystal"
+        }
+      },
+      "from": [
+        10.8,
+        3,
+        10.8
+      ],
+      "to": [
+        12.8,
+        8,
+        12.8
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#crystal",
+          "uv": [
+            3.7,
+            3.7,
+            4.7,
+            4.7
+          ]
+        },
+        "east": {
+          "texture": "#crystal",
+          "uv": [
+            3.7,
+            7.3,
+            4.7,
+            8.5
+          ]
+        },
+        "north": {
+          "texture": "#crystal",
+          "uv": [
+            3.7,
+            7.3,
+            4.7,
+            8.5
+          ]
+        },
+        "south": {
+          "texture": "#crystal"
+        },
+        "up": {
+          "texture": "#crystal"
+        },
+        "west": {
+          "texture": "#crystal"
+        }
+      },
+      "from": [
+        3.7,
+        7.5,
+        3.7
+      ],
+      "to": [
+        4.7,
+        8.7,
+        4.7
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#crystal",
+          "uv": [
+            11.3,
+            3.7,
+            12.3,
+            4.7
+          ]
+        },
+        "east": {
+          "texture": "#crystal",
+          "uv": [
+            3.7,
+            8.5,
+            4.7,
+            9.5
+          ]
+        },
+        "north": {
+          "texture": "#crystal",
+          "uv": [
+            11.3,
+            8.5,
+            12.3,
+            9.5
+          ]
+        },
+        "south": {
+          "texture": "#crystal"
+        },
+        "up": {
+          "texture": "#crystal"
+        },
+        "west": {
+          "texture": "#crystal"
+        }
+      },
+      "from": [
+        11.3,
+        6.5,
+        3.7
+      ],
+      "to": [
+        12.3,
+        7.5,
+        4.7
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#crystal",
+          "uv": [
+            3.7,
+            11.3,
+            4.7,
+            12.3
+          ]
+        },
+        "east": {
+          "texture": "#crystal",
+          "uv": [
+            11.3,
+            8.5,
+            12.3,
+            9.5
+          ]
+        },
+        "north": {
+          "texture": "#crystal",
+          "uv": [
+            3.7,
+            8.5,
+            4.7,
+            9.5
+          ]
+        },
+        "south": {
+          "texture": "#crystal"
+        },
+        "up": {
+          "texture": "#crystal"
+        },
+        "west": {
+          "texture": "#crystal"
+        }
+      },
+      "from": [
+        3.7,
+        6.5,
+        11.3
+      ],
+      "to": [
+        4.7,
+        7.5,
+        12.3
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#crystal",
+          "uv": [
+            11.3,
+            11.3,
+            12.3,
+            12.3
+          ]
+        },
+        "east": {
+          "texture": "#crystal",
+          "uv": [
+            11.3,
+            6.6000004,
+            12.3,
+            8.0
+          ]
+        },
+        "north": {
+          "texture": "#crystal",
+          "uv": [
+            11.3,
+            6.6000004,
+            12.3,
+            8.0
+          ]
+        },
+        "south": {
+          "texture": "#crystal"
+        },
+        "up": {
+          "texture": "#crystal"
+        },
+        "west": {
+          "texture": "#crystal"
+        }
+      },
+      "from": [
+        11.3,
+        8,
+        11.3
+      ],
+      "to": [
+        12.3,
+        9.4,
+        12.3
+      ]
+    }
+  ],
+  "textures": {
+    "base": "kingdomsatwar:block/starstone_base",
+    "base_top": "kingdomsatwar:block/starstone_base_top",
+    "crystal": "kingdomsatwar:block/starstone_crystal_dim",
+    "particle": "kingdomsatwar:block/starstone_crystal_dim"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "kingdomsatwar:block/shale",
+    "side": "kingdomsatwar:block/shale",
+    "top": "kingdomsatwar:block/shale"
+  }
+}

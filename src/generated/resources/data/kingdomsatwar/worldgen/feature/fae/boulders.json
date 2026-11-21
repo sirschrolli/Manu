@@ -1,0 +1,12 @@
+{
+  "type": "kingdomsatwar:boulder",
+  "accent": "minecraft:amethyst_block",
+  "accent_chance": 0.035,
+  "in_water": false,
+  "max_radius": 2.8,
+  "min_radius": 1.4,
+  "secondary": "minecraft:calcite",
+  "secondary_chance": 0.22,
+  "stone": "kingdomsatwar:faestone",
+  "top": "kingdomsatwar:fae_moss"
+}

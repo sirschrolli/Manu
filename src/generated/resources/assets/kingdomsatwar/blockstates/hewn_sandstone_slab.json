@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "kingdomsatwar:block/hewn_sandstone_slab"
+    },
+    "type=double": {
+      "model": "kingdomsatwar:block/hewn_sandstone"
+    },
+    "type=top": {
+      "model": "kingdomsatwar:block/hewn_sandstone_slab_top"
+    }
+  }
+}

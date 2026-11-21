@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "L": "minecraft:leather",
+    "P": "kingdomsatwar:werewolf_pelt"
+  },
+  "pattern": [
+    "P P",
+    "LPL",
+    "LLL"
+  ],
+  "result": {
+    "id": "kingdomsatwar:werewolf_pelt_chestplate"
+  }
+}

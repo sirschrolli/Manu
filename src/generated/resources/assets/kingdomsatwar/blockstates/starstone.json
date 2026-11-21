@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "phase=awake": {
+      "model": "kingdomsatwar:block/starstone"
+    },
+    "phase=dim": {
+      "model": "kingdomsatwar:block/starstone_dim"
+    },
+    "phase=dormant": {
+      "model": "kingdomsatwar:block/starstone"
+    }
+  }
+}

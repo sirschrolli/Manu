@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "kingdomsatwar:block/soul_reeds_bottom"
+    },
+    "half=upper": {
+      "model": "kingdomsatwar:block/soul_reeds_top"
+    }
+  }
+}

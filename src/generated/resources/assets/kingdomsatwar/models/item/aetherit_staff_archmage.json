@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "kingdomsatwar:item/aetherit_staff_archmage",
+    "layer1": "kingdomsatwar:item/aetherit_staff_archmage_crystal"
+  }
+}

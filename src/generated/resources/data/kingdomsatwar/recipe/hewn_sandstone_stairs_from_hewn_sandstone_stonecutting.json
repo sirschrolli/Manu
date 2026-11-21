@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:hewn_sandstone",
+  "result": {
+    "id": "kingdomsatwar:hewn_sandstone_stairs"
+  }
+}

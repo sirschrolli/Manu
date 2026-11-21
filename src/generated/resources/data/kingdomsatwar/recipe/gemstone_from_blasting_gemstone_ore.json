@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:blasting",
+  "cookingtime": 100,
+  "experience": 1.0,
+  "group": "gemstone",
+  "ingredient": "kingdomsatwar:gemstone_ore",
+  "result": {
+    "id": "kingdomsatwar:gemstone"
+  }
+}

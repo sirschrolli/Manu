@@ -1,0 +1,6 @@
+{
+  "type": "kingdomsatwar:fallen_trunk",
+  "log": "minecraft:dark_oak_log",
+  "max_length": 7,
+  "min_length": 4
+}

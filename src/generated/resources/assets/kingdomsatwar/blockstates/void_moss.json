@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "kingdomsatwar:block/void_moss"
+      },
+      {
+        "model": "kingdomsatwar:block/void_moss",
+        "y": 90
+      },
+      {
+        "model": "kingdomsatwar:block/void_moss",
+        "y": 180
+      },
+      {
+        "model": "kingdomsatwar:block/void_moss",
+        "y": 270
+      }
+    ]
+  }
+}

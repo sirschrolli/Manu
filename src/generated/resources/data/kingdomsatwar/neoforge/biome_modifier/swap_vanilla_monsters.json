@@ -1,0 +1,26 @@
+{
+  "type": "kingdomsatwar:replace_spawns",
+  "biomes": "#kingdomsatwar:replaces_vanilla_animals",
+  "replacements": {
+    "minecraft:bogged": "kingdomsatwar:bogged",
+    "minecraft:camel_husk": "kingdomsatwar:camel_husk",
+    "minecraft:cave_spider": "kingdomsatwar:cave_spider",
+    "minecraft:creeper": "kingdomsatwar:creeper",
+    "minecraft:drowned": "kingdomsatwar:drowned",
+    "minecraft:enderman": "kingdomsatwar:enderman",
+    "minecraft:husk": "kingdomsatwar:husk",
+    "minecraft:parched": "kingdomsatwar:parched",
+    "minecraft:phantom": "kingdomsatwar:phantom",
+    "minecraft:silverfish": "kingdomsatwar:silverfish",
+    "minecraft:skeleton": "kingdomsatwar:skeleton",
+    "minecraft:skeleton_horse": "kingdomsatwar:skeleton_horse",
+    "minecraft:slime": "kingdomsatwar:slime",
+    "minecraft:spider": "kingdomsatwar:spider",
+    "minecraft:stray": "kingdomsatwar:stray",
+    "minecraft:sulfur_cube": "kingdomsatwar:sulfur_cube",
+    "minecraft:witch": "kingdomsatwar:witch",
+    "minecraft:zombie": "kingdomsatwar:zombie",
+    "minecraft:zombie_horse": "kingdomsatwar:zombie_horse",
+    "minecraft:zombie_villager": "kingdomsatwar:zombie_villager"
+  }
+}

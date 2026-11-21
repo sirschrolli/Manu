@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "kingdomsatwar:block/fae_grass"
+      },
+      {
+        "model": "kingdomsatwar:block/fae_grass",
+        "y": 90
+      },
+      {
+        "model": "kingdomsatwar:block/fae_grass",
+        "y": 180
+      },
+      {
+        "model": "kingdomsatwar:block/fae_grass",
+        "y": 270
+      }
+    ]
+  }
+}

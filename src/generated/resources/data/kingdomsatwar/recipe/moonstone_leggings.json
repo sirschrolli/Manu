@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "D": "kingdomsatwar:fae_dust",
+    "M": "kingdomsatwar:moonstone"
+  },
+  "pattern": [
+    "MMM",
+    "MDM",
+    "M M"
+  ],
+  "result": {
+    "id": "kingdomsatwar:moonstone_leggings"
+  }
+}

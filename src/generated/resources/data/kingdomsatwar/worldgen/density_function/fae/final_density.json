@@ -1,0 +1,109 @@
+{
+  "type": "minecraft:squeeze",
+  "input": {
+    "type": "minecraft:interpolated",
+    "cell_size_xz": 4,
+    "cell_size_y": 4,
+    "input": {
+      "type": "minecraft:add",
+      "left": {
+        "type": "minecraft:max",
+        "left": {
+          "type": "minecraft:add",
+          "left": {
+            "type": "minecraft:mul",
+            "left": {
+              "type": "minecraft:sub",
+              "left": "kingdomsatwar:fae/height",
+              "right": {
+                "type": "minecraft:gradient",
+                "axis": "y",
+                "from_coordinate": 0,
+                "from_value": 0.0,
+                "to_coordinate": 256,
+                "to_value": 256.0
+              }
+            },
+            "right": 0.14285715
+          },
+          "right": {
+            "type": "minecraft:mul",
+            "left": {
+              "type": "minecraft:noise",
+              "noise": "kingdomsatwar:fae/detail",
+              "xz_scale": 1.0,
+              "y_scale": 1.2
+            },
+            "right": 0.32
+          }
+        },
+        "right": {
+          "type": "minecraft:add",
+          "left": {
+            "type": "minecraft:sub",
+            "left": {
+              "type": "minecraft:sub",
+              "left": {
+                "type": "minecraft:add",
+                "left": {
+                  "type": "minecraft:mul",
+                  "left": {
+                    "type": "minecraft:noise",
+                    "noise": "kingdomsatwar:fae/isles",
+                    "xz_scale": 1.2,
+                    "y_scale": 1.6
+                  },
+                  "right": 1.4
+                },
+                "right": {
+                  "type": "minecraft:add",
+                  "left": {
+                    "type": "minecraft:mul",
+                    "left": {
+                      "type": "minecraft:clamp",
+                      "input": {
+                        "type": "minecraft:noise",
+                        "noise": "kingdomsatwar:fae/isle_mask",
+                        "xz_scale": 1.0,
+                        "y_scale": 0.0
+                      },
+                      "max": 0.55,
+                      "min": 0.22
+                    },
+                    "right": 7.1212115
+                  },
+                  "right": -3.5666666
+                }
+              },
+              "right": {
+                "type": "minecraft:gradient",
+                "axis": "y",
+                "from_coordinate": 132,
+                "from_value": 0.0,
+                "to_coordinate": 146,
+                "to_value": 2.6
+              }
+            },
+            "right": {
+              "type": "minecraft:gradient",
+              "axis": "y",
+              "from_coordinate": 112,
+              "from_value": 2.0,
+              "to_coordinate": 132,
+              "to_value": 0.0
+            }
+          },
+          "right": -0.25
+        }
+      },
+      "right": {
+        "type": "minecraft:gradient",
+        "axis": "y",
+        "from_coordinate": 220,
+        "from_value": 0.0,
+        "to_coordinate": 240,
+        "to_value": -3.0
+      }
+    }
+  }
+}

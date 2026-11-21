@@ -1,0 +1,57 @@
+{
+  "type": "minecraft:tree",
+  "below_trunk_provider": "minecraft:soil_beneath_tree",
+  "decorators": [],
+  "foliage_placer": {
+    "type": "kingdomsatwar:weeping_foliage_placer",
+    "hang": 0.6,
+    "height": 2,
+    "offset": 0,
+    "radius": 3
+  },
+  "foliage_provider": {
+    "id": "minecraft:cherry_leaves",
+    "properties": {
+      "distance": "7",
+      "persistent": "false",
+      "waterlogged": "false"
+    }
+  },
+  "ignore_vines": true,
+  "minimum_size": {
+    "type": "minecraft:two_layers_feature_size",
+    "upper_size": 2
+  },
+  "trunk_placer": {
+    "type": "kingdomsatwar:branched_trunk_placer",
+    "base_height": 5,
+    "branch_length": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 4,
+      "min_inclusive": 3
+    },
+    "branch_start": 0.55,
+    "branches": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 3,
+      "min_inclusive": 2
+    },
+    "crown": true,
+    "height_rand_a": 2,
+    "height_rand_b": 1,
+    "lean": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 1,
+      "min_inclusive": 0
+    },
+    "rise": 0.5,
+    "roots": 0,
+    "thick": false
+  },
+  "trunk_provider": {
+    "id": "minecraft:cherry_log",
+    "properties": {
+      "axis": "y"
+    }
+  }
+}

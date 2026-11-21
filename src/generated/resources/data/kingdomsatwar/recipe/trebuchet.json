@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "minecraft:iron_block",
+    "C": "minecraft:iron_chain",
+    "L": "#minecraft:logs",
+    "P": "#minecraft:planks",
+    "S": "minecraft:string"
+  },
+  "pattern": [
+    "LCL",
+    "SBS",
+    "PPP"
+  ],
+  "result": {
+    "id": "kingdomsatwar:trebuchet"
+  }
+}

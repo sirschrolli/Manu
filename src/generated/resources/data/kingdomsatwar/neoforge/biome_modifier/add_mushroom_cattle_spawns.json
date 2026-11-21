@@ -1,0 +1,13 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#kingdomsatwar:has_mushroom_cattle",
+  "spawners": {
+    "type": "kingdomsatwar:cattle",
+    "count": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 8,
+      "min_inclusive": 4
+    },
+    "weight": 8
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "kingdomsatwar:add_spawns_in_category",
+  "biomes": [
+    "minecraft:forest",
+    "minecraft:dark_forest",
+    "minecraft:old_growth_birch_forest",
+    "minecraft:snowy_taiga"
+  ],
+  "category": "creature",
+  "spawners": [
+    {
+      "type": "kingdomsatwar:bear",
+      "count": {
+        "type": "minecraft:uniform",
+        "max_inclusive": 1,
+        "min_inclusive": 1
+      },
+      "weight": 1
+    }
+  ]
+}

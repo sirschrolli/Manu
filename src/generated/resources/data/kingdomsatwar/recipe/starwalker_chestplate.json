@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "I": "kingdomsatwar:sky_iron_ingot",
+    "S": "kingdomsatwar:void_shard"
+  },
+  "pattern": [
+    "I I",
+    "ISI",
+    "III"
+  ],
+  "result": {
+    "id": "kingdomsatwar:starwalker_chestplate"
+  }
+}

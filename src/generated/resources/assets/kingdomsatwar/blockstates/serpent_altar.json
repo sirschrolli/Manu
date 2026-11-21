@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=east,phase=awake": {
+      "model": "kingdomsatwar:block/serpent_altar_awake",
+      "y": 90
+    },
+    "facing=east,phase=fallen": {
+      "model": "kingdomsatwar:block/serpent_altar_fallen",
+      "y": 90
+    },
+    "facing=east,phase=sleeping": {
+      "model": "kingdomsatwar:block/serpent_altar_sleeping",
+      "y": 90
+    },
+    "facing=north,phase=awake": {
+      "model": "kingdomsatwar:block/serpent_altar_awake"
+    },
+    "facing=north,phase=fallen": {
+      "model": "kingdomsatwar:block/serpent_altar_fallen"
+    },
+    "facing=north,phase=sleeping": {
+      "model": "kingdomsatwar:block/serpent_altar_sleeping"
+    },
+    "facing=south,phase=awake": {
+      "model": "kingdomsatwar:block/serpent_altar_awake",
+      "y": 180
+    },
+    "facing=south,phase=fallen": {
+      "model": "kingdomsatwar:block/serpent_altar_fallen",
+      "y": 180
+    },
+    "facing=south,phase=sleeping": {
+      "model": "kingdomsatwar:block/serpent_altar_sleeping",
+      "y": 180
+    },
+    "facing=west,phase=awake": {
+      "model": "kingdomsatwar:block/serpent_altar_awake",
+      "y": 270
+    },
+    "facing=west,phase=fallen": {
+      "model": "kingdomsatwar:block/serpent_altar_fallen",
+      "y": 270
+    },
+    "facing=west,phase=sleeping": {
+      "model": "kingdomsatwar:block/serpent_altar_sleeping",
+      "y": 270
+    }
+  }
+}
