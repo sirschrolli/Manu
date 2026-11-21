@@ -179,58 +179,113 @@ def nest_egg(lit: bool) -> Image.Image:
 # Der Sternenbogen (Symbole: ruhend und drei Stufen gespannt)
 # =============================================================================
 
-def bow_icon(pull: int) -> Image.Image:
-    """Der Bogen schräg (Spitzen unten links und oben rechts), der Rücken nach oben links gewölbt, rechts die leuchtende
-    Sehne; gespannt wandert ihre Mitte nach unten rechts, und ein Pfeil liegt auf."""
-    img = Image.new("RGBA", (N, N), CLEAR)
-    t0 = (1.5, 13.5)
-    t1 = (13.5, 1.5)
-    bulge = 4.6 + pull * 0.5
-    # die Arme: eine Bogenlinie durch die Spitzen, nach oben links gewölbt
+def _bow_limb() -> dict[tuple[int, int], tuple[float, float]]:
+    """
+    Die Arme des Bogens als Pixel -> (Lage t längs des Arms 0..1 von der oberen Spitze, Seite -1 innen .. +1 außen).
+    Ein Kreisbogen von der Spitze oben rechts nach unten links, zur Ecke oben links gewölbt (wie beim Bogen von Minecraft –
+    so passt die Haltung in der Hand), gut zwei Pixel stark, zu den Spitzen hin schlanker.
+    """
+    a, b, m = (13.6, 1.4), (1.4, 13.6), (5.0, 5.0)
+    # Mittelpunkt auf der Diagonale x = y, gleich weit von Spitze und Scheitel
+    k = ((a[0] ** 2 + a[1] ** 2) - 2 * m[0] ** 2) / (2 * (a[0] + a[1]) - 4 * m[0])
+    radius_arc = math.hypot(a[0] - k, a[1] - k)
+    ang_a = math.atan2(a[1] - k, a[0] - k)
+    ang_b = math.atan2(b[1] - k, b[0] - k)
+    # von A über den Scheitel (Richtung -135°) nach B
+    if ang_b > ang_a:
+        ang_b -= 2 * math.pi
+    out: dict[tuple[int, int], tuple[float, float]] = {}
+    for y in range(N):
+        for x in range(N):
+            cx, cy = x + 0.5, y + 0.5
+            ang = math.atan2(cy - k, cx - k)
+            while ang > ang_a:
+                ang -= 2 * math.pi
+            while ang < ang_b:
+                ang += 2 * math.pi
+            if not (ang_b - 0.02 <= ang <= ang_a + 0.02):
+                continue
+            t = (ang_a - ang) / (ang_a - ang_b)
+            dist = math.hypot(cx - k, cy - k)
+            side = dist - radius_arc  # außen (weiter vom Mittelpunkt) = zur Ecke oben links
+            half = 1.0 if 0.12 < t < 0.88 else 0.75
+            if abs(side) < half:
+                out[(x, y)] = (min(1.0, max(0.0, t)), side / half)
+    return out
+
+
+def _line(x0: int, y0: int, x1: int, y1: int) -> list[tuple[int, int]]:
+    """Bresenham: eine ein Pixel feine Linie."""
     pts = []
-    for i in range(41):
-        s = i / 40.0
-        x = t0[0] + (t1[0] - t0[0]) * s
-        y = t0[1] + (t1[1] - t0[1]) * s
-        k = math.sin(s * math.pi)
-        x -= k * bulge * 0.707
-        y -= k * bulge * 0.707
-        pts.append((x, y, s))
-    for x, y, s in pts:
-        px, py = int(round(x)), int(round(y))
-        mid = abs(s - 0.5) < 0.12
-        col = CRYSTAL[3] if mid else IRON[4] if (s < 0.08 or s > 0.92) else IRON[3]
-        img.putpixel((px, py), col)
-        # die Dicke: ein Pixel nach unten rechts im Schatten
-        qx, qy = px + 1, py + 1
-        if 0 <= qx < N and 0 <= qy < N and img.getpixel((qx, qy))[3] == 0:
-            img.putpixel((qx, qy), CRYSTAL[1] if mid else IRON[1])
-    # Silberbeschläge an den Spitzen
-    for (x, y) in (t0, t1):
-        img.putpixel((int(round(x)), int(round(y))), IRON[5])
-    # die Sehne: von Spitze zu Spitze, beim Spannen zur Mitte hin nach unten rechts gezogen
-    draw = pull * 1.4
-    nock = (7.5 + draw * 0.707, 7.5 + draw * 0.707)
-    for seg in ((t0, nock), (nock, t1)):
-        (ax, ay), (bx, by) = seg
-        steps = 24
-        for i in range(steps + 1):
-            s = i / steps
-            x = ax + (bx - ax) * s
-            y = ay + (by - ay) * s
-            px, py = int(round(x)), int(round(y))
-            if img.getpixel((px, py))[3] == 0:
-                img.putpixel((px, py), GLOW[1])
-    if pull > 0:
-        # der Pfeil: von der Sehne nach oben links, Kristallspitze
-        length = 7.0 + pull * 0.5
-        for i in range(int(length * 2)):
-            s = i * 0.5
-            px = int(round(nock[0] - s * 0.707))
-            py = int(round(nock[1] - s * 0.707))
-            if 0 <= px < N and 0 <= py < N:
-                img.putpixel((px, py), GLOW[2] if s > length - 1.6 else IRON[4])
-    return pa.outline(img, hexc("#0c0f1e"))
+    dx, dy = abs(x1 - x0), -abs(y1 - y0)
+    sx, sy = (1 if x0 < x1 else -1), (1 if y0 < y1 else -1)
+    err = dx + dy
+    while True:
+        pts.append((x0, y0))
+        if x0 == x1 and y0 == y1:
+            return pts
+        e2 = 2 * err
+        if e2 >= dy:
+            err += dy
+            x0 += sx
+        if e2 <= dx:
+            err += dx
+            y0 += sy
+
+
+def bow_icon(pull: int) -> Image.Image:
+    """
+    Der Sternenbogen schräg wie der Bogen von Minecraft: die Arme aus Himmelseisen von oben rechts über die Ecke oben links
+    nach unten links gewölbt (außen hell, innen im Schatten, die Spitzen mit Silber beschlagen), in der Mitte der Griff mit
+    violetter Wicklung und einem Kristall der Leere. Die Sehne aus Sternenseide ist ein feiner, leuchtender Faden von
+    Spitze zu Spitze; gespannt (Stufen 1–3) wandert ihre Mitte nach unten rechts, und der Pfeil – Kristallspitze vorn –
+    wandert mit ihr zurück.
+    """
+    img = Image.new("RGBA", (N, N), CLEAR)
+    limb = _bow_limb()
+    for (x, y), (t, side) in limb.items():
+        tip = t < 0.1 or t > 0.9
+        grip = abs(t - 0.5) < 0.1
+        if grip:
+            col = CRYSTAL[3] if side > 0.35 else CRYSTAL[1] if side < -0.35 else CRYSTAL[2]
+            if abs(t - 0.5) < 0.03 and abs(side) < 0.5:
+                col = CRYSTAL[4]
+        elif tip:
+            col = IRON[5] if side > -0.2 else IRON[3]
+        else:
+            col = IRON[4] if side > 0.4 else IRON[1] if side < -0.4 else IRON[3]
+            # feine Lichtpunkte im Eisen (Sternenstaub)
+            if side > 0.4 and int(t * 40) % 7 == 3:
+                col = IRON[5]
+        img.putpixel((x, y), col)
+    img = pa.outline(img, hexc("#0c0f1e"))
+
+    # die Sehne: von Spitze zu Spitze, gespannt zur Mitte nach unten rechts gezogen
+    top, bottom = (13, 2), (2, 13)
+    nock = {0: None, 1: (9, 9), 2: (10, 10), 3: (11, 11)}[pull]
+    if nock is None:
+        string = _line(*top, *bottom)
+    else:
+        string = _line(*top, *nock) + _line(*nock, *bottom)
+    for i, (x, y) in enumerate(string):
+        img.putpixel((x, y), GLOW[1] if i % 3 else GLOW[0])
+    for (x, y) in (top, bottom):
+        img.putpixel((x, y), GLOW[0])
+    if nock is not None:
+        # der Pfeil liegt auf dem Griff: hinten am Faden die Federn, vorn die Kristallspitze
+        length = 9
+        nx, ny = nock
+        hx, hy = nx - length, ny - length
+        for k in range(1, length):
+            x, y = nx - k, ny - k
+            img.putpixel((x, y), CRYSTAL[4] if k % 2 else CRYSTAL[3])
+        for (x, y) in ((nx - 2, ny - 1), (nx - 1, ny - 2)):
+            img.putpixel((x, y), SILK[5])
+        img.putpixel((nx, ny), GLOW[2])
+        for (x, y, col) in ((hx, hy, GLOW[3]), (hx + 1, hy, GLOW[1]), (hx, hy + 1, GLOW[1])):
+            if 0 <= x < N and 0 <= y < N:
+                img.putpixel((x, y), col)
+    return img
 
 
 # =============================================================================

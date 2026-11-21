@@ -35,6 +35,8 @@ final class HoldShowcase {
         return level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, new BlockPos(0, 0, 0));
     }
 
+    static final List<String> BOWS = List.of("minecraft:bow", "kingdomsatwar:star_bow");
+
     static final List<String> SPEARS = List.of("minecraft:iron_spear", "kingdomsatwar:glut_spear", "kingdomsatwar:tide_spear",
             "kingdomsatwar:world_spear", "kingdomsatwar:star_lance");
 
@@ -120,6 +122,46 @@ final class HoldShowcase {
             steps.add(Step.waitTicks(20));
         }
 
+        // --- die Bögen (mit dem Bogen von Minecraft zum Vergleich): ruhig, beim Spannen in drei Stufen, gespannt mit F5 ---
+        for (String bow : BOWS) {
+            if (!wanted(bow)) {
+                continue;
+            }
+            String n = "bogen_" + name(bow);
+            steps.add(Step.server(any -> {
+                ServerPlayer player = player(any);
+                player.setItemInHand(InteractionHand.MAIN_HAND, stack(bow));
+                player.setItemInHand(InteractionHand.OFF_HAND, ItemStack.EMPTY);
+                player.getInventory().add(new ItemStack(net.minecraft.world.item.Items.ARROW, 64));
+            }));
+            steps.add(Step.once(minecraft -> minecraft.options.setCameraType(CameraType.FIRST_PERSON)));
+            steps.add(Step.waitTicks(36));
+            steps.add(Step.screenshot(n + "_1ich"));
+            steps.add(Step.once(minecraft -> minecraft.options.keyUse.setDown(true)));
+            steps.add(Step.waitTicks(5));
+            steps.add(Step.screenshot(n + "_2ich_spannen"));
+            steps.add(Step.waitTicks(10));
+            steps.add(Step.screenshot(n + "_3ich_halb"));
+            steps.add(Step.waitTicks(12));
+            steps.add(Step.screenshot(n + "_4ich_gespannt"));
+            steps.add(Step.hud(false));
+            steps.add(Step.once(minecraft -> minecraft.options.setCameraType(CameraType.THIRD_PERSON_BACK)));
+            steps.add(Step.waitTicks(2));
+            steps.add(Step.screenshot(n + "_5hinten_gespannt"));
+            steps.add(Step.once(minecraft -> minecraft.options.setCameraType(CameraType.THIRD_PERSON_FRONT)));
+            steps.add(Step.waitTicks(2));
+            steps.add(Step.screenshot(n + "_6vorn_gespannt"));
+            steps.add(Step.once(minecraft -> minecraft.options.keyUse.setDown(false)));
+            steps.add(Step.waitTicks(30));
+            steps.add(Step.screenshot(n + "_7vorn"));
+            steps.add(Step.once(minecraft -> minecraft.options.setCameraType(CameraType.THIRD_PERSON_BACK)));
+            steps.add(Step.waitTicks(4));
+            steps.add(Step.screenshot(n + "_8hinten"));
+            steps.add(Step.hud(true));
+            steps.add(Step.command("kill @e[type=minecraft:arrow]"));
+        }
+        steps.add(Step.once(minecraft -> minecraft.options.setCameraType(CameraType.FIRST_PERSON)));
+
         // --- alle Gegenstände mit eigener Haltung: eigene Sicht, F5 vorn, F5 hinten ---
         for (String id : heldIds()) {
             if (!wanted(id)) {
@@ -173,6 +215,63 @@ final class HoldShowcase {
         steps.add(Step.screenshot("puppen_hinten"));
         steps.add(Step.hud(true));
         steps.add(Step.command("kill @e[type=minecraft:mannequin]"));
+
+        // --- Bögen in fremder Hand: Puppen (ruhig) und Schützen der Armee (ruhig und beim Zielen) ---
+        if (BOWS.stream().anyMatch(HoldShowcase::wanted)) {
+            steps.add(Step.server(any -> {
+                ServerPlayer player = player(any);
+                ServerLevel level = player.level();
+                BlockPos top = origin(level);
+                String[] held = {"minecraft:bow", "kingdomsatwar:star_bow"};
+                for (int i = 0; i < held.length; i++) {
+                    double x = top.getX() + 0.5 + (i - 2.5) * 2.2;
+                    level.getServer().getCommands().performPrefixedCommand(level.getServer().createCommandSourceStack().withSuppressedOutput(),
+                            String.format(Locale.ROOT, "summon minecraft:mannequin %.2f %d %.2f {Rotation:[-90f,0f],immovable:1b,"
+                                    + "hide_description:1b,equipment:{mainhand:{id:\"%s\",count:1}}}", x, top.getY(), top.getZ() - 6.5, held[i]));
+                }
+                // zwei Bogenschützen und ein Armbrustschütze der Armee: einer ruhig, zwei zielend
+                io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType[] types = {
+                        io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType.ARCHER,
+                        io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType.ARCHER,
+                        io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType.CROSSBOWMAN};
+                for (int i = 0; i < types.length; i++) {
+                    var soldier = io.github.sirschrolli.kingdomsatwar.registry.ModEntities.SOLDIERS.get(types[i]).get().create(level,
+                            net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+                    if (soldier == null) {
+                        continue;
+                    }
+                    soldier.equip();
+                    soldier.setNoAi(true);
+                    soldier.snapTo(top.getX() + 0.5 + (i - 0.5) * 2.2 + 2.2, top.getY(), top.getZ() - 6.5, -90.0f, 0.0f);
+                    soldier.setYBodyRot(-90.0f);
+                    soldier.setYHeadRot(-90.0f);
+                    soldier.setAggressive(i > 0);
+                    if (i == 1) {
+                        soldier.startUsingItem(InteractionHand.MAIN_HAND);
+                    }
+                    soldier.addTag("kaw_hold");
+                    level.addFreshEntity(soldier);
+                }
+                player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+                player.teleportTo(level, top.getX() + 0.5, top.getY() + 1.0, top.getZ() + 1.0, Set.of(), 180.0f, 6.0f, true);
+            }));
+            steps.add(Step.hud(false));
+            // (die Puppen der Speere davor vergehen mit einer Staubwolke – erst verfliegen lassen)
+            steps.add(Step.waitTicks(70));
+            steps.add(Step.screenshot("boegen_seite"));
+            steps.add(Step.command("execute as @e[type=minecraft:mannequin] at @s run tp @s ~ ~ ~ -20 0"));
+            steps.add(Step.server(any -> player(any).level().getEntitiesOfClass(io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity.class,
+                    player(any).getBoundingBox().inflate(30), e -> e.entityTags().contains("kaw_hold")).forEach(e -> {
+                        e.setYRot(-20.0f);
+                        e.setYBodyRot(-20.0f);
+                        e.setYHeadRot(-20.0f);
+                    })));
+            steps.add(Step.waitTicks(20));
+            steps.add(Step.screenshot("boegen_vorn"));
+            steps.add(Step.hud(true));
+            steps.add(Step.command("kill @e[type=minecraft:mannequin]"));
+            steps.add(Step.command("kill @e[tag=kaw_hold]"));
+        }
         steps.add(Step.quit());
     }
 

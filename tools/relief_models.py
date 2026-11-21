@@ -106,7 +106,10 @@ def held(rotation, translation, scale) -> dict:
 # aufrecht vor sich, das Gesicht nach vorn; einen Apfel ebenso, nur kleiner. (Eigene Sicht, Boden und Rahmen erbt das Modell.)
 TOTEM_HELD = held((78, 0, 0), (0, 3.5, 1.5), 0.6)
 APPLE_HELD = held((75, 0, 0), (0, 2.5, 0.5), 0.45)
-DISPLAY: dict[str, dict] = {name: (TOTEM_HELD if name.startswith("totem_") else APPLE_HELD) for name in ITEMS}
+# (Der Sternenbogen bekommt keine eigene Haltung: Er erbt die des Bogens von Minecraft – früher hielt man ihn in fremder
+# Hand wie einen Apfel, klein und aufrecht vor der Brust.)
+DISPLAY: dict[str, dict] = {name: (TOTEM_HELD if name.startswith("totem_") else APPLE_HELD) for name in ITEMS
+                            if not name.startswith("star_bow")}
 # Der Fischbeutel ist prall: In der eigenen Hand säße er sonst zu groß im Bild – etwas kleiner und tiefer, in beiden Händen.
 DISPLAY["fish_bag"] = dict(held((75, 0, 0), (0, 2.5, 0.5), 0.5), **{
     "firstperson_righthand": {"rotation": [0, -90, 25], "translation": [1.13, 2.4, 1.13], "scale": [0.54, 0.54, 0.54]},
