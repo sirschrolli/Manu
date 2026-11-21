@@ -399,7 +399,7 @@ final class VoidGameTests {
                     .isEmpty(), "Der Boden reißt nicht auf");
             float before = soldier.getHealth();
             // ein Treffer kurz zuvor (Schonzeit) soll den Ausbruch nicht schlucken
-            soldier.invulnerableTime = 0;
+            soldier.setInvulnerableTime(0);
             helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.RIFT_ERUPT
                     - io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.RIFT_TEAR + 4, () -> {
                 helper.assertTrue(soldier.getHealth() < before, "Die Leere bricht nicht unter ihm hervor");
