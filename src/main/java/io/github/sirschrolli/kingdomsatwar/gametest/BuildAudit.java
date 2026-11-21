@@ -44,7 +44,7 @@ final class BuildAudit {
                 bed(level, pos, state, outer, where, problems);
             } else if (state.getBlock() instanceof DoorBlock) {
                 door(level, pos, state, where, problems);
-            } else if (state.getBlock() instanceof ChestBlock && ChestBlock.isChestBlockedAt(level, pos)) {
+            } else if (state.getBlock() instanceof ChestBlock && ChestBlock.isChestBlockedAt(level, pos) && !buried(level.getBlockState(pos.above()))) {
                 problems.add("Truhe lässt sich nicht öffnen (darüber " + name(level.getBlockState(pos.above())) + ") bei " + where.apply(pos));
             } else if (state.getBlock() instanceof AbstractFurnaceBlock) {
                 BlockPos front = pos.relative(state.getValue(HorizontalDirectionalBlock.FACING));
@@ -143,6 +143,12 @@ final class BuildAudit {
             io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.warn("[Bauprüfung] {}: {}", name, p);
         }
         return problems;
+    }
+
+    /** Eine vergrabene Truhe (Erde, Sand oder Kies darüber) ist Absicht: Der Schatz will ausgegraben werden. */
+    private static boolean buried(BlockState above) {
+        return above.is(net.minecraft.tags.BlockTags.DIRT) || above.is(net.minecraft.tags.BlockTags.SAND) || above.is(net.minecraft.world.level.block.Blocks.GRAVEL)
+                || above.is(net.minecraft.world.level.block.Blocks.COARSE_DIRT);
     }
 
     static String name(BlockState state) {
