@@ -381,8 +381,9 @@ final class VoidGameTests {
      */
     private static void riftAndQuake(GameTestHelper helper, ServerLevel level, io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity king,
             net.minecraft.world.entity.LivingEntity soldier, Runnable then) {
-        // die gerufenen Wächter treten ab (sonst greifen sie den Ritter an und verfälschen die Treffer)
+        // die gerufenen Wächter treten ab (sonst greifen sie den Ritter an und verfälschen die Treffer), ebenso noch fliegende Splitter
         level.getEntitiesOfClass(ShardWardenEntity.class, king.getBoundingBox().inflate(40)).forEach(net.minecraft.world.entity.Entity::discard);
+        level.getEntitiesOfClass(WardenShardEntity.class, king.getBoundingBox().inflate(40)).forEach(net.minecraft.world.entity.Entity::discard);
         soldier.setHealth(soldier.getMaxHealth());
         // erst muss der Ritter wieder fest stehen (die Stöße der Wächter), sonst laufen die Risse an ihm vorbei
         helper.runAfterDelay(15, () -> rift(helper, level, king, soldier, then));
@@ -397,6 +398,8 @@ final class VoidGameTests {
             helper.assertFalse(level.getEntitiesOfClass(SpellFxEntity.class, king.getBoundingBox().inflate(30), e -> e.kind() == SpellFxEntity.Kind.FISSURE)
                     .isEmpty(), "Der Boden reißt nicht auf");
             float before = soldier.getHealth();
+            // ein Treffer kurz zuvor (Schonzeit) soll den Ausbruch nicht schlucken
+            soldier.invulnerableTime = 0;
             helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.RIFT_ERUPT
                     - io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.RIFT_TEAR + 4, () -> {
                 helper.assertTrue(soldier.getHealth() < before, "Die Leere bricht nicht unter ihm hervor");
