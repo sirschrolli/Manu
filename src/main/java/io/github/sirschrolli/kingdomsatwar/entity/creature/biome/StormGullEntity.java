@@ -412,7 +412,9 @@ public class StormGullEntity extends SoaringBird {
             Vec3 hand = p.position().add(look.x * 0.6, 1.1, look.z * 0.6);
             gull.flyTo(hand.x, hand.y, hand.z, 1.35);
             gull.getLookControl().setLookAt(p);
-            if (gull.position().add(0, 0.3, 0).distanceToSqr(hand) < 1.4 * 1.4) {
+            // je länger sie um die Hand kreist, desto beherzter schnappt sie zu (sonst flatterte sie mitunter ewig daneben)
+            double reach = 1.4 + Math.min(1.0, this.ticks / 120.0) * 0.8;
+            if (gull.position().add(0, 0.3, 0).distanceToSqr(hand) < reach * reach) {
                 ItemStack stack = p.getMainHandItem();
                 if (isStealable(stack)) {
                     gull.setCarried(stack.split(1));

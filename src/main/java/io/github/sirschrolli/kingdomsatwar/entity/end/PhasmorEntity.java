@@ -1118,6 +1118,11 @@ public class PhasmorEntity extends Monster implements PhasmorLike, io.github.sir
 
     @Override
     public void remove(RemovalReason reason) {
+        // mit dem König vergehen auch seine Trugbilder – sofort, nicht erst, wenn jedes für sich merkt, dass er fort ist (vorher
+        // suchen: danach findet die Welt ihn nicht mehr)
+        if (reason.shouldDestroy() && this.level() instanceof ServerLevel level) {
+            this.dispelIllusions(level);
+        }
         super.remove(reason);
         this.bossBar.removeAllPlayers();
     }
