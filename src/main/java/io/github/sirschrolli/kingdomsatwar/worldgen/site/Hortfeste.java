@@ -729,7 +729,7 @@ final class Hortfeste {
                     this.b.set(x, 2, z, s(Blocks.HAY_BLOCK));
                 }
             }
-            this.chest(16, 1, -a + 1, Direction.SOUTH, BuiltInLootTables.BASTION_HOGLIN_STABLE);
+            this.chest(16, 1, -a + 2, Direction.SOUTH, BuiltInLootTables.BASTION_HOGLIN_STABLE);   // vor der Rückwand (darin ließ sie sich nicht öffnen)
             this.hang(-9, ROOF[0] - 1, -16, 2);
             this.hang(9, ROOF[0] - 1, -16, 2);
         }

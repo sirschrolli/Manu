@@ -648,8 +648,9 @@ final class SiteGameTests {
             problems.add("Gefangene: " + captives.size());
         }
         captives.forEach(Entity::discard);
+        // die Leiter reicht bis an die Bühne (die Sprosse vor der Luke hätte keinen Halt)
         int ladder = count(helper, o.offset(-6, 0, -3), o.offset(-6, 5, -3), s -> s.is(Blocks.LADDER));
-        if (ladder != 6) {
+        if (ladder != 5) {
             problems.add("Leiter am Wachgerüst: " + ladder);
         }
         var spawns = helper.getLevel().registryAccess().lookupOrThrow(Registries.STRUCTURE).getOrThrow(ModStructures.site(SiteKind.BANDIT_CAMP))

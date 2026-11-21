@@ -49,6 +49,8 @@ public final class VillageBuilder {
     private final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
     /** Zäune, Scheiben, Mauern …: ihre Verbindungen werden am Ende aus den Nachbarn berechnet. */
     private final List<BlockPos> shaped = new ArrayList<>();
+    /** Zierrat, der Halt braucht (Ranken, Flechten, Schnee, Seegurken, Korallenfächer, Pflanzen) – wird am Ende geprüft. */
+    private final List<BlockPos> fragile = new ArrayList<>();
     /**
      * Wo man vor dem Gebäude steht, um hineinzugehen (Gebäude-Koordinaten): vor der ersten Haustür bzw. am ersten Zugang
      * von der Straße. Die Bewohner nehmen diesen Platz als Zwischenziel, wenn sie von weit her heimkommen.
@@ -116,6 +118,8 @@ public final class VillageBuilder {
             this.level.setBlock(pos, place, Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
             if (needsShape(place)) {
                 this.shaped.add(pos.immutable());
+            } else if (fragile(place)) {
+                this.fragile.add(pos.immutable());
             }
         }
     }
@@ -385,12 +389,23 @@ public final class VillageBuilder {
         if (this.inside(pos)) {
             this.level.setBlock(pos, state.rotate(this.rotation), Block.UPDATE_CLIENTS);
             RandomizableContainer.setBlockEntityLootTable(this.level, RandomSource.create(pos.asLong() ^ this.seed), pos, loot);
+            BlockPos below = pos.below();
+            if (coversPath(state) && this.inside(below) && this.level.getBlockState(below).is(Blocks.DIRT_PATH)) {
+                this.level.setBlock(below, Blocks.DIRT.defaultBlockState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
+            }
         }
     }
 
     // =====================================================================================
     // Abschluss
     // =====================================================================================
+
+    private static boolean fragile(BlockState state) {
+        Block block = state.getBlock();
+        return block instanceof net.minecraft.world.level.block.VineBlock || block instanceof net.minecraft.world.level.block.MultifaceBlock
+                || block instanceof net.minecraft.world.level.block.SnowLayerBlock || block instanceof net.minecraft.world.level.block.SeaPickleBlock
+                || block instanceof net.minecraft.world.level.block.BaseCoralWallFanBlock || block instanceof net.minecraft.world.level.block.VegetationBlock;
+    }
 
     private static boolean needsShape(BlockState state) {
         Block block = state.getBlock();
@@ -413,6 +428,19 @@ public final class VillageBuilder {
             }
         }
         this.shaped.clear();
+        // Zierrat ohne Halt fiele im Spiel beim nächsten Anstoß ab (und läge als Gegenstand herum): gleich weg damit. Geprüft wird
+        // nur, was ganz innerhalb dieses Chunks liegt – jenseits der Grenze steht der Halt vielleicht erst, wenn der Nachbar baut.
+        for (BlockPos pos : this.fragile) {
+            if (pos.getX() <= this.chunkBox.minX() || pos.getX() >= this.chunkBox.maxX() || pos.getZ() <= this.chunkBox.minZ()
+                    || pos.getZ() >= this.chunkBox.maxZ() || pos.getY() <= this.chunkBox.minY() || pos.getY() >= this.chunkBox.maxY()) {
+                continue;
+            }
+            BlockState state = this.level.getBlockState(pos);
+            if (fragile(state) && !state.canSurvive(this.level, pos)) {
+                this.level.setBlock(pos, state.getFluidState().createLegacyBlock(), Block.UPDATE_CLIENTS);
+            }
+        }
+        this.fragile.clear();
     }
 
     private void reshape(BlockPos pos) {
