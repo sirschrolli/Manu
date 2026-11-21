@@ -479,6 +479,13 @@ final class VentorGameTests {
         helper.assertTrue(trident.getRarity() == Rarity.EPIC, "Der Sturmdreizack ist nicht episch");
 
         BlockPos base = helper.absolutePos(new BlockPos(4, 200, 4));
+        // Wurfbahn und Rückflug reichen über die Arena hinaus: liegt dort eine Chunkgrenze, blieb der Dreizack sonst in einem
+        // nicht tickenden Chunk mitten in der Luft stehen (traf dann nicht oder kehrte nicht zurück)
+        for (int cx = (base.getX() - 16) >> 4; cx <= (base.getX() + 16) >> 4; cx++) {
+            for (int cz = (base.getZ() - 16) >> 4; cz <= (base.getZ() + 24) >> 4; cz++) {
+                level.setChunkForced(cx, cz, true);
+            }
+        }
         for (BlockPos p : BlockPos.betweenClosed(base.offset(-4, -1, -3), base.offset(4, -1, 10))) {
             level.setBlock(p, Blocks.STONE.defaultBlockState(), Block.UPDATE_CLIENTS);
         }
@@ -500,7 +507,8 @@ final class VentorGameTests {
             }
         };
         float[] hp = new float[3];
-        tidyOnFailure(tidy, () -> {
+        StormTridentEntity[] back = new StormTridentEntity[1];
+        Runnable throwTrident = () -> tidyOnFailure(tidy, () -> {
             player.connection.markClientLoaded();
             player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
             move(player, base.getX() + 0.5, base.getY(), base.getZ() + 0.5, 0.0f);       // Blick nach Süden
@@ -518,19 +526,49 @@ final class VentorGameTests {
             trident.releaseUsing(level, player, trident.getUseDuration(player) - 15);
             helper.assertTrue(player.getMainHandItem().isEmpty(), "Der Sturmdreizack bleibt in der Hand");
             helper.assertTrue(!level.getEntitiesOfClass(StormTridentEntity.class, area).isEmpty(), "Kein Sturmdreizack fliegt");
+            helper.runAfterDelay(10, () -> tidyOnFailure(tidy, () -> {
+                helper.assertTrue(hp[0] - front.getHealth() >= 6.0f, "Der Wurf trifft nicht hart genug: " + fmt(hp[0] - front.getHealth()));
+                helper.assertTrue(side.getHealth() < hp[1], "Die Böe beim Aufschlag trifft den Nachbarn nicht");
+                helper.assertTrue(player.getHealth() >= player.getMaxHealth(), "Die Böe trifft den Werfer");
+            }));
+            helper.runAfterDelay(91, () -> catchAndNet(helper, level, tidy, area, base, player, front, side, netted, hp, back));
         });
-        helper.runAfterDelay(10, () -> tidyOnFailure(tidy, () -> {
-            helper.assertTrue(hp[0] - front.getHealth() >= 6.0f, "Der Wurf trifft nicht hart genug: " + fmt(hp[0] - front.getHealth()));
-            helper.assertTrue(side.getHealth() < hp[1], "Die Böe beim Aufschlag trifft den Nachbarn nicht");
-            helper.assertTrue(player.getHealth() >= player.getMaxHealth(), "Die Böe trifft den Werfer");
-        }));
-        helper.runAfterDelay(40, () -> tidyOnFailure(tidy, () -> {
+        // Erst werfen, wenn Wurfbahn und Rückweg in tickenden Chunks liegen (der Testserver lädt die zusätzlichen Chunks erst
+        // nach ein paar Ticks fertig). Der Testspieler greift nicht von selbst zu: Der Dreizack schießt im Rückflug an ihm
+        // vorbei und kehrt um – gefangen wird er, sobald er (12 bis 90 Ticks nach dem Wurf) nahe genug ist.
+        BlockPos[] lane = {base.offset(-4, 0, -3), base.offset(4, 0, -3), base.offset(-4, 0, 10), base.offset(4, 0, 10)};
+        int[] tick = new int[1];
+        int[] thrown = {-1};
+        helper.onEachTick(() -> {
+            tick[0]++;
+            if (thrown[0] < 0) {
+                if (java.util.Arrays.stream(lane).allMatch(level::isPositionEntityTicking)) {
+                    thrown[0] = tick[0];
+                    throwTrident.run();
+                } else if (tick[0] > 150) {
+                    tidyOnFailure(tidy, () -> helper.assertTrue(false, "Die Chunks der Wurfbahn ticken nicht"));
+                }
+                return;
+            }
+            int since = tick[0] - thrown[0];
+            if (back[0] == null && since >= 12 && since <= 90) {
+                for (StormTridentEntity t : level.getEntitiesOfClass(StormTridentEntity.class, area)) {
+                    if (t.isReturning() && t.distanceTo(player) < 3.0) {
+                        back[0] = t;
+                    }
+                }
+            }
+        });
+    }
+
+    /** Zweiter Teil des Dreizack-Tests: den zurückgekehrten Dreizack fangen, dann das Wurfnetz. */
+    private static void catchAndNet(GameTestHelper helper, ServerLevel level, Runnable tidy, AABB area, BlockPos base, ServerPlayer player,
+            Zombie front, Zombie side, Zombie netted, float[] hp, StormTridentEntity[] back) {
+        tidyOnFailure(tidy, () -> {
             List<StormTridentEntity> flying = level.getEntitiesOfClass(StormTridentEntity.class, area);
             helper.assertTrue(flying.size() == 1, "Der Sturmdreizack ist fort: " + flying.size());
-            StormTridentEntity back = flying.getFirst();
-            helper.assertTrue(back.isReturning() && back.distanceTo(player) < 3.0, "Er kehrt nicht zum Werfer zurück (Abstand "
-                    + fmt(back.distanceTo(player)) + ")");
-            back.playerTouch(player);
+            helper.assertTrue(back[0] != null, "Er kehrt nicht zum Werfer zurück (Abstand " + fmt(flying.getFirst().distanceTo(player)) + ")");
+            back[0].playerTouch(player);
             helper.assertTrue(player.getInventory().contains(stack -> stack.is(ArenaGear.STORM_TRIDENT.get())), "Der Werfer fängt ihn nicht");
             // das Wurfnetz
             front.discard();
@@ -552,6 +590,6 @@ final class VentorGameTests {
                 tidy.run();
                 helper.succeed();
             }));
-        }));
+        });
     }
 }
