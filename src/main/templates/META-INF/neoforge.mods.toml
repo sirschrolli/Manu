@@ -21,11 +21,13 @@ Die Geschichte „Das Siegel“ mit Chronik und Siegelkreis, sechs riesige Drach
 [[mixins]]
 config="${mod_id}.mixins.json"
 
+# AFTER: Die Daten der Mod liegen über denen von NeoForge – so kann sie das Rezept des Kompasses abschalten (seit 1.12;
+# NeoForge bringt eine eigene Fassung davon mit).
 [[dependencies.${mod_id}]]
     modId="neoforge"
     type="required"
     versionRange="[${neo_version},)"
-    ordering="NONE"
+    ordering="AFTER"
     side="BOTH"
 
 [[dependencies.${mod_id}]]

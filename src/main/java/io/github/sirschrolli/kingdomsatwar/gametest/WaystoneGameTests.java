@@ -87,7 +87,8 @@ final class WaystoneGameTests {
     private static void recipes(GameTestHelper helper) {
         var manager = helper.getLevel().getServer().getRecipeManager();
         helper.assertTrue(manager.byKey(ResourceKey.create(Registries.RECIPE, Identifier.withDefaultNamespace("compass"))).isEmpty(),
-                "Der Kompass von Minecraft lässt sich noch herstellen");
+                "Der Kompass von Minecraft lässt sich noch herstellen (Quellen: " + helper.getLevel().getServer().getResourceManager()
+                        .getResourceStack(Identifier.withDefaultNamespace("recipe/compass.json")).stream().map(r -> r.sourcePackId()).toList() + ")");
         for (String name : List.of("waystone_compass", "waystone", "map_from_paper", "recovery_compass_from_waystone_compass")) {
             helper.assertTrue(manager.byKey(ResourceKey.create(Registries.RECIPE, KingdomsAtWar.id(name))).isPresent(), "Rezept fehlt: " + name);
         }
