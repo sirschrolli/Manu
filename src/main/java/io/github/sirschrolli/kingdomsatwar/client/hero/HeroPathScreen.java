@@ -19,6 +19,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.player.Player;
 import com.mojang.blaze3d.platform.InputConstants;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiTheme;
 
 /**
  * Der Heldenweg (Taste K): Die Heldenstufe als Pfad über eine nächtliche Landschaft.
@@ -40,7 +41,7 @@ import com.mojang.blaze3d.platform.InputConstants;
  *       (anklicken springt dorthin).</li>
  * </ul>
  */
-public class HeroPathScreen extends Screen {
+public class HeroPathScreen extends Screen implements UiTheme.HeroStyle {
     private static final int STEP = 34;
     private static final int MARGIN = 96;
     private static final int HEADER = 46;

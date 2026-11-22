@@ -20,6 +20,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Util;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiTheme;
 
 /**
  * Der Drill ({@link FishFight}) auf dem Bildschirm: links die Karte des Fischs (sein Bild – oder nur der Schattenriss, wenn er
@@ -29,7 +30,7 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
  * <p>Gesteuert wird mit der Maus (seit 0.83 nur noch mit ihr): Halten hebt die Zone, jeder Klick gibt ihr einen kleinen
  * Schubs nach oben – beides mit jeder Maustaste. Esc gibt auf. Die Welt läuft weiter.
  */
-public class FishingScreen extends Screen {
+public class FishingScreen extends Screen implements UiTheme.ParchmentStyle {
     private static final Identifier ATLAS = KingdomsAtWar.id("textures/gui/fishing/minigame.png");
     private static final int TEX_W = 512;
     private static final int TEX_H = 256;

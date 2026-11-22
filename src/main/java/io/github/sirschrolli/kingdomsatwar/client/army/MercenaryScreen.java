@@ -31,6 +31,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.jspecify.annotations.Nullable;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiTheme;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiMotion;
+import net.minecraft.util.Util;
 
 /**
  * Die Söldnertafel im Söldnerhaus eines Dorfs (Pergament wie das Stadtfenster): links die Söldner, die heute warten
@@ -38,7 +41,9 @@ import org.jspecify.annotations.Nullable;
  * er kann; unten die eigene Börse und "Anheuern". Ausbilden und befördern lassen sie sich später am eigenen
  * Feldherrentisch.
  */
-public class MercenaryScreen extends Screen {
+public class MercenaryScreen extends Screen implements UiTheme.ParchmentStyle {
+    /** Wann das Fenster aufging (für das sanfte Aufgehen, siehe {@link UiMotion}). */
+    private long openedAt;
     private static final int WIDTH = ArmyWidgets.WIDTH;
     private static final int HEIGHT = ArmyWidgets.HEIGHT;
     private static final int LIST_X = 12;
@@ -79,6 +84,9 @@ public class MercenaryScreen extends Screen {
 
     @Override
     protected void init() {
+        if (this.openedAt == 0L) {
+            this.openedAt = Util.getMillis();
+        }
         this.left = (this.width - WIDTH) / 2;
         this.top = (this.height - HEIGHT) / 2;
         this.hireButton = this.addRenderableWidget(new WoodButton(this.left + INFO_X, this.top + BAR_Y, INFO_W, BUTTON_H,
@@ -228,11 +236,22 @@ public class MercenaryScreen extends Screen {
     @Override
     public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         super.extractBackground(g, mouseX, mouseY, a);
+        UiMotion.begin(g, this.openedAt, this.width / 2.0f, this.height / 2.0f);
         ArmyWidgets.window(g, this.left, this.top);
+        UiMotion.end(g);
     }
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
+        UiMotion.begin(g, this.openedAt, this.width / 2.0f, this.height / 2.0f);
+        try {
+            this.extractWindow(g, mouseX, mouseY, a);
+        } finally {
+            UiMotion.end(g);
+        }
+    }
+
+    private void extractWindow(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         super.extractRenderState(g, mouseX, mouseY, a);
         int x0 = this.left;
         int y0 = this.top;

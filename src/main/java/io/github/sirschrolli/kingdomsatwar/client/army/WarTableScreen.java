@@ -38,6 +38,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.jspecify.annotations.Nullable;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiTheme;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiMotion;
+import net.minecraft.util.Util;
 
 /**
  * Das Fenster des Feldherrentischs (Pergament wie das Stadtfenster). Links die eigenen Soldaten im Feldlager (24 Blöcke um
@@ -48,7 +51,9 @@ import org.jspecify.annotations.Nullable;
  * Feldschers), Proviant zuteilen (aus dem Stadtlager und dem Gepäck) und mit allen auf den Schlachtzug ziehen bzw. sie heim
  * in die Garnison schicken. Neue Soldaten gibt es hier nicht – die heuert man bei den Rittern und Söldnern der Dörfer an.
  */
-public class WarTableScreen extends Screen {
+public class WarTableScreen extends Screen implements UiTheme.ParchmentStyle {
+    /** Wann das Fenster aufging (für das sanfte Aufgehen, siehe {@link UiMotion}). */
+    private long openedAt;
     private static final int WIDTH = ArmyWidgets.WIDTH;
     private static final int HEIGHT = ArmyWidgets.HEIGHT;
     private static final int LIST_X = 12;
@@ -111,6 +116,9 @@ public class WarTableScreen extends Screen {
 
     @Override
     protected void init() {
+        if (this.openedAt == 0L) {
+            this.openedAt = Util.getMillis();
+        }
         this.left = (this.width - WIDTH) / 2;
         this.top = (this.height - HEIGHT) / 2;
         int third = (WIDTH - 2 * LIST_X - 8) / 3;
@@ -512,11 +520,22 @@ public class WarTableScreen extends Screen {
     @Override
     public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         super.extractBackground(g, mouseX, mouseY, a);
+        UiMotion.begin(g, this.openedAt, this.width / 2.0f, this.height / 2.0f);
         ArmyWidgets.window(g, this.left, this.top);
+        UiMotion.end(g);
     }
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
+        UiMotion.begin(g, this.openedAt, this.width / 2.0f, this.height / 2.0f);
+        try {
+            this.extractWindow(g, mouseX, mouseY, a);
+        } finally {
+            UiMotion.end(g);
+        }
+    }
+
+    private void extractWindow(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         super.extractRenderState(g, mouseX, mouseY, a);
         int x0 = this.left;
         int y0 = this.top;

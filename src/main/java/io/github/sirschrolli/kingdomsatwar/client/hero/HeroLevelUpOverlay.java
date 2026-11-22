@@ -29,7 +29,9 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
  *   <li>die Zahl zählt bis zur neuen Stufe hoch und hüpft, Funken sprühen nach allen Seiten und fallen,</li>
  *   <li>darunter gleiten "Heldenstufe N", der Rang und die neuen Talentpunkte herein;</li>
  *   <li>bei einem neuen Rang: eine zweite Welle, doppelt so viele Funken, "Neuer Rang", und als Legende die Belohnung;</li>
- *   <li>seit 1.11 auch neue Handwerkspunkte, neue Fähigkeiten (mit ihrem Bild) und ein neuer Titel (mit seinem Siegel).</li>
+ *   <li>seit 1.11 auch neue Handwerkspunkte, neue Fähigkeiten (mit ihrem Bild) und ein neuer Titel (mit seinem Siegel);</li>
+ *   <li>seit 1.12 ein weicher Schatten hinter den Zeilen, ein leuchtendes Band hinter einem neuen Rang und zuletzt das nächste
+ *       Ziel auf dem Weg.</li>
  * </ol>
  */
 public final class HeroLevelUpOverlay {
@@ -95,6 +97,13 @@ public final class HeroLevelUpOverlay {
         int color = HeroGui.rankColor(rank);
         float base = rankUp ? 1.6f : 1.4f;
 
+        // ein weicher dunkler Grund hinter den Zeilen (seit 1.12): vor hellem Himmel blieb die Schrift sonst blass
+        float textTop = cy + 24.0f * base + 12.0f;
+        float blockBottom = textTop + linesHeight();
+        float shadeIn = HeroGui.easeOutCubic(HeroGui.span(t, 0.35f, 0.8f));
+        HeroGui.shade(g, cx, (textTop + blockBottom) / 2.0f + 2.0f, Math.min(g.guiWidth() * 0.95f, 340.0f), blockBottom - textTop + 46.0f,
+                0.62f * shadeIn * out);
+
         // Lichtblitz und Druckwellen
         float flash = 1.0f - HeroGui.span(t, 0.0f, 0.4f);
         HeroGui.light(g, HeroGui.GLOW, cx, cy, 120.0f + 220.0f * HeroGui.easeOutCubic(HeroGui.span(t, 0.0f, 0.4f)), 0.0f, color, 0.85f * flash);
@@ -133,7 +142,6 @@ public final class HeroLevelUpOverlay {
         }
 
         // Texte darunter
-        float textTop = cy + 24.0f * base + 12.0f;
         float in1 = HeroGui.easeOutCubic(HeroGui.span(t, 0.45f, 0.85f));
         if (in1 > 0.0f) {
             Component title = Component.translatable("hero.kingdomsatwar.level_up.title", to);
@@ -145,6 +153,15 @@ public final class HeroLevelUpOverlay {
                     ? Component.translatable("hero.kingdomsatwar.level_up.rank", Component.translatable(rank.translationKey()))
                     : Component.translatable(rank.translationKey());
             float s = rankUp ? 1.3f : 1.0f;
+            if (rankUp) {
+                // ein leuchtendes Band in der Farbe des Rangs, oben und unten eine goldene Kante
+                float a = Mth.clamp(in2, 0.0f, 1.0f) * out;
+                float bandW = (font.width(line) * s + 90.0f) * Mth.clamp(in2, 0.0f, 1.2f);
+                float mid = textTop + 24.0f + 4.5f * s;
+                HeroGui.lightRect(g, HeroGui.GLOW, cx, mid, bandW, 24.0f, color, 0.75f * a);
+                HeroGui.lightRect(g, HeroGui.GLOW, cx, mid - 9.0f * s, bandW * 1.15f, 2.5f, 0xFFF2C14E, 0.85f * a);
+                HeroGui.lightRect(g, HeroGui.GLOW, cx, mid + 9.0f * s, bandW * 1.15f, 2.5f, 0xFFF2C14E, 0.85f * a);
+            }
             HeroGui.centered(g, font, line, cx, textTop + 24.0f, ARGB.color(Math.round(255 * Mth.clamp(in2, 0.0f, 1.0f) * out), color & 0xFFFFFF),
                     s * (0.85f + 0.15f * in2));
         }
@@ -222,7 +239,51 @@ public final class HeroLevelUpOverlay {
                 HeroGui.light(g, HeroGui.GLOW, cx, ry + 4.0f, 150.0f, 0.0f, immortal ? 0xFFFFE27A : 0xFFB070FF, 0.35f * in4 * out);
                 HeroGui.centered(g, font, line, cx, ry, ARGB.color(Math.round(255 * in4 * out), immortal ? 0xFFF0C0 : 0xE0B8FF), 1.0f);
             }
+            y += 16.0f;
         }
+        // zuletzt: das nächste Ziel auf dem Weg (seit 1.12)
+        HeroGoals.Goal goal = HeroGoals.next(to);
+        if (goal != null) {
+            float in = HeroGui.easeOutCubic(HeroGui.span(t, 1.9f, 2.35f));
+            if (in > 0.0f) {
+                float a = in * out;
+                Component line = Component.translatable("hero.kingdomsatwar.level_up.goal", goal.label(), goal.level());
+                float w = font.width(line) * 0.85f;
+                float gy = y + 4.0f + 5.0f * (1.0f - in);
+                g.blitSprite(RenderPipelines.GUI_TEXTURED, goal.icon(), Math.round(cx - w / 2.0f - 7.0f), Math.round(gy - 1.0f), 9, 9, ARGB.white(a));
+                HeroGui.centered(g, font, line, cx + 5.0f, gy, ARGB.color(Math.round(230 * a), 0xC9C0DC), 0.85f);
+            }
+        }
+    }
+
+    /** Wie hoch der Textblock unter dem Abzeichen wird (für den Schatten dahinter) – dieselbe Rechnung wie beim Zeichnen. */
+    private static float linesHeight() {
+        float y = rankUp ? 40.0f : 38.0f;
+        if (HeroLevel.pointsFor(to) > HeroLevel.pointsFor(from)) {
+            y += 12.0f;
+        }
+        if (!HeroGui.might(from, to).getString().isEmpty()) {
+            y += 12.0f;
+        }
+        if (HeroLevel.craftPointsFor(to) > HeroLevel.craftPointsFor(from)) {
+            y += 12.0f;
+        }
+        for (HeroAbility ability : HeroAbility.values()) {
+            if (ability.level() > from && ability.level() <= to) {
+                y += 16.0f;
+            }
+        }
+        HeroLevel.Title title = HeroLevel.Title.of(to);
+        if (title != null && title != HeroLevel.Title.of(from)) {
+            y += 18.0f;
+        }
+        if (rankUp && (rank == HeroLevel.Rank.LEGEND || rank == HeroLevel.Rank.IMMORTAL)) {
+            y += 16.0f;
+        }
+        if (HeroGoals.next(to) != null) {
+            y += 12.0f;
+        }
+        return y;
     }
 
     /** Eine Druckwelle: ein Lichtring, der zwischen {@code from} und {@code to} Sekunden auf {@code size} anwächst und verblasst. */

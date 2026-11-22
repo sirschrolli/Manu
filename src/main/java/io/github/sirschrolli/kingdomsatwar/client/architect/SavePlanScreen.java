@@ -31,13 +31,18 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.jspecify.annotations.Nullable;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiTheme;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiMotion;
+import net.minecraft.util.Util;
 
 /**
  * „Bauplan zeichnen“: das Fenster des Vermessungsstabs. Links Ansicht und Grundriss des vermessenen Gebäudes auf
  * Blaupausen-Papier (mit Bodenlinie und Eingang), rechts Name, Vorderseite, Bodenlinie, was der Bau kosten wird und was
  * nicht übernommen wird. Die Vorschau vermisst das Spiel selbst; gezeichnet wird auf dem Server.
  */
-public class SavePlanScreen extends Screen {
+public class SavePlanScreen extends Screen implements UiTheme.ParchmentStyle {
+    /** Wann das Fenster aufging (für das sanfte Aufgehen, siehe {@link UiMotion}). */
+    private long openedAt;
     private static final Identifier BACKGROUND = KingdomsAtWar.id("textures/gui/town.png");
     private static final int WIDTH = 320;
     private static final int HEIGHT = 210;
@@ -85,6 +90,9 @@ public class SavePlanScreen extends Screen {
 
     @Override
     protected void init() {
+        if (this.openedAt == 0L) {
+            this.openedAt = Util.getMillis();
+        }
         this.left = (this.width - WIDTH) / 2;
         this.top = (this.height - HEIGHT) / 2;
         String name = this.nameBox != null ? this.nameBox.getValue() : Component.translatable("gui.kingdomsatwar.architect.default_name").getString();
@@ -268,11 +276,22 @@ public class SavePlanScreen extends Screen {
     @Override
     public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         super.extractBackground(g, mouseX, mouseY, a);
+        UiMotion.begin(g, this.openedAt, this.width / 2.0f, this.height / 2.0f);
         g.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND, this.left, this.top, 0.0f, 0.0f, WIDTH, HEIGHT, WIDTH, HEIGHT);
+        UiMotion.end(g);
     }
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
+        UiMotion.begin(g, this.openedAt, this.width / 2.0f, this.height / 2.0f);
+        try {
+            this.extractWindow(g, mouseX, mouseY, a);
+        } finally {
+            UiMotion.end(g);
+        }
+    }
+
+    private void extractWindow(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         this.hotspots.clear();
         int x0 = this.left;
         int y0 = this.top;

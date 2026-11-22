@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.client.town;
 
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiMotion;
 import io.github.sirschrolli.kingdomsatwar.economy.Coin;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -46,11 +47,13 @@ public final class Parchment {
     public static void woodButton(GuiGraphicsExtractor g, Font font, int x, int y, int w, int h, Component label, boolean active, boolean hover,
             @Nullable ItemStack icon, int price) {
         boolean hot = active && hover;
-        g.fill(x, y, x + w, y + h, hot ? 0xFFE0B04A : 0xFF2E1D10);
-        g.fill(x + 1, y + 1, x + w - 1, y + h - 1, !active ? 0xFF8C826E : hover ? 0xFF8E6038 : 0xFF74492A);
-        g.fill(x + 1, y + 1, x + w - 1, y + 2, !active ? 0xFFA49A86 : hover ? 0xFFB08050 : 0xFFA4744A);
+        // unter der Maus blendet der Knopf weich über (seit 1.12), statt umzuspringen
+        float glow = UiMotion.hover(x, y, w, h, hot);
+        g.fill(x, y, x + w, y + h, UiMotion.mix(0xFF2E1D10, 0xFFE0B04A, glow));
+        g.fill(x + 1, y + 1, x + w - 1, y + h - 1, !active ? 0xFF8C826E : UiMotion.mix(0xFF74492A, 0xFF8E6038, glow));
+        g.fill(x + 1, y + 1, x + w - 1, y + 2, !active ? 0xFFA49A86 : UiMotion.mix(0xFFA4744A, 0xFFC09060, glow));
         g.fill(x + 1, y + h - 2, x + w - 1, y + h - 1, !active ? 0xFF6E6656 : 0xFF4A2E18);
-        int color = !active ? 0xFFE6DECB : hot ? 0xFFFFF4D6 : 0xFFF3E6C4;
+        int color = !active ? 0xFFE6DECB : UiMotion.mix(0xFFF3E6C4, 0xFFFFF4D6, glow);
         int iconSize = icon == null || icon.isEmpty() ? 0 : h >= 16 ? 10 : 8;
         int gap = iconSize > 0 ? 3 : 0;
         int coinsW = price >= 0 ? 4 + smallPriceWidth(font, price) : 0;
@@ -120,12 +123,13 @@ public final class Parchment {
 
     /** Ein leicht aufgehelltes Feld mit dünnem Rand (unter der Maus heller, ausgewählt mit Goldrand). */
     public static void card(GuiGraphicsExtractor g, int x, int y, int w, int h, boolean hover, boolean selected) {
-        g.fill(x, y, x + w, y + h, selected ? 0x59FFF1C4 : hover ? CARD_HOVER : CARD);
+        float glow = UiMotion.hover(x, y, w, h, hover);
+        g.fill(x, y, x + w, y + h, selected ? 0x59FFF1C4 : UiMotion.mix(CARD, CARD_HOVER, glow));
         if (selected) {
             g.outline(x, y, w, h, 0xFFB8862A);
             g.outline(x + 1, y + 1, w - 2, h - 2, 0x66F7DC80);
         } else {
-            g.outline(x, y, w, h, hover ? CARD_BORDER_HOVER : CARD_BORDER);
+            g.outline(x, y, w, h, UiMotion.mix(CARD_BORDER, CARD_BORDER_HOVER, glow));
         }
     }
 

@@ -22,6 +22,9 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import org.jspecify.annotations.Nullable;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiTheme;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiMotion;
+import net.minecraft.util.Util;
 
 /**
  * Die Chronik des Siegels als aufgeschlagenes Buch: links die Kapitel (erreichte mit Haken, das aktuelle markiert,
@@ -29,7 +32,9 @@ import org.jspecify.annotations.Nullable;
  * Hinweisen – bei den sechs Drachen eine Liste mit Zustand und ungefährer Lage jedes Nests. Lange Seiten lassen sich
  * mit dem Mausrad blättern.
  */
-public class ChronicleScreen extends Screen {
+public class ChronicleScreen extends Screen implements UiTheme.ParchmentStyle {
+    /** Wann das Fenster aufging (für das sanfte Aufgehen, siehe {@link UiMotion}). */
+    private long openedAt;
     private static final Identifier BOOK = KingdomsAtWar.id("textures/gui/chronicle.png");
     private static final int TEX_W = 512;
     private static final int TEX_H = 256;
@@ -103,6 +108,9 @@ public class ChronicleScreen extends Screen {
 
     @Override
     protected void init() {
+        if (this.openedAt == 0L) {
+            this.openedAt = Util.getMillis();
+        }
         this.left = (this.width - W) / 2;
         this.top = (this.height - H) / 2;
         this.buildPage();
@@ -364,11 +372,22 @@ public class ChronicleScreen extends Screen {
     @Override
     public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         super.extractBackground(g, mouseX, mouseY, a);
+        UiMotion.begin(g, this.openedAt, this.width / 2.0f, this.height / 2.0f);
         g.blit(RenderPipelines.GUI_TEXTURED, BOOK, this.left, this.top, 0.0f, 0.0f, W, H, TEX_W, TEX_H);
+        UiMotion.end(g);
     }
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
+        UiMotion.begin(g, this.openedAt, this.width / 2.0f, this.height / 2.0f);
+        try {
+            this.extractWindow(g, mouseX, mouseY, a);
+        } finally {
+            UiMotion.end(g);
+        }
+    }
+
+    private void extractWindow(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         super.extractRenderState(g, mouseX, mouseY, a);
         this.drawLeftPage(g, mouseX, mouseY);
         this.drawRightPage(g);

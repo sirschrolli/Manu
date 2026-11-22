@@ -29,6 +29,9 @@ public final class HeroHud {
     private static int gained;
     private static long shownAt = -100_000L;
     private static long gainAt = -100_000L;
+    private static long levelAt = -100_000L;
+    /** So viele Stufen vor einem neuen Rang, einer Fähigkeit oder einem Titel meldet die Leiste das Ziel. */
+    private static final int NEAR = 3;
     private static float shown;
     private static float fresh;
     private static long lastFrame;
@@ -62,6 +65,7 @@ public final class HeroHud {
             if (hero.level() > lastLevel) {
                 shown = 0.0f;   // neue Stufe: die Leiste beginnt von vorn
                 fresh = 0.0f;
+                levelAt = now;
             } else {
                 fresh = Math.min(fresh, shown);
             }
@@ -86,14 +90,28 @@ public final class HeroHud {
         Font font = mc.font;
         HeroLevel.Rank rank = hero.rank();
         int color = HeroGui.rankColor(rank);
+        HeroGoals.Goal goal = HeroGoals.next(hero.level());
+        int remaining = goal == null ? 0 : goal.level() - hero.level();
+        boolean near = goal != null && remaining <= NEAR;
         int x = g.guiWidth() / 2 - 91;
-        int y = g.guiHeight() - mc.gui.hud.leftHeight - 20 + Math.round(4 * (1.0f - appear));
+        int y = g.guiHeight() - mc.gui.hud.leftHeight - 20 - (near ? 8 : 0) + Math.round(4 * (1.0f - appear));
+        int bx = x + 18;
+        int bw = 74;
 
-        // Abzeichen mit Stufe
-        g.blitSprite(RenderPipelines.GUI_TEXTURED, HeroGui.badge(rank), x, y, HeroGui.BADGE, HeroGui.BADGE, ARGB.white(alpha));
-        String level = String.valueOf(hero.level());
+        // ein weicher dunkler Grund: so bleibt alles auch vor hellem Himmel und Schnee lesbar
+        HeroGui.shade(g, x + 50.0f, y + 7.0f + (near ? 4.0f : 0.0f), 168.0f, near ? 46.0f : 36.0f, 0.5f * alpha);
+
+        // das Abzeichen mit der Stufe – bei einer neuen Stufe hüpft es und glüht auf
+        float bump = 1.0f + 0.3f * (1.0f - HeroGui.easeOutCubic(Mth.clamp((now - levelAt) / 500.0f, 0.0f, 1.0f)));
+        float pulse = 0.8f + 0.2f * Mth.sin(now / 1000.0f * 3.0f);
+        HeroGui.light(g, HeroGui.GLOW, x + 7.5f, y + 7.5f, 24.0f * bump, 0.0f, color, (0.28f * pulse + 0.4f * (bump - 1.0f) / 0.3f) * alpha);
         g.pose().pushMatrix();
-        g.pose().translate(x + 7.5f, y + 4.5f);
+        g.pose().translate(x + 7.5f, y + 7.5f);
+        g.pose().scale(bump, bump);
+        g.pose().translate(-7.5f, -7.5f);
+        g.blitSprite(RenderPipelines.GUI_TEXTURED, HeroGui.badge(rank), 0, 0, HeroGui.BADGE, HeroGui.BADGE, ARGB.white(alpha));
+        String level = String.valueOf(hero.level());
+        g.pose().translate(7.5f, 4.5f);
         float s = level.length() >= 3 ? 0.55f : 0.75f;
         g.pose().scale(s, s);
         int lw = font.width(level);
@@ -101,36 +119,64 @@ public final class HeroHud {
         g.pose().popMatrix();
 
         // Leiste
-        int bx = x + 18;
-        int bw = 74;
         float flash = 1.0f - Mth.clamp((now - gainAt) / 900.0f, 0.0f, 1.0f);
-        g.pose().pushMatrix();
-        drawBar(g, bx, y + 8, bw, alpha, shown, fresh, flash, color);
-        g.pose().popMatrix();
+        drawBar(g, bx, y + 8, bw, alpha, shown, fresh, flash, color, now);
         if (flash <= 0.0f) {
             fresh = shown;
         }
 
-        // Rang und Zahl darüber
+        // Rang darüber, die Stufe klein dahinter
         Component name = Component.translatable(rank.translationKey());
-        g.text(font, name, bx, y - 1, ARGB.color(Math.round(230 * alpha), color & 0xFFFFFF), true);
+        HeroGui.text(g, font, name, bx, y - 1, ARGB.color(Math.round(235 * alpha), color & 0xFFFFFF));
+        // die neue Erfahrung springt herein, steigt und glüht kurz
         if (gained > 0 && now - gainAt < SHOW) {
             float rise = Mth.clamp((now - gainAt) / 1200.0f, 0.0f, 1.0f);
+            float pop = HeroGui.easeOutBack(Mth.clamp((now - gainAt) / 280.0f, 0.0f, 1.0f));
             Component plus = Component.translatable("hud.kingdomsatwar.hero.plus", HeroGui.number(gained));
-            int px = bx + bw + 4;
-            int py = y + 5 - Math.round(6 * HeroGui.easeOutCubic(rise));
-            g.text(font, plus, px, py, ARGB.color(Math.round(255 * alpha), 0xFFE7A0), true);
+            float px = bx + bw + 5;
+            float py = y + 4.5f - 5.0f * HeroGui.easeOutCubic(rise);
+            float glow = 1.0f - Mth.clamp((now - gainAt) / 700.0f, 0.0f, 1.0f);
+            HeroGui.light(g, HeroGui.GLOW, px + font.width(plus) / 2.0f, py + 3.5f, 22.0f + font.width(plus), 0.0f, 0xFFF2C14E, 0.45f * glow * alpha);
+            g.pose().pushMatrix();
+            g.pose().translate(px, py + 3.5f);
+            float ps = 0.7f + 0.3f * pop;
+            g.pose().scale(ps, ps);
+            HeroGui.text(g, font, plus, 0, -4, ARGB.color(Math.round(255 * alpha), 0xFFE7A0));
+            g.pose().popMatrix();
+        }
+        // ein Ziel ist nah: „Noch 2 Stufen: Rang Held“
+        if (near) {
+            float in = HeroGui.easeOutCubic(Math.min(1.0f, age / 400.0f));
+            int a = Math.round(255 * alpha * in);
+            g.blitSprite(RenderPipelines.GUI_TEXTURED, goal.icon(), bx, y + 15, 8, 8, ARGB.white(alpha * in));
+            Component hint = Component.translatable(remaining == 1 ? "hud.kingdomsatwar.hero.goal.one" : "hud.kingdomsatwar.hero.goal", remaining,
+                    goal.label());
+            g.pose().pushMatrix();
+            g.pose().translate(bx + 10, y + 16.5f);
+            g.pose().scale(0.75f, 0.75f);
+            HeroGui.text(g, font, hint, 0, 0, ARGB.color(a, goal.color() & 0xFFFFFF));
+            g.pose().popMatrix();
         }
     }
 
-    private static void drawBar(GuiGraphicsExtractor g, int x, int y, int w, float alpha, float progress, float fresh, float flash, int color) {
+    private static void drawBar(GuiGraphicsExtractor g, int x, int y, int w, float alpha, float progress, float fresh, float flash, int color, long now) {
         int a = Math.round(255 * alpha);
-        g.fill(x, y, x + w, y + 5, ARGB.color(Math.round(a * 0.75f), 11, 9, 16));
-        g.fill(x + 1, y + 1, x + w - 1, y + 4, ARGB.color(Math.round(a * 0.8f), 36, 31, 52));
+        g.fill(x, y, x + w, y + 5, ARGB.color(Math.round(a * 0.8f), 11, 9, 16));
+        g.fill(x + 1, y + 1, x + w - 1, y + 4, ARGB.color(Math.round(a * 0.85f), 36, 31, 52));
         int fill = Math.round((w - 2) * Mth.clamp(progress, 0.0f, 1.0f));
         if (fill > 0) {
             int top = ARGB.srgbLerp(0.45f, color, 0xFFFFFFFF);
             g.fillGradient(x + 1, y + 1, x + 1 + fill, y + 4, ARGB.color(a, top & 0xFFFFFF), ARGB.color(a, color & 0xFFFFFF));
+            // ein Schimmer wandert durch die Füllung
+            float t = (now / 1000.0f * 0.6f) % 1.0f;
+            int sx = x + 1 + Math.round((w + 10) * t) - 8;
+            for (int i = 0; i < 6; i++) {
+                int px = sx + i;
+                if (px >= x + 1 && px < x + 1 + fill) {
+                    float k = 1.0f - Math.abs(i - 2.5f) / 3.0f;
+                    g.fill(px, y + 1, px + 1, y + 4, ARGB.color(Math.round(a * 0.35f * k), 255, 255, 255));
+                }
+            }
             if (flash > 0.0f && fresh < progress) {
                 int from = x + 1 + Math.round((w - 2) * Mth.clamp(fresh, 0.0f, 1.0f));
                 g.fill(from, y + 1, x + 1 + fill, y + 4, ARGB.color(Math.round(a * 0.75f * flash), 255, 250, 225));

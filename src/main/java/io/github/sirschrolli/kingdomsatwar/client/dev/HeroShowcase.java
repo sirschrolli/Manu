@@ -165,7 +165,7 @@ final class HeroShowcase {
             Crystals.set(player, new Crystals.Count(6, 4));
             // Heldenstufe 47 (Ritter), zwei Punkte noch frei
             HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(47) + (HeroLevel.total(48) - HeroLevel.total(47)) * 3 / 5,
-                    java.util.List.of(12, 10, 6, 8, 9, 3), 23));
+                    java.util.List.of(5, 4, 3, 3, 3, 2), 23));
             player.setHealth(player.getMaxHealth());
         }));
         steps.add(Step.command("gamemode survival"));
@@ -417,7 +417,7 @@ final class HeroShowcase {
         steps.add(Step.server(level -> {
             ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
             HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(47) + (HeroLevel.total(48) - HeroLevel.total(47)) * 3 / 5,
-                    java.util.List.of(12, 10, 6, 8, 9, 3), 23));
+                    java.util.List.of(5, 4, 3, 3, 3, 2), 23));
         }));
         steps.add(Step.command("gamemode survival"));
         steps.add(Step.hud(true));

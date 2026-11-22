@@ -32,6 +32,8 @@ public final class HeroGui {
     public static final Identifier GLOW = sprite("glow");
     public static final Identifier RING = sprite("ring");
     public static final Identifier SPARKLE = sprite("sparkle");
+    /** Ein weicher dunkler Schatten (seit 1.12): hinter Schrift über der Welt, damit sie vor hellem Himmel lesbar bleibt. */
+    public static final Identifier SHADE = sprite("shade");
 
     /** Schrift: helles Pergament, gedämpft, Gold, Grün für Gewinne. */
     public static final int TEXT = 0xFFEDE3C8;
@@ -157,6 +159,21 @@ public final class HeroGui {
         float scale = size / 64.0f;
         g.pose().scale(scale, scale);
         g.blitSprite(RenderPipelines.GUI_NAUSEA_OVERLAY, sprite, -32, -32, 64, 64, color);
+        g.pose().popMatrix();
+    }
+
+    /**
+     * Ein weicher Schatten von {@code w} × {@code h} Pixeln mittig bei (cx, cy) – dunkelt ab (anders als {@link #light}), mit der
+     * Stärke {@code alpha} (0 bis 1).
+     */
+    public static void shade(GuiGraphicsExtractor g, float cx, float cy, float w, float h, float alpha) {
+        if (alpha <= 0.003f || w < 1.0f || h < 1.0f) {
+            return;
+        }
+        g.pose().pushMatrix();
+        g.pose().translate(cx, cy);
+        g.pose().scale(w / 64.0f, h / 64.0f);
+        g.blitSprite(RenderPipelines.GUI_TEXTURED, SHADE, -32, -32, 64, 64, ARGB.white(Mth.clamp(alpha, 0.0f, 1.0f)));
         g.pose().popMatrix();
     }
 

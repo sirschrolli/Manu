@@ -262,6 +262,14 @@ final class UiCheckShowcase {
             }));
             steps.add(Step.waitTicks(12));
             steps.add(Step.screenshot(tag + (appointed ? "rat_mitregent" : "rat_anwaerter")));
+            if (appointed) {
+                // seit 1.12: Tooltips im Stil des Fensters – die Maus auf dem ✘ des Mitregenten
+                steps.add(Step.once(minecraft -> hover(minecraft, (minecraft.getWindow().getGuiScaledWidth() - 320) / 2 + 150,
+                        (minecraft.getWindow().getGuiScaledHeight() - 210) / 2 + 94)));
+                steps.add(Step.waitTicks(6));
+                steps.add(Step.screenshot(tag + "rat_tooltip"));
+                steps.add(Step.once(Showcase::parkMouse));
+            }
             steps.add(Step.screen(minecraft -> null));
         }
         // … und umgekehrt: der Freund gründet weiter draußen seine eigene Siedlung und ernennt uns – so sieht ein Mitregent den Rat
@@ -330,6 +338,20 @@ final class UiCheckShowcase {
         }));
         steps.add(Step.command("gamemode spectator"));
         steps.add(Step.hud(false));
+    }
+
+    /** Die Maus an diese Stelle (GUI-Koordinaten) – für Tooltips in Vorführungen. */
+    private static void hover(Minecraft minecraft, int guiX, int guiY) {
+        double scale = minecraft.getWindow().getGuiScale();
+        try {
+            for (String name : new String[] {"xpos", "ypos"}) {
+                java.lang.reflect.Field field = minecraft.mouseHandler.getClass().getDeclaredField(name);
+                field.setAccessible(true);
+                field.setDouble(minecraft.mouseHandler, name.equals("xpos") ? guiX * scale : guiY * scale);
+            }
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     private static ServerPlayer first(ServerLevel level) {

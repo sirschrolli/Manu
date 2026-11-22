@@ -744,12 +744,26 @@ public final class HeroLevel {
         double x = player.getX();
         double y = player.getY();
         double z = player.getZ();
-        for (int i = 0; i < 36; i++) {
-            double a = i * Mth.TWO_PI / 36.0;
-            world.sendParticles(ParticleTypes.END_ROD, x + Math.cos(a) * 0.5, y + 0.15, z + Math.sin(a) * 0.5, 0, Math.cos(a), 0.015, Math.sin(a),
-                    0.2);
-        }
         int rgb = rank.color() & 0xFFFFFF;
+        // der Lichtring über den Boden: die anderen sehen ihn aus Lichtfunken; dem Helden selbst flögen die dicht unter den
+        // Augen als große weiße Flecken vorbei – er sieht einen Ring aus feinem Goldstaub, etwas weiter draußen
+        net.minecraft.core.particles.DustParticleOptions gold = new net.minecraft.core.particles.DustParticleOptions(0xFFE27A, 0.9f);
+        for (ServerPlayer viewer : world.players()) {
+            if (viewer.distanceToSqr(player) > 48.0 * 48.0) {
+                continue;
+            }
+            for (int i = 0; i < 36; i++) {
+                double a = i * Mth.TWO_PI / 36.0;
+                if (viewer == player) {
+                    for (double r : new double[] {1.7, 2.3}) {
+                        world.sendParticles(viewer, gold, false, false, x + Math.cos(a) * r, y + 0.12, z + Math.sin(a) * r, 1, 0.0, 0.0, 0.0, 0.0);
+                    }
+                } else {
+                    world.sendParticles(viewer, ParticleTypes.END_ROD, false, false, x + Math.cos(a) * 0.5, y + 0.15, z + Math.sin(a) * 0.5, 0,
+                            Math.cos(a), 0.015, Math.sin(a), 0.2);
+                }
+            }
+        }
         net.minecraft.core.particles.DustColorTransitionOptions dust = new net.minecraft.core.particles.DustColorTransitionOptions(rgb, 0xFFF6DC,
                 1.0f);
         // die Spirale sehen nur die anderen (dem Helden selbst flöge sie dicht vor den Augen vorbei)
@@ -1134,6 +1148,9 @@ public final class HeroLevel {
     public static void apply(Player player) {
         Hero hero = of(player);
         int level = hero.level();
+        if (player instanceof ServerPlayer server) {
+            HeroFame.publish(server, level);   // die Stufe vor dem Namen, für alle sichtbar
+        }
         modifier(player, Attributes.ATTACK_DAMAGE, Talent.STRENGTH.modifierId(), Talent.STRENGTH.value(hero.points(Talent.STRENGTH)),
                 AttributeModifier.Operation.ADD_VALUE);
         modifier(player, Attributes.MAX_HEALTH, Talent.VITALITY.modifierId(), Talent.VITALITY.value(hero.points(Talent.VITALITY)),

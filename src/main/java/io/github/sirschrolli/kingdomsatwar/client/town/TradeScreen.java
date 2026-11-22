@@ -23,13 +23,18 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiTheme;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiMotion;
+import net.minecraft.util.Util;
 
 /**
  * Handel mit einem Bürger oder Dorfbewohner: links die Angebote (was man gibt → was man bekommt; ein Klick handelt einmal), rechts der
  * eigene Geldbeutel, wie oft noch gehandelt werden kann, bevor der Laden Pause macht (in Echtzeit), und der Rabatt durch
  * das Ansehen.
  */
-public class TradeScreen extends Screen {
+public class TradeScreen extends Screen implements UiTheme.ParchmentStyle {
+    /** Wann das Fenster aufging (für das sanfte Aufgehen, siehe {@link UiMotion}). */
+    private long openedAt;
     private static final Identifier BACKGROUND = KingdomsAtWar.id("textures/gui/trade.png");
     private static final int WIDTH = 300;
     private static final int HEIGHT = 186;
@@ -65,6 +70,9 @@ public class TradeScreen extends Screen {
 
     @Override
     protected void init() {
+        if (this.openedAt == 0L) {
+            this.openedAt = Util.getMillis();
+        }
         this.left = (this.width - WIDTH) / 2;
         this.top = (this.height - HEIGHT) / 2;
     }
@@ -181,11 +189,22 @@ public class TradeScreen extends Screen {
     @Override
     public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         super.extractBackground(g, mouseX, mouseY, a);
+        UiMotion.begin(g, this.openedAt, this.width / 2.0f, this.height / 2.0f);
         g.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND, this.left, this.top, 0.0f, 0.0f, WIDTH, HEIGHT, WIDTH, HEIGHT);
+        UiMotion.end(g);
     }
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
+        UiMotion.begin(g, this.openedAt, this.width / 2.0f, this.height / 2.0f);
+        try {
+            this.extractWindow(g, mouseX, mouseY, a);
+        } finally {
+            UiMotion.end(g);
+        }
+    }
+
+    private void extractWindow(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         int x0 = this.left;
         int y0 = this.top;
         Component name = this.data.name();

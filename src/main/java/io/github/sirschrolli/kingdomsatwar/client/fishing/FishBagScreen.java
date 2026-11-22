@@ -24,6 +24,9 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.jspecify.annotations.Nullable;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiTheme;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiMotion;
+import net.minecraft.util.Util;
 
 /**
  * Das Fenster des Fischbeutels (seit 0.81): eine Tafel aus Pergament in dunklem Holz. Oben der Name und die Stufe, darunter
@@ -32,7 +35,9 @@ import org.jspecify.annotations.Nullable;
  * Unten steht, was die nächste Stufe beim Fischer im Dorf kostet. Das Fenster zeigt immer den Beutel in der Hand – entnommen
  * wird auf dem Server.
  */
-public class FishBagScreen extends Screen {
+public class FishBagScreen extends Screen implements UiTheme.ParchmentStyle {
+    /** Wann das Fenster aufging (für das sanfte Aufgehen, siehe {@link UiMotion}). */
+    private long openedAt;
     private static final Identifier TEXTURE = KingdomsAtWar.id("textures/gui/fishing/bag.png");
     private static final int TEX = 256;
     private static final int W = 196;
@@ -63,6 +68,9 @@ public class FishBagScreen extends Screen {
 
     @Override
     protected void init() {
+        if (this.openedAt == 0L) {
+            this.openedAt = Util.getMillis();
+        }
         this.left = (this.width - W) / 2;
         this.top = (this.height - H) / 2;
     }
@@ -174,11 +182,22 @@ public class FishBagScreen extends Screen {
     @Override
     public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         super.extractBackground(g, mouseX, mouseY, a);
+        UiMotion.begin(g, this.openedAt, this.width / 2.0f, this.height / 2.0f);
         g.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, this.left, this.top, 0.0f, 0.0f, W, H, TEX, TEX);
+        UiMotion.end(g);
     }
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
+        UiMotion.begin(g, this.openedAt, this.width / 2.0f, this.height / 2.0f);
+        try {
+            this.extractWindow(g, mouseX, mouseY, a);
+        } finally {
+            UiMotion.end(g);
+        }
+    }
+
+    private void extractWindow(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         super.extractRenderState(g, mouseX, mouseY, a);
         FishBag bag = this.bag();
         if (bag == null) {

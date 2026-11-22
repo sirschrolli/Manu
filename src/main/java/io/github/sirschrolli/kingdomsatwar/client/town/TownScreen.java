@@ -38,13 +38,18 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.jspecify.annotations.Nullable;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiTheme;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiMotion;
+import net.minecraft.util.Util;
 
 /**
  * Das Stadtfenster am Stadtbanner: ein Pergament im Eichenrahmen mit fünf Reitern – Übersicht (Stufe, Betten, Ansehen,
  * Baustellen, Name), Anheuern (die acht Berufe mit Lohn), Bewohner (wer hier wohnt und was er gerade tut), Bauen (die
  * Baupläne) und Krone (die Voraussetzungen der Krönung). Alles, was hier angeklickt wird, prüft der Server noch einmal.
  */
-public class TownScreen extends Screen {
+public class TownScreen extends Screen implements UiTheme.ParchmentStyle {
+    /** Wann das Fenster aufging (für das sanfte Aufgehen, siehe {@link UiMotion}). */
+    private long openedAt;
     private static final Identifier BACKGROUND = KingdomsAtWar.id("textures/gui/town.png");
     static final int WIDTH = 320;
     static final int HEIGHT = 210;
@@ -105,6 +110,9 @@ public class TownScreen extends Screen {
     private final BlockPos banner;
     private TownView view;
     private Tab tab = Tab.OVERVIEW;
+    /** Der Reiter, der zuletzt gezeichnet wurde, und wann er erschien (für das Hereingleiten). */
+    private @Nullable Tab drawnTab;
+    private long tabShownAt;
     private int left;
     private int top;
     private @Nullable EditBox nameBox;
@@ -198,6 +206,9 @@ public class TownScreen extends Screen {
 
     @Override
     protected void init() {
+        if (this.openedAt == 0L) {
+            this.openedAt = Util.getMillis();
+        }
         this.left = (this.width - WIDTH) / 2;
         this.top = (this.height - HEIGHT) / 2;
         this.nameBox = new EditBox(this.font, this.left + 30, this.top + 11, 170, 14, Component.translatable("gui.kingdomsatwar.town.name_hint"));
@@ -347,11 +358,22 @@ public class TownScreen extends Screen {
     @Override
     public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         super.extractBackground(g, mouseX, mouseY, a);
+        UiMotion.begin(g, this.openedAt, this.width / 2.0f, this.height / 2.0f);
         g.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND, this.left, this.top, 0.0f, 0.0f, WIDTH, HEIGHT, WIDTH, HEIGHT);
+        UiMotion.end(g);
     }
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
+        UiMotion.begin(g, this.openedAt, this.width / 2.0f, this.height / 2.0f);
+        try {
+            this.extractWindow(g, mouseX, mouseY, a);
+        } finally {
+            UiMotion.end(g);
+        }
+    }
+
+    private void extractWindow(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         this.hotspots.clear();
         // wer abgesetzt wurde (oder sein Amt niederlegt), sieht die Reiter des Verwaltens nicht mehr
         if (!java.util.Arrays.asList(this.tabs()).contains(this.tab)) {
@@ -362,6 +384,14 @@ public class TownScreen extends Screen {
         this.drawTabs(g, mouseX, mouseY);
         int x = this.left + CONTENT_X;
         int y = this.top + CONTENT_Y;
+        // ein neuer Reiter gleitet sanft von rechts herein (seit 1.12)
+        if (this.tab != this.drawnTab) {
+            this.drawnTab = this.tab;
+            this.tabShownAt = this.openedAt != 0L && Util.getMillis() - this.openedAt > 150L ? Util.getMillis() : 0L;
+        }
+        float slide = 1.0f - UiMotion.open(this.tabShownAt);
+        g.pose().pushMatrix();
+        g.pose().translate(12.0f * slide, 0.0f);
         switch (this.tab) {
             case OVERVIEW -> this.drawOverview(g, x, y, mouseX, mouseY);
             case HIRE -> this.drawHire(g, x, y, mouseX, mouseY);
@@ -378,6 +408,7 @@ public class TownScreen extends Screen {
             case COUNCIL -> this.drawCouncil(g, x, y, mouseX, mouseY);
             case CROWN -> this.drawCrown(g, x, y, mouseX, mouseY);
         }
+        g.pose().popMatrix();
         Runnable overlay = this.overlay;
         this.overlay = null;
         if (overlay != null) {
@@ -537,7 +568,7 @@ public class TownScreen extends Screen {
             int w = widths[i];
             boolean active = t == this.tab;
             boolean hover = mouseX >= x && mouseX < x + w && mouseY >= y && mouseY < y + 17;
-            int fill = active ? 0xFFF1E2BC : hover ? 0xFFE3CE9E : 0xFFD6BF8C;
+            int fill = active ? 0xFFF1E2BC : UiMotion.mix(0xFFD6BF8C, 0xFFE3CE9E, UiMotion.hover(x, y, w, 17, hover));
             g.fill(x, y, x + w, y + 17, fill);
             g.fill(x, y, x + w, y + 1, active ? 0xFF8A6A3E : 0xFF9C7F52);
             g.fill(x, y, x + 1, y + 17, active ? 0xFF8A6A3E : 0xFF9C7F52);
@@ -874,8 +905,9 @@ public class TownScreen extends Screen {
             Profession p = Profession.values()[Mth.clamp(r.profession(), 0, Profession.values().length - 1)];
             int ry = y + i * ROW_H;
             boolean hover = mouseX >= x && mouseX < x + CONTENT_W - 14 && mouseY >= ry && mouseY < ry + ROW_H - 1;
-            if (hover || index % 2 == 0) {
-                g.fill(x, ry, x + CONTENT_W - 14, ry + ROW_H - 1, hover ? CARD_HOVER : 0x14FFF6DC);
+            float glow = UiMotion.hover(x, ry, CONTENT_W - 14, ROW_H - 1, hover);
+            if (glow > 0.0f || index % 2 == 0) {
+                g.fill(x, ry, x + CONTENT_W - 14, ry + ROW_H - 1, UiMotion.mix(index % 2 == 0 ? 0x14FFF6DC : 0x00FFF6DC, CARD_HOVER, glow));
             }
             this.face(g, x + 2, ry + 2, 12, p, r.variant());
             g.text(this.font, this.ellipsize(r.name(), 78), x + 18, ry + 4, TEXT, false);
@@ -1039,7 +1071,7 @@ public class TownScreen extends Screen {
     private void councilRow(GuiGraphicsExtractor g, int x, int y, int w, int h, String name, Component office, int officeColor, int mouseX,
             int mouseY) {
         boolean hover = mouseX >= x && mouseX < x + w && mouseY >= y && mouseY < y + h - 1;
-        g.fill(x, y, x + w, y + h - 1, hover ? CARD_HOVER : 0x14FFF6DC);
+        g.fill(x, y, x + w, y + h - 1, UiMotion.mix(0x14FFF6DC, CARD_HOVER, UiMotion.hover(x, y, w, h - 1, hover)));
         this.playerFace(g, name, x + 2, y + (h - 13) / 2, 12);
         int officeW = this.font.width(office);
         int ty = y + (h - 9) / 2;
@@ -1163,14 +1195,15 @@ public class TownScreen extends Screen {
     /** Die Karte „Eigene Pläne“ im Reiter Bauen. */
     private void drawPlansCard(GuiGraphicsExtractor g, int x, int y, int cw, int ch, int mouseX, int mouseY, int built) {
         boolean hover = mouseX >= x && mouseX < x + cw && mouseY >= y && mouseY < y + ch;
-        g.fill(x, y, x + cw, y + ch, hover ? 0xFF2B4E80 : 0xFF203F6C);
+        float glow = UiMotion.hover(x, y, cw, ch, hover);
+        g.fill(x, y, x + cw, y + ch, UiMotion.mix(0xFF203F6C, 0xFF2B4E80, glow));
         for (int gx = x + 6; gx < x + cw; gx += 6) {
             g.fill(gx, y + 1, gx + 1, y + ch - 1, 0x22A9C8F0);
         }
         for (int gy = y + 6; gy < y + ch; gy += 6) {
             g.fill(x + 1, gy, x + cw - 1, gy + 1, 0x22A9C8F0);
         }
-        g.outline(x, y, cw, ch, hover ? 0xFFF2C23A : 0xFF9DBBE4);
+        g.outline(x, y, cw, ch, UiMotion.mix(0xFF9DBBE4, 0xFFF2C23A, glow));
         this.itemScaled(g, new ItemStack(ModItems.SURVEYORS_ROD.get()), x + (cw - 16) / 2, y + 3, 1.0f);
         this.centeredFit(g, Component.translatable("gui.kingdomsatwar.town.plans"), x + cw / 2, y + 21, cw - 4, 0xFFF3F7FF);
         Component sub = this.plans.isEmpty() ? Component.translatable("gui.kingdomsatwar.town.plans.scan")
@@ -1477,8 +1510,9 @@ public class TownScreen extends Screen {
 
     /** Ein leicht aufgehelltes Feld mit dünnem Rand. */
     private void card(GuiGraphicsExtractor g, int x, int y, int w, int h, boolean hover) {
-        g.fill(x, y, x + w, y + h, hover ? CARD_HOVER : CARD);
-        g.outline(x, y, w, h, hover ? 0xFFAE8A52 : CARD_BORDER);
+        float glow = UiMotion.hover(x, y, w, h, hover);
+        g.fill(x, y, x + w, y + h, UiMotion.mix(CARD, CARD_HOVER, glow));
+        g.outline(x, y, w, h, UiMotion.mix(CARD_BORDER, 0xFFAE8A52, glow));
     }
 
     /** Fortschrittsbalken (dunkle Rinne, farbige Füllung mit hellem Glanz oben). */
@@ -1589,14 +1623,14 @@ public class TownScreen extends Screen {
     private void woodButton(GuiGraphicsExtractor g, int x, int y, int w, int h, Component label, boolean active, int mouseX, int mouseY,
             Runnable action, @Nullable List<Component> tooltip) {
         boolean hover = mouseX >= x && mouseX < x + w && mouseY >= y && mouseY < y + h;
-        int border = active && hover ? 0xFFE0B04A : 0xFF2E1D10;
-        int fill = !active ? 0xFF8C826E : hover ? 0xFF8E6038 : 0xFF74492A;
-        g.fill(x, y, x + w, y + h, border);
-        g.fill(x + 1, y + 1, x + w - 1, y + h - 1, fill);
-        g.fill(x + 1, y + 1, x + w - 1, y + 2, !active ? 0xFFA49A86 : 0xFFA4744A);
+        // unter der Maus blendet der Knopf weich über (seit 1.12)
+        float glow = UiMotion.hover(x, y, w, h, active && hover);
+        g.fill(x, y, x + w, y + h, UiMotion.mix(0xFF2E1D10, 0xFFE0B04A, glow));
+        g.fill(x + 1, y + 1, x + w - 1, y + h - 1, !active ? 0xFF8C826E : UiMotion.mix(0xFF74492A, 0xFF8E6038, glow));
+        g.fill(x + 1, y + 1, x + w - 1, y + 2, !active ? 0xFFA49A86 : UiMotion.mix(0xFFA4744A, 0xFFC09060, glow));
         g.fill(x + 1, y + h - 2, x + w - 1, y + h - 1, !active ? 0xFF6E6656 : 0xFF4A2E18);
         int tw = this.font.width(label);
-        int color = active ? 0xFFF3E6C4 : 0xFFD5CCB6;
+        int color = active ? UiMotion.mix(0xFFF3E6C4, 0xFFFFF4D6, glow) : 0xFFD5CCB6;
         if (tw > w - 4) {
             this.centeredFit(g, label, x + w / 2, y + (h - 8) / 2, w - 4, color);
         } else {

@@ -27,6 +27,9 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import org.jspecify.annotations.Nullable;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiTheme;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiMotion;
+import net.minecraft.util.Util;
 
 /**
  * Das Fischbuch (Taste H): ein aufgeschlagener Band in Seeleder, seit 0.99 mit <b>8369 Arten</b> (1893 seit 0.90). Am linken Rand die
@@ -37,7 +40,9 @@ import org.jspecify.annotations.Nullable;
  * gewählte Art: wo und wann sie beißt (auch bei noch nie gefangenen, als Fährte), Größe und eigener Rekord, wie oft gefangen,
  * was sie gegessen bewirkt, und eine Notiz.
  */
-public class FishBookScreen extends Screen {
+public class FishBookScreen extends Screen implements UiTheme.ParchmentStyle {
+    /** Wann das Fenster aufging (für das sanfte Aufgehen, siehe {@link UiMotion}). */
+    private long openedAt;
     private static final Identifier BOOK = KingdomsAtWar.id("textures/gui/fishing/book.png");
     private static final int TEX_W = 512;
     private static final int TEX_H = 256;
@@ -134,6 +139,9 @@ public class FishBookScreen extends Screen {
 
     @Override
     protected void init() {
+        if (this.openedAt == 0L) {
+            this.openedAt = Util.getMillis();
+        }
         this.left = (this.width - W) / 2 + 8;
         this.top = (this.height - H) / 2;
         if (this.waters.isEmpty()) {
@@ -450,6 +458,7 @@ public class FishBookScreen extends Screen {
     @Override
     public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         super.extractBackground(g, mouseX, mouseY, a);
+        UiMotion.begin(g, this.openedAt, this.width / 2.0f, this.height / 2.0f);
         // die Lesezeichen stecken im Buch: erst sie, dann der Band darüber
         Chapter hovered = this.tabAt(mouseX, mouseY);
         for (Chapter c : Chapter.values()) {
@@ -460,10 +469,20 @@ public class FishBookScreen extends Screen {
             g.blit(RenderPipelines.GUI_TEXTURED, BOOK, x + (open ? 5 : 10), y + 3, 320.0f + c.ordinal() * 14, 70.0f, 12, 12, TEX_W, TEX_H);
         }
         g.blit(RenderPipelines.GUI_TEXTURED, BOOK, this.left, this.top, 0.0f, 0.0f, W, H, TEX_W, TEX_H);
+        UiMotion.end(g);
     }
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
+        UiMotion.begin(g, this.openedAt, this.width / 2.0f, this.height / 2.0f);
+        try {
+            this.extractWindow(g, mouseX, mouseY, a);
+        } finally {
+            UiMotion.end(g);
+        }
+    }
+
+    private void extractWindow(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         super.extractRenderState(g, mouseX, mouseY, a);
         this.drawLeftPage(g, mouseX, mouseY);
         this.drawRightPage(g);

@@ -157,6 +157,13 @@ public final class ModAttachments {
      * Wann das Licht der Unsterblichkeit den Spieler zuletzt bewahrt hat (Spielzeit; -1: nie) – bleibt nach dem Tod. Sein
      * Spiel bekommt es zugeschickt: Das Heldenfenster zeigt, wie lange das Licht noch ruht.
      */
+    /**
+     * Ruhm (seit 1.12): die Heldenstufe, die alle sehen – vor dem Namen über dem Kopf, im Chat und in der Spielerliste. Allen
+     * zugeschickt, aber nur, wenn sich die Stufe ändert (siehe {@link io.github.sirschrolli.kingdomsatwar.hero.HeroFame}).
+     */
+    public static final Supplier<AttachmentType<Integer>> HERO_FAME = ATTACHMENTS.register("hero_fame",
+            () -> AttachmentType.builder(() -> 0).serialize(Codec.INT.fieldOf("level"))
+                    .sync((holder, to) -> true, net.minecraft.network.codec.ByteBufCodecs.VAR_INT).copyOnDeath().build());
     public static final Supplier<AttachmentType<Long>> HERO_IMMORTAL = ATTACHMENTS.register("hero_immortal",
             () -> AttachmentType.builder(() -> -1L)
                     .serialize(com.mojang.serialization.Codec.LONG.fieldOf("last"))

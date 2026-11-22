@@ -8,6 +8,8 @@ import io.github.sirschrolli.kingdomsatwar.network.HeroTalentPayload;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
 import java.util.ArrayList;
 import java.util.List;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiMotion;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiTheme;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Tooltip;
@@ -46,7 +48,7 @@ import org.jspecify.annotations.Nullable;
  * </ul>
  * Unter dem Rang steht ab Stufe 250 der Titel mit seinem Siegel. Im Hintergrund steigen langsam Glutfunken auf.
  */
-public class CharacterScreen extends Screen {
+public class CharacterScreen extends Screen implements UiTheme.HeroStyle {
     private static final int WIDTH = 324;
     private static final int HEIGHT = 268;
     private static final int LEFT_W = 90;
@@ -223,10 +225,12 @@ public class CharacterScreen extends Screen {
     @Override
     public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         super.extractBackground(g, mouseX, mouseY, a);
+        UiMotion.begin(g, this.openedAt, this.width / 2.0f, this.height / 2.0f);
         g.pose().pushMatrix();
         g.pose().scale(this.fit, this.fit);
         this.background(g, this.virtual(mouseX), this.virtual(mouseY));
         g.pose().popMatrix();
+        UiMotion.end(g);
     }
 
     private void background(GuiGraphicsExtractor g, int mouseX, int mouseY) {
@@ -267,6 +271,15 @@ public class CharacterScreen extends Screen {
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor g, int realX, int realY, float a) {
+        UiMotion.begin(g, this.openedAt, this.width / 2.0f, this.height / 2.0f);
+        try {
+            this.extractWindow(g, realX, realY, a);
+        } finally {
+            UiMotion.end(g);
+        }
+    }
+
+    private void extractWindow(GuiGraphicsExtractor g, int realX, int realY, float a) {
         int mouseX = this.virtual(realX);
         int mouseY = this.virtual(realY);
         g.pose().pushMatrix();
@@ -312,13 +325,17 @@ public class CharacterScreen extends Screen {
             HeroGui.light(g, HeroGui.GLOW, sx + 3.5f, y0 + CARD_Y - 7.5f, 18.0f, 0.0f, HeroGui.GOLD, 0.3f + 0.4f * pulse);
             g.text(this.font, "★", sx, y0 + CARD_Y - 11, ARGB.color(Math.round(170 + 85 * pulse), 0xFFE7A0), false);
         }
-        // klein und rechtsbündig, damit auch "Talentpunkte: 219" mit dem Stern daneben Platz hat
+        // klein und rechtsbündig, damit auch "Talentpunkte: 219" mit dem Stern daneben Platz hat – und nur, wo es Platz hat
+        // (sonst liefe "Alle Talentpunkte verteilt" hinein)
         Component spent = Component.translatable("gui.kingdomsatwar.character.spent", hero.spent(pot), hero.earned(pot));
-        g.pose().pushMatrix();
-        g.pose().translate(rx + rw - 2, y0 + CARD_Y - 9);
-        g.pose().scale(0.75f, 0.75f);
-        g.text(this.font, spent, -this.font.width(spent), 0, HeroGui.MUTED, false);
-        g.pose().popMatrix();
+        int left = this.font.width(points) + (unspent > 0 ? 14 : 0);
+        if (left + 6 + this.font.width(spent) * 0.75f <= rw - 4) {
+            g.pose().pushMatrix();
+            g.pose().translate(rx + rw - 2, y0 + CARD_Y - 9);
+            g.pose().scale(0.75f, 0.75f);
+            g.text(this.font, spent, -this.font.width(spent), 0, HeroGui.MUTED, false);
+            g.pose().popMatrix();
+        }
         for (int i = 0; i < this.shown.size(); i++) {
             this.drawTalent(g, hero, this.shown.get(i), i, rx, y0 + CARD_Y + i * (CARD_H + CARD_GAP), rw, mouseX, mouseY);
         }
@@ -873,6 +890,86 @@ public class CharacterScreen extends Screen {
                     Component.translatable("gui.kingdomsatwar.character.mana", crystals.mana(), Crystals.MAX).withStyle(ChatFormatting.AQUA),
                     Component.translatable("gui.kingdomsatwar.character.biomes", hero.discoveries()).withStyle(ChatFormatting.GREEN))),
                     mouseX, mouseY);
+        }
+        // darunter: das nächste Ziel auf dem Weg (bis über die Knöpfe ist Platz)
+        this.drawGoal(g, hero, x, cy + 2 * line + 3, w, this.top + HEIGHT - 61, mouseX, mouseY);
+    }
+
+    /**
+     * Das nächste Ziel (seit 1.12): ein neuer Rang, eine Fähigkeit oder ein Titel – mit Bild, Name, wie viele Stufen noch
+     * fehlen, und einer Leiste vom letzten erreichten Ziel bis dorthin. Unter der Maus: was es bringt und die Ziele danach.
+     */
+    private void drawGoal(GuiGraphicsExtractor g, HeroLevel.Hero hero, int x, int y, int w, int bottom, int mouseX, int mouseY) {
+        HeroGoals.Goal goal = HeroGoals.next(hero.level());
+        int room = bottom - y;
+        if (room < 14) {
+            return;
+        }
+        float in = HeroGui.easeOutCubic(HeroGui.span(this.age(), 0.35f, 0.85f));
+        boolean full = room >= 25;
+        int ry = y;
+        if (full) {
+            // die Überschrift sitzt in der goldenen Linie
+            Component head = Component.translatable(goal == null ? "gui.kingdomsatwar.character.goal.done" : "gui.kingdomsatwar.character.goal");
+            float hw = this.font.width(head) * 0.75f;
+            int mid = y + 3;
+            g.fillGradient(x + 4, mid, Math.round(x + w / 2.0f - hw / 2.0f - 3), mid + 1, 0x00B5832C, 0xFFB5832C);
+            g.fillGradient(Math.round(x + w / 2.0f + hw / 2.0f + 3), mid, x + w - 4, mid + 1, 0xFFB5832C, 0x00B5832C);
+            g.pose().pushMatrix();
+            g.pose().translate(x + w / 2.0f - hw / 2.0f, y);
+            g.pose().scale(0.75f, 0.75f);
+            g.text(this.font, head, 0, 0, HeroGui.GOLD_DARK, false);
+            g.pose().popMatrix();
+            ry = y + 9;
+        }
+        if (goal == null) {
+            return;
+        }
+        // Bild (das Abzeichen des Rangs, das Bild der Fähigkeit, das Siegel des Titels) mit einem Schimmer dahinter
+        float pulse = 0.75f + 0.25f * Mth.sin(HeroGui.seconds() * 2.2f);
+        HeroGui.light(g, HeroGui.GLOW, x + 6.5f, ry + 5.5f, 20.0f, 0.0f, goal.color(), 0.32f * pulse * in);
+        g.blitSprite(RenderPipelines.GUI_TEXTURED, goal.icon(), x + 1, ry, 11, 11, ARGB.white(in));
+        int remaining = goal.level() - hero.level();
+        Component left = Component.translatable(remaining == 1 ? "gui.kingdomsatwar.character.goal.one" : "gui.kingdomsatwar.character.goal.levels",
+                remaining);
+        float lw = this.font.width(left) * 0.75f;
+        Component name = goal.name();
+        int nameRoom = Math.round(w - 14 - lw - 4);
+        // zu lang: erst kleiner (bis drei Viertel), dann gekürzt
+        float ns = Math.max(0.75f, Math.min(1.0f, nameRoom / (float) Math.max(1, this.font.width(name))));
+        String shown = io.github.sirschrolli.kingdomsatwar.client.town.Parchment.ellipsize(this.font, name.getString(), Math.round(nameRoom / ns));
+        g.pose().pushMatrix();
+        g.pose().translate(x + 14, ry + 2 + (1.0f - ns) * 4.0f);
+        g.pose().scale(ns, ns);
+        HeroGui.text(g, this.font, Component.literal(shown), 0, 0, ARGB.color(Math.round(255 * in), goal.color() & 0xFFFFFF));
+        g.pose().popMatrix();
+        g.pose().pushMatrix();
+        g.pose().translate(x + w - 1 - lw, ry + 3.5f);
+        g.pose().scale(0.75f, 0.75f);
+        g.text(this.font, left, 0, 0, HeroGui.MUTED, false);
+        g.pose().popMatrix();
+        // die Leiste vom letzten Ziel bis zu diesem
+        int by = ry + 12;
+        if (by + 4 <= bottom) {
+            float progress = HeroGoals.progress(hero.experience(), goal) * HeroGui.easeOutCubic(HeroGui.span(this.age(), 0.3f, 1.0f));
+            HeroGui.bar(g, x + 1, by, w - 2, 4, progress, progress, 0.0f, goal.color());
+        }
+        if (mouseX >= x && mouseX < x + w && mouseY >= y && mouseY < Math.min(bottom, by + 4)) {
+            List<Component> lines = new ArrayList<>();
+            lines.add(Component.translatable("gui.kingdomsatwar.character.goal").withStyle(ChatFormatting.GOLD));
+            lines.add(Component.translatable("gui.kingdomsatwar.character.goal.at", goal.label(), goal.level()).withColor(goal.color() & 0xFFFFFF));
+            lines.add(goal.reward().copy().withStyle(ChatFormatting.GRAY));
+            lines.add(Component.translatable("gui.kingdomsatwar.character.goal.experience",
+                    HeroGui.number(Math.max(0, HeroLevel.total(goal.level()) - hero.experience()))).withStyle(ChatFormatting.YELLOW));
+            List<HeroGoals.Goal> later = HeroGoals.upcoming(goal.level(), 3);
+            if (!later.isEmpty()) {
+                lines.add(Component.translatable("gui.kingdomsatwar.character.goal.later").withStyle(ChatFormatting.DARK_GRAY));
+                for (HeroGoals.Goal next : later) {
+                    lines.add(Component.translatable("gui.kingdomsatwar.character.goal.at", next.label(), next.level()).withColor(
+                            ARGB.srgbLerp(0.35f, next.color(), 0xFF8F86A3) & 0xFFFFFF));
+                }
+            }
+            g.setTooltipForNextFrame(this.font, this.lines(lines), mouseX, mouseY);
         }
     }
 

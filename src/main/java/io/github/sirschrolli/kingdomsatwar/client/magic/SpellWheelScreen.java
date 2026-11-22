@@ -28,6 +28,7 @@ import net.minecraft.util.Util;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.UseCooldown;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiTheme;
 
 /**
  * Der Zauberkreis: eine dunkle Scheibe mit Goldringen und Siebenstern, auf der die sieben Zauber in Fassungen sitzen
@@ -39,7 +40,7 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
  * wählt ein Klick. Ziffern 1–7 wählen direkt, Rechtsklick oder Esc bricht ab. Noch nicht gelernte Zauber sind
  * gesperrt (grau mit Schloss).
  */
-public class SpellWheelScreen extends Screen {
+public class SpellWheelScreen extends Screen implements UiTheme.HeroStyle {
     private static final Identifier BASE = KingdomsAtWar.id("textures/gui/spell_wheel/base.png");
     private static final Identifier PARTS = KingdomsAtWar.id("textures/gui/spell_wheel/parts.png");
     private static final int TEX = 256;

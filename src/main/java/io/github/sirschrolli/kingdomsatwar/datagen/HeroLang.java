@@ -158,6 +158,8 @@ final class HeroLang {
         text.add("hero.kingdomsatwar.discovered", "New biome discovered: %s", "Neues Biom entdeckt: %s");
         text.add("hud.kingdomsatwar.hero.gained", "+%s hero experience", "+%s Heldenerfahrung");
         text.add("hud.kingdomsatwar.hero.plus", "+%s", "+%s");
+        text.add("hud.kingdomsatwar.hero.goal", "%s more levels: %s", "Noch %s Stufen: %s");
+        text.add("hud.kingdomsatwar.hero.goal.one", "Next level: %2$s", "Nächste Stufe: %2$s");
         text.add("commands.kingdomsatwar.hero.status", "%s: hero level %s (%s) · %s / %s hero experience · %s talent points free",
                 "%s: Heldenstufe %s (%s) · %s / %s Heldenerfahrung · %s Talentpunkte frei");
         text.add("commands.kingdomsatwar.army.xp", "%s combat experience for each of your %s soldiers nearby",
@@ -288,6 +290,28 @@ final class HeroLang {
         text.add("hero.kingdomsatwar.level_up.craft_points", "+%s craft points", "+%s Handwerkspunkte");
         text.add("hero.kingdomsatwar.level_up.ability", "New ability: %s – %s", "Neue Fähigkeit: %s – %s");
         text.add("hero.kingdomsatwar.level_up.title_new", "New title: %s", "Neuer Titel: %s");
+        text.add("hero.kingdomsatwar.level_up.goal", "Next goal: %s – hero level %s", "Nächstes Ziel: %s – Heldenstufe %s");
+
+        // --- seit 1.12: die nächsten Ziele auf dem Weg ---
+        text.add("gui.kingdomsatwar.character.goal", "Next goal", "Nächstes Ziel");
+        text.add("gui.kingdomsatwar.character.goal.done", "The path is complete", "Der Weg ist vollendet");
+        text.add("gui.kingdomsatwar.character.goal.one", "next level", "nächste Stufe");
+        text.add("gui.kingdomsatwar.character.goal.levels", "%s to go", "noch %s");
+        text.add("gui.kingdomsatwar.character.goal.at", "%s – hero level %s", "%s – Heldenstufe %s");
+        text.add("gui.kingdomsatwar.character.goal.experience", "%s hero experience to go", "Noch %s Heldenerfahrung");
+        text.add("gui.kingdomsatwar.character.goal.later", "After that:", "Danach:");
+        text.add("hero.kingdomsatwar.goal.rank", "Rank %s", "Rang %s");
+        text.add("hero.kingdomsatwar.goal.ability", "Ability %s", "Fähigkeit %s");
+        text.add("hero.kingdomsatwar.goal.title", "Title %s", "Titel %s");
+        text.add("hero.kingdomsatwar.goal.reward.rank", "+%s talent points, a new emblem and more hero's might",
+                "+%s Talentpunkte, ein neues Abzeichen und mehr Heldenkraft");
+        text.add("hero.kingdomsatwar.goal.reward.ability", "A new ability for your ability wheel", "Eine neue Fähigkeit für dein Fähigkeitenrad");
+        text.add("hero.kingdomsatwar.goal.reward.title", "A title with its seal – it stands under your rank",
+                "Ein Titel mit seinem Siegel – er steht unter deinem Rang");
+        text.add("hero.kingdomsatwar.goal.reward.legend", "+%s talent points and the Legend's reward: patting",
+                "+%s Talentpunkte und die Belohnung der Legende: Streicheln");
+        text.add("hero.kingdomsatwar.goal.reward.immortal", "The light of immortality: once every %s minutes it saves you from death",
+                "Das Licht der Unsterblichkeit: Einmal alle %s Minuten bewahrt es dich vor dem Tod");
         text.add("hero.kingdomsatwar.title.lightbringer", "Lightbringer", "Lichtbringer");
         text.add("hero.kingdomsatwar.title.dragonslayer", "Dragonslayer", "Drachenbezwinger");
         text.add("hero.kingdomsatwar.title.sunwarden", "Sunwarden", "Sonnenwächter");

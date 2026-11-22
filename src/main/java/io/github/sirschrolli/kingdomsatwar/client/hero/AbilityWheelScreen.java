@@ -22,6 +22,7 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.player.Player;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiTheme;
 
 /**
  * Das Fähigkeitenrad (seit 1.11): eine dunkle Scheibe mit Goldringen und einem Achtstern aus warmem Licht, darauf die acht
@@ -32,7 +33,7 @@ import net.minecraft.world.entity.player.Player;
  * <p>Bedienung wie beim Zauberkreis: die Fähigkeitstaste halten, Maus in Richtung der Fähigkeit, loslassen (sie liegt dann
  * auf der Taste). Ziffern 1–8 wählen direkt, Rechtsklick oder Esc bricht ab.
  */
-public class AbilityWheelScreen extends Screen {
+public class AbilityWheelScreen extends Screen implements UiTheme.HeroStyle {
     private static final Identifier BASE = KingdomsAtWar.id("textures/gui/hero_wheel/base.png");
     private static final Identifier PARTS = KingdomsAtWar.id("textures/gui/spell_wheel/parts.png");
     private static final int TEX = 256;

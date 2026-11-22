@@ -53,11 +53,18 @@ public class HeroButton extends Button {
                     this.getX(), this.getY(), 13, 13, ARGB.white(this.alpha));
             return;
         }
-        g.blitSprite(RenderPipelines.GUI_TEXTURED, !this.active ? HeroGui.BUTTON_DISABLED : hover ? HeroGui.BUTTON_HIGHLIGHTED : HeroGui.BUTTON,
-                this.getX(), this.getY(), this.getWidth(), this.getHeight(), ARGB.white(this.alpha));
+        // unter der Maus blendet der Knopf weich ins Gold über (seit 1.12)
+        float glow = io.github.sirschrolli.kingdomsatwar.client.gui.UiMotion.hover(this.getX(), this.getY(), this.getWidth(), this.getHeight(),
+                this.active && hover);
+        g.blitSprite(RenderPipelines.GUI_TEXTURED, !this.active ? HeroGui.BUTTON_DISABLED : HeroGui.BUTTON, this.getX(), this.getY(), this.getWidth(),
+                this.getHeight(), ARGB.white(this.alpha));
+        if (this.active && glow > 0.01f) {
+            g.blitSprite(RenderPipelines.GUI_TEXTURED, HeroGui.BUTTON_HIGHLIGHTED, this.getX(), this.getY(), this.getWidth(), this.getHeight(),
+                    ARGB.white(this.alpha * glow));
+        }
         Font font = Minecraft.getInstance().font;
         Component label = this.label;
-        int color = !this.active ? 0xFF6E6880 : hover ? 0xFFFFE7A0 : HeroGui.TEXT;
+        int color = !this.active ? 0xFF6E6880 : io.github.sirschrolli.kingdomsatwar.client.gui.UiMotion.mix(HeroGui.TEXT, 0xFFFFE7A0, glow);
         int x = this.getX() + (this.getWidth() - font.width(label)) / 2;
         int y = this.getY() + (this.getHeight() - 8) / 2;
         g.text(font, label, x + 1, y + 1, 0xFF0B0910, false);

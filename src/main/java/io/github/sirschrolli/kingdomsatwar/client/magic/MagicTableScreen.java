@@ -22,6 +22,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiMotion;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiTheme;
 
 /**
  * Fenster des Magietischs in arkanem Stil: links der Siegelkreis mit dem Stab in der Mitte und den sieben Zaubern
@@ -29,7 +31,10 @@ import net.minecraft.world.item.ItemStack;
  * am Rand kreisen Runen. Rechts die Fächer für Zaubertafel und Aetherit, was das Einschreiben bewirkt, was es kostet,
  * und der Knopf "Einschreiben". Nach dem Einschreiben blitzt der Kreis in der Farbe des Zaubers auf.
  */
-public class MagicTableScreen extends AbstractContainerScreen<MagicTableMenu> {
+public class MagicTableScreen extends AbstractContainerScreen<MagicTableMenu> implements UiTheme.HeroStyle {
+    /** Wann das Fenster aufging (für das sanfte Aufgehen, siehe {@link UiMotion}). */
+    private long openedAt;
+
     private static final Identifier BACKGROUND = KingdomsAtWar.id("textures/gui/magic_table.png");
     private static final Identifier PARTS = KingdomsAtWar.id("textures/gui/spell_wheel/parts.png");
     private static final Identifier BUTTON = KingdomsAtWar.id("magic_table/button");
@@ -78,8 +83,27 @@ public class MagicTableScreen extends AbstractContainerScreen<MagicTableMenu> {
     // =====================================================================================
 
     @Override
+    protected void init() {
+        super.init();
+        if (this.openedAt == 0L) {
+            this.openedAt = Util.getMillis();
+        }
+    }
+
+    @Override
+    public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
+        UiMotion.begin(g, this.openedAt, this.width / 2.0f, this.height / 2.0f);
+        try {
+            super.extractRenderState(g, mouseX, mouseY, a);
+        } finally {
+            UiMotion.end(g);
+        }
+    }
+
+    @Override
     public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         super.extractBackground(g, mouseX, mouseY, a);
+        UiMotion.begin(g, this.openedAt, this.width / 2.0f, this.height / 2.0f);
         int x = this.leftPos;
         int y = this.topPos;
         g.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND, x, y, 0.0f, 0.0f, WIDTH, HEIGHT, 256, 256);
@@ -88,6 +112,7 @@ public class MagicTableScreen extends AbstractContainerScreen<MagicTableMenu> {
         this.drawFlash(g, x + CIRCLE_X, y + CIRCLE_Y, now);
         this.drawGems(g, x, y, now, mouseX, mouseY);
         this.drawPanel(g, x, y, mouseX, mouseY, now);
+        UiMotion.end(g);
     }
 
     @Override
