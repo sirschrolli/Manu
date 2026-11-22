@@ -65,6 +65,12 @@ public final class MultiplayerCheck {
         return !System.getProperty("kingdomsatwar.mpcheck", "").isBlank();
     }
 
+    /** Welche Teile laufen ({@code -Dkingdomsatwar.mpcheck=items,entities,windows}; {@code 1}: alle). */
+    private static boolean phase(String name) {
+        String value = System.getProperty("kingdomsatwar.mpcheck", "");
+        return value.equals("1") || value.equals("all") || java.util.Arrays.asList(value.split(",")).contains(name);
+    }
+
     @SubscribeEvent
     static void onClientTick(ClientTickEvent.Post event) {
         if (!enabled()) {
@@ -161,9 +167,15 @@ public final class MultiplayerCheck {
         STEPS.add(pause(40));
         STEPS.add(Step.screenshot("mp_02_angekommen"));
 
-        planItems();
-        planEntities();
-        planWindows();
+        if (phase("items")) {
+            planItems();
+        }
+        if (phase("entities")) {
+            planEntities();
+        }
+        if (phase("windows")) {
+            planWindows();
+        }
 
         STEPS.add(pause(20));
         STEPS.add(Step.once(minecraft -> {
@@ -207,7 +219,11 @@ public final class MultiplayerCheck {
         STEPS.add(log("Gegenstände fertig"));
     }
 
-    /** Jedes Wesen der Mod: herbeirufen (ohne KI), ansehen und prüfen, ob es beim Spiel ankommt (fünf auf einmal). */
+    /**
+     * Jedes Wesen der Mod: herbeirufen (ohne KI), prüfen, ob es beim Spiel ankommt, und fotografieren – drei auf einmal,
+     * dem Betrachter schräg zugewandt und mit Namensschild (die Bilder dienen auch zum Durchsehen der Modelle). Danach
+     * werden sie weit fortgeschickt, statt zu sterben: keine Todesanimation und keine Beute im nächsten Bild.
+     */
     private static void planEntities() {
         List<EntityType<?>> types = new ArrayList<>();
         for (EntityType<?> type : BuiltInRegistries.ENTITY_TYPE) {
@@ -216,17 +232,25 @@ public final class MultiplayerCheck {
             }
         }
         STEPS.add(log("Wesen: " + types.size()));
-        for (int from = 0; from < types.size(); from += 5) {
-            List<EntityType<?>> batch = types.subList(from, Math.min(types.size(), from + 5));
-            int index = from / 5;
+        STEPS.add(Step.command("gamerule send_command_feedback false"));
+        STEPS.add(Step.command("tp @s 0 -60 0 0 10"));
+        // Anzeige an (für die Namensschilder), der Chat bleibt aus
+        STEPS.add(Step.once(minecraft -> {
+            if (minecraft.gui.hud.isHidden()) {
+                minecraft.gui.hud.toggle();
+            }
+        }));
+        int perShot = 3;
+        for (int from = 0; from < types.size(); from += perShot) {
+            List<EntityType<?>> batch = types.subList(from, Math.min(types.size(), from + perShot));
+            int index = from / perShot;
             Set<EntityType<?>> seen = new HashSet<>();
             STEPS.add(Step.once(minecraft -> {
                 for (int i = 0; i < batch.size(); i++) {
                     Identifier id = BuiltInRegistries.ENTITY_TYPE.getKey(batch.get(i));
-                    // mit Namensschild, damit man auf den Bildern sieht, wer wer ist
                     minecraft.player.connection.sendCommand(String.format(Locale.ROOT,
-                            "summon %s %.1f -60 %.1f {NoAI:1b,Silent:1b,CustomName:\"%s\",CustomNameVisible:1b}", id, -8.0 + i * 4.0, 9.0,
-                            id.getPath()));
+                            "summon %s %.1f -60 7.0 {NoAI:1b,Silent:1b,Rotation:[150f,0f],CustomName:\"%s\",CustomNameVisible:1b}", id,
+                            -5.0 + i * 5.0, id.getPath()));
                 }
             }));
             barrier("Wesen " + index);
@@ -248,11 +272,16 @@ public final class MultiplayerCheck {
                 }
                 return true;
             });
-            STEPS.add(pause(6));
+            STEPS.add(pause(8));
+            STEPS.add(Step.once(minecraft -> io.github.sirschrolli.kingdomsatwar.client.story.ChapterCardOverlay.clear()));
             STEPS.add(Step.screenshot(String.format(Locale.ROOT, "mp_wesen_%02d", index)));
-            STEPS.add(Step.command("kill @e[type=!minecraft:player]"));
+            // weit fort statt in die Leere: Bosse (ruhend unverwundbar) bleiben sonst samt Bossleiste unter dem Spieler, und
+            // ein Drache, der dort stirbt, zählte als besiegt
+            STEPS.add(Step.command("tp @e[type=!minecraft:player] 0 -60 1000000"));
             barrier("aufgeräumt " + index);
         }
+        STEPS.add(Step.hud(false));
+        STEPS.add(Step.command("gamerule send_command_feedback true"));
         STEPS.add(log("Wesen fertig"));
     }
 

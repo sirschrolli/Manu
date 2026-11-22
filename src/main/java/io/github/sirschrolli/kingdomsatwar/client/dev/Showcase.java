@@ -2017,9 +2017,13 @@ final class Showcase {
         steps.add(Step.waitTicks(10));
         List<CreativeModeTab> tabs = List.of(ModCreativeTabs.BUILDING.get(), ModCreativeTabs.RESOURCES.get(),
                 ModCreativeTabs.DRAGONS.get(), ModCreativeTabs.FARMING.get(), ModCreativeTabs.KINGDOM.get(),
-                ModCreativeTabs.EQUIPMENT.get(), ModCreativeTabs.NATURE.get(), ModCreativeTabs.SHADOW_WORLD.get());
+                ModCreativeTabs.EQUIPMENT.get(), ModCreativeTabs.NATURE.get(), ModCreativeTabs.SHADOW_WORLD.get(),
+                ModCreativeTabs.THE_VOID.get(), ModCreativeTabs.THE_ABYSS.get(), ModCreativeTabs.THE_SEA.get(),
+                ModCreativeTabs.THE_FAE_REALM.get(), ModCreativeTabs.LEGENDS.get(), ModCreativeTabs.CREATION.get(),
+                ModCreativeTabs.FISHING.get(), ModCreativeTabs.RELICS.get());
         String[] names = {"tab_building", "tab_resources", "tab_dragons", "tab_farming", "tab_kingdom", "tab_equipment",
-                "tab_nature", "tab_shadow"};
+                "tab_nature", "tab_shadow", "tab_void", "tab_abyss", "tab_sea", "tab_fae", "tab_legends", "tab_creation",
+                "tab_fishing", "tab_relics"};
         for (int i = 0; i < tabs.size(); i++) {
             CreativeModeTab tab = tabs.get(i);
             steps.add(Step.screen(minecraft -> new CreativeModeInventoryScreen(minecraft.player,
@@ -2031,7 +2035,7 @@ final class Showcase {
             }));
             steps.add(Step.waitTicks(10));
             steps.add(Step.screenshot(names[i]));
-            if (i == 0 || i == tabs.size() - 1) {
+            if (i == 0 || i == 7) {
                 // Bau- und Schattenwelt-Tab sind länger als eine Seite: ans Ende blättern
                 steps.add(Step.once(minecraft -> minecraft.gui.screen().mouseScrolled(100, 100, 0, -30)));
                 steps.add(Step.waitTicks(5));

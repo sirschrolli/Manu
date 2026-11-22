@@ -370,7 +370,8 @@ public final class ModGameTests {
         EndGameTests.register(event, environment);
         TreeGameTests.register(event, environment);
         IdentityGameTests.register(event, environment);
-        NetworkGameTests.register(event, environment);
+        // eigener Durchgang: Der Netztest packt in einem Tick Tausende Gegenstände ein und aus – das soll keinen anderen Test bremsen
+        NetworkGameTests.register(event, event.registerEnvironment(KingdomsAtWar.id("network")));
         // Drachen-Bosse brauchen länger (Erwachen + Todesanimation)
         event.registerTest(DRAGON_BOSS_LIFECYCLE.getId(), new FunctionGameTestInstance(DRAGON_BOSS_LIFECYCLE.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 700, 0, true, Rotation.NONE, false, 1, 1, true, 0)));

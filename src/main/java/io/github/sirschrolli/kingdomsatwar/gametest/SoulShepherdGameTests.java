@@ -420,7 +420,11 @@ final class SoulShepherdGameTests {
                     knight.setYHeadRot(90.0f);
                     shepherd.forceAttack(SoulShepherdEntity.Attack.FOG);
                 }, () -> {
-                    helper.assertTrue(knight.hasEffect(MobEffects.BLINDNESS), "Aus dem Nebel trifft er den Ritter nicht");
+                    helper.assertTrue(knight.hasEffect(MobEffects.BLINDNESS), String.format(java.util.Locale.ROOT,
+                            "Aus dem Nebel trifft er den Ritter nicht (Ritter bei %.1f/%.1f, Blick %.0f°; Hirte bei %.1f/%.1f, Abstand %.1f, "
+                                    + "Angriff %s, Ziel %s, unsichtbar %s)", knight.getX() - spot.x, knight.getZ() - spot.z, knight.getYRot(),
+                            shepherd.getX() - spot.x, shepherd.getZ() - spot.z, knight.distanceTo(shepherd), shepherd.currentAttack(),
+                            shepherd.getTarget() == knight ? "Ritter" : String.valueOf(shepherd.getTarget()), shepherd.isInvisible()));
                     helper.assertFalse(shepherd.isInvisible(), "Er bleibt unsichtbar");
                 }),
                 new Step(26, () -> {
@@ -532,7 +536,9 @@ final class SoulShepherdGameTests {
         player.teleportTo(level, stand.getX() + 0.5, stand.getY(), stand.getZ() + 0.5, java.util.Set.of(), 0.0f, 0.0f, true);
         ItemStack crook = new ItemStack(SoulShepherd.CROOK.get());
         player.setItemInHand(InteractionHand.MAIN_HAND, crook);
-        helper.runAfterDelay(2, () -> {
+        // erst wenn der Ritter wirklich tickt (frische Testflächen lassen Wesen erst nach ein paar Ticks laufen), sonst
+        // bliebe er trotz Zug einfach stehen
+        helper.runAfterDelay(2, () -> whenTicking(helper, level, kp, 200, () -> {
             // auf die Mitte des Ritters zielen
             Vec3 aim = knight.getBoundingBox().getCenter().subtract(player.getEyePosition());
             player.setYRot(0.0f);
@@ -549,6 +555,17 @@ final class SoulShepherdGameTests {
                 level.getServer().getPlayerList().remove(player);
                 helper.succeed();
             });
-        });
+        }));
+    }
+
+    /** Wartet, bis an {@code pos} Wesen ticken (höchstens {@code maxTicks}), dann {@code then}. */
+    private static void whenTicking(GameTestHelper helper, ServerLevel level, BlockPos pos, int maxTicks, Runnable then) {
+        if (level.isPositionEntityTicking(pos)) {
+            then.run();
+        } else if (maxTicks <= 0) {
+            helper.fail("Hier ticken keine Wesen: " + pos.toShortString());
+        } else {
+            helper.runAfterDelay(1, () -> whenTicking(helper, level, pos, maxTicks - 1, then));
+        }
     }
 }
