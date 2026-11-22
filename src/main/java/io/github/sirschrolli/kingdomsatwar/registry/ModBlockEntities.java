@@ -30,5 +30,10 @@ public final class ModBlockEntities {
                     () -> new BlockEntityType<>(io.github.sirschrolli.kingdomsatwar.block.entity.MercenaryBoardBlockEntity::new,
                             ModBlocks.MERCENARY_BOARD.get()));
 
+    /** Wegstein (seit 1.12): trägt seinen Namen. */
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<io.github.sirschrolli.kingdomsatwar.waystone.WaystoneBlockEntity>>
+            WAYSTONE = BLOCK_ENTITIES.register("waystone",
+                    () -> new BlockEntityType<>(io.github.sirschrolli.kingdomsatwar.waystone.WaystoneBlockEntity::new, ModBlocks.WAYSTONE.get()));
+
     private ModBlockEntities() {}
 }

@@ -654,6 +654,17 @@ public final class ModBlocks {
             ip -> ip.rarity(net.minecraft.world.item.Rarity.EPIC).component(DataComponents.LORE, ModItems.lore("magic_table", 2)),
             KINGDOM_TAB);
 
+    /**
+     * Wegstein (seit 1.12): Ein Wegkompass merkt ihn sich, wenn man ihn damit anklickt; ein Namensschild gibt ihm seinen
+     * Namen (sonst heißt er nach seinem Biom). Er leuchtet ein wenig, und Explosionen kann er widerstehen.
+     */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.waystone.WaystoneBlock> WAYSTONE = blockWithItem("waystone",
+            io.github.sirschrolli.kingdomsatwar.waystone.WaystoneBlock::new,
+            p -> p.mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops()
+                    .strength(3.5f, 1200.0f).sound(SoundType.STONE).lightLevel(state -> 6).noOcclusion(),
+            ip -> ip.rarity(net.minecraft.world.item.Rarity.UNCOMMON).component(DataComponents.LORE, ModItems.lore("waystone", 2)),
+            KINGDOM_TAB);
+
     public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.TownBannerBlock> TOWN_BANNER = blockWithItem("town_banner",
             io.github.sirschrolli.kingdomsatwar.block.TownBannerBlock::new,
             p -> p.mapColor(MapColor.COLOR_BLUE).instrument(NoteBlockInstrument.BASS).strength(2.0f, 1200.0f).sound(SoundType.WOOD)

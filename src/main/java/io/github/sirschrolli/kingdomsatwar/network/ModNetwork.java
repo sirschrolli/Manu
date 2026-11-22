@@ -16,7 +16,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 @EventBusSubscriber(modid = KingdomsAtWar.MODID)
 public final class ModNetwork {
     /** Erhöhen, wenn sich Nachrichten ändern – Client und Server müssen zusammenpassen. */
-    private static final String PROTOCOL = "16";   // 1.11.6: Stadtfenster mit Rat (Mitregenten)
+    private static final String PROTOCOL = "17";   // 1.12: Wegkompass
 
     /** Eine angemeldete Nachricht: ihre Art, ihr Codec und die Richtung ({@code toServer}: vom Spiel zum Server). */
     public record Registered(CustomPacketPayload.Type<?> type, StreamCodec<? super RegistryFriendlyByteBuf, ?> codec, boolean toServer) {}
@@ -68,6 +68,7 @@ public final class ModNetwork {
         toServer(registrar, TownActionPayload.TYPE, TownActionPayload.STREAM_CODEC, TownActionPayload::handle);
         toServer(registrar, SelectSpellPayload.TYPE, SelectSpellPayload.STREAM_CODEC, SelectSpellPayload::handle);
         toServer(registrar, SavePlanPayload.TYPE, SavePlanPayload.STREAM_CODEC, SavePlanPayload::handle);
+        toServer(registrar, WaystoneCompassPayload.TYPE, WaystoneCompassPayload.STREAM_CODEC, WaystoneCompassPayload::handle);
         toClient(registrar, OpenSavePlanPayload.TYPE, OpenSavePlanPayload.STREAM_CODEC);
         toClient(registrar, PlanListPayload.TYPE, PlanListPayload.STREAM_CODEC);
         toClient(registrar, ImportListPayload.TYPE, ImportListPayload.STREAM_CODEC);
@@ -81,6 +82,7 @@ public final class ModNetwork {
         toClient(registrar, OpenChroniclePayload.TYPE, OpenChroniclePayload.STREAM_CODEC);
         toClient(registrar, OpenFishBookPayload.TYPE, OpenFishBookPayload.STREAM_CODEC);
         toClient(registrar, OpenFishBagPayload.TYPE, OpenFishBagPayload.STREAM_CODEC);
+        toClient(registrar, OpenWaystoneCompassPayload.TYPE, OpenWaystoneCompassPayload.STREAM_CODEC);
         toClient(registrar, FishingStartPayload.TYPE, FishingStartPayload.STREAM_CODEC);
         toClient(registrar, FishingCatchPayload.TYPE, FishingCatchPayload.STREAM_CODEC);
         toClient(registrar, FishingEndPayload.TYPE, FishingEndPayload.STREAM_CODEC);

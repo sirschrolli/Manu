@@ -511,6 +511,14 @@ public final class ModItems {
             ITEMS.registerItem("dragon_compass", io.github.sirschrolli.kingdomsatwar.item.DragonCompassItem::new,
                     p -> p.stacksTo(1).rarity(Rarity.RARE).component(DataComponents.LORE, lore("dragon_compass", 1))));
 
+    /**
+     * Der Wegkompass (seit 1.12; der Kompass von Minecraft lässt sich nicht mehr herstellen): merkt sich bis zu acht Wegsteine
+     * und zeigt zu dem, den man wählt – ohne Ziel zum Spawn.
+     */
+    public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.waystone.WaystoneCompassItem> WAYSTONE_COMPASS = addTo(EQUIPMENT_TAB,
+            ITEMS.registerItem("waystone_compass", io.github.sirschrolli.kingdomsatwar.waystone.WaystoneCompassItem::new,
+                    p -> p.stacksTo(1).rarity(Rarity.UNCOMMON)));
+
     /** Das Drachenhorn: schickt die eigenen Drachen in den Krieg (Angriff, Luftangriff, Rückkehr). */
     public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.item.DragonHornItem> DRAGON_HORN = addTo(DRAGON_TAB,
             ITEMS.registerItem("dragon_horn", io.github.sirschrolli.kingdomsatwar.item.DragonHornItem::new,

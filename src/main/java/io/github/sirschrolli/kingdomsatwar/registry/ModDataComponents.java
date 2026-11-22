@@ -74,5 +74,12 @@ public final class ModDataComponents {
                     .networkSynchronized(io.github.sirschrolli.kingdomsatwar.fishing.FishBag.STREAM_CODEC)
                     .cacheEncoding());
 
+    /** Wegkompass (seit 1.12): die gemerkten Wegsteine (bis zu acht) und welcher davon das Ziel ist. */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<io.github.sirschrolli.kingdomsatwar.waystone.Waypoints>> WAYPOINTS =
+            COMPONENTS.registerComponentType("waypoints", builder -> builder
+                    .persistent(io.github.sirschrolli.kingdomsatwar.waystone.Waypoints.CODEC)
+                    .networkSynchronized(io.github.sirschrolli.kingdomsatwar.waystone.Waypoints.STREAM_CODEC)
+                    .cacheEncoding());
+
     private ModDataComponents() {}
 }
