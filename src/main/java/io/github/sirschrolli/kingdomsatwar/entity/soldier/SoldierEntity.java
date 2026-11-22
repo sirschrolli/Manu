@@ -784,7 +784,29 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
 
     @Override
     public boolean canAttack(LivingEntity target) {
-        return !this.isAlliedTo(target) && super.canAttack(target);
+        return !this.isAlliedTo(target) && !this.sparedForOwner(target) && super.canAttack(target);
+    }
+
+    /**
+     * Mehrspieler: Wen der Besitzer nicht verletzen darf (Spieler gegen Spieler ist auf dem Server aus, oder beide sind im
+     * selben Team), den greift auch sein Heer nicht an – weder den Spieler selbst noch dessen Soldaten, Rosse und Tiere.
+     * So verhalten sich auch gezähmte Wölfe; ein versehentlicher Hieb unter Freunden löst keine Schlacht der Heere aus.
+     */
+    private boolean sparedForOwner(LivingEntity target) {
+        if (!(this.getOwner() instanceof Player owner)) {
+            return false;
+        }
+        Player other = target instanceof Player player ? player : playerBehind(target);
+        return other != null && other != owner && !owner.canHarmPlayer(other);
+    }
+
+    /** Der Spieler, dem ein Wesen gehört (bei einem Ross: dem sein Reiter gehört) – oder {@code null}. */
+    private static @Nullable Player playerBehind(LivingEntity entity) {
+        LivingEntity owner = entity instanceof OwnableEntity ownable ? ownable.getOwner() : null;
+        if (owner == null && entity instanceof Warhorse horse && horse.rider() != null) {
+            owner = horse.rider().getOwner();
+        }
+        return owner instanceof Player player ? player : null;
     }
 
     /** Monster (außer Creepern und "neutralen" Wesen wie Endermen) und Banditen sind Feinde. */

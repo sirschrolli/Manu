@@ -65,6 +65,8 @@ final class ArmyGameTests {
             ModGameTests.TEST_FUNCTIONS.register("village_mercenary_hall", () -> ArmyGameTests::hall);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SOLDIER_HUNGER =
             ModGameTests.TEST_FUNCTIONS.register("soldier_hunger", () -> ArmyGameTests::hunger);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SOLDIER_FRIENDS =
+            ModGameTests.TEST_FUNCTIONS.register("soldier_spares_friends", () -> ArmyGameTests::friends);
 
     private ArmyGameTests() {}
 
@@ -75,6 +77,46 @@ final class ArmyGameTests {
         add(event, environment, MERCENARY_BOARD, ARENA, 200);
         add(event, environment, VILLAGE_MERCENARY_HALL, TOWN, 300);
         add(event, environment, SOLDIER_HUNGER, ARENA, 200);
+        add(event, environment, SOLDIER_FRIENDS, ARENA, 100);
+    }
+
+    /**
+     * Mehrspieler: Ist Spieler gegen Spieler aus ({@code /gamerule pvp false}), greift ein Heer weder den Freund seines
+     * Herrn an noch dessen Soldaten oder Rosse – auch nicht, wenn der Freund versehentlich zuschlägt. Mit PvP darf es sich
+     * wehren (wie gezähmte Wölfe). Die Spielregel wird nur innerhalb dieses einen Aufrufs umgestellt.
+     */
+    private static void friends(GameTestHelper helper) {
+        floor(helper);
+        ServerLevel level = helper.getLevel();
+        ServerPlayer lord = player(helper, new Vec3(2.5, 1, 2.5));
+        ServerPlayer friend = player(helper, new Vec3(6.5, 1, 2.5));
+        try {
+            SoldierEntity mine = helper.spawn(ModEntities.SOLDIERS.get(SoldierType.SWORDSMAN).get(), new BlockPos(3, 1, 5));
+            mine.setOwner(lord);
+            SoldierEntity theirs = helper.spawn(ModEntities.SOLDIERS.get(SoldierType.ARCHER).get(), new BlockPos(6, 1, 5));
+            theirs.setOwner(friend);
+            SoldierEntity stray = helper.spawn(ModEntities.SOLDIERS.get(SoldierType.ARCHER).get(), new BlockPos(5, 1, 6));
+            var rules = level.getGameRules();
+            boolean before = rules.get(net.minecraft.world.level.gamerules.GameRules.PVP);
+            boolean peaceful;
+            boolean war;
+            try {
+                rules.set(net.minecraft.world.level.gamerules.GameRules.PVP, false, level.getServer());
+                peaceful = !mine.canAttack(friend) && !mine.canAttack(theirs) && !theirs.canAttack(lord) && !theirs.canAttack(mine);
+                rules.set(net.minecraft.world.level.gamerules.GameRules.PVP, true, level.getServer());
+                war = mine.canAttack(friend) && mine.canAttack(theirs) && theirs.canAttack(lord);
+            } finally {
+                rules.set(net.minecraft.world.level.gamerules.GameRules.PVP, before, level.getServer());
+            }
+            helper.assertTrue(peaceful, "Ohne PvP greift ein Heer den Freund des Herrn oder dessen Soldaten an");
+            helper.assertTrue(war, "Mit PvP wehrt sich ein Heer nicht gegen andere Spieler");
+            helper.assertTrue(!mine.canAttack(lord), "Ein Soldat greift den eigenen Herrn an");
+            helper.assertTrue(mine.canAttack(stray), "Ein Soldat verschont einen herrenlosen Soldaten ohne Grund");
+            helper.succeed();
+        } finally {
+            level.getServer().getPlayerList().remove(lord);
+            level.getServer().getPlayerList().remove(friend);
+        }
     }
 
     private static void add(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment,

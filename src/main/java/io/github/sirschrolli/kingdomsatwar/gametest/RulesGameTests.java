@@ -88,7 +88,8 @@ final class RulesGameTests {
         if (!ModGuard.foreignIds(loaded).isEmpty()) {
             problems.add("fremde Mods geladen: " + ModGuard.foreignIds(loaded));
         }
-        if (!ModGuard.foreignIds(List.of("minecraft", "neoforge", KingdomsAtWar.MODID, "jei", "xaerominimap"))
+        // Essential (Welten mit Freunden) ist erlaubt
+        if (!ModGuard.foreignIds(List.of("minecraft", "neoforge", KingdomsAtWar.MODID, "essential", "jei", "xaerominimap"))
                 .equals(List.of("jei", "xaerominimap"))) {
             problems.add("fremde Kennungen nicht erkannt");
         }
@@ -98,12 +99,25 @@ final class RulesGameTests {
             Files.createFile(dir.resolve("jei-26.3.jar"));
             Files.createFile(dir.resolve("hilfe.txt"));
             Files.createFile(dir.resolve("alt.jar.disabled"));
+            // der Lader von Essential wird an seinem Inhalt erkannt – eine umbenannte fremde Mod nicht
+            try (var zip = new java.util.zip.ZipOutputStream(Files.newOutputStream(dir.resolve("Essential_1-5-2_neoforge_26-3.jar")))) {
+                zip.putNextEntry(new java.util.zip.ZipEntry("gg/essential/loader/stage0/EssentialModLocator.class"));
+                zip.write(new byte[] {(byte) 0xCA, (byte) 0xFE});
+                zip.closeEntry();
+            }
+            Files.createFile(dir.resolve("Essential-cheat.jar"));
             List<String> files = ModGuard.foreignFiles(dir, own);
-            if (!files.equals(List.of("jei-26.3.jar"))) {
+            if (!files.equals(List.of("Essential-cheat.jar", "jei-26.3.jar"))) {
                 problems.add("fremde Dateien: " + files);
             }
             if (!ModGuard.foreignFiles(dir.resolve("gibt-es-nicht"), own).isEmpty()) {
                 problems.add("fehlender Mod-Ordner nicht als leer erkannt");
+            }
+            Path essentialFolder = net.neoforged.fml.loading.FMLPaths.GAMEDIR.get().resolve("essential");
+            if (!ModGuard.essentialJar(essentialFolder.resolve("Essential (neoforge_26.3).jar"))
+                    || ModGuard.essentialJar(essentialFolder.resolve("mods").resolve("fremd").resolve("26.3.jar"))
+                    || ModGuard.essentialJar(dir.resolve("Essential (neoforge_26.3).jar"))) {
+                problems.add("die Datei von Essential wird nicht richtig erkannt");
             }
         } catch (java.io.IOException e) {
             problems.add("Testordner: " + e);

@@ -244,6 +244,7 @@ public final class ModGameTests {
         EndGameTests.init();       // Wesen des Ends
         TreeGameTests.init();      // neue Baumformen, karge Truhen
         IdentityGameTests.init();  // die eigenen Wesen gelten für Vanilla als die ersetzten
+        NetworkGameTests.init();   // Mehrspieler: Nachrichten, Gegenstände und Spielerdaten kommen übers Netz heil an
         WarGameTests.init();       // Krieg der Königreiche: Stammburgen und ihre Besatzung
         RulesGameTests.init();     // Regeln: Mod-Sperre, Koordinaten, Härte, Verzauberungen
         KawCommandGameTests.init(); // /kaw: Dimensionen, Bosse, Bauwerke, Landeplätze, Reisen per Klick
@@ -369,6 +370,7 @@ public final class ModGameTests {
         EndGameTests.register(event, environment);
         TreeGameTests.register(event, environment);
         IdentityGameTests.register(event, environment);
+        NetworkGameTests.register(event, environment);
         // Drachen-Bosse brauchen länger (Erwachen + Todesanimation)
         event.registerTest(DRAGON_BOSS_LIFECYCLE.getId(), new FunctionGameTestInstance(DRAGON_BOSS_LIFECYCLE.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 700, 0, true, Rotation.NONE, false, 1, 1, true, 0)));

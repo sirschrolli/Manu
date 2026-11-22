@@ -103,7 +103,6 @@ public final class ModAttachments {
             () -> AttachmentType.<java.util.List<String>>builder(() -> java.util.List.of())
                     .serialize(Codec.STRING.listOf().fieldOf("realms")).copyOnDeath().build());
 
-    /** Ansehen des Spielers im Königreich (Punkte; bleibt nach dem Tod). */
     /** Ehrentitel „Weltenretter“: wer beim Sieg über den Weltenfresser dabei war (für alle sichtbar, bleibt nach dem Tod). */
     public static final Supplier<AttachmentType<Boolean>> WORLD_SAVIOR = ATTACHMENTS.register("world_savior",
             () -> AttachmentType.builder(() -> false).serialize(Codec.BOOL.fieldOf("savior"))
@@ -114,8 +113,10 @@ public final class ModAttachments {
             () -> AttachmentType.builder(() -> false).serialize(Codec.BOOL.fieldOf("godslayer"))
                     .sync((holder, to) -> true, net.minecraft.network.codec.ByteBufCodecs.BOOL).copyOnDeath().build());
 
+    /** Ansehen des Spielers (Punkte; bleibt nach dem Tod) – auch sein Spiel kennt es, für Rang und Rabatt in den Fenstern. */
     public static final Supplier<AttachmentType<Integer>> REPUTATION = ATTACHMENTS.register("reputation",
-            () -> AttachmentType.builder(() -> 0).serialize(Codec.INT.fieldOf("points")).copyOnDeath().build());
+            () -> AttachmentType.builder(() -> 0).serialize(Codec.INT.fieldOf("points"))
+                    .sync((holder, to) -> holder == to, net.minecraft.network.codec.ByteBufCodecs.VAR_INT).copyOnDeath().build());
 
     /**
      * Mana des Spielers (für die Zauber des Aetherit-Stabs). Nur er selbst bekommt es zugeschickt – für die Mana-Leiste.
@@ -152,10 +153,14 @@ public final class ModAttachments {
             ATTACHMENTS.register("kept_inventory", () -> AttachmentType.builder(() -> io.github.sirschrolli.kingdomsatwar.hero.ImmortalKeep.Kept.NONE)
                     .serialize(io.github.sirschrolli.kingdomsatwar.hero.ImmortalKeep.Kept.CODEC.fieldOf("items"))
                     .build());
-    /** Wann das Licht der Unsterblichkeit den Spieler zuletzt bewahrt hat (Spielzeit; -1: nie) – bleibt nach dem Tod. */
+    /**
+     * Wann das Licht der Unsterblichkeit den Spieler zuletzt bewahrt hat (Spielzeit; -1: nie) – bleibt nach dem Tod. Sein
+     * Spiel bekommt es zugeschickt: Das Heldenfenster zeigt, wie lange das Licht noch ruht.
+     */
     public static final Supplier<AttachmentType<Long>> HERO_IMMORTAL = ATTACHMENTS.register("hero_immortal",
             () -> AttachmentType.builder(() -> -1L)
                     .serialize(com.mojang.serialization.Codec.LONG.fieldOf("last"))
+                    .sync((holder, to) -> holder == to, net.minecraft.network.codec.ByteBufCodecs.VAR_LONG)
                     .copyOnDeath()
                     .build());
     /**
