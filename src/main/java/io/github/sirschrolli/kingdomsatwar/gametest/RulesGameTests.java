@@ -88,10 +88,29 @@ final class RulesGameTests {
         if (!ModGuard.foreignIds(loaded).isEmpty()) {
             problems.add("fremde Mods geladen: " + ModGuard.foreignIds(loaded));
         }
-        // Essential (Welten mit Freunden) ist erlaubt
+        // Essential (Welten mit Freunden) und die freigegebenen Mods samt ihren Bibliotheken sind erlaubt
         if (!ModGuard.foreignIds(List.of("minecraft", "neoforge", KingdomsAtWar.MODID, "essential", "jei", "xaerominimap"))
                 .equals(List.of("jei", "xaerominimap"))) {
             problems.add("fremde Kennungen nicht erkannt");
+        }
+        List<String> approvedIds = List.of("skinlayers3d", "appleskin", "architectury", "cloth_config", "clumps", "controlling", "searchables",
+                "distanthorizons", "durabilitytooltip", "supermartijn642configlib", "effecttimerplus", "enchdesc", "prickle", "entityculling",
+                "ferritecore", "inventoryprofilesnext", "libipn", "inventoryhud", "invmove", "invmove_compat", "jade", "klf", "kotlinforforge",
+                "mixinextras");
+        if (!ModGuard.foreignIds(approvedIds).isEmpty()) {
+            problems.add("freigegebene Mods gelten als fremd: " + ModGuard.foreignIds(approvedIds));
+        }
+        // an ihrem Namen erkannt, auch wenn die Kennung unbekannt ist – aber nur genau dieser Name
+        if (!ModGuard.approved("nsi_armor", "Armor Durability HUD") || !ModGuard.approved("ihp", "InventoryHUD+")
+                || !ModGuard.approved("x", "Jade 🔍") || !ModGuard.approved("cloth_config", "Cloth Config v21 API")) {
+            problems.add("freigegebene Mods nicht an ihrem Namen erkannt");
+        }
+        if (ModGuard.approved("jei", "Just Enough Items") || ModGuard.approved("controllingplus", "Controlling Plus")
+                || ModGuard.approved("xray", "Jade X-Ray")) {
+            problems.add("fremde Mods gelten als freigegeben");
+        }
+        if (!ModGuard.approvedNames().startsWith("Essential, 3D Skin Layers") || !ModGuard.approvedNames().contains("KotlinLangForge")) {
+            problems.add("Liste in der Meldung: " + ModGuard.approvedNames());
         }
         try {
             Path dir = Files.createTempDirectory("kaw-mods");

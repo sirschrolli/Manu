@@ -21,20 +21,61 @@ import net.neoforged.neoforgespi.locating.IModFile;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Kingdoms at War wird ohne andere Mods gespielt: Ist neben Minecraft und NeoForge noch eine andere Mod installiert (oder
- * liegt sonst eine fremde Datei im Mod-Ordner), bricht das Spiel den Start mit einer Liste der fremden Mods ab. Gelöscht
- * wird nichts – wer spielen will, entfernt die Mods selbst aus dem Mod-Ordner.
+ * Kingdoms at War wird nur mit freigegebenen Mods gespielt: Ist neben Minecraft und NeoForge noch eine andere Mod
+ * installiert (oder liegt sonst eine fremde Datei im Mod-Ordner), bricht das Spiel den Start mit einer Liste der fremden
+ * Mods ab. Gelöscht wird nichts – wer spielen will, entfernt die Mods selbst aus dem Mod-Ordner.
  *
- * <p>Die eine Ausnahme ist <b>Essential</b> (essential.gg): Damit lädt man Freunde in die eigene Welt ein. Essential liegt
- * als kleiner Lader im Mod-Ordner und holt sich die eigentliche Mod in den Ordner {@code essential} des Spiels; erlaubt
- * sind der Lader, Essential selbst und was in dessen Datei steckt. Mods, die andere über den Lader von Essential
- * nachladen lassen, bleiben fremde Mods.
+ * <p>Freigegeben sind {@link #APPROVED}: <b>Essential</b> (essential.gg – damit lädt man Freunde in die eigene Welt ein)
+ * und seit 1.11.7 Mods für Anzeige, Bedienung und Leistung, die das Spiel nicht leichter machen – samt den Bibliotheken,
+ * die sie brauchen (Searchables für Controlling, Prickle für Enchantment Descriptions, libIPN und Kotlin für Inventory
+ * Profiles Next, die Config Lib von SuperMartijn642 für Durability Tooltip). Erkannt wird eine Mod an ihrer Kennung oder
+ * an ihrem Namen (ohne Groß- und Kleinschreibung, Leer- und Sonderzeichen); was in der Datei einer freigegebenen Mod
+ * steckt, ist mit ihr freigegeben.
+ *
+ * <p>Essential liegt als kleiner Lader im Mod-Ordner und holt sich die eigentliche Mod in den Ordner {@code essential}
+ * des Spiels; erlaubt sind der Lader, Essential selbst und was in dessen Datei steckt. Mods, die andere über den Lader von
+ * Essential nachladen lassen, bleiben fremde Mods.
  */
 public final class ModGuard {
-    /** Was neben dieser Mod geladen sein darf: das Spiel selbst, der Mod-Lader und Essential (für Welten mit Freunden). */
-    public static final Set<String> ALLOWED = Set.of("minecraft", "neoforge", KingdomsAtWar.MODID, "essential");
+    /** Eine freigegebene Mod: ihr Name und die Kennungen, unter denen sie (und die Bibliotheken, die sie braucht) lädt. */
+    public record Approved(String name, List<String> ids) {
+        public Approved(String name, String... ids) {
+            this(name, List.of(ids));
+        }
+    }
 
-    /** Kennung von Essential (essential.gg). */
+    /** Die freigegebenen Mods (seit 1.11.7; bis dahin nur Essential). */
+    public static final List<Approved> APPROVED = List.of(
+            new Approved("Essential", "essential", "essentialmod"),
+            new Approved("3D Skin Layers", "skinlayers3d"),
+            new Approved("AppleSkin", "appleskin"),
+            new Approved("Architectury API", "architectury"),
+            new Approved("Armor Durability HUD", "armorhud", "armor_hud", "armordurabilityhud", "armordurabilityhuddisplay"),
+            new Approved("Cloth Config API", "cloth_config"),
+            new Approved("Clumps", "clumps"),
+            new Approved("Controlling", "controlling", "searchables"),
+            new Approved("Distant Horizons", "distanthorizons"),
+            new Approved("Durability Tooltip", "durabilitytooltip", "supermartijn642configlib", "supermartijn642corelib"),
+            new Approved("Effect Timer Plus", "effecttimerplus"),
+            new Approved("Enchantment Descriptions", "enchdesc", "prickle", "bookshelf"),
+            new Approved("Entity Culling", "entityculling"),
+            new Approved("FerriteCore", "ferritecore"),
+            new Approved("Inventory Profiles Next", "inventoryprofilesnext", "libipn"),
+            new Approved("InventoryHUD+", "inventoryhud", "inventoryhudplus"),
+            new Approved("InvMove", "invmove", "invmove_compat"),
+            new Approved("Jade", "jade"),
+            new Approved("KotlinLangForge", "klf", "kotlinforforge"));
+
+    /** Was immer geladen sein darf: das Spiel selbst, der Mod-Lader, diese Mod – und MixinExtras, das in vielen Mods steckt. */
+    static final Set<String> BASE = Set.of("minecraft", "neoforge", KingdomsAtWar.MODID, "mixinextras");
+
+    /** Woran eine freigegebene Mod zu erkennen ist: ihre Kennungen und ihr Name, als {@link #key}. */
+    private static final Set<String> KEYS = APPROVED.stream()
+            .flatMap(mod -> Stream.concat(Stream.of(mod.name()), mod.ids().stream()))
+            .map(ModGuard::key)
+            .collect(java.util.stream.Collectors.toUnmodifiableSet());
+
+    /** Kennung von Essential (essential.gg) – auch der Name seines Ordners im Spielordner. */
     static final String ESSENTIAL = "essential";
     /** Woran der Lader von Essential im Mod-Ordner zu erkennen ist (an seinem Inhalt, nicht am Dateinamen). */
     static final String ESSENTIAL_LOADER = "gg/essential/loader/stage0/";
@@ -43,9 +84,9 @@ public final class ModGuard {
      * Die Meldung im Ladefehler-Bildschirm (zweisprachig: der Mod-Lader kennt nur seine eigenen Übersetzungen und zeigt
      * unbekannte Schlüssel wörtlich an).
      */
-    static final String MESSAGE = "§6Kingdoms at War§r läuft nur ohne andere Mods (erlaubt ist Essential für Welten mit Freunden). "
+    static final String MESSAGE = "§6Kingdoms at War§r läuft nur mit freigegebenen Mods ({1}). "
             + "Bitte entferne aus dem Mod-Ordner: §e{0}§r\n"
-            + "§7Kingdoms at War can only be played without other mods (Essential for playing with friends is allowed). "
+            + "§7Kingdoms at War can only be played with approved mods ({1}). "
             + "Please remove from the mods folder: {0}";
 
     private ModGuard() {}
@@ -57,7 +98,7 @@ public final class ModGuard {
         allowedFiles.add(self.getModInfo().getOwningFile().getFile().getFilePath());
         for (IModInfo mod : ModList.get().getMods()) {
             IModFile file = mod.getOwningFile() == null ? null : mod.getOwningFile().getFile();
-            if (ALLOWED.contains(mod.getModId()) || partOfEssential(file)) {
+            if (approved(mod.getModId(), mod.getDisplayName()) || partOfApproved(file)) {
                 if (file != null && file.getFilePath() != null) {
                     allowedFiles.add(file.getFilePath());
                 }
@@ -71,14 +112,29 @@ public final class ModGuard {
         }
         if (!foreign.isEmpty()) {
             String list = String.join(", ", foreign);
-            KingdomsAtWar.LOGGER.error("Kingdoms at War läuft nur ohne andere Mods – gefunden: {}", list);
-            ModLoader.addLoadingIssue(ModLoadingIssue.error(MESSAGE, list));
+            KingdomsAtWar.LOGGER.error("Kingdoms at War läuft nur mit freigegebenen Mods – fremd: {}", list);
+            ModLoader.addLoadingIssue(ModLoadingIssue.error(MESSAGE, list, approvedNames()));
         }
     }
 
-    /** Die fremden Kennungen in dieser Liste (alles außer Minecraft, NeoForge, dieser Mod und Essential), sortiert. */
+    /** Die Namen der freigegebenen Mods, für die Meldung. */
+    public static String approvedNames() {
+        return String.join(", ", APPROVED.stream().map(Approved::name).toList());
+    }
+
+    /** Ist diese Mod freigegeben? (An ihrer Kennung oder an ihrem Namen erkannt; das Spiel und diese Mod sind es immer.) */
+    public static boolean approved(String modId, @Nullable String displayName) {
+        return BASE.contains(modId) || KEYS.contains(key(modId)) || displayName != null && KEYS.contains(key(displayName));
+    }
+
+    /** Kennung oder Name ohne Groß- und Kleinschreibung, Leer- und Sonderzeichen („InventoryHUD+“ → „inventoryhud“). */
+    static String key(String text) {
+        return text.toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]", "");
+    }
+
+    /** Die fremden Kennungen in dieser Liste (alles, was nicht freigegeben ist), sortiert. */
     public static List<String> foreignIds(Collection<String> modIds) {
-        return modIds.stream().filter(id -> !ALLOWED.contains(id)).sorted().toList();
+        return modIds.stream().filter(id -> !approved(id, null)).sorted().toList();
     }
 
     /** Fremde Dateien im Mod-Ordner: jede Mod-Datei außer der eigenen (ausgeschaltete Dateien zählen nicht). */
@@ -114,12 +170,14 @@ public final class ModGuard {
     }
 
     /**
-     * Gehört diese Mod-Datei zu Essential? Ja, wenn sie selbst oder die Datei, in der sie steckt, Essential enthält oder
-     * die eigentliche Mod aus dem Ordner {@code essential} des Spiels ist ({@code Essential (neoforge_…).jar}).
+     * Steckt diese Mod-Datei in einer freigegebenen Mod? Ja, wenn sie selbst oder die Datei, in der sie steckt, eine
+     * freigegebene Mod enthält (so kommen deren eingebaute Bibliotheken mit) oder die eigentliche Mod Essential aus dem
+     * Ordner {@code essential} des Spiels ist ({@code Essential (neoforge_…).jar}).
      */
-    public static boolean partOfEssential(@Nullable IModFile file) {
+    public static boolean partOfApproved(@Nullable IModFile file) {
         for (IModFile f = file; f != null; f = f.getDiscoveryAttributes() == null ? null : f.getDiscoveryAttributes().parent()) {
-            if (f.getModInfos().stream().anyMatch(info -> ESSENTIAL.equals(info.getModId())) || essentialJar(f.getFilePath())) {
+            if (essentialJar(f.getFilePath()) || f.getModInfos().stream().anyMatch(info -> !BASE.contains(info.getModId())
+                    && approved(info.getModId(), info.getDisplayName()))) {
                 return true;
             }
         }
