@@ -44,6 +44,8 @@ public final class HeroLevelUpOverlay {
     private static int to;
     private static HeroLevel.Rank rank = HeroLevel.Rank.SQUIRE;
     private static boolean rankUp;
+    /** Steht das nächste Ziel unter den Zeilen? (Nicht, wenn der Platz bis zur Heldenleiste fehlt.) */
+    private static boolean showGoal = true;
     private static final List<Spark> SPARKS = new ArrayList<>();
 
     private record Spark(float angle, float speed, float life, float size, float spin, boolean white) {}
@@ -92,10 +94,19 @@ public final class HeroLevelUpOverlay {
         }
         Font font = mc.font;
         float cx = g.guiWidth() / 2.0f;
-        float cy = Math.max(46.0f, g.guiHeight() * 0.3f);
+        float base = rankUp ? 1.6f : 1.4f;
+        // viele Zeilen (z. B. die Legende): die Szene rückt nach oben, damit sie nicht in die Heldenleiste über den Herzen
+        // läuft; reicht auch das nicht (kleine Fenster), entfällt das nächste Ziel
+        float floor = g.guiHeight() - mc.gui.hud.leftHeight - 34.0f;
+        showGoal = true;
+        float below = 24.0f * base + 12.0f + linesHeight();
+        if (floor - below < 30.0f) {
+            showGoal = false;
+            below = 24.0f * base + 12.0f + linesHeight();
+        }
+        float cy = Math.max(30.0f, Math.min(Math.max(46.0f, g.guiHeight() * 0.3f), floor - below));
         float out = 1.0f - HeroGui.span(t, DURATION - FADE, DURATION);
         int color = HeroGui.rankColor(rank);
-        float base = rankUp ? 1.6f : 1.4f;
 
         // ein weicher dunkler Grund hinter den Zeilen (seit 1.12): vor hellem Himmel blieb die Schrift sonst blass
         float textTop = cy + 24.0f * base + 12.0f;
@@ -242,7 +253,7 @@ public final class HeroLevelUpOverlay {
             y += 16.0f;
         }
         // zuletzt: das nächste Ziel auf dem Weg (seit 1.12)
-        HeroGoals.Goal goal = HeroGoals.next(to);
+        HeroGoals.Goal goal = showGoal ? HeroGoals.next(to) : null;
         if (goal != null) {
             float in = HeroGui.easeOutCubic(HeroGui.span(t, 1.9f, 2.35f));
             if (in > 0.0f) {
@@ -280,7 +291,7 @@ public final class HeroLevelUpOverlay {
         if (rankUp && (rank == HeroLevel.Rank.LEGEND || rank == HeroLevel.Rank.IMMORTAL)) {
             y += 16.0f;
         }
-        if (HeroGoals.next(to) != null) {
+        if (showGoal && HeroGoals.next(to) != null) {
             y += 12.0f;
         }
         return y;

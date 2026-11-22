@@ -10639,6 +10639,7 @@
   "hero.kingdomsatwar.rank.warlord": "Warlord",
   "hero.kingdomsatwar.rank.warrior": "Warrior",
   "hero.kingdomsatwar.rank_up": "New rank: %s – %s extra talent points!",
+  "hero.kingdomsatwar.rank_up.others": "⚔ %s is now %s (hero level %s)!",
   "hero.kingdomsatwar.reward.immortal": "You are Immortal! Once every %s minutes the light saves you from death – like a totem, when no totem helps any more.",
   "hero.kingdomsatwar.reward.pat": "You are a Legend! Sneak and right-click any creature with an empty hand (or press %s) to pat it – hold to keep patting. Your own soldiers and animals get half a heart back.",
   "hero.kingdomsatwar.settled": "The hero levels have changed – you are now hero level %s and get all talent points back to spend anew (free of charge).",

@@ -10639,6 +10639,7 @@
   "hero.kingdomsatwar.rank.warlord": "Kriegsherr",
   "hero.kingdomsatwar.rank.warrior": "Recke",
   "hero.kingdomsatwar.rank_up": "Neuer Rang: %s – %s Talentpunkte extra!",
+  "hero.kingdomsatwar.rank_up.others": "⚔ %s ist jetzt %s (Heldenstufe %s)!",
   "hero.kingdomsatwar.reward.immortal": "Du bist unsterblich! Einmal alle %s Minuten bewahrt dich das Licht vor dem Tod – wie ein Totem, wenn kein Totem mehr hilft.",
   "hero.kingdomsatwar.reward.pat": "Du bist eine Legende! Schleiche und klicke ein Wesen mit leerer Hand rechts an (oder drücke %s), um es zu streicheln – gedrückt halten streichelt weiter. Deine eigenen Soldaten und Tiere bekommen dabei ein halbes Herz zurück.",
   "hero.kingdomsatwar.settled": "Die Heldenstufen haben sich geändert – du bist jetzt Heldenstufe %s und bekommst alle Talentpunkte zurück, um sie neu zu verteilen (kostenlos).",

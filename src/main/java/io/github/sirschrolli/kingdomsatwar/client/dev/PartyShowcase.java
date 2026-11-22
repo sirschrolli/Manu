@@ -74,6 +74,9 @@ final class PartyShowcase {
             friend[0] = ShowcaseGuest.join(level, "Freund", new Vec3(-2.4, ground, OZ - 3.1), 246.0f, new ItemStack(Items.IRON_SWORD),
                     GameType.SURVIVAL);
             friend[0].getAbilities().invulnerable = true;   // er steht nur da
+            // ein erfahrener Freund: über seinem Kopf steht seine Heldenstufe (seit 1.12)
+            io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.set(friend[0], new io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.Hero(
+                    io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.total(64), java.util.List.of(), 0));
         }));
         steps.add(Step.waitTicks(30));
         steps.add(Step.server(level -> {

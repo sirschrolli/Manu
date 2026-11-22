@@ -802,6 +802,15 @@ public final class HeroLevel {
             world.playSound(null, x, y, z, SoundEvents.BEACON_POWER_SELECT, SoundSource.PLAYERS, 0.8f, 1.1f);
             player.sendSystemMessage(Component.translatable("hero.kingdomsatwar.rank_up", Component.translatable(rank.translationKey())
                     .withColor(rank.color() & 0xFFFFFF).withStyle(ChatFormatting.BOLD), RANK_BONUS).withStyle(ChatFormatting.GOLD));
+            // die anderen Spieler erfahren es auch (seit 1.12) – ein neuer Rang kommt nur alle zwanzig Stufen
+            Component news = Component.translatable("hero.kingdomsatwar.rank_up.others", player.getName().copy().withStyle(ChatFormatting.WHITE),
+                    Component.translatable(rank.translationKey()).withColor(rank.color() & 0xFFFFFF).withStyle(ChatFormatting.BOLD), level)
+                    .withStyle(ChatFormatting.GOLD);
+            for (ServerPlayer other : world.getServer().getPlayerList().getPlayers()) {
+                if (other != player) {
+                    other.sendSystemMessage(news);
+                }
+            }
             if (rank == Rank.LEGEND) {
                 player.sendSystemMessage(Component.translatable("hero.kingdomsatwar.reward.pat", Component.keybind("key.kingdomsatwar.pat"))
                         .withStyle(ChatFormatting.LIGHT_PURPLE));

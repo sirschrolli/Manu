@@ -87,13 +87,15 @@ final class HeroGameTests {
             ModGameTests.TEST_FUNCTIONS.register("hero_might", () -> HeroGameTests::might);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> IMMORTAL =
             ModGameTests.TEST_FUNCTIONS.register("hero_immortal", () -> HeroGameTests::immortal);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> FAME =
+            ModGameTests.TEST_FUNCTIONS.register("hero_fame", () -> HeroGameTests::fame);
 
     private HeroGameTests() {}
 
     static void init() {}
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : List.of(CRYSTALS, CRYSTAL_CAVES, CRYSTAL_LOOT, LEVELS, TALENTS, SOURCES, SETTLE, PAT, COMMAND, MIGHT, IMMORTAL)) {
+        for (var test : List.of(CRYSTALS, CRYSTAL_CAVES, CRYSTAL_LOOT, LEVELS, TALENTS, SOURCES, SETTLE, PAT, COMMAND, MIGHT, IMMORTAL, FAME)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -814,6 +816,39 @@ final class HeroGameTests {
      * Treffer einmal (halbe Herzen, Regeneration), danach ruht es – der nächste tödliche Treffer tötet. Ein echtes Totem
      * wirkt zuerst (das Licht bleibt bereit).
      */
+    /**
+     * Ruhm (seit 1.12): Die Heldenstufe steht vor dem Namen – über dem Kopf, im Chat und in der Spielerliste – in der Farbe
+     * des Rangs; nach einem Aufstieg die neue Stufe. Der Name selbst (für Rat und Einladungen) bleibt, wie er ist.
+     */
+    private static void fame(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer player = MageGameTests.survivalPlayer(helper, "test-hero-fame", new io.netty.channel.embedded.EmbeddedChannel[1], 0);
+        try {
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(47), List.of(), 0));
+            helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.hero.HeroFame.level(player), 47, "Ruhm nach dem Setzen");
+            String shown = player.getDisplayName().getString();
+            helper.assertTrue(shown.equals("[47] test-hero-fame"), "Name über dem Kopf: " + shown);
+            helper.assertValueEqual(player.getName().getString(), "test-hero-fame", "Der Name selbst");
+            net.minecraft.network.chat.Component tab = player.getTabListDisplayName();
+            helper.assertTrue(tab != null && tab.getString().equals("[47] test-hero-fame"), "Spielerliste: " + (tab == null ? "–" : tab.getString()));
+            // die Zahl in der Farbe des Rangs (Ritter)
+            int[] color = {-1};
+            player.getDisplayName().visit((style, text) -> {
+                if (text.contains("47") && style.getColor() != null) {
+                    color[0] = style.getColor().getValue();
+                }
+                return java.util.Optional.empty();
+            }, net.minecraft.network.chat.Style.EMPTY);
+            helper.assertValueEqual(color[0], HeroLevel.Rank.KNIGHT.color() & 0xFFFFFF, "Farbe der Stufe");
+            // ein Aufstieg: die neue Stufe steht sofort vor dem Namen
+            HeroLevel.award(player, HeroLevel.total(61) - HeroLevel.of(player).experience());
+            helper.assertTrue(player.getDisplayName().getString().equals("[61] test-hero-fame"), "Nach dem Aufstieg: " + player.getDisplayName().getString());
+            helper.succeed();
+        } finally {
+            level.getServer().getPlayerList().remove(player);
+        }
+    }
+
     private static void immortal(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         // Stufe 199: kein Licht

@@ -291,6 +291,7 @@ final class HeroLang {
         text.add("hero.kingdomsatwar.level_up.ability", "New ability: %s – %s", "Neue Fähigkeit: %s – %s");
         text.add("hero.kingdomsatwar.level_up.title_new", "New title: %s", "Neuer Titel: %s");
         text.add("hero.kingdomsatwar.level_up.goal", "Next goal: %s – hero level %s", "Nächstes Ziel: %s – Heldenstufe %s");
+        text.add("hero.kingdomsatwar.rank_up.others", "⚔ %s is now %s (hero level %s)!", "⚔ %s ist jetzt %s (Heldenstufe %s)!");
 
         // --- seit 1.12: die nächsten Ziele auf dem Weg ---
         text.add("gui.kingdomsatwar.character.goal", "Next goal", "Nächstes Ziel");
