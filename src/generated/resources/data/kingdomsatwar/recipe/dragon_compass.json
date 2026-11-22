@@ -3,7 +3,10 @@
   "category": "equipment",
   "key": {
     "A": "kingdomsatwar:aetherit",
-    "C": "minecraft:compass",
+    "C": [
+      "kingdomsatwar:waystone_compass",
+      "minecraft:compass"
+    ],
     "D": "kingdomsatwar:draconium",
     "G": "kingdomsatwar:gemstone"
   },

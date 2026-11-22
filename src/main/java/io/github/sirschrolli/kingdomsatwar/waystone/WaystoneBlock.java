@@ -36,9 +36,13 @@ import org.jspecify.annotations.Nullable;
  */
 public class WaystoneBlock extends Block implements EntityBlock {
     private static final VoxelShape SHAPE = Shapes.or(
-            Block.box(1, 0, 1, 15, 3, 15),
-            Block.box(3, 3, 3, 13, 14, 13),
-            Block.box(2, 14, 2, 14, 16, 14));
+            Block.box(1, 0, 1, 15, 2, 15),
+            Block.box(2, 2, 2, 14, 3, 14),
+            Block.box(3, 3, 3, 13, 12, 13),
+            Block.box(2.5, 12, 2.5, 13.5, 13, 13.5),
+            Block.box(3, 13, 3, 13, 14, 13),
+            Block.box(4, 14, 4, 12, 15, 12),
+            Block.box(4.5, 15, 4.5, 11.5, 16, 11.5));
 
     public WaystoneBlock(Properties properties) {
         super(properties);
@@ -116,9 +120,10 @@ public class WaystoneBlock extends Block implements EntityBlock {
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (random.nextInt(4) == 0) {
+            // Glyphen fliegen von einem Kreis um den Stein in den schwebenden Kristall (sie enden 1,2 Blöcke unter dem Ziel)
             double a = random.nextDouble() * Math.PI * 2;
-            level.addParticle(ParticleTypes.ENCHANT, pos.getX() + 0.5 + Math.cos(a) * 1.4, pos.getY() + 1.6 + random.nextDouble() * 0.5,
-                    pos.getZ() + 0.5 + Math.sin(a) * 1.4, -Math.cos(a) * 1.3, -0.6, -Math.sin(a) * 1.3);
+            level.addParticle(ParticleTypes.ENCHANT, pos.getX() + 0.5, pos.getY() + 2.37, pos.getZ() + 0.5, Math.cos(a) * 1.3,
+                    -0.8 - random.nextDouble() * 0.5, Math.sin(a) * 1.3);
         }
         if (random.nextInt(10) == 0) {
             level.addParticle(ParticleTypes.END_ROD, pos.getX() + 0.5 + (random.nextDouble() - 0.5) * 0.3, pos.getY() + 1.05,

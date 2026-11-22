@@ -1,0 +1,453 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#base_top"
+        },
+        "east": {
+          "texture": "#base_side"
+        },
+        "north": {
+          "texture": "#base_side"
+        },
+        "south": {
+          "texture": "#base_side"
+        },
+        "up": {
+          "texture": "#base_top"
+        },
+        "west": {
+          "texture": "#base_side"
+        }
+      },
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        2,
+        15
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#base_top"
+        },
+        "east": {
+          "texture": "#base_side"
+        },
+        "north": {
+          "texture": "#base_side"
+        },
+        "south": {
+          "texture": "#base_side"
+        },
+        "up": {
+          "texture": "#base_top"
+        },
+        "west": {
+          "texture": "#base_side"
+        }
+      },
+      "from": [
+        2,
+        2,
+        2
+      ],
+      "to": [
+        14,
+        3,
+        14
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#base_top"
+        },
+        "east": {
+          "texture": "#shaft"
+        },
+        "north": {
+          "texture": "#shaft"
+        },
+        "south": {
+          "texture": "#shaft"
+        },
+        "up": {
+          "texture": "#cap_top"
+        },
+        "west": {
+          "texture": "#shaft"
+        }
+      },
+      "from": [
+        3,
+        3,
+        3
+      ],
+      "to": [
+        13,
+        12,
+        13
+      ]
+    },
+    {
+      "faces": {
+        "east": {
+          "texture": "#shaft_glow"
+        },
+        "north": {
+          "texture": "#shaft_glow"
+        },
+        "south": {
+          "texture": "#shaft_glow"
+        },
+        "west": {
+          "texture": "#shaft_glow"
+        }
+      },
+      "from": [
+        3,
+        3,
+        3
+      ],
+      "light_emission": 12,
+      "to": [
+        13,
+        12,
+        13
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#bronze"
+        },
+        "east": {
+          "texture": "#bronze"
+        },
+        "north": {
+          "texture": "#bronze"
+        },
+        "south": {
+          "texture": "#bronze"
+        },
+        "up": {
+          "texture": "#bronze"
+        },
+        "west": {
+          "texture": "#bronze"
+        }
+      },
+      "from": [
+        2.5,
+        12,
+        2.5
+      ],
+      "to": [
+        13.5,
+        13,
+        13.5
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#cap_top"
+        },
+        "east": {
+          "texture": "#cap_side"
+        },
+        "north": {
+          "texture": "#cap_side"
+        },
+        "south": {
+          "texture": "#cap_side"
+        },
+        "up": {
+          "texture": "#cap_top"
+        },
+        "west": {
+          "texture": "#cap_side"
+        }
+      },
+      "from": [
+        3,
+        13,
+        3
+      ],
+      "to": [
+        13,
+        14,
+        13
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#cap_top"
+        },
+        "east": {
+          "texture": "#cap_side"
+        },
+        "north": {
+          "texture": "#cap_side"
+        },
+        "south": {
+          "texture": "#cap_side"
+        },
+        "up": {
+          "texture": "#cap_top"
+        },
+        "west": {
+          "texture": "#cap_side"
+        }
+      },
+      "from": [
+        4,
+        14,
+        4
+      ],
+      "to": [
+        12,
+        15,
+        12
+      ]
+    },
+    {
+      "faces": {
+        "up": {
+          "texture": "#cap_glow"
+        }
+      },
+      "from": [
+        4,
+        15,
+        4
+      ],
+      "light_emission": 10,
+      "to": [
+        12,
+        15,
+        12
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#bronze",
+          "uv": [
+            4.5,
+            4.5,
+            5.5,
+            5.5
+          ]
+        },
+        "east": {
+          "texture": "#bronze",
+          "uv": [
+            4.5,
+            0.0,
+            5.5,
+            1.0
+          ]
+        },
+        "north": {
+          "texture": "#bronze",
+          "uv": [
+            4.5,
+            0.0,
+            5.5,
+            1.0
+          ]
+        },
+        "south": {
+          "texture": "#bronze"
+        },
+        "up": {
+          "texture": "#bronze"
+        },
+        "west": {
+          "texture": "#bronze"
+        }
+      },
+      "from": [
+        4.5,
+        15,
+        4.5
+      ],
+      "to": [
+        5.5,
+        16,
+        5.5
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#bronze",
+          "uv": [
+            10.5,
+            4.5,
+            11.5,
+            5.5
+          ]
+        },
+        "east": {
+          "texture": "#bronze",
+          "uv": [
+            4.5,
+            0.0,
+            5.5,
+            1.0
+          ]
+        },
+        "north": {
+          "texture": "#bronze",
+          "uv": [
+            10.5,
+            0.0,
+            11.5,
+            1.0
+          ]
+        },
+        "south": {
+          "texture": "#bronze"
+        },
+        "up": {
+          "texture": "#bronze"
+        },
+        "west": {
+          "texture": "#bronze"
+        }
+      },
+      "from": [
+        10.5,
+        15,
+        4.5
+      ],
+      "to": [
+        11.5,
+        16,
+        5.5
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#bronze",
+          "uv": [
+            4.5,
+            10.5,
+            5.5,
+            11.5
+          ]
+        },
+        "east": {
+          "texture": "#bronze",
+          "uv": [
+            10.5,
+            0.0,
+            11.5,
+            1.0
+          ]
+        },
+        "north": {
+          "texture": "#bronze",
+          "uv": [
+            4.5,
+            0.0,
+            5.5,
+            1.0
+          ]
+        },
+        "south": {
+          "texture": "#bronze"
+        },
+        "up": {
+          "texture": "#bronze"
+        },
+        "west": {
+          "texture": "#bronze"
+        }
+      },
+      "from": [
+        4.5,
+        15,
+        10.5
+      ],
+      "to": [
+        5.5,
+        16,
+        11.5
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#bronze",
+          "uv": [
+            10.5,
+            10.5,
+            11.5,
+            11.5
+          ]
+        },
+        "east": {
+          "texture": "#bronze",
+          "uv": [
+            10.5,
+            0.0,
+            11.5,
+            1.0
+          ]
+        },
+        "north": {
+          "texture": "#bronze",
+          "uv": [
+            10.5,
+            0.0,
+            11.5,
+            1.0
+          ]
+        },
+        "south": {
+          "texture": "#bronze"
+        },
+        "up": {
+          "texture": "#bronze"
+        },
+        "west": {
+          "texture": "#bronze"
+        }
+      },
+      "from": [
+        10.5,
+        15,
+        10.5
+      ],
+      "to": [
+        11.5,
+        16,
+        11.5
+      ]
+    }
+  ],
+  "textures": {
+    "base_side": "kingdomsatwar:block/waystone_base_side",
+    "base_top": "kingdomsatwar:block/waystone_base_top",
+    "bronze": "kingdomsatwar:block/waystone_bronze",
+    "cap_glow": "kingdomsatwar:block/waystone_cap_glow",
+    "cap_side": "kingdomsatwar:block/waystone_cap_side",
+    "cap_top": "kingdomsatwar:block/waystone_cap_top",
+    "particle": "kingdomsatwar:block/waystone_shaft",
+    "shaft": "kingdomsatwar:block/waystone_shaft",
+    "shaft_glow": "kingdomsatwar:block/waystone_shaft_glow"
+  }
+}

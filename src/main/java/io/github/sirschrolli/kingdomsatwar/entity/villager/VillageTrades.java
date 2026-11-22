@@ -146,7 +146,7 @@ public final class VillageTrades {
                 list.add(Offer.buy(Items.GLASS, 4, 4));
                 list.add(Offer.buy(Items.WRITABLE_BOOK, 1, 8));
                 list.add(Offer.buy(Items.CLOCK, 1, 25));
-                list.add(Offer.buy(Items.COMPASS, 1, 20));
+                list.add(Offer.buy(ModItems.WAYSTONE_COMPASS.get(), 1, 20));
                 list.add(Offer.buy(Items.NAME_TAG, 1, 40));
                 for (int i = 0; i < 4; i++) {
                     Offer book = book(registries, random);
@@ -158,7 +158,7 @@ public final class VillageTrades {
             case CARTOGRAPHER -> {
                 list.add(Offer.sell(Items.PAPER, 24, 8));
                 list.add(Offer.sell(Items.GLASS_PANE, 11, 8));
-                list.add(Offer.sell(Items.COMPASS, 1, 10));
+                list.add(Offer.sell(ModItems.WAYSTONE_COMPASS.get(), 1, 4));
                 list.add(Offer.buy(Items.MAP, 1, 7));
                 list.add(Offer.special("village_map", Trading.named(Items.FILLED_MAP, "item.kingdomsatwar.map.village"), 40));
                 list.add(Offer.special("seal_map", Trading.named(Items.FILLED_MAP, "item.kingdomsatwar.map.seal_circle"), 50));

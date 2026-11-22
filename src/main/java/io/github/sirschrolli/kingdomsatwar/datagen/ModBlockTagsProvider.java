@@ -48,6 +48,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         }
         ModBlocks.COPPER_ROOF.all().forEach(block -> add(BlockTags.NEEDS_STONE_TOOL, block));
         add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.STONE_PILLAR);
+        add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.WAYSTONE);
         add(BlockTags.MINEABLE_WITH_PICKAXE, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.DEEP_SEA_LANTERN);
         add(BlockTags.MINEABLE_WITH_PICKAXE, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.VENT_ROCK);
         // das Urmeer (0.89)

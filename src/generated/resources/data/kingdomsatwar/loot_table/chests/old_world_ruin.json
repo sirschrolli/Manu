@@ -172,7 +172,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:compass",
+          "name": "kingdomsatwar:waystone_compass",
           "weight": 2
         },
         {

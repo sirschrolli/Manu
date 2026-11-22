@@ -149,7 +149,7 @@ public final class Trading {
             }
             case CARTOGRAPHER -> {
                 list.add(Offer.buy(Items.MAP, 1, 8));
-                list.add(Offer.buy(Items.COMPASS, 1, 15));
+                list.add(Offer.buy(ModItems.WAYSTONE_COMPASS.get(), 1, 15));
                 list.add(Offer.special("seal_map", named(Items.FILLED_MAP, "item.kingdomsatwar.map.seal_circle"), 50));
                 list.add(Offer.special("nest_map", named(Items.FILLED_MAP, "item.kingdomsatwar.map.nest"), 120));
                 list.add(Offer.special("realm_map", named(Items.FILLED_MAP, "item.kingdomsatwar.map.realm"), 150));

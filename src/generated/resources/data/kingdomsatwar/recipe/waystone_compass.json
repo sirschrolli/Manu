@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "N": "minecraft:gold_nugget",
+    "R": "minecraft:redstone"
+  },
+  "pattern": [
+    " N ",
+    "CRC",
+    " C "
+  ],
+  "result": {
+    "id": "kingdomsatwar:waystone_compass"
+  }
+}

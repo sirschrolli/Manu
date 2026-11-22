@@ -434,10 +434,47 @@ public class ModRecipeProvider extends RecipeProvider {
                 .pattern(" A ")
                 .define('D', ModItems.DRACONIUM.get())
                 .define('G', ModItems.GEMSTONE.get())
-                .define('C', Items.COMPASS)
+                .define('C', net.minecraft.world.item.crafting.Ingredient.of(ModItems.WAYSTONE_COMPASS.get(), Items.COMPASS))
                 .define('A', aetherit)
                 .unlockedBy(getHasName(ModItems.DRACONIUM.get()), has(ModItems.DRACONIUM.get()))
                 .save(output, key("dragon_compass"));
+        // Wegkompass (seit 1.12; der Kompass von Minecraft lässt sich nicht mehr herstellen): Gehäuse aus Kupfer, Redstone für
+        // die Nadel, eine Goldöse
+        shaped(RecipeCategory.TOOLS, ModItems.WAYSTONE_COMPASS.get())
+                .pattern(" N ")
+                .pattern("CRC")
+                .pattern(" C ")
+                .define('N', Items.GOLD_NUGGET)
+                .define('C', Items.COPPER_INGOT)
+                .define('R', Items.REDSTONE)
+                .unlockedBy(getHasName(Items.COPPER_INGOT), has(Items.COPPER_INGOT))
+                .save(output, key("waystone_compass"));
+        // Wegstein: Steinziegel, ein Kupferband und Aetherit als leuchtender Kristall
+        shaped(RecipeCategory.DECORATIONS, ModBlocks.WAYSTONE.get())
+                .pattern(" A ")
+                .pattern("SCS")
+                .pattern("SSS")
+                .define('A', aetherit)
+                .define('S', Items.STONE_BRICKS)
+                .define('C', Items.COPPER_INGOT)
+                .unlockedBy(getHasName(aetherit), has(aetherit))
+                .save(output, key("waystone"));
+        // ohne Kompass: eine leere Karte aus neun Blatt Papier, der Bergungskompass aus dem Wegkompass
+        shaped(RecipeCategory.MISC, Items.MAP)
+                .pattern("PPP")
+                .pattern("PPP")
+                .pattern("PPP")
+                .define('P', Items.PAPER)
+                .unlockedBy(getHasName(Items.PAPER), has(Items.PAPER))
+                .save(output, key("map_from_paper"));
+        shaped(RecipeCategory.TOOLS, Items.RECOVERY_COMPASS)
+                .pattern("EEE")
+                .pattern("ECE")
+                .pattern("EEE")
+                .define('E', Items.ECHO_SHARD)
+                .define('C', ModItems.WAYSTONE_COMPASS.get())
+                .unlockedBy(getHasName(Items.ECHO_SHARD), has(Items.ECHO_SHARD))
+                .save(output, key("recovery_compass_from_waystone_compass"));
         // Chronik des Siegels (falls verloren): Buch und Gold
         shapeless(RecipeCategory.MISC, ModItems.CHRONICLE.get())
                 .requires(Items.BOOK)

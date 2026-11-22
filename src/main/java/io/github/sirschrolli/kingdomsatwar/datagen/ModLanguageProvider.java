@@ -43,6 +43,7 @@ public class ModLanguageProvider extends LanguageProvider {
         VeterancyLang.register(this::text);
         RulesLang.register(this::text);
         PlaceLang.register(this::text);
+        WaystoneLang.register(this::text);
         bosses();
         shadowWorld();
         voidWorld();

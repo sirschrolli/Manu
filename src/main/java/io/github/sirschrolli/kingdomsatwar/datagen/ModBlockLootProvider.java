@@ -66,6 +66,7 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.TIMBER_FRAME_CROSS.get());
         dropSelf(ModBlocks.RECRUITMENT_TABLE.get());
         dropSelf(ModBlocks.MAGIC_TABLE.get());
+        add(ModBlocks.WAYSTONE.get(), this::createNameableBlockEntityTable);
         add(ModBlocks.TOWN_BANNER.get(), this::createDoorTable);
         // die Söldnertafel hat keinen Gegenstand: abgebaut bleiben Stöcke und ein paar Anschläge
         add(ModBlocks.MERCENARY_BOARD.get(), block -> LootTable.lootTable()

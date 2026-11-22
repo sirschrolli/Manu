@@ -114,7 +114,7 @@
               "min": 1
             }
           },
-          "name": "minecraft:compass",
+          "name": "kingdomsatwar:waystone_compass",
           "weight": 3
         },
         {

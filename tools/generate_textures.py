@@ -45,6 +45,7 @@ import grove_textures  # noqa: E402
 import earth_textures  # noqa: E402
 import economy_textures  # noqa: E402
 import town_textures  # noqa: E402
+import waystone_textures  # noqa: E402
 import magic_textures  # noqa: E402
 import moor_textures  # noqa: E402
 import storm_textures  # noqa: E402
@@ -450,6 +451,7 @@ def build_all() -> dict[str, Image.Image]:
     items_architect.build(put)
     economy_textures.build(put)
     town_textures.build(put)
+    waystone_textures.build(put)
     magic_textures.build(put)
     moor_textures.build(put)
     return GENERATED

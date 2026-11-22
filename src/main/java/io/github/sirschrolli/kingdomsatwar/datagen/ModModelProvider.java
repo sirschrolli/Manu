@@ -279,6 +279,21 @@ public class ModModelProvider extends ModelProvider {
         Identifier magicModel = MagicTableModel.template().create(magicTable, magicTextures, blocks.modelOutput);
         blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(magicTable, BlockModelGenerators.plainVariant(magicModel)));
 
+        // --- Wegstein (seit 1.12): Sockel, Schaft mit Rune, Bronzeband, Spitze mit Kristallfassung ---
+        Block waystone = ModBlocks.WAYSTONE.get();
+        TextureMapping waystoneTextures = new TextureMapping()
+                .put(WaystoneModel.BASE_SIDE, new Material(KingdomsAtWar.id("block/waystone_base_side")))
+                .put(WaystoneModel.BASE_TOP, new Material(KingdomsAtWar.id("block/waystone_base_top")))
+                .put(WaystoneModel.SHAFT, new Material(KingdomsAtWar.id("block/waystone_shaft")))
+                .put(WaystoneModel.SHAFT_GLOW, new Material(KingdomsAtWar.id("block/waystone_shaft_glow")))
+                .put(WaystoneModel.BRONZE, new Material(KingdomsAtWar.id("block/waystone_bronze")))
+                .put(WaystoneModel.CAP_SIDE, new Material(KingdomsAtWar.id("block/waystone_cap_side")))
+                .put(WaystoneModel.CAP_TOP, new Material(KingdomsAtWar.id("block/waystone_cap_top")))
+                .put(WaystoneModel.CAP_GLOW, new Material(KingdomsAtWar.id("block/waystone_cap_glow")))
+                .put(TextureSlot.PARTICLE, new Material(KingdomsAtWar.id("block/waystone_shaft")));
+        Identifier waystoneModel = WaystoneModel.template().create(waystone, waystoneTextures, blocks.modelOutput);
+        blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(waystone, BlockModelGenerators.plainVariant(waystoneModel)));
+
         // --- Stadtbanner: zwei Hälften, dreht sich zum Spieler ---
         Block banner = ModBlocks.TOWN_BANNER.get();
         TextureMapping bannerLower = new TextureMapping()
@@ -439,6 +454,7 @@ public class ModModelProvider extends ModelProvider {
         glowingCube(blocks, ModBlocks.DRAGON_LAIR_CORE.get());
         glowingCube(blocks, ModBlocks.SHADOW_THRONE_CORE.get());
         dragonCompass(items, ModItems.DRAGON_COMPASS.get());
+        waystoneCompass(items, ModItems.WAYSTONE_COMPASS.get());
 
         // --- Siegelkreis, Siegelsplitter und Chronik ---
         SealModels.register(blocks, items);
@@ -606,6 +622,43 @@ public class ModModelProvider extends ModelProvider {
                 new net.minecraft.client.renderer.item.properties.numeric.CompassAngle(true,
                         net.minecraft.client.renderer.item.properties.numeric.CompassAngleState.CompassTarget.LODESTONE),
                 32.0F, entries));
+    }
+
+    /**
+     * Wegkompass (seit 1.12): 32 Nadelstellungen wie beim Kompass von Minecraft. Mit einem gewählten Wegstein (dann trägt er
+     * einen {@code lodestone_tracker}) zeigt die Nadel dorthin, sonst zum Spawn.
+     */
+    private static void waystoneCompass(ItemModelGenerators items, Item compass) {
+        java.util.List<net.minecraft.client.renderer.item.ItemModel.Unbaked> frames = new java.util.ArrayList<>();
+        for (int i = 0; i < 32; i++) {
+            frames.add(waystoneFrame(items, compass, i));
+        }
+        items.itemModelOutput.accept(compass, net.minecraft.client.data.models.model.ItemModelUtils.conditional(
+                new net.minecraft.client.renderer.item.properties.conditional.HasComponent(net.minecraft.core.component.DataComponents.LODESTONE_TRACKER,
+                        false),
+                waystoneNeedle(frames, net.minecraft.client.renderer.item.properties.numeric.CompassAngleState.CompassTarget.LODESTONE),
+                waystoneNeedle(frames, net.minecraft.client.renderer.item.properties.numeric.CompassAngleState.CompassTarget.SPAWN)));
+    }
+
+    private static net.minecraft.client.renderer.item.ItemModel.Unbaked waystoneNeedle(
+            java.util.List<net.minecraft.client.renderer.item.ItemModel.Unbaked> frames,
+            net.minecraft.client.renderer.item.properties.numeric.CompassAngleState.CompassTarget target) {
+        java.util.List<net.minecraft.client.renderer.item.RangeSelectItemModel.Entry> entries = new java.util.ArrayList<>();
+        entries.add(net.minecraft.client.data.models.model.ItemModelUtils.override(frames.get(16), 0.0F));
+        for (int i = 1; i < 32; i++) {
+            entries.add(net.minecraft.client.data.models.model.ItemModelUtils.override(frames.get(net.minecraft.util.Mth.positiveModulo(i - 16, 32)),
+                    i - 0.5F));
+        }
+        entries.add(net.minecraft.client.data.models.model.ItemModelUtils.override(frames.get(16), 31.5F));
+        return net.minecraft.client.data.models.model.ItemModelUtils.rangeSelect(
+                new net.minecraft.client.renderer.item.properties.numeric.CompassAngle(true, target), 32.0F, entries);
+    }
+
+    private static net.minecraft.client.renderer.item.ItemModel.Unbaked waystoneFrame(ItemModelGenerators items, Item compass, int index) {
+        String suffix = String.format(java.util.Locale.ROOT, "_%02d", index);
+        Identifier model = ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(compass, suffix),
+                TextureMapping.layer0(new Material(KingdomsAtWar.id("item/waystone_compass" + suffix))), items.modelOutput);
+        return net.minecraft.client.data.models.model.ItemModelUtils.plainModel(model);
     }
 
     private static net.minecraft.client.renderer.item.ItemModel.Unbaked compassFrame(ItemModelGenerators items, Item compass, int index) {

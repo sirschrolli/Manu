@@ -124,14 +124,14 @@ public class ModChestLootProvider implements LootTableSubProvider {
         this.output.accept(ModLootTables.VILLAGE_SCRIPTORIUM, coins(LootTable.lootTable(), 2, 6, 0, 2, 0.0f)
                 .withPool(pool(3, 5,
                         item(Items.PAPER, 10, 2, 8), item(Items.BOOK, 8, 1, 3), item(Items.WRITABLE_BOOK, 3, 1, 1), item(Items.INK_SAC, 6, 1, 4),
-                        item(Items.FEATHER, 6, 1, 4), item(Items.CANDLE, 4, 1, 3), item(Items.COMPASS, 2, 1, 1), item(Items.CLOCK, 1, 1, 1),
+                        item(Items.FEATHER, 6, 1, 4), item(Items.CANDLE, 4, 1, 3), item(ModItems.WAYSTONE_COMPASS.get(), 2, 1, 1), item(Items.CLOCK, 1, 1, 1),
                         item(Items.GLOW_INK_SAC, 2, 1, 2)))
                 .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
                         .add(LootItem.lootTableItem(Items.BOOK).setWeight(1).apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
                         .add(EmptyLootItem.emptyItem().setWeight(3))));
         this.output.accept(ModLootTables.VILLAGE_MAP_HOUSE, coins(LootTable.lootTable(), 1, 6, 0, 2, 0.0f)
                 .withPool(pool(2, 5,
-                        item(Items.MAP, 8, 1, 3), item(Items.PAPER, 10, 2, 8), item(Items.COMPASS, 4, 1, 1), item(Items.GLASS_PANE, 5, 1, 4),
+                        item(Items.MAP, 8, 1, 3), item(Items.PAPER, 10, 2, 8), item(ModItems.WAYSTONE_COMPASS.get(), 4, 1, 1), item(Items.GLASS_PANE, 5, 1, 4),
                         item(Items.SPYGLASS, 1, 1, 1), item(Items.FEATHER, 4, 1, 3), item(Items.INK_SAC, 4, 1, 2))));
         this.output.accept(ModLootTables.VILLAGE_HERB_HOUSE, coins(LootTable.lootTable(), 1, 6, 0, 2, 0.0f)
                 .withPool(pool(3, 6,
@@ -207,7 +207,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
         // Sterndeuter: Vorräte, Schreibzeug, Kerzen, ein Fernrohr, selten eine Enderperle
         this.output.accept(ModLootTables.SITE_FALLEN_STAR_CAMP, coins(LootTable.lootTable(), 2, 8, 0, 2, 0.05f)
                 .withPool(pool(3, 6, item(Items.BREAD, 8, 1, 4), item(Items.APPLE, 6, 1, 3), item(Items.TORCH, 8, 3, 10), item(Items.PAPER, 6, 2, 6),
-                        item(Items.BOOK, 4, 1, 2), item(Items.CANDLE, 5, 1, 3), item(Items.COMPASS, 2, 1, 1), item(Items.SPYGLASS, 1, 1, 1),
+                        item(Items.BOOK, 4, 1, 2), item(Items.CANDLE, 5, 1, 3), item(ModItems.WAYSTONE_COMPASS.get(), 2, 1, 1), item(Items.SPYGLASS, 1, 1, 1),
                         item(Items.ENDER_PEARL, 2, 1, 1), item(Items.AMETHYST_SHARD, 4, 1, 4))));
         // Kern des Sterns: Enderperlen und -augen, Obsidian, Amethyst, Gold, ein verzaubertes Buch der Sterndeuter
         this.output.accept(ModLootTables.SITE_FALLEN_STAR_CORE, coins(LootTable.lootTable().withPool(crystals(10, 20)), 0, 0, 2, 6, 0.4f)
@@ -250,7 +250,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                 coins(LootTable.lootTable().withPool(crystals(20, 15)), 3, 9, 3, 7, 0.7f)
                 .withPool(pool(4, 7, item(Items.GOLD_INGOT, 5, 2, 6), item(Items.GOLD_NUGGET, 6, 6, 16), item(Items.EMERALD, 4, 2, 5),
                         item(Items.INK_SAC, 6, 3, 9), item(Items.GLOW_INK_SAC, 4, 2, 5), item(Items.NAUTILUS_SHELL, 4, 1, 3),
-                        item(Items.COMPASS, 2, 1, 1), item(Items.MAP, 3, 1, 1), item(Items.SPYGLASS, 2, 1, 1),
+                        item(ModItems.WAYSTONE_COMPASS.get(), 2, 1, 1), item(Items.MAP, 3, 1, 1), item(Items.SPYGLASS, 2, 1, 1),
                         item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_HORN.get(), 2, 1, 1),
                         item(ModItems.GEMSTONE.get(), 3, 1, 3), item(Items.HEART_OF_THE_SEA, 1, 1, 1)))
                 .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
@@ -299,7 +299,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
         this.output.accept(ModLootTables.SITE_CARAVANSERAI_TRAVELER, coins(LootTable.lootTable(), 2, 8, 0, 3, 0.05f)
                 .withPool(pool(3, 6, item(Items.BREAD, 6, 1, 3), item(Items.APPLE, 5, 1, 3), item(Items.STRING, 5, 2, 6), item(Items.LEATHER, 4, 1, 3),
                         item(Items.CARPET.pick(net.minecraft.world.item.DyeColor.RED), 3, 1, 3), item(Items.DYE.pick(net.minecraft.world.item.DyeColor.ORANGE), 3, 1, 4), item(Items.CACTUS, 3, 1, 4), item(Items.SADDLE, 1, 1, 1),
-                        item(Items.LEAD, 2, 1, 1), item(Items.COMPASS, 1, 1, 1), item(Items.GLASS_BOTTLE, 4, 1, 3))));
+                        item(Items.LEAD, 2, 1, 1), item(ModItems.WAYSTONE_COMPASS.get(), 1, 1, 1), item(Items.GLASS_BOTTLE, 4, 1, 3))));
         // Schlangentempel: die Opfergaben (wie im Dschungeltempel), dazu Gold und Smaragde
         this.output.accept(ModLootTables.SITE_SERPENT_TEMPLE, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.JUNGLE_TEMPLE).withPool(crystals(10, 8)),
                 0, 4, 2, 6, 0.4f)
@@ -339,7 +339,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                 .withPool(pool(2, 4, item(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.MISSING_BLOCK.get(), 4, 2, 6),
                         item(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.STATIC_BLOCK.get(), 4, 2, 6), item(Items.REDSTONE, 5, 4, 12),
                         item(Items.EMERALD, 3, 1, 3), item(Items.ENDER_PEARL, 2, 1, 2), item(Items.DIAMOND, 1, 1, 1),
-                        item(Items.GLOWSTONE_DUST, 3, 2, 6), item(Items.COMPASS, 1, 1, 1), item(Items.CLOCK, 1, 1, 1))));
+                        item(Items.GLOWSTONE_DUST, 3, 2, 6), item(ModItems.WAYSTONE_COMPASS.get(), 1, 1, 1), item(Items.CLOCK, 1, 1, 1))));
         // Glutpforte: das Gold der Feuerdiener (wie in der Portalruine)
         this.output.accept(ModLootTables.SITE_EMBER_GATE, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.RUINED_PORTAL),
                 0, 3, 1, 3, 0.1f));
@@ -511,7 +511,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(item(Items.IRON_INGOT, 6, 1, 3))
                         .add(item(Items.PAPER, 8, 2, 6))
                         .add(item(Items.SPYGLASS, 3, 1, 1))
-                        .add(item(Items.COMPASS, 3, 1, 1))
+                        .add(item(ModItems.WAYSTONE_COMPASS.get(), 3, 1, 1))
                         .add(item(Items.CANDLE, 5, 1, 3))
                         .add(item(Items.AMETHYST_SHARD, 4, 1, 3))
                         .add(item(ModBlocks.STORM_CRYSTAL.get(), 6, 1, 3))
@@ -856,7 +856,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(item(Items.GLASS_BOTTLE, 4, 1, 3))
                         .add(item(Items.LEAD, 3, 1, 2))
                         .add(item(Items.SPYGLASS, 2, 1, 1))
-                        .add(item(Items.COMPASS, 2, 1, 1))));
+                        .add(item(ModItems.WAYSTONE_COMPASS.get(), 2, 1, 1))));
         this.output.accept(ModLootTables.OLD_WORLD_RUIN_CHEST, coins(LootTable.lootTable().withPool(crystals(8, 6)), 3, 9, 1, 3, 0.12f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(3, 6))
@@ -872,7 +872,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.exactly(1))
                         .add(LootItem.lootTableItem(Items.MAP).setWeight(2))
-                        .add(LootItem.lootTableItem(Items.COMPASS).setWeight(2))
+                        .add(LootItem.lootTableItem(ModItems.WAYSTONE_COMPASS.get()).setWeight(2))
                         .add(LootItem.lootTableItem(Items.CLOCK).setWeight(1))
                         .add(EmptyLootItem.emptyItem().setWeight(3))));
     }
@@ -962,7 +962,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(item(Items.EMERALD, 5, 1, 4))
                         .add(item(Items.DIAMOND, 2, 1, 2))
                         .add(item(Items.CLOCK, 2, 1, 1))
-                        .add(item(Items.COMPASS, 2, 1, 1))
+                        .add(item(ModItems.WAYSTONE_COMPASS.get(), 2, 1, 1))
                         .add(item(Items.GOLDEN_APPLE, 2, 1, 1))
                         .add(item(ModItems.WINE.get(), 4, 1, 2))
                         .add(item(Items.EXPERIENCE_BOTTLE, 4, 2, 6))));
