@@ -356,6 +356,14 @@ public final class MultiplayerCheck {
         STEPS.add(waitFor("Banner steht", minecraft -> !minecraft.level.getBlockState(banner).isAir(), 200));
         STEPS.add(pause(10));
         openAndShoot(use(banner), "Stadtfenster", "mp_stadt");
+        // der Rat (seit 1.11.6): Herr und Mitregenten kommen mit dem Stadtfenster über die Leitung
+        STEPS.add(Step.once(minecraft -> {
+            if (minecraft.gui.screen() instanceof io.github.sirschrolli.kingdomsatwar.client.town.TownScreen screen) {
+                screen.selectTab(4);
+            }
+        }));
+        STEPS.add(pause(10));
+        STEPS.add(Step.screenshot("mp_stadt_rat"));
         STEPS.add(Step.screen(minecraft -> null));
         STEPS.add(Step.command("gamemode creative"));
 
