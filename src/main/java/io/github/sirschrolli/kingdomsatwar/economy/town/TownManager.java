@@ -107,6 +107,66 @@ public final class TownManager {
         Towns.of(player.level().getServer()).save(player.level().getServer());
     }
 
+    /** Was beim Ernennen oder Absetzen eines Mitregenten herauskam (mit dem Schlüssel der Meldung im Stadtfenster). */
+    public enum CouncilResult {
+        APPOINTED, DEPOSED, NOT_LORD, NOT_NEAR, ALREADY, FULL, UNKNOWN;
+
+        public String key() {
+            return "gui.kingdomsatwar.town.council." + this.name().toLowerCase(java.util.Locale.ROOT);
+        }
+    }
+
+    /**
+     * Der Herr ernennt einen Spieler, der bei ihm am Banner steht, zum Mitregenten (seit 1.11.6): Er verwaltet die Siedlung
+     * mit (anheuern, entlassen, bauen), seine Soldaten und die des Herrn kämpfen Seite an Seite, und in seiner Chronik gilt
+     * die Siedlung als gegründet.
+     */
+    public static CouncilResult appoint(ServerPlayer lord, Town town, ServerPlayer friend) {
+        if (!town.owner().equals(lord.getUUID())) {
+            return CouncilResult.NOT_LORD;
+        }
+        if (friend == lord || friend.isSpectator()) {
+            return CouncilResult.UNKNOWN;
+        }
+        if (town.isCoRuler(friend.getUUID())) {
+            return CouncilResult.ALREADY;
+        }
+        if (!town.hasBanner() || friend.level() != lord.level() || !friend.level().dimension().equals(town.dimension())
+                || friend.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(town.banner())) > TownActions.RANGE * TownActions.RANGE) {
+            return CouncilResult.NOT_NEAR;
+        }
+        if (!town.appoint(friend.getUUID(), friend.getName().getString())) {
+            return CouncilResult.FULL;
+        }
+        Towns.of(lord.level().getServer()).save(lord.level().getServer());
+        friend.sendSystemMessage(Component.translatable("message.kingdomsatwar.town.co_ruler.appointed", lord.getDisplayName(),
+                Component.literal(town.name())).withStyle(ChatFormatting.GOLD));
+        io.github.sirschrolli.kingdomsatwar.story.Story.onTownFounded(friend);
+        return CouncilResult.APPOINTED;
+    }
+
+    /** Der Herr setzt einen Mitregenten ab – oder ein Mitregent legt selbst sein Amt nieder. */
+    public static CouncilResult depose(ServerPlayer by, Town town, java.util.UUID ruler) {
+        boolean resign = by.getUUID().equals(ruler);
+        if (!town.owner().equals(by.getUUID()) && !resign) {
+            return CouncilResult.NOT_LORD;
+        }
+        if (!town.depose(ruler)) {
+            return CouncilResult.UNKNOWN;
+        }
+        MinecraftServer server = by.level().getServer();
+        Towns.of(server).save(server);
+        ServerPlayer other = server.getPlayerList().getPlayer(resign ? town.owner() : ruler);
+        if (other != null) {
+            other.sendSystemMessage(resign
+                    ? Component.translatable("message.kingdomsatwar.town.co_ruler.resigned", by.getDisplayName(), Component.literal(town.name()))
+                            .withStyle(ChatFormatting.GRAY)
+                    : Component.translatable("message.kingdomsatwar.town.co_ruler.deposed", Component.literal(town.name()))
+                            .withStyle(ChatFormatting.GRAY));
+        }
+        return CouncilResult.DEPOSED;
+    }
+
     public static void setQueen(ServerPlayer player, Town town, boolean queen) {
         if (town.owner().equals(player.getUUID())) {
             town.setQueen(queen);
@@ -156,7 +216,7 @@ public final class TownManager {
     }
 
     public static HireResult hire(ServerPlayer player, Town town, Profession profession) {
-        if (!town.owner().equals(player.getUUID())) {
+        if (!town.mayManage(player.getUUID())) {
             return HireResult.NOT_OWNER;
         }
         if (!town.hasBanner()) {
@@ -214,7 +274,7 @@ public final class TownManager {
     }
 
     public static void dismiss(ServerPlayer player, Town town, java.util.UUID entity) {
-        if (!town.owner().equals(player.getUUID()) || town.resident(entity) == null) {
+        if (!town.mayManage(player.getUUID()) || town.resident(entity) == null) {
             return;
         }
         town.removeResident(entity);
@@ -432,7 +492,7 @@ public final class TownManager {
     public static PlaceResult placeProject(ServerPlayer player, BuildingType type, int design, BlockPos origin, Rotation rotation) {
         ServerLevel level = player.level();
         Towns towns = Towns.of(level.getServer());
-        Town town = towns.byOwner(player.getUUID());
+        Town town = towns.managedAt(player.getUUID(), level.dimension(), origin);
         if (town == null) {
             return PlaceResult.NO_TOWN;
         }
@@ -492,7 +552,7 @@ public final class TownManager {
             Rotation rotation) {
         ServerLevel level = player.level();
         Towns towns = Towns.of(level.getServer());
-        Town town = towns.byOwner(player.getUUID());
+        Town town = towns.managedAt(player.getUUID(), level.dimension(), origin);
         if (town == null) {
             return PlaceResult.NO_TOWN;
         }
@@ -542,7 +602,7 @@ public final class TownManager {
 
     /** Schaltet die Bauweise einer Baustelle um (Block für Block ↔ abschnittsweise). */
     public static void toggleFast(ServerPlayer player, Town town, int index) {
-        if (!town.owner().equals(player.getUUID()) || index < 0 || index >= town.projects().size()) {
+        if (!town.mayManage(player.getUUID()) || index < 0 || index >= town.projects().size()) {
             return;
         }
         Town.Project project = town.projects().get(index);
@@ -567,7 +627,7 @@ public final class TownManager {
             // die Garnison zieht vor die neue Kaserne
             for (io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity soldier : level.getEntitiesOfClass(
                     io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity.class, new net.minecraft.world.phys.AABB(town.banner())
-                            .inflate(town.radius() + 32.0), s -> town.owner().equals(s.getOwnerId()) && !s.isOnCampaign())) {
+                            .inflate(town.radius() + 32.0), s -> s.getOwnerId() != null && town.mayManage(s.getOwnerId()) && !s.isOnCampaign())) {
                 io.github.sirschrolli.kingdomsatwar.army.Garrison.station(soldier);
             }
         }
@@ -651,7 +711,7 @@ public final class TownManager {
     }
 
     public static void cancelProject(ServerPlayer player, Town town, int index) {
-        if (!town.owner().equals(player.getUUID()) || index < 0 || index >= town.projects().size()) {
+        if (!town.mayManage(player.getUUID()) || index < 0 || index >= town.projects().size()) {
             return;
         }
         Town.Project project = town.projects().get(index);

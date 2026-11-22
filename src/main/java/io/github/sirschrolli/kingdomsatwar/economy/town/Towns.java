@@ -49,6 +49,23 @@ public final class Towns {
         return null;
     }
 
+    /**
+     * Die Siedlung, die ein Spieler regiert: seine eigene – oder, wenn er keine hat, die, in der er Mitregent ist (seit
+     * 1.11.6). Für Garnison, Kasernen, Lager und Ansehen.
+     */
+    public @Nullable Town ruledBy(UUID player) {
+        Town own = this.byOwner(player);
+        if (own != null) {
+            return own;
+        }
+        for (Town town : this.towns) {
+            if (town.isCoRuler(player)) {
+                return town;
+            }
+        }
+        return null;
+    }
+
     public @Nullable Town byId(UUID id) {
         for (Town town : this.towns) {
             if (town.id().equals(id)) {
@@ -82,6 +99,34 @@ public final class Towns {
             }
         }
         return null;
+    }
+
+    /**
+     * Regieren die beiden Spieler eine Siedlung zusammen (Herr und Mitregent, oder zwei Mitregenten)? Dann sind sie
+     * Verbündete: Ihre Soldaten kämpfen Seite an Seite.
+     */
+    public boolean allied(UUID a, UUID b) {
+        if (a.equals(b)) {
+            return true;
+        }
+        for (Town town : this.towns) {
+            if (town.mayManage(a) && town.mayManage(b)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Die Siedlung, in der ein Spieler hier bauen darf: die, auf deren Gebiet er steht, wenn er sie (mit)regiert – sonst
+     * seine eigene.
+     */
+    public @Nullable Town managedAt(UUID player, ResourceKey<Level> dimension, BlockPos pos) {
+        Town here = this.at(dimension, pos);
+        if (here != null && here.mayManage(player)) {
+            return here;
+        }
+        return this.byOwner(player);
     }
 
     /** Die Siedlung, zu der ein Bürger gehört. */

@@ -2244,6 +2244,13 @@ public class ModLanguageProvider extends LanguageProvider {
         text("message.kingdomsatwar.story.dragon_fallen", "%s has fallen! Its seal shard belongs in the Seal Circle.",
                 "%s ist gefallen! Sein Siegelsplitter gehört in den Siegelkreis.");
 
+        // Bosskämpfe mit mehreren Spielern (seit 1.11.6)
+        text("message.kingdomsatwar.party.grows", "%1$s faces %2$s challengers – and grows stronger",
+                "%1$s stellt sich %2$s Mitstreitern – und wird stärker");
+        text("message.kingdomsatwar.party.loot", "Shared victory over %s – your share of the spoils is in your inventory.",
+                "Gemeinsamer Sieg über %s – dein Anteil an der Beute liegt in deinem Inventar.");
+        text("message.kingdomsatwar.party.victory", "Shared victory over %s!", "Gemeinsamer Sieg über %s!");
+
         // Befehle
         text("command.kingdomsatwar.story.reset", "Your story progress has been reset.", "Dein Fortschritt in der Geschichte wurde zurückgesetzt.");
         text("command.kingdomsatwar.seal.status", "Seal Circle at %s – %s of 6 shards – %s", "Siegelkreis bei %s – %s von 6 Splittern – %s");

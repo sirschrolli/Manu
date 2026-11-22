@@ -79,7 +79,7 @@ import org.jspecify.annotations.Nullable;
  * Ist niemand mehr im Ring, sinkt er nach einer halben Minute zurück in den Schlund. Besiegt sinkt er tot hinab; das Herz
  * des Schlunds merkt es sich, nur das Gezeitenhorn (mit einem Herz des Meeres) ruft ihn zurück.
  */
-public class KrakenEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
+public class KrakenEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden, io.github.sirschrolli.kingdomsatwar.entity.boss.PartyBoss {
     public static final byte EVENT_ROAR = 100;
     public static final byte EVENT_SLAM_LEFT = 101;
     public static final byte EVENT_SLAM_RIGHT = 102;

@@ -73,7 +73,7 @@ import org.jspecify.annotations.Nullable;
  * </ul>
  * Findet sie niemanden mehr, kehrt sie vor den Altar zurück und betet wieder (geheilt, ohne Schwingen).
  */
-public class IgnaraEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
+public class IgnaraEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden, io.github.sirschrolli.kingdomsatwar.entity.boss.PartyBoss {
     public static final float MAX_HEALTH = 900.0f;
     public static final int AWAKEN_TICKS = 70;
     /** So lange (Ticks) dauert ihr Sterben (sie steigt auf, die Flammen verlöschen, sie zerfällt zu Glut und Asche). */

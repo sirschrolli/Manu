@@ -79,7 +79,7 @@ import org.jspecify.annotations.Nullable;
  * </ul>
  * Besiegt zerbricht er Glied um Glied; wer dabei war, ist fortan <b>Weltenretter</b>.
  */
-public class WorldEaterEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound, io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
+public class WorldEaterEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound, io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden, io.github.sirschrolli.kingdomsatwar.entity.boss.PartyBoss {
     public static final byte EVENT_AWAKEN = 90;
     public static final byte EVENT_ROAR = 91;
     public static final byte EVENT_WRATH = 92;

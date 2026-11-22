@@ -82,7 +82,7 @@ import org.jspecify.annotations.Nullable;
  * durch die Arena (man sieht sie kommen), und er dreht sich im <b>Zyklon</b> – mit ausgebreiteten Armen, alles ringsum zieht
  * es zu ihm, Geschosse prallen ab. Findet er niemanden mehr, sinkt er in den Spawner der Böen zurück.
  */
-public class VentorEntity extends Monster implements SkyWarden {
+public class VentorEntity extends Monster implements SkyWarden, io.github.sirschrolli.kingdomsatwar.entity.boss.PartyBoss {
     public static final float MAX_HEALTH = 740.0f;
     public static final int AWAKEN_TICKS = 80;
     /** So lange formt er sich beim Aufsteigen (das Modell wächst aus dem Wirbel). */

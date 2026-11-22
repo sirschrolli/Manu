@@ -35,6 +35,10 @@ public final class TownActions {
     public static final int IMPORT = 13;
     /** Dragon Architect: einen eigenen Plan als .litematic, .schem und .nbt ablegen ({@code text} = Kennung des Plans). */
     public static final int EXPORT = 14;
+    /** Der Herr ernennt einen Spieler am Banner zum Mitregenten ({@code text} = sein Name). */
+    public static final int APPOINT = 15;
+    /** Der Herr setzt einen Mitregenten ab – oder ein Mitregent legt sein Amt nieder ({@code text} = sein Name). */
+    public static final int DEPOSE = 16;
 
     /** Wie weit man vom Banner weg sein darf, solange das Fenster offen ist. */
     public static final double RANGE = 16.0;
@@ -56,7 +60,8 @@ public final class TownActions {
         if (town == null || player.distanceToSqr(banner.getX() + 0.5, banner.getY(), banner.getZ() + 0.5) > RANGE * RANGE) {
             return;
         }
-        boolean owner = town.owner().equals(player.getUUID());
+        // Herr oder Mitregent: darf verwalten (anheuern, entlassen, bauen, Baustellen ändern)
+        boolean owner = town.mayManage(player.getUUID());
         Component notice = null;
         boolean good = true;
         switch (action) {
@@ -159,6 +164,20 @@ public final class TownActions {
                         }
                     }
                 }
+            }
+            case APPOINT -> {
+                ServerPlayer friend = player.level().getServer().getPlayerList().getPlayerByName(text);
+                TownManager.CouncilResult result = friend == null ? TownManager.CouncilResult.NOT_NEAR : TownManager.appoint(player, town, friend);
+                good = result == TownManager.CouncilResult.APPOINTED;
+                notice = Component.translatable(result.key(), text);
+            }
+            case DEPOSE -> {
+                Town.CoRuler ruler = town.coRulers().stream().filter(r -> r.name().equals(text)).findFirst().orElse(null);
+                TownManager.CouncilResult result = ruler == null ? TownManager.CouncilResult.UNKNOWN
+                        : TownManager.depose(player, town, ruler.id());
+                good = result == TownManager.CouncilResult.DEPOSED;
+                notice = Component.translatable(result == TownManager.CouncilResult.DEPOSED && ruler.id().equals(player.getUUID())
+                        ? "gui.kingdomsatwar.town.council.resigned" : result.key(), text);
             }
             case FAST -> {
                 if (owner && arg >= 0 && arg < town.projects().size()) {

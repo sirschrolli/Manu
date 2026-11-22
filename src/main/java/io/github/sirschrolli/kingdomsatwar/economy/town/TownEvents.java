@@ -59,7 +59,7 @@ public final class TownEvents {
             return;
         }
         if (dead instanceof Enemy && event.getSource().getEntity() instanceof ServerPlayer player) {
-            Town town = Towns.of(level.getServer()).byOwner(player.getUUID());
+            Town town = Towns.of(level.getServer()).ruledBy(player.getUUID());
             if (town != null && town.contains(level.dimension(), dead.blockPosition())) {
                 Reputation.add(player, Reputation.DEFEND);
             }

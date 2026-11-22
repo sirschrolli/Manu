@@ -102,6 +102,8 @@ final class TownGameTests {
             ModGameTests.TEST_FUNCTIONS.register("town_garrison", () -> TownGameTests::townGarrison);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> TOWN_LUMBERJACK =
             ModGameTests.TEST_FUNCTIONS.register("town_lumberjack", () -> TownGameTests::townLumberjack);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> TOWN_COUNCIL =
+            ModGameTests.TEST_FUNCTIONS.register("town_council", () -> TownGameTests::townCouncil);
 
     private TownGameTests() {}
 
@@ -121,6 +123,85 @@ final class TownGameTests {
         own(event, TOWN_FOOD, "town_food", 200);
         own(event, TOWN_GARRISON, "town_garrison", 300);
         own(event, TOWN_LUMBERJACK, "town_lumberjack", 4000);
+        own(event, TOWN_COUNCIL, "town_council", 200);
+    }
+
+    /**
+     * Mehrspieler: Der Herr ernennt einen Freund, der bei ihm am Banner steht, zum Mitregenten. Der verwaltet mit (darf
+     * anheuern), darf aber weder umbenennen noch selbst ernennen; ihre Soldaten sind Verbündete (auch wenn PvP an ist), ein
+     * Gast nicht; das Stadtfenster zeigt dem Herrn, wen er ernennen kann, und dem Mitregenten sein Amt; der Rat übersteht
+     * das Speichern; abgesetzt oder zurückgetreten verwaltet niemand mehr mit.
+     */
+    private static void townCouncil(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        MinecraftServer server = level.getServer();
+        clearTowns(server);
+        io.netty.channel.embedded.EmbeddedChannel[] channels = new io.netty.channel.embedded.EmbeddedChannel[4];
+        ServerPlayer lord = MageGameTests.survivalPlayer(helper, "council-lord", channels, 0);
+        ServerPlayer friend = MageGameTests.survivalPlayer(helper, "council-friend", channels, 1);
+        ServerPlayer guest = MageGameTests.survivalPlayer(helper, "council-guest", channels, 2);
+        ServerPlayer far = MageGameTests.survivalPlayer(helper, "council-far", channels, 3);
+        try {
+            for (ServerPlayer p : List.of(lord, friend, guest, far)) {
+                Vec3 at = helper.absoluteVec(Vec3.atBottomCenterOf(new BlockPos(p == lord ? 4 : p == friend ? 6 : 8, 1, 4)));
+                p.teleportTo(level, at.x, at.y, at.z, java.util.Set.of(), 0.0f, 0.0f, true);
+            }
+            Vec3 away = helper.absoluteVec(new Vec3(4.5, 1.0, 4.5)).add(200.0, 0.0, 0.0);
+            far.teleportTo(level, away.x, away.y, away.z, java.util.Set.of(), 0.0f, 0.0f, true);
+            Town town = found(helper, lord, new BlockPos(5, 1, 7));
+            // der Herr sieht, wen er ernennen kann: wer bei ihm am Banner steht
+            TownView view = TownView.of(lord, town);
+            helper.assertTrue(view.lord() && view.isOwner() && view.council().isEmpty(), "Fenster des Herrn");
+            helper.assertTrue(view.candidates().containsAll(List.of("council-friend", "council-guest")) && !view.candidates().contains("council-far"),
+                    "Wer ernannt werden kann: " + view.candidates());
+            helper.assertValueEqual(TownManager.appoint(friend, town, guest), TownManager.CouncilResult.NOT_LORD, "Ein Fremder ernennt");
+            helper.assertValueEqual(TownManager.appoint(lord, town, far), TownManager.CouncilResult.NOT_NEAR, "Ernennen aus der Ferne");
+            helper.assertValueEqual(TownManager.appoint(lord, town, friend), TownManager.CouncilResult.APPOINTED, "Ernennen");
+            helper.assertValueEqual(TownManager.appoint(lord, town, friend), TownManager.CouncilResult.ALREADY, "Zweimal ernennen");
+            helper.assertTrue(town.mayManage(friend.getUUID()) && !town.mayManage(guest.getUUID()), "Wer verwalten darf");
+            // das Fenster des Mitregenten
+            TownView mine = TownView.of(friend, town);
+            helper.assertTrue(mine.isOwner() && !mine.lord() && mine.council().equals(List.of("council-friend")) && mine.candidates().isEmpty(),
+                    "Fenster des Mitregenten");
+            helper.assertTrue(!TownView.of(guest, town).isOwner(), "Ein Gast verwaltet mit");
+            // er verwaltet mit – umbenennen und ernennen darf er nicht
+            helper.assertTrue(TownManager.hire(friend, town, Profession.BUILDER) != TownManager.HireResult.NOT_OWNER, "Der Mitregent darf nicht anheuern");
+            helper.assertValueEqual(TownManager.hire(guest, town, Profession.BUILDER), TownManager.HireResult.NOT_OWNER, "Ein Gast heuert an");
+            String name = town.name();
+            TownManager.rename(friend, town, "Freistadt");
+            helper.assertValueEqual(town.name(), name, "Der Mitregent benennt um");
+            helper.assertValueEqual(TownManager.appoint(friend, town, guest), TownManager.CouncilResult.NOT_LORD, "Der Mitregent ernennt");
+            // Siedlung und Bündnis
+            Towns towns = Towns.of(server);
+            helper.assertTrue(towns.ruledBy(friend.getUUID()) == town && towns.ruledBy(guest.getUUID()) == null, "Wer die Siedlung regiert");
+            helper.assertTrue(towns.allied(lord.getUUID(), friend.getUUID()) && !towns.allied(lord.getUUID(), guest.getUUID()), "Verbündete");
+            SoldierEntity lordSoldier = helper.spawn(ModEntities.SOLDIERS.get(SoldierType.SWORDSMAN).get(), new BlockPos(3, 1, 2));
+            lordSoldier.setOwner(lord);
+            SoldierEntity friendSoldier = helper.spawn(ModEntities.SOLDIERS.get(SoldierType.ARCHER).get(), new BlockPos(7, 1, 2));
+            friendSoldier.setOwner(friend);
+            helper.assertTrue(lordSoldier.isAlliedTo(friend) && lordSoldier.isAlliedTo(friendSoldier) && friendSoldier.isAlliedTo(lord),
+                    "Die Heere von Herr und Mitregent sind keine Verbündeten");
+            helper.assertTrue(!lordSoldier.canAttack(friend) && !lordSoldier.canAttack(friendSoldier), "Ein Soldat greift Verbündete an");
+            helper.assertTrue(!lordSoldier.isAlliedTo(guest), "Ein Gast gilt als Verbündeter");
+            // der Rat übersteht das Speichern
+            Town copy = Town.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, Town.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, town)
+                    .getOrThrow()).getOrThrow();
+            helper.assertTrue(copy.isCoRuler(friend.getUUID()) && copy.coRulers().getFirst().name().equals("council-friend"),
+                    "Der Rat geht beim Speichern verloren");
+            // absetzen darf nur der Herr – zurücktreten jeder selbst
+            helper.assertValueEqual(TownManager.depose(guest, town, friend.getUUID()), TownManager.CouncilResult.NOT_LORD, "Ein Gast setzt ab");
+            helper.assertValueEqual(TownManager.depose(lord, town, friend.getUUID()), TownManager.CouncilResult.DEPOSED, "Absetzen");
+            helper.assertTrue(!town.mayManage(friend.getUUID()) && !lordSoldier.isAlliedTo(friend), "Abgesetzt verwaltet er weiter");
+            helper.assertValueEqual(TownManager.appoint(lord, town, guest), TownManager.CouncilResult.APPOINTED, "Den Gast ernennen");
+            helper.assertValueEqual(TownManager.depose(guest, town, guest.getUUID()), TownManager.CouncilResult.DEPOSED, "Zurücktreten");
+            helper.assertTrue(town.coRulers().isEmpty(), "Nach dem Rücktritt sitzt noch jemand im Rat");
+            lordSoldier.discard();
+            friendSoldier.discard();
+            helper.succeed();
+        } finally {
+            clearTowns(server);
+            leave(helper, lord, friend, guest, far);
+        }
     }
 
     private static void own(RegisterGameTestsEvent event, DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> test,

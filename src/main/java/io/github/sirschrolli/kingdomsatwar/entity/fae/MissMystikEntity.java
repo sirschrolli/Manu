@@ -84,7 +84,7 @@ import org.jspecify.annotations.Nullable;
  * verbeugt sie sich ein letztes Mal und vergeht in einem Regen aus Konfetti – der Zylinder ist dann leer (Feenstaub ruft
  * sie zurück).
  */
-public class MissMystikEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound, io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
+public class MissMystikEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound, io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden, io.github.sirschrolli.kingdomsatwar.entity.boss.PartyBoss {
     public static final float MAX_HEALTH = 520.0f;
     /** Ablauf des Auftritts: Trommelwirbel, im Tick {@link #APPEAR_BURST} springt sie heraus, danach die Verbeugung. */
     public static final int APPEAR_TICKS = 72;

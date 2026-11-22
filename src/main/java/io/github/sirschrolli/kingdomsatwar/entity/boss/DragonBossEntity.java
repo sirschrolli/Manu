@@ -68,7 +68,7 @@ import org.jspecify.annotations.Nullable;
  * dazu Angriffe, Erweckung und Todeseffekte. Bewegt wird ohne Wegfindung: am Boden lenkend, in der Luft mit
  * weichen Kurven um das Nest.
  */
-public abstract class DragonBossEntity extends Mob implements Enemy, ElementalBoss, io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
+public abstract class DragonBossEntity extends Mob implements Enemy, ElementalBoss, io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden, io.github.sirschrolli.kingdomsatwar.entity.boss.PartyBoss {
     public enum State { AWAKENING, FIGHT, RETURNING, SLUMBER, DYING }
 
     public enum MoveMode { GROUND, AIR, WATER, BURROW }
@@ -1481,5 +1481,11 @@ public abstract class DragonBossEntity extends Mob implements Enemy, ElementalBo
     @Override
     public boolean guardsSky() {
         return this.getBossState() == State.FIGHT;
+    }
+
+    /** Die Drachen (auch Nyxar) zählen ihre Herausforderer beim Erwachen selbst. */
+    @Override
+    public boolean scalesWithParty() {
+        return false;
     }
 }

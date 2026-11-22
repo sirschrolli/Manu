@@ -55,7 +55,7 @@ public final class Recruitment {
         int limit = armyLimit();
         if (player.level() instanceof ServerLevel level) {
             io.github.sirschrolli.kingdomsatwar.economy.town.Town town =
-                    io.github.sirschrolli.kingdomsatwar.economy.town.Towns.of(level.getServer()).byOwner(player.getUUID());
+                    io.github.sirschrolli.kingdomsatwar.economy.town.Towns.of(level.getServer()).ruledBy(player.getUUID());
             if (town != null) {
                 limit += SOLDIERS_PER_BARRACKS * town.count(io.github.sirschrolli.kingdomsatwar.economy.town.BuildingType.BARRACKS);
             }

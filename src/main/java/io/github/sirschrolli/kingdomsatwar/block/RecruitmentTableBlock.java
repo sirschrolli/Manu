@@ -62,7 +62,7 @@ public class RecruitmentTableBlock extends HorizontalDirectionalBlock {
             io.github.sirschrolli.kingdomsatwar.network.ModNetwork.send(serverPlayer, new OpenRecruitScreenPayload(pos,
                     Recruitment.armyLimit(serverPlayer), Recruitment.armySize(serverPlayer.level(), serverPlayer.getUUID()),
                     io.github.sirschrolli.kingdomsatwar.economy.town.Towns.of(serverPlayer.level().getServer())
-                            .byOwner(serverPlayer.getUUID()) != null));
+                            .ruledBy(serverPlayer.getUUID()) != null));
         }
         return InteractionResult.SUCCESS;
     }

@@ -95,7 +95,7 @@ import org.jspecify.annotations.Nullable;
  * </ul>
  * Findet er niemanden mehr, kehrt er unter sein Banner zurück (geheilt und wieder zu Ross).
  */
-public class RobberKnightEntity extends Monster implements SkyWarden {
+public class RobberKnightEntity extends Monster implements SkyWarden, io.github.sirschrolli.kingdomsatwar.entity.boss.PartyBoss {
     public static final float MAX_HEALTH = 720.0f;
     public static final int AWAKEN_TICKS = 70;
     /** So lange (Ticks) dauert sein Sterben (er sinkt in die Knie, dann fällt er). */

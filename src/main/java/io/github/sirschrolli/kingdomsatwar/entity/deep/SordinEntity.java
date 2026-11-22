@@ -74,7 +74,7 @@ import org.jspecify.annotations.Nullable;
  * trifft man ihn leichter (höchstens alle {@value #STAGGER_PAUSE_SECONDS} Sekunden). Findet er niemanden mehr, kehrt er an die
  * Orgel zurück und spielt weiter (geheilt).
  */
-public class SordinEntity extends Monster implements SkyWarden {
+public class SordinEntity extends Monster implements SkyWarden, io.github.sirschrolli.kingdomsatwar.entity.boss.PartyBoss {
     public static final float MAX_HEALTH = 760.0f;
     public static final int AWAKEN_TICKS = 80;
     /** So lange (Ticks) dauert sein Sterben (er sinkt auf die Knie, die Pfeifen verstummen, er zerfällt zu Sculk). */

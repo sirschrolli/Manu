@@ -16,9 +16,22 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * Eine Siedlung: gegründet mit dem Stadtbanner, gehört einem Spieler, hat einen Namen, Bewohner, fertige Gebäude und
- * Baustellen. Die Stufe ergibt sich aus der Zahl der Bewohner ({@link TownTier}).
+ * Baustellen. Die Stufe ergibt sich aus der Zahl der Bewohner ({@link TownTier}). Seit 1.11.6 kann der Herr Freunde zu
+ * Mitregenten ernennen: Sie verwalten die Siedlung mit ihm (anheuern, entlassen, bauen), nur Name, Krone und Rat bleiben
+ * beim Herrn.
  */
 public final class Town {
+    /** So viele Mitregenten höchstens (mit dem Herrn acht – so viele spielen mit Essential zusammen). */
+    public static final int MAX_CO_RULERS = 7;
+
+    /** Ein Mitregent: Spieler und sein Name (zuletzt gesehen, für die Anzeige). */
+    public record CoRuler(UUID id, String name) {
+        public static final Codec<CoRuler> CODEC = RecordCodecBuilder.create(i -> i.group(
+                UUIDUtil.CODEC.fieldOf("id").forGetter(CoRuler::id),
+                Codec.STRING.fieldOf("name").forGetter(CoRuler::name)
+        ).apply(i, CoRuler::new));
+    }
+
     /**
      * Ein angeheuerter Bürger: sein Lebewesen, Beruf, Name, sein Bett (Kopfende, in der Welt) und seine Werkstatt
      * (Ursprung des Gebäudes, in dem er arbeitet).
@@ -311,7 +324,8 @@ public final class Town {
             Codec.BOOL.optionalFieldOf("crowned", false).forGetter(t -> t.crowned),
             Resident.CODEC.listOf().optionalFieldOf("residents", List.of()).forGetter(t -> List.copyOf(t.residents)),
             Building.CODEC.listOf().optionalFieldOf("buildings", List.of()).forGetter(t -> List.copyOf(t.buildings)),
-            Project.CODEC.listOf().optionalFieldOf("projects", List.of()).forGetter(t -> List.copyOf(t.projects))
+            Project.CODEC.listOf().optionalFieldOf("projects", List.of()).forGetter(t -> List.copyOf(t.projects)),
+            CoRuler.CODEC.listOf().optionalFieldOf("co_rulers", List.of()).forGetter(t -> List.copyOf(t.coRulers))
     ).apply(i, Town::new));
 
     /** So viele Baumeister mehr darf eine Siedlung anheuern, solange sie eine Großbaustelle hat. */
@@ -333,9 +347,11 @@ public final class Town {
     private final List<Resident> residents = new ArrayList<>();
     private final List<Building> buildings = new ArrayList<>();
     private final List<Project> projects = new ArrayList<>();
+    private final List<CoRuler> coRulers = new ArrayList<>();
 
     private Town(UUID id, UUID owner, String ownerName, String name, ResourceKey<Level> dimension, BlockPos banner, boolean hasBanner,
-            long founded, boolean queen, boolean crowned, List<Resident> residents, List<Building> buildings, List<Project> projects) {
+            long founded, boolean queen, boolean crowned, List<Resident> residents, List<Building> buildings, List<Project> projects,
+            List<CoRuler> coRulers) {
         this.id = id;
         this.owner = owner;
         this.ownerName = ownerName;
@@ -349,10 +365,16 @@ public final class Town {
         this.residents.addAll(residents);
         this.buildings.addAll(buildings);
         this.projects.addAll(projects);
+        for (CoRuler ruler : coRulers) {
+            if (!ruler.id().equals(owner) && this.coRulers.stream().noneMatch(r -> r.id().equals(ruler.id()))) {
+                this.coRulers.add(ruler);
+            }
+        }
     }
 
     public static Town found(UUID owner, String ownerName, String name, ResourceKey<Level> dimension, BlockPos banner, long time) {
-        return new Town(UUID.randomUUID(), owner, ownerName, name, dimension, banner, true, time, false, false, List.of(), List.of(), List.of());
+        return new Town(UUID.randomUUID(), owner, ownerName, name, dimension, banner, true, time, false, false, List.of(), List.of(), List.of(),
+                List.of());
     }
 
     // ---------------------------------------------------------------- Grunddaten
@@ -420,6 +442,45 @@ public final class Town {
 
     void setCrowned(boolean crowned) {
         this.crowned = crowned;
+    }
+
+    // ---------------------------------------------------------------- Herr und Mitregenten
+
+    /** Die Mitregenten, in der Reihenfolge ihrer Ernennung. */
+    public List<CoRuler> coRulers() {
+        return List.copyOf(this.coRulers);
+    }
+
+    public boolean isCoRuler(UUID player) {
+        return this.coRulers.stream().anyMatch(r -> r.id().equals(player));
+    }
+
+    /** Herr oder Mitregent: darf die Siedlung verwalten (anheuern, entlassen, bauen, Baustellen ändern). */
+    public boolean mayManage(UUID player) {
+        return this.owner.equals(player) || this.isCoRuler(player);
+    }
+
+    /** Ernennt einen Mitregenten (oder frischt seinen Namen auf); {@code false}, wenn er der Herr ist oder kein Platz mehr frei. */
+    boolean appoint(UUID player, String name) {
+        if (this.owner.equals(player)) {
+            return false;
+        }
+        for (int i = 0; i < this.coRulers.size(); i++) {
+            if (this.coRulers.get(i).id().equals(player)) {
+                this.coRulers.set(i, new CoRuler(player, name));
+                return true;
+            }
+        }
+        if (this.coRulers.size() >= MAX_CO_RULERS) {
+            return false;
+        }
+        this.coRulers.add(new CoRuler(player, name));
+        return true;
+    }
+
+    /** Setzt einen Mitregenten ab; {@code false}, wenn er keiner war. */
+    boolean depose(UUID player) {
+        return this.coRulers.removeIf(r -> r.id().equals(player));
     }
 
     // ---------------------------------------------------------------- Stufe und Fläche

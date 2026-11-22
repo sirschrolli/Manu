@@ -81,7 +81,7 @@ import org.jspecify.annotations.Nullable;
  * Uhrwerk läuft aus, die Zeiger fallen – dann zerspringt er in Zahnräder; das Herz bleibt stehen, und ein Chronit darin weckt
  * einen neuen Wächter.
  */
-public class HourWardenEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
+public class HourWardenEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden, io.github.sirschrolli.kingdomsatwar.entity.boss.PartyBoss {
     public static final float MAX_HEALTH = 1800.0f;
     /** So lange (Ticks) dauert sein Sterben (er sinkt auf die Knie, das Uhrwerk läuft aus, er zerspringt). */
     public static final int DEATH_TICKS = 100;

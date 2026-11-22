@@ -78,7 +78,7 @@ import org.jspecify.annotations.Nullable;
  * Phasenwechsel stößt er alle von sich und ist einen Moment unverwundbar. Läuft man davon, kehrt er nach einer Weile
  * zurück, heilt sich und meditiert wieder.
  */
-public class MageBossEntity extends Monster implements Enemy, ElementalBoss, MageLike, io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
+public class MageBossEntity extends Monster implements Enemy, ElementalBoss, MageLike, io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden, io.github.sirschrolli.kingdomsatwar.entity.boss.PartyBoss {
     public enum State { DORMANT, AWAKENING, FIGHT, DYING }
 
     /** Gesten (Animationen), synchronisiert. */
@@ -1622,5 +1622,11 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
     @Override
     public boolean guardsSky() {
         return this.state() == State.FIGHT;
+    }
+
+    /** Die Erzmagier zählen ihre Herausforderer beim Erwachen selbst. */
+    @Override
+    public boolean scalesWithParty() {
+        return false;
     }
 }

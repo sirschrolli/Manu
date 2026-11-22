@@ -71,7 +71,7 @@ import org.jspecify.annotations.Nullable;
  * mit dem Reich im Krieg liegt), schlägt Alarm und verfolgt Eindringlinge nur bis an den Rand der Burg. Schützen halten
  * ihre Stellung auf Mauer und Turm, Ritter und Herrscher verlassen den Thronsaal nicht.
  */
-public class RealmWarriorEntity extends Monster implements CrossbowAttackMob {
+public class RealmWarriorEntity extends Monster implements CrossbowAttackMob, io.github.sirschrolli.kingdomsatwar.entity.boss.PartyBoss {
     private static final EntityDataAccessor<Byte> DATA_REALM = SynchedEntityData.defineId(RealmWarriorEntity.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Byte> DATA_VARIANT = SynchedEntityData.defineId(RealmWarriorEntity.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Boolean> DATA_CHARGING = SynchedEntityData.defineId(RealmWarriorEntity.class,
@@ -867,5 +867,11 @@ public class RealmWarriorEntity extends Monster implements CrossbowAttackMob {
                 self.setChargingCrossbow(true);
             }
         }
+    }
+
+    /** Nur der Fürst eines Reichs ist ein Boss, gegen den man gemeinsam kämpft (mit Bossleiste). */
+    @Override
+    public boolean isPartyBoss() {
+        return this.role() == WarriorRole.LORD;
     }
 }

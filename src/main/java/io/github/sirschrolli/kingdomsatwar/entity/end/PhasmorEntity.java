@@ -73,7 +73,7 @@ import org.jspecify.annotations.Nullable;
  * darin oder trifft ihn ein Wurftrank aus Wasser, krümmt er sich (er kann eine Weile weder springen noch ausweichen).
  * Findet er niemanden mehr, kehrt er vor den Thron zurück und kniet wieder (geheilt, ohne Krone).
  */
-public class PhasmorEntity extends Monster implements PhasmorLike, io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
+public class PhasmorEntity extends Monster implements PhasmorLike, io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden, io.github.sirschrolli.kingdomsatwar.entity.boss.PartyBoss {
     public static final float MAX_HEALTH = 800.0f;
     public static final int AWAKEN_TICKS = 80;
     /** So lange (Ticks) dauert sein Sterben (er sinkt auf die Knie, die Krone erlischt, er zerfällt zu türkisem Staub). */

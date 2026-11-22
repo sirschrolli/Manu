@@ -69,7 +69,7 @@ import org.jspecify.annotations.Nullable;
  * niemanden mehr, kehrt er zu seiner Glocke zurück und versinkt wieder in Andacht (geheilt). Besiegt zerfällt er zu Nebel;
  * die Glocke verstummt, und ein Seelenkristall an ihr ruft ihn zurück.
  */
-public class SoulShepherdEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
+public class SoulShepherdEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden, io.github.sirschrolli.kingdomsatwar.entity.boss.PartyBoss {
     public static final float MAX_HEALTH = 900.0f;
     /** So lange (Ticks) dauert sein Sterben (er sinkt zusammen und zerfällt zu Nebel). */
     public static final int DEATH_TICKS = 70;

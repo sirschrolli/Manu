@@ -779,6 +779,15 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
                 && this.considersEntityAsAlly(horse.rider()))) {
             return true; // das eigene Ross und die Rosse der Kameraden
         }
+        if (owner != null && this.level() instanceof ServerLevel level) {
+            // Mehrspieler: Wer mit dem Herrn eine Siedlung regiert (Mitregent), dessen Leute sind Verbündete – samt ihm selbst
+            UUID otherLord = other instanceof Player player ? player.getUUID()
+                    : other instanceof OwnableEntity ownable && ownable.getOwnerReference() != null ? ownable.getOwnerReference().getUUID() : null;
+            if (otherLord != null && !otherLord.equals(owner)
+                    && io.github.sirschrolli.kingdomsatwar.economy.town.Towns.of(level.getServer()).allied(owner, otherLord)) {
+                return true;
+            }
+        }
         return super.considersEntityAsAlly(other);
     }
 

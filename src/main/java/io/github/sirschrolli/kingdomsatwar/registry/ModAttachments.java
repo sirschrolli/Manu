@@ -174,5 +174,14 @@ public final class ModAttachments {
                     .copyOnDeath()
                     .build());
 
+    /**
+     * Die Mitstreiter im Kampf gegen einen Boss (seit 1.11.6, siehe
+     * {@link io.github.sirschrolli.kingdomsatwar.entity.boss.BossParty}) – nur auf dem Server, mit dem Boss gespeichert.
+     */
+    public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.entity.boss.BossParty.Party>> BOSS_PARTY =
+            ATTACHMENTS.register("boss_party", () -> AttachmentType.builder(() -> io.github.sirschrolli.kingdomsatwar.entity.boss.BossParty.Party.NONE)
+                    .serialize(io.github.sirschrolli.kingdomsatwar.entity.boss.BossParty.Party.CODEC.fieldOf("party"))
+                    .build());
+
     private ModAttachments() {}
 }

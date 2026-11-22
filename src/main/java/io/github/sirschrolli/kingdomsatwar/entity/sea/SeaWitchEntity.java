@@ -73,7 +73,7 @@ import org.jspecify.annotations.Nullable;
  * schneller und wütender. Findet sie niemanden mehr, kehrt sie über ihren Kessel zurück und versinkt wieder in Trance (geheilt).
  * Besiegt zerfließt sie zu Tinte; der Kessel erkaltet, und eine Perle darin ruft sie zurück.
  */
-public class SeaWitchEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
+public class SeaWitchEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden, io.github.sirschrolli.kingdomsatwar.entity.boss.PartyBoss {
     public static final float MAX_HEALTH = 680.0f;
     /** So lange (Ticks) zerfließt sie im Tod. */
     public static final int DEATH_TICKS = 60;

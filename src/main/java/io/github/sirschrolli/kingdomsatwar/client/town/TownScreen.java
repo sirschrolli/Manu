@@ -9,6 +9,7 @@ import io.github.sirschrolli.kingdomsatwar.economy.town.BuildingType;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Material;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Profession;
 import io.github.sirschrolli.kingdomsatwar.economy.town.SiteSections;
+import io.github.sirschrolli.kingdomsatwar.economy.town.Town;
 import io.github.sirschrolli.kingdomsatwar.economy.town.TownActions;
 import io.github.sirschrolli.kingdomsatwar.economy.town.TownTier;
 import io.github.sirschrolli.kingdomsatwar.economy.town.TownView;
@@ -70,7 +71,7 @@ public class TownScreen extends Screen {
     private static final int VISIBLE_ROWS = 7;
 
     enum Tab {
-        OVERVIEW("overview"), HIRE("hire"), RESIDENTS("residents"), BUILD("build"), CROWN("crown");
+        OVERVIEW("overview"), HIRE("hire"), RESIDENTS("residents"), BUILD("build"), COUNCIL("council"), CROWN("crown");
 
         final String id;
 
@@ -88,6 +89,7 @@ public class TownScreen extends Screen {
                 case HIRE -> new ItemStack(ModItems.GOLD_COIN.get());
                 case RESIDENTS -> new ItemStack(Items.BED.red());
                 case BUILD -> new ItemStack(ModItems.BLUEPRINT.get());
+                case COUNCIL -> new ItemStack(Items.BELL);
                 case CROWN -> new ItemStack(ModItems.GEMSTONE_CROWN.get());
             };
         }
@@ -112,6 +114,8 @@ public class TownScreen extends Screen {
     private int residentScroll;
     /** Bürger, dessen Entlassung gerade bestätigt werden soll (zweiter Klick), und wie lange noch. */
     private int confirmDismiss = -1;
+    /** Wen der Herr absetzen will (oder ob ein Mitregent niederlegen will) – zweiter Klick bestätigt. */
+    private @Nullable String confirmCouncil;
     private int confirmTicks;
     /** Dragon Architect: eigene Baupläne statt der Baupläne der Siedlung zeigen (im Reiter Bauen). */
     private boolean showPlans;
@@ -208,7 +212,7 @@ public class TownScreen extends Screen {
 
     private void updateWidgets() {
         if (this.nameBox != null) {
-            this.nameBox.visible = this.editingName && this.view.isOwner();
+            this.nameBox.visible = this.editingName && this.view.lord();
             if (!this.nameBox.visible) {
                 this.nameBox.setFocused(false);
             }
@@ -228,6 +232,7 @@ public class TownScreen extends Screen {
         if (this.confirmTicks > 0 && --this.confirmTicks == 0) {
             this.confirmDismiss = -1;
             this.confirmDelete = null;
+            this.confirmCouncil = null;
         }
         // alle zwei Sekunden auffrischen (Bewohner wandern, Baustellen wachsen)
         if (this.ticks % 40 == 0) {
@@ -348,6 +353,10 @@ public class TownScreen extends Screen {
     @Override
     public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         this.hotspots.clear();
+        // wer abgesetzt wurde (oder sein Amt niederlegt), sieht die Reiter des Verwaltens nicht mehr
+        if (!java.util.Arrays.asList(this.tabs()).contains(this.tab)) {
+            this.tab = Tab.OVERVIEW;
+        }
         this.updateWidgets();
         this.drawHeader(g, mouseX, mouseY);
         this.drawTabs(g, mouseX, mouseY);
@@ -366,6 +375,7 @@ public class TownScreen extends Screen {
                     this.drawBuild(g, x, y, mouseX, mouseY);
                 }
             }
+            case COUNCIL -> this.drawCouncil(g, x, y, mouseX, mouseY);
             case CROWN -> this.drawCrown(g, x, y, mouseX, mouseY);
         }
         Runnable overlay = this.overlay;
@@ -463,7 +473,7 @@ public class TownScreen extends Screen {
                 this.itemScaled(g, new ItemStack(ModItems.GEMSTONE_CROWN.get()), nx, y0 + 11, 0.75f);
                 nx += 15;
             }
-            if (this.view.isOwner()) {
+            if (this.view.lord()) {
                 this.woodButton(g, nx, y0 + 11, 14, 14, Component.literal("✎"), true, mouseX, mouseY, this::startRename,
                         List.of(Component.translatable("gui.kingdomsatwar.town.rename")));
             }
@@ -472,8 +482,32 @@ public class TownScreen extends Screen {
         g.text(this.font, tier, x0 + WIDTH - 12 - this.font.width(tier), y0 + 14, RIBBON_TEXT, true);
     }
 
+    /**
+     * Die Reiter für diesen Spieler: Wer die Siedlung (mit)verwaltet, sieht Anheuern; den Rat sieht der Herr, sobald er nicht
+     * allein spielt (oder schon Mitregenten hat), und jeder Mitregent; die Krone bleibt beim Herrn. Gäste sehen Übersicht,
+     * Bewohner und Bauten.
+     */
+    private Tab[] tabs() {
+        TownView v = this.view;
+        List<Tab> tabs = new java.util.ArrayList<>(v.isOwner() ? List.of(Tab.OVERVIEW, Tab.HIRE, Tab.RESIDENTS, Tab.BUILD)
+                : List.of(Tab.OVERVIEW, Tab.RESIDENTS, Tab.BUILD));
+        if (v.lord() ? !v.council().isEmpty() || !v.candidates().isEmpty() || this.withOthers() : v.isOwner()) {
+            tabs.add(Tab.COUNCIL);
+        }
+        if (v.lord()) {
+            tabs.add(Tab.CROWN);
+        }
+        return tabs.toArray(Tab[]::new);
+    }
+
+    /** Spielt hier noch jemand mit (Server, LAN, Essential)? */
+    private boolean withOthers() {
+        return this.minecraft != null && (!this.minecraft.isLocalServer()
+                || this.minecraft.getConnection() != null && this.minecraft.getConnection().getOnlinePlayers().size() > 1);
+    }
+
     private void drawTabs(GuiGraphicsExtractor g, int mouseX, int mouseY) {
-        Tab[] tabs = this.view.isOwner() ? Tab.values() : new Tab[] {Tab.OVERVIEW, Tab.RESIDENTS, Tab.BUILD};
+        Tab[] tabs = this.tabs();
         // Alle Reiter müssen aufs Pergament passen (deutsch sind sie breit): erst wird der Rand innen schmaler, dann die
         // Schrift kleiner; übriger Platz wird gleichmäßig verteilt, der letzte Reiter endet bündig am rechten Rand.
         int gap = 2;
@@ -610,9 +644,9 @@ public class TownScreen extends Screen {
                     Component.translatable(next.translationKey())), x, y, 140, MUTED);
         }
         y += 1;
-        Component discount = v.crowned() && v.isOwner() ? Component.translatable("gui.kingdomsatwar.town.all_free")
+        Component discount = v.crowned() && v.lord() ? Component.translatable("gui.kingdomsatwar.town.all_free")
                 : Component.translatable("gui.kingdomsatwar.town.discount", rank.discount());
-        this.wrapped(g, discount, x, y, 140, v.crowned() && v.isOwner() ? GOOD : TEXT);
+        this.wrapped(g, discount, x, y, 140, v.crowned() && v.lord() ? GOOD : TEXT);
 
         // rechte Spalte: Baustellen
         int rx = x0 + 158;
@@ -892,6 +926,114 @@ public class TownScreen extends Screen {
             int ky = y + (sh - knob) * this.residentScroll / max;
             g.fill(sx, ky, sx + 3, ky + knob, 0xFF8A6A3E);
         }
+    }
+
+    // ---------------------------------------------------------------- Rat (Mitregenten, seit 1.11.6)
+
+    /**
+     * Der Rat: links der Herr und seine Mitregenten (der Herr kann jeden absetzen), rechts – für den Herrn – wer gerade bei
+     * ihm am Banner steht und ernannt werden kann; ein Mitregent sieht dort, was er darf, und kann sein Amt niederlegen.
+     */
+    private void drawCouncil(GuiGraphicsExtractor g, int x0, int y0, int mouseX, int mouseY) {
+        TownView v = this.view;
+        String me = this.minecraft == null || this.minecraft.player == null ? "" : this.minecraft.player.getName().getString();
+        int x = x0 + 4;
+        int y = y0 + 3;
+        int colW = 146;
+        g.text(this.font, Component.translatable("gui.kingdomsatwar.town.council.rulers"), x, y, MUTED, false);
+        g.fill(x, y + 10, x + colW, y + 11, 0x40765A34);
+        int ry = y + 14;
+        // der Herr
+        this.councilRow(g, x, ry, colW, v.owner(), Component.translatable("gui.kingdomsatwar.town.council.lord"), 0xFF8A5A10, mouseX, mouseY);
+        ry += ROW_H;
+        for (String name : v.council()) {
+            this.councilRow(g, x, ry, colW, name, Component.translatable("gui.kingdomsatwar.town.council.co_ruler"), MUTED, mouseX, mouseY);
+            if (v.lord()) {
+                boolean confirm = name.equals(this.confirmCouncil);
+                this.smallButton(g, x + colW - 17, ry + 1, 16, 14, Component.literal(confirm ? "!" : "✘"), true, mouseX, mouseY, () -> {
+                    if (name.equals(this.confirmCouncil)) {
+                        this.send(TownActions.DEPOSE, 0, name);
+                        this.confirmCouncil = null;
+                    } else {
+                        this.confirmCouncil = name;
+                        this.confirmTicks = 60;
+                    }
+                }, List.of(Component.translatable(confirm ? "gui.kingdomsatwar.town.council.depose_confirm" : "gui.kingdomsatwar.town.council.depose",
+                        Component.literal(name))));
+            }
+            ry += ROW_H;
+        }
+        if (v.council().isEmpty()) {
+            this.wrapped(g, Component.translatable(v.lord() ? "gui.kingdomsatwar.town.council.alone" : "gui.kingdomsatwar.town.council.none")
+                    .withStyle(ChatFormatting.ITALIC), x + 2, ry + 3, colW - 4, MUTED);
+        }
+
+        // rechte Spalte
+        int rx = x0 + 158;
+        int rw = CONTENT_W - 162;
+        g.fill(rx - 7, y0 + 2, rx - 6, y0 + CONTENT_H - 4, 0x40765A34);
+        if (v.lord()) {
+            g.text(this.font, Component.translatable("gui.kingdomsatwar.town.council.nearby"), rx, y, MUTED, false);
+            g.fill(rx, y + 10, rx + rw, y + 11, 0x40765A34);
+            int cy = y + 14;
+            if (v.candidates().isEmpty()) {
+                cy = this.wrapped(g, Component.translatable(v.council().size() >= Town.MAX_CO_RULERS ? "gui.kingdomsatwar.town.council.full_hint"
+                        : "gui.kingdomsatwar.town.council.nobody").withStyle(ChatFormatting.ITALIC), rx + 2, cy + 3, rw - 4, MUTED);
+            } else {
+                for (String name : v.candidates()) {
+                    if (cy + ROW_H > y0 + CONTENT_H - 42) {
+                        break;
+                    }
+                    this.playerFace(g, name, rx + 2, cy + 2, 12);
+                    g.text(this.font, this.ellipsize(name, rw - 78), rx + 18, cy + 4, TEXT, false);
+                    this.woodButton(g, rx + rw - 58, cy + 1, 58, 14, Component.translatable("gui.kingdomsatwar.town.council.appoint"), true, mouseX,
+                            mouseY, () -> this.send(TownActions.APPOINT, 0, name),
+                            List.of(Component.translatable("gui.kingdomsatwar.town.council.appoint_hint", Component.literal(name))));
+                    cy += ROW_H;
+                }
+            }
+        } else {
+            g.text(this.font, Component.translatable("gui.kingdomsatwar.town.council.you"), rx, y, MUTED, false);
+            g.fill(rx, y + 10, rx + rw, y + 11, 0x40765A34);
+            this.wrapped(g, Component.translatable("gui.kingdomsatwar.town.council.your_rights", Component.literal(v.owner())), rx + 2, y + 15,
+                    rw - 4, TEXT);
+            boolean confirm = me.equals(this.confirmCouncil);
+            this.woodButton(g, rx + rw - 96, y0 + CONTENT_H - 60, 96, 14,
+                    Component.translatable(confirm ? "gui.kingdomsatwar.town.council.resign_confirm" : "gui.kingdomsatwar.town.council.resign"), true,
+                    mouseX, mouseY, () -> {
+                        if (me.equals(this.confirmCouncil)) {
+                            this.send(TownActions.DEPOSE, 0, me);
+                            this.confirmCouncil = null;
+                        } else {
+                            this.confirmCouncil = me;
+                            this.confirmTicks = 60;
+                        }
+                    }, List.of(Component.translatable("gui.kingdomsatwar.town.council.resign_hint")));
+        }
+        // unten: was Mitregenten dürfen
+        int fy = y0 + CONTENT_H - 40;
+        g.fill(rx, fy - 3, rx + rw, fy - 2, 0x40765A34);
+        this.wrapped(g, Component.translatable("gui.kingdomsatwar.town.council.rules"), rx + 2, fy, rw - 4, MUTED);
+    }
+
+    /** Eine Zeile im Rat: Gesicht, Name und Amt. */
+    private void councilRow(GuiGraphicsExtractor g, int x, int y, int w, String name, Component office, int officeColor, int mouseX, int mouseY) {
+        boolean hover = mouseX >= x && mouseX < x + w && mouseY >= y && mouseY < y + ROW_H - 1;
+        g.fill(x, y, x + w, y + ROW_H - 1, hover ? CARD_HOVER : 0x14FFF6DC);
+        this.playerFace(g, name, x + 2, y + 2, 12);
+        int officeW = this.font.width(office);
+        g.text(this.font, this.ellipsize(name, w - 40 - officeW), x + 18, y + 4, TEXT, false);
+        g.text(this.font, office, x + w - 20 - officeW, y + 4, officeColor, false);
+    }
+
+    /** Das Gesicht eines Spielers (sein Skin, wenn er gerade mitspielt – sonst das Standardgesicht). */
+    private void playerFace(GuiGraphicsExtractor g, String name, int x, int y, int size) {
+        net.minecraft.client.multiplayer.PlayerInfo info = this.minecraft == null || this.minecraft.getConnection() == null ? null
+                : this.minecraft.getConnection().getPlayerInfoIgnoreCase(name);
+        net.minecraft.world.entity.player.PlayerSkin skin = info != null ? info.getSkin()
+                : net.minecraft.client.resources.DefaultPlayerSkin.getDefaultSkin();
+        g.fill(x - 1, y - 1, x + size + 1, y + size + 1, 0xFF5C4527);
+        net.minecraft.client.gui.components.PlayerFaceExtractor.extractRenderState(g, skin, x, y, size);
     }
 
     // ---------------------------------------------------------------- Bauen

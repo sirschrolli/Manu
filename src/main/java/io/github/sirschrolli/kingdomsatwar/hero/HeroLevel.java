@@ -861,10 +861,15 @@ public final class HeroLevel {
         };
     }
 
+    /** Bringt ein Sieg über {@code victim} Heldenerfahrung? (Feinde und Elementarbosse.) */
+    public static boolean givesKillExperience(LivingEntity victim) {
+        return victim instanceof Enemy || victim instanceof ElementalBoss;
+    }
+
     @SubscribeEvent
     static void onDeath(LivingDeathEvent event) {
         LivingEntity victim = event.getEntity();
-        if (!(victim.level() instanceof ServerLevel) || !(victim instanceof Enemy || victim instanceof ElementalBoss)) {
+        if (!(victim.level() instanceof ServerLevel) || !givesKillExperience(victim)) {
             return;
         }
         if (event.getSource().getEntity() instanceof ServerPlayer player) {

@@ -35,7 +35,7 @@ public final class Garrison {
         if (!(soldier.level() instanceof ServerLevel level) || soldier.getOwnerId() == null) {
             return null;
         }
-        return Towns.of(level.getServer()).byOwner(soldier.getOwnerId());
+        return Towns.of(level.getServer()).ruledBy(soldier.getOwnerId());
     }
 
     /**
@@ -147,7 +147,7 @@ public final class Garrison {
         if (!atTable(player, table)) {
             return Recruitment.Result.TOO_FAR;
         }
-        if (!(player.level() instanceof ServerLevel level) || Towns.of(level.getServer()).byOwner(player.getUUID()) == null) {
+        if (!(player.level() instanceof ServerLevel level) || Towns.of(level.getServer()).ruledBy(player.getUUID()) == null) {
             return Recruitment.Result.NO_TOWN;
         }
         List<SoldierEntity> camp = Training.camp(player, table).stream().filter(SoldierEntity::isOnCampaign).toList();
@@ -162,7 +162,7 @@ public final class Garrison {
 
     /** Kommandostab (Schleichen und in den Himmel zeigen): alle eigenen Soldaten in Rufweite kehren heim. */
     public static int sendHome(ServerPlayer player) {
-        Town town = Towns.of(player.level().getServer()).byOwner(player.getUUID());
+        Town town = Towns.of(player.level().getServer()).ruledBy(player.getUUID());
         if (town == null) {
             player.sendOverlayMessage(Component.translatable("message.kingdomsatwar.garrison.no_town").withStyle(ChatFormatting.RED));
             return 0;

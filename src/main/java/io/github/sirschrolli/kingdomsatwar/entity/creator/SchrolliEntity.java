@@ -107,7 +107,7 @@ import org.jspecify.annotations.Nullable;
  * <p>Sein Licht geht durch jede Rüstung (Verzauberungen schützen weiter). Wer fällt, verliert in seinem Hof alles. Wer ihn
  * besiegt, trägt fortan den Titel „Gottbezwinger“.
  */
-public class SchrolliEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound, io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
+public class SchrolliEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound, io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden, io.github.sirschrolli.kingdomsatwar.entity.boss.PartyBoss {
     /** Lebenskraft jeder der beiden Gestalten (die Leiste von Minecraft fasst nur 1.024 – siehe BossHealth). */
     public static final float DESIGNED_HEALTH = 3200.0f;
     /** Erfahrung beim Sieg (fest, wie bei den anderen großen Gegnern). */
@@ -2027,5 +2027,11 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
     @Override
     public io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme skyTheme() {
         return io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme.CREATOR;
+    }
+
+    /** Schrolli zählt seine Herausforderer am Altar selbst ({@link #scaleForChallengers}). */
+    @Override
+    public boolean scalesWithParty() {
+        return false;
     }
 }

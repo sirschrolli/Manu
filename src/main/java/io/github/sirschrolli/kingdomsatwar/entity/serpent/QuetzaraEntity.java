@@ -81,7 +81,7 @@ import org.jspecify.annotations.Nullable;
  * </ul>
  * Findet sie niemanden mehr, kriecht sie zum Altar zurück, rollt sich ein und schläft (und heilt).
  */
-public class QuetzaraEntity extends Monster implements SkyWarden {
+public class QuetzaraEntity extends Monster implements SkyWarden, io.github.sirschrolli.kingdomsatwar.entity.boss.PartyBoss {
     public static final float MAX_HEALTH = 780.0f;
     /** Erfahrung beim Sieg (wie bei allen Bossen, die wiederkommen). */
     public static final int XP_REWARD = 450;

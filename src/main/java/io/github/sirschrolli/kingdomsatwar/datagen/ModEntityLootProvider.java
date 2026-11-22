@@ -629,8 +629,8 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
 
     /**
      * Der erste eigene Sieg über diesen Boss: Der Spieler, der ihn zuletzt getroffen hat, hat ihn genau einmal besiegt – eben
-     * jetzt (die Statistik „getötet“ zählt den Sieg schon mit, wenn die Beute fällt; setzt ein Soldat den letzten Treffer,
-     * ist es kein eigener Sieg). Siehe {@link io.github.sirschrolli.kingdomsatwar.entity.boss.BossLoot}.
+     * jetzt (die Statistik „getötet“ zählt den Sieg schon mit, wenn die Beute fällt – auch für die Mitstreiter, die ihre
+     * eigene Beute würfeln). Siehe {@link io.github.sirschrolli.kingdomsatwar.entity.boss.BossLoot}.
      */
     private static LootItemCondition.Builder firstVictory(EntityType<?> boss) {
         return LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.ATTACKING_PLAYER,

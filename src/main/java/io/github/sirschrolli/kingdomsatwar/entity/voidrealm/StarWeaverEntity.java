@@ -81,7 +81,7 @@ import org.jspecify.annotations.Nullable;
  * (geheilt). Besiegt rollt sie die Beine ein und zerfällt zu Sternenstaub; das Gelege erlischt, und ein Himmelseisenbarren
  * darin lockt eine neue Weberin.
  */
-public class StarWeaverEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
+public class StarWeaverEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden, io.github.sirschrolli.kingdomsatwar.entity.boss.PartyBoss {
     public static final float MAX_HEALTH = 1600.0f;
     /** So lange (Ticks) dauert ihr Sterben (sie rollt die Beine ein und zerfällt zu Sternenstaub). */
     public static final int DEATH_TICKS = 80;

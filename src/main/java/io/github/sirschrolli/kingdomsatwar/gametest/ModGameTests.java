@@ -245,6 +245,7 @@ public final class ModGameTests {
         TreeGameTests.init();      // neue Baumformen, karge Truhen
         IdentityGameTests.init();  // die eigenen Wesen gelten für Vanilla als die ersetzten
         NetworkGameTests.init();   // Mehrspieler: Nachrichten, Gegenstände und Spielerdaten kommen übers Netz heil an
+        PartyGameTests.init();     // Mehrspieler: Bosse gemeinsam bekämpfen (stärker je Mitstreiter, Beute für jeden)
         WarGameTests.init();       // Krieg der Königreiche: Stammburgen und ihre Besatzung
         RulesGameTests.init();     // Regeln: Mod-Sperre, Koordinaten, Härte, Verzauberungen
         KawCommandGameTests.init(); // /kaw: Dimensionen, Bosse, Bauwerke, Landeplätze, Reisen per Klick
@@ -370,6 +371,7 @@ public final class ModGameTests {
         EndGameTests.register(event, environment);
         TreeGameTests.register(event, environment);
         IdentityGameTests.register(event, environment);
+        PartyGameTests.register(event, environment);
         // eigener Durchgang: Der Netztest packt in einem Tick Tausende Gegenstände ein und aus – das soll keinen anderen Test bremsen
         NetworkGameTests.register(event, event.registerEnvironment(KingdomsAtWar.id("network")));
         // Drachen-Bosse brauchen länger (Erwachen + Todesanimation)

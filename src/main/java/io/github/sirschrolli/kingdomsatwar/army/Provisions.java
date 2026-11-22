@@ -57,9 +57,9 @@ public final class Provisions {
         return total;
     }
 
-    /** Die Siedlung des Spielers, wenn der Tisch in ihr steht (dann zählt ihr Lager mit). */
+    /** Die Siedlung des Spielers (oder die, die er mitregiert), wenn der Tisch in ihr steht (dann zählt ihr Lager mit). */
     public static @Nullable Town townAt(ServerLevel level, Player player, BlockPos table) {
-        Town town = Towns.of(level.getServer()).byOwner(player.getUUID());
+        Town town = Towns.of(level.getServer()).ruledBy(player.getUUID());
         return town != null && town.contains(level.dimension(), table) ? town : null;
     }
 

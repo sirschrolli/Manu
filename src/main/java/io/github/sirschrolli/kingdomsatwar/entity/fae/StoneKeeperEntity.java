@@ -74,7 +74,7 @@ import org.jspecify.annotations.Nullable;
  * Findet er niemanden mehr, kehrt er an seinen Platz zurück, kniet nieder und ist wieder heil. Besiegt zerfällt er zu Geröll;
  * ein Mondstein auf dem Hüterstein ruft einen neuen.
  */
-public class StoneKeeperEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
+public class StoneKeeperEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden, io.github.sirschrolli.kingdomsatwar.entity.boss.PartyBoss {
     public static final float MAX_HEALTH = 440.0f;
     /** So lange (Ticks) dauert sein Sterben (er sinkt auf die Knie und zerfällt). */
     public static final int DEATH_TICKS = 70;

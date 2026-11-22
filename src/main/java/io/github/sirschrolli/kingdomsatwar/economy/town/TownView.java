@@ -12,11 +12,13 @@ import net.minecraft.server.level.ServerPlayer;
 
 /**
  * Was das Stadtfenster zeigt: ein Abbild der Siedlung für einen Spieler (Name, Stufe, Bewohner, Preise, Baustellen,
- * Voraussetzungen der Krönung). Wird vom Server geschickt.
+ * Voraussetzungen der Krönung, der Rat). Wird vom Server geschickt. {@code isOwner}: Der Spieler darf die Siedlung
+ * verwalten (Herr oder Mitregent); {@code lord}: Er ist ihr Herr. {@code council}: die Namen der Mitregenten;
+ * {@code candidates}: wen der Herr gerade ernennen könnte (Spieler bei ihm am Banner).
  */
 public record TownView(String name, String owner, boolean isOwner, int tier, int capacity, int radius, int reputation, boolean crowned,
         boolean queen, List<ResidentView> residents, List<HireView> hires, List<BuildView> builds, List<ProjectView> projects, int crown,
-        boolean storage, List<Integer> stock, int food) {
+        boolean storage, List<Integer> stock, int food, boolean lord, List<String> council, List<String> candidates) {
 
     /** Ein Bürger: Name, Beruf, Zustand (0 = unterwegs, 1 = bei der Arbeit, 2 = schläft, 3 = fern, 4 = hungrig), mit Bett und Werkstatt. */
     public record ResidentView(String name, int profession, int variant, int state, boolean bed, boolean work) {
@@ -151,7 +153,13 @@ public record TownView(String name, String owner, boolean isOwner, int tier, int
         buf.writeBoolean(v.storage);
         ByteBufCodecs.VAR_INT.apply(ByteBufCodecs.list()).encode(buf, v.stock);
         buf.writeVarInt(v.food);
+        buf.writeBoolean(v.lord);
+        NAMES.encode(buf, v.council);
+        NAMES.encode(buf, v.candidates);
     }
+
+    /** Spielernamen (eine Handvoll). */
+    private static final StreamCodec<io.netty.buffer.ByteBuf, List<String>> NAMES = ByteBufCodecs.stringUtf8(64).apply(ByteBufCodecs.list(16));
 
     private static TownView read(RegistryFriendlyByteBuf buf) {
         return new TownView(buf.readUtf(), buf.readUtf(), buf.readBoolean(), buf.readVarInt(), buf.readVarInt(), buf.readVarInt(),
@@ -160,7 +168,8 @@ public record TownView(String name, String owner, boolean isOwner, int tier, int
                 HireView.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf),
                 BuildView.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf),
                 ProjectView.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf),
-                buf.readVarInt(), buf.readBoolean(), ByteBufCodecs.VAR_INT.apply(ByteBufCodecs.list()).decode(buf), buf.readVarInt());
+                buf.readVarInt(), buf.readBoolean(), ByteBufCodecs.VAR_INT.apply(ByteBufCodecs.list()).decode(buf), buf.readVarInt(),
+                buf.readBoolean(), NAMES.decode(buf), NAMES.decode(buf));
     }
 
     public TownTier tierValue() {
@@ -208,9 +217,27 @@ public record TownView(String name, String owner, boolean isOwner, int tier, int
         boolean storage = level != null && TownStorage.exists(level, town);
         int[] stock = level == null ? new int[Material.values().length] : TownStorage.counts(level, town);
         int food = level == null ? 0 : TownFood.pantry(level, town);
-        return new TownView(town.name(), town.ownerName(), town.owner().equals(player.getUUID()), town.tier().ordinal(), town.capacity(),
+        boolean lord = town.owner().equals(player.getUUID());
+        List<String> council = town.coRulers().stream().map(Town.CoRuler::name).toList();
+        return new TownView(town.name(), town.ownerName(), town.mayManage(player.getUUID()), town.tier().ordinal(), town.capacity(),
                 town.radius(), Reputation.points(player), town.crowned(), town.queen(), residents, hires, builds, projects,
-                Coronation.requirements(player, town), storage, ints(stock), food);
+                Coronation.requirements(player, town), storage, ints(stock), food, lord, council, lord ? candidates(player, town) : List.of());
+    }
+
+    /** Wen der Herr ernennen könnte: Spieler bei ihm am Banner, die noch nicht im Rat sitzen. */
+    static List<String> candidates(ServerPlayer lord, Town town) {
+        if (!town.hasBanner() || town.coRulers().size() >= Town.MAX_CO_RULERS) {
+            return List.of();
+        }
+        net.minecraft.world.phys.Vec3 banner = net.minecraft.world.phys.Vec3.atCenterOf(town.banner());
+        List<String> names = new ArrayList<>();
+        for (ServerPlayer other : lord.level().getServer().getPlayerList().getPlayers()) {
+            if (other != lord && other.level() == lord.level() && !other.isSpectator() && !town.mayManage(other.getUUID())
+                    && other.distanceToSqr(banner) <= TownActions.RANGE * TownActions.RANGE && names.size() < 8) {
+                names.add(other.getName().getString());
+            }
+        }
+        return names;
     }
 
     private static int[] concat(int[] a, int[] b) {

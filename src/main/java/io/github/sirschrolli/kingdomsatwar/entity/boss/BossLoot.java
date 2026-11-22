@@ -31,7 +31,8 @@ public final class BossLoot {
 
     /**
      * Ist das der erste eigene Sieg dieses Spielers über diesen Boss? Die Statistik zählt den Sieg schon mit, sobald der Boss
-     * fällt (nur wenn der Spieler den letzten Treffer selbst setzt – trifft zuletzt ein Soldat, ist es kein eigener Sieg).
+     * fällt – für den, der den letzten Treffer setzt, und (seit 1.11.6) für jeden Mitstreiter, auch wenn zuletzt ein Soldat
+     * trifft (siehe {@link BossParty#honour}).
      */
     public static boolean firstVictory(@Nullable Player player, EntityType<?> boss) {
         return player instanceof ServerPlayer server && server.getStats().getValue(Stats.ENTITY_KILLED.get(boss)) == 1;

@@ -237,6 +237,45 @@ final class EconomyLang {
         t.add("gui.kingdomsatwar.town.tab.residents", "Residents", "Bewohner");
         t.add("gui.kingdomsatwar.town.tab.build", "Build", "Bauen");
         t.add("gui.kingdomsatwar.town.tab.crown", "Crown", "Krone");
+        t.add("gui.kingdomsatwar.town.tab.council", "Council", "Rat");
+        // der Rat: Mitregenten (seit 1.11.6)
+        t.add("gui.kingdomsatwar.town.council.rulers", "Lord and co-rulers", "Herr und Mitregenten");
+        t.add("gui.kingdomsatwar.town.council.lord", "Lord", "Herr");
+        t.add("gui.kingdomsatwar.town.council.co_ruler", "Co-ruler", "Mitregent");
+        t.add("gui.kingdomsatwar.town.council.alone", "You rule alone so far. Friends who stand with you at the banner can become co-rulers.",
+                "Noch regierst du allein. Freunde, die mit dir am Banner stehen, kannst du zu Mitregenten ernennen.");
+        t.add("gui.kingdomsatwar.town.council.none", "No co-rulers.", "Keine Mitregenten.");
+        t.add("gui.kingdomsatwar.town.council.nearby", "At the banner", "Am Banner");
+        t.add("gui.kingdomsatwar.town.council.nobody", "Nobody else is here. Bring your friends to the banner to appoint them.",
+                "Sonst ist niemand hier. Stell dich mit deinen Freunden ans Banner, um sie zu ernennen.");
+        t.add("gui.kingdomsatwar.town.council.full_hint", "The council is full (seven co-rulers).", "Der Rat ist voll (sieben Mitregenten).");
+        t.add("gui.kingdomsatwar.town.council.appoint", "Appoint", "Ernennen");
+        t.add("gui.kingdomsatwar.town.council.appoint_hint", "Make %s a co-ruler of this town", "%s zum Mitregenten dieser Siedlung ernennen");
+        t.add("gui.kingdomsatwar.town.council.depose", "Depose %s", "%s absetzen");
+        t.add("gui.kingdomsatwar.town.council.depose_confirm", "Click again to depose %s", "Noch einmal klicken: %s absetzen");
+        t.add("gui.kingdomsatwar.town.council.you", "Your office", "Dein Amt");
+        t.add("gui.kingdomsatwar.town.council.your_rights",
+                "You rule this town together with %s: you may hire and dismiss citizens and start, change and cancel buildings.",
+                "Du regierst diese Siedlung gemeinsam mit %s: Du darfst Bürger anheuern und entlassen und Bauten beginnen, ändern und abbrechen.");
+        t.add("gui.kingdomsatwar.town.council.resign", "Resign", "Amt niederlegen");
+        t.add("gui.kingdomsatwar.town.council.resign_confirm", "Really resign?", "Wirklich niederlegen?");
+        t.add("gui.kingdomsatwar.town.council.resign_hint", "Leave the council of this town", "Den Rat dieser Siedlung verlassen");
+        t.add("gui.kingdomsatwar.town.council.rules",
+                "Co-rulers hire, dismiss and build. Name, crown and council stay with the lord. Your armies fight side by side.",
+                "Mitregenten heuern an, entlassen und bauen. Name, Krone und Rat bleiben beim Herrn. Eure Heere kämpfen Seite an Seite.");
+        t.add("gui.kingdomsatwar.town.council.appointed", "%s is now a co-ruler", "%s ist jetzt Mitregent");
+        t.add("gui.kingdomsatwar.town.council.deposed", "%s has been deposed", "%s ist abgesetzt");
+        t.add("gui.kingdomsatwar.town.council.resigned", "You have resigned", "Du hast dein Amt niedergelegt");
+        t.add("gui.kingdomsatwar.town.council.not_lord", "Only the lord may do that", "Das darf nur der Herr");
+        t.add("gui.kingdomsatwar.town.council.not_near", "%s must stand at the banner", "%s muss am Banner stehen");
+        t.add("gui.kingdomsatwar.town.council.already", "%s is already a co-ruler", "%s ist schon Mitregent");
+        t.add("gui.kingdomsatwar.town.council.full", "The council is full", "Der Rat ist voll");
+        t.add("gui.kingdomsatwar.town.council.unknown", "%s is not on the council", "%s sitzt nicht im Rat");
+        t.add("message.kingdomsatwar.town.co_ruler.appointed", "%1$s has made you co-ruler of %2$s. Open the town window at the banner to rule together.",
+                "%1$s hat dich zum Mitregenten von %2$s ernannt. Öffne das Stadtfenster am Banner, um mitzuregieren.");
+        t.add("message.kingdomsatwar.town.co_ruler.deposed", "You are no longer co-ruler of %s.", "Du bist nicht mehr Mitregent von %s.");
+        t.add("message.kingdomsatwar.town.co_ruler.resigned", "%1$s has resigned as co-ruler of %2$s.",
+                "%1$s hat sein Amt als Mitregent von %2$s niedergelegt.");
         t.add("gui.kingdomsatwar.town.name_hint", "Name of the settlement", "Name der Siedlung");
         t.add("gui.kingdomsatwar.town.rename", "Rename the settlement", "Siedlung umbenennen");
         t.add("gui.kingdomsatwar.town.foreign", "This is the settlement of %s.", "Dies ist die Siedlung von %s.");
