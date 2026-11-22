@@ -336,17 +336,10 @@ final class UiCheckShowcase {
         return level.getServer().getPlayerList().getPlayers().getFirst();
     }
 
-    /** Ein zweiter Spieler für die Vorführung (ohne eigenen Client – was der Server ihm schickt, verschwindet). */
+    /** Ein zweiter Spieler für die Vorführung (siehe {@link ShowcaseGuest}). */
     private static ServerPlayer guest(ServerLevel level, String name, BlockPos pos) {
-        var cookie = net.minecraft.server.network.CommonListenerCookie.createInitial(
-                new com.mojang.authlib.GameProfile(java.util.UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(java.nio.charset.StandardCharsets.UTF_8)), name),
-                false);
-        ServerPlayer guest = new ServerPlayer(level.getServer(), level, cookie.gameProfile(), cookie.clientInformation());
-        var connection = new net.minecraft.network.Connection(net.minecraft.network.protocol.PacketFlow.SERVERBOUND);
-        new io.netty.channel.embedded.EmbeddedChannel(connection);
-        level.getServer().getPlayerList().placeNewPlayer(connection, guest, cookie);
-        guest.teleportTo(level, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, java.util.Set.of(), 210.0f, 0.0f, true);
-        return guest;
+        return ShowcaseGuest.join(level, name, net.minecraft.world.phys.Vec3.atBottomCenterOf(pos), 210.0f, ItemStack.EMPTY,
+                net.minecraft.world.level.GameType.SURVIVAL);
     }
 
     private static void shot(Deque<Step> steps, Function<Minecraft, Screen> screen, String name, int wait) {

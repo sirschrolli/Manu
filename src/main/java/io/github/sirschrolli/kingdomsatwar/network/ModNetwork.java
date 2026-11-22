@@ -16,7 +16,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 @EventBusSubscriber(modid = KingdomsAtWar.MODID)
 public final class ModNetwork {
     /** Erhöhen, wenn sich Nachrichten ändern – Client und Server müssen zusammenpassen. */
-    private static final String PROTOCOL = "15";
+    private static final String PROTOCOL = "16";   // 1.11.6: Stadtfenster mit Rat (Mitregenten)
 
     /** Eine angemeldete Nachricht: ihre Art, ihr Codec und die Richtung ({@code toServer}: vom Spiel zum Server). */
     public record Registered(CustomPacketPayload.Type<?> type, StreamCodec<? super RegistryFriendlyByteBuf, ?> codec, boolean toServer) {}
