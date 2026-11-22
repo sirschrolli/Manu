@@ -74,9 +74,19 @@ public class WaystoneBlock extends Block implements EntityBlock {
 
     /** „Wegstein (Birkenwald)“ – als übersetzbarer Text, so liest jeder ihn in seiner Sprache. */
     public static Component autoName(Level level, BlockPos pos) {
-        String biome = level.getBiome(pos).unwrapKey().map(key -> "biome." + key.identifier().getNamespace() + "." + key.identifier().getPath()
-                .replace('/', '.')).orElse("block.kingdomsatwar.waystone");
-        return Component.translatable("block.kingdomsatwar.waystone.named", Component.translatable(biome));
+        Component biome = level.getBiome(pos).unwrapKey().map(key -> {
+            String path = key.identifier().getPath();
+            // ohne Übersetzung (manche Biome der Reiche): der Name aus der Kennung, „Arcane Sphere“
+            StringBuilder fallback = new StringBuilder();
+            for (String word : path.split("[_/]")) {
+                if (!word.isEmpty()) {
+                    fallback.append(fallback.isEmpty() ? "" : " ").append(Character.toUpperCase(word.charAt(0))).append(word.substring(1));
+                }
+            }
+            return (Component) Component.translatableWithFallback("biome." + key.identifier().getNamespace() + "." + path.replace('/', '.'),
+                    fallback.toString());
+        }).orElse(Component.translatable("block.kingdomsatwar.waystone"));
+        return Component.translatable("block.kingdomsatwar.waystone.named", biome);
     }
 
     @Override
@@ -106,12 +116,21 @@ public class WaystoneBlock extends Block implements EntityBlock {
         return InteractionResult.TRY_WITH_EMPTY_HAND;
     }
 
-    /** Mit leerer Hand: sein Name und wie man ihn sich merkt. */
+    /**
+     * Ohne Kompass in der Haupthand: Liegt einer in der anderen Hand, merkt er sich den Stein (Minecraft fragt die andere Hand
+     * hier gar nicht mehr); sonst nennt der Stein seinen Namen und wie man ihn sich merkt.
+     */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        if (player instanceof ServerPlayer serverPlayer && level.getBlockEntity(pos) instanceof WaystoneBlockEntity stone) {
-            serverPlayer.sendOverlayMessage(Component.translatable("message.kingdomsatwar.waystone.info", stone.getName().copy()
-                    .withStyle(ChatFormatting.AQUA)).withStyle(ChatFormatting.GRAY));
+        if (player instanceof ServerPlayer serverPlayer && level instanceof ServerLevel server
+                && level.getBlockEntity(pos) instanceof WaystoneBlockEntity stone) {
+            ItemStack offhand = player.getOffhandItem();
+            if (offhand.getItem() instanceof WaystoneCompassItem) {
+                WaystoneCompass.remember(serverPlayer, offhand, server, pos, stone);
+            } else {
+                serverPlayer.sendOverlayMessage(Component.translatable("message.kingdomsatwar.waystone.info", stone.getName().copy()
+                        .withStyle(ChatFormatting.AQUA)).withStyle(ChatFormatting.GRAY));
+            }
         }
         return InteractionResult.SUCCESS;
     }

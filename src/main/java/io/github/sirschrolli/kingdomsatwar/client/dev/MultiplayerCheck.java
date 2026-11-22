@@ -381,6 +381,35 @@ public final class MultiplayerCheck {
         }), "Fischbeutel", "mp_fischbeutel");
         STEPS.add(Step.screen(minecraft -> null));
 
+        // Wegkompass (seit 1.12): einen Wegstein mit dem Kompass anklicken, das Kompassfenster öffnen und das Ziel über die
+        // Leitung wählen und abwählen
+        BlockPos waystone = new BlockPos(2, -60, -2);
+        STEPS.add(Step.command("clear @s"));
+        STEPS.add(Step.command("setblock 2 -60 -2 kingdomsatwar:waystone"));
+        STEPS.add(Step.command("give @s kingdomsatwar:waystone_compass"));
+        barrier("Wegkompass");
+        STEPS.add(blockArrives(waystone, "kingdomsatwar:waystone"));
+        STEPS.add(Step.once(minecraft -> {
+            minecraft.player.getInventory().setSelectedSlot(0);
+            minecraft.gameMode.useItemOn(minecraft.player, InteractionHand.MAIN_HAND,
+                    new BlockHitResult(Vec3.atCenterOf(waystone), Direction.UP, waystone, false));
+        }));
+        STEPS.add(waitFor("Der Wegkompass merkt sich den Wegstein", minecraft -> io.github.sirschrolli.kingdomsatwar.waystone.WaystoneCompass.of(
+                minecraft.player.getMainHandItem()).entries().size() == 1, 200));
+        openAndShoot(Step.once(minecraft -> minecraft.gameMode.useItem(minecraft.player, InteractionHand.MAIN_HAND)), "Kompassfenster",
+                "mp_wegkompass");
+        STEPS.add(Step.once(minecraft -> ClientPacketDistributor.sendToServer(new io.github.sirschrolli.kingdomsatwar.network.WaystoneCompassPayload(
+                true, io.github.sirschrolli.kingdomsatwar.waystone.WaystoneCompass.SELECT, 0))));
+        STEPS.add(waitFor("Ziel des Wegkompasses abgewählt", minecraft -> io.github.sirschrolli.kingdomsatwar.waystone.WaystoneCompass.of(
+                minecraft.player.getMainHandItem()).selected() == -1, 200));
+        STEPS.add(Step.once(minecraft -> ClientPacketDistributor.sendToServer(new io.github.sirschrolli.kingdomsatwar.network.WaystoneCompassPayload(
+                true, io.github.sirschrolli.kingdomsatwar.waystone.WaystoneCompass.SELECT, 0))));
+        STEPS.add(waitFor("Ziel des Wegkompasses gewählt", minecraft -> io.github.sirschrolli.kingdomsatwar.waystone.WaystoneCompass.of(
+                minecraft.player.getMainHandItem()).selected() == 0, 200));
+        STEPS.add(pause(10));
+        STEPS.add(Step.screenshot("mp_wegkompass_ziel"));
+        STEPS.add(Step.screen(minecraft -> null));
+
         // Titelkarte eines Kapitels (Server an Spiel)
         STEPS.add(Step.command("kaw story card 1"));
         barrier("Titelkarte");

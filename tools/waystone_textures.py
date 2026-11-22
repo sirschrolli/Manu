@@ -316,18 +316,6 @@ def cap_glow() -> Image.Image:
     return img
 
 
-def crystal_halo() -> Image.Image:
-    """Weicher Schein um den schwebenden Kristall (weiß, im Spiel türkis gefärbt)."""
-    img = pa.new()
-    px = img.load()
-    for y in range(N):
-        for x in range(N):
-            d = math.hypot(x + 0.5 - 8.0, y + 0.5 - 8.0) / 8.0
-            if d < 1.0:
-                px[x, y] = (255, 255, 255, round(255 * (1.0 - d) ** 2.2))
-    return img
-
-
 def crystal() -> Image.Image:
     """Der schwebende Kristall (für alle acht Flächen): türkis, zur Spitze hin heller, mit Lichtkante."""
     img = pa.new()
@@ -553,7 +541,6 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     put("block/waystone_cap_top", cap_top())
     put("block/waystone_cap_glow", cap_glow())
     put("block/waystone_crystal", crystal())
-    put("block/waystone_halo", crystal_halo())
     put("gui/waystone_compass", gui_sheet())
 
 

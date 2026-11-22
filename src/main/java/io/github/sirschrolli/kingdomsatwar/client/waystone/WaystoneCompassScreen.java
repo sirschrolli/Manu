@@ -72,7 +72,7 @@ public class WaystoneCompassScreen extends Screen implements UiTheme.ParchmentSt
     private static final float DIAL_CX = DIAL_X + 48.5f;
     private static final float DIAL_CY = DIAL_Y + 48.5f;
     private static final float MARKER_R = 43.0f;
-    private static final float LETTER_R = 28.5f;
+    private static final float LETTER_R = 30.0f;
     private static final int BUTTON_W = 84;
     private static final int BUTTON_H = 14;
     private static final int BUTTON_Y = 160;
@@ -437,8 +437,11 @@ public class WaystoneCompassScreen extends Screen implements UiTheme.ParchmentSt
         for (int i = 0; i < 4; i++) {
             float angle = this.relative((i - 1) * Mth.HALF_PI);
             Component letter = Component.translatable("gui.kingdomsatwar.waystone_compass." + letters[i]);
-            int lx = Math.round(cx + Mth.sin(angle) * LETTER_R - this.font.width(letter) / 2.0f);
+            int lw = this.font.width(letter);
+            int lx = Math.round(cx + Mth.sin(angle) * LETTER_R - lw / 2.0f);
             int ly = Math.round(cy - Mth.cos(angle) * LETTER_R - 3.5f);
+            // ein Fleck in der Farbe des Blatts unter dem Buchstaben – so kreuzt ihn kein Teilstrich
+            g.fill(lx - 1, ly, lx + lw, ly + 7, 0xFF182629);
             g.text(this.font, letter, lx, ly, i == 0 ? 0xFFE8695A : 0xFF8FA9AE, false);
         }
 
@@ -516,8 +519,8 @@ public class WaystoneCompassScreen extends Screen implements UiTheme.ParchmentSt
         float sy = -Mth.cos(angle);
         float px = Mth.cos(angle);
         float py = Mth.sin(angle);
-        float tipLength = 31.0f;
-        float tailLength = 18.0f;
+        float tipLength = 27.0f;
+        float tailLength = 17.0f;
         float half = 2.8f;
         int[] tipLeft = target ? new int[] {0xFF4FD2E0, 0xFF9AF0F5, 0xFFE2FDFF} : new int[] {0xFFE05A4A, 0xFFFF8A7A, 0xFFFFC8BC};
         int[] tipRight = target ? new int[] {0xFF22A3B8, 0xFF4FD2E0, 0xFF9AF0F5} : new int[] {0xFFA8322A, 0xFFE05A4A, 0xFFFF8A7A};

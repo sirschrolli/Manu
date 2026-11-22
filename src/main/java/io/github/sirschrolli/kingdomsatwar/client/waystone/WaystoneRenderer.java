@@ -37,17 +37,14 @@ import org.joml.Vector3f;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Über dem Wegstein schwebt ein türkiser Kristall (seit 1.12): ein Achtflächner, der sich langsam dreht und auf und ab
- * schwingt, mit einem weichen Schein. Ist der Wegstein das Ziel des Wegkompasses in der Hand, dreht er sich schneller und
+ * Über dem Wegstein schwebt ein türkiser Kristall (seit 1.12): ein Achtflächner, der sich langsam dreht, auf und ab
+ * schwingt und sanft pulsiert. Ist der Wegstein das Ziel des Wegkompasses in der Hand, dreht er sich schneller und
  * leuchtet heller. Steht ein Block auf dem Wegstein, sinkt der Kristall in seine Fassung.
  */
 public class WaystoneRenderer implements BlockEntityRenderer<WaystoneBlockEntity, WaystoneRenderer.State> {
     private static final Identifier CRYSTAL = KingdomsAtWar.id("textures/block/waystone_crystal.png");
-    private static final Identifier HALO = KingdomsAtWar.id("textures/block/waystone_halo.png");
     private static final RenderType CRYSTAL_TYPE = RenderTypes.entityTranslucentEmissive(CRYSTAL);
-    private static final RenderType HALO_TYPE = RenderTypes.entityTranslucentEmissive(HALO);
     private static final int FULL_BRIGHT = 0xF000F0;
-    private static final int GLOW = 0x5FE3F0;
 
     public static class State extends BlockEntityRenderState {
         float time;
@@ -108,19 +105,6 @@ public class WaystoneRenderer implements BlockEntityRenderer<WaystoneBlockEntity
         float size = state.blocked ? 0.085f : 0.12f;
         float pulse = 0.5f + 0.5f * Mth.sin(t * 0.11f);
 
-        // Schein: zeigt immer zur Kamera
-        if (!state.blocked) {
-            pose.pushPose();
-            pose.translate(0.5f, height, 0.5f);
-            pose.rotate(camera.orientation);
-            float halo = 0.62f + 0.1f * pulse + 0.25f * lit;
-            pose.scale(halo, halo, halo);
-            int alpha = Math.round(70 + 30 * pulse + 60 * lit);
-            int color = ARGB.color(alpha, GLOW);
-            collector.submitCustomGeometry(pose, HALO_TYPE, (p, buffer) -> haloQuad(p, buffer, color));
-            pose.popPose();
-        }
-
         // Kristall: Achtflächner, oben spitzer als unten
         pose.pushPose();
         pose.translate(0.5f, height, 0.5f);
@@ -164,14 +148,6 @@ public class WaystoneRenderer implements BlockEntityRenderer<WaystoneBlockEntity
     private static void vertex(VertexConsumer buffer, PoseStack.Pose pose, Vector3f p, float u, float v, int color, Vector3f normal) {
         buffer.addVertex(pose, p.x(), p.y(), p.z()).setColor(color).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(FULL_BRIGHT)
                 .setNormal(pose, normal.x(), normal.y(), normal.z());
-    }
-
-    private static void haloQuad(PoseStack.Pose pose, VertexConsumer buffer, int color) {
-        Vector3f n = new Vector3f(0, 0, 1);
-        vertex(buffer, pose, new Vector3f(-0.5f, -0.5f, 0), 0.0f, 1.0f, color, n);
-        vertex(buffer, pose, new Vector3f(0.5f, -0.5f, 0), 1.0f, 1.0f, color, n);
-        vertex(buffer, pose, new Vector3f(0.5f, 0.5f, 0), 1.0f, 0.0f, color, n);
-        vertex(buffer, pose, new Vector3f(-0.5f, 0.5f, 0), 0.0f, 0.0f, color, n);
     }
 
     @Override

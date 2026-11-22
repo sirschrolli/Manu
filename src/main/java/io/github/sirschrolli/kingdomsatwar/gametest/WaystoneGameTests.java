@@ -312,6 +312,14 @@ final class WaystoneGameTests {
             helper.assertTrue(waypoints.entries().size() == 1 && waypoints.entries().getFirst().name().getString().equals("Rabenfels"),
                     "Der Kompass merkt sich den Wegstein nicht: " + waypoints);
             aims(helper, compass, GlobalPos.of(level.dimension(), pos), "Angeklickt");
+            // der Kompass in der anderen Hand, die Haupthand leer: wie im Spiel erst die Haupthand, dann ohne Gegenstand
+            ItemStack offhand = new ItemStack(ModItems.WAYSTONE_COMPASS.get());
+            player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+            player.setItemInHand(InteractionHand.OFF_HAND, offhand);
+            var first = state.useItemOn(ItemStack.EMPTY, level, player, InteractionHand.MAIN_HAND, hit);
+            helper.assertTrue(!first.consumesAction(), "Leere Hand verbraucht den Klick: " + first);
+            state.useWithoutItem(level, player, hit);
+            aims(helper, offhand, GlobalPos.of(level.dimension(), pos), "Kompass in der anderen Hand");
             // Licht und Härte
             helper.assertTrue(state.getLightEmission() == 6, "Der Wegstein leuchtet nicht: " + state.getLightEmission());
             helper.assertTrue(block.getExplosionResistance() >= 1200.0f, "Der Wegstein widersteht keiner Explosion");

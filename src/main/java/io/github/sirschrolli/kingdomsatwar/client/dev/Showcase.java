@@ -180,6 +180,7 @@ final class Showcase {
                 case "leveln" -> HeroShowcase.leveln(steps);
                 case "uicheck" -> UiCheckShowcase.all(steps);
                 case "party" -> PartyShowcase.fight(steps);
+                case "waystone" -> WaystoneShowcase.waystones(steps);
                 case "veterans" -> VeteranShowcase.veterans(steps);
                 case "siteworld" -> SitesShowcase.siteWorld(steps);
                 case "townplans" -> TownShowcase.plans(steps, "");
