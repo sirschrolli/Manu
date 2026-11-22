@@ -516,6 +516,22 @@ Danach nennt dir das Spiel die Taste für die **Chronik des Siegels** (anfangs *
 dir den nächsten Schritt. Ein Buch dafür gibt es seit 0.79 nicht mehr: Die Chronik hat jeder immer bei sich.
 Im Kreativmodus gibt es sechzehn eigene Tabs.
 
+**Mit Freunden spielen (seit 1.11.5)**
+
+Kingdoms at War läuft nur ohne andere Mods – mit einer Ausnahme: **Essential** ([essential.gg](https://essential.gg/)).
+Damit öffnest du deine Welt für Freunde, ohne selbst einen Server aufzusetzen:
+
+1. Essential für **NeoForge 26.3** herunterladen und neben `kingdomsatwar-1.11.5.jar` in den Ordner `mods` legen.
+2. Deine Welt starten, mit **Esc** das Pausenmenü öffnen, im Menü von Essential auf **Host** und dann **Start Hosting**
+   klicken und Freunde einladen (bis zu acht spielen gleichzeitig).
+3. Jeder Mitspieler braucht genau dasselbe: NeoForge 26.3, **dieselbe Version** von Kingdoms at War und Essential.
+
+Dein Spiel ist dabei der Server – solange du spielst, können die anderen in deine Welt. Statt Essential geht auch
+**„Im LAN öffnen“** oder ein eigener NeoForge-Server mit `kingdomsatwar-1.11.5.jar` im Ordner `mods`. Jeder hat seinen
+eigenen Helden, sein eigenes Heer, seine eigenen Siedlungen, sein Fangbuch und sein Intro; die Geschichte der Welt (die
+Chronik), die Bosse und die fremden Reiche erlebt ihr gemeinsam. Tipp: Mit `/gamerule pvp false` können Spieler einander
+nicht verletzen – und ihre Heere verschonen einander dann auch.
+
 ---
 
 ## Inhalte
