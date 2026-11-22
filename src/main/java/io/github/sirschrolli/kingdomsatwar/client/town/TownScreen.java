@@ -144,7 +144,7 @@ public class TownScreen extends Screen {
         return this.banner;
     }
 
-    /** Für Vorführungen: einen Reiter auswählen (0 = Übersicht … 4 = Krone). */
+    /** Für Vorführungen: einen Reiter auswählen (0 = Übersicht … 4 = Rat, 5 = Krone). */
     public void selectTab(int index) {
         this.tab = Tab.values()[Mth.clamp(index, 0, Tab.values().length - 1)];
         this.showPlans = false;
@@ -940,17 +940,35 @@ public class TownScreen extends Screen {
         int x = x0 + 4;
         int y = y0 + 3;
         int colW = 146;
+        int rx = x0 + 158;
+        int rw = CONTENT_W - 162;
+        int top = y + 14;
+        Component alone = Component.translatable(v.lord() ? "gui.kingdomsatwar.town.council.alone" : "gui.kingdomsatwar.town.council.none")
+                .withStyle(ChatFormatting.ITALIC);
+        Component nobody = Component.translatable(v.council().size() >= Town.MAX_CO_RULERS ? "gui.kingdomsatwar.town.council.full_hint"
+                : "gui.kingdomsatwar.town.council.nobody").withStyle(ChatFormatting.ITALIC);
+        // Platz: sitzen viele im Rat oder stehen viele am Banner, rücken die Zeilen zusammen und der Hinweis unten entfällt
+        int rows = Math.max(1 + v.council().size(), v.lord() ? v.candidates().size() : 0);
+        int rowH = Math.min(ROW_H, (y0 + CONTENT_H - 2 - top) / Math.max(1, rows));
+        int leftBottom = top + (1 + v.council().size()) * rowH + (v.council().isEmpty() ? 3 + 10 * this.font.split(alone, colW - 4).size() : 0);
+        int rightBottom = top + (v.candidates().isEmpty() ? 3 + 10 * this.font.split(nobody, rw - 4).size() : v.candidates().size() * rowH);
+        List<FormattedCharSequence> rules = v.lord()
+                ? this.font.split(Component.translatable("gui.kingdomsatwar.town.council.rules").withStyle(ChatFormatting.ITALIC), CONTENT_W - 14)
+                : List.of();
+        int footer = y0 + CONTENT_H - 3 - 10 * rules.size();
+        boolean showRules = !rules.isEmpty() && Math.max(leftBottom, rightBottom) + 6 <= footer - 4;
+
         g.text(this.font, Component.translatable("gui.kingdomsatwar.town.council.rulers"), x, y, MUTED, false);
         g.fill(x, y + 10, x + colW, y + 11, 0x40765A34);
-        int ry = y + 14;
+        int ry = top;
         // der Herr
-        this.councilRow(g, x, ry, colW, v.owner(), Component.translatable("gui.kingdomsatwar.town.council.lord"), 0xFF8A5A10, mouseX, mouseY);
-        ry += ROW_H;
+        this.councilRow(g, x, ry, colW, rowH, v.owner(), Component.translatable("gui.kingdomsatwar.town.council.lord"), 0xFF8A5A10, mouseX, mouseY);
+        ry += rowH;
         for (String name : v.council()) {
-            this.councilRow(g, x, ry, colW, name, Component.translatable("gui.kingdomsatwar.town.council.co_ruler"), MUTED, mouseX, mouseY);
+            this.councilRow(g, x, ry, colW, rowH, name, Component.translatable("gui.kingdomsatwar.town.council.co_ruler"), MUTED, mouseX, mouseY);
             if (v.lord()) {
                 boolean confirm = name.equals(this.confirmCouncil);
-                this.smallButton(g, x + colW - 17, ry + 1, 16, 14, Component.literal(confirm ? "!" : "✘"), true, mouseX, mouseY, () -> {
+                this.smallButton(g, x + colW - 17, ry + (rowH - 14) / 2, 16, 14, Component.literal(confirm ? "!" : "✘"), true, mouseX, mouseY, () -> {
                     if (name.equals(this.confirmCouncil)) {
                         this.send(TownActions.DEPOSE, 0, name);
                         this.confirmCouncil = null;
@@ -961,44 +979,40 @@ public class TownScreen extends Screen {
                 }, List.of(Component.translatable(confirm ? "gui.kingdomsatwar.town.council.depose_confirm" : "gui.kingdomsatwar.town.council.depose",
                         Component.literal(name))));
             }
-            ry += ROW_H;
+            ry += rowH;
         }
         if (v.council().isEmpty()) {
-            this.wrapped(g, Component.translatable(v.lord() ? "gui.kingdomsatwar.town.council.alone" : "gui.kingdomsatwar.town.council.none")
-                    .withStyle(ChatFormatting.ITALIC), x + 2, ry + 3, colW - 4, MUTED);
+            this.wrapped(g, alone, x + 2, ry + 3, colW - 4, MUTED);
         }
 
         // rechte Spalte
-        int rx = x0 + 158;
-        int rw = CONTENT_W - 162;
-        g.fill(rx - 7, y0 + 2, rx - 6, y0 + CONTENT_H - 4, 0x40765A34);
+        g.fill(rx - 7, y0 + 2, rx - 6, showRules ? footer - 7 : y0 + CONTENT_H - 4, 0x40765A34);
         if (v.lord()) {
             g.text(this.font, Component.translatable("gui.kingdomsatwar.town.council.nearby"), rx, y, MUTED, false);
             g.fill(rx, y + 10, rx + rw, y + 11, 0x40765A34);
-            int cy = y + 14;
+            int cy = top;
             if (v.candidates().isEmpty()) {
-                cy = this.wrapped(g, Component.translatable(v.council().size() >= Town.MAX_CO_RULERS ? "gui.kingdomsatwar.town.council.full_hint"
-                        : "gui.kingdomsatwar.town.council.nobody").withStyle(ChatFormatting.ITALIC), rx + 2, cy + 3, rw - 4, MUTED);
+                this.wrapped(g, nobody, rx + 2, cy + 3, rw - 4, MUTED);
             } else {
                 for (String name : v.candidates()) {
-                    if (cy + ROW_H > y0 + CONTENT_H - 42) {
+                    if (cy + rowH > y0 + CONTENT_H - 2) {
                         break;
                     }
-                    this.playerFace(g, name, rx + 2, cy + 2, 12);
-                    g.text(this.font, this.ellipsize(name, rw - 78), rx + 18, cy + 4, TEXT, false);
-                    this.woodButton(g, rx + rw - 58, cy + 1, 58, 14, Component.translatable("gui.kingdomsatwar.town.council.appoint"), true, mouseX,
-                            mouseY, () -> this.send(TownActions.APPOINT, 0, name),
+                    this.playerFace(g, name, rx + 2, cy + (rowH - 12) / 2, 12);
+                    g.text(this.font, this.ellipsize(name, rw - 78), rx + 18, cy + (rowH - 8) / 2, TEXT, false);
+                    this.woodButton(g, rx + rw - 58, cy + (rowH - 14) / 2, 58, 14, Component.translatable("gui.kingdomsatwar.town.council.appoint"), true,
+                            mouseX, mouseY, () -> this.send(TownActions.APPOINT, 0, name),
                             List.of(Component.translatable("gui.kingdomsatwar.town.council.appoint_hint", Component.literal(name))));
-                    cy += ROW_H;
+                    cy += rowH;
                 }
             }
         } else {
             g.text(this.font, Component.translatable("gui.kingdomsatwar.town.council.you"), rx, y, MUTED, false);
             g.fill(rx, y + 10, rx + rw, y + 11, 0x40765A34);
-            this.wrapped(g, Component.translatable("gui.kingdomsatwar.town.council.your_rights", Component.literal(v.owner())), rx + 2, y + 15,
+            int ty = this.wrapped(g, Component.translatable("gui.kingdomsatwar.town.council.your_rights", Component.literal(v.owner())), rx + 2, top + 1,
                     rw - 4, TEXT);
             boolean confirm = me.equals(this.confirmCouncil);
-            this.woodButton(g, rx + rw - 96, y0 + CONTENT_H - 60, 96, 14,
+            this.woodButton(g, rx + rw - 96, Math.min(ty + 6, y0 + CONTENT_H - 18), 96, 14,
                     Component.translatable(confirm ? "gui.kingdomsatwar.town.council.resign_confirm" : "gui.kingdomsatwar.town.council.resign"), true,
                     mouseX, mouseY, () -> {
                         if (me.equals(this.confirmCouncil)) {
@@ -1010,20 +1024,27 @@ public class TownScreen extends Screen {
                         }
                     }, List.of(Component.translatable("gui.kingdomsatwar.town.council.resign_hint")));
         }
-        // unten: was Mitregenten dürfen
-        int fy = y0 + CONTENT_H - 40;
-        g.fill(rx, fy - 3, rx + rw, fy - 2, 0x40765A34);
-        this.wrapped(g, Component.translatable("gui.kingdomsatwar.town.council.rules"), rx + 2, fy, rw - 4, MUTED);
+        // unten über die ganze Breite: was Mitregenten dürfen
+        if (showRules) {
+            g.fill(x, footer - 5, x0 + CONTENT_W - 4, footer - 4, 0x40765A34);
+            int fy = footer;
+            for (FormattedCharSequence line : rules) {
+                g.text(this.font, line, x + 2, fy, MUTED, false);
+                fy += 10;
+            }
+        }
     }
 
     /** Eine Zeile im Rat: Gesicht, Name und Amt. */
-    private void councilRow(GuiGraphicsExtractor g, int x, int y, int w, String name, Component office, int officeColor, int mouseX, int mouseY) {
-        boolean hover = mouseX >= x && mouseX < x + w && mouseY >= y && mouseY < y + ROW_H - 1;
-        g.fill(x, y, x + w, y + ROW_H - 1, hover ? CARD_HOVER : 0x14FFF6DC);
-        this.playerFace(g, name, x + 2, y + 2, 12);
+    private void councilRow(GuiGraphicsExtractor g, int x, int y, int w, int h, String name, Component office, int officeColor, int mouseX,
+            int mouseY) {
+        boolean hover = mouseX >= x && mouseX < x + w && mouseY >= y && mouseY < y + h - 1;
+        g.fill(x, y, x + w, y + h - 1, hover ? CARD_HOVER : 0x14FFF6DC);
+        this.playerFace(g, name, x + 2, y + (h - 13) / 2, 12);
         int officeW = this.font.width(office);
-        g.text(this.font, this.ellipsize(name, w - 40 - officeW), x + 18, y + 4, TEXT, false);
-        g.text(this.font, office, x + w - 20 - officeW, y + 4, officeColor, false);
+        int ty = y + (h - 9) / 2;
+        g.text(this.font, this.ellipsize(name, w - 40 - officeW), x + 18, ty, TEXT, false);
+        g.text(this.font, office, x + w - 20 - officeW, ty, officeColor, false);
     }
 
     /** Das Gesicht eines Spielers (sein Skin, wenn er gerade mitspielt – sonst das Standardgesicht). */

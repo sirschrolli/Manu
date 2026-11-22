@@ -218,7 +218,7 @@ final class UiCheckShowcase {
             town[0] = Towns.of(level.getServer()).byOwner(player.getUUID());
         }));
         steps.add(Step.until(() -> town[0] != null, 100));
-        for (int tab = 0; tab < 5; tab++) {
+        for (int tab = 0; tab < 6; tab++) {
             int t = tab;
             steps.add(Step.server(level -> {
                 if (town[0] != null) {
@@ -236,6 +236,79 @@ final class UiCheckShowcase {
             steps.add(Step.screenshot(tag + "stadt_" + t));
             steps.add(Step.screen(minecraft -> null));
         }
+        // der Rat: ein Freund steht am Banner – erst als Anwärter, dann als Mitregent
+        ServerPlayer[] friend = new ServerPlayer[1];
+        steps.add(Step.server(level -> friend[0] = guest(level, "Freund", banner[0].offset(2, 0, 2))));
+        for (int round = 0; round < 2; round++) {
+            boolean appointed = round == 1;
+            if (appointed) {
+                steps.add(Step.server(level -> {
+                    if (town[0] != null && friend[0] != null) {
+                        TownManager.appoint(first(level), town[0], friend[0]);
+                    }
+                }));
+            }
+            steps.add(Step.server(level -> {
+                if (town[0] != null) {
+                    TownActions.open(first(level), town[0], banner[0]);
+                }
+            }));
+            steps.add(Step.until(() -> Minecraft.getInstance().gui.screen() instanceof io.github.sirschrolli.kingdomsatwar.client.town.TownScreen, 100));
+            steps.add(Step.once(minecraft -> {
+                if (minecraft.gui.screen() instanceof io.github.sirschrolli.kingdomsatwar.client.town.TownScreen screen) {
+                    screen.selectTab(4);
+                }
+                Showcase.parkMouse(minecraft);
+            }));
+            steps.add(Step.waitTicks(12));
+            steps.add(Step.screenshot(tag + (appointed ? "rat_mitregent" : "rat_anwaerter")));
+            steps.add(Step.screen(minecraft -> null));
+        }
+        // … und umgekehrt: der Freund gründet weiter draußen seine eigene Siedlung und ernennt uns – so sieht ein Mitregent den Rat
+        BlockPos[] far = new BlockPos[1];
+        steps.add(Step.server(level -> {
+            ServerPlayer player = first(level);
+            BlockPos column = player.blockPosition().offset(96, 0, 0);
+            int top = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, column.getX(), column.getZ());
+            far[0] = new BlockPos(column.getX(), top, column.getZ());
+            player.teleportTo(level, far[0].getX() + 0.5, far[0].getY(), far[0].getZ() + 3.5, java.util.Set.of(), 180.0f, 10.0f, true);
+            if (friend[0] != null) {
+                friend[0].teleportTo(level, far[0].getX() + 2.5, far[0].getY(), far[0].getZ() + 2.5, java.util.Set.of(), 160.0f, 0.0f, true);
+            }
+        }));
+        steps.add(Step.waitForChunks(200));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.server(level -> {
+            if (friend[0] == null || far[0] == null) {
+                return;
+            }
+            BlockPos pos = new BlockPos(far[0].getX(), level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    far[0].getX(), far[0].getZ()), far[0].getZ());
+            BlockState lower = ModBlocks.TOWN_BANNER.get().defaultBlockState().setValue(TownBannerBlock.FACING, Direction.SOUTH);
+            level.setBlock(pos, lower, Block.UPDATE_ALL);
+            level.setBlock(pos.above(), lower.setValue(TownBannerBlock.HALF, DoubleBlockHalf.UPPER), Block.UPDATE_ALL);
+            TownManager.placeBanner(friend[0], level, pos);
+            Town theirs = Towns.of(level.getServer()).byOwner(friend[0].getUUID());
+            if (theirs != null) {
+                TownManager.appoint(friend[0], theirs, first(level));
+                TownActions.open(first(level), theirs, pos);
+            }
+        }));
+        steps.add(Step.until(() -> Minecraft.getInstance().gui.screen() instanceof io.github.sirschrolli.kingdomsatwar.client.town.TownScreen, 100));
+        steps.add(Step.once(minecraft -> {
+            if (minecraft.gui.screen() instanceof io.github.sirschrolli.kingdomsatwar.client.town.TownScreen screen) {
+                screen.selectTab(4);
+            }
+            Showcase.parkMouse(minecraft);
+        }));
+        steps.add(Step.waitTicks(12));
+        steps.add(Step.screenshot(tag + "rat_als_mitregent"));
+        steps.add(Step.screen(minecraft -> null));
+        steps.add(Step.server(level -> {
+            if (friend[0] != null) {
+                level.getServer().getPlayerList().remove(friend[0]);
+            }
+        }));
 
         // Zaubertisch (ein echtes Menü vom Server)
         steps.add(Step.server(level -> {
@@ -261,6 +334,19 @@ final class UiCheckShowcase {
 
     private static ServerPlayer first(ServerLevel level) {
         return level.getServer().getPlayerList().getPlayers().getFirst();
+    }
+
+    /** Ein zweiter Spieler für die Vorführung (ohne eigenen Client – was der Server ihm schickt, verschwindet). */
+    private static ServerPlayer guest(ServerLevel level, String name, BlockPos pos) {
+        var cookie = net.minecraft.server.network.CommonListenerCookie.createInitial(
+                new com.mojang.authlib.GameProfile(java.util.UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(java.nio.charset.StandardCharsets.UTF_8)), name),
+                false);
+        ServerPlayer guest = new ServerPlayer(level.getServer(), level, cookie.gameProfile(), cookie.clientInformation());
+        var connection = new net.minecraft.network.Connection(net.minecraft.network.protocol.PacketFlow.SERVERBOUND);
+        new io.netty.channel.embedded.EmbeddedChannel(connection);
+        level.getServer().getPlayerList().placeNewPlayer(connection, guest, cookie);
+        guest.teleportTo(level, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, java.util.Set.of(), 210.0f, 0.0f, true);
+        return guest;
     }
 
     private static void shot(Deque<Step> steps, Function<Minecraft, Screen> screen, String name, int wait) {

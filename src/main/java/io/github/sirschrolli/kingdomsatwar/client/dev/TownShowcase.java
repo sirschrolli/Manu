@@ -386,7 +386,7 @@ final class TownShowcase {
         }));
         steps.add(Step.until(() -> Minecraft.getInstance().gui.screen() instanceof TownScreen, 100));
         steps.add(Step.once(Showcase::parkMouse));
-        String[] tabs = {"overview", "hire", "residents", "build", "crown"};
+        String[] tabs = {"overview", "hire", "residents", "build", "council", "crown"};
         for (int i = 0; i < tabs.length; i++) {
             int index = i;
             steps.add(Step.once(minecraft -> {
