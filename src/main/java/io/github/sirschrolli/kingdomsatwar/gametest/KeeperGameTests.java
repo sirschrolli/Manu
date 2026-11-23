@@ -319,6 +319,9 @@ final class KeeperGameTests {
             return true;
         };
         AABB around = new AABB(o).inflate(40, 24, 40);
+        // Mondsteinkäfig: ein Ritter auf dem Kranz (gegenüber der Lücke), einer daneben außerhalb
+        LivingEntity[] extra = new LivingEntity[2];
+        float[] extraHp = new float[2];
         List<Step> steps = List.of(
                 new Step(StoneKeeperEntity.Attack.SMASH.duration - 4, () -> {
                     place.accept(2.6);
@@ -338,6 +341,29 @@ final class KeeperGameTests {
                     place.accept(7.0);
                     keeper.forceAttack(StoneKeeperEntity.Attack.CRYSTALS);
                 }, () -> hurt.test("Die Kristallspur")),
+                new Step(StoneKeeperEntity.CAGE_RISE + 2, () -> {
+                    place.accept(7.0);
+                    keeper.forceAttack(StoneKeeperEntity.Attack.CAGE);
+                }, () -> {
+                    Vec3 c = keeper.cageCenter();
+                    helper.assertTrue(c != null && Math.hypot(c.x - knight.getX(), c.z - knight.getZ()) < 0.6,
+                            "Der Mondsteinkäfig bricht nicht um den Ritter hervor: " + c);
+                    helper.assertTrue(knight.getHealth() >= hp[0], "Der Mondsteinkäfig trifft, bevor er zusammenbricht");
+                    double a = keeper.cageGap() + Math.PI;
+                    extra[0] = cageKnight(level, c.add(Math.cos(a) * StoneKeeperEntity.CAGE_RADIUS, 0.0, Math.sin(a) * StoneKeeperEntity.CAGE_RADIUS));
+                    extra[1] = cageKnight(level, c.add(Math.cos(a) * (StoneKeeperEntity.CAGE_RADIUS + 3.0), 0.0,
+                            Math.sin(a) * (StoneKeeperEntity.CAGE_RADIUS + 3.0)));
+                    extraHp[0] = extra[0].getHealth();
+                    extraHp[1] = extra[1].getHealth();
+                }),
+                new Step(StoneKeeperEntity.CAGE_CLOSE - StoneKeeperEntity.CAGE_RISE, () -> { }, () -> {
+                    hurt.test("Der Mondsteinkäfig");
+                    helper.assertTrue(extra[0].getHealth() < extraHp[0], "Die Kristalle des Käfigs schneiden nicht, wer zwischen ihnen steht");
+                    helper.assertTrue(extra[1].getHealth() >= extraHp[1], "Der Mondsteinkäfig trifft auch, wer draußen steht");
+                    helper.assertTrue(keeper.cageCenter() == null, "Der Mondsteinkäfig bricht nicht zusammen");
+                    extra[0].discard();
+                    extra[1].discard();
+                }),
                 new Step(56, () -> {
                     place.accept(8.0);
                     keeper.forceEnraged();
@@ -358,6 +384,18 @@ final class KeeperGameTests {
                     keeper.forceAttack(StoneKeeperEntity.Attack.ARMOR);
                 }, () -> helper.assertTrue(keeper.isArmored(), "Kein Kristallpanzer")));
         run(helper, steps, 0, () -> armorAndDeath(helper, level, field, stone, keeper, knight));
+    }
+
+    /** Ein zäher, willenloser Ritter für den Mondsteinkäfig. */
+    private static LivingEntity cageKnight(ServerLevel level, Vec3 at) {
+        LivingEntity k = ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get().create(level, EntitySpawnReason.EVENT);
+        if (k == null) {
+            throw new IllegalStateException("Kein Ritter");
+        }
+        ((Mob) k).setNoAi(true);
+        k.snapTo(at.x, at.y, at.z, 0.0f, 0.0f);
+        level.addFreshEntity(k);
+        return k;
     }
 
     private static void armorAndDeath(GameTestHelper helper, ServerLevel level, Field field, KeeperStoneBlockEntity stone, StoneKeeperEntity keeper,

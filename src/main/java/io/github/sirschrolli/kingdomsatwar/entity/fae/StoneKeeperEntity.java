@@ -64,6 +64,9 @@ import org.jspecify.annotations.Nullable;
  *     <li><b>Felswurf</b> – er reißt einen Felsbrocken aus dem Boden und schleudert ihn im Bogen;</li>
  *     <li><b>Kristallspur</b> – er rammt die Fäuste in den Boden, und Mondsteinkristalle brechen in einer Spur auf seinen Gegner
  *     zu hervor (unter halber Kraft in drei Spuren);</li>
+ *     <li><b>Mondsteinkäfig</b> (seit 1.13) – er streckt die Fäuste nach seinem Gegner aus und reißt sie hoch: Ein Kranz aus
+ *     Mondsteinkristallen bricht um ihn aus dem Boden, mit nur einer Lücke. Wer zwischen den Kristallen hindurch will, schneidet
+ *     sich; wer noch darin steht, wenn er die Fäuste zusammenschlägt, den zermalmt der Käfig;</li>
  *     <li><b>Felssprung</b> – steht sein Gegner fern oder auf einer höheren Stufe des Bruchs, springt er ihm nach und landet
  *     mit Wucht;</li>
  *     <li><b>Kristallpanzer</b> – unter halber Kraft wachsen Kristalle über ihn: Er nimmt viel weniger Schaden, bis der Panzer
@@ -96,10 +99,19 @@ public class StoneKeeperEntity extends Monster implements io.github.sirschrolli.
     public static final int LEAP_FLIGHT = 18;
     /** Mondstrahl: so weit reicht er. */
     public static final double BEAM_RANGE = 26.0;
+    /** Mondsteinkäfig: so weit (Halbmesser) um sein Ziel bricht der Kranz hervor … */
+    public static final double CAGE_RADIUS = 3.2;
+    /** … in diesem Tick; in diesem bricht er zusammen. */
+    public static final int CAGE_RISE = 14;
+    public static final int CAGE_CLOSE = 44;
+    /** So viel Schaden, wenn er zusammenbricht (im Zorn mehr), und wenn man sich zwischen den Kristallen hindurchzwängt. */
+    public static final float CAGE_DAMAGE = 12.0f;
+    public static final float CAGE_CUT = 4.0f;
+    private static final int MOONSTONE = 0x9ED0FF;
 
     public enum Attack {
         NONE(0), DORMANT(0), AWAKEN(70), SMASH(36), STOMP(36), BOULDER(54), CRYSTALS(52), BEAM(82), LEAP(40), LAND(26), ARMOR(52),
-        STAGGER(64);
+        STAGGER(64), CAGE(58);
 
         public final int duration;
 
@@ -129,6 +141,10 @@ public class StoneKeeperEntity extends Monster implements io.github.sirschrolli.
     private @Nullable Vec3 leapTo;
     private @Nullable Vec3 beamDir;
     private @Nullable SpellFxEntity beamFx;
+    /** Mondsteinkäfig: seine Mitte, wo die Lücke ist (Winkel), wer sich schon geschnitten hat. */
+    private @Nullable Vec3 cageCenter;
+    private double cageGap;
+    private final Set<UUID> cageCut = new HashSet<>();
     private int clientAttackStart;
 
     public StoneKeeperEntity(EntityType<? extends StoneKeeperEntity> type, Level level) {
@@ -256,6 +272,9 @@ public class StoneKeeperEntity extends Monster implements io.github.sirschrolli.
             this.lastAttack = next;
         }
         this.slamHit.clear();
+        if (next != Attack.CAGE) {
+            this.cageCenter = null;
+        }
         this.bossBar.setVisible(next != Attack.DORMANT);
     }
 
@@ -441,6 +460,7 @@ public class StoneKeeperEntity extends Monster implements io.github.sirschrolli.
             case BOULDER -> this.tickBoulder(level, target);
             case CRYSTALS -> this.tickCrystals(level, target);
             case BEAM -> this.tickBeam(level, target);
+            case CAGE -> this.tickCage(level, target);
             default -> { }
         }
         if (this.attackTick >= this.attack.duration) {
@@ -546,9 +566,9 @@ public class StoneKeeperEntity extends Monster implements io.github.sirschrolli.
         if (distance < 5.0) {
             options.addAll(List.of(Attack.SMASH, Attack.SMASH, Attack.STOMP, Attack.CRYSTALS));
         } else if (distance < 10.0) {
-            options.addAll(List.of(Attack.STOMP, Attack.CRYSTALS, Attack.CRYSTALS, Attack.BOULDER));
+            options.addAll(List.of(Attack.STOMP, Attack.CRYSTALS, Attack.CRYSTALS, Attack.BOULDER, Attack.CAGE));
         } else {
-            options.addAll(List.of(Attack.BOULDER, Attack.BOULDER, Attack.CRYSTALS));
+            options.addAll(List.of(Attack.BOULDER, Attack.BOULDER, Attack.CRYSTALS, Attack.CAGE));
         }
         if (this.isEnraged() && distance > 4.0) {
             options.add(Attack.BEAM);
@@ -771,6 +791,140 @@ public class StoneKeeperEntity extends Monster implements io.github.sirschrolli.
             Vec3 d = lines == 1 ? dir : dir.yRot((float) Math.toRadians((i - 1) * 24.0));
             CrystalLine.start(level, new Vec3(start.x, this.getY(), start.z), d, 12, 1.45, 2, damage, 0.8f, this, this::canStrike);
         }
+    }
+
+    /**
+     * Mondsteinkäfig: Er streckt die Fäuste nach seinem Gegner aus und reißt sie hoch – ein Kranz aus Mondsteinkristallen bricht
+     * um ihn aus dem Boden (im Zorn dichter), nur an einer Stelle klafft eine Lücke; ein Warnkreis füllt sich. Wer sich zwischen
+     * den Kristallen hindurchzwängt, schneidet sich (einmal) und wird langsam; wer noch darin steht, wenn er die Fäuste
+     * zusammenschlägt, den zermalmt der Käfig.
+     */
+    private void tickCage(ServerLevel level, LivingEntity target) {
+        int t = this.attackTick;
+        if (t == 4) {
+            this.sound(level, ModSounds.STONE_KEEPER_ROAR.get(), 2.0f, 1.25f);
+        }
+        if (t == CAGE_RISE) {
+            this.raiseCage(level, target);
+        }
+        Vec3 c = this.cageCenter;
+        if (c == null || t < CAGE_RISE) {
+            return;
+        }
+        int slots = this.cageSlots();
+        if (t < CAGE_CLOSE) {
+            // die Kristalle glimmen
+            if (t % 4 == 0) {
+                for (int k = 1; k < slots; k++) {
+                    double a = this.cageGap + k * Mth.TWO_PI / slots;
+                    level.sendParticles(ParticleTypes.END_ROD, c.x + Math.cos(a) * CAGE_RADIUS, c.y + 1.0, c.z + Math.sin(a) * CAGE_RADIUS, 1,
+                            0.15, 0.4, 0.15, 0.01);
+                }
+            }
+            // wer sich zwischen den Kristallen hindurchzwängt, schneidet sich
+            if (t > CAGE_RISE + 3) {
+                for (LivingEntity e : this.victims(level, new AABB(c, c).inflate(CAGE_RADIUS + 1.5, 3.0, CAGE_RADIUS + 1.5))) {
+                    double d = Math.hypot(e.getX() - c.x, e.getZ() - c.z);
+                    if (Math.abs(d - CAGE_RADIUS) < 0.45 + e.getBbWidth() * 0.5 && Math.abs(e.getY() - c.y) < 2.5 && !this.inCageGap(e)
+                            && this.cageCut.add(e.getUUID())) {
+                        e.hurtServer(level, this.damageSources().mobAttack(this), CAGE_CUT + (this.isEnraged() ? 1.0f : 0.0f));
+                        e.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 40, 1), this);
+                        level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, FaeBlocks.MOONSTONE_BLOCK.get().defaultBlockState()),
+                                e.getX(), e.getY(0.5), e.getZ(), 12, 0.3, 0.4, 0.3, 0.1);
+                    }
+                }
+            }
+            return;
+        }
+        if (t == CAGE_CLOSE) {
+            this.crushCage(level, c);
+        }
+    }
+
+    /** Der Kranz bricht um das Ziel hervor: Kristalle auf allen Plätzen außer der Lücke, dazu der Warnkreis. */
+    private void raiseCage(ServerLevel level, LivingEntity target) {
+        Vec3 c = target.position();
+        this.cageCenter = c;
+        this.cageGap = this.random.nextDouble() * Mth.TWO_PI;
+        this.cageCut.clear();
+        int slots = this.cageSlots();
+        int life = CAGE_CLOSE - CAGE_RISE + 6;
+        for (int k = 1; k < slots; k++) {
+            double a = this.cageGap + k * Mth.TWO_PI / slots;
+            Vec3 at = ground(level, c.add(Math.cos(a) * CAGE_RADIUS, 0.0, Math.sin(a) * CAGE_RADIUS));
+            float yaw = (float) (a * Mth.RAD_TO_DEG) - 90.0f;
+            SpellFxEntity.create(level, SpellFxEntity.Kind.CRYSTAL, at, null, MOONSTONE, life, 1.05f + this.random.nextFloat() * 0.2f)
+                    .facing(yaw).spawn();
+            level.sendParticles(this.dust(level), at.x, at.y + 0.2, at.z, 6, 0.3, 0.1, 0.3, 0.1);
+        }
+        SpellFxEntity.create(level, SpellFxEntity.Kind.CIRCLE, c.add(0.0, 0.05, 0.0), null, MOONSTONE, CAGE_CLOSE - CAGE_RISE + 2,
+                (float) CAGE_RADIUS).spawn();
+        this.sound(level, ModSounds.STONE_KEEPER_SMASH.get(), 2.4f, 1.3f);
+        level.playSound(null, c.x, c.y, c.z, SoundEvents.AMETHYST_CLUSTER_PLACE, SoundSource.HOSTILE, 2.5f, 0.6f);
+    }
+
+    /** Er schlägt die Fäuste zusammen: Der Käfig bricht in sich zusammen und zermalmt, wer noch darin steht. */
+    private void crushCage(ServerLevel level, Vec3 c) {
+        for (int k = 0; k < 6; k++) {
+            double a = this.cageGap + k * Mth.TWO_PI / 6.0;
+            Vec3 at = ground(level, c.add(Math.cos(a) * 1.3, 0.0, Math.sin(a) * 1.3));
+            SpellFxEntity.create(level, SpellFxEntity.Kind.CRYSTAL, at, null, MOONSTONE, 24, 0.9f).facing((float) (a * Mth.RAD_TO_DEG) + 90.0f)
+                    .spawn();
+        }
+        SpellFxEntity.create(level, SpellFxEntity.Kind.CRYSTAL, ground(level, c), null, MOONSTONE, 26, 1.6f).spawn();
+        level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, FaeBlocks.MOONSTONE_BLOCK.get().defaultBlockState()), c.x, c.y + 0.6,
+                c.z, 50, 1.4, 0.6, 1.4, 0.2);
+        level.sendParticles(ParticleTypes.END_ROD, c.x, c.y + 1.0, c.z, 30, 1.2, 0.8, 1.2, 0.08);
+        this.sound(level, ModSounds.STONE_KEEPER_SMASH.get(), 3.0f, 1.0f);
+        level.playSound(null, c.x, c.y, c.z, SoundEvents.AMETHYST_BLOCK_BREAK, SoundSource.HOSTILE, 3.0f, 0.5f);
+        float damage = CAGE_DAMAGE + (this.isEnraged() ? 3.0f : 0.0f);
+        for (LivingEntity e : this.victims(level, new AABB(c, c).inflate(CAGE_RADIUS + 1.0, 3.0, CAGE_RADIUS + 1.0))) {
+            if (Math.hypot(e.getX() - c.x, e.getZ() - c.z) < CAGE_RADIUS - 0.2 && Math.abs(e.getY() - c.y) < 2.5
+                    && e.hurtServer(level, this.damageSources().mobAttack(this), damage)) {
+                e.setDeltaMovement(e.getDeltaMovement().add(0.0, 0.55, 0.0));
+                e.needsSync = true;
+                e.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 60, 2), this);
+            }
+        }
+        this.cageCenter = null;
+    }
+
+    /** So viele Plätze hat der Kranz (einer davon ist die Lücke); im Zorn mehr, die Lücke wird enger. */
+    private int cageSlots() {
+        return this.isEnraged() ? 16 : 14;
+    }
+
+    /** Steht {@code e} in der Lücke des Käfigs? */
+    private boolean inCageGap(LivingEntity e) {
+        if (this.cageCenter == null) {
+            return false;
+        }
+        double a = Math.atan2(e.getZ() - this.cageCenter.z, e.getX() - this.cageCenter.x);
+        double diff = Math.abs(Mth.wrapDegrees((a - this.cageGap) * Mth.RAD_TO_DEG));
+        return diff < 360.0 / this.cageSlots() * 0.7;
+    }
+
+    /** Für Tests: die Mitte des Mondsteinkäfigs (oder null) und der Winkel seiner Lücke (Bogenmaß, 0 = Osten). */
+    public @Nullable Vec3 cageCenter() {
+        return this.cageCenter;
+    }
+
+    public double cageGap() {
+        return this.cageGap;
+    }
+
+    /** Der Boden bei {@code p}: die Oberkante des ersten festen Blocks von zwei Blöcken darüber bis vier darunter. */
+    private static Vec3 ground(ServerLevel level, Vec3 p) {
+        BlockPos.MutableBlockPos m = BlockPos.containing(p.x, p.y + 2.0, p.z).mutable();
+        for (int i = 0; i < 7; i++) {
+            BlockPos below = m.below();
+            var shape = level.getBlockState(below).getCollisionShape(level, below);
+            if (!shape.isEmpty() && level.getBlockState(m).getCollisionShape(level, m).isEmpty()) {
+                return new Vec3(p.x, below.getY() + shape.max(net.minecraft.core.Direction.Axis.Y), p.z);
+            }
+            m.move(0, -1, 0);
+        }
+        return p;
     }
 
     /** Wo das Hüterherz sitzt (Ursprung des Mondstrahls): auf der Brust, gut zweieinhalb Blöcke hoch. */

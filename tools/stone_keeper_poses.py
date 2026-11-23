@@ -76,6 +76,14 @@ POSES: dict[str, dict] = {
                  "legs": [60, 46], "knees": [-24, -40], "legz": 8},
     "leap_land": {"lean": 40, "drop": 6.0, "head": [8, 0, 0], "jaw": 22, "l": [46, 58], "lz": 24, "r": [46, 58], "rz": 24,
                   "legs": [48, -16], "knees": [-10, -54], "legz": 8},
+    # Mondsteinkäfig (1.13): beide Fäuste weit nach dem Gegner ausgestreckt – hochgerissen (der Kranz bricht hervor) – und
+    # vor der Brust zusammengeschlagen (der Käfig bricht in sich zusammen)
+    "cage_reach": {"lean": 10, "head": [-16, 0, 0], "jaw": 12, "l": [92, 98], "lz": 26, "r": [92, 98], "rz": 26,
+                   "legs": [22, -14], "knees": [-4, -18], "legz": 7},
+    "cage_lift": {"lean": -12, "head": [-26, 0, 0], "jaw": 26, "l": [134, 166], "lz": 24, "r": [134, 166], "rz": 24,
+                  "legs": [16, -12], "knees": [0, -8], "legz": 8},
+    "cage_clench": {"lean": 24, "drop": 2.5, "head": [4, 0, 0], "jaw": 30, "l": [78, 142], "lz": -8, "r": [78, 142], "rz": -8,
+                    "legs": [30, -18], "knees": [-6, -30], "legz": 7},
     # Kristallpanzer: er ballt die Fäuste vor der Brust, brüllt – und Kristalle wachsen über ihn
     "armor_flex": {"lean": -6, "head": [-28, 0, 0], "jaw": 30, "l": [62, 150], "lz": 40, "r": [62, 150], "rz": 40,
                    "legs": [14, -12], "knees": [0, -8], "legz": 8},
@@ -101,6 +109,8 @@ TIMELINES: dict[str, list[tuple[float, str, int]]] = {
     "LAND": [(0, "leap_air", 0), (3, "leap_land", 1), (14, "leap_land", 0), (26, "ready", 0)],
     "ARMOR": [(0, "ready", 0), (12, "armor_flex", 2), (40, "armor_flex", 0), (52, "ready", 0)],
     "STAGGER": [(0, "ready", 0), (6, "stagger", 1), (54, "stagger", 0), (64, "ready", 0)],
+    "CAGE": [(0, "ready", 0), (10, "cage_reach", 2), (14, "cage_lift", 1), (38, "cage_lift", 0), (44, "cage_clench", 1),
+             (50, "cage_clench", 0), (58, "ready", 0)],
 }
 
 

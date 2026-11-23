@@ -76,6 +76,7 @@ public class StoneKeeperModel extends EntityModel<StoneKeeperRenderState> {
             case LAND -> StoneKeeperPoses.LAND;
             case ARMOR -> StoneKeeperPoses.ARMOR;
             case STAGGER -> StoneKeeperPoses.STAGGER;
+            case CAGE -> StoneKeeperPoses.CAGE;
             default -> null;
         };
         if (timeline == null) {

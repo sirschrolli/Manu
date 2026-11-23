@@ -39,9 +39,12 @@ final class StoneKeeperPoses {
     static final int P_LEAP_CROUCH = 15;
     static final int P_LEAP_AIR = 16;
     static final int P_LEAP_LAND = 17;
-    static final int P_ARMOR_FLEX = 18;
-    static final int P_STAGGER = 19;
-    static final int P_DEATH = 20;
+    static final int P_CAGE_REACH = 18;
+    static final int P_CAGE_LIFT = 19;
+    static final int P_CAGE_CLENCH = 20;
+    static final int P_ARMOR_FLEX = 21;
+    static final int P_STAGGER = 22;
+    static final int P_DEATH = 23;
 
     /** Je Haltung und Knochen: rx, ry, rz (Grad), dx, dy, dz (Pixel). */
     static final float[][] POSES = {
@@ -81,6 +84,12 @@ final class StoneKeeperPoses {
             {4f, 0f, 0f, 0f, 0f, 0f, -10f, 0f, 0f, 0f, 0f, 0f, 14f, 0f, 0f, 0f, 0f, 0f, -164f, 0f, -18f, 0f, 0f, 0f, -14f, 0f, 0f, 0f, 0f, 0f, -164f, 0f, 18f, 0f, 0f, 0f, -14f, 0f, 0f, 0f, 0f, 0f, -60f, 0f, -8f, 0f, 0f, 0f, 84f, 0f, 0f, 0f, 0f, 0f, -46f, 0f, 8f, 0f, 0f, 0f, 86f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f},
             // leap_land
             {40f, 0f, 0f, 0f, 6f, 0f, 8f, 0f, 0f, 0f, 0f, 0f, 22f, 0f, 0f, 0f, 0f, 0f, -96f, 0f, -24f, 0f, 0f, 0f, 2f, 0f, 0f, 0f, 0f, 0f, -96f, 0f, 24f, 0f, 0f, 0f, 2f, 0f, 0f, 0f, 0f, 0f, -48f, 0f, -8f, 0f, 6f, 0f, 58f, 0f, 0f, 0f, 0f, 0f, 16f, 0f, 8f, 0f, 6f, 0f, 38f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f},
+            // cage_reach
+            {10f, 0f, 0f, 0f, 0f, 0f, -16f, 0f, 0f, 0f, 0f, 0f, 12f, 0f, 0f, 0f, 0f, 0f, -112f, 0f, -26f, 0f, 0f, 0f, 8f, 0f, 0f, 0f, 0f, 0f, -112f, 0f, 26f, 0f, 0f, 0f, 8f, 0f, 0f, 0f, 0f, 0f, -22f, 0f, -7f, 0f, 0f, 0f, 26f, 0f, 0f, 0f, 0f, 0f, 14f, 0f, 7f, 0f, 0f, 0f, 4f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f},
+            // cage_lift
+            {-12f, 0f, 0f, 0f, 0f, 0f, -26f, 0f, 0f, 0f, 0f, 0f, 26f, 0f, 0f, 0f, 0f, 0f, -132f, 0f, -24f, 0f, 0f, 0f, -18f, 0f, 0f, 0f, 0f, 0f, -132f, 0f, 24f, 0f, 0f, 0f, -18f, 0f, 0f, 0f, 0f, 0f, -16f, 0f, -8f, 0f, 0f, 0f, 16f, 0f, 0f, 0f, 0f, 0f, 12f, 0f, 8f, 0f, 0f, 0f, -4f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f},
+            // cage_clench
+            {24f, 0f, 0f, 0f, 2.5f, 0f, 4f, 0f, 0f, 0f, 0f, 0f, 30f, 0f, 0f, 0f, 0f, 0f, -112f, 0f, 8f, 0f, 0f, 0f, -50f, 0f, 0f, 0f, 0f, 0f, -112f, 0f, -8f, 0f, 0f, 0f, -50f, 0f, 0f, 0f, 0f, 0f, -30f, 0f, -7f, 0f, 2.5f, 0f, 36f, 0f, 0f, 0f, 0f, 0f, 18f, 0f, 7f, 0f, 2.5f, 0f, 12f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f},
             // armor_flex
             {-6f, 0f, 0f, 0f, 0f, 0f, -28f, 0f, 0f, 0f, 0f, 0f, 30f, 0f, 0f, 0f, 0f, 0f, -66f, 0f, -40f, 0f, 0f, 0f, -74f, 0f, 0f, 0f, 0f, 0f, -66f, 0f, 40f, 0f, 0f, 0f, -74f, 0f, 0f, 0f, 0f, 0f, -14f, 0f, -8f, 0f, 0f, 0f, 14f, 0f, 0f, 0f, 0f, 0f, 12f, 0f, 8f, 0f, 0f, 0f, -4f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f},
             // stagger
@@ -101,6 +110,7 @@ final class StoneKeeperPoses {
     static final int[][] LAND = {{0, P_LEAP_AIR, 0}, {3, P_LEAP_LAND, 1}, {14, P_LEAP_LAND, 0}, {26, P_READY, 0}};
     static final int[][] ARMOR = {{0, P_READY, 0}, {12, P_ARMOR_FLEX, 2}, {40, P_ARMOR_FLEX, 0}, {52, P_READY, 0}};
     static final int[][] STAGGER = {{0, P_READY, 0}, {6, P_STAGGER, 1}, {54, P_STAGGER, 0}, {64, P_READY, 0}};
+    static final int[][] CAGE = {{0, P_READY, 0}, {10, P_CAGE_REACH, 2}, {14, P_CAGE_LIFT, 1}, {38, P_CAGE_LIFT, 0}, {44, P_CAGE_CLENCH, 1}, {50, P_CAGE_CLENCH, 0}, {58, P_READY, 0}};
 
     private StoneKeeperPoses() {}
 }
