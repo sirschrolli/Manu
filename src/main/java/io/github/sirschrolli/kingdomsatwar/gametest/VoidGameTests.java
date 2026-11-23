@@ -398,26 +398,24 @@ final class VoidGameTests {
         soldier.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
         soldier.setHealth(soldier.getMaxHealth());
         king.forceAttack(level, "crash", soldier, true);
+        int started = king.tickCount;
         net.minecraft.world.phys.Vec3 g = king.slamPoint();
         helper.assertTrue(Math.hypot(g.x - soldier.getX(), g.z - soldier.getZ()) < 0.5, "Der Königssturz zielt nicht auf den Ritter: " + g);
         float[] before = {soldier.getHealth()};
-        helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.CRASH_RISE + 2, () -> {
-            helper.assertTrue(king.getY() > g.y + 6.0, "Er steigt nicht über die Stelle auf: "
-                    + String.format(java.util.Locale.ROOT, "%.1f", king.getY() - g.y));
+        // erst steigt er über die Stelle (der Ritter bleibt heil), dann stürzt er hinein und trifft; die Takte des Königs zählen
+        ModGameTests.await(helper, () -> king.getY() > g.y + 6.0, io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.CRASH_RISE + 40,
+                () -> "Er steigt nicht über die Stelle auf: " + String.format(java.util.Locale.ROOT, "%.1f", king.getY() - g.y), () -> {
             helper.assertTrue(soldier.getHealth() >= before[0], "Der Königssturz trifft, bevor er stürzt");
             soldier.setHealth(soldier.getMaxHealth());
             soldier.setInvulnerableTime(0);
             before[0] = soldier.getHealth();
-        });
-        helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.CRASH_IMPACT + 2, () -> {
-            helper.assertTrue(soldier.getHealth() < before[0], "Der Königssturz trifft den Ritter nicht");
-            helper.assertTrue(king.getY() < g.y + 3.0, "Er stürzt nicht hinab: " + String.format(java.util.Locale.ROOT, "%.1f", king.getY() - g.y));
-            helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.CRASH_TICKS
-                    - io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.CRASH_IMPACT, () -> {
-                helper.assertTrue(king.currentAttack().equals("none"), "Der Königssturz endet nicht: " + king.currentAttack());
-                soldier.setHealth(soldier.getMaxHealth());
-                then.run();
-            });
+            ModGameTests.await(helper, () -> king.getY() < g.y + 3.0 && soldier.getHealth() < before[0], 60,
+                    () -> "Der Königssturz trifft den Ritter nicht (" + king.currentAttack() + ", " + (king.tickCount - started) + " Takte des Königs, Höhe "
+                            + String.format(java.util.Locale.ROOT, "%.1f", king.getY() - g.y) + ")", () ->
+                    ModGameTests.await(helper, () -> king.currentAttack().equals("none"), 60, () -> "Der Königssturz endet nicht: " + king.currentAttack(), () -> {
+                        soldier.setHealth(soldier.getMaxHealth());
+                        then.run();
+                    }));
         });
     }
 

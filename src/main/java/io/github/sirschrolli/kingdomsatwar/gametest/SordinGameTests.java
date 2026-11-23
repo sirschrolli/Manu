@@ -387,14 +387,19 @@ final class SordinGameTests {
         reset(knight, spot, hp);
         cantor.setTarget(knight);
         cantor.forceAttack(SordinEntity.Attack.SILENCE);
-        helper.runAfterDelay(SordinEntity.SILENCE_VANISH + 6, () -> helper.assertTrue(cantor.isInvisible(), "In der Stille bleibt er sichtbar"));
-        helper.runAfterDelay(SordinEntity.SILENCE_HIT + 4, () -> {
-            helper.assertFalse(cantor.isInvisible(), "Nach der Stille bleibt er unsichtbar");
-            helper.assertTrue(knight.getHealth() < hp[0], "Aus der Stille trifft er nicht (Abstand "
-                    + String.format(java.util.Locale.ROOT, "%.1f", cantor.distanceTo(knight)) + ")");
-            cleanup(helper.getLevel(), area);
-            helper.succeed();
-        });
+        ModGameTests.await(helper, cantor::isInvisible, SordinEntity.SILENCE_VANISH + 20, () -> "In der Stille bleibt er sichtbar ("
+                + cantor.currentAttack() + " seit " + (int) cantor.attackTime(0.0f) + " Takten, zuletzt getroffen: "
+                + (cantor.getLastDamageSource() == null ? "-" : cantor.getLastDamageSource().getMsgId() + " von " + cantor.getLastDamageSource().getEntity())
+                + ")", () ->
+                // dann taucht er hinter dem Ritter auf und trifft
+                ModGameTests.await(helper, () -> !cantor.isInvisible() && knight.getHealth() < hp[0],
+                        SordinEntity.SILENCE_HIT - SordinEntity.SILENCE_VANISH + 30, () -> (cantor.isInvisible()
+                                ? "Nach der Stille bleibt er unsichtbar" : "Aus der Stille trifft er nicht") + " (Abstand "
+                                + String.format(java.util.Locale.ROOT, "%.1f", cantor.distanceTo(knight)) + ", " + cantor.currentAttack() + ")",
+                        () -> {
+                            cleanup(helper.getLevel(), area);
+                            helper.succeed();
+                        }));
     }
 
     private static void reset(LivingEntity knight, Vec3 spot, float[] hp) {

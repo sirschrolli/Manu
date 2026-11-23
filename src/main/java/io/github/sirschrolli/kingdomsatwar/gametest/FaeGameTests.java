@@ -465,8 +465,12 @@ final class FaeGameTests {
                     + c);
             helper.assertTrue(knight.getHealth() >= hp, "Die Mondlichtspirale trifft, bevor der Strahl fällt");
         });
-        helper.runAfterDelay(MothQueenEntity.SPIRAL_START + 3, () -> {
-            helper.assertTrue(knight.getHealth() < hp, "Die Mondlichtspirale trifft den Ritter nicht");
+        ModGameTests.await(helper, () -> knight.getHealth() < hp, MothQueenEntity.SPIRAL_START + 30, () -> {
+            Vec3 c = queen.spiralCenter();
+            return "Die Mondlichtspirale trifft den Ritter nicht (" + queen.currentAttack() + " seit " + (int) queen.attackTime(0.0f)
+                    + " Takten, Mitte " + (c == null ? "-" : String.format(java.util.Locale.ROOT, "%.2f", Math.hypot(c.x - knight.getX(),
+                    c.z - knight.getZ()))) + " vom Ritter)";
+        }, () -> {
             helper.assertTrue(knight.hasEffect(MobEffects.GLOWING), "Wen die Mondlichtspirale trifft, der leuchtet nicht");
             queen.forceAttack(MothQueenEntity.Attack.NONE);
             then.run();

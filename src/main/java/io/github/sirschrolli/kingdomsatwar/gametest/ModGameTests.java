@@ -84,6 +84,22 @@ public final class ModGameTests {
      * der Chunks und ihrer Wesen läuft aber in anderen Threads. Solange {@code loaded} noch nicht stimmt, wartet dieser
      * Tick darum ein paar Millisekunden, damit das Laden hinterherkommt (sonst ist die Zeit des Tests in zwei Sekunden um).
      */
+    /**
+     * Wartet Takt für Takt, bis {@code done} stimmt (höchstens {@code maxTicks}), dann {@code then}; sonst scheitert der Test mit
+     * {@code message}. Für Prüfungen, die an den Takten eines Wesens hängen: In der vollen Testreihe ticken die Wesen nicht
+     * immer im Gleichschritt mit dem Test.
+     */
+    static void await(GameTestHelper helper, java.util.function.BooleanSupplier done, int maxTicks,
+            java.util.function.Supplier<String> message, Runnable then) {
+        if (done.getAsBoolean()) {
+            then.run();
+        } else if (maxTicks <= 0) {
+            helper.fail(message.get());
+        } else {
+            helper.runAfterDelay(1, () -> await(helper, done, maxTicks - 1, message, then));
+        }
+    }
+
     static boolean awaitLoading(boolean loaded) {
         if (!loaded) {
             try {
