@@ -24,7 +24,7 @@ public final class WildLlamaGeometry {
         PartDefinition root = mesh.getRoot();
         PartDefinition p_head = root.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(51, 29).addBox(-2F, -14F, -10F, 4F, 4F, 9F)
-                .texOffs(45, 0).addBox(-4F, -16F, -6F, 8F, 18F, 6F)
+                .texOffs(45, 0).addBox(-4F, -16F, -6F, 8F, 18F, 6F, new CubeDeformation(0F, 0.04F, 0F))
                 .texOffs(74, 0).addBox(-4.5F, -9F, -6.5F, 9F, 11F, 7F, new CubeDeformation(-0.1F, 0F, -0.1F)),
                 PartPose.offset(0F, 7F, -6F));
         PartDefinition p_ear_l = p_head.addOrReplaceChild("ear_l", CubeListBuilder.create()

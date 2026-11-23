@@ -41,8 +41,8 @@ public final class MermaidGeometry {
                 .texOffs(5, 0).addBox(-3.5F, -6.9F, -3.5F, 7F, 7F, 7F, new CubeDeformation(-0.1F, -0.1F, -0.2F))
                 .texOffs(69, 29).addBox(-4F, -7.65F, -3.95F, 8F, 2F, 8F, new CubeDeformation(-0.35F, -0.35F, -0.45F))
                 .texOffs(22, 73).addBox(-4F, -6.55F, -3.9F, 8F, 2F, 1F, new CubeDeformation(-0.4F, -0.15F, -0.25F))
-                .texOffs(21, 29).addBox(-3.9F, -6.7F, -2.65F, 1F, 5F, 6F, new CubeDeformation(-0.2F, -0.3F, -0.05F))
-                .texOffs(36, 29).addBox(2.9F, -6.7F, -2.65F, 1F, 5F, 6F, new CubeDeformation(-0.2F, -0.3F, -0.05F)),
+                .texOffs(21, 29).addBox(-3.9F, -6.7F, -2.65F, 1F, 5F, 6F, new CubeDeformation(-0.2F, -0.3F, -0.01F))
+                .texOffs(36, 29).addBox(2.9F, -6.7F, -2.65F, 1F, 5F, 6F, new CubeDeformation(-0.2F, -0.3F, -0.01F)),
                 PartPose.offset(0F, -9.5F, 0F));
         PartDefinition p_ear_l = p_head.addOrReplaceChild("ear_l", CubeListBuilder.create()
                 .texOffs(43, 52).addBox(0F, -2F, -0.4F, 0F, 4F, 3F, new CubeDeformation(0F, -0.4F, -0.2F)),
@@ -95,7 +95,7 @@ public final class MermaidGeometry {
                 PartPose.offsetAndRotation(-2.7F, -6.5F, -2.4F, 0F, -0.3491F, -0.2443F));
         PartDefinition p_helmet = p_head.addOrReplaceChild("helmet", CubeListBuilder.create()
                 .texOffs(34, 0).addBox(-4F, -7.9F, -4F, 8F, 5F, 8F, new CubeDeformation(-0.25F, -0.3F, -0.2F))
-                .texOffs(41, 73).addBox(-4F, -7.8F, -4.15F, 8F, 2F, 1F, new CubeDeformation(-0.25F, -0.2F, -0.3F))
+                .texOffs(41, 73).addBox(-4F, -7.8F, -4.15F, 8F, 2F, 1F, new CubeDeformation(-0.21F, -0.2F, -0.3F))
                 .texOffs(0, 41).addBox(-0.5F, -10.2F, -3F, 1F, 3F, 7F, new CubeDeformation(-0.05F, -0.2F, 0F))
                 .texOffs(90, 73).addBox(-0.5F, -3.4F, -4.45F, 1F, 2F, 1F, new CubeDeformation(0F, 0F, -0.25F))
                 .texOffs(0, 60).addBox(-4.05F, -3.6F, -2.7F, 1F, 3F, 3F, new CubeDeformation(-0.2F, -0.2F, -0.1F))
@@ -104,7 +104,7 @@ public final class MermaidGeometry {
         PartDefinition p_left_arm = p_torso.addOrReplaceChild("left_arm", CubeListBuilder.create()
                 .texOffs(17, 41).addBox(-1F, -0.6F, -1F, 2F, 8F, 2F, new CubeDeformation(-0.1F, 0F, -0.1F))
                 .texOffs(93, 67).addBox(-1F, 7.15F, -1F, 2F, 2F, 2F, new CubeDeformation(-0.05F, -0.05F, 0F))
-                .texOffs(18, 60).addBox(0.9F, 2.9F, -0.2F, 0F, 4F, 2F, new CubeDeformation(0F, -0.3F, 0F)),
+                .texOffs(18, 60).addBox(0.9F, 2.9F, -0.2F, 0F, 4F, 2F, new CubeDeformation(0.04F, -0.3F, 0F)),
                 PartPose.offset(3.75F, -8.9F, 0F));
         PartDefinition p_bracelet_l = p_left_arm.addOrReplaceChild("bracelet_l", CubeListBuilder.create()
                 .texOffs(40, 67).addBox(-1.5F, 5.45F, -1.5F, 3F, 1F, 3F, new CubeDeformation(-0.45F, -0.15F, -0.45F)),
@@ -115,7 +115,7 @@ public final class MermaidGeometry {
         PartDefinition p_right_arm = p_torso.addOrReplaceChild("right_arm", CubeListBuilder.create()
                 .texOffs(26, 41).addBox(-1F, -0.6F, -1F, 2F, 8F, 2F, new CubeDeformation(-0.1F, 0F, -0.1F))
                 .texOffs(102, 67).addBox(-1F, 7.15F, -1F, 2F, 2F, 2F, new CubeDeformation(-0.05F, -0.05F, 0F))
-                .texOffs(23, 60).addBox(-0.9F, 2.9F, -0.2F, 0F, 4F, 2F, new CubeDeformation(0F, -0.3F, 0F)),
+                .texOffs(23, 60).addBox(-0.9F, 2.9F, -0.2F, 0F, 4F, 2F, new CubeDeformation(0.04F, -0.3F, 0F)),
                 PartPose.offset(-3.75F, -8.9F, 0F));
         PartDefinition p_bracelet_r = p_right_arm.addOrReplaceChild("bracelet_r", CubeListBuilder.create()
                 .texOffs(53, 67).addBox(-1.5F, 5.45F, -1.5F, 3F, 1F, 3F, new CubeDeformation(-0.45F, -0.15F, -0.45F)),
@@ -125,8 +125,8 @@ public final class MermaidGeometry {
                 PartPose.offsetAndRotation(0F, -0.6F, 0F, 0F, 0F, 0.2094F));
         PartDefinition p_trident = p_right_arm.addOrReplaceChild("trident", CubeListBuilder.create()
                 .texOffs(0, 0).addBox(-0.5F, -15F, -0.5F, 1F, 27F, 1F, new CubeDeformation(-0.1F, 0F, -0.1F))
-                .texOffs(108, 73).addBox(-2.5F, -15.85F, -0.5F, 5F, 1F, 1F, new CubeDeformation(-0.1F, -0.05F, -0.05F))
-                .texOffs(28, 60).addBox(-0.5F, -20.6F, -0.5F, 1F, 5F, 1F, new CubeDeformation(-0.05F, -0.1F, -0.05F))
+                .texOffs(108, 73).addBox(-2.5F, -15.85F, -0.5F, 5F, 1F, 1F, new CubeDeformation(-0.06F, -0.05F, -0.05F))
+                .texOffs(28, 60).addBox(-0.5F, -20.6F, -0.5F, 1F, 5F, 1F, new CubeDeformation(-0.05F, -0.1F, -0.01F))
                 .texOffs(25, 67).addBox(-2.5F, -19.25F, -0.5F, 1F, 4F, 1F, new CubeDeformation(-0.1F, -0.45F, -0.1F))
                 .texOffs(30, 67).addBox(1.5F, -19.25F, -0.5F, 1F, 4F, 1F, new CubeDeformation(-0.1F, -0.45F, -0.1F)),
                 PartPose.offset(0F, 8.2F, -0.1F));

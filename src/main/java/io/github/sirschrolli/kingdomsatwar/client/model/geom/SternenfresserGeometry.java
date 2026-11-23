@@ -164,9 +164,9 @@ public final class SternenfresserGeometry {
                 PartPose.offsetAndRotation(0F, 20F, -1F, -0.5F, 0F, 0F));
         PartDefinition p_left_front_foot = p_left_front_leg_tip.addOrReplaceChild("left_front_foot", CubeListBuilder.create()
                 .texOffs(449, 203).addBox(-4F, 0F, -12F, 8F, 4F, 16F)
-                .texOffs(0, 298).addBox(-3.75F, 1.25F, -15.25F, 2F, 3F, 4F, new CubeDeformation(-0.25F, -0.25F, -0.25F))
-                .texOffs(13, 298).addBox(-1F, 1.25F, -15.25F, 2F, 3F, 4F, new CubeDeformation(-0.25F, -0.25F, -0.25F))
-                .texOffs(26, 298).addBox(1.75F, 1.25F, -15.25F, 2F, 3F, 4F, new CubeDeformation(-0.25F, -0.25F, -0.25F)),
+                .texOffs(0, 298).addBox(-3.75F, 1.25F, -15.25F, 2F, 3F, 4F, new CubeDeformation(-0.25F, -0.21F, -0.25F))
+                .texOffs(13, 298).addBox(-1F, 1.25F, -15.25F, 2F, 3F, 4F, new CubeDeformation(-0.25F, -0.21F, -0.25F))
+                .texOffs(26, 298).addBox(1.75F, 1.25F, -15.25F, 2F, 3F, 4F, new CubeDeformation(-0.25F, -0.21F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 23F, 0F, 0.75F, 0F, 0F));
         PartDefinition p_left_hind_leg = p_body.addOrReplaceChild("left_hind_leg", CubeListBuilder.create()
                 .texOffs(225, 146).addBox(-8F, -4F, -8F, 16F, 32F, 16F),
@@ -176,10 +176,10 @@ public final class SternenfresserGeometry {
                 PartPose.offsetAndRotation(0F, 32F, -4F, 0.5F, 0F, 0F));
         PartDefinition p_left_hind_foot = p_left_hind_leg_tip.addOrReplaceChild("left_hind_foot", CubeListBuilder.create()
                 .texOffs(96, 203).addBox(-9F, 0F, -20F, 18F, 6F, 24F)
-                .texOffs(276, 289).addBox(-8.25F, 3F, -24.25F, 3F, 3F, 5F, new CubeDeformation(-0.25F, 0F, -0.25F))
-                .texOffs(293, 289).addBox(-3.5F, 3F, -24.25F, 3F, 3F, 5F, new CubeDeformation(-0.25F, 0F, -0.25F))
-                .texOffs(310, 289).addBox(1.25F, 3F, -24.25F, 3F, 3F, 5F, new CubeDeformation(-0.25F, 0F, -0.25F))
-                .texOffs(327, 289).addBox(5.75F, 3F, -24.25F, 3F, 3F, 5F, new CubeDeformation(-0.25F, 0F, -0.25F)),
+                .texOffs(276, 289).addBox(-8.25F, 3F, -24.25F, 3F, 3F, 5F, new CubeDeformation(-0.25F, 0.04F, -0.25F))
+                .texOffs(293, 289).addBox(-3.5F, 3F, -24.25F, 3F, 3F, 5F, new CubeDeformation(-0.25F, 0.04F, -0.25F))
+                .texOffs(310, 289).addBox(1.25F, 3F, -24.25F, 3F, 3F, 5F, new CubeDeformation(-0.25F, 0.04F, -0.25F))
+                .texOffs(327, 289).addBox(5.75F, 3F, -24.25F, 3F, 3F, 5F, new CubeDeformation(-0.25F, 0.04F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 31F, 4F, 0.75F, 0F, 0F));
         PartDefinition p_right_front_leg = p_body.addOrReplaceChild("right_front_leg", CubeListBuilder.create()
                 .texOffs(0, 203).addBox(-4F, -4F, -4F, 8F, 24F, 8F),
@@ -189,9 +189,9 @@ public final class SternenfresserGeometry {
                 PartPose.offsetAndRotation(0F, 20F, -1F, -0.5F, 0F, 0F));
         PartDefinition p_right_front_foot = p_right_front_leg_tip.addOrReplaceChild("right_front_foot", CubeListBuilder.create()
                 .texOffs(0, 236).addBox(-4F, 0F, -12F, 8F, 4F, 16F)
-                .texOffs(39, 298).addBox(-3.75F, 1.25F, -15.25F, 2F, 3F, 4F, new CubeDeformation(-0.25F, -0.25F, -0.25F))
-                .texOffs(52, 298).addBox(-1F, 1.25F, -15.25F, 2F, 3F, 4F, new CubeDeformation(-0.25F, -0.25F, -0.25F))
-                .texOffs(65, 298).addBox(1.75F, 1.25F, -15.25F, 2F, 3F, 4F, new CubeDeformation(-0.25F, -0.25F, -0.25F)),
+                .texOffs(39, 298).addBox(-3.75F, 1.25F, -15.25F, 2F, 3F, 4F, new CubeDeformation(-0.25F, -0.21F, -0.25F))
+                .texOffs(52, 298).addBox(-1F, 1.25F, -15.25F, 2F, 3F, 4F, new CubeDeformation(-0.25F, -0.21F, -0.25F))
+                .texOffs(65, 298).addBox(1.75F, 1.25F, -15.25F, 2F, 3F, 4F, new CubeDeformation(-0.25F, -0.21F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 23F, 0F, 0.75F, 0F, 0F));
         PartDefinition p_right_hind_leg = p_body.addOrReplaceChild("right_hind_leg", CubeListBuilder.create()
                 .texOffs(290, 146).addBox(-8F, -4F, -8F, 16F, 32F, 16F),
@@ -201,10 +201,10 @@ public final class SternenfresserGeometry {
                 PartPose.offsetAndRotation(0F, 32F, -4F, 0.5F, 0F, 0F));
         PartDefinition p_right_hind_foot = p_right_hind_leg_tip.addOrReplaceChild("right_hind_foot", CubeListBuilder.create()
                 .texOffs(181, 203).addBox(-9F, 0F, -20F, 18F, 6F, 24F)
-                .texOffs(344, 289).addBox(-8.25F, 3F, -24.25F, 3F, 3F, 5F, new CubeDeformation(-0.25F, 0F, -0.25F))
-                .texOffs(361, 289).addBox(-3.5F, 3F, -24.25F, 3F, 3F, 5F, new CubeDeformation(-0.25F, 0F, -0.25F))
-                .texOffs(378, 289).addBox(1.25F, 3F, -24.25F, 3F, 3F, 5F, new CubeDeformation(-0.25F, 0F, -0.25F))
-                .texOffs(395, 289).addBox(5.75F, 3F, -24.25F, 3F, 3F, 5F, new CubeDeformation(-0.25F, 0F, -0.25F)),
+                .texOffs(344, 289).addBox(-8.25F, 3F, -24.25F, 3F, 3F, 5F, new CubeDeformation(-0.25F, 0.04F, -0.25F))
+                .texOffs(361, 289).addBox(-3.5F, 3F, -24.25F, 3F, 3F, 5F, new CubeDeformation(-0.25F, 0.04F, -0.25F))
+                .texOffs(378, 289).addBox(1.25F, 3F, -24.25F, 3F, 3F, 5F, new CubeDeformation(-0.25F, 0.04F, -0.25F))
+                .texOffs(395, 289).addBox(5.75F, 3F, -24.25F, 3F, 3F, 5F, new CubeDeformation(-0.25F, 0.04F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 31F, 4F, 0.75F, 0F, 0F));
         return mesh;
     }

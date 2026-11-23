@@ -24,8 +24,8 @@ public final class DivinePlanetGeometry {
         PartDefinition root = mesh.getRoot();
         PartDefinition p_planet = root.addOrReplaceChild("planet", CubeListBuilder.create()
                 .texOffs(0, 23).addBox(-6F, -4F, -4F, 12F, 8F, 8F)
-                .texOffs(86, 0).addBox(-4F, -6F, -4F, 8F, 12F, 8F)
-                .texOffs(45, 0).addBox(-4F, -4F, -6F, 8F, 8F, 12F)
+                .texOffs(86, 0).addBox(-4F, -6F, -4F, 8F, 12F, 8F, new CubeDeformation(0F, 0F, 0.04F))
+                .texOffs(45, 0).addBox(-4F, -4F, -6F, 8F, 8F, 12F, new CubeDeformation(0.04F, 0.04F, 0F))
                 .texOffs(0, 0).addBox(-5.5F, -5.5F, -5.5F, 11F, 11F, 11F, new CubeDeformation(-0.3F, -0.3F, -0.3F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_ring = p_planet.addOrReplaceChild("ring", CubeListBuilder.create(),

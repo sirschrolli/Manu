@@ -56,7 +56,7 @@ public final class NightWingGeometry {
                 .texOffs(46, 16).addBox(-1.5F, -1F, 0F, 3F, 2F, 7F),
                 PartPose.offset(0F, -0.5F, 5F));
         PartDefinition p_tail_tip = p_tail_base.addOrReplaceChild("tail_tip", CubeListBuilder.create()
-                .texOffs(37, 26).addBox(-1F, -0.5F, 0F, 2F, 1F, 7F)
+                .texOffs(37, 26).addBox(-1F, -0.5F, 0F, 2F, 1F, 7F, new CubeDeformation(0F, 0.04F, 0F))
                 .texOffs(70, 26).addBox(-3F, -0.25F, 4F, 6F, 1F, 4F, new CubeDeformation(0F, -0.25F, 0F)),
                 PartPose.offset(0F, 0F, 7F));
         return mesh;

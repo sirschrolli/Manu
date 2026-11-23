@@ -27,8 +27,8 @@ public final class VoltarionGeometry {
                 .texOffs(0, 0).addBox(-5.5F, -10F, -18F, 11F, 19F, 34F, new CubeDeformation(0F, 0F, -0.08F))
                 .texOffs(424, 125).addBox(-10.5F, -6.5F, -19F, 21F, 12F, 14F)
                 .texOffs(169, 54).addBox(-6F, -11F, -19F, 12F, 21F, 14F, new CubeDeformation(0F, 0F, -0.08F))
-                .texOffs(405, 154).addBox(-10F, -6F, 3F, 20F, 10F, 12F)
-                .texOffs(389, 92).addBox(-6F, -10F, 3F, 12F, 18F, 12F, new CubeDeformation(0F, 0F, -0.08F))
+                .texOffs(405, 154).addBox(-10F, -6F, 3F, 20F, 10F, 12F, new CubeDeformation(0F, 0.04F, 0F))
+                .texOffs(389, 92).addBox(-6F, -10F, 3F, 12F, 18F, 12F, new CubeDeformation(0F, 0.04F, -0.08F))
                 .texOffs(438, 92).addBox(-4.5F, -11.75F, -15F, 9F, 1F, 27F, new CubeDeformation(0F, -0.05F, 0F))
                 .texOffs(250, 92).addBox(-3.5F, -13.25F, -15F, 7F, 4F, 27F, new CubeDeformation(-0.3F, -0.25F, -0.08F))
                 .texOffs(422, 200).addBox(8F, -9F, -17F, 5F, 5F, 10F)
@@ -46,37 +46,37 @@ public final class VoltarionGeometry {
         PartDefinition p_neck1 = p_body.addOrReplaceChild("neck1", CubeListBuilder.create()
                 .texOffs(97, 218).addBox(-5.5F, -2.5F, -8F, 11F, 5F, 9F, new CubeDeformation(0F, -0.3F, -0.4F))
                 .texOffs(174, 179).addBox(-2.5F, -5.5F, -8F, 5F, 11F, 9F, new CubeDeformation(-0.3F, 0F, -0.48F))
-                .texOffs(135, 260).addBox(-2.5F, 4.3F, -7F, 5F, 2F, 7F, new CubeDeformation(-0.3F, -0.2F, 0F))
+                .texOffs(135, 260).addBox(-2.5F, 4.3F, -7F, 5F, 2F, 7F, new CubeDeformation(-0.26F, -0.2F, 0F))
                 .texOffs(181, 248).addBox(-0.5F, -9.6F, -6.5F, 1F, 5F, 6F, new CubeDeformation(-0.15F, 0F, 0F)),
                 PartPose.offsetAndRotation(0F, -6F, -17F, -0.5236F, 0F, 0F));
         PartDefinition p_neck2 = p_neck1.addOrReplaceChild("neck2", CubeListBuilder.create()
                 .texOffs(59, 234).addBox(-5F, -2F, -7.4F, 10F, 4F, 8F)
                 .texOffs(403, 179).addBox(-2F, -5F, -7.4F, 4F, 10F, 8F, new CubeDeformation(0F, 0F, -0.08F))
-                .texOffs(185, 260).addBox(-2F, 3.8F, -6.9F, 4F, 2F, 7F, new CubeDeformation(0F, -0.2F, -0.1F))
+                .texOffs(185, 260).addBox(-2F, 3.8F, -6.9F, 4F, 2F, 7F, new CubeDeformation(0.04F, -0.2F, -0.1F))
                 .texOffs(196, 248).addBox(-0.5F, -8.875F, -6.4F, 1F, 5F, 6F, new CubeDeformation(-0.15F, -0.225F, -0.1F)),
                 PartPose.offsetAndRotation(0F, 0F, -7F, -0.2443F, 0F, 0F));
         PartDefinition p_neck3 = p_neck2.addOrReplaceChild("neck3", CubeListBuilder.create()
                 .texOffs(96, 234).addBox(-5F, -2F, -7.25F, 10F, 4F, 8F, new CubeDeformation(-0.4F, -0.16F, -0.15F))
                 .texOffs(428, 179).addBox(-2F, -5F, -7.25F, 4F, 10F, 8F, new CubeDeformation(-0.16F, -0.4F, -0.23F))
-                .texOffs(208, 260).addBox(-2F, 3.4F, -6.75F, 4F, 2F, 7F, new CubeDeformation(-0.16F, -0.2F, -0.25F))
+                .texOffs(208, 260).addBox(-2F, 3.4F, -6.75F, 4F, 2F, 7F, new CubeDeformation(-0.12F, -0.2F, -0.25F))
                 .texOffs(211, 248).addBox(-0.5F, -8.25F, -6.25F, 1F, 5F, 6F, new CubeDeformation(-0.15F, -0.45F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 0F, -6.8F, -0.0698F, 0F, 0F));
         PartDefinition p_neck4 = p_neck3.addOrReplaceChild("neck4", CubeListBuilder.create()
                 .texOffs(133, 234).addBox(-4.5F, -2F, -7.1F, 9F, 4F, 8F, new CubeDeformation(-0.2F, -0.28F, -0.3F))
                 .texOffs(76, 200).addBox(-2F, -4.5F, -7.1F, 4F, 9F, 8F, new CubeDeformation(-0.28F, -0.2F, -0.38F))
-                .texOffs(231, 260).addBox(-2F, 3.1F, -6.6F, 4F, 2F, 7F, new CubeDeformation(-0.28F, -0.2F, -0.4F))
+                .texOffs(231, 260).addBox(-2F, 3.1F, -6.6F, 4F, 2F, 7F, new CubeDeformation(-0.24F, -0.2F, -0.4F))
                 .texOffs(396, 248).addBox(-0.5F, -7.225F, -6.1F, 1F, 4F, 6F, new CubeDeformation(-0.15F, -0.175F, -0.4F)),
                 PartPose.offsetAndRotation(0F, 0F, -6.5F, 0.0698F, 0F, 0F));
         PartDefinition p_neck5 = p_neck4.addOrReplaceChild("neck5", CubeListBuilder.create()
                 .texOffs(238, 234).addBox(-4F, -2F, -7F, 8F, 4F, 8F, new CubeDeformation(0F, -0.4F, -0.4F))
                 .texOffs(200, 200).addBox(-2F, -4F, -7F, 4F, 8F, 8F, new CubeDeformation(-0.4F, 0F, -0.48F))
-                .texOffs(395, 260).addBox(-2F, 2.8F, -6F, 4F, 2F, 6F, new CubeDeformation(-0.4F, -0.2F, 0F))
+                .texOffs(395, 260).addBox(-2F, 2.8F, -6F, 4F, 2F, 6F, new CubeDeformation(-0.36F, -0.2F, 0F))
                 .texOffs(357, 260).addBox(-0.5F, -6.7F, -5.5F, 1F, 4F, 5F, new CubeDeformation(-0.15F, -0.4F, 0F)),
                 PartPose.offsetAndRotation(0F, 0F, -6.2F, 0.1745F, 0F, 0F));
         PartDefinition p_neck6 = p_neck5.addOrReplaceChild("neck6", CubeListBuilder.create()
                 .texOffs(254, 248).addBox(-4F, -1.5F, -6.4F, 8F, 3F, 7F, new CubeDeformation(-0.3F, -0.02F, 0F))
                 .texOffs(27, 218).addBox(-1.5F, -4F, -6.4F, 3F, 8F, 7F, new CubeDeformation(-0.02F, -0.3F, -0.08F))
-                .texOffs(458, 260).addBox(-1.5F, 2.5F, -5.9F, 3F, 2F, 6F, new CubeDeformation(-0.02F, -0.2F, -0.1F))
+                .texOffs(458, 260).addBox(-1.5F, 2.5F, -5.9F, 3F, 2F, 6F, new CubeDeformation(0.02F, -0.2F, -0.1F))
                 .texOffs(17, 270).addBox(-0.5F, -5.675F, -5.4F, 1F, 3F, 5F, new CubeDeformation(-0.15F, -0.125F, -0.1F)),
                 PartPose.offsetAndRotation(0F, 0F, -6F, 0.1745F, 0F, 0F));
         PartDefinition p_head = p_neck6.addOrReplaceChild("head", CubeListBuilder.create()
@@ -87,13 +87,13 @@ public final class VoltarionGeometry {
                 .texOffs(168, 234).addBox(-4.5F, -2F, -19.5F, 9F, 4F, 8F, new CubeDeformation(-0.3F, -0.1F, 0F))
                 .texOffs(146, 200).addBox(-2.5F, -4F, -19.5F, 5F, 8F, 8F, new CubeDeformation(0F, -0.4F, -0.08F))
                 .texOffs(271, 234).addBox(-4F, -1.75F, -26.75F, 8F, 4F, 8F, new CubeDeformation(-0.4F, -0.05F, -0.25F))
-                .texOffs(484, 200).addBox(-2.5F, -3.25F, -26.75F, 5F, 7F, 8F, new CubeDeformation(-0.3F, -0.15F, -0.33F))
+                .texOffs(484, 200).addBox(-2.5F, -3.25F, -26.75F, 5F, 7F, 8F, new CubeDeformation(-0.3F, -0.11F, -0.33F))
                 .texOffs(387, 200).addBox(-2F, -4.6F, -25.25F, 4F, 2F, 13F, new CubeDeformation(0F, -0.2F, -0.25F))
                 .texOffs(255, 286).addBox(-3F, -2.8F, -27.3F, 6F, 4F, 1F, new CubeDeformation(-0.2F, -0.2F, 0F))
                 .texOffs(189, 298).addBox(0.6F, -2.4F, -27.75F, 2F, 1F, 1F, new CubeDeformation(-0.4F, -0.1F, -0.25F))
                 .texOffs(432, 279).addBox(3.75F, -3.25F, -13.1F, 2F, 2F, 4F, new CubeDeformation(-0.15F, -0.15F, -0.2F))
                 .texOffs(24, 298).addBox(2.8F, 3.4775F, -25.6429F, 1F, 2F, 1F, new CubeDeformation(-0.1F, -0.1225F, -0.1F))
-                .texOffs(29, 298).addBox(2.8F, 3.25F, -23.9286F, 1F, 2F, 1F, new CubeDeformation(-0.1F, -0.35F, -0.1F))
+                .texOffs(29, 298).addBox(2.8F, 3.25F, -23.9286F, 1F, 2F, 1F, new CubeDeformation(-0.1F, -0.31F, -0.1F))
                 .texOffs(34, 298).addBox(2.8F, 3.25F, -22.2143F, 1F, 2F, 1F, new CubeDeformation(-0.1F, -0.35F, -0.1F))
                 .texOffs(39, 298).addBox(2.8F, 3.25F, -20.5F, 1F, 2F, 1F, new CubeDeformation(-0.1F, -0.35F, -0.1F))
                 .texOffs(44, 298).addBox(2.8F, 3.25F, -18.7857F, 1F, 2F, 1F, new CubeDeformation(-0.1F, -0.35F, -0.1F))
@@ -103,7 +103,7 @@ public final class VoltarionGeometry {
                 .texOffs(196, 298).addBox(-2.6F, -2.4F, -27.75F, 2F, 1F, 1F, new CubeDeformation(-0.4F, -0.1F, -0.25F))
                 .texOffs(445, 279).addBox(-5.75F, -3.25F, -13.1F, 2F, 2F, 4F, new CubeDeformation(-0.15F, -0.15F, -0.2F))
                 .texOffs(59, 298).addBox(-3.8F, 3.4775F, -25.6429F, 1F, 2F, 1F, new CubeDeformation(-0.1F, -0.1225F, -0.1F))
-                .texOffs(64, 298).addBox(-3.8F, 3.25F, -23.9286F, 1F, 2F, 1F, new CubeDeformation(-0.1F, -0.35F, -0.1F))
+                .texOffs(64, 298).addBox(-3.8F, 3.25F, -23.9286F, 1F, 2F, 1F, new CubeDeformation(-0.1F, -0.31F, -0.1F))
                 .texOffs(69, 298).addBox(-3.8F, 3.25F, -22.2143F, 1F, 2F, 1F, new CubeDeformation(-0.1F, -0.35F, -0.1F))
                 .texOffs(74, 298).addBox(-3.8F, 3.25F, -20.5F, 1F, 2F, 1F, new CubeDeformation(-0.1F, -0.35F, -0.1F))
                 .texOffs(79, 298).addBox(-3.8F, 3.25F, -18.7857F, 1F, 2F, 1F, new CubeDeformation(-0.1F, -0.35F, -0.1F))
@@ -219,71 +219,71 @@ public final class VoltarionGeometry {
         PartDefinition p_tail1 = p_body.addOrReplaceChild("tail1", CubeListBuilder.create()
                 .texOffs(225, 200).addBox(-5F, -2F, -1F, 10F, 4F, 11F, new CubeDeformation(0F, -0.2F, -0.4F))
                 .texOffs(141, 179).addBox(-2.5F, -4.5F, -1F, 5F, 9F, 11F, new CubeDeformation(-0.2F, 0F, -0.48F))
-                .texOffs(386, 234).addBox(-2.5F, 3.3F, 0F, 5F, 2F, 9F, new CubeDeformation(-0.2F, -0.2F, 0F))
+                .texOffs(386, 234).addBox(-2.5F, 3.3F, 0F, 5F, 2F, 9F, new CubeDeformation(-0.16F, -0.2F, 0F))
                 .texOffs(226, 248).addBox(-0.5F, -8.15F, 1.5F, 1F, 5F, 6F, new CubeDeformation(-0.2F, -0.45F, 0F)),
                 PartPose.offsetAndRotation(0F, -3F, 15F, -0.1047F, 0F, 0F));
         PartDefinition p_tail2 = p_tail1.addOrReplaceChild("tail2", CubeListBuilder.create()
                 .texOffs(268, 200).addBox(-4.5F, -2F, -1F, 9F, 4F, 11F, new CubeDeformation(0F, -0.4F, -0.4F))
                 .texOffs(246, 179).addBox(-2.5F, -4F, -1F, 5F, 8F, 11F, new CubeDeformation(-0.4F, 0F, -0.48F))
-                .texOffs(415, 234).addBox(-2.5F, 2.8F, 0F, 5F, 2F, 9F, new CubeDeformation(-0.4F, -0.2F, 0F))
+                .texOffs(415, 234).addBox(-2.5F, 2.8F, 0F, 5F, 2F, 9F, new CubeDeformation(-0.36F, -0.2F, 0F))
                 .texOffs(411, 248).addBox(-0.5F, -6.975F, 1.5F, 1F, 4F, 6F, new CubeDeformation(-0.2F, -0.125F, 0F)),
                 PartPose.offsetAndRotation(0F, 0F, 9F, -0.0698F, 0F, 0F));
         PartDefinition p_tail3 = p_tail2.addOrReplaceChild("tail3", CubeListBuilder.create()
                 .texOffs(369, 218).addBox(-4F, -1.5F, -0.75F, 8F, 3F, 10F, new CubeDeformation(0F, -0.06F, -0.15F))
                 .texOffs(374, 179).addBox(-2F, -4F, -0.75F, 4F, 8F, 10F, new CubeDeformation(-0.16F, -0.4F, -0.23F))
-                .texOffs(54, 248).addBox(-2F, 2.4F, -0.25F, 4F, 2F, 9F, new CubeDeformation(-0.16F, -0.2F, -0.25F))
+                .texOffs(54, 248).addBox(-2F, 2.4F, -0.25F, 4F, 2F, 9F, new CubeDeformation(-0.12F, -0.2F, -0.25F))
                 .texOffs(426, 248).addBox(-0.5F, -6.4F, 1.25F, 1F, 4F, 6F, new CubeDeformation(-0.2F, -0.3F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 0F, 9F, -0.0349F, 0F, 0F));
         PartDefinition p_tail4 = p_tail3.addOrReplaceChild("tail4", CubeListBuilder.create()
                 .texOffs(441, 218).addBox(-3.5F, -1.5F, -0.75F, 7F, 3F, 10F, new CubeDeformation(0F, -0.22F, -0.15F))
                 .texOffs(47, 200).addBox(-2F, -3.5F, -0.75F, 4F, 7F, 10F, new CubeDeformation(-0.42F, -0.3F, -0.23F))
-                .texOffs(81, 248).addBox(-2F, 2F, -0.25F, 4F, 2F, 9F, new CubeDeformation(-0.42F, -0.2F, -0.25F))
+                .texOffs(81, 248).addBox(-2F, 2F, -0.25F, 4F, 2F, 9F, new CubeDeformation(-0.38F, -0.2F, -0.25F))
                 .texOffs(441, 248).addBox(-0.5F, -5.825F, 1.25F, 1F, 4F, 6F, new CubeDeformation(-0.2F, -0.475F, -0.25F)),
                 PartPose.offset(0F, 0F, 8.5F));
         PartDefinition p_tail5 = p_tail4.addOrReplaceChild("tail5", CubeListBuilder.create()
                 .texOffs(476, 218).addBox(-3.5F, -1.5F, -1F, 7F, 3F, 10F, new CubeDeformation(-0.4F, -0.38F, -0.4F))
                 .texOffs(173, 200).addBox(-1.5F, -3F, -1F, 3F, 6F, 10F, new CubeDeformation(-0.08F, -0.2F, -0.48F))
-                .texOffs(285, 248).addBox(-1.5F, 1.6F, 0F, 3F, 2F, 8F, new CubeDeformation(-0.08F, -0.2F, 0F))
+                .texOffs(285, 248).addBox(-1.5F, 1.6F, 0F, 3F, 2F, 8F, new CubeDeformation(-0.04F, -0.2F, 0F))
                 .texOffs(30, 270).addBox(-0.5F, -4.75F, 1.5F, 1F, 3F, 5F, new CubeDeformation(-0.2F, -0.15F, 0F)),
                 PartPose.offsetAndRotation(0F, 0F, 8.5F, 0.0175F, 0F, 0F));
         PartDefinition p_tail6 = p_tail5.addOrReplaceChild("tail6", CubeListBuilder.create()
                 .texOffs(304, 234).addBox(-3F, -1F, -1F, 6F, 2F, 10F, new CubeDeformation(-0.3F, 0F, -0.4F))
                 .texOffs(0, 218).addBox(-1.5F, -2.5F, -1F, 3F, 5F, 10F, new CubeDeformation(-0.3F, 0F, -0.48F))
-                .texOffs(308, 248).addBox(-1.5F, 1.3F, 0F, 3F, 2F, 8F, new CubeDeformation(-0.3F, -0.2F, 0F))
+                .texOffs(308, 248).addBox(-1.5F, 1.3F, 0F, 3F, 2F, 8F, new CubeDeformation(-0.26F, -0.2F, 0F))
                 .texOffs(43, 270).addBox(-0.5F, -4.275F, 1.5F, 1F, 3F, 5F, new CubeDeformation(-0.2F, -0.325F, 0F)),
                 PartPose.offsetAndRotation(0F, 0F, 8F, 0.0349F, 0F, 0F));
         PartDefinition p_tail7 = p_tail6.addOrReplaceChild("tail7", CubeListBuilder.create()
                 .texOffs(444, 234).addBox(-2.5F, -1F, -0.75F, 5F, 2F, 9F, new CubeDeformation(-0.1F, -0.12F, -0.15F))
                 .texOffs(294, 218).addBox(-1.5F, -2.5F, -0.75F, 3F, 5F, 9F, new CubeDeformation(-0.42F, -0.3F, -0.23F))
-                .texOffs(331, 248).addBox(-1.5F, 1F, -0.25F, 3F, 2F, 8F, new CubeDeformation(-0.42F, -0.2F, -0.25F))
+                .texOffs(331, 248).addBox(-1.5F, 1F, -0.25F, 3F, 2F, 8F, new CubeDeformation(-0.38F, -0.2F, -0.25F))
                 .texOffs(56, 270).addBox(-0.5F, -3.8F, 1.25F, 1F, 3F, 5F, new CubeDeformation(-0.2F, -0.5F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 0F, 8F, 0.0349F, 0F, 0F));
         PartDefinition p_tail8 = p_tail7.addOrReplaceChild("tail8", CubeListBuilder.create()
                 .texOffs(473, 234).addBox(-2.5F, -1F, -0.75F, 5F, 2F, 9F, new CubeDeformation(-0.4F, -0.24F, -0.15F))
                 .texOffs(0, 234).addBox(-1F, -2F, -0.75F, 2F, 4F, 9F, new CubeDeformation(-0.04F, -0.1F, -0.23F))
-                .texOffs(354, 248).addBox(-1F, 0.7F, -0.25F, 2F, 2F, 8F, new CubeDeformation(-0.04F, -0.2F, -0.25F))
+                .texOffs(354, 248).addBox(-1F, 0.7F, -0.25F, 2F, 2F, 8F, new CubeDeformation(0F, -0.2F, -0.25F))
                 .texOffs(278, 270).addBox(-0.5F, -2.825F, 1.25F, 1F, 2F, 5F, new CubeDeformation(-0.2F, -0.175F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 0F, 7.5F, 0.0349F, 0F, 0F));
         PartDefinition p_tail9 = p_tail8.addOrReplaceChild("tail9", CubeListBuilder.create()
                 .texOffs(108, 248).addBox(-2F, -1F, -1F, 4F, 2F, 9F, new CubeDeformation(-0.2F, -0.36F, -0.4F))
                 .texOffs(23, 234).addBox(-1F, -2F, -1F, 2F, 4F, 9F, new CubeDeformation(-0.16F, -0.4F, -0.48F))
-                .texOffs(300, 260).addBox(-1F, 0.4F, 0F, 2F, 2F, 7F, new CubeDeformation(-0.16F, -0.2F, 0F))
+                .texOffs(300, 260).addBox(-1F, 0.4F, 0F, 2F, 2F, 7F, new CubeDeformation(-0.12F, -0.2F, 0F))
                 .texOffs(52, 286).addBox(-0.5F, -2.35F, 1.5F, 1F, 2F, 4F, new CubeDeformation(-0.2F, -0.35F, 0F)),
                 PartPose.offsetAndRotation(0F, 0F, 7.5F, 0.0349F, 0F, 0F));
         PartDefinition p_tail10 = p_tail9.addOrReplaceChild("tail10", CubeListBuilder.create()
                 .texOffs(135, 248).addBox(-1.5F, -1F, -1F, 3F, 2F, 9F, new CubeDeformation(0F, -0.44F, -0.4F))
                 .texOffs(337, 234).addBox(-1F, -1.5F, -1F, 2F, 3F, 9F, new CubeDeformation(-0.34F, -0.1F, -0.48F))
-                .texOffs(319, 260).addBox(-1F, 0.2F, 0F, 2F, 2F, 7F, new CubeDeformation(-0.34F, -0.2F, 0F)),
+                .texOffs(319, 260).addBox(-1F, 0.2F, 0F, 2F, 2F, 7F, new CubeDeformation(-0.3F, -0.2F, 0F)),
                 PartPose.offsetAndRotation(0F, 0F, 7F, 0.0349F, 0F, 0F));
         PartDefinition p_tail11 = p_tail10.addOrReplaceChild("tail11", CubeListBuilder.create()
                 .texOffs(254, 260).addBox(-1.5F, -0.5F, -0.75F, 3F, 1F, 8F, new CubeDeformation(-0.2F, -0.02F, -0.15F))
                 .texOffs(160, 248).addBox(-1F, -1.5F, -0.75F, 2F, 3F, 8F, new CubeDeformation(-0.42F, -0.3F, -0.23F))
-                .texOffs(338, 260).addBox(-1F, 0F, -0.25F, 2F, 2F, 7F, new CubeDeformation(-0.42F, -0.2F, -0.25F)),
+                .texOffs(338, 260).addBox(-1F, 0F, -0.25F, 2F, 2F, 7F, new CubeDeformation(-0.38F, -0.2F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 0F, 7F, 0.0175F, 0F, 0F));
         PartDefinition p_tail12 = p_tail11.addOrReplaceChild("tail12", CubeListBuilder.create()
                 .texOffs(277, 260).addBox(-1.5F, -0.5F, -1F, 3F, 1F, 8F, new CubeDeformation(-0.4F, -0.1F, -0.4F))
                 .texOffs(375, 248).addBox(-1F, -1F, -1F, 2F, 2F, 8F, new CubeDeformation(-0.5F, 0F, -0.48F))
-                .texOffs(477, 260).addBox(-1F, -0.2F, 0F, 2F, 2F, 6F, new CubeDeformation(-0.5F, -0.2F, 0F))
+                .texOffs(477, 260).addBox(-1F, -0.2F, 0F, 2F, 2F, 6F, new CubeDeformation(-0.46F, -0.2F, 0F))
                 .texOffs(48, 218).addBox(-5.5F, -0.5F, 4.5F, 11F, 1F, 13F),
                 PartPose.offsetAndRotation(0F, 0F, 6.5F, 0.0175F, 0F, 0F));
         PartDefinition p_hind_leg_l = p_body.addOrReplaceChild("hind_leg_l", CubeListBuilder.create()
@@ -299,11 +299,11 @@ public final class VoltarionGeometry {
         PartDefinition p_hind_foot_l = p_hind_shin_l.addOrReplaceChild("hind_foot_l", CubeListBuilder.create()
                 .texOffs(138, 218).addBox(-4F, 0.5F, -8.4F, 8F, 2F, 12F, new CubeDeformation(0F, -0.4F, 0F))
                 .texOffs(309, 200).addBox(-3.5F, 0F, -8.4F, 7F, 3F, 12F, new CubeDeformation(-0.4F, 0F, -0.08F))
-                .texOffs(188, 270).addBox(-3.8667F, 1.05F, -12.15F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.15F))
+                .texOffs(188, 270).addBox(-3.8667F, 1.05F, -12.15F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.15F))
                 .texOffs(336, 286).addBox(-3.8667F, 1.43F, -14.65F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.05F))
-                .texOffs(203, 270).addBox(-1F, 1.05F, -12.15F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.15F))
+                .texOffs(203, 270).addBox(-1F, 1.05F, -12.15F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.15F))
                 .texOffs(347, 286).addBox(-1F, 1.43F, -14.65F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.05F))
-                .texOffs(218, 270).addBox(1.8667F, 1.05F, -12.15F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.15F))
+                .texOffs(218, 270).addBox(1.8667F, 1.05F, -12.15F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.15F))
                 .texOffs(358, 286).addBox(1.8667F, 1.43F, -14.65F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.05F)),
                 PartPose.offsetAndRotation(0F, 14.4F, 0F, -0.4189F, 0F, 0F));
         PartDefinition p_hind_leg_r = p_body.addOrReplaceChild("hind_leg_r", CubeListBuilder.create()
@@ -319,11 +319,11 @@ public final class VoltarionGeometry {
         PartDefinition p_hind_foot_r = p_hind_shin_r.addOrReplaceChild("hind_foot_r", CubeListBuilder.create()
                 .texOffs(179, 218).addBox(-4F, 0.5F, -8.4F, 8F, 2F, 12F, new CubeDeformation(0F, -0.4F, 0F))
                 .texOffs(348, 200).addBox(-3.5F, 0F, -8.4F, 7F, 3F, 12F, new CubeDeformation(-0.4F, 0F, -0.08F))
-                .texOffs(233, 270).addBox(-3.8667F, 1.05F, -12.15F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.15F))
+                .texOffs(233, 270).addBox(-3.8667F, 1.05F, -12.15F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.15F))
                 .texOffs(369, 286).addBox(-3.8667F, 1.43F, -14.65F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.05F))
-                .texOffs(248, 270).addBox(-1F, 1.05F, -12.15F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.15F))
+                .texOffs(248, 270).addBox(-1F, 1.05F, -12.15F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.15F))
                 .texOffs(380, 286).addBox(-1F, 1.43F, -14.65F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.05F))
-                .texOffs(263, 270).addBox(1.8667F, 1.05F, -12.15F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.15F))
+                .texOffs(263, 270).addBox(1.8667F, 1.05F, -12.15F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.15F))
                 .texOffs(391, 286).addBox(1.8667F, 1.43F, -14.65F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.05F)),
                 PartPose.offsetAndRotation(0F, 14.4F, 0F, -0.4189F, 0F, 0F));
         PartDefinition p_wing_l = p_body.addOrReplaceChild("wing_l", CubeListBuilder.create()

@@ -31,8 +31,8 @@ public final class ShatteredKingGeometry {
                 .texOffs(185, 64).addBox(-3F, -8.8F, 0.8F, 6F, 6F, 1F, new CubeDeformation(-0.2F, 0F, -0.2F))
                 .texOffs(172, 20).addBox(-9F, -13F, -5.3F, 18F, 2F, 11F, new CubeDeformation(-0.4F, -0.2F, -0.3F))
                 .texOffs(43, 38).addBox(-6.5F, 0F, -4F, 13F, 4F, 8F, new CubeDeformation(0F, 0F, -0.2F))
-                .texOffs(58, 74).addBox(-3.6F, -8.8F, -5.1F, 1F, 6F, 1F, new CubeDeformation(-0.2F, -0.2F, -0.3F))
-                .texOffs(63, 74).addBox(2.6F, -8.8F, -5.1F, 1F, 6F, 1F, new CubeDeformation(-0.2F, -0.2F, -0.3F)),
+                .texOffs(58, 74).addBox(-3.6F, -8.8F, -5.1F, 1F, 6F, 1F, new CubeDeformation(-0.16F, -0.2F, -0.3F))
+                .texOffs(63, 74).addBox(2.6F, -8.8F, -5.1F, 1F, 6F, 1F, new CubeDeformation(-0.16F, -0.2F, -0.3F)),
                 PartPose.offset(0F, 2F, 0F));
         PartDefinition p_heart = p_body.addOrReplaceChild("heart", CubeListBuilder.create(),
                 PartPose.offset(0F, -5.8F, -1.8F));

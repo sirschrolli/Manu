@@ -65,7 +65,7 @@ public final class PyrrhonGeometry {
         PartDefinition p_neck1 = p_body.addOrReplaceChild("neck1", CubeListBuilder.create()
                 .texOffs(121, 281).addBox(-7.5F, -3F, -9F, 15F, 6F, 10F, new CubeDeformation(-0.25F, -0.2F, -0.4F))
                 .texOffs(251, 170).addBox(-3.5F, -7F, -9F, 7F, 14F, 10F, new CubeDeformation(-0.45F, 0F, -0.48F))
-                .texOffs(220, 329).addBox(-3.5F, 5.8F, -8F, 7F, 2F, 8F, new CubeDeformation(-0.45F, -0.2F, 0F)),
+                .texOffs(220, 329).addBox(-3.5F, 5.8F, -8F, 7F, 2F, 8F, new CubeDeformation(-0.41F, -0.2F, 0F)),
                 PartPose.offsetAndRotation(0F, -6F, -21F, -0.5236F, 0F, 0F));
         PartDefinition p_neck1_spike = p_neck1.addOrReplaceChild("neck1_spike", CubeListBuilder.create()
                 .texOffs(52, 352).addBox(-2F, -2.117F, -2F, 4F, 3F, 4F, new CubeDeformation(-0.4F, -0.283F, 0F))
@@ -75,7 +75,7 @@ public final class PyrrhonGeometry {
         PartDefinition p_neck2 = p_neck1.addOrReplaceChild("neck2", CubeListBuilder.create()
                 .texOffs(453, 281).addBox(-7F, -3F, -8.25F, 14F, 6F, 9F, new CubeDeformation(-0.25F, -0.4F, -0.15F))
                 .texOffs(343, 197).addBox(-3F, -6.5F, -8.25F, 6F, 13F, 9F, new CubeDeformation(-0.15F, 0F, -0.23F))
-                .texOffs(251, 329).addBox(-3F, 5.3F, -7.75F, 6F, 2F, 8F, new CubeDeformation(-0.15F, -0.2F, -0.25F)),
+                .texOffs(251, 329).addBox(-3F, 5.3F, -7.75F, 6F, 2F, 8F, new CubeDeformation(-0.11F, -0.2F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 0F, -8F, -0.2094F, 0F, 0F));
         PartDefinition p_neck2_spike = p_neck2.addOrReplaceChild("neck2_spike", CubeListBuilder.create()
                 .texOffs(69, 352).addBox(-2F, -2.054F, -2F, 4F, 3F, 4F, new CubeDeformation(-0.4F, -0.346F, 0F))
@@ -85,7 +85,7 @@ public final class PyrrhonGeometry {
         PartDefinition p_neck3 = p_neck2.addOrReplaceChild("neck3", CubeListBuilder.create()
                 .texOffs(164, 298).addBox(-6.5F, -2.5F, -8F, 13F, 5F, 9F, new CubeDeformation(-0.25F, -0.1F, -0.4F))
                 .texOffs(106, 220).addBox(-3F, -6F, -8F, 6F, 12F, 9F, new CubeDeformation(-0.35F, 0F, -0.48F))
-                .texOffs(187, 342).addBox(-3F, 4.8F, -7F, 6F, 2F, 7F, new CubeDeformation(-0.35F, -0.2F, 0F)),
+                .texOffs(187, 342).addBox(-3F, 4.8F, -7F, 6F, 2F, 7F, new CubeDeformation(-0.31F, -0.2F, 0F)),
                 PartPose.offsetAndRotation(0F, 0F, -7.5F, -0.0349F, 0F, 0F));
         PartDefinition p_neck3_spike = p_neck3.addOrReplaceChild("neck3_spike", CubeListBuilder.create()
                 .texOffs(103, 352).addBox(-1.5F, -1.991F, -2F, 3F, 3F, 4F, new CubeDeformation(0F, -0.409F, -0.125F))
@@ -95,7 +95,7 @@ public final class PyrrhonGeometry {
         PartDefinition p_neck4 = p_neck3.addOrReplaceChild("neck4", CubeListBuilder.create()
                 .texOffs(116, 314).addBox(-6F, -2.5F, -7.25F, 12F, 5F, 8F, new CubeDeformation(-0.25F, -0.3F, -0.15F))
                 .texOffs(194, 242).addBox(-2.5F, -5.5F, -7.25F, 5F, 11F, 8F, new CubeDeformation(-0.05F, 0F, -0.23F))
-                .texOffs(214, 342).addBox(-2.5F, 4.3F, -6.75F, 5F, 2F, 7F, new CubeDeformation(-0.05F, -0.2F, -0.25F)),
+                .texOffs(214, 342).addBox(-2.5F, 4.3F, -6.75F, 5F, 2F, 7F, new CubeDeformation(-0.01F, -0.2F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 0F, -7F, 0.1047F, 0F, 0F));
         PartDefinition p_neck4_spike = p_neck4.addOrReplaceChild("neck4_spike", CubeListBuilder.create()
                 .texOffs(118, 352).addBox(-1.5F, -1.928F, -2F, 3F, 3F, 4F, new CubeDeformation(-0.12F, -0.472F, -0.275F))
@@ -105,7 +105,7 @@ public final class PyrrhonGeometry {
         PartDefinition p_neck5 = p_neck4.addOrReplaceChild("neck5", CubeListBuilder.create()
                 .texOffs(411, 314).addBox(-5.5F, -2F, -7.25F, 11F, 4F, 8F, new CubeDeformation(-0.25F, 0F, -0.15F))
                 .texOffs(54, 262).addBox(-2.5F, -5F, -7.25F, 5F, 10F, 8F, new CubeDeformation(-0.25F, 0F, -0.23F))
-                .texOffs(239, 342).addBox(-2.5F, 3.8F, -6.75F, 5F, 2F, 7F, new CubeDeformation(-0.25F, -0.2F, -0.25F)),
+                .texOffs(239, 342).addBox(-2.5F, 3.8F, -6.75F, 5F, 2F, 7F, new CubeDeformation(-0.21F, -0.2F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 0F, -6.5F, 0.1571F, 0F, 0F));
         PartDefinition p_neck5_spike = p_neck5.addOrReplaceChild("neck5_spike", CubeListBuilder.create()
                 .texOffs(430, 360).addBox(-1.5F, -1.365F, -2F, 3F, 2F, 4F, new CubeDeformation(-0.24F, -0.035F, -0.425F))
@@ -115,7 +115,7 @@ public final class PyrrhonGeometry {
         PartDefinition p_neck6 = p_neck5.addOrReplaceChild("neck6", CubeListBuilder.create()
                 .texOffs(450, 314).addBox(-5F, -2F, -7F, 10F, 4F, 8F, new CubeDeformation(0F, -0.1F, -0.4F))
                 .texOffs(81, 262).addBox(-2.5F, -5F, -7F, 5F, 10F, 8F, new CubeDeformation(-0.35F, -0.25F, -0.48F))
-                .texOffs(340, 342).addBox(-2.5F, 3.55F, -6F, 5F, 2F, 6F, new CubeDeformation(-0.35F, -0.2F, 0F)),
+                .texOffs(340, 342).addBox(-2.5F, 3.55F, -6F, 5F, 2F, 6F, new CubeDeformation(-0.31F, -0.2F, 0F)),
                 PartPose.offsetAndRotation(0F, 0F, -6.5F, 0.1396F, 0F, 0F));
         PartDefinition p_neck6_spike = p_neck6.addOrReplaceChild("neck6_spike", CubeListBuilder.create()
                 .texOffs(389, 367).addBox(-1.5F, -1.281F, -1.5F, 3F, 2F, 3F, new CubeDeformation(-0.3F, -0.119F, 0F))
@@ -130,14 +130,14 @@ public final class PyrrhonGeometry {
                 .texOffs(299, 298).addBox(-5F, -2.7F, -21F, 10F, 5F, 9F, new CubeDeformation(-0.1F, -0.3F, 0F))
                 .texOffs(448, 242).addBox(-3F, -4.7F, -21F, 6F, 9F, 9F, new CubeDeformation(-0.1F, -0.3F, -0.08F))
                 .texOffs(194, 314).addBox(-4.5F, -2.45F, -28F, 9F, 5F, 8F, new CubeDeformation(-0.1F, -0.35F, 0F))
-                .texOffs(297, 281).addBox(-3F, -3.95F, -28F, 6F, 8F, 8F, new CubeDeformation(-0.4F, -0.05F, -0.08F))
+                .texOffs(297, 281).addBox(-3F, -3.95F, -28F, 6F, 8F, 8F, new CubeDeformation(-0.4F, -0.01F, -0.08F))
                 .texOffs(86, 298).addBox(-3F, -5.5F, -26.5F, 6F, 2F, 13F, new CubeDeformation(-0.2F, -0.1F, 0F))
                 .texOffs(33, 352).addBox(-3.5F, -3.9F, -29.3F, 7F, 5F, 2F, new CubeDeformation(-0.1F, -0.4F, -0.4F))
                 .texOffs(394, 385).addBox(1.1F, -3.25F, -29.3F, 2F, 1F, 1F, new CubeDeformation(-0.3F, -0.05F, -0.2F))
                 .texOffs(153, 329).addBox(5F, -0.1F, -14F, 2F, 4F, 8F, new CubeDeformation(0F, -0.2F, 0F))
                 .texOffs(328, 314).addBox(5.5F, -0.6F, -14F, 1F, 5F, 8F, new CubeDeformation(-0.2F, 0F, -0.08F))
                 .texOffs(484, 360).addBox(4.825F, -3.9F, -13.5F, 2F, 2F, 4F, new CubeDeformation(-0.075F, 0F, -0.1F))
-                .texOffs(77, 385).addBox(3.5F, 3.5125F, -26.5F, 1F, 3F, 1F, new CubeDeformation(-0.05F, -0.4875F, -0.05F))
+                .texOffs(77, 385).addBox(3.5F, 3.5125F, -26.5F, 1F, 3F, 1F, new CubeDeformation(-0.05F, -0.4475F, -0.05F))
                 .texOffs(121, 385).addBox(3.5F, 3.75F, -24.5F, 1F, 2F, 1F, new CubeDeformation(-0.05F, -0.25F, -0.05F))
                 .texOffs(126, 385).addBox(3.5F, 3.75F, -22.5F, 1F, 2F, 1F, new CubeDeformation(-0.05F, -0.25F, -0.05F))
                 .texOffs(131, 385).addBox(3.5F, 3.75F, -20.5F, 1F, 2F, 1F, new CubeDeformation(-0.05F, -0.25F, -0.05F))
@@ -148,7 +148,7 @@ public final class PyrrhonGeometry {
                 .texOffs(174, 329).addBox(-7F, -0.1F, -14F, 2F, 4F, 8F, new CubeDeformation(0F, -0.2F, 0F))
                 .texOffs(347, 314).addBox(-6.5F, -0.6F, -14F, 1F, 5F, 8F, new CubeDeformation(-0.2F, 0F, -0.08F))
                 .texOffs(497, 360).addBox(-6.825F, -3.9F, -13.5F, 2F, 2F, 4F, new CubeDeformation(-0.075F, 0F, -0.1F))
-                .texOffs(87, 385).addBox(-4.5F, 3.5125F, -26.5F, 1F, 3F, 1F, new CubeDeformation(-0.05F, -0.4875F, -0.05F))
+                .texOffs(87, 385).addBox(-4.5F, 3.5125F, -26.5F, 1F, 3F, 1F, new CubeDeformation(-0.05F, -0.4475F, -0.05F))
                 .texOffs(141, 385).addBox(-4.5F, 3.75F, -24.5F, 1F, 2F, 1F, new CubeDeformation(-0.05F, -0.25F, -0.05F))
                 .texOffs(146, 385).addBox(-4.5F, 3.75F, -22.5F, 1F, 2F, 1F, new CubeDeformation(-0.05F, -0.25F, -0.05F))
                 .texOffs(151, 385).addBox(-4.5F, 3.75F, -20.5F, 1F, 2F, 1F, new CubeDeformation(-0.05F, -0.25F, -0.05F))
@@ -262,8 +262,8 @@ public final class PyrrhonGeometry {
                 .texOffs(344, 242).addBox(-4.5F, 1.3F, -16.45F, 9F, 1F, 17F, new CubeDeformation(0F, 0F, -0.25F))
                 .texOffs(57, 220).addBox(-3.5F, -0.2F, -16.45F, 7F, 4F, 17F, new CubeDeformation(-0.3F, -0.2F, -0.33F))
                 .texOffs(0, 352).addBox(-5.5F, 0.7F, -3F, 11F, 2F, 5F, new CubeDeformation(-0.3F, -0.2F, 0F))
-                .texOffs(280, 329).addBox(-4F, -0.8F, -3F, 8F, 5F, 5F, new CubeDeformation(-0.2F, -0.3F, -0.08F))
-                .texOffs(158, 342).addBox(-3.5F, 2.4F, -15.8F, 7F, 2F, 7F, new CubeDeformation(-0.1F, -0.2F, 0F))
+                .texOffs(280, 329).addBox(-4F, -0.8F, -3F, 8F, 5F, 5F, new CubeDeformation(-0.2F, -0.26F, -0.08F))
+                .texOffs(158, 342).addBox(-3.5F, 2.4F, -15.8F, 7F, 2F, 7F, new CubeDeformation(-0.1F, -0.16F, 0F))
                 .texOffs(216, 385).addBox(3.2F, -1.7775F, -15.1333F, 1F, 2F, 1F, new CubeDeformation(-0.075F, -0.1225F, -0.075F))
                 .texOffs(221, 385).addBox(3.2F, -1.55F, -13.2F, 1F, 2F, 1F, new CubeDeformation(-0.075F, -0.35F, -0.075F))
                 .texOffs(226, 385).addBox(3.2F, -1.55F, -11.2667F, 1F, 2F, 1F, new CubeDeformation(-0.075F, -0.35F, -0.075F))
@@ -276,9 +276,9 @@ public final class PyrrhonGeometry {
                 .texOffs(261, 385).addBox(-4.2F, -1.55F, -9.3333F, 1F, 2F, 1F, new CubeDeformation(-0.075F, -0.35F, -0.075F))
                 .texOffs(266, 385).addBox(-4.2F, -1.55F, -7.4F, 1F, 2F, 1F, new CubeDeformation(-0.075F, -0.35F, -0.075F))
                 .texOffs(271, 385).addBox(-4.2F, -1.7775F, -5.4667F, 1F, 2F, 1F, new CubeDeformation(-0.075F, -0.1225F, -0.075F))
-                .texOffs(108, 262).addBox(-4F, -0.5F, -15.8F, 8F, 1F, 16F, new CubeDeformation(-0.2F, -0.35F, 0F))
+                .texOffs(108, 262).addBox(-4F, -0.5F, -15.8F, 8F, 1F, 16F, new CubeDeformation(-0.16F, -0.35F, 0F))
                 .texOffs(157, 314).addBox(-3F, -0.7F, -14.5F, 6F, 1F, 12F, new CubeDeformation(-0.4F, -0.2F, 0F))
-                .texOffs(0, 329).addBox(-3.5F, 3.3F, -11F, 7F, 1F, 11F, new CubeDeformation(-0.3F, -0.1F, 0F)),
+                .texOffs(0, 329).addBox(-3.5F, 3.3F, -11F, 7F, 1F, 11F, new CubeDeformation(-0.26F, -0.1F, 0F)),
                 PartPose.offsetAndRotation(0F, 4F, -11.5F, 0.0698F, 0F, 0F));
         PartDefinition p_beard1 = p_jaw.addOrReplaceChild("beard1", CubeListBuilder.create()
                 .texOffs(431, 380).addBox(-1F, -1.197F, -1F, 2F, 2F, 2F, new CubeDeformation(-0.2F, -0.203F, 0F))
@@ -298,7 +298,7 @@ public final class PyrrhonGeometry {
         PartDefinition p_tail1 = p_body.addOrReplaceChild("tail1", CubeListBuilder.create()
                 .texOffs(428, 197).addBox(-7F, -3F, -1F, 14F, 6F, 15F, new CubeDeformation(0F, -0.4F, -0.4F))
                 .texOffs(329, 136).addBox(-3.5F, -6.5F, -1F, 7F, 13F, 15F, new CubeDeformation(-0.4F, 0F, -0.48F))
-                .texOffs(45, 298).addBox(-3.5F, 5.3F, 0F, 7F, 2F, 13F, new CubeDeformation(-0.4F, -0.2F, 0F)),
+                .texOffs(45, 298).addBox(-3.5F, 5.3F, 0F, 7F, 2F, 13F, new CubeDeformation(-0.36F, -0.2F, 0F)),
                 PartPose.offsetAndRotation(0F, -4F, 20F, -0.1745F, 0F, 0F));
         PartDefinition p_tail1_spike = p_tail1.addOrReplaceChild("tail1_spike", CubeListBuilder.create()
                 .texOffs(86, 352).addBox(-2F, -2.201F, -2F, 4F, 3F, 4F, new CubeDeformation(-0.4F, -0.199F, 0F))
@@ -308,7 +308,7 @@ public final class PyrrhonGeometry {
         PartDefinition p_tail2 = p_tail1.addOrReplaceChild("tail2", CubeListBuilder.create()
                 .texOffs(139, 242).addBox(-6.5F, -2.5F, -1F, 13F, 5F, 14F, new CubeDeformation(-0.4F, -0.26F, -0.4F))
                 .texOffs(0, 170).addBox(-3F, -6F, -1F, 6F, 12F, 14F, new CubeDeformation(-0.26F, -0.4F, -0.48F))
-                .texOffs(338, 298).addBox(-3F, 4.4F, 0F, 6F, 2F, 12F, new CubeDeformation(-0.26F, -0.2F, 0F)),
+                .texOffs(338, 298).addBox(-3F, 4.4F, 0F, 6F, 2F, 12F, new CubeDeformation(-0.22F, -0.2F, 0F)),
                 PartPose.offsetAndRotation(0F, 0F, 13F, -0.1396F, 0F, 0F));
         PartDefinition p_tail2_spike = p_tail2.addOrReplaceChild("tail2_spike", CubeListBuilder.create()
                 .texOffs(223, 352).addBox(-1.5F, -2.117F, -2F, 3F, 3F, 4F, new CubeDeformation(-0.036F, -0.283F, -0.17F))
@@ -318,7 +318,7 @@ public final class PyrrhonGeometry {
         PartDefinition p_tail3 = p_tail2.addOrReplaceChild("tail3", CubeListBuilder.create()
                 .texOffs(397, 242).addBox(-5.5F, -2F, -1F, 11F, 4F, 14F, new CubeDeformation(-0.2F, -0.08F, -0.4F))
                 .texOffs(212, 170).addBox(-2.5F, -5F, -1F, 5F, 10F, 14F, new CubeDeformation(-0.08F, -0.2F, -0.48F))
-                .texOffs(35, 314).addBox(-2.5F, 3.6F, 0F, 5F, 2F, 12F, new CubeDeformation(-0.08F, -0.2F, 0F)),
+                .texOffs(35, 314).addBox(-2.5F, 3.6F, 0F, 5F, 2F, 12F, new CubeDeformation(-0.04F, -0.2F, 0F)),
                 PartPose.offsetAndRotation(0F, 0F, 12F, -0.0698F, 0F, 0F));
         PartDefinition p_tail3_spike = p_tail3.addOrReplaceChild("tail3_spike", CubeListBuilder.create()
                 .texOffs(238, 352).addBox(-1.5F, -2.033F, -2F, 3F, 3F, 4F, new CubeDeformation(-0.228F, -0.367F, -0.41F))
@@ -328,7 +328,7 @@ public final class PyrrhonGeometry {
         PartDefinition p_tail4 = p_tail3.addOrReplaceChild("tail4", CubeListBuilder.create()
                 .texOffs(157, 262).addBox(-5F, -2F, -1F, 10F, 4F, 13F, new CubeDeformation(-0.4F, -0.36F, -0.4F))
                 .texOffs(306, 197).addBox(-2.5F, -4.5F, -1F, 5F, 9F, 13F, new CubeDeformation(-0.36F, -0.4F, -0.48F))
-                .texOffs(264, 314).addBox(-2.5F, 2.9F, 0F, 5F, 2F, 11F, new CubeDeformation(-0.36F, -0.2F, 0F)),
+                .texOffs(264, 314).addBox(-2.5F, 2.9F, 0F, 5F, 2F, 11F, new CubeDeformation(-0.32F, -0.2F, 0F)),
                 PartPose.offset(0F, 0F, 12F));
         PartDefinition p_tail4_spike = p_tail4.addOrReplaceChild("tail4_spike", CubeListBuilder.create()
                 .texOffs(52, 367).addBox(-1.5F, -1.928F, -1.5F, 3F, 3F, 3F, new CubeDeformation(-0.396F, -0.472F, -0.12F))
@@ -338,7 +338,7 @@ public final class PyrrhonGeometry {
         PartDefinition p_tail5 = p_tail4.addOrReplaceChild("tail5", CubeListBuilder.create()
                 .texOffs(172, 281).addBox(-4F, -1.5F, -1F, 8F, 3F, 13F, new CubeDeformation(-0.1F, -0.1F, -0.4F))
                 .texOffs(211, 220).addBox(-2F, -3.5F, -1F, 4F, 7F, 13F, new CubeDeformation(-0.2F, 0F, -0.48F))
-                .texOffs(297, 314).addBox(-2F, 2.3F, 0F, 4F, 2F, 11F, new CubeDeformation(-0.2F, -0.2F, 0F)),
+                .texOffs(297, 314).addBox(-2F, 2.3F, 0F, 4F, 2F, 11F, new CubeDeformation(-0.16F, -0.2F, 0F)),
                 PartPose.offsetAndRotation(0F, 0F, 11F, 0.0524F, 0F, 0F));
         PartDefinition p_tail5_spike = p_tail5.addOrReplaceChild("tail5_spike", CubeListBuilder.create()
                 .texOffs(110, 374).addBox(-1F, -1.323F, -1.5F, 2F, 2F, 3F, new CubeDeformation(-0.064F, -0.077F, -0.33F))
@@ -348,7 +348,7 @@ public final class PyrrhonGeometry {
         PartDefinition p_tail6 = p_tail5.addOrReplaceChild("tail6", CubeListBuilder.create()
                 .texOffs(125, 298).addBox(-3.5F, -1.5F, -1F, 7F, 3F, 12F, new CubeDeformation(-0.3F, -0.34F, -0.4F))
                 .texOffs(479, 242).addBox(-1.5F, -3F, -1F, 3F, 6F, 12F, new CubeDeformation(-0.04F, -0.1F, -0.48F))
-                .texOffs(126, 329).addBox(-1.5F, 1.7F, 0F, 3F, 2F, 10F, new CubeDeformation(-0.04F, -0.2F, 0F)),
+                .texOffs(126, 329).addBox(-1.5F, 1.7F, 0F, 3F, 2F, 10F, new CubeDeformation(0F, -0.2F, 0F)),
                 PartPose.offsetAndRotation(0F, 0F, 11F, 0.0698F, 0F, 0F));
         PartDefinition p_tail6_spike = p_tail6.addOrReplaceChild("tail6_spike", CubeListBuilder.create()
                 .texOffs(485, 380).addBox(-1F, -1.218F, -1F, 2F, 2F, 2F, new CubeDeformation(-0.232F, -0.182F, -0.04F))
@@ -358,7 +358,7 @@ public final class PyrrhonGeometry {
         PartDefinition p_tail7 = p_tail6.addOrReplaceChild("tail7", CubeListBuilder.create()
                 .texOffs(229, 314).addBox(-3F, -1F, -1F, 6F, 2F, 11F, new CubeDeformation(-0.4F, -0.04F, -0.4F))
                 .texOffs(326, 281).addBox(-1.5F, -2.5F, -1F, 3F, 5F, 11F, new CubeDeformation(-0.34F, -0.1F, -0.48F))
-                .texOffs(195, 329).addBox(-1.5F, 1.2F, 0F, 3F, 2F, 9F, new CubeDeformation(-0.34F, -0.2F, 0F)),
+                .texOffs(195, 329).addBox(-1.5F, 1.2F, 0F, 3F, 2F, 9F, new CubeDeformation(-0.3F, -0.2F, 0F)),
                 PartPose.offsetAndRotation(0F, 0F, 10F, 0.0698F, 0F, 0F));
         PartDefinition p_tail7_spike = p_tail7.addOrReplaceChild("tail7_spike", CubeListBuilder.create()
                 .texOffs(494, 380).addBox(-1F, -1.113F, -1F, 2F, 2F, 2F, new CubeDeformation(-0.3F, -0.287F, -0.125F))
@@ -368,7 +368,7 @@ public final class PyrrhonGeometry {
         PartDefinition p_tail8 = p_tail7.addOrReplaceChild("tail8", CubeListBuilder.create()
                 .texOffs(37, 329).addBox(-2.5F, -1F, -1F, 5F, 2F, 10F, new CubeDeformation(-0.4F, -0.24F, -0.4F))
                 .texOffs(70, 314).addBox(-1F, -2F, -1F, 2F, 4F, 10F, new CubeDeformation(-0.04F, -0.1F, -0.48F))
-                .texOffs(349, 329).addBox(-1F, 0.7F, 0F, 2F, 2F, 8F, new CubeDeformation(-0.04F, -0.2F, 0F))
+                .texOffs(349, 329).addBox(-1F, 0.7F, 0F, 2F, 2F, 8F, new CubeDeformation(0F, -0.2F, 0F))
                 .texOffs(366, 314).addBox(-5.5F, -0.5F, 4F, 11F, 1F, 11F)
                 .texOffs(95, 314).addBox(-0.5F, -5.25F, 3F, 1F, 5F, 9F, new CubeDeformation(0F, -0.25F, 0F)),
                 PartPose.offsetAndRotation(0F, 0F, 9F, 0.0524F, 0F, 0F));
@@ -385,11 +385,11 @@ public final class PyrrhonGeometry {
         PartDefinition p_front_foot_l = p_front_shin_l.addOrReplaceChild("front_foot_l", CubeListBuilder.create()
                 .texOffs(209, 298).addBox(-5F, 0.75F, -8.4F, 10F, 2F, 12F, new CubeDeformation(-0.25F, -0.3F, 0F))
                 .texOffs(215, 281).addBox(-4F, -0.25F, -8.4F, 8F, 4F, 12F, new CubeDeformation(-0.3F, -0.25F, -0.08F))
-                .texOffs(65, 367).addBox(-4.3667F, 1.55F, -11.3F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.05F, 0F))
+                .texOffs(65, 367).addBox(-4.3667F, 1.55F, -11.3F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.01F, 0F))
                 .texOffs(121, 374).addBox(-4.3667F, 1.93F, -13.85F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.15F))
-                .texOffs(78, 367).addBox(-1F, 1.55F, -11.3F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.05F, 0F))
+                .texOffs(78, 367).addBox(-1F, 1.55F, -11.3F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.01F, 0F))
                 .texOffs(132, 374).addBox(-1F, 1.93F, -13.85F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.15F))
-                .texOffs(91, 367).addBox(2.3667F, 1.55F, -11.3F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.05F, 0F))
+                .texOffs(91, 367).addBox(2.3667F, 1.55F, -11.3F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.01F, 0F))
                 .texOffs(143, 374).addBox(2.3667F, 1.93F, -13.85F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.15F)),
                 PartPose.offsetAndRotation(0F, 11.4F, 0F, 0.1047F, 0F, 0F));
         PartDefinition p_hind_leg_l = p_body.addOrReplaceChild("hind_leg_l", CubeListBuilder.create()
@@ -405,11 +405,11 @@ public final class PyrrhonGeometry {
         PartDefinition p_hind_foot_l = p_hind_shin_l.addOrReplaceChild("hind_foot_l", CubeListBuilder.create()
                 .texOffs(355, 281).addBox(-5.5F, 0.75F, -9.1F, 11F, 2F, 13F, new CubeDeformation(-0.25F, -0.3F, 0F))
                 .texOffs(249, 262).addBox(-4.5F, -0.25F, -9.1F, 9F, 4F, 13F, new CubeDeformation(-0.3F, -0.25F, -0.08F))
-                .texOffs(253, 352).addBox(-4.7F, 1.55F, -12.75F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.25F))
+                .texOffs(253, 352).addBox(-4.7F, 1.55F, -12.75F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.25F))
                 .texOffs(154, 374).addBox(-4.7F, 1.93F, -15.15F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.05F))
-                .texOffs(268, 352).addBox(-1F, 1.55F, -12.75F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.25F))
+                .texOffs(268, 352).addBox(-1F, 1.55F, -12.75F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.25F))
                 .texOffs(165, 374).addBox(-1F, 1.93F, -15.15F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.05F))
-                .texOffs(283, 352).addBox(2.7F, 1.55F, -12.75F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.25F))
+                .texOffs(283, 352).addBox(2.7F, 1.55F, -12.75F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.25F))
                 .texOffs(176, 374).addBox(2.7F, 1.93F, -15.15F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.05F)),
                 PartPose.offsetAndRotation(0F, 11.9F, 0F, -0.384F, 0F, 0F));
         PartDefinition p_front_leg_r = p_body.addOrReplaceChild("front_leg_r", CubeListBuilder.create()
@@ -425,11 +425,11 @@ public final class PyrrhonGeometry {
         PartDefinition p_front_foot_r = p_front_shin_r.addOrReplaceChild("front_foot_r", CubeListBuilder.create()
                 .texOffs(254, 298).addBox(-5F, 0.75F, -8.4F, 10F, 2F, 12F, new CubeDeformation(-0.25F, -0.3F, 0F))
                 .texOffs(256, 281).addBox(-4F, -0.25F, -8.4F, 8F, 4F, 12F, new CubeDeformation(-0.3F, -0.25F, -0.08F))
-                .texOffs(104, 367).addBox(-4.3667F, 1.55F, -11.3F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.05F, 0F))
+                .texOffs(104, 367).addBox(-4.3667F, 1.55F, -11.3F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.01F, 0F))
                 .texOffs(187, 374).addBox(-4.3667F, 1.93F, -13.85F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.15F))
-                .texOffs(117, 367).addBox(-1F, 1.55F, -11.3F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.05F, 0F))
+                .texOffs(117, 367).addBox(-1F, 1.55F, -11.3F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.01F, 0F))
                 .texOffs(198, 374).addBox(-1F, 1.93F, -13.85F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.15F))
-                .texOffs(130, 367).addBox(2.3667F, 1.55F, -11.3F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.05F, 0F))
+                .texOffs(130, 367).addBox(2.3667F, 1.55F, -11.3F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.01F, 0F))
                 .texOffs(209, 374).addBox(2.3667F, 1.93F, -13.85F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.15F)),
                 PartPose.offsetAndRotation(0F, 11.4F, 0F, 0.1047F, 0F, 0F));
         PartDefinition p_hind_leg_r = p_body.addOrReplaceChild("hind_leg_r", CubeListBuilder.create()
@@ -445,11 +445,11 @@ public final class PyrrhonGeometry {
         PartDefinition p_hind_foot_r = p_hind_shin_r.addOrReplaceChild("hind_foot_r", CubeListBuilder.create()
                 .texOffs(404, 281).addBox(-5.5F, 0.75F, -9.1F, 11F, 2F, 13F, new CubeDeformation(-0.25F, -0.3F, 0F))
                 .texOffs(339, 262).addBox(-4.5F, -0.25F, -9.1F, 9F, 4F, 13F, new CubeDeformation(-0.3F, -0.25F, -0.08F))
-                .texOffs(298, 352).addBox(-4.7F, 1.55F, -12.75F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.25F))
+                .texOffs(298, 352).addBox(-4.7F, 1.55F, -12.75F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.25F))
                 .texOffs(220, 374).addBox(-4.7F, 1.93F, -15.15F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.05F))
-                .texOffs(313, 352).addBox(-1F, 1.55F, -12.75F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.25F))
+                .texOffs(313, 352).addBox(-1F, 1.55F, -12.75F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.25F))
                 .texOffs(231, 374).addBox(-1F, 1.93F, -15.15F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.05F))
-                .texOffs(328, 352).addBox(2.7F, 1.55F, -12.75F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.25F))
+                .texOffs(328, 352).addBox(2.7F, 1.55F, -12.75F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.25F))
                 .texOffs(242, 374).addBox(2.7F, 1.93F, -15.15F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.05F)),
                 PartPose.offsetAndRotation(0F, 11.9F, 0F, -0.384F, 0F, 0F));
         PartDefinition p_wing_l = p_body.addOrReplaceChild("wing_l", CubeListBuilder.create()

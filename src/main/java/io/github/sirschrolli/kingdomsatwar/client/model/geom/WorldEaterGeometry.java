@@ -35,12 +35,12 @@ public final class WorldEaterGeometry {
                 .texOffs(405, 129).addBox(-23.9F, -9.4F, -13.5F, 1F, 3F, 3F, new CubeDeformation(0F, -0.4F, 0F))
                 .texOffs(414, 129).addBox(-23.9F, -6F, -9.5F, 1F, 3F, 3F, new CubeDeformation(0F, -0.4F, 0F))
                 .texOffs(423, 129).addBox(-23.9F, -2.6F, -5.5F, 1F, 3F, 3F, new CubeDeformation(0F, -0.4F, 0F))
-                .texOffs(38, 92).addBox(-15F, -15F, -22F, 30F, 7F, 10F)
-                .texOffs(119, 92).addBox(-15F, 8F, -22F, 30F, 7F, 10F)
-                .texOffs(292, 61).addBox(8F, -8F, -22F, 7F, 16F, 10F)
-                .texOffs(327, 61).addBox(-15F, -8F, -22F, 7F, 16F, 10F)
+                .texOffs(38, 92).addBox(-15F, -15F, -22F, 30F, 7F, 10F, new CubeDeformation(0F, 0F, 0.04F))
+                .texOffs(119, 92).addBox(-15F, 8F, -22F, 30F, 7F, 10F, new CubeDeformation(0F, 0F, 0.04F))
+                .texOffs(292, 61).addBox(8F, -8F, -22F, 7F, 16F, 10F, new CubeDeformation(0F, 0F, 0.04F))
+                .texOffs(327, 61).addBox(-15F, -8F, -22F, 7F, 16F, 10F, new CubeDeformation(0F, 0F, 0.04F))
                 .texOffs(356, 0).addBox(-16.5F, -16.5F, -12.8F, 33F, 33F, 1F, new CubeDeformation(0F, 0F, -0.2F))
-                .texOffs(362, 92).addBox(-8F, -8F, -13F, 16F, 16F, 1F)
+                .texOffs(362, 92).addBox(-8F, -8F, -13F, 16F, 16F, 1F, new CubeDeformation(0F, 0F, 0.04F))
                 .texOffs(63, 139).addBox(5.4F, -1F, -19F, 2F, 2F, 3F, new CubeDeformation(-0.1F, -0.1F, 0F))
                 .texOffs(74, 139).addBox(4.5426F, 2.2F, -19F, 2F, 2F, 3F, new CubeDeformation(-0.1F, -0.1F, 0F))
                 .texOffs(85, 139).addBox(2.2F, 4.5426F, -19F, 2F, 2F, 3F, new CubeDeformation(-0.1F, -0.1F, 0F))
@@ -173,37 +173,37 @@ public final class WorldEaterGeometry {
                 PartPose.offsetAndRotation(0F, 0F, -10F, -0.5934F, 0F, 0F));
         PartDefinition p_shard0 = p_head.addOrReplaceChild("shard0", CubeListBuilder.create()
                 .texOffs(358, 115).addBox(-3F, -2.6F, -3F, 6F, 3F, 6F, new CubeDeformation(0F, -0.4F, 0F))
-                .texOffs(271, 61).addBox(-2.5F, -22F, -2.5F, 5F, 22F, 5F, new CubeDeformation(-0.3F, 0F, -0.3F))
+                .texOffs(271, 61).addBox(-2.5F, -22F, -2.5F, 5F, 22F, 5F, new CubeDeformation(-0.3F, 0.04F, -0.3F))
                 .texOffs(339, 129).addBox(-1.5F, -25F, -1.5F, 3F, 3F, 3F, new CubeDeformation(-0.4F, 0F, -0.4F)),
                 PartPose.offsetAndRotation(0F, -19F, -4F, -0.6632F, 0F, 0F));
         PartDefinition p_shard1 = p_head.addOrReplaceChild("shard1", CubeListBuilder.create()
                 .texOffs(383, 115).addBox(-3F, -2.6F, -3F, 6F, 3F, 6F, new CubeDeformation(0F, -0.4F, 0F))
-                .texOffs(0, 92).addBox(-2.5F, -17F, -2.5F, 5F, 17F, 5F, new CubeDeformation(-0.3F, 0F, -0.3F))
+                .texOffs(0, 92).addBox(-2.5F, -17F, -2.5F, 5F, 17F, 5F, new CubeDeformation(-0.3F, 0.04F, -0.3F))
                 .texOffs(352, 129).addBox(-1.5F, -20F, -1.5F, 3F, 3F, 3F, new CubeDeformation(-0.4F, 0F, -0.4F)),
                 PartPose.offsetAndRotation(9F, -19F, 0F, -0.5236F, -0.3142F, -0.384F));
         PartDefinition p_shard2 = p_head.addOrReplaceChild("shard2", CubeListBuilder.create()
                 .texOffs(408, 115).addBox(-3F, -2.6F, -3F, 6F, 3F, 6F, new CubeDeformation(0F, -0.4F, 0F))
-                .texOffs(432, 61).addBox(-2.5F, -18F, -2.5F, 5F, 18F, 5F, new CubeDeformation(-0.3F, 0F, -0.3F))
+                .texOffs(432, 61).addBox(-2.5F, -18F, -2.5F, 5F, 18F, 5F, new CubeDeformation(-0.3F, 0.04F, -0.3F))
                 .texOffs(365, 129).addBox(-1.5F, -21F, -1.5F, 3F, 3F, 3F, new CubeDeformation(-0.4F, 0F, -0.4F)),
                 PartPose.offsetAndRotation(-9F, -19F, 0F, -0.5236F, 0.3142F, 0.384F));
         PartDefinition p_shard3 = p_head.addOrReplaceChild("shard3", CubeListBuilder.create()
                 .texOffs(433, 115).addBox(-3F, -2.6F, -3F, 6F, 3F, 6F, new CubeDeformation(-0.4F, -0.4F, -0.4F))
-                .texOffs(397, 92).addBox(-2F, -13F, -2F, 4F, 13F, 4F, new CubeDeformation(-0.2F, 0F, -0.2F))
+                .texOffs(397, 92).addBox(-2F, -13F, -2F, 4F, 13F, 4F, new CubeDeformation(-0.2F, 0.04F, -0.2F))
                 .texOffs(339, 139).addBox(-1F, -16F, -1F, 2F, 3F, 2F, new CubeDeformation(-0.1F, 0F, -0.1F)),
                 PartPose.offsetAndRotation(15F, -16F, 8F, -0.3491F, -0.5236F, -0.6981F));
         PartDefinition p_shard4 = p_head.addOrReplaceChild("shard4", CubeListBuilder.create()
                 .texOffs(458, 115).addBox(-3F, -2.6F, -3F, 6F, 3F, 6F, new CubeDeformation(-0.4F, -0.4F, -0.4F))
-                .texOffs(21, 92).addBox(-2F, -14F, -2F, 4F, 14F, 4F, new CubeDeformation(-0.2F, 0F, -0.2F))
+                .texOffs(21, 92).addBox(-2F, -14F, -2F, 4F, 14F, 4F, new CubeDeformation(-0.2F, 0.04F, -0.2F))
                 .texOffs(348, 139).addBox(-1F, -17F, -1F, 2F, 3F, 2F, new CubeDeformation(-0.1F, 0F, -0.1F)),
                 PartPose.offsetAndRotation(-15F, -16F, 8F, -0.384F, 0.5236F, 0.6981F));
         PartDefinition p_shard5 = p_head.addOrReplaceChild("shard5", CubeListBuilder.create()
                 .texOffs(483, 115).addBox(-3F, -2.6F, -3F, 6F, 3F, 6F, new CubeDeformation(-0.4F, -0.4F, -0.4F))
-                .texOffs(414, 92).addBox(-2F, -12F, -2F, 4F, 12F, 4F, new CubeDeformation(-0.2F, 0F, -0.2F))
+                .texOffs(414, 92).addBox(-2F, -12F, -2F, 4F, 12F, 4F, new CubeDeformation(-0.2F, 0.04F, -0.2F))
                 .texOffs(357, 139).addBox(-1F, -15F, -1F, 2F, 3F, 2F, new CubeDeformation(-0.1F, 0F, -0.1F)),
                 PartPose.offsetAndRotation(5F, -18F, 13F, -1.0123F, -0.1745F, -0.1745F));
         PartDefinition p_shard6 = p_head.addOrReplaceChild("shard6", CubeListBuilder.create()
                 .texOffs(0, 129).addBox(-3F, -2.6F, -3F, 6F, 3F, 6F, new CubeDeformation(-0.4F, -0.4F, -0.4F))
-                .texOffs(431, 92).addBox(-2F, -11F, -2F, 4F, 11F, 4F, new CubeDeformation(-0.2F, 0F, -0.2F))
+                .texOffs(431, 92).addBox(-2F, -11F, -2F, 4F, 11F, 4F, new CubeDeformation(-0.2F, 0.04F, -0.2F))
                 .texOffs(366, 139).addBox(-1F, -14F, -1F, 2F, 3F, 2F, new CubeDeformation(-0.1F, 0F, -0.1F)),
                 PartPose.offsetAndRotation(-6F, -18F, 14F, -1.0821F, 0.2094F, 0.2094F));
         return mesh;

@@ -25,8 +25,8 @@ public final class SchreinfunkeGeometry {
         PartDefinition p_main = root.addOrReplaceChild("main", CubeListBuilder.create()
                 .texOffs(0, 12).addBox(-1.5F, -1.5F, -1.5F, 3F, 3F, 3F)
                 .texOffs(23, 0).addBox(-1F, -4.5F, -1F, 2F, 9F, 2F, new CubeDeformation(-0.25F, 0F, -0.25F))
-                .texOffs(0, 19).addBox(-4.5F, -1F, -1F, 9F, 2F, 2F, new CubeDeformation(0F, -0.25F, -0.25F))
-                .texOffs(0, 0).addBox(-1F, -1F, -4.5F, 2F, 2F, 9F, new CubeDeformation(-0.25F, -0.25F, 0F)),
+                .texOffs(0, 19).addBox(-4.5F, -1F, -1F, 9F, 2F, 2F, new CubeDeformation(0F, -0.25F, -0.21F))
+                .texOffs(0, 0).addBox(-1F, -1F, -4.5F, 2F, 2F, 9F, new CubeDeformation(-0.21F, -0.21F, 0F)),
                 PartPose.offset(0F, 0F, 0F));
         return mesh;
     }

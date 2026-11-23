@@ -29,9 +29,9 @@ public final class AsteriaGeometry {
                 .texOffs(138, 124).addBox(-2F, -4.45F, 5.3F, 4F, 1F, 3F, new CubeDeformation(-0.4F, -0.05F, -0.3F))
                 .texOffs(153, 124).addBox(-1.5F, -4.2F, 8.3F, 3F, 1F, 3F, new CubeDeformation(-0.25F, -0.05F, -0.3F))
                 .texOffs(179, 124).addBox(-1F, -3.95F, 11.1F, 2F, 1F, 3F, new CubeDeformation(-0.1F, -0.05F, -0.3F))
-                .texOffs(0, 95).addBox(-9F, -3.75F, -5F, 18F, 1F, 9F, new CubeDeformation(-0.4F, -0.25F, 0F))
-                .texOffs(0, 80).addBox(-8.95F, -3.9F, -5F, 1F, 5F, 9F, new CubeDeformation(-0.25F, -0.4F, 0F))
-                .texOffs(21, 80).addBox(7.95F, -3.9F, -5F, 1F, 5F, 9F, new CubeDeformation(-0.25F, -0.4F, 0F))
+                .texOffs(0, 95).addBox(-9F, -3.75F, -5F, 18F, 1F, 9F, new CubeDeformation(-0.4F, -0.21F, 0F))
+                .texOffs(0, 80).addBox(-8.95F, -3.9F, -5F, 1F, 5F, 9F, new CubeDeformation(-0.25F, -0.32F, 0.04F))
+                .texOffs(21, 80).addBox(7.95F, -3.9F, -5F, 1F, 5F, 9F, new CubeDeformation(-0.25F, -0.32F, 0.04F))
                 .texOffs(152, 80).addBox(-4F, -5.45F, -5F, 8F, 2F, 9F, new CubeDeformation(0F, -0.05F, -0.4F))
                 .texOffs(48, 124).addBox(-2F, -7.9F, -5.5F, 4F, 3F, 2F, new CubeDeformation(-0.4F, -0.3F, -0.2F))
                 .texOffs(139, 116).addBox(-4F, -9.2F, 2.7F, 8F, 4F, 2F, new CubeDeformation(-0.2F, 0F, -0.3F))
@@ -95,7 +95,7 @@ public final class AsteriaGeometry {
                 .texOffs(230, 106).addBox(-3F, -2.6F, -2F, 6F, 3F, 4F, new CubeDeformation(0F, -0.2F, 0F)),
                 PartPose.offset(0F, -5.4F, 0.6F));
         PartDefinition p_torso = p_rider.addOrReplaceChild("torso", CubeListBuilder.create()
-                .texOffs(42, 80).addBox(-3.5F, -9F, -2F, 7F, 9F, 4F, new CubeDeformation(-0.3F, 0F, 0F))
+                .texOffs(42, 80).addBox(-3.5F, -9F, -2F, 7F, 9F, 4F, new CubeDeformation(-0.3F, 0.04F, 0F))
                 .texOffs(222, 95).addBox(-3.5F, -9.5F, -2.5F, 7F, 4F, 5F, new CubeDeformation(0F, -0.3F, -0.3F))
                 .texOffs(57, 106).addBox(-2.5F, -6.1F, -2.7F, 5F, 8F, 1F, new CubeDeformation(-0.1F, -0.3F, -0.3F))
                 .texOffs(70, 106).addBox(-2.5F, -6.1F, 1.7F, 5F, 8F, 1F, new CubeDeformation(-0.1F, -0.3F, -0.3F))
@@ -106,7 +106,7 @@ public final class AsteriaGeometry {
         PartDefinition p_helm = p_torso.addOrReplaceChild("helm", CubeListBuilder.create()
                 .texOffs(65, 80).addBox(-3F, -5.8F, -3F, 6F, 6F, 6F, new CubeDeformation(-0.4F, -0.2F, -0.3F))
                 .texOffs(114, 131).addBox(-2F, -3.9F, -3.3F, 4F, 1F, 1F, new CubeDeformation(0F, 0F, -0.35F))
-                .texOffs(14, 131).addBox(-0.5F, -3.4F, -3.3F, 1F, 3F, 1F, new CubeDeformation(0F, -0.4F, -0.35F))
+                .texOffs(14, 131).addBox(-0.5F, -3.4F, -3.3F, 1F, 3F, 1F, new CubeDeformation(0F, -0.4F, -0.31F))
                 .texOffs(13, 124).addBox(-0.5F, -5.9F, -3.2F, 1F, 5F, 1F, new CubeDeformation(-0.15F, 0F, -0.3F))
                 .texOffs(38, 116).addBox(-0.5F, -6.25F, -3F, 1F, 1F, 6F, new CubeDeformation(-0.15F, -0.25F, -0.4F)),
                 PartPose.offset(0F, -10F, 0F));
@@ -171,7 +171,7 @@ public final class AsteriaGeometry {
                 .texOffs(166, 124).addBox(-1.5F, 25.4F, -1.5F, 3F, 1F, 3F, new CubeDeformation(-0.2F, 0F, -0.2F))
                 .texOffs(120, 124).addBox(-1F, 26F, -1F, 2F, 3F, 2F, new CubeDeformation(-0.05F, -0.4F, -0.05F))
                 .texOffs(29, 131).addBox(-3F, 26.5F, -0.5F, 6F, 2F, 1F, new CubeDeformation(-0.4F, -0.4F, -0.15F))
-                .texOffs(143, 106).addBox(-0.5F, 26.5F, -3F, 1F, 2F, 6F, new CubeDeformation(-0.15F, -0.4F, -0.4F))
+                .texOffs(143, 106).addBox(-0.5F, 26.5F, -3F, 1F, 2F, 6F, new CubeDeformation(-0.15F, -0.36F, -0.4F))
                 .texOffs(129, 124).addBox(-1F, 28.6F, -1F, 2F, 3F, 2F, new CubeDeformation(-0.3F, 0F, -0.3F))
                 .texOffs(24, 131).addBox(-0.5F, 31.3F, -0.5F, 1F, 3F, 1F, new CubeDeformation(-0.05F, -0.3F, -0.05F))
                 .texOffs(109, 131).addBox(-0.5F, 33.7F, -0.5F, 1F, 2F, 1F, new CubeDeformation(-0.3F, -0.3F, -0.3F)),

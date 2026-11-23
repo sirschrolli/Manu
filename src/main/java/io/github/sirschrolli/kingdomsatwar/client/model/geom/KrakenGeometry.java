@@ -33,7 +33,7 @@ public final class KrakenGeometry {
                 .texOffs(29, 124).addBox(10.2F, -7F, -9.7F, 5F, 8F, 9F, new CubeDeformation(0F, -0.2F, -0.3F))
                 .texOffs(209, 159).addBox(9.15F, -9.6F, -10.3F, 7F, 3F, 10F, new CubeDeformation(-0.25F, -0.2F, -0.1F))
                 .texOffs(131, 187).addBox(9.5F, 0.6F, -9.7F, 6F, 2F, 9F, new CubeDeformation(-0.1F, -0.2F, -0.1F))
-                .texOffs(186, 212).addBox(7F, 0F, 6F, 4F, 4F, 6F),
+                .texOffs(186, 212).addBox(7F, 0F, 6F, 4F, 4F, 6F, new CubeDeformation(0.04F, 0.04F, 0F)),
                 PartPose.offset(0F, 18F, 0F));
         PartDefinition p_mantle = p_body.addOrReplaceChild("mantle", CubeListBuilder.create()
                 .texOffs(166, 0).addBox(-10.5F, -3F, -10.5F, 21F, 3F, 21F, new CubeDeformation(-0.2605F, 0F, -0.2605F))
@@ -49,14 +49,14 @@ public final class KrakenGeometry {
                 .texOffs(0, 174).addBox(-4.5F, -33F, -4.5F, 9F, 3F, 9F, new CubeDeformation(-0.2537F, 0F, -0.2537F))
                 .texOffs(126, 224).addBox(-3F, -36F, -3F, 6F, 3F, 6F, new CubeDeformation(-0.0617F, 0F, -0.0617F))
                 .texOffs(77, 235).addBox(-2F, -39F, -2F, 4F, 3F, 4F, new CubeDeformation(-0.4F, 0F, -0.4F))
-                .texOffs(239, 224).addBox(-1.5F, -12F, -10.5668F, 3F, 6F, 2F, new CubeDeformation(-0.3F, 0F, -0.3F))
-                .texOffs(0, 235).addBox(-1.5F, -18F, -9.6974F, 3F, 6F, 2F, new CubeDeformation(-0.3F, 0F, -0.3F))
-                .texOffs(11, 235).addBox(-1.5F, -24F, -8.3664F, 3F, 6F, 2F, new CubeDeformation(-0.3F, 0F, -0.3F))
-                .texOffs(22, 235).addBox(-1.5F, -30F, -6.5938F, 3F, 6F, 2F, new CubeDeformation(-0.3F, 0F, -0.3F))
-                .texOffs(33, 235).addBox(-1.5F, -12F, 8.5668F, 3F, 6F, 2F, new CubeDeformation(-0.3F, 0F, -0.3F))
-                .texOffs(44, 235).addBox(-1.5F, -18F, 7.6974F, 3F, 6F, 2F, new CubeDeformation(-0.3F, 0F, -0.3F))
-                .texOffs(55, 235).addBox(-1.5F, -24F, 6.3664F, 3F, 6F, 2F, new CubeDeformation(-0.3F, 0F, -0.3F))
-                .texOffs(66, 235).addBox(-1.5F, -30F, 4.5938F, 3F, 6F, 2F, new CubeDeformation(-0.3F, 0F, -0.3F)),
+                .texOffs(239, 224).addBox(-1.5F, -12F, -10.5668F, 3F, 6F, 2F, new CubeDeformation(-0.3F, 0.04F, -0.3F))
+                .texOffs(0, 235).addBox(-1.5F, -18F, -9.6974F, 3F, 6F, 2F, new CubeDeformation(-0.3F, 0.04F, -0.3F))
+                .texOffs(11, 235).addBox(-1.5F, -24F, -8.3664F, 3F, 6F, 2F, new CubeDeformation(-0.3F, 0.04F, -0.3F))
+                .texOffs(22, 235).addBox(-1.5F, -30F, -6.5938F, 3F, 6F, 2F, new CubeDeformation(-0.3F, 0.04F, -0.3F))
+                .texOffs(33, 235).addBox(-1.5F, -12F, 8.5668F, 3F, 6F, 2F, new CubeDeformation(-0.3F, 0.04F, -0.3F))
+                .texOffs(44, 235).addBox(-1.5F, -18F, 7.6974F, 3F, 6F, 2F, new CubeDeformation(-0.3F, 0.04F, -0.3F))
+                .texOffs(55, 235).addBox(-1.5F, -24F, 6.3664F, 3F, 6F, 2F, new CubeDeformation(-0.3F, 0.04F, -0.3F))
+                .texOffs(66, 235).addBox(-1.5F, -30F, 4.5938F, 3F, 6F, 2F, new CubeDeformation(-0.3F, 0.04F, -0.3F)),
                 PartPose.offsetAndRotation(0F, -10F, 1F, -0.2443F, 0F, 0F));
         PartDefinition p_fin_left = p_mantle.addOrReplaceChild("fin_left", CubeListBuilder.create()
                 .texOffs(114, 249).addBox(-0.1F, 2.55F, -1F, 3F, 2F, 2F, new CubeDeformation(-0.1F, -0.15F, -0.2F))

@@ -102,9 +102,9 @@ public final class SordinGeometry {
                 PartPose.offset(0F, 11.2F, 0F));
         PartDefinition p_left_hand = p_left_forearm.addOrReplaceChild("left_hand", CubeListBuilder.create()
                 .texOffs(77, 72).addBox(-1.5F, -0.4F, -1F, 3F, 3F, 2F, new CubeDeformation(-0.4F, -0.4F, 0F))
-                .texOffs(57, 72).addBox(-1.175F, 2F, -1.225F, 1F, 5F, 1F, new CubeDeformation(-0.225F, 0F, -0.225F))
-                .texOffs(0, 72).addBox(-0.475F, 1.7F, -1.225F, 1F, 6F, 1F, new CubeDeformation(-0.225F, -0.3F, -0.225F))
-                .texOffs(5, 72).addBox(0.225F, 1.7F, -1.225F, 1F, 6F, 1F, new CubeDeformation(-0.225F, -0.3F, -0.225F))
+                .texOffs(57, 72).addBox(-1.175F, 2F, -1.225F, 1F, 5F, 1F, new CubeDeformation(-0.225F, 0F, -0.185F))
+                .texOffs(0, 72).addBox(-0.475F, 1.7F, -1.225F, 1F, 6F, 1F, new CubeDeformation(-0.225F, -0.3F, -0.185F))
+                .texOffs(5, 72).addBox(0.225F, 1.7F, -1.225F, 1F, 6F, 1F, new CubeDeformation(-0.225F, -0.3F, -0.185F))
                 .texOffs(62, 72).addBox(0.225F, 1.6F, -0.025F, 1F, 5F, 1F, new CubeDeformation(-0.225F, -0.4F, -0.225F)),
                 PartPose.offset(0F, 11.5F, 0F));
         PartDefinition p_right_arm = p_body.addOrReplaceChild("right_arm", CubeListBuilder.create()
@@ -116,9 +116,9 @@ public final class SordinGeometry {
                 PartPose.offset(0F, 11.2F, 0F));
         PartDefinition p_right_hand = p_right_forearm.addOrReplaceChild("right_hand", CubeListBuilder.create()
                 .texOffs(88, 72).addBox(-1.5F, -0.4F, -1F, 3F, 3F, 2F, new CubeDeformation(-0.4F, -0.4F, 0F))
-                .texOffs(67, 72).addBox(-1.175F, 2F, -1.225F, 1F, 5F, 1F, new CubeDeformation(-0.225F, 0F, -0.225F))
-                .texOffs(10, 72).addBox(-0.475F, 1.7F, -1.225F, 1F, 6F, 1F, new CubeDeformation(-0.225F, -0.3F, -0.225F))
-                .texOffs(15, 72).addBox(0.225F, 1.7F, -1.225F, 1F, 6F, 1F, new CubeDeformation(-0.225F, -0.3F, -0.225F))
+                .texOffs(67, 72).addBox(-1.175F, 2F, -1.225F, 1F, 5F, 1F, new CubeDeformation(-0.225F, 0F, -0.185F))
+                .texOffs(10, 72).addBox(-0.475F, 1.7F, -1.225F, 1F, 6F, 1F, new CubeDeformation(-0.225F, -0.3F, -0.185F))
+                .texOffs(15, 72).addBox(0.225F, 1.7F, -1.225F, 1F, 6F, 1F, new CubeDeformation(-0.225F, -0.3F, -0.185F))
                 .texOffs(72, 72).addBox(0.225F, 1.6F, -0.025F, 1F, 5F, 1F, new CubeDeformation(-0.225F, -0.4F, -0.225F)),
                 PartPose.offset(0F, 11.5F, 0F));
         PartDefinition p_fork = p_right_hand.addOrReplaceChild("fork", CubeListBuilder.create()

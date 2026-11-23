@@ -26,7 +26,7 @@ public final class WildWolfGeometry {
                 PartPose.offset(-1F, 13.5F, -7F));
         PartDefinition p_real_head = p_head.addOrReplaceChild("real_head", CubeListBuilder.create()
                 .texOffs(35, 28).addBox(-2F, -3F, -2F, 6F, 6F, 4F)
-                .texOffs(0, 51).addBox(-0.5F, -0.001F, -5F, 3F, 3F, 4F)
+                .texOffs(0, 51).addBox(-0.5F, -0.001F, -5F, 3F, 3F, 4F, new CubeDeformation(0F, 0.04F, 0F))
                 .texOffs(40, 40).addBox(-2.8F, -0.75F, -2F, 1F, 4F, 4F, new CubeDeformation(-0.2F, -0.25F, -0.4F))
                 .texOffs(51, 40).addBox(3.8F, -0.75F, -2F, 1F, 4F, 4F, new CubeDeformation(-0.2F, -0.25F, -0.4F)),
                 PartPose.offset(0F, 0F, 0F));

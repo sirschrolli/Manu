@@ -30,7 +30,7 @@ public final class MireSnapperGeometry {
                 .texOffs(70, 40).addBox(-1F, -6F, -4F, 2F, 2F, 2F, new CubeDeformation(-0.3F, -0.4F, -0.2F))
                 .texOffs(79, 40).addBox(-1F, -6F, -1.8F, 2F, 2F, 2F, new CubeDeformation(-0.3F, -0.4F, -0.2F))
                 .texOffs(88, 40).addBox(-1F, -6F, 0.4F, 2F, 2F, 2F, new CubeDeformation(-0.3F, -0.4F, -0.2F))
-                .texOffs(97, 40).addBox(-1F, -6F, 2.6F, 2F, 2F, 2F, new CubeDeformation(-0.3F, -0.4F, -0.2F))
+                .texOffs(97, 40).addBox(-1F, -6F, 2.6F, 2F, 2F, 2F, new CubeDeformation(-0.3F, -0.4F, -0.16F))
                 .texOffs(0, 47).addBox(-3.4F, -4.8F, -3.3F, 2F, 1F, 2F, new CubeDeformation(-0.4F, 0F, -0.3F))
                 .texOffs(9, 47).addBox(-3.4F, -4.8F, -1F, 2F, 1F, 2F, new CubeDeformation(-0.4F, 0F, -0.3F))
                 .texOffs(18, 47).addBox(-3.4F, -4.8F, 1.3F, 2F, 1F, 2F, new CubeDeformation(-0.4F, 0F, -0.3F))
@@ -41,8 +41,8 @@ public final class MireSnapperGeometry {
                 .texOffs(68, 47).addBox(-1.65F, -1.6F, 6.4F, 1F, 2F, 1F, new CubeDeformation(-0.05F, -0.2F, 0F))
                 .texOffs(73, 47).addBox(0.75F, -1.6F, 6.4F, 1F, 2F, 1F, new CubeDeformation(-0.05F, -0.2F, 0F))
                 .texOffs(78, 47).addBox(3.15F, -1.6F, 6.4F, 1F, 2F, 1F, new CubeDeformation(-0.05F, -0.2F, 0F))
-                .texOffs(44, 40).addBox(-4F, -4.5F, -5.1F, 3F, 1F, 3F, new CubeDeformation(0F, -0.2F, -0.3F))
-                .texOffs(57, 40).addBox(1.4F, -4.5F, 2F, 3F, 1F, 3F, new CubeDeformation(-0.2F, -0.2F, 0F))
+                .texOffs(44, 40).addBox(-4F, -4.5F, -5.1F, 3F, 1F, 3F, new CubeDeformation(0F, -0.16F, -0.3F))
+                .texOffs(57, 40).addBox(1.4F, -4.5F, 2F, 3F, 1F, 3F, new CubeDeformation(-0.2F, -0.16F, 0F))
                 .texOffs(54, 47).addBox(-3.6F, -5.15F, 2.6F, 2F, 1F, 2F, new CubeDeformation(0F, -0.25F, 0F))
                 .texOffs(106, 40).addBox(-6.05F, 1F, -2.25F, 1F, 3F, 1F, new CubeDeformation(-0.45F, -0.2F, -0.25F))
                 .texOffs(111, 40).addBox(5.05F, 1.2F, 0.75F, 1F, 3F, 1F, new CubeDeformation(-0.45F, 0F, -0.25F))
@@ -77,28 +77,28 @@ public final class MireSnapperGeometry {
                 PartPose.offset(0F, 0.1F, 4.5F));
         PartDefinition p_left_front_leg = root.addOrReplaceChild("left_front_leg", CubeListBuilder.create()
                 .texOffs(49, 32).addBox(-1F, -1.3F, -1.5F, 4F, 3F, 3F, new CubeDeformation(-0.4F, -0.4F, -0.1F))
-                .texOffs(109, 32).addBox(1F, 0.1F, -1.6F, 2F, 3F, 3F, new CubeDeformation(-0.1F, -0.3F, 0F))
+                .texOffs(109, 32).addBox(1F, 0.1F, -1.6F, 2F, 3F, 3F, new CubeDeformation(-0.1F, -0.3F, 0.04F))
                 .texOffs(10, 51).addBox(0.925F, 1.975F, -2.35F, 1F, 1F, 1F, new CubeDeformation(-0.275F, -0.175F, -0.2F))
                 .texOffs(15, 51).addBox(1.525F, 1.975F, -2.35F, 1F, 1F, 1F, new CubeDeformation(-0.275F, -0.175F, -0.2F))
                 .texOffs(20, 51).addBox(2.125F, 1.975F, -2.35F, 1F, 1F, 1F, new CubeDeformation(-0.275F, -0.175F, -0.2F)),
                 PartPose.offset(4.4F, 21.2F, -3.8F));
         PartDefinition p_left_hind_leg = root.addOrReplaceChild("left_hind_leg", CubeListBuilder.create()
                 .texOffs(64, 32).addBox(-1F, -1.3F, -1.5F, 4F, 3F, 3F, new CubeDeformation(-0.4F, -0.4F, -0.1F))
-                .texOffs(0, 40).addBox(1F, 0.1F, -1.6F, 2F, 3F, 3F, new CubeDeformation(-0.1F, -0.3F, 0F))
+                .texOffs(0, 40).addBox(1F, 0.1F, -1.6F, 2F, 3F, 3F, new CubeDeformation(-0.1F, -0.3F, 0.04F))
                 .texOffs(25, 51).addBox(0.925F, 1.975F, -2.35F, 1F, 1F, 1F, new CubeDeformation(-0.275F, -0.175F, -0.2F))
                 .texOffs(30, 51).addBox(1.525F, 1.975F, -2.35F, 1F, 1F, 1F, new CubeDeformation(-0.275F, -0.175F, -0.2F))
                 .texOffs(35, 51).addBox(2.125F, 1.975F, -2.35F, 1F, 1F, 1F, new CubeDeformation(-0.275F, -0.175F, -0.2F)),
                 PartPose.offset(4.4F, 21.2F, 3.9F));
         PartDefinition p_right_front_leg = root.addOrReplaceChild("right_front_leg", CubeListBuilder.create()
                 .texOffs(79, 32).addBox(-3F, -1.3F, -1.5F, 4F, 3F, 3F, new CubeDeformation(-0.4F, -0.4F, -0.1F))
-                .texOffs(11, 40).addBox(-3F, 0.1F, -1.6F, 2F, 3F, 3F, new CubeDeformation(-0.1F, -0.3F, 0F))
+                .texOffs(11, 40).addBox(-3F, 0.1F, -1.6F, 2F, 3F, 3F, new CubeDeformation(-0.1F, -0.3F, 0.04F))
                 .texOffs(40, 51).addBox(-1.925F, 1.975F, -2.35F, 1F, 1F, 1F, new CubeDeformation(-0.275F, -0.175F, -0.2F))
                 .texOffs(45, 51).addBox(-2.525F, 1.975F, -2.35F, 1F, 1F, 1F, new CubeDeformation(-0.275F, -0.175F, -0.2F))
                 .texOffs(50, 51).addBox(-3.125F, 1.975F, -2.35F, 1F, 1F, 1F, new CubeDeformation(-0.275F, -0.175F, -0.2F)),
                 PartPose.offset(-4.4F, 21.2F, -3.8F));
         PartDefinition p_right_hind_leg = root.addOrReplaceChild("right_hind_leg", CubeListBuilder.create()
                 .texOffs(94, 32).addBox(-3F, -1.3F, -1.5F, 4F, 3F, 3F, new CubeDeformation(-0.4F, -0.4F, -0.1F))
-                .texOffs(22, 40).addBox(-3F, 0.1F, -1.6F, 2F, 3F, 3F, new CubeDeformation(-0.1F, -0.3F, 0F))
+                .texOffs(22, 40).addBox(-3F, 0.1F, -1.6F, 2F, 3F, 3F, new CubeDeformation(-0.1F, -0.3F, 0.04F))
                 .texOffs(55, 51).addBox(-1.925F, 1.975F, -2.35F, 1F, 1F, 1F, new CubeDeformation(-0.275F, -0.175F, -0.2F))
                 .texOffs(60, 51).addBox(-2.525F, 1.975F, -2.35F, 1F, 1F, 1F, new CubeDeformation(-0.275F, -0.175F, -0.2F))
                 .texOffs(65, 51).addBox(-3.125F, 1.975F, -2.35F, 1F, 1F, 1F, new CubeDeformation(-0.275F, -0.175F, -0.2F)),

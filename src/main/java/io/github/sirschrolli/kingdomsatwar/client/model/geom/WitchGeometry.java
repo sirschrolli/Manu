@@ -41,7 +41,7 @@ public final class WitchGeometry {
                 .texOffs(68, 18).addBox(-7F, -0.5F, -7F, 14F, 1F, 14F),
                 PartPose.offset(0F, -7.6F, 0F));
         PartDefinition p_hat_crown = p_hat_brim.addOrReplaceChild("hat_crown", CubeListBuilder.create()
-                .texOffs(0, 35).addBox(-4.5F, -4F, -4.5F, 9F, 4F, 9F)
+                .texOffs(0, 35).addBox(-4.5F, -4F, -4.5F, 9F, 4F, 9F, new CubeDeformation(0F, 0.04F, 0F))
                 .texOffs(37, 35).addBox(-5F, -1.7F, -5F, 10F, 2F, 10F, new CubeDeformation(-0.3F, -0.3F, -0.3F)),
                 PartPose.offset(0F, -0.5F, 0F));
         PartDefinition p_hat_tier1 = p_hat_crown.addOrReplaceChild("hat_tier1", CubeListBuilder.create()

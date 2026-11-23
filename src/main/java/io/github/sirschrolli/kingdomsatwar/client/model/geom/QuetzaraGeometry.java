@@ -23,12 +23,12 @@ public final class QuetzaraGeometry {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
         PartDefinition p_head = root.addOrReplaceChild("head", CubeListBuilder.create()
-                .texOffs(55, 0).addBox(-6F, -6F, -2F, 12F, 12F, 8F)
+                .texOffs(55, 0).addBox(-6F, -6F, -2F, 12F, 12F, 8F, new CubeDeformation(0F, 0.04F, 0F))
                 .texOffs(0, 0).addBox(-8F, -6F, -12F, 16F, 10F, 11F)
                 .texOffs(46, 22).addBox(7.4F, -3.6F, -10.5F, 2F, 7F, 8F, new CubeDeformation(-0.2F, 0F, 0F))
                 .texOffs(67, 22).addBox(-9.4F, -3.6F, -10.5F, 2F, 7F, 8F, new CubeDeformation(-0.2F, 0F, 0F))
                 .texOffs(73, 70).addBox(-7F, -5.9F, -16.5F, 14F, 6F, 5F, new CubeDeformation(-0.4F, -0.1F, -0.3F))
-                .texOffs(39, 57).addBox(-5F, -5.6F, -21.6F, 10F, 6F, 6F, new CubeDeformation(0F, -0.4F, -0.4F))
+                .texOffs(39, 57).addBox(-5F, -5.6F, -21.6F, 10F, 6F, 6F, new CubeDeformation(0F, -0.36F, -0.4F))
                 .texOffs(52, 95).addBox(-4F, -4.7F, -23.9F, 8F, 5F, 3F, new CubeDeformation(-0.4F, -0.3F, -0.1F))
                 .texOffs(68, 83).addBox(-3.5F, -6.9F, -11F, 7F, 1F, 9F, new CubeDeformation(0F, -0.1F, 0F))
                 .texOffs(75, 95).addBox(5.7F, -5.2F, -15.8F, 2F, 3F, 4F, new CubeDeformation(-0.3F, -0.2F, -0.2F))
@@ -57,7 +57,7 @@ public final class QuetzaraGeometry {
                 PartPose.offset(0F, -0.2F, -19.6F));
         PartDefinition p_jaw = p_head.addOrReplaceChild("jaw", CubeListBuilder.create()
                 .texOffs(0, 57).addBox(-5F, -0.3F, -19.6F, 10F, 3F, 9F, new CubeDeformation(-0.4F, -0.3F, 0F))
-                .texOffs(15, 95).addBox(-6.5F, 0F, -10.8F, 13F, 3F, 5F, new CubeDeformation(-0.3F, 0F, 0F))
+                .texOffs(15, 95).addBox(-6.5F, 0F, -10.8F, 13F, 3F, 5F, new CubeDeformation(-0.3F, 0.04F, 0F))
                 .texOffs(25, 83).addBox(-7.5F, -0.1F, -6F, 15F, 4F, 6F, new CubeDeformation(-0.1F, -0.1F, 0F))
                 .texOffs(25, 105).addBox(3.45F, -0.9F, -18.15F, 1F, 1F, 1F, new CubeDeformation(-0.15F, -0.1F, -0.15F))
                 .texOffs(30, 105).addBox(-4.45F, -0.9F, -18.15F, 1F, 1F, 1F, new CubeDeformation(-0.15F, -0.1F, -0.15F))

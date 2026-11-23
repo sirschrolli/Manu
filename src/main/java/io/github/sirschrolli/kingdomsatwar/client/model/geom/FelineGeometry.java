@@ -24,7 +24,7 @@ public final class FelineGeometry {
         PartDefinition root = mesh.getRoot();
         PartDefinition p_head = root.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(29, 23).addBox(-2.5F, -2F, -3F, 5F, 4F, 5F)
-                .texOffs(9, 42).addBox(-1.5F, -0.001F, -4F, 3F, 2F, 2F),
+                .texOffs(9, 42).addBox(-1.5F, -0.001F, -4F, 3F, 2F, 2F, new CubeDeformation(0F, 0.04F, 0F)),
                 PartPose.offset(0F, 15F, -9F));
         PartDefinition p_ear_l = p_head.addOrReplaceChild("ear_l", CubeListBuilder.create()
                 .texOffs(20, 42).addBox(-0.9F, -1.75F, -0.7F, 2F, 2F, 2F, new CubeDeformation(-0.4F, -0.25F, -0.2F)),

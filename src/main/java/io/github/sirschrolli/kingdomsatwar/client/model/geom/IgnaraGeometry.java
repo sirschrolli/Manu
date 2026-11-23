@@ -102,7 +102,7 @@ public final class IgnaraGeometry {
         PartDefinition p_left_forearm = p_left_arm.addOrReplaceChild("left_forearm", CubeListBuilder.create()
                 .texOffs(79, 42).addBox(-1F, -0.4F, -1F, 2F, 6F, 2F, new CubeDeformation(0F, -0.4F, 0F))
                 .texOffs(97, 42).addBox(-1.5F, 2F, -1.5F, 3F, 3F, 3F, new CubeDeformation(-0.25F, -0.4F, -0.25F))
-                .texOffs(42, 51).addBox(-1F, 4.6F, -1F, 2F, 3F, 2F, new CubeDeformation(0F, -0.4F, 0F)),
+                .texOffs(42, 51).addBox(-1F, 4.6F, -1F, 2F, 3F, 2F, new CubeDeformation(0.04F, -0.4F, 0.04F)),
                 PartPose.offsetAndRotation(0F, 5.4F, 0F, -0.4538F, 0F, 0F));
         PartDefinition p_orb = p_left_forearm.addOrReplaceChild("orb", CubeListBuilder.create()
                 .texOffs(62, 42).addBox(-2F, -2F, -2F, 4F, 4F, 4F, new CubeDeformation(-0.4F, -0.4F, -0.4F))
@@ -115,7 +115,7 @@ public final class IgnaraGeometry {
         PartDefinition p_right_forearm = p_right_arm.addOrReplaceChild("right_forearm", CubeListBuilder.create()
                 .texOffs(88, 42).addBox(-1F, -0.4F, -1F, 2F, 6F, 2F, new CubeDeformation(0F, -0.4F, 0F))
                 .texOffs(110, 42).addBox(-1.5F, 2F, -1.5F, 3F, 3F, 3F, new CubeDeformation(-0.25F, -0.4F, -0.25F))
-                .texOffs(51, 51).addBox(-1F, 4.6F, -1F, 2F, 3F, 2F, new CubeDeformation(0F, -0.4F, 0F)),
+                .texOffs(51, 51).addBox(-1F, 4.6F, -1F, 2F, 3F, 2F, new CubeDeformation(0.04F, -0.4F, 0.04F)),
                 PartPose.offsetAndRotation(0F, 5.4F, 0F, -0.4538F, 0F, 0F));
         PartDefinition p_whip = p_right_forearm.addOrReplaceChild("whip", CubeListBuilder.create()
                 .texOffs(174, 30).addBox(-1F, -1.5F, -1F, 2F, 7F, 2F, new CubeDeformation(-0.4F, -0.3F, -0.4F))

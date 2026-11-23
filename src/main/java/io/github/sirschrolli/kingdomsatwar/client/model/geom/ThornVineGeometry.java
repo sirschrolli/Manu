@@ -23,12 +23,12 @@ public final class ThornVineGeometry {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
         PartDefinition p_seg0 = root.addOrReplaceChild("seg0", CubeListBuilder.create()
-                .texOffs(23, 0).addBox(-3F, -10.2F, -2.5F, 6F, 11F, 5F, new CubeDeformation(0F, -0.2F, -0.4F))
+                .texOffs(23, 0).addBox(-3F, -10.2F, -2.5F, 6F, 11F, 5F, new CubeDeformation(0F, -0.16F, -0.4F))
                 .texOffs(0, 0).addBox(-2.5F, -10.2F, -3F, 5F, 11F, 6F, new CubeDeformation(-0.4F, -0.25F, 0F))
-                .texOffs(63, 43).addBox(2F, -2.1F, -1.1F, 5F, 3F, 3F, new CubeDeformation(-0.4F, -0.3F, -0.4F))
-                .texOffs(30, 43).addBox(-1.9F, -2.1F, 2.2F, 3F, 3F, 4F, new CubeDeformation(-0.4F, -0.3F, -0.2F))
-                .texOffs(97, 43).addBox(-6.3F, -2.1F, -1.9F, 4F, 3F, 3F, new CubeDeformation(-0.1F, -0.3F, -0.4F))
-                .texOffs(65, 32).addBox(-1.1F, -2.1F, -7.1F, 3F, 3F, 5F, new CubeDeformation(-0.4F, -0.3F, -0.3F))
+                .texOffs(63, 43).addBox(2F, -2.1F, -1.1F, 5F, 3F, 3F, new CubeDeformation(-0.4F, -0.22F, -0.4F))
+                .texOffs(30, 43).addBox(-1.9F, -2.1F, 2.2F, 3F, 3F, 4F, new CubeDeformation(-0.4F, -0.26F, -0.2F))
+                .texOffs(97, 43).addBox(-6.3F, -2.1F, -1.9F, 4F, 3F, 3F, new CubeDeformation(-0.1F, -0.22F, -0.4F))
+                .texOffs(65, 32).addBox(-1.1F, -2.1F, -7.1F, 3F, 3F, 5F, new CubeDeformation(-0.4F, -0.26F, -0.3F))
                 .texOffs(60, 18).addBox(-4F, -3F, -4F, 8F, 4F, 8F, new CubeDeformation(-0.1F, -0.4F, -0.1F))
                 .texOffs(9, 64).addBox(2.5F, -4F, -1.5F, 1F, 2F, 2F, new CubeDeformation(0F, -0.35F, -0.35F))
                 .texOffs(54, 59).addBox(2.5F, -5.74F, -0.5F, 4F, 4F, 0F, new CubeDeformation(0F, -0.16F, 0F))
@@ -41,7 +41,7 @@ public final class ThornVineGeometry {
                 .texOffs(76, 52).addBox(-2F, -7.8F, 2.5F, 3F, 0F, 4F, new CubeDeformation(-0.4F, 0F, 0F)),
                 PartPose.offset(0F, 24F, 0F));
         PartDefinition p_seg1 = p_seg0.addOrReplaceChild("seg1", CubeListBuilder.create()
-                .texOffs(67, 0).addBox(-3F, -9.2F, -2F, 6F, 10F, 4F, new CubeDeformation(-0.4F, -0.2F, -0.18F))
+                .texOffs(67, 0).addBox(-3F, -9.2F, -2F, 6F, 10F, 4F, new CubeDeformation(-0.4F, -0.16F, -0.18F))
                 .texOffs(46, 0).addBox(-2F, -9.2F, -3F, 4F, 10F, 6F, new CubeDeformation(-0.18F, -0.25F, -0.4F))
                 .texOffs(11, 32).addBox(-3.5F, -1.25F, -3.5F, 7F, 2F, 7F, new CubeDeformation(-0.45F, -0.15F, -0.45F))
                 .texOffs(29, 69).addBox(-1.48F, -4.3F, -3.08F, 2F, 2F, 1F, new CubeDeformation(-0.376F, -0.376F, -0.02F))
@@ -57,7 +57,7 @@ public final class ThornVineGeometry {
                 .texOffs(0, 18).addBox(0.15F, -12.05F, -8.9F, 0F, 6F, 7F, new CubeDeformation(0F, -0.1F, -0.3F)),
                 PartPose.offset(0F, -10F, 0F));
         PartDefinition p_seg2 = p_seg1.addOrReplaceChild("seg2", CubeListBuilder.create()
-                .texOffs(88, 0).addBox(-2.5F, -8.95F, -2F, 5F, 10F, 4F, new CubeDeformation(-0.3F, -0.45F, -0.46F))
+                .texOffs(88, 0).addBox(-2.5F, -8.95F, -2F, 5F, 10F, 4F, new CubeDeformation(-0.3F, -0.41F, -0.46F))
                 .texOffs(107, 0).addBox(-2F, -8.45F, -2.5F, 4F, 9F, 5F, new CubeDeformation(-0.46F, 0F, -0.3F))
                 .texOffs(40, 32).addBox(-3F, -1.25F, -3F, 6F, 2F, 6F, new CubeDeformation(-0.35F, -0.15F, -0.35F))
                 .texOffs(30, 64).addBox(-2.66F, -3.55F, -1.46F, 1F, 2F, 2F, new CubeDeformation(-0.04F, -0.402F, -0.402F))
@@ -73,7 +73,7 @@ public final class ThornVineGeometry {
                 .texOffs(15, 18).addBox(0.15F, -11.675F, 1.5F, 0F, 6F, 7F, new CubeDeformation(0F, -0.1F, -0.3F)),
                 PartPose.offset(0F, -9F, 0F));
         PartDefinition p_seg3 = p_seg2.addOrReplaceChild("seg3", CubeListBuilder.create()
-                .texOffs(93, 18).addBox(-2F, -8.2F, -1.5F, 4F, 9F, 3F, new CubeDeformation(-0.2F, -0.2F, -0.24F))
+                .texOffs(93, 18).addBox(-2F, -8.2F, -1.5F, 4F, 9F, 3F, new CubeDeformation(-0.2F, -0.16F, -0.24F))
                 .texOffs(30, 18).addBox(-1.5F, -8.2F, -2F, 3F, 9F, 4F, new CubeDeformation(-0.24F, -0.25F, -0.2F))
                 .texOffs(9, 43).addBox(-2.5F, -1.25F, -2.5F, 5F, 2F, 5F, new CubeDeformation(-0.25F, -0.15F, -0.25F))
                 .texOffs(50, 69).addBox(-1.44F, -4F, 1.24F, 2F, 2F, 1F, new CubeDeformation(-0.428F, -0.428F, -0.06F))
@@ -89,7 +89,7 @@ public final class ThornVineGeometry {
                 .texOffs(45, 18).addBox(0.15F, -11.3F, -8.1F, 0F, 6F, 7F, new CubeDeformation(0F, -0.1F, -0.3F)),
                 PartPose.offset(0F, -8.5F, 0F));
         PartDefinition p_seg4 = p_seg3.addOrReplaceChild("seg4", CubeListBuilder.create()
-                .texOffs(0, 32).addBox(-1.5F, -7.2F, -1F, 3F, 8F, 2F, new CubeDeformation(-0.1F, -0.2F, -0.02F))
+                .texOffs(0, 32).addBox(-1.5F, -7.2F, -1F, 3F, 8F, 2F, new CubeDeformation(-0.1F, -0.16F, -0.02F))
                 .texOffs(108, 18).addBox(-1F, -7.2F, -1.5F, 2F, 8F, 3F, new CubeDeformation(-0.02F, -0.25F, -0.1F))
                 .texOffs(80, 43).addBox(-2F, -1.25F, -2F, 4F, 2F, 4F, new CubeDeformation(-0.15F, -0.15F, -0.15F))
                 .texOffs(51, 64).addBox(0.82F, -3.1F, -1.42F, 1F, 2F, 2F, new CubeDeformation(-0.08F, -0.454F, -0.454F))
@@ -100,7 +100,7 @@ public final class ThornVineGeometry {
                 .texOffs(110, 69).addBox(-4.58F, -5.46F, -0.58F, 4F, 0F, 2F, new CubeDeformation(-0.32F, 0F, -0.076F)),
                 PartPose.offset(0F, -8F, 0F));
         PartDefinition p_seg5 = p_seg4.addOrReplaceChild("seg5", CubeListBuilder.create()
-                .texOffs(30, 52).addBox(-1F, -3.2F, -1F, 2F, 4F, 2F, new CubeDeformation(0F, -0.2F, -0.3F))
+                .texOffs(30, 52).addBox(-1F, -3.2F, -1F, 2F, 4F, 2F, new CubeDeformation(0F, -0.16F, -0.3F))
                 .texOffs(39, 52).addBox(-1F, -3.2F, -1F, 2F, 4F, 2F, new CubeDeformation(-0.3F, -0.25F, 0F))
                 .texOffs(48, 52).addBox(-1.5F, -1.25F, -1.5F, 3F, 2F, 3F, new CubeDeformation(-0.05F, -0.15F, -0.05F))
                 .texOffs(0, 64).addBox(-1F, -4.7F, -1F, 2F, 2F, 2F, new CubeDeformation(-0.35F, -0.1F, -0.35F))

@@ -28,7 +28,7 @@ public final class SeaWitchGeometry {
                 .texOffs(29, 31).addBox(-3F, -9.5F, -2F, 6F, 5F, 4F, new CubeDeformation(0F, 0F, -0.3F))
                 .texOffs(130, 31).addBox(-2.5F, -4.75F, -1.5F, 5F, 5F, 3F, new CubeDeformation(-0.3F, -0.25F, -0.2F))
                 .texOffs(17, 57).addBox(-2.5F, -9.85F, -2.3F, 5F, 1F, 1F, new CubeDeformation(-0.2F, -0.2F, -0.35F))
-                .texOffs(147, 50).addBox(-0.5F, -9.45F, -2.4F, 1F, 2F, 1F, new CubeDeformation(0F, -0.15F, -0.25F)),
+                .texOffs(147, 50).addBox(-0.5F, -9.45F, -2.4F, 1F, 2F, 1F, new CubeDeformation(0F, -0.15F, -0.21F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_shawl = p_torso.addOrReplaceChild("shawl", CubeListBuilder.create()
                 .texOffs(103, 31).addBox(-4F, -10.45F, -2.5F, 8F, 3F, 5F, new CubeDeformation(-0.3F, -0.35F, -0.25F)),
@@ -137,7 +137,7 @@ public final class SeaWitchGeometry {
                 .texOffs(152, 50).addBox(-0.5F, 9.1F, -1.175F, 1F, 2F, 1F, new CubeDeformation(-0.25F, -0.2F, -0.275F))
                 .texOffs(157, 50).addBox(-0.15F, 9.1F, -0.425F, 1F, 2F, 1F, new CubeDeformation(-0.25F, -0.2F, -0.275F))
                 .texOffs(162, 50).addBox(-0.5F, 9.1F, 0.325F, 1F, 2F, 1F, new CubeDeformation(-0.25F, -0.2F, -0.275F))
-                .texOffs(73, 41).addBox(0.8F, 2.3F, -0.4F, 0F, 5F, 3F, new CubeDeformation(0F, -0.3F, -0.2F))
+                .texOffs(73, 41).addBox(0.8F, 2.3F, -0.4F, 0F, 5F, 3F, new CubeDeformation(0.04F, -0.3F, -0.2F))
                 .texOffs(113, 50).addBox(-1F, 5.3F, -1F, 2F, 1F, 2F, new CubeDeformation(-0.05F, -0.1F, -0.05F)),
                 PartPose.offset(3.6F, -8.9F, 0F));
         PartDefinition p_right_arm = p_torso.addOrReplaceChild("right_arm", CubeListBuilder.create()
@@ -146,7 +146,7 @@ public final class SeaWitchGeometry {
                 .texOffs(167, 50).addBox(-0.5F, 9.1F, -1.175F, 1F, 2F, 1F, new CubeDeformation(-0.25F, -0.2F, -0.275F))
                 .texOffs(172, 50).addBox(-0.85F, 9.1F, -0.425F, 1F, 2F, 1F, new CubeDeformation(-0.25F, -0.2F, -0.275F))
                 .texOffs(177, 50).addBox(-0.5F, 9.1F, 0.325F, 1F, 2F, 1F, new CubeDeformation(-0.25F, -0.2F, -0.275F))
-                .texOffs(80, 41).addBox(-0.8F, 2.3F, -0.4F, 0F, 5F, 3F, new CubeDeformation(0F, -0.3F, -0.2F))
+                .texOffs(80, 41).addBox(-0.8F, 2.3F, -0.4F, 0F, 5F, 3F, new CubeDeformation(0.04F, -0.3F, -0.2F))
                 .texOffs(122, 50).addBox(-1F, 5.3F, -1F, 2F, 1F, 2F, new CubeDeformation(-0.05F, -0.1F, -0.05F)),
                 PartPose.offset(-3.6F, -8.9F, 0F));
         PartDefinition p_staff = p_right_arm.addOrReplaceChild("staff", CubeListBuilder.create()

@@ -35,11 +35,11 @@ public final class LavastelzerBabyGeometry {
                 .texOffs(43, 16).addBox(-3.5F, -2.5F, 0F, 7F, 3F, 0F),
                 PartPose.offset(0F, -4.25F, -2F));
         PartDefinition p_right_leg = root.addOrReplaceChild("right_leg", CubeListBuilder.create()
-                .texOffs(31, 0).addBox(-1F, 0F, -1F, 2F, 4F, 2F)
+                .texOffs(31, 0).addBox(-1F, 0F, -1F, 2F, 4F, 2F, new CubeDeformation(0F, 0.04F, 0F))
                 .texOffs(49, 0).addBox(-1.5F, 3.1F, -1.6F, 3F, 1F, 3F, new CubeDeformation(-0.1F, -0.1F, 0F)),
                 PartPose.offset(-1.5F, 20F, 0F));
         PartDefinition p_left_leg = root.addOrReplaceChild("left_leg", CubeListBuilder.create()
-                .texOffs(40, 0).addBox(-1F, 0F, -1F, 2F, 4F, 2F)
+                .texOffs(40, 0).addBox(-1F, 0F, -1F, 2F, 4F, 2F, new CubeDeformation(0F, 0.04F, 0F))
                 .texOffs(0, 16).addBox(-1.5F, 3.1F, -1.6F, 3F, 1F, 3F, new CubeDeformation(-0.1F, -0.1F, 0F)),
                 PartPose.offset(1.5F, 20F, 0F));
         return mesh;

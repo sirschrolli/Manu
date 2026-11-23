@@ -66,9 +66,9 @@ def build() -> Model:
         m.cube("front_leg_" + sfx, (-0.6, 0, -0.6), (1.2, 4.5, 1.2), "leg")
         m.cube("front_leg_" + sfx, (-0.7, 3.9, -1.4), (1.4, 0.6, 1.6), "paw")
         m.bone("haunch_" + sfx, pivot=(2.4 * side, 19.5, 3.0))
-        m.cube("haunch_" + sfx, (-1.0 if side > 0 else -1.0, -2.0, -2.5), (2, 4, 5), "haunch")
+        m.cube("haunch_" + sfx, (-1.0 if side > 0 else -1.0, -2.0, -2.5), (2, 5.6, 5), "haunch")   # reicht bis auf die Pfote
         m.bone("hind_foot_" + sfx, "haunch_" + sfx, pivot=(0, 2.0, 1.5))
-        m.cube("hind_foot_" + sfx, (-1.0, 2.0, -5.0), (2, 0.9, 6.0), "foot")
+        m.cube("hind_foot_" + sfx, (-1.0, 1.6, -5.0), (2, 0.9, 6.0), "foot")      # liegt unter der Keule auf dem Boden
     return m
 
 

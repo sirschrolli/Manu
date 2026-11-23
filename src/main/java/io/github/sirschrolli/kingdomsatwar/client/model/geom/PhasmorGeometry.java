@@ -127,7 +127,7 @@ public final class PhasmorGeometry {
                 .texOffs(79, 74).addBox(-1.5F, 13F, -1.5F, 3F, 2F, 3F, new CubeDeformation(-0.15F, -0.2F, -0.15F)),
                 PartPose.offset(2.2F, 0.5F, 0F));
         PartDefinition p_left_shin = p_left_leg.addOrReplaceChild("left_shin", CubeListBuilder.create()
-                .texOffs(52, 28).addBox(-1F, 0F, -1F, 2F, 12F, 2F)
+                .texOffs(52, 28).addBox(-1F, 0F, -1F, 2F, 12F, 2F, new CubeDeformation(0F, 0.04F, 0F))
                 .texOffs(108, 28).addBox(-1.5F, 0.9F, -1.5F, 3F, 8F, 3F, new CubeDeformation(-0.05F, -0.3F, -0.05F))
                 .texOffs(112, 66).addBox(-1.5F, 10.25F, -3.2F, 3F, 2F, 4F, new CubeDeformation(-0.2F, -0.25F, -0.2F)),
                 PartPose.offset(0F, 14.5F, 0F));
@@ -136,7 +136,7 @@ public final class PhasmorGeometry {
                 .texOffs(92, 74).addBox(-1.5F, 13F, -1.5F, 3F, 2F, 3F, new CubeDeformation(-0.15F, -0.2F, -0.15F)),
                 PartPose.offset(-2.2F, 0.5F, 0F));
         PartDefinition p_right_shin = p_right_leg.addOrReplaceChild("right_shin", CubeListBuilder.create()
-                .texOffs(61, 28).addBox(-1F, 0F, -1F, 2F, 12F, 2F)
+                .texOffs(61, 28).addBox(-1F, 0F, -1F, 2F, 12F, 2F, new CubeDeformation(0F, 0.04F, 0F))
                 .texOffs(0, 44).addBox(-1.5F, 0.9F, -1.5F, 3F, 8F, 3F, new CubeDeformation(-0.05F, -0.3F, -0.05F))
                 .texOffs(0, 74).addBox(-1.5F, 10.25F, -3.2F, 3F, 2F, 4F, new CubeDeformation(-0.2F, -0.25F, -0.2F)),
                 PartPose.offset(0F, 14.5F, 0F));

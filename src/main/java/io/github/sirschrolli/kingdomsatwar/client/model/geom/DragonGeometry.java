@@ -102,9 +102,9 @@ public final class DragonGeometry {
                 PartPose.offsetAndRotation(0F, 5.5F, 0F, -0.1047F, 0F, 0F));
         PartDefinition p_front_foot_l = p_front_shin_l.addOrReplaceChild("front_foot_l", CubeListBuilder.create()
                 .texOffs(42, 188).addBox(-3F, -0.25F, -5.5F, 6F, 3F, 8F, new CubeDeformation(0F, -0.25F, 0F))
-                .texOffs(132, 210).addBox(-2.5F, 0.75F, -7F, 1F, 2F, 2F, new CubeDeformation(0F, -0.25F, 0F))
-                .texOffs(139, 210).addBox(-0.5F, 0.75F, -7F, 1F, 2F, 2F, new CubeDeformation(0F, -0.25F, 0F))
-                .texOffs(146, 210).addBox(1.5F, 0.75F, -7F, 1F, 2F, 2F, new CubeDeformation(0F, -0.25F, 0F)),
+                .texOffs(132, 210).addBox(-2.5F, 0.75F, -7F, 1F, 2F, 2F, new CubeDeformation(0F, -0.21F, 0F))
+                .texOffs(139, 210).addBox(-0.5F, 0.75F, -7F, 1F, 2F, 2F, new CubeDeformation(0F, -0.21F, 0F))
+                .texOffs(146, 210).addBox(1.5F, 0.75F, -7F, 1F, 2F, 2F, new CubeDeformation(0F, -0.21F, 0F)),
                 PartPose.offsetAndRotation(0F, 6F, 0F, 0.0349F, 0F, 0F));
         PartDefinition p_hind_leg_l = p_body.addOrReplaceChild("hind_leg_l", CubeListBuilder.create()
                 .texOffs(90, 131).addBox(-4F, -3.5F, -5F, 8F, 11F, 10F),
@@ -114,9 +114,9 @@ public final class DragonGeometry {
                 PartPose.offsetAndRotation(0F, 7F, 1.5F, 0.1745F, 0F, 0F));
         PartDefinition p_hind_foot_l = p_hind_shin_l.addOrReplaceChild("hind_foot_l", CubeListBuilder.create()
                 .texOffs(183, 173).addBox(-3.5F, -0.25F, -6.5F, 7F, 3F, 9F, new CubeDeformation(0F, -0.25F, 0F))
-                .texOffs(153, 210).addBox(-3F, 0.75F, -8F, 1F, 2F, 2F, new CubeDeformation(0F, -0.25F, 0F))
-                .texOffs(160, 210).addBox(-0.5F, 0.75F, -8F, 1F, 2F, 2F, new CubeDeformation(0F, -0.25F, 0F))
-                .texOffs(167, 210).addBox(2F, 0.75F, -8F, 1F, 2F, 2F, new CubeDeformation(0F, -0.25F, 0F)),
+                .texOffs(153, 210).addBox(-3F, 0.75F, -8F, 1F, 2F, 2F, new CubeDeformation(0F, -0.21F, 0F))
+                .texOffs(160, 210).addBox(-0.5F, 0.75F, -8F, 1F, 2F, 2F, new CubeDeformation(0F, -0.21F, 0F))
+                .texOffs(167, 210).addBox(2F, 0.75F, -8F, 1F, 2F, 2F, new CubeDeformation(0F, -0.21F, 0F)),
                 PartPose.offsetAndRotation(0F, 6.5F, 0F, -0.0698F, 0F, 0F));
         PartDefinition p_front_leg_r = p_body.addOrReplaceChild("front_leg_r", CubeListBuilder.create()
                 .texOffs(54, 173).addBox(-3F, -2.5F, -3F, 6F, 8F, 6F),
@@ -126,9 +126,9 @@ public final class DragonGeometry {
                 PartPose.offsetAndRotation(0F, 5.5F, 0F, -0.1047F, 0F, 0F));
         PartDefinition p_front_foot_r = p_front_shin_r.addOrReplaceChild("front_foot_r", CubeListBuilder.create()
                 .texOffs(71, 188).addBox(-3F, -0.25F, -5.5F, 6F, 3F, 8F, new CubeDeformation(0F, -0.25F, 0F))
-                .texOffs(174, 210).addBox(-2.5F, 0.75F, -7F, 1F, 2F, 2F, new CubeDeformation(0F, -0.25F, 0F))
-                .texOffs(181, 210).addBox(-0.5F, 0.75F, -7F, 1F, 2F, 2F, new CubeDeformation(0F, -0.25F, 0F))
-                .texOffs(188, 210).addBox(1.5F, 0.75F, -7F, 1F, 2F, 2F, new CubeDeformation(0F, -0.25F, 0F)),
+                .texOffs(174, 210).addBox(-2.5F, 0.75F, -7F, 1F, 2F, 2F, new CubeDeformation(0F, -0.21F, 0F))
+                .texOffs(181, 210).addBox(-0.5F, 0.75F, -7F, 1F, 2F, 2F, new CubeDeformation(0F, -0.21F, 0F))
+                .texOffs(188, 210).addBox(1.5F, 0.75F, -7F, 1F, 2F, 2F, new CubeDeformation(0F, -0.21F, 0F)),
                 PartPose.offsetAndRotation(0F, 6F, 0F, 0.0349F, 0F, 0F));
         PartDefinition p_hind_leg_r = p_body.addOrReplaceChild("hind_leg_r", CubeListBuilder.create()
                 .texOffs(127, 131).addBox(-4F, -3.5F, -5F, 8F, 11F, 10F),
@@ -138,9 +138,9 @@ public final class DragonGeometry {
                 PartPose.offsetAndRotation(0F, 7F, 1.5F, 0.1745F, 0F, 0F));
         PartDefinition p_hind_foot_r = p_hind_shin_r.addOrReplaceChild("hind_foot_r", CubeListBuilder.create()
                 .texOffs(216, 173).addBox(-3.5F, -0.25F, -6.5F, 7F, 3F, 9F, new CubeDeformation(0F, -0.25F, 0F))
-                .texOffs(195, 210).addBox(-3F, 0.75F, -8F, 1F, 2F, 2F, new CubeDeformation(0F, -0.25F, 0F))
-                .texOffs(202, 210).addBox(-0.5F, 0.75F, -8F, 1F, 2F, 2F, new CubeDeformation(0F, -0.25F, 0F))
-                .texOffs(209, 210).addBox(2F, 0.75F, -8F, 1F, 2F, 2F, new CubeDeformation(0F, -0.25F, 0F)),
+                .texOffs(195, 210).addBox(-3F, 0.75F, -8F, 1F, 2F, 2F, new CubeDeformation(0F, -0.21F, 0F))
+                .texOffs(202, 210).addBox(-0.5F, 0.75F, -8F, 1F, 2F, 2F, new CubeDeformation(0F, -0.21F, 0F))
+                .texOffs(209, 210).addBox(2F, 0.75F, -8F, 1F, 2F, 2F, new CubeDeformation(0F, -0.21F, 0F)),
                 PartPose.offsetAndRotation(0F, 6.5F, 0F, -0.0698F, 0F, 0F));
         PartDefinition p_wing_l = p_body.addOrReplaceChild("wing_l", CubeListBuilder.create()
                 .texOffs(61, 201).addBox(0F, -1.5F, -1.5F, 22F, 3F, 3F)
@@ -149,7 +149,7 @@ public final class DragonGeometry {
         PartDefinition p_wing_tip_l = p_wing_l.addOrReplaceChild("wing_tip_l", CubeListBuilder.create()
                 .texOffs(18, 210).addBox(0F, -1F, -1F, 26F, 2F, 2F)
                 .texOffs(97, 0).addBox(0F, 0F, 1F, 40F, 0F, 34F)
-                .texOffs(229, 201).addBox(25F, -2F, -2F, 2F, 3F, 3F),
+                .texOffs(229, 201).addBox(25F, -2F, -2F, 2F, 3F, 3F, new CubeDeformation(0F, 0.04F, 0.04F)),
                 PartPose.offset(21F, 0F, 0F));
         PartDefinition p_wing_r = p_body.addOrReplaceChild("wing_r", CubeListBuilder.create()
                 .texOffs(112, 201).addBox(-22F, -1.5F, -1.5F, 22F, 3F, 3F)
@@ -158,7 +158,7 @@ public final class DragonGeometry {
         PartDefinition p_wing_tip_r = p_wing_r.addOrReplaceChild("wing_tip_r", CubeListBuilder.create()
                 .texOffs(75, 210).addBox(-26F, -1F, -1F, 26F, 2F, 2F)
                 .texOffs(0, 46).addBox(-40F, 0F, 1F, 40F, 0F, 34F)
-                .texOffs(240, 201).addBox(-27F, -2F, -2F, 2F, 3F, 3F),
+                .texOffs(240, 201).addBox(-27F, -2F, -2F, 2F, 3F, 3F, new CubeDeformation(0F, 0.04F, 0.04F)),
                 PartPose.offset(-21F, 0F, 0F));
         return mesh;
     }

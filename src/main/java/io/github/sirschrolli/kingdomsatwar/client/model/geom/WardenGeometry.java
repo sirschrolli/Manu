@@ -39,7 +39,7 @@ public final class WardenGeometry {
         PartDefinition p_head = p_body.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(0, 37).addBox(-8F, -16F, -5F, 16F, 16F, 10F)
                 .texOffs(54, 104).addBox(-8.5F, -12.25F, -6.45F, 17F, 3F, 2F, new CubeDeformation(0F, -0.25F, -0.25F))
-                .texOffs(66, 87).addBox(-7F, -5F, -6.4F, 14F, 5F, 2F, new CubeDeformation(0F, 0F, -0.4F))
+                .texOffs(66, 87).addBox(-7F, -5F, -6.4F, 14F, 5F, 2F, new CubeDeformation(0F, 0.04F, -0.4F))
                 .texOffs(99, 87).addBox(-9.6F, -14F, -1.5F, 2F, 4F, 3F)
                 .texOffs(110, 87).addBox(7.6F, -14F, -1.5F, 2F, 4F, 3F),
                 PartPose.offset(0F, -13F, 0F));

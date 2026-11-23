@@ -30,7 +30,7 @@ public final class WerewolfGeometry {
                 .texOffs(0, 0).addBox(-5.5F, -13F, -4F, 11F, 13F, 8F)
                 .texOffs(0, 22).addBox(-6.5F, -15.5F, -3.5F, 13F, 5F, 9F, new CubeDeformation(-0.3F, 0F, -0.3F))
                 .texOffs(0, 73).addBox(-4.5F, -17F, -0.5F, 9F, 3F, 5F)
-                .texOffs(50, 50).addBox(-2F, -14F, 3.5F, 4F, 9F, 2F, new CubeDeformation(0F, 0F, -0.3F)),
+                .texOffs(50, 50).addBox(-2F, -14F, 3.5F, 4F, 9F, 2F, new CubeDeformation(0F, 0F, -0.26F)),
                 PartPose.offsetAndRotation(0F, -2.5F, 0F, 0.5585F, 0F, 0F));
         PartDefinition p_head = p_body.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(45, 22).addBox(-4F, -6.4F, -5.75F, 8F, 7F, 7F, new CubeDeformation(-0.4F, 0F, -0.25F))
@@ -86,7 +86,7 @@ public final class WerewolfGeometry {
                 .texOffs(0, 50).addBox(-3F, 0.25F, -2.9F, 6F, 5F, 6F, new CubeDeformation(-0.4F, -0.25F, -0.2F)),
                 PartPose.offsetAndRotation(3.4F, -0.5F, 0.5F, -0.4538F, 0F, 0F));
         PartDefinition p_left_shin = p_left_leg.addOrReplaceChild("left_shin", CubeListBuilder.create()
-                .texOffs(110, 22).addBox(-2F, -0.1F, -2F, 4F, 8F, 4F, new CubeDeformation(-0.3F, -0.1F, -0.2F))
+                .texOffs(110, 22).addBox(-2F, -0.1F, -2F, 4F, 8F, 4F, new CubeDeformation(-0.3F, -0.06F, -0.2F))
                 .texOffs(19, 82).addBox(-2F, -0.2F, -2F, 4F, 3F, 4F, new CubeDeformation(-0.1F, -0.2F, 0F)),
                 PartPose.offsetAndRotation(0F, 7.6F, 0.3F, 1.0123F, 0F, 0F));
         PartDefinition p_left_foot = p_left_shin.addOrReplaceChild("left_foot", CubeListBuilder.create()
@@ -101,7 +101,7 @@ public final class WerewolfGeometry {
                 .texOffs(25, 50).addBox(-3F, 0.25F, -2.9F, 6F, 5F, 6F, new CubeDeformation(-0.4F, -0.25F, -0.2F)),
                 PartPose.offsetAndRotation(-3.4F, -0.5F, 0.5F, -0.4538F, 0F, 0F));
         PartDefinition p_right_shin = p_right_leg.addOrReplaceChild("right_shin", CubeListBuilder.create()
-                .texOffs(0, 37).addBox(-2F, -0.1F, -2F, 4F, 8F, 4F, new CubeDeformation(-0.3F, -0.1F, -0.2F))
+                .texOffs(0, 37).addBox(-2F, -0.1F, -2F, 4F, 8F, 4F, new CubeDeformation(-0.3F, -0.06F, -0.2F))
                 .texOffs(36, 82).addBox(-2F, -0.2F, -2F, 4F, 3F, 4F, new CubeDeformation(-0.1F, -0.2F, 0F)),
                 PartPose.offsetAndRotation(0F, 7.6F, 0.3F, 1.0123F, 0F, 0F));
         PartDefinition p_right_foot = p_right_shin.addOrReplaceChild("right_foot", CubeListBuilder.create()

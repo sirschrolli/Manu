@@ -23,7 +23,7 @@ public final class MissMystikGeometry {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
         PartDefinition p_body = root.addOrReplaceChild("body", CubeListBuilder.create()
-                .texOffs(58, 50).addBox(-3F, -4F, -2F, 6F, 4F, 4F, new CubeDeformation(-0.25F, 0F, -0.25F))
+                .texOffs(58, 50).addBox(-3F, -4F, -2F, 6F, 4F, 4F, new CubeDeformation(-0.25F, 0.04F, -0.25F))
                 .texOffs(109, 50).addBox(-3F, -1.625F, -2F, 6F, 2F, 4F, new CubeDeformation(0F, -0.375F, 0F)),
                 PartPose.offset(0F, 4F, 0F));
         PartDefinition p_chest = p_body.addOrReplaceChild("chest", CubeListBuilder.create()
@@ -35,9 +35,9 @@ public final class MissMystikGeometry {
                 PartPose.offset(0F, -4F, 0F));
         PartDefinition p_head = p_chest.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(161, 0).addBox(-3F, -7F, -3F, 6F, 7F, 6F)
-                .texOffs(0, 50).addBox(-3.5F, -7.5F, -3.375F, 7F, 1F, 7F, new CubeDeformation(-0.25F, 0F, -0.375F))
-                .texOffs(193, 59).addBox(-3.5F, -7.25F, -3.3F, 7F, 2F, 1F, new CubeDeformation(-0.25F, 0F, 0F))
-                .texOffs(71, 37).addBox(-3.5F, -7F, 1.375F, 7F, 8F, 2F, new CubeDeformation(-0.25F, 0F, -0.125F))
+                .texOffs(0, 50).addBox(-3.5F, -7.5F, -3.375F, 7F, 1F, 7F, new CubeDeformation(-0.21F, 0F, -0.335F))
+                .texOffs(193, 59).addBox(-3.5F, -7.25F, -3.3F, 7F, 2F, 1F, new CubeDeformation(-0.17F, 0F, 0F))
+                .texOffs(71, 37).addBox(-3.5F, -7F, 1.375F, 7F, 8F, 2F, new CubeDeformation(-0.25F, 0.04F, -0.125F))
                 .texOffs(222, 37).addBox(-3.6F, -6.25F, -2.6F, 1F, 7F, 2F, new CubeDeformation(-0.2F, -0.25F, 0F))
                 .texOffs(229, 37).addBox(2.6F, -6.25F, -2.6F, 1F, 7F, 2F, new CubeDeformation(-0.2F, -0.25F, 0F))
                 .texOffs(56, 59).addBox(-3.8F, -4.75F, -0.75F, 1F, 3F, 2F, new CubeDeformation(-0.2F, -0.25F, -0.25F))
@@ -45,7 +45,7 @@ public final class MissMystikGeometry {
                 .texOffs(210, 59).addBox(-3.5F, -5F, -3.75F, 7F, 2F, 1F, new CubeDeformation(0F, 0F, -0.25F)),
                 PartPose.offset(0F, -8.5F, 0F));
         PartDefinition p_ponytail = p_head.addOrReplaceChild("ponytail", CubeListBuilder.create()
-                .texOffs(122, 59).addBox(-1.5F, -0.975F, -1.025F, 3F, 2F, 2F, new CubeDeformation(0F, -0.375F, -0.125F))
+                .texOffs(122, 59).addBox(-1.5F, -0.975F, -1.025F, 3F, 2F, 2F, new CubeDeformation(0.04F, -0.375F, -0.125F))
                 .texOffs(90, 37).addBox(-1.5F, 0.5F, -0.7F, 3F, 8F, 2F),
                 PartPose.offsetAndRotation(0F, -6.25F, 3F, 0.5236F, 0F, 0F));
         PartDefinition p_ponytail_tip = p_ponytail.addOrReplaceChild("ponytail_tip", CubeListBuilder.create()
@@ -54,7 +54,7 @@ public final class MissMystikGeometry {
                 PartPose.offsetAndRotation(0F, 8.25F, 0.25F, -0.3491F, 0F, 0F));
         PartDefinition p_hat = p_head.addOrReplaceChild("hat", CubeListBuilder.create()
                 .texOffs(7, 37).addBox(-5F, -0.875F, -5F, 10F, 1F, 10F, new CubeDeformation(-0.25F, -0.125F, -0.25F))
-                .texOffs(132, 0).addBox(-3.5F, -7.625F, -3.5F, 7F, 7F, 7F, new CubeDeformation(-0.25F, -0.125F, -0.25F))
+                .texOffs(132, 0).addBox(-3.5F, -7.625F, -3.5F, 7F, 7F, 7F, new CubeDeformation(-0.25F, -0.085F, -0.25F))
                 .texOffs(29, 50).addBox(-3.5F, -8.375F, -3.5F, 7F, 1F, 7F, new CubeDeformation(0F, -0.125F, 0F))
                 .texOffs(101, 37).addBox(-3.5F, -2.625F, -3.5F, 7F, 2F, 7F, new CubeDeformation(-0.1F, -0.125F, -0.1F))
                 .texOffs(151, 59).addBox(-1F, -3.125F, -3.9F, 2F, 3F, 1F, new CubeDeformation(0F, -0.375F, -0.25F))
@@ -68,7 +68,7 @@ public final class MissMystikGeometry {
                 .texOffs(159, 37).addBox(-1.5F, -0.25F, -1.5F, 3F, 6F, 3F, new CubeDeformation(-0.4F, -0.25F, -0.4F)),
                 PartPose.offsetAndRotation(-4.4F, -6.25F, 0F, 0F, 0F, 0.1047F));
         PartDefinition p_right_forearm = p_right_arm.addOrReplaceChild("right_forearm", CubeListBuilder.create()
-                .texOffs(244, 50).addBox(-1F, -0.25F, -1F, 2F, 4F, 2F, new CubeDeformation(0F, -0.25F, 0F))
+                .texOffs(244, 50).addBox(-1F, -0.25F, -1F, 2F, 4F, 2F, new CubeDeformation(0F, -0.21F, 0F))
                 .texOffs(70, 59).addBox(-1.5F, 2.625F, -1.5F, 3F, 1F, 3F, new CubeDeformation(-0.25F, -0.125F, -0.25F))
                 .texOffs(83, 59).addBox(-1.5F, 3.375F, -1.5F, 3F, 1F, 3F, new CubeDeformation(-0.4F, -0.125F, -0.4F))
                 .texOffs(181, 50).addBox(-1.5F, 4F, -1.5F, 3F, 3F, 3F, new CubeDeformation(-0.4F, -0.25F, -0.25F)),
@@ -83,7 +83,7 @@ public final class MissMystikGeometry {
                 .texOffs(172, 37).addBox(-1.5F, -0.25F, -1.5F, 3F, 6F, 3F, new CubeDeformation(-0.4F, -0.25F, -0.4F)),
                 PartPose.offsetAndRotation(4.4F, -6.25F, 0F, 0F, 0F, -0.1047F));
         PartDefinition p_left_forearm = p_left_arm.addOrReplaceChild("left_forearm", CubeListBuilder.create()
-                .texOffs(0, 59).addBox(-1F, -0.25F, -1F, 2F, 4F, 2F, new CubeDeformation(0F, -0.25F, 0F))
+                .texOffs(0, 59).addBox(-1F, -0.25F, -1F, 2F, 4F, 2F, new CubeDeformation(0F, -0.21F, 0F))
                 .texOffs(96, 59).addBox(-1.5F, 2.625F, -1.5F, 3F, 1F, 3F, new CubeDeformation(-0.25F, -0.125F, -0.25F))
                 .texOffs(109, 59).addBox(-1.5F, 3.375F, -1.5F, 3F, 1F, 3F, new CubeDeformation(-0.4F, -0.125F, -0.4F))
                 .texOffs(194, 50).addBox(-1.5F, 4F, -1.5F, 3F, 3F, 3F, new CubeDeformation(-0.4F, -0.25F, -0.25F)),

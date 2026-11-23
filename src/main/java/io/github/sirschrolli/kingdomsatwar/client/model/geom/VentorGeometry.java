@@ -26,7 +26,7 @@ public final class VentorGeometry {
                 PartPose.offset(0F, 1.5F, 0F));
         PartDefinition p_ring_0 = p_wind.addOrReplaceChild("ring_0", CubeListBuilder.create()
                 .texOffs(38, 0).addBox(-5.5F, 0F, -5.5F, 11F, 6F, 11F)
-                .texOffs(52, 88).addBox(4.55F, 3.55F, -1.25F, 1F, 1F, 1F, new CubeDeformation(-0.05F, -0.05F, -0.05F))
+                .texOffs(52, 88).addBox(4.55F, 3.55F, -1.25F, 1F, 1F, 1F, new CubeDeformation(-0.01F, -0.05F, -0.05F))
                 .texOffs(115, 79).addBox(-5F, 1F, 0.6F, 0F, 2F, 3F, new CubeDeformation(0F, -0.4F, -0.4F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_ring_1 = p_ring_0.addOrReplaceChild("ring_1", CubeListBuilder.create()
@@ -60,7 +60,7 @@ public final class VentorGeometry {
                 .texOffs(83, 0).addBox(-4F, -8.9F, -4F, 8F, 9F, 8F, new CubeDeformation(-0.3F, -0.1F, -0.1F))
                 .texOffs(0, 44).addBox(-5F, -6.1F, -5.1F, 10F, 1F, 11F, new CubeDeformation(-0.3F, -0.1F, -0.2F))
                 .texOffs(50, 69).addBox(-3F, -9.8F, -3.5F, 6F, 1F, 7F, new CubeDeformation(0F, 0F, -0.3F))
-                .texOffs(0, 69).addBox(-1F, -10.7F, -3.9F, 2F, 1F, 8F, new CubeDeformation(0F, 0F, -0.2F))
+                .texOffs(0, 69).addBox(-1F, -10.7F, -3.9F, 2F, 1F, 8F, new CubeDeformation(0.04F, 0F, -0.2F))
                 .texOffs(9, 0).addBox(-1F, -17.6F, -5.6F, 2F, 7F, 12F, new CubeDeformation(0F, 0F, -0.3F)),
                 PartPose.offset(0F, -16.2F, 0F));
         PartDefinition p_crest_tail = p_head.addOrReplaceChild("crest_tail", CubeListBuilder.create()

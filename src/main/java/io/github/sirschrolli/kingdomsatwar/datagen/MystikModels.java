@@ -209,7 +209,10 @@ final class MystikModels {
         }
         Identifier model3d = worn.build().create(ModelLocationUtils.getModelLocation(hat, "_worn"), textures, items.modelOutput);
         var flat = ItemModelUtils.plainModel(items.createFlatItemModel(hat, ModelTemplates.FLAT_ITEM));
-        items.itemModelOutput.accept(hat, ItemModelGenerators.createFlatModelDispatch(flat, ItemModelUtils.plainModel(model3d)),
+        // der Zylinder als Zylinder nur auf dem Kopf; in der Hand (jede Sicht) und überall sonst das flache Bild wie bei
+        // allen Hüten und Helmen – das Modell für den Kopf lag in der Hand quer und steckte im Arm (seit 1.12.1)
+        items.itemModelOutput.accept(hat, ItemModelUtils.select(new net.minecraft.client.renderer.item.properties.select.DisplayContext(), flat,
+                        ItemModelUtils.when(net.minecraft.world.item.ItemDisplayContext.HEAD, ItemModelUtils.plainModel(model3d))),
                 new ClientItem.Properties(true, false, 1.0f));
     }
 }

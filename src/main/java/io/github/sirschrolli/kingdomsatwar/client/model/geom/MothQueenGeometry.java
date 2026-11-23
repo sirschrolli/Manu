@@ -35,8 +35,8 @@ public final class MothQueenGeometry {
                 PartPose.offset(0F, 0.2F, 5F));
         PartDefinition p_head = p_body.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(40, 47).addBox(-2.5F, -2.5F, -3.6F, 5F, 5F, 4F, new CubeDeformation(-0.3F, -0.3F, -0.2F))
-                .texOffs(89, 47).addBox(-3.45F, -1.9F, -3.4F, 2F, 3F, 3F, new CubeDeformation(-0.15F, 0F, 0F))
-                .texOffs(100, 47).addBox(1.45F, -1.9F, -3.4F, 2F, 3F, 3F, new CubeDeformation(-0.15F, 0F, 0F))
+                .texOffs(89, 47).addBox(-3.45F, -1.9F, -3.4F, 2F, 3F, 3F, new CubeDeformation(-0.15F, 0F, 0.04F))
+                .texOffs(100, 47).addBox(1.45F, -1.9F, -3.4F, 2F, 3F, 3F, new CubeDeformation(-0.15F, 0F, 0.04F))
                 .texOffs(111, 47).addBox(-2F, -3.8F, -3.2F, 4F, 2F, 3F, new CubeDeformation(-0.2F, -0.4F, -0.4F))
                 .texOffs(9, 58).addBox(-1F, -5.2F, -2.9F, 2F, 2F, 2F, new CubeDeformation(-0.4F, -0.2F, -0.3F))
                 .texOffs(18, 58).addBox(-1.95F, -4.4F, -2.4F, 1F, 1F, 1F, new CubeDeformation(-0.05F, 0F, 0F))

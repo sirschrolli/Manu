@@ -35,7 +35,7 @@ public final class PrimevalElkGeometry {
                 PartPose.offsetAndRotation(0F, -5.5F, -13F, 0.1396F, 0F, 0F));
         PartDefinition p_head = p_neck.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(50, 40).addBox(-4F, -5F, -6.75F, 8F, 9F, 8F, new CubeDeformation(0F, -0.4F, -0.25F))
-                .texOffs(83, 40).addBox(-3.5F, -4.1F, -15F, 7F, 8F, 9F, new CubeDeformation(-0.2F, -0.3F, 0F))
+                .texOffs(83, 40).addBox(-3.5F, -4.1F, -15F, 7F, 8F, 9F, new CubeDeformation(-0.2F, -0.26F, 0F))
                 .texOffs(88, 88).addBox(-3.5F, -4.1F, -17F, 7F, 5F, 3F, new CubeDeformation(0F, -0.1F, -0.4F))
                 .texOffs(46, 105).addBox(3.575F, -3.25F, -5.7F, 1F, 2F, 2F, new CubeDeformation(-0.375F, -0.35F, -0.1F))
                 .texOffs(53, 105).addBox(-4.575F, -3.25F, -5.7F, 1F, 2F, 2F, new CubeDeformation(-0.375F, -0.35F, -0.1F)),

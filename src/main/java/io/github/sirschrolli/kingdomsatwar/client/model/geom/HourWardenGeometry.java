@@ -30,9 +30,9 @@ public final class HourWardenGeometry {
         PartDefinition p_shin_l = p_leg_l.addOrReplaceChild("shin_l", CubeListBuilder.create()
                 .texOffs(0, 23).addBox(-2F, -0.2F, -2F, 4F, 9F, 4F, new CubeDeformation(-0.1F, -0.2F, 0F))
                 .texOffs(54, 37).addBox(-2.5F, 1F, -2.6F, 5F, 7F, 3F, new CubeDeformation(-0.3F, -0.2F, -0.2F))
-                .texOffs(226, 67).addBox(-2.5F, 7.45F, -2.65F, 5F, 1F, 3F, new CubeDeformation(-0.2F, -0.15F, -0.15F))
+                .texOffs(226, 67).addBox(-2.5F, 7.45F, -2.65F, 5F, 1F, 3F, new CubeDeformation(-0.2F, -0.15F, -0.11F))
                 .texOffs(58, 48).addBox(-2.5F, 8.2F, -4.7F, 5F, 2F, 7F, new CubeDeformation(-0.2F, -0.2F, -0.1F))
-                .texOffs(34, 74).addBox(-2F, 8.4F, -6F, 4F, 2F, 2F, new CubeDeformation(-0.1F, -0.4F, -0.4F))
+                .texOffs(34, 74).addBox(-2F, 8.4F, -6F, 4F, 2F, 2F, new CubeDeformation(-0.1F, -0.36F, -0.4F))
                 .texOffs(150, 67).addBox(-2F, -1.4F, -3.3F, 4F, 3F, 2F, new CubeDeformation(0F, -0.2F, -0.4F)),
                 PartPose.offset(0F, 8F, 0F));
         PartDefinition p_knee_gear_l = p_shin_l.addOrReplaceChild("knee_gear_l", CubeListBuilder.create()
@@ -46,9 +46,9 @@ public final class HourWardenGeometry {
         PartDefinition p_shin_r = p_leg_r.addOrReplaceChild("shin_r", CubeListBuilder.create()
                 .texOffs(17, 23).addBox(-2F, -0.2F, -2F, 4F, 9F, 4F, new CubeDeformation(-0.1F, -0.2F, 0F))
                 .texOffs(71, 37).addBox(-2.5F, 1F, -2.6F, 5F, 7F, 3F, new CubeDeformation(-0.3F, -0.2F, -0.2F))
-                .texOffs(17, 74).addBox(-2.5F, 7.45F, -2.65F, 5F, 1F, 3F, new CubeDeformation(-0.2F, -0.15F, -0.15F))
+                .texOffs(17, 74).addBox(-2.5F, 7.45F, -2.65F, 5F, 1F, 3F, new CubeDeformation(-0.2F, -0.15F, -0.11F))
                 .texOffs(83, 48).addBox(-2.5F, 8.2F, -4.7F, 5F, 2F, 7F, new CubeDeformation(-0.2F, -0.2F, -0.1F))
-                .texOffs(47, 74).addBox(-2F, 8.4F, -6F, 4F, 2F, 2F, new CubeDeformation(-0.1F, -0.4F, -0.4F))
+                .texOffs(47, 74).addBox(-2F, 8.4F, -6F, 4F, 2F, 2F, new CubeDeformation(-0.1F, -0.36F, -0.4F))
                 .texOffs(163, 67).addBox(-2F, -1.4F, -3.3F, 4F, 3F, 2F, new CubeDeformation(0F, -0.2F, -0.4F)),
                 PartPose.offset(0F, 8F, 0F));
         PartDefinition p_knee_gear_r = p_shin_r.addOrReplaceChild("knee_gear_r", CubeListBuilder.create()
@@ -97,21 +97,21 @@ public final class HourWardenGeometry {
                 .texOffs(45, 23).addBox(-4.5F, -5.7F, -3F, 9F, 6F, 6F, new CubeDeformation(-0.3F, -0.1F, -0.3F))
                 .texOffs(154, 74).addBox(-4.5F, -5.6F, -3F, 9F, 2F, 1F, new CubeDeformation(0F, -0.2F, -0.05F))
                 .texOffs(175, 74).addBox(-4.5F, -3.8F, -3F, 9F, 2F, 1F, new CubeDeformation(-0.15F, -0.2F, -0.05F))
-                .texOffs(196, 74).addBox(-4.5F, -2F, -3F, 9F, 2F, 1F, new CubeDeformation(-0.3F, -0.2F, -0.05F)),
+                .texOffs(196, 74).addBox(-4.5F, -2F, -3F, 9F, 2F, 1F, new CubeDeformation(-0.26F, -0.2F, -0.05F)),
                 PartPose.offset(0F, 3F, 0F));
         PartDefinition p_chest = p_body.addOrReplaceChild("chest", CubeListBuilder.create()
                 .texOffs(86, 0).addBox(-6F, -11F, -2.9F, 12F, 11F, 7F, new CubeDeformation(-0.4F, 0F, -0.3F))
-                .texOffs(0, 67).addBox(-6F, -11.7F, -4.2F, 12F, 4F, 2F, new CubeDeformation(0F, -0.3F, -0.3F))
-                .texOffs(121, 67).addBox(-6F, -2.4F, -4.2F, 12F, 3F, 2F, new CubeDeformation(0F, -0.4F, -0.3F))
-                .texOffs(105, 58).addBox(-6F, -8F, -4.2F, 3F, 6F, 2F, new CubeDeformation(0F, 0F, -0.3F))
-                .texOffs(116, 58).addBox(3F, -8F, -4.2F, 3F, 6F, 2F, new CubeDeformation(0F, 0F, -0.3F))
-                .texOffs(9, 79).addBox(-3F, -8F, -4.2F, 1F, 1F, 2F, new CubeDeformation(0F, 0F, -0.3F))
-                .texOffs(16, 79).addBox(2F, -8F, -4.2F, 1F, 1F, 2F, new CubeDeformation(0F, 0F, -0.3F))
-                .texOffs(23, 79).addBox(-3F, -3F, -4.2F, 1F, 1F, 2F, new CubeDeformation(0F, 0F, -0.3F))
-                .texOffs(30, 79).addBox(2F, -3F, -4.2F, 1F, 1F, 2F, new CubeDeformation(0F, 0F, -0.3F))
-                .texOffs(52, 0).addBox(-6F, -11.6F, -2.8F, 1F, 12F, 7F, new CubeDeformation(0F, -0.2F, -0.2F))
-                .texOffs(69, 0).addBox(5F, -11.6F, -2.8F, 1F, 12F, 7F, new CubeDeformation(0F, -0.2F, -0.2F))
-                .texOffs(154, 0).addBox(-6F, -11.6F, 3.2F, 12F, 12F, 2F, new CubeDeformation(-0.4F, -0.2F, -0.4F))
+                .texOffs(0, 67).addBox(-6F, -11.7F, -4.2F, 12F, 4F, 2F, new CubeDeformation(0.04F, -0.3F, -0.3F))
+                .texOffs(121, 67).addBox(-6F, -2.4F, -4.2F, 12F, 3F, 2F, new CubeDeformation(0.04F, -0.4F, -0.3F))
+                .texOffs(105, 58).addBox(-6F, -8F, -4.2F, 3F, 6F, 2F, new CubeDeformation(0.04F, 0F, -0.3F))
+                .texOffs(116, 58).addBox(3F, -8F, -4.2F, 3F, 6F, 2F, new CubeDeformation(0.04F, 0F, -0.3F))
+                .texOffs(9, 79).addBox(-3F, -8F, -4.2F, 1F, 1F, 2F, new CubeDeformation(0F, 0.04F, -0.3F))
+                .texOffs(16, 79).addBox(2F, -8F, -4.2F, 1F, 1F, 2F, new CubeDeformation(0F, 0.04F, -0.3F))
+                .texOffs(23, 79).addBox(-3F, -3F, -4.2F, 1F, 1F, 2F, new CubeDeformation(0F, 0.04F, -0.3F))
+                .texOffs(30, 79).addBox(2F, -3F, -4.2F, 1F, 1F, 2F, new CubeDeformation(0F, 0.04F, -0.3F))
+                .texOffs(52, 0).addBox(-6F, -11.6F, -2.8F, 1F, 12F, 7F, new CubeDeformation(0F, -0.16F, -0.16F))
+                .texOffs(69, 0).addBox(5F, -11.6F, -2.8F, 1F, 12F, 7F, new CubeDeformation(0F, -0.16F, -0.16F))
+                .texOffs(154, 0).addBox(-6F, -11.6F, 3.2F, 12F, 12F, 2F, new CubeDeformation(-0.36F, -0.2F, -0.4F))
                 .texOffs(214, 37).addBox(-3.5F, -13.1F, -3.4F, 7F, 2F, 7F, new CubeDeformation(-0.2F, -0.1F, -0.4F)),
                 PartPose.offset(0F, -5F, 0F));
         PartDefinition p_gear_big = p_chest.addOrReplaceChild("gear_big", CubeListBuilder.create()
@@ -121,10 +121,10 @@ public final class HourWardenGeometry {
                 .texOffs(104, 74).addBox(-1.5F, -1.5F, -0.5F, 3F, 3F, 1F, new CubeDeformation(0F, 0F, -0.3F)),
                 PartPose.offset(1.9F, -6.6F, -3.05F));
         PartDefinition p_head = p_chest.addOrReplaceChild("head", CubeListBuilder.create()
-                .texOffs(125, 0).addBox(-3.5F, -7.6F, -3.5F, 7F, 8F, 7F, new CubeDeformation(-0.4F, -0.4F, -0.2F))
+                .texOffs(125, 0).addBox(-3.5F, -7.6F, -3.5F, 7F, 8F, 7F, new CubeDeformation(-0.4F, -0.36F, -0.2F))
                 .texOffs(183, 37).addBox(-3.5F, -7.6F, -4F, 7F, 1F, 8F, new CubeDeformation(-0.1F, 0F, -0.4F))
                 .texOffs(0, 58).addBox(-3.5F, -0.9F, -3.5F, 7F, 1F, 7F, new CubeDeformation(-0.2F, -0.1F, 0F))
-                .texOffs(149, 74).addBox(-0.5F, -7.35F, -4F, 1F, 3F, 1F, new CubeDeformation(-0.05F, -0.35F, -0.25F))
+                .texOffs(149, 74).addBox(-0.5F, -7.35F, -4F, 1F, 3F, 1F, new CubeDeformation(-0.05F, -0.31F, -0.21F))
                 .texOffs(86, 79).addBox(-3.5F, -5.5F, -3.975F, 7F, 1F, 1F, new CubeDeformation(-0.25F, -0.2F, -0.275F)),
                 PartPose.offset(0F, -12.6F, -0.3F));
         PartDefinition p_crest = p_head.addOrReplaceChild("crest", CubeListBuilder.create()
@@ -156,7 +156,7 @@ public final class HourWardenGeometry {
                 PartPose.offsetAndRotation(6.9F, -9.6F, 0.4F, -0.1047F, 0F, -0.1396F));
         PartDefinition p_fore_l = p_arm_l.addOrReplaceChild("fore_l", CubeListBuilder.create()
                 .texOffs(29, 58).addBox(-2.5F, -1.3F, -2.5F, 5F, 3F, 5F, new CubeDeformation(-0.3F, -0.4F, -0.3F))
-                .texOffs(88, 37).addBox(-2F, 0.7F, -2F, 4F, 6F, 4F, new CubeDeformation(-0.1F, -0.3F, -0.1F))
+                .texOffs(88, 37).addBox(-2F, 0.7F, -2F, 4F, 6F, 4F, new CubeDeformation(-0.1F, -0.26F, -0.1F))
                 .texOffs(158, 48).addBox(-2.5F, 5.8F, -2.5F, 5F, 4F, 5F, new CubeDeformation(-0.3F, -0.4F, -0.2F))
                 .texOffs(29, 67).addBox(-2.5F, 5.5F, -2.5F, 5F, 1F, 5F, new CubeDeformation(-0.2F, -0.1F, -0.1F)),
                 PartPose.offsetAndRotation(0F, 6.6F, 0F, -0.4887F, 0F, 0F));
@@ -186,7 +186,7 @@ public final class HourWardenGeometry {
                 PartPose.offsetAndRotation(-6.9F, -9.6F, 0.4F, -0.1047F, 0F, 0.1396F));
         PartDefinition p_fore_r = p_arm_r.addOrReplaceChild("fore_r", CubeListBuilder.create()
                 .texOffs(50, 58).addBox(-2.5F, -1.3F, -2.5F, 5F, 3F, 5F, new CubeDeformation(-0.3F, -0.4F, -0.3F))
-                .texOffs(105, 37).addBox(-2F, 0.7F, -2F, 4F, 6F, 4F, new CubeDeformation(-0.1F, -0.3F, -0.1F))
+                .texOffs(105, 37).addBox(-2F, 0.7F, -2F, 4F, 6F, 4F, new CubeDeformation(-0.1F, -0.26F, -0.1F))
                 .texOffs(179, 48).addBox(-2.5F, 5.8F, -2.5F, 5F, 4F, 5F, new CubeDeformation(-0.3F, -0.4F, -0.2F))
                 .texOffs(50, 67).addBox(-2.5F, 5.5F, -2.5F, 5F, 1F, 5F, new CubeDeformation(-0.2F, -0.1F, -0.1F)),
                 PartPose.offsetAndRotation(0F, 6.6F, 0F, -0.4887F, 0F, 0F));

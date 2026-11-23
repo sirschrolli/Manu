@@ -35,7 +35,7 @@ public final class ShardWardenGeometry {
                 .texOffs(162, 57).addBox(-4F, 15F, -5F, 8F, 3F, 9F, new CubeDeformation(-0.4F, 0F, -0.2F)),
                 PartPose.offset(4.6F, 6F, 0.5F));
         PartDefinition p_body = root.addOrReplaceChild("body", CubeListBuilder.create()
-                .texOffs(92, 24).addBox(-6.5F, -6.5F, -4F, 13F, 7F, 8F)
+                .texOffs(92, 24).addBox(-6.5F, -6.5F, -4F, 13F, 7F, 8F, new CubeDeformation(0F, 0.04F, 0F))
                 .texOffs(78, 57).addBox(-7.5F, -2.5F, -4.5F, 15F, 3F, 9F)
                 .texOffs(58, 0).addBox(-10F, -21F, 2F, 20F, 15F, 4F)
                 .texOffs(0, 0).addBox(-10.2F, -21F, -6F, 6F, 15F, 8F, new CubeDeformation(-0.2F, 0F, 0F))
@@ -44,8 +44,8 @@ public final class ShardWardenGeometry {
                 .texOffs(0, 71).addBox(-4.5F, -9.6F, -5.8F, 9F, 4F, 8F, new CubeDeformation(-0.1F, -0.4F, -0.2F))
                 .texOffs(110, 71).addBox(-4.5F, -17.8F, 1.1F, 9F, 9F, 1F, new CubeDeformation(-0.1F, -0.4F, -0.1F))
                 .texOffs(13, 57).addBox(-11F, -22.2F, -6.9F, 22F, 2F, 10F, new CubeDeformation(0F, -0.2F, -0.3F))
-                .texOffs(170, 71).addBox(-5.3F, -17.3F, -6.6F, 1F, 8F, 1F, new CubeDeformation(-0.1F, -0.3F, -0.3F))
-                .texOffs(175, 71).addBox(4.3F, -17.3F, -6.6F, 1F, 8F, 1F, new CubeDeformation(-0.1F, -0.3F, -0.3F)),
+                .texOffs(170, 71).addBox(-5.3F, -17.3F, -6.6F, 1F, 8F, 1F, new CubeDeformation(-0.06F, -0.3F, -0.3F))
+                .texOffs(175, 71).addBox(4.3F, -17.3F, -6.6F, 1F, 8F, 1F, new CubeDeformation(-0.06F, -0.3F, -0.3F)),
                 PartPose.offset(0F, 6F, 0F));
         PartDefinition p_core = p_body.addOrReplaceChild("core", CubeListBuilder.create()
                 .texOffs(131, 71).addBox(-2.5F, -2.5F, -2.5F, 5F, 5F, 5F, new CubeDeformation(-0.2F, -0.2F, -0.2F)),

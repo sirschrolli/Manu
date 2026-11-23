@@ -23,14 +23,14 @@ public final class PoisonFlowerGeometry {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
         PartDefinition p_stem = root.addOrReplaceChild("stem", CubeListBuilder.create()
-                .texOffs(0, 0).addBox(-2.5F, -9.4F, -2.5F, 5F, 11F, 5F, new CubeDeformation(-0.4F, -0.4F, -0.4F))
+                .texOffs(0, 0).addBox(-2.5F, -9.4F, -2.5F, 5F, 11F, 5F, new CubeDeformation(-0.4F, -0.36F, -0.4F))
                 .texOffs(50, 0).addBox(-1.8F, -17.3F, -2.05F, 4F, 9F, 4F, new CubeDeformation(-0.05F, -0.1F, -0.05F))
                 .texOffs(67, 0).addBox(-1.2F, -24.5F, -2.4F, 4F, 8F, 4F, new CubeDeformation(-0.1F, -0.1F, -0.15F))
                 .texOffs(29, 17).addBox(-3F, -1.6F, -3F, 6F, 3F, 6F, new CubeDeformation(-0.4F, -0.2F, -0.4F))
                 .texOffs(102, 50).addBox(-1.7F, -24.5F, -3.7F, 5F, 3F, 2F, new CubeDeformation(-0.2F, -0.3F, -0.4F))
                 .texOffs(0, 56).addBox(-1.7F, -24.5F, 1.7F, 5F, 3F, 2F, new CubeDeformation(-0.2F, -0.3F, -0.4F))
                 .texOffs(79, 17).addBox(-3.1F, -24.5F, -1.9F, 2F, 3F, 5F, new CubeDeformation(-0.4F, -0.3F, -0.3F))
-                .texOffs(94, 17).addBox(2.3F, -24.5F, -1.9F, 2F, 3F, 5F, new CubeDeformation(-0.4F, -0.3F, -0.3F)),
+                .texOffs(94, 17).addBox(2.3F, -24.5F, -1.9F, 2F, 3F, 5F, new CubeDeformation(-0.4F, -0.26F, -0.3F)),
                 PartPose.offset(0F, 24F, 0F));
         PartDefinition p_leaf0 = p_stem.addOrReplaceChild("leaf0", CubeListBuilder.create()
                 .texOffs(100, 27).addBox(-2.5F, -1F, -5.5F, 5F, 1F, 6F, new CubeDeformation(-0.2F, -0.1F, -0.1F))
@@ -68,32 +68,32 @@ public final class PoisonFlowerGeometry {
                 .texOffs(45, 62).addBox(1.4053F, -9.45F, -1.6F, 1F, 1F, 1F, new CubeDeformation(-0.05F, -0.05F, -0.05F)),
                 PartPose.offset(0.8F, -24F, -0.4F));
         PartDefinition p_petal0 = p_bulb.addOrReplaceChild("petal0", CubeListBuilder.create()
-                .texOffs(0, 50).addBox(-2F, -0.5F, -3.4F, 4F, 1F, 4F, new CubeDeformation(-0.3F, 0F, 0F))
+                .texOffs(0, 50).addBox(-2F, -0.5F, -3.4F, 4F, 1F, 4F, new CubeDeformation(-0.3F, 0.04F, 0F))
                 .texOffs(69, 35).addBox(-3.5F, -0.5F, -8.05F, 7F, 1F, 5F, new CubeDeformation(-0.2F, 0F, -0.05F))
                 .texOffs(15, 56).addBox(-2.5F, -1.1F, -10.55F, 5F, 1F, 3F, new CubeDeformation(-0.2F, 0F, -0.15F)),
                 PartPose.offset(0F, -4.4F, -3F));
         PartDefinition p_petal1 = p_bulb.addOrReplaceChild("petal1", CubeListBuilder.create()
-                .texOffs(17, 50).addBox(-2F, -0.5F, -3.4F, 4F, 1F, 4F, new CubeDeformation(-0.3F, 0F, 0F))
+                .texOffs(17, 50).addBox(-2F, -0.5F, -3.4F, 4F, 1F, 4F, new CubeDeformation(-0.3F, 0.04F, 0F))
                 .texOffs(94, 35).addBox(-3.5F, -0.5F, -8.05F, 7F, 1F, 5F, new CubeDeformation(-0.2F, 0F, -0.05F))
                 .texOffs(32, 56).addBox(-2.5F, -1.1F, -10.55F, 5F, 1F, 3F, new CubeDeformation(-0.2F, 0F, -0.15F)),
                 PartPose.offsetAndRotation(-2.598F, -4.4F, -1.5F, 0F, 1.0472F, 0F));
         PartDefinition p_petal2 = p_bulb.addOrReplaceChild("petal2", CubeListBuilder.create()
-                .texOffs(34, 50).addBox(-2F, -0.5F, -3.4F, 4F, 1F, 4F, new CubeDeformation(-0.3F, 0F, 0F))
+                .texOffs(34, 50).addBox(-2F, -0.5F, -3.4F, 4F, 1F, 4F, new CubeDeformation(-0.3F, 0.04F, 0F))
                 .texOffs(0, 43).addBox(-3.5F, -0.5F, -8.05F, 7F, 1F, 5F, new CubeDeformation(-0.2F, 0F, -0.05F))
                 .texOffs(49, 56).addBox(-2.5F, -1.1F, -10.55F, 5F, 1F, 3F, new CubeDeformation(-0.2F, 0F, -0.15F)),
                 PartPose.offsetAndRotation(-2.598F, -4.4F, 1.5F, 0F, 2.0944F, 0F));
         PartDefinition p_petal3 = p_bulb.addOrReplaceChild("petal3", CubeListBuilder.create()
-                .texOffs(51, 50).addBox(-2F, -0.5F, -3.4F, 4F, 1F, 4F, new CubeDeformation(-0.3F, 0F, 0F))
+                .texOffs(51, 50).addBox(-2F, -0.5F, -3.4F, 4F, 1F, 4F, new CubeDeformation(-0.3F, 0.04F, 0F))
                 .texOffs(25, 43).addBox(-3.5F, -0.5F, -8.05F, 7F, 1F, 5F, new CubeDeformation(-0.2F, 0F, -0.05F))
                 .texOffs(66, 56).addBox(-2.5F, -1.1F, -10.55F, 5F, 1F, 3F, new CubeDeformation(-0.2F, 0F, -0.15F)),
                 PartPose.offsetAndRotation(0F, -4.4F, 3F, 0F, 3.1416F, 0F));
         PartDefinition p_petal4 = p_bulb.addOrReplaceChild("petal4", CubeListBuilder.create()
-                .texOffs(68, 50).addBox(-2F, -0.5F, -3.4F, 4F, 1F, 4F, new CubeDeformation(-0.3F, 0F, 0F))
+                .texOffs(68, 50).addBox(-2F, -0.5F, -3.4F, 4F, 1F, 4F, new CubeDeformation(-0.3F, 0.04F, 0F))
                 .texOffs(50, 43).addBox(-3.5F, -0.5F, -8.05F, 7F, 1F, 5F, new CubeDeformation(-0.2F, 0F, -0.05F))
                 .texOffs(83, 56).addBox(-2.5F, -1.1F, -10.55F, 5F, 1F, 3F, new CubeDeformation(-0.2F, 0F, -0.15F)),
                 PartPose.offsetAndRotation(2.598F, -4.4F, 1.5F, 0F, 4.1888F, 0F));
         PartDefinition p_petal5 = p_bulb.addOrReplaceChild("petal5", CubeListBuilder.create()
-                .texOffs(85, 50).addBox(-2F, -0.5F, -3.4F, 4F, 1F, 4F, new CubeDeformation(-0.3F, 0F, 0F))
+                .texOffs(85, 50).addBox(-2F, -0.5F, -3.4F, 4F, 1F, 4F, new CubeDeformation(-0.3F, 0.04F, 0F))
                 .texOffs(75, 43).addBox(-3.5F, -0.5F, -8.05F, 7F, 1F, 5F, new CubeDeformation(-0.2F, 0F, -0.05F))
                 .texOffs(100, 56).addBox(-2.5F, -1.1F, -10.55F, 5F, 1F, 3F, new CubeDeformation(-0.2F, 0F, -0.15F)),
                 PartPose.offsetAndRotation(2.598F, -4.4F, -1.5F, 0F, 5.236F, 0F));

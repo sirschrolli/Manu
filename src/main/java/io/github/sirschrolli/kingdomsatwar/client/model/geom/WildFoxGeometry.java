@@ -24,8 +24,8 @@ public final class WildFoxGeometry {
         PartDefinition root = mesh.getRoot();
         PartDefinition p_head = root.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(0, 18).addBox(-3F, -2F, -5F, 8F, 6F, 6F)
-                .texOffs(0, 31).addBox(-3.6F, 1F, -4.9F, 1F, 3F, 4F, new CubeDeformation(0F, 0F, -0.3F))
-                .texOffs(11, 31).addBox(4.6F, 1F, -4.9F, 1F, 3F, 4F, new CubeDeformation(0F, 0F, -0.3F)),
+                .texOffs(0, 31).addBox(-3.6F, 1F, -4.9F, 1F, 3F, 4F, new CubeDeformation(0F, 0.04F, -0.3F))
+                .texOffs(11, 31).addBox(4.6F, 1F, -4.9F, 1F, 3F, 4F, new CubeDeformation(0F, 0.04F, -0.3F)),
                 PartPose.offset(-1F, 16.5F, -3F));
         PartDefinition p_right_ear = p_head.addOrReplaceChild("right_ear", CubeListBuilder.create()
                 .texOffs(15, 39).addBox(-1F, -2.75F, 0F, 2F, 3F, 1F, new CubeDeformation(0F, -0.25F, 0F)),

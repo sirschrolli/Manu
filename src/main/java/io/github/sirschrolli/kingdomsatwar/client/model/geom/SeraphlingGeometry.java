@@ -23,7 +23,7 @@ public final class SeraphlingGeometry {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
         PartDefinition p_body = root.addOrReplaceChild("body", CubeListBuilder.create()
-                .texOffs(29, 13).addBox(-2.5F, 0F, -2F, 5F, 5F, 4F, new CubeDeformation(0F, 0F, -0.4F))
+                .texOffs(29, 13).addBox(-2.5F, 0F, -2F, 5F, 5F, 4F, new CubeDeformation(0F, 0.04F, -0.4F))
                 .texOffs(42, 32).addBox(-3F, 0F, -2F, 6F, 1F, 4F, new CubeDeformation(-0.3F, 0F, -0.2F)),
                 PartPose.offset(0F, 12F, 0F));
         PartDefinition p_robe_low = p_body.addOrReplaceChild("robe_low", CubeListBuilder.create()

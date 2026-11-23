@@ -24,13 +24,13 @@ public final class ShadeStalkerGeometry {
         PartDefinition root = mesh.getRoot();
         PartDefinition p_left_leg = root.addOrReplaceChild("left_leg", CubeListBuilder.create()
                 .texOffs(0, 0).addBox(-1F, 0F, -1F, 2F, 19F, 2F)
-                .texOffs(34, 35).addBox(-1.5F, 18F, -3F, 3F, 2F, 4F)
-                .texOffs(34, 51).addBox(-1.5F, 19.25F, -4F, 3F, 1F, 1F, new CubeDeformation(0F, -0.25F, 0F)),
+                .texOffs(34, 35).addBox(-1.5F, 18F, -3F, 3F, 2F, 4F, new CubeDeformation(0F, 0F, 0.04F))
+                .texOffs(34, 51).addBox(-1.5F, 19.25F, -4F, 3F, 1F, 1F, new CubeDeformation(0F, -0.21F, 0F)),
                 PartPose.offset(2.3F, 4F, 0.5F));
         PartDefinition p_right_leg = root.addOrReplaceChild("right_leg", CubeListBuilder.create()
                 .texOffs(9, 0).addBox(-1F, 0F, -1F, 2F, 19F, 2F)
-                .texOffs(49, 35).addBox(-1.5F, 18F, -3F, 3F, 2F, 4F)
-                .texOffs(43, 51).addBox(-1.5F, 19.25F, -4F, 3F, 1F, 1F, new CubeDeformation(0F, -0.25F, 0F)),
+                .texOffs(49, 35).addBox(-1.5F, 18F, -3F, 3F, 2F, 4F, new CubeDeformation(0F, 0F, 0.04F))
+                .texOffs(43, 51).addBox(-1.5F, 19.25F, -4F, 3F, 1F, 1F, new CubeDeformation(0F, -0.21F, 0F)),
                 PartPose.offset(-2.3F, 4F, 0.5F));
         PartDefinition p_body = root.addOrReplaceChild("body", CubeListBuilder.create()
                 .texOffs(37, 0).addBox(-3.5F, -14F, -2F, 7F, 14F, 4F)
@@ -44,7 +44,7 @@ public final class ShadeStalkerGeometry {
                 PartPose.offsetAndRotation(0F, -13.5F, 2.1F, -0.2094F, 0F, 0F));
         PartDefinition p_head = p_body.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(36, 22).addBox(-2.5F, -6F, -3.5F, 5F, 6F, 5F)
-                .texOffs(30, 44).addBox(-2F, -2F, -6F, 4F, 2F, 3F)
+                .texOffs(30, 44).addBox(-2F, -2F, -6F, 4F, 2F, 3F, new CubeDeformation(0F, 0.04F, 0F))
                 .texOffs(0, 51).addBox(-1.5F, 0F, -5.5F, 3F, 1F, 3F)
                 .texOffs(52, 51).addBox(-2.2F, -4.2F, -4.05F, 2F, 1F, 1F, new CubeDeformation(-0.4F, 0F, -0.25F))
                 .texOffs(0, 56).addBox(0.2F, -4.2F, -4.05F, 2F, 1F, 1F, new CubeDeformation(-0.4F, 0F, -0.25F)),

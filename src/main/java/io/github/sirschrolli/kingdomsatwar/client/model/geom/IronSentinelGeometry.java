@@ -26,7 +26,7 @@ public final class IronSentinelGeometry {
                 .texOffs(59, 0).addBox(-4F, -12F, -5.5F, 8F, 10F, 8F)
                 .texOffs(50, 95).addBox(-1F, -13.9F, -5.4F, 2F, 2F, 8F, new CubeDeformation(-0.4F, -0.1F, -0.2F))
                 .texOffs(0, 115).addBox(-4.5F, -11.6F, -6.1F, 9F, 2F, 1F, new CubeDeformation(-0.1F, -0.4F, 0F))
-                .texOffs(17, 107).addBox(-4.5F, -5.6F, -6.6F, 9F, 4F, 2F, new CubeDeformation(0F, -0.4F, -0.2F))
+                .texOffs(17, 107).addBox(-4.5F, -5.6F, -6.6F, 9F, 4F, 2F, new CubeDeformation(0F, -0.36F, -0.2F))
                 .texOffs(71, 95).addBox(-4.5F, -12.6F, -5.4F, 9F, 1F, 8F, new CubeDeformation(-0.2F, -0.1F, -0.4F))
                 .texOffs(21, 115).addBox(-4.4F, -10.3F, -6.3F, 1F, 2F, 1F, new CubeDeformation(-0.1F, -0.3F, -0.1F))
                 .texOffs(97, 107).addBox(-0.5F, -10.4F, -6.3F, 1F, 3F, 1F, new CubeDeformation(-0.1F, -0.4F, -0.1F))

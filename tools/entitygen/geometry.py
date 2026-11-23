@@ -25,6 +25,9 @@ class Cube:
     tag: str = ""
     uv: tuple[int, int] | None = None
     faces: tuple[str, ...] | None = None  # None = alle Seiten
+    # gegen Flimmern (seit 1.12.1): so viel wächst der Quader je Achse zusätzlich (nur im Spiel, nicht beim Bemalen),
+    # wenn eine seiner Flächen genau in der Ebene einer gleich gerichteten Fläche eines anderen Quaders liegt
+    nudge: tuple[float, float, float] = (0.0, 0.0, 0.0)
 
     @property
     def uv_size(self) -> tuple[int, int]:
@@ -94,6 +97,70 @@ class Model:
         walk(self.root)
         return out
 
+    # ------------------------------------------------------------------ gegen Flimmern
+    FACES = {(0, 0): "west", (0, 1): "east", (1, 0): "up", (1, 1): "down", (2, 0): "north", (2, 1): "south"}
+
+    def resolve_coplanar(self, eps: float = 0.04) -> int:
+        """
+        Zwei Quader im selben Knochen, deren gleich gerichtete Flächen in derselben Ebene liegen und sich überdecken,
+        flimmern im Spiel (keiner liegt vorne). Dann wächst der Quader mit dem kleineren Querschnitt längs dieser Achse um
+        eps über den anderen hinaus – Zierleisten und Abzeichen liegen so knapp vor ihrem Grund. Das wiederholt sich, bis
+        keine solche Stelle mehr übrig ist (Ketten aus mehreren Lagen). Gibt die Zahl der verschobenen Flächen zurück.
+        """
+        def shows(c: Cube, face: str) -> bool:
+            return c.faces is None or face in c.faces
+
+        def overlap(a, b) -> float:
+            return max(0.0, min(a[1], b[1]) - max(a[0], b[0]))
+
+        fixed = 0
+        for bone in self.bones.values():
+            cubes = bone.cubes
+            nudge = [[0.0, 0.0, 0.0] for _ in cubes]
+
+            def bounds(i: int):
+                c = cubes[i]
+                (ox, oy, oz), (w, h, d) = c.origin, c.size
+                g = c.inflate
+                n = nudge[i]
+                return [(ox - g - n[0], ox + w + g + n[0]), (oy - g - n[1], oy + h + g + n[1]), (oz - g - n[2], oz + d + g + n[2])]
+
+            def section(i: int, ax: int) -> float:
+                w, h, d = cubes[i].size
+                dims = [w, h, d]
+                del dims[ax]
+                return dims[0] * dims[1]
+
+            for _ in range(12):
+                changed = False
+                for ax in range(3):
+                    others = [k for k in range(3) if k != ax]
+                    for side in (0, 1):
+                        face = self.FACES[(ax, side)]
+                        for i in range(len(cubes)):
+                            if not shows(cubes[i], face):
+                                continue
+                            bi = bounds(i)
+                            for j in range(i + 1, len(cubes)):
+                                if not shows(cubes[j], face):
+                                    continue
+                                bj = bounds(j)
+                                if abs(bi[ax][side] - bj[ax][side]) > 0.005:
+                                    continue
+                                if overlap(bi[others[0]], bj[others[0]]) * overlap(bi[others[1]], bj[others[1]]) <= 0.05:
+                                    continue
+                                # der mit dem kleineren Querschnitt kommt nach vorne (bei Gleichstand der spätere)
+                                small, big = (j, i) if section(j, ax) <= section(i, ax) else (i, j)
+                                nudge[small][ax] = max(nudge[small][ax], nudge[big][ax] + eps)
+                                fixed += 1
+                                changed = True
+                                bi = bounds(i)
+                if not changed:
+                    break
+            for i, c in enumerate(cubes):
+                c.nudge = tuple(nudge[i])
+        return fixed
+
     # ------------------------------------------------------------------ UV packen
     def pack(self, padding: int = 1) -> None:
         """Einfacher Regal-Packer: große Teile zuerst, zeilenweise von links nach rechts."""
@@ -141,10 +208,11 @@ class Model:
                 # Abweichung als Verformung je Achse – derselbe Quader im Raum, die UVs genau wie gemalt.
                 n = c.int_size()
                 g = tuple((s - k) / 2 for s, k in zip((w, h, d), n))
-                if any(abs(x) > 1e-9 for x in g):
+                if any(abs(x) > 1e-9 for x in g) or any(c.nudge):
+                    e = tuple(c.inflate + gi + ni for gi, ni in zip(g, c.nudge))
                     cube_parts.append(f".texOffs({u}, {v}).addBox({fmt(ox + g[0])}, {fmt(oy + g[1])}, {fmt(oz + g[2])}, "
                                       f"{fmt(n[0])}, {fmt(n[1])}, {fmt(n[2])}, new CubeDeformation("
-                                      f"{dfm(c.inflate + g[0])}, {dfm(c.inflate + g[1])}, {dfm(c.inflate + g[2])}))")
+                                      f"{dfm(e[0])}, {dfm(e[1])}, {dfm(e[2])}))")
                 elif c.inflate or grow:
                     cube_parts.append(f".texOffs({u}, {v}).addBox({fmt(ox)}, {fmt(oy)}, {fmt(oz)}, {fmt(w)}, {fmt(h)}, {fmt(d)}, "
                                       f"new CubeDeformation({dfm(c.inflate)}))")

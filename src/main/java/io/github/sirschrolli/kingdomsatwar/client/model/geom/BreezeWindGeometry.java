@@ -55,13 +55,13 @@ public final class BreezeWindGeometry {
                 PartPose.offset(0F, 24F, 0F));
         PartDefinition p_wind_mid = p_wind_bottom.addOrReplaceChild("wind_mid", CubeListBuilder.create()
                 .texOffs(0, 27).addBox(-6F, -6F, -6F, 12F, 6F, 12F)
-                .texOffs(49, 27).addBox(-4F, -6F, -4F, 8F, 6F, 8F)
-                .texOffs(0, 46).addBox(-2.5F, -6F, -2.5F, 5F, 6F, 5F),
+                .texOffs(49, 27).addBox(-4F, -6F, -4F, 8F, 6F, 8F, new CubeDeformation(0F, 0.04F, 0F))
+                .texOffs(0, 46).addBox(-2.5F, -6F, -2.5F, 5F, 6F, 5F, new CubeDeformation(0F, 0.08F, 0F)),
                 PartPose.offset(0F, -7F, 0F));
         PartDefinition p_wind_top = p_wind_mid.addOrReplaceChild("wind_top", CubeListBuilder.create()
                 .texOffs(0, 0).addBox(-9F, -8F, -9F, 18F, 8F, 18F)
-                .texOffs(73, 0).addBox(-6F, -8F, -6F, 12F, 8F, 12F)
-                .texOffs(82, 27).addBox(-2.5F, -8F, -2.5F, 5F, 8F, 5F),
+                .texOffs(73, 0).addBox(-6F, -8F, -6F, 12F, 8F, 12F, new CubeDeformation(0F, 0.04F, 0F))
+                .texOffs(82, 27).addBox(-2.5F, -8F, -2.5F, 5F, 8F, 5F, new CubeDeformation(0F, 0.08F, 0F)),
                 PartPose.offset(0F, -6F, 0F));
         return mesh;
     }

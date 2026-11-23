@@ -29,7 +29,7 @@ public final class AshWraithGeometry {
                 PartPose.offsetAndRotation(0F, 4F, 0F, 0.1745F, 0F, 0F));
         PartDefinition p_head = p_body.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(31, 0).addBox(-4.5F, -9F, -4.9F, 9F, 9F, 9F, new CubeDeformation(-0.1F, 0F, -0.3F))
-                .texOffs(68, 0).addBox(-4F, -8.9F, -2.8F, 8F, 9F, 7F, new CubeDeformation(-0.2F, -0.4F, -0.2F))
+                .texOffs(68, 0).addBox(-4F, -8.9F, -2.6F, 8F, 9F, 6F, new CubeDeformation(-0.2F, -0.4F, 0F))
                 .texOffs(57, 35).addBox(-3F, -7.2F, -4.2F, 6F, 6F, 4F, new CubeDeformation(-0.4F, -0.2F, -0.2F))
                 .texOffs(19, 55).addBox(-2.4F, -6F, -4.55F, 2F, 2F, 1F, new CubeDeformation(-0.2F, -0.4F, -0.35F))
                 .texOffs(26, 55).addBox(0.4F, -6F, -4.55F, 2F, 2F, 1F, new CubeDeformation(-0.2F, -0.4F, -0.35F))

@@ -127,7 +127,7 @@ public final class IcePrisonGeometry {
                 .texOffs(120, 101).addBox(-0.5F, -22.0113F, -0.5F, 1F, 1F, 1F, new CubeDeformation(-0.3762F, -0.0612F, -0.2857F))
                 .texOffs(0, 72).addBox(0.448F, -4.53F, 0.715F, 2F, 6F, 1F, new CubeDeformation(0F, -0.47F, 0F))
                 .texOffs(7, 72).addBox(0.948F, -4.03F, 0.215F, 1F, 5F, 2F, new CubeDeformation(0F, -0.02F, -0.134F))
-                .texOffs(152, 97).addBox(0.448F, -4.8922F, 0.715F, 2F, 1F, 1F, new CubeDeformation(-0.2F, -0.0678F, -0.1F))
+                .texOffs(152, 97).addBox(0.448F, -4.8922F, 0.715F, 2F, 1F, 1F, new CubeDeformation(-0.16F, -0.0678F, -0.1F))
                 .texOffs(119, 92).addBox(0.948F, -4.8922F, 0.215F, 1F, 1F, 2F, new CubeDeformation(-0.1F, -0.1178F, -0.3072F))
                 .texOffs(159, 97).addBox(0.448F, -5.6272F, 0.715F, 2F, 1F, 1F, new CubeDeformation(-0.4F, -0.0972F, -0.2F))
                 .texOffs(126, 92).addBox(0.948F, -5.6272F, 0.215F, 1F, 1F, 2F, new CubeDeformation(-0.2F, -0.1472F, -0.4804F))
@@ -237,7 +237,7 @@ public final class IcePrisonGeometry {
                 .texOffs(25, 104).addBox(-2.736F, -6.274F, 1.066F, 1F, 1F, 1F, new CubeDeformation(-0.3F, -0.206F, -0.1536F))
                 .texOffs(30, 104).addBox(-2.736F, -6.8179F, 1.066F, 1F, 1F, 1F, new CubeDeformation(-0.26F, -0.2001F, -0.38F))
                 .texOffs(35, 104).addBox(-2.736F, -6.8179F, 1.066F, 1F, 1F, 1F, new CubeDeformation(-0.38F, -0.2501F, -0.2922F))
-                .texOffs(40, 104).addBox(-2.736F, -7.2589F, 1.066F, 1F, 1F, 1F, new CubeDeformation(-0.39F, -0.2589F, -0.445F))
+                .texOffs(40, 104).addBox(-2.736F, -7.2589F, 1.066F, 1F, 1F, 1F, new CubeDeformation(-0.39F, -0.2589F, -0.405F))
                 .texOffs(45, 104).addBox(-2.736F, -7.2589F, 1.066F, 1F, 1F, 1F, new CubeDeformation(-0.445F, -0.3089F, -0.4047F)),
                 PartPose.offsetAndRotation(0F, 24F, -13.5F, 0.0873F, -3.1416F, 0F));
         PartDefinition p_shard7 = root.addOrReplaceChild("shard7", CubeListBuilder.create()

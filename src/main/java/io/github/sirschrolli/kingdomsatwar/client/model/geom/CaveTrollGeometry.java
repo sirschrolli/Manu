@@ -31,7 +31,7 @@ public final class CaveTrollGeometry {
         PartDefinition p_head = p_body.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(42, 29).addBox(-4.5F, -8F, -6.5F, 9F, 9F, 9F)
                 .texOffs(21, 80).addBox(-1.5F, -4.5F, -9F, 3F, 4F, 3F)
-                .texOffs(76, 80).addBox(-4.5F, -8.5F, -7F, 9F, 2F, 2F)
+                .texOffs(76, 80).addBox(-4.5F, -8.5F, -7F, 9F, 2F, 2F, new CubeDeformation(0.04F, 0F, 0F))
                 .texOffs(34, 80).addBox(-3.5F, 0F, -7F, 7F, 2F, 4F)
                 .texOffs(121, 80).addBox(-3F, -1.5F, -7.3F, 1F, 2F, 1F)
                 .texOffs(0, 88).addBox(2F, -1.5F, -7.3F, 1F, 2F, 1F)
@@ -54,7 +54,7 @@ public final class CaveTrollGeometry {
                 .texOffs(0, 67).addBox(-2.5F, 16F, -3.5F, 6F, 5F, 7F),
                 PartPose.offsetAndRotation(-10F, -15F, -1F, -0.2443F, 0F, 0F));
         PartDefinition p_club = p_right_arm.addOrReplaceChild("club", CubeListBuilder.create()
-                .texOffs(29, 29).addBox(-1.5F, -2F, -1.5F, 3F, 18F, 3F)
+                .texOffs(29, 29).addBox(-1.5F, -2F, -1.5F, 3F, 18F, 3F, new CubeDeformation(0F, 0.04F, 0F))
                 .texOffs(57, 51).addBox(-2.5F, 13F, -2.5F, 5F, 8F, 5F)
                 .texOffs(60, 67).addBox(-3F, 15F, -3F, 6F, 1F, 6F)
                 .texOffs(85, 67).addBox(-3F, 18F, -3F, 6F, 1F, 6F),

@@ -24,7 +24,7 @@ public final class WildBoarGeometry {
         PartDefinition root = mesh.getRoot();
         PartDefinition p_body = root.addOrReplaceChild("body", CubeListBuilder.create()
                 .texOffs(0, 0).addBox(-4.5F, -5F, -9F, 9F, 9F, 17F)
-                .texOffs(39, 27).addBox(-3.5F, -6.5F, -9F, 7F, 2F, 8F)
+                .texOffs(39, 27).addBox(-3.5F, -6.5F, -9F, 7F, 2F, 8F, new CubeDeformation(0F, 0F, 0.04F))
                 .texOffs(53, 0).addBox(0F, -10F, -9.5F, 0F, 4F, 13F),
                 PartPose.offset(0F, 12F, 0F));
         PartDefinition p_head = p_body.addOrReplaceChild("head", CubeListBuilder.create()

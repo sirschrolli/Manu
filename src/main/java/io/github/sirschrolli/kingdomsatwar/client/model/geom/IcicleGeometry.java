@@ -39,7 +39,7 @@ public final class IcicleGeometry {
                 .texOffs(0, 16).addBox(1.8F, -0.5F, 0.1F, 1F, 1F, 4F, new CubeDeformation(0F, 0F, -0.3F))
                 .texOffs(14, 22).addBox(1.8F, -0.5F, -1.4F, 1F, 1F, 2F, new CubeDeformation(-0.2F, -0.2F, 0F))
                 .texOffs(11, 16).addBox(-1.4F, 1.15F, 2.6F, 2F, 2F, 3F, new CubeDeformation(-0.4F, -0.45F, 0F))
-                .texOffs(21, 22).addBox(-0.95F, 1.85F, 0.9F, 1F, 1F, 2F, new CubeDeformation(-0.15F, -0.15F, -0.1F))
+                .texOffs(21, 22).addBox(-0.95F, 1.85F, 0.9F, 1F, 1F, 2F, new CubeDeformation(-0.15F, -0.11F, -0.1F))
                 .texOffs(0, 0).addBox(-3F, -3F, 8.1F, 6F, 6F, 2F, new CubeDeformation(-0.1F, -0.2F, -0.1F))
                 .texOffs(13, 9).addBox(-2.7F, -2.8F, 9.8F, 5F, 5F, 1F, new CubeDeformation(-0.3F, -0.2F, 0F))
                 .texOffs(49, 16).addBox(-1.9F, -2.2F, 10.5F, 3F, 3F, 1F, new CubeDeformation(-0.3F, 0F, -0.1F)),

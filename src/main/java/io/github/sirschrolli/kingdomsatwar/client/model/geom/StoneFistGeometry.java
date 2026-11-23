@@ -23,18 +23,18 @@ public final class StoneFistGeometry {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
         PartDefinition p_arm = root.addOrReplaceChild("arm", CubeListBuilder.create()
-                .texOffs(0, 0).addBox(-5.5F, -9.7F, -5.5F, 11F, 11F, 11F, new CubeDeformation(0F, -0.1F, -0.4F))
-                .texOffs(45, 0).addBox(-5F, -9.5F, -5.5F, 10F, 11F, 11F, new CubeDeformation(0F, -0.3F, 0F))
+                .texOffs(0, 0).addBox(-5.5F, -9.7F, -5.5F, 11F, 11F, 11F, new CubeDeformation(0F, -0.06F, -0.4F))
+                .texOffs(45, 0).addBox(-5F, -9.5F, -5.5F, 10F, 11F, 11F, new CubeDeformation(0F, -0.22F, 0F))
                 .texOffs(47, 23).addBox(-5F, -19.3F, -4.5F, 10F, 11F, 9F, new CubeDeformation(-0.4F, -0.3F, -0.2F))
                 .texOffs(86, 23).addBox(-4.5F, -18.7F, -5F, 9F, 10F, 10F, new CubeDeformation(-0.3F, 0F, -0.4F))
                 .texOffs(0, 45).addBox(-7F, -3.6F, -6.5F, 14F, 5F, 13F, new CubeDeformation(-0.4F, -0.2F, -0.1F))
                 .texOffs(30, 89).addBox(-5.6F, -5.3F, -7.4F, 8F, 3F, 2F, new CubeDeformation(0F, -0.3F, 0F))
                 .texOffs(70, 80).addBox(1.8F, -5F, 5.3F, 4F, 3F, 3F, new CubeDeformation(-0.2F, -0.4F, -0.3F))
-                .texOffs(29, 80).addBox(-8.3F, -1.7F, 0.8F, 3F, 3F, 4F, new CubeDeformation(-0.3F, -0.1F, -0.2F))
+                .texOffs(29, 80).addBox(-8.3F, -1.7F, 0.8F, 3F, 3F, 4F, new CubeDeformation(-0.3F, -0.06F, -0.2F))
                 .texOffs(44, 80).addBox(-6.8F, -11.5F, -2F, 2F, 3F, 4F, new CubeDeformation(-0.2F, 0F, 0F))
                 .texOffs(57, 80).addBox(4.9F, -8.2F, 0.3F, 2F, 3F, 4F, new CubeDeformation(-0.1F, -0.2F, -0.3F))
                 .texOffs(51, 89).addBox(-2F, -8F, 4.8F, 4F, 3F, 2F, new CubeDeformation(0F, -0.4F, -0.2F))
-                .texOffs(64, 89).addBox(1F, -13.3F, -5.7F, 4F, 3F, 2F, new CubeDeformation(-0.4F, -0.3F, -0.3F))
+                .texOffs(64, 89).addBox(1F, -13.3F, -5.7F, 4F, 3F, 2F, new CubeDeformation(-0.36F, -0.3F, -0.3F))
                 .texOffs(38, 64).addBox(-5.5F, -18.5F, -5.5F, 11F, 3F, 11F, new CubeDeformation(-0.2F, -0.2F, -0.2F)),
                 PartPose.offset(0F, 24F, 0F));
         PartDefinition p_fist = p_arm.addOrReplaceChild("fist", CubeListBuilder.create()

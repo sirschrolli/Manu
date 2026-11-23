@@ -47,7 +47,7 @@ public final class VinelingGeometry {
                 PartPose.offsetAndRotation(-3F, -6F, 0F, 0F, 0F, -0.2094F));
         PartDefinition p_left_arm = p_body.addOrReplaceChild("left_arm", CubeListBuilder.create()
                 .texOffs(31, 15).addBox(-1F, -0.5F, -1F, 2F, 7F, 2F)
-                .texOffs(7, 49).addBox(0.1F, 1.9F, -1.5F, 1F, 1F, 1F, new CubeDeformation(-0.1F, -0.1F, -0.2F)),
+                .texOffs(7, 49).addBox(0.1F, 1.9F, -1.5F, 1F, 1F, 1F, new CubeDeformation(-0.06F, -0.1F, -0.2F)),
                 PartPose.offsetAndRotation(3.2F, -8F, 0F, 0F, 0F, -0.2094F));
         PartDefinition p_left_forearm = p_left_arm.addOrReplaceChild("left_forearm", CubeListBuilder.create()
                 .texOffs(40, 15).addBox(-1F, -0.3F, -1F, 2F, 7F, 2F, new CubeDeformation(-0.25F, 0F, -0.25F))
@@ -56,7 +56,7 @@ public final class VinelingGeometry {
                 PartPose.offsetAndRotation(0F, 6F, 0F, -0.1745F, 0F, 0.1047F));
         PartDefinition p_right_arm = p_body.addOrReplaceChild("right_arm", CubeListBuilder.create()
                 .texOffs(49, 15).addBox(-1F, -0.5F, -1F, 2F, 7F, 2F)
-                .texOffs(17, 49).addBox(-1.1F, 1.9F, -1.5F, 1F, 1F, 1F, new CubeDeformation(-0.1F, -0.1F, -0.2F)),
+                .texOffs(17, 49).addBox(-1.1F, 1.9F, -1.5F, 1F, 1F, 1F, new CubeDeformation(-0.06F, -0.1F, -0.2F)),
                 PartPose.offsetAndRotation(-3.2F, -8F, 0F, 0F, 0F, 0.2094F));
         PartDefinition p_right_forearm = p_right_arm.addOrReplaceChild("right_forearm", CubeListBuilder.create()
                 .texOffs(0, 26).addBox(-1F, -0.3F, -1F, 2F, 7F, 2F, new CubeDeformation(-0.25F, 0F, -0.25F))

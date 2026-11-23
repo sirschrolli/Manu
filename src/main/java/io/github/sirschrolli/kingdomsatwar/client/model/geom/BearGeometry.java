@@ -37,7 +37,7 @@ public final class BearGeometry {
         PartDefinition p_body = root.addOrReplaceChild("body", CubeListBuilder.create()
                 .texOffs(0, 0).addBox(-5F, -13F, -7F, 14F, 14F, 11F)
                 .texOffs(51, 0).addBox(-4F, -25F, -7F, 12F, 12F, 10F)
-                .texOffs(25, 26).addBox(-5.5F, -14F, 3.25F, 15F, 15F, 2F, new CubeDeformation(0F, 0F, -0.25F)),
+                .texOffs(25, 26).addBox(-5.5F, -14F, 3.25F, 15F, 15F, 2F, new CubeDeformation(0F, 0.04F, -0.25F)),
                 PartPose.offsetAndRotation(-2F, 9F, 12F, 1.5708F, 0F, 0F));
         PartDefinition p_hump = p_body.addOrReplaceChild("hump", CubeListBuilder.create()
                 .texOffs(29, 45).addBox(-3F, -22F, -8.75F, 10F, 8F, 3F, new CubeDeformation(0F, 0F, -0.25F)),

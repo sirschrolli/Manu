@@ -35,8 +35,8 @@ public final class GiantCrabGeometry {
                 .texOffs(103, 36).addBox(-3.5F, -2.2F, -5.7F, 1F, 1F, 1F, new CubeDeformation(-0.1F, 0F, -0.1F))
                 .texOffs(108, 36).addBox(2.5F, -2.2F, -5.7F, 1F, 1F, 1F, new CubeDeformation(-0.1F, 0F, -0.1F))
                 .texOffs(113, 36).addBox(5F, -2.2F, -5.7F, 1F, 1F, 1F, new CubeDeformation(-0.1F, 0F, -0.1F))
-                .texOffs(118, 36).addBox(6.1F, -2F, -2.1F, 1F, 1F, 1F, new CubeDeformation(-0.1F, 0F, -0.1F))
-                .texOffs(123, 36).addBox(-7.1F, -2F, -2.1F, 1F, 1F, 1F, new CubeDeformation(-0.1F, 0F, -0.1F)),
+                .texOffs(118, 36).addBox(6.1F, -2F, -2.1F, 1F, 1F, 1F, new CubeDeformation(-0.06F, 0F, -0.1F))
+                .texOffs(123, 36).addBox(-7.1F, -2F, -2.1F, 1F, 1F, 1F, new CubeDeformation(-0.06F, 0F, -0.1F)),
                 PartPose.offset(0F, 18.5F, 0F));
         PartDefinition p_left_eye = p_body.addOrReplaceChild("left_eye", CubeListBuilder.create()
                 .texOffs(123, 31).addBox(-0.5F, -2.6F, -0.5F, 1F, 3F, 1F, new CubeDeformation(-0.2F, -0.4F, -0.2F))

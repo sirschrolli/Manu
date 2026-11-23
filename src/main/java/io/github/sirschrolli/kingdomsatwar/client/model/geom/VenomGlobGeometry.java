@@ -25,7 +25,7 @@ public final class VenomGlobGeometry {
         PartDefinition p_glob = root.addOrReplaceChild("glob", CubeListBuilder.create()
                 .texOffs(17, 0).addBox(-2.5F, -2.5F, -2.5F, 5F, 5F, 5F)
                 .texOffs(0, 0).addBox(-2F, -3.5F, -2F, 4F, 7F, 4F, new CubeDeformation(-0.2F, -0.4F, -0.2F))
-                .texOffs(38, 0).addBox(-3.5F, -2F, -2F, 7F, 4F, 4F, new CubeDeformation(-0.4F, -0.2F, -0.2F))
+                .texOffs(38, 0).addBox(-3.5F, -2F, -2F, 7F, 4F, 4F, new CubeDeformation(-0.4F, -0.2F, -0.16F))
                 .texOffs(0, 12).addBox(-1.5F, -1.5F, 2.1F, 3F, 3F, 3F, new CubeDeformation(-0.3F, -0.3F, -0.3F))
                 .texOffs(13, 12).addBox(-1F, -1F, 4.6F, 2F, 2F, 2F, new CubeDeformation(-0.3F, -0.3F, -0.2F)),
                 PartPose.offset(0F, 0F, 0F));

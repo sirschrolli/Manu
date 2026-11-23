@@ -44,12 +44,12 @@ public final class GooseGeometry {
                 .texOffs(43, 17).addBox(-2F, -1F, 0F, 4F, 2F, 3F),
                 PartPose.offsetAndRotation(0F, -2.5F, 5F, -0.4363F, 0F, 0F));
         PartDefinition p_left_leg = root.addOrReplaceChild("left_leg", CubeListBuilder.create()
-                .texOffs(11, 30).addBox(-0.5F, 0F, -0.5F, 1F, 4F, 1F)
-                .texOffs(21, 30).addBox(-1F, 3.25F, -2.5F, 2F, 1F, 3F, new CubeDeformation(0F, -0.25F, 0F)),
+                .texOffs(11, 30).addBox(-0.5F, 0F, -0.5F, 1F, 4F, 1F, new CubeDeformation(0F, 0.04F, 0F))
+                .texOffs(21, 30).addBox(-1F, 3.25F, -2.5F, 2F, 1F, 3F, new CubeDeformation(0F, -0.25F, 0.04F)),
                 PartPose.offset(1.5F, 20F, 0.5F));
         PartDefinition p_right_leg = root.addOrReplaceChild("right_leg", CubeListBuilder.create()
-                .texOffs(16, 30).addBox(-0.5F, 0F, -0.5F, 1F, 4F, 1F)
-                .texOffs(32, 30).addBox(-1F, 3.25F, -2.5F, 2F, 1F, 3F, new CubeDeformation(0F, -0.25F, 0F)),
+                .texOffs(16, 30).addBox(-0.5F, 0F, -0.5F, 1F, 4F, 1F, new CubeDeformation(0F, 0.04F, 0F))
+                .texOffs(32, 30).addBox(-1F, 3.25F, -2.5F, 2F, 1F, 3F, new CubeDeformation(0F, -0.25F, 0.04F)),
                 PartPose.offset(-1.5F, 20F, 0.5F));
         return mesh;
     }

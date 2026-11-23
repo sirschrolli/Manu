@@ -51,7 +51,7 @@ public final class MageGeometry {
                 .texOffs(0, 35).addBox(-4.5F, 0F, -3F, 9F, 7F, 6F)
                 .texOffs(216, 0).addBox(-5.5F, 7F, -4F, 11F, 6F, 8F, new CubeDeformation(-0.3F, 0F, -0.4F))
                 .texOffs(70, 49).addBox(-6F, 12.8F, -4F, 12F, 2F, 8F, new CubeDeformation(-0.4F, -0.2F, 0F))
-                .texOffs(205, 0).addBox(-2F, -0.3F, -3.65F, 4F, 14F, 1F, new CubeDeformation(-0.2F, -0.3F, -0.25F)),
+                .texOffs(205, 0).addBox(-2F, -0.3F, -3.65F, 4F, 14F, 1F, new CubeDeformation(-0.2F, -0.26F, -0.25F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_head = p_body.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(176, 0).addBox(-3.5F, -8F, -3.5F, 7F, 8F, 7F)
@@ -63,8 +63,8 @@ public final class MageGeometry {
                 PartPose.offset(0F, -12F, 0F));
         PartDefinition p_beard = p_head.addOrReplaceChild("beard", CubeListBuilder.create()
                 .texOffs(56, 71).addBox(-3.5F, -0.1F, -0.9F, 7F, 3F, 2F, new CubeDeformation(-0.2F, -0.1F, -0.2F))
-                .texOffs(133, 71).addBox(-3.6F, -2.4F, -0.7F, 1F, 3F, 2F, new CubeDeformation(0F, -0.2F, -0.4F))
-                .texOffs(140, 71).addBox(2.6F, -2.4F, -0.7F, 1F, 3F, 2F, new CubeDeformation(0F, -0.2F, -0.4F))
+                .texOffs(133, 71).addBox(-3.6F, -2.4F, -0.7F, 1F, 3F, 2F, new CubeDeformation(0F, -0.2F, -0.36F))
+                .texOffs(140, 71).addBox(2.6F, -2.4F, -0.7F, 1F, 3F, 2F, new CubeDeformation(0F, -0.2F, -0.36F))
                 .texOffs(63, 79).addBox(-2F, -1.45F, -1F, 4F, 1F, 1F, new CubeDeformation(-0.2F, -0.05F, -0.25F)),
                 PartPose.offset(0F, -2.4F, -3.5F));
         PartDefinition p_beard_long = p_beard.addOrReplaceChild("beard_long", CubeListBuilder.create()
@@ -80,7 +80,7 @@ public final class MageGeometry {
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_hood = p_head.addOrReplaceChild("hood", CubeListBuilder.create()
                 .texOffs(32, 0).addBox(-4.5F, -9.2F, -4.4F, 9F, 10F, 9F, new CubeDeformation(-0.3F, -0.3F, -0.4F))
-                .texOffs(42, 79).addBox(-4.5F, -8.9F, -4.4F, 9F, 1F, 1F, new CubeDeformation(-0.3F, 0F, -0.3F))
+                .texOffs(42, 79).addBox(-4.5F, -8.9F, -4.4F, 9F, 1F, 1F, new CubeDeformation(-0.26F, 0F, -0.3F))
                 .texOffs(5, 71).addBox(-2F, -10.2F, 2.2F, 4F, 3F, 3F, new CubeDeformation(-0.4F, -0.4F, 0F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_flame_crown = p_head.addOrReplaceChild("flame_crown", CubeListBuilder.create()
@@ -111,7 +111,7 @@ public final class MageGeometry {
                 PartPose.offsetAndRotation(3.2F, -1F, -3.6F, -0.1396F, 0F, 0.2443F));
         PartDefinition p_hat = p_head.addOrReplaceChild("hat", CubeListBuilder.create()
                 .texOffs(119, 0).addBox(-7F, -0.6F, -7F, 14F, 1F, 14F, new CubeDeformation(-0.4F, 0F, -0.4F))
-                .texOffs(90, 35).addBox(-4F, -4.5F, -4F, 8F, 4F, 8F, new CubeDeformation(0F, -0.1F, 0F))
+                .texOffs(90, 35).addBox(-4F, -4.5F, -4F, 8F, 4F, 8F, new CubeDeformation(0F, -0.06F, 0F))
                 .texOffs(0, 49).addBox(-4.5F, -2.2F, -4.5F, 9F, 2F, 9F, new CubeDeformation(-0.4F, -0.4F, -0.4F)),
                 PartPose.offset(0F, -8.4F, 0F));
         PartDefinition p_hat_mid = p_hat.addOrReplaceChild("hat_mid", CubeListBuilder.create()
@@ -131,14 +131,14 @@ public final class MageGeometry {
                 .texOffs(166, 61).addBox(-1F, -6F, -1F, 2F, 6F, 2F, new CubeDeformation(-0.4F, 0F, -0.4F))
                 .texOffs(92, 79).addBox(0.1F, -4.2F, -0.5F, 3F, 1F, 1F, new CubeDeformation(-0.3F, 0F, 0F))
                 .texOffs(124, 79).addBox(0.1F, -7.2F, -0.5F, 2F, 1F, 1F, new CubeDeformation(-0.1F, 0F, 0F))
-                .texOffs(241, 71).addBox(-2F, -3.2F, -0.5F, 3F, 2F, 1F, new CubeDeformation(-0.4F, -0.2F, -0.1F))
+                .texOffs(241, 71).addBox(-2F, -3.2F, -0.5F, 3F, 2F, 1F, new CubeDeformation(-0.36F, -0.2F, -0.1F))
                 .texOffs(9, 79).addBox(0.7F, -6.3F, -0.5F, 2F, 2F, 1F, new CubeDeformation(-0.1F, -0.3F, -0.1F)),
                 PartPose.offsetAndRotation(2.6F, -0.8F, -1F, -0.1745F, 0F, 0.4189F));
         PartDefinition p_antler_r = p_antlers.addOrReplaceChild("antler_r", CubeListBuilder.create()
                 .texOffs(175, 61).addBox(-1F, -6F, -1F, 2F, 6F, 2F, new CubeDeformation(-0.4F, 0F, -0.4F))
                 .texOffs(101, 79).addBox(-3.1F, -4.2F, -0.5F, 3F, 1F, 1F, new CubeDeformation(-0.3F, 0F, 0F))
                 .texOffs(131, 79).addBox(-2.1F, -7.2F, -0.5F, 2F, 1F, 1F, new CubeDeformation(-0.1F, 0F, 0F))
-                .texOffs(0, 79).addBox(-1F, -3.2F, -0.5F, 3F, 2F, 1F, new CubeDeformation(-0.4F, -0.2F, -0.1F))
+                .texOffs(0, 79).addBox(-1F, -3.2F, -0.5F, 3F, 2F, 1F, new CubeDeformation(-0.36F, -0.2F, -0.1F))
                 .texOffs(16, 79).addBox(-2.7F, -6.3F, -0.5F, 2F, 2F, 1F, new CubeDeformation(-0.1F, -0.3F, -0.1F)),
                 PartPose.offsetAndRotation(-2.6F, -0.8F, -1F, -0.1745F, 0F, -0.4189F));
         PartDefinition p_stone_circlet = p_head.addOrReplaceChild("stone_circlet", CubeListBuilder.create()

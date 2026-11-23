@@ -57,6 +57,7 @@ def write_model(module, class_name: str, doc: str, folder: str, variants: dict, 
         return
     model = module.build()
     model.pack()
+    model.resolve_coplanar()            # gegen Flimmern (seit 1.12.1)
     JAVA.mkdir(parents=True, exist_ok=True)
     (JAVA / f"{class_name}.java").write_text(model.java_class(PACKAGE, class_name, doc), encoding="utf-8")
     out = TEX / folder

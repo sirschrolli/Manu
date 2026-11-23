@@ -87,7 +87,7 @@ public final class GuardianGeometry {
                 .texOffs(0, 63).addBox(0F, 14F, 0F, 3F, 3F, 7F),
                 PartPose.offset(-1.5F, 0.5F, 14F));
         PartDefinition p_tail2 = p_tail1.addOrReplaceChild("tail2", CubeListBuilder.create()
-                .texOffs(31, 63).addBox(0F, 14F, 0F, 2F, 2F, 6F)
+                .texOffs(31, 63).addBox(0F, 14F, 0F, 2F, 2F, 6F, new CubeDeformation(0.04F, 0F, 0F))
                 .texOffs(0, 29).addBox(1F, 10.5F, 3F, 1F, 9F, 9F),
                 PartPose.offset(0.5F, 0.5F, 6F));
         PartDefinition p_brow_right = p_head.addOrReplaceChild("brow_right", CubeListBuilder.create()

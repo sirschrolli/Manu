@@ -27,7 +27,7 @@ public final class FarmHorseGeometry {
                 PartPose.offset(0F, 11F, 5F));
         PartDefinition p_tail = p_body.addOrReplaceChild("tail", CubeListBuilder.create()
                 .texOffs(114, 0).addBox(-1.5F, 0F, 0F, 3F, 14F, 4F)
-                .texOffs(95, 33).addBox(-2F, 8.75F, -0.6F, 4F, 7F, 5F, new CubeDeformation(0F, -0.25F, -0.4F)),
+                .texOffs(95, 33).addBox(-2F, 8.75F, -0.6F, 4F, 7F, 5F, new CubeDeformation(0F, -0.25F, -0.36F)),
                 PartPose.offsetAndRotation(0F, -5F, 2F, 0.5236F, 0F, 0F));
         PartDefinition p_head_parts = root.addOrReplaceChild("head_parts", CubeListBuilder.create()
                 .texOffs(91, 0).addBox(-2.05F, -6F, -2F, 4F, 12F, 7F),

@@ -24,7 +24,7 @@ public final class EmberWyrmGeometry {
         PartDefinition root = mesh.getRoot();
         PartDefinition p_head = root.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(0, 0).addBox(-4.5F, -4F, -9F, 9F, 6F, 9F)
-                .texOffs(91, 16).addBox(-4F, -2.7F, -13.4F, 8F, 5F, 5F, new CubeDeformation(-0.4F, -0.3F, -0.4F))
+                .texOffs(91, 16).addBox(-4F, -2.7F, -13.4F, 8F, 5F, 5F, new CubeDeformation(-0.4F, -0.26F, -0.4F))
                 .texOffs(0, 30).addBox(-5F, -4.8F, -8F, 10F, 2F, 5F, new CubeDeformation(-0.1F, -0.2F, 0F))
                 .texOffs(171, 30).addBox(-4.3F, -3.8F, -8.6F, 2F, 2F, 1F, new CubeDeformation(-0.1F, -0.4F, -0.3F))
                 .texOffs(178, 30).addBox(2.3F, -3.8F, -8.6F, 2F, 2F, 1F, new CubeDeformation(-0.1F, -0.4F, -0.3F))

@@ -28,13 +28,13 @@ public final class FairyGeometry {
                 .texOffs(0, 23).addBox(-2.5F, -5F, -2.5F, 5F, 5F, 5F)
                 .texOffs(0, 48).addBox(-3.2F, -3.8F, -0.4F, 1F, 2F, 1F, new CubeDeformation(-0.2F, -0.2F, 0F))
                 .texOffs(5, 48).addBox(2.2F, -3.8F, -0.4F, 1F, 2F, 1F, new CubeDeformation(-0.2F, -0.2F, 0F))
-                .texOffs(0, 34).addBox(-3F, -5.4F, -2.05F, 6F, 1F, 5F, new CubeDeformation(-0.3F, 0F, -0.05F))
-                .texOffs(21, 23).addBox(-3F, -5.4F, 1.05F, 6F, 7F, 2F, new CubeDeformation(-0.3F, -0.4F, -0.25F))
+                .texOffs(0, 34).addBox(-3F, -5.4F, -2.05F, 6F, 1F, 5F, new CubeDeformation(-0.26F, 0F, -0.05F))
+                .texOffs(21, 23).addBox(-3F, -5.4F, 1.05F, 6F, 7F, 2F, new CubeDeformation(-0.3F, -0.36F, -0.25F))
                 .texOffs(38, 23).addBox(-3.1F, -5.1F, -2F, 1F, 5F, 4F, new CubeDeformation(-0.25F, -0.3F, -0.4F))
                 .texOffs(49, 23).addBox(2.1F, -5.1F, -2F, 1F, 5F, 4F, new CubeDeformation(-0.25F, -0.3F, -0.4F))
-                .texOffs(10, 48).addBox(-3F, -5.95F, -2.85F, 6F, 1F, 1F, new CubeDeformation(-0.1F, -0.05F, -0.05F))
-                .texOffs(0, 41).addBox(-2.95F, -5.95F, -3F, 1F, 1F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.2F))
-                .texOffs(13, 41).addBox(1.95F, -5.95F, -3F, 1F, 1F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.2F)),
+                .texOffs(10, 48).addBox(-3F, -5.95F, -2.85F, 6F, 1F, 1F, new CubeDeformation(-0.06F, -0.05F, -0.05F))
+                .texOffs(0, 41).addBox(-2.95F, -5.95F, -3F, 1F, 1F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.16F))
+                .texOffs(13, 41).addBox(1.95F, -5.95F, -3F, 1F, 1F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.16F)),
                 PartPose.offset(0F, -3.99F, 0F));
         PartDefinition p_body = p_root.addOrReplaceChild("body", CubeListBuilder.create()
                 .texOffs(26, 41).addBox(-1.5F, -0.4F, -1F, 3F, 4F, 2F, new CubeDeformation(-0.1F, -0.4F, -0.1F))

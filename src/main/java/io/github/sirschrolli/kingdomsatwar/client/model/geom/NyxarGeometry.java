@@ -78,37 +78,37 @@ public final class NyxarGeometry {
         PartDefinition p_neck1 = p_body.addOrReplaceChild("neck1", CubeListBuilder.create()
                 .texOffs(260, 280).addBox(-7F, -3F, -8.25F, 14F, 6F, 9F, new CubeDeformation(-0.25F, -0.4F, -0.15F))
                 .texOffs(0, 219).addBox(-3F, -6.5F, -8.25F, 6F, 13F, 9F, new CubeDeformation(-0.15F, 0F, -0.23F))
-                .texOffs(419, 329).addBox(-3F, 5.3F, -7.75F, 6F, 2F, 8F, new CubeDeformation(-0.15F, -0.2F, -0.25F)),
+                .texOffs(419, 329).addBox(-3F, 5.3F, -7.75F, 6F, 2F, 8F, new CubeDeformation(-0.11F, -0.2F, -0.25F)),
                 PartPose.offsetAndRotation(0F, -6F, -22F, -0.5236F, 0F, 0F));
         PartDefinition p_neck2 = p_neck1.addOrReplaceChild("neck2", CubeListBuilder.create()
                 .texOffs(117, 298).addBox(-6.5F, -2.5F, -8F, 13F, 5F, 9F, new CubeDeformation(-0.2F, -0.06F, -0.4F))
                 .texOffs(31, 219).addBox(-3F, -6.5F, -8F, 6F, 13F, 9F, new CubeDeformation(-0.36F, -0.4F, -0.48F))
-                .texOffs(302, 342).addBox(-3F, 4.9F, -7F, 6F, 2F, 7F, new CubeDeformation(-0.36F, -0.2F, 0F)),
+                .texOffs(302, 342).addBox(-3F, 4.9F, -7F, 6F, 2F, 7F, new CubeDeformation(-0.32F, -0.2F, 0F)),
                 PartPose.offsetAndRotation(0F, 0F, -7.5F, -0.2094F, 0F, 0F));
         PartDefinition p_neck3 = p_neck2.addOrReplaceChild("neck3", CubeListBuilder.create()
                 .texOffs(162, 298).addBox(-6F, -2.5F, -8F, 12F, 5F, 9F, new CubeDeformation(-0.1F, -0.22F, -0.4F))
                 .texOffs(62, 219).addBox(-2.5F, -6F, -8F, 5F, 12F, 9F, new CubeDeformation(-0.02F, -0.3F, -0.48F))
-                .texOffs(356, 342).addBox(-2.5F, 4.5F, -7F, 5F, 2F, 7F, new CubeDeformation(-0.02F, -0.2F, 0F)),
+                .texOffs(356, 342).addBox(-2.5F, 4.5F, -7F, 5F, 2F, 7F, new CubeDeformation(0.02F, -0.2F, 0F)),
                 PartPose.offsetAndRotation(0F, 0F, -7F, -0.0698F, 0F, 0F));
         PartDefinition p_neck4 = p_neck3.addOrReplaceChild("neck4", CubeListBuilder.create()
                 .texOffs(47, 314).addBox(-5.5F, -2.5F, -7.25F, 11F, 5F, 8F, new CubeDeformation(0F, -0.38F, -0.15F))
                 .texOffs(33, 242).addBox(-2.5F, -5.5F, -7.25F, 5F, 11F, 8F, new CubeDeformation(-0.18F, -0.2F, -0.23F))
-                .texOffs(381, 342).addBox(-2.5F, 4.1F, -6.75F, 5F, 2F, 7F, new CubeDeformation(-0.18F, -0.2F, -0.25F)),
+                .texOffs(381, 342).addBox(-2.5F, 4.1F, -6.75F, 5F, 2F, 7F, new CubeDeformation(-0.14F, -0.2F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 0F, -7F, 0.0524F, 0F, 0F));
         PartDefinition p_neck5 = p_neck4.addOrReplaceChild("neck5", CubeListBuilder.create()
                 .texOffs(405, 314).addBox(-5.5F, -2F, -7.25F, 11F, 4F, 8F, new CubeDeformation(-0.3F, 0F, -0.15F))
                 .texOffs(326, 242).addBox(-2.5F, -5F, -7.25F, 5F, 10F, 8F, new CubeDeformation(-0.3F, 0F, -0.23F))
-                .texOffs(406, 342).addBox(-2.5F, 3.8F, -6.75F, 5F, 2F, 7F, new CubeDeformation(-0.3F, -0.2F, -0.25F)),
+                .texOffs(406, 342).addBox(-2.5F, 3.8F, -6.75F, 5F, 2F, 7F, new CubeDeformation(-0.26F, -0.2F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 0F, -6.5F, 0.1047F, 0F, 0F));
         PartDefinition p_neck6 = p_neck5.addOrReplaceChild("neck6", CubeListBuilder.create()
                 .texOffs(444, 314).addBox(-5F, -2F, -7F, 10F, 4F, 8F, new CubeDeformation(-0.1F, -0.12F, -0.4F))
                 .texOffs(353, 242).addBox(-2.5F, -5F, -7F, 5F, 10F, 8F, new CubeDeformation(-0.42F, -0.3F, -0.48F))
-                .texOffs(485, 342).addBox(-2.5F, 3.5F, -6F, 5F, 2F, 6F, new CubeDeformation(-0.42F, -0.2F, 0F)),
+                .texOffs(485, 342).addBox(-2.5F, 3.5F, -6F, 5F, 2F, 6F, new CubeDeformation(-0.38F, -0.2F, 0F)),
                 PartPose.offsetAndRotation(0F, 0F, -6.5F, 0.1396F, 0F, 0F));
         PartDefinition p_neck7 = p_neck6.addOrReplaceChild("neck7", CubeListBuilder.create()
                 .texOffs(0, 329).addBox(-5F, -2F, -7F, 10F, 4F, 8F, new CubeDeformation(-0.3F, -0.2F, -0.4F))
                 .texOffs(58, 280).addBox(-2.5F, -4.5F, -7F, 5F, 9F, 8F, new CubeDeformation(-0.5F, 0F, -0.48F))
-                .texOffs(0, 353).addBox(-2.5F, 3.3F, -6F, 5F, 2F, 6F, new CubeDeformation(-0.5F, -0.2F, 0F)),
+                .texOffs(0, 353).addBox(-2.5F, 3.3F, -6F, 5F, 2F, 6F, new CubeDeformation(-0.46F, -0.2F, 0F)),
                 PartPose.offsetAndRotation(0F, 0F, -6F, 0.1222F, 0F, 0F));
         PartDefinition p_neck7_spike = p_neck7.addOrReplaceChild("neck7_spike", CubeListBuilder.create()
                 .texOffs(437, 377).addBox(-1.5F, -1.302F, -1.5F, 3F, 2F, 3F, new CubeDeformation(-0.3F, -0.098F, 0F))
@@ -132,7 +132,7 @@ public final class NyxarGeometry {
                 .texOffs(212, 370).addBox(4.65F, -3.8F, -13.8F, 2F, 2F, 4F, new CubeDeformation(-0.1F, 0F, -0.2F))
                 .texOffs(463, 377).addBox(4.7F, -4.45F, -9.3F, 2F, 2F, 3F, new CubeDeformation(-0.25F, -0.25F, -0.3F))
                 .texOffs(319, 390).addBox(4.7F, -4.8F, -5.7F, 2F, 2F, 2F, new CubeDeformation(-0.35F, -0.4F, -0.1F))
-                .texOffs(175, 395).addBox(3.2F, 3.28F, -28.5F, 1F, 3F, 1F, new CubeDeformation(-0.075F, -0.42F, -0.075F))
+                .texOffs(175, 395).addBox(3.2F, 3.28F, -28.5F, 1F, 3F, 1F, new CubeDeformation(-0.075F, -0.38F, -0.075F))
                 .texOffs(221, 395).addBox(3.2F, 3.5F, -26.5F, 1F, 2F, 1F, new CubeDeformation(-0.075F, -0.2F, -0.075F))
                 .texOffs(226, 395).addBox(3.2F, 3.5F, -24.5F, 1F, 2F, 1F, new CubeDeformation(-0.075F, -0.2F, -0.075F))
                 .texOffs(231, 395).addBox(3.2F, 3.5F, -22.5F, 1F, 2F, 1F, new CubeDeformation(-0.075F, -0.2F, -0.075F))
@@ -146,7 +146,7 @@ public final class NyxarGeometry {
                 .texOffs(225, 370).addBox(-6.65F, -3.8F, -13.8F, 2F, 2F, 4F, new CubeDeformation(-0.1F, 0F, -0.2F))
                 .texOffs(474, 377).addBox(-6.7F, -4.45F, -9.3F, 2F, 2F, 3F, new CubeDeformation(-0.25F, -0.25F, -0.3F))
                 .texOffs(328, 390).addBox(-6.7F, -4.8F, -5.7F, 2F, 2F, 2F, new CubeDeformation(-0.35F, -0.4F, -0.1F))
-                .texOffs(185, 395).addBox(-4.2F, 3.28F, -28.5F, 1F, 3F, 1F, new CubeDeformation(-0.075F, -0.42F, -0.075F))
+                .texOffs(185, 395).addBox(-4.2F, 3.28F, -28.5F, 1F, 3F, 1F, new CubeDeformation(-0.075F, -0.38F, -0.075F))
                 .texOffs(246, 395).addBox(-4.2F, 3.5F, -26.5F, 1F, 2F, 1F, new CubeDeformation(-0.075F, -0.2F, -0.075F))
                 .texOffs(251, 395).addBox(-4.2F, 3.5F, -24.5F, 1F, 2F, 1F, new CubeDeformation(-0.075F, -0.2F, -0.075F))
                 .texOffs(256, 395).addBox(-4.2F, 3.5F, -22.5F, 1F, 2F, 1F, new CubeDeformation(-0.075F, -0.2F, -0.075F))
@@ -293,8 +293,8 @@ public final class NyxarGeometry {
                 .texOffs(194, 219).addBox(-4.5F, 1.2F, -18.45F, 9F, 1F, 19F, new CubeDeformation(-0.3F, -0.1F, -0.25F))
                 .texOffs(0, 195).addBox(-3F, -0.3F, -18.45F, 6F, 4F, 19F, new CubeDeformation(-0.1F, -0.3F, -0.33F))
                 .texOffs(201, 353).addBox(-5F, 0.6F, -3F, 10F, 2F, 5F, new CubeDeformation(0F, -0.3F, 0F))
-                .texOffs(448, 329).addBox(-4F, -0.9F, -3F, 8F, 5F, 5F, new CubeDeformation(-0.4F, -0.4F, -0.08F))
-                .texOffs(329, 342).addBox(-3F, 2.2F, -17.8F, 6F, 2F, 7F, new CubeDeformation(0F, -0.2F, 0F))
+                .texOffs(448, 329).addBox(-4F, -0.9F, -3F, 8F, 5F, 5F, new CubeDeformation(-0.4F, -0.36F, -0.08F))
+                .texOffs(329, 342).addBox(-3F, 2.2F, -17.8F, 6F, 2F, 7F, new CubeDeformation(0F, -0.16F, 0F))
                 .texOffs(326, 395).addBox(2.9F, -1.845F, -17.1286F, 1F, 2F, 1F, new CubeDeformation(-0.1F, -0.055F, -0.1F))
                 .texOffs(331, 395).addBox(2.9F, -1.6F, -15.1857F, 1F, 2F, 1F, new CubeDeformation(-0.1F, -0.3F, -0.1F))
                 .texOffs(336, 395).addBox(2.9F, -1.6F, -13.2429F, 1F, 2F, 1F, new CubeDeformation(-0.1F, -0.3F, -0.1F))
@@ -311,7 +311,7 @@ public final class NyxarGeometry {
                 .texOffs(391, 395).addBox(-3.9F, -1.845F, -5.4714F, 1F, 2F, 1F, new CubeDeformation(-0.1F, -0.055F, -0.1F))
                 .texOffs(448, 219).addBox(-3.5F, -0.5F, -17.8F, 7F, 1F, 18F, new CubeDeformation(0F, -0.35F, 0F))
                 .texOffs(442, 280).addBox(-2.5F, -0.7F, -16.5F, 5F, 1F, 14F, new CubeDeformation(-0.1F, -0.2F, 0F))
-                .texOffs(86, 314).addBox(-3F, 3.1F, -12F, 6F, 1F, 12F, new CubeDeformation(0F, -0.1F, 0F)),
+                .texOffs(86, 314).addBox(-3F, 3.1F, -12F, 6F, 1F, 12F, new CubeDeformation(0.04F, -0.1F, 0F)),
                 PartPose.offsetAndRotation(0F, 3.7F, -11.5F, 0.0698F, 0F, 0F));
         PartDefinition p_beard_l = p_jaw.addOrReplaceChild("beard_l", CubeListBuilder.create()
                 .texOffs(418, 390).addBox(-1F, -1.281F, -1F, 2F, 2F, 2F, new CubeDeformation(-0.3F, -0.119F, -0.125F))
@@ -361,52 +361,52 @@ public final class NyxarGeometry {
         PartDefinition p_tail1 = p_body.addOrReplaceChild("tail1", CubeListBuilder.create()
                 .texOffs(338, 219).addBox(-7F, -2.5F, -0.75F, 14F, 5F, 14F, new CubeDeformation(-0.25F, 0F, -0.15F))
                 .texOffs(237, 138).addBox(-3F, -6.5F, -0.75F, 6F, 13F, 14F, new CubeDeformation(0F, -0.25F, -0.23F))
-                .texOffs(0, 298).addBox(-3F, 5.05F, -0.25F, 6F, 2F, 13F, new CubeDeformation(0F, -0.2F, -0.25F)),
+                .texOffs(0, 298).addBox(-3F, 5.05F, -0.25F, 6F, 2F, 13F, new CubeDeformation(0.04F, -0.2F, -0.25F)),
                 PartPose.offsetAndRotation(0F, -4F, 21F, -0.1745F, 0F, 0F));
         PartDefinition p_tail2 = p_tail1.addOrReplaceChild("tail2", CubeListBuilder.create()
                 .texOffs(395, 219).addBox(-6F, -2.5F, -1F, 12F, 5F, 14F, new CubeDeformation(0F, -0.3F, -0.4F))
                 .texOffs(218, 169).addBox(-3F, -5.5F, -1F, 6F, 11F, 14F, new CubeDeformation(-0.3F, 0F, -0.48F))
-                .texOffs(332, 298).addBox(-3F, 4.3F, 0F, 6F, 2F, 12F, new CubeDeformation(-0.3F, -0.2F, 0F)),
+                .texOffs(332, 298).addBox(-3F, 4.3F, 0F, 6F, 2F, 12F, new CubeDeformation(-0.26F, -0.2F, 0F)),
                 PartPose.offsetAndRotation(0F, 0F, 12.5F, -0.1396F, 0F, 0F));
         PartDefinition p_tail3 = p_tail2.addOrReplaceChild("tail3", CubeListBuilder.create()
                 .texOffs(131, 262).addBox(-5.5F, -2F, -0.75F, 11F, 4F, 13F, new CubeDeformation(-0.2F, -0.04F, -0.15F))
                 .texOffs(51, 195).addBox(-2.5F, -5F, -0.75F, 5F, 10F, 13F, new CubeDeformation(-0.14F, -0.1F, -0.23F))
-                .texOffs(476, 298).addBox(-2.5F, 3.7F, -0.25F, 5F, 2F, 12F, new CubeDeformation(-0.14F, -0.2F, -0.25F)),
+                .texOffs(476, 298).addBox(-2.5F, 3.7F, -0.25F, 5F, 2F, 12F, new CubeDeformation(-0.1F, -0.2F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 0F, 12F, -0.0873F, 0F, 0F));
         PartDefinition p_tail4 = p_tail3.addOrReplaceChild("tail4", CubeListBuilder.create()
                 .texOffs(227, 262).addBox(-5F, -2F, -1F, 10F, 4F, 13F, new CubeDeformation(-0.3F, -0.28F, -0.4F))
                 .texOffs(452, 195).addBox(-2.5F, -4.5F, -1F, 5F, 9F, 13F, new CubeDeformation(-0.38F, -0.2F, -0.48F))
-                .texOffs(193, 314).addBox(-2.5F, 3.1F, 0F, 5F, 2F, 11F, new CubeDeformation(-0.38F, -0.2F, 0F)),
+                .texOffs(193, 314).addBox(-2.5F, 3.1F, 0F, 5F, 2F, 11F, new CubeDeformation(-0.34F, -0.2F, 0F)),
                 PartPose.offsetAndRotation(0F, 0F, 11.5F, -0.0349F, 0F, 0F));
         PartDefinition p_tail5 = p_tail4.addOrReplaceChild("tail5", CubeListBuilder.create()
                 .texOffs(110, 280).addBox(-4.5F, -2F, -0.75F, 9F, 4F, 12F, new CubeDeformation(-0.4F, -0.48F, -0.15F))
                 .texOffs(251, 219).addBox(-2F, -4F, -0.75F, 4F, 8F, 12F, new CubeDeformation(-0.18F, -0.2F, -0.23F))
-                .texOffs(292, 314).addBox(-2F, 2.6F, -0.25F, 4F, 2F, 11F, new CubeDeformation(-0.18F, -0.2F, -0.25F)),
+                .texOffs(292, 314).addBox(-2F, 2.6F, -0.25F, 4F, 2F, 11F, new CubeDeformation(-0.14F, -0.2F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 0F, 11F, 0.0175F, 0F, 0F));
         PartDefinition p_tail6 = p_tail5.addOrReplaceChild("tail6", CubeListBuilder.create()
                 .texOffs(401, 280).addBox(-4F, -1.5F, -1F, 8F, 3F, 12F, new CubeDeformation(-0.4F, -0.18F, -0.4F))
                 .texOffs(0, 242).addBox(-2F, -3.5F, -1F, 4F, 7F, 12F, new CubeDeformation(-0.38F, -0.2F, -0.48F))
-                .texOffs(126, 329).addBox(-2F, 2.1F, 0F, 4F, 2F, 10F, new CubeDeformation(-0.38F, -0.2F, 0F)),
+                .texOffs(126, 329).addBox(-2F, 2.1F, 0F, 4F, 2F, 10F, new CubeDeformation(-0.34F, -0.2F, 0F)),
                 PartPose.offsetAndRotation(0F, 0F, 10.5F, 0.0524F, 0F, 0F));
         PartDefinition p_tail7 = p_tail6.addOrReplaceChild("tail7", CubeListBuilder.create()
                 .texOffs(369, 298).addBox(-3.5F, -1.5F, -0.75F, 7F, 3F, 11F, new CubeDeformation(-0.4F, -0.34F, -0.15F))
                 .texOffs(29, 280).addBox(-1.5F, -3F, -0.75F, 3F, 6F, 11F, new CubeDeformation(-0.14F, -0.1F, -0.23F))
-                .texOffs(184, 329).addBox(-1.5F, 1.7F, -0.25F, 3F, 2F, 10F, new CubeDeformation(-0.14F, -0.2F, -0.25F)),
+                .texOffs(184, 329).addBox(-1.5F, 1.7F, -0.25F, 3F, 2F, 10F, new CubeDeformation(-0.1F, -0.2F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 0F, 10F, 0.0698F, 0F, 0F));
         PartDefinition p_tail8 = p_tail7.addOrReplaceChild("tail8", CubeListBuilder.create()
                 .texOffs(158, 314).addBox(-3F, -1F, -1F, 6F, 2F, 11F, new CubeDeformation(-0.35F, 0F, -0.4F))
                 .texOffs(231, 280).addBox(-1.5F, -2.5F, -1F, 3F, 5F, 11F, new CubeDeformation(-0.35F, 0F, -0.48F))
-                .texOffs(275, 329).addBox(-1.5F, 1.3F, 0F, 3F, 2F, 9F, new CubeDeformation(-0.35F, -0.2F, 0F)),
+                .texOffs(275, 329).addBox(-1.5F, 1.3F, 0F, 3F, 2F, 9F, new CubeDeformation(-0.31F, -0.2F, 0F)),
                 PartPose.offsetAndRotation(0F, 0F, 9.5F, 0.0698F, 0F, 0F));
         PartDefinition p_tail9 = p_tail8.addOrReplaceChild("tail9", CubeListBuilder.create()
                 .texOffs(37, 329).addBox(-2.5F, -1F, -0.75F, 5F, 2F, 10F, new CubeDeformation(-0.25F, -0.16F, -0.15F))
                 .texOffs(39, 298).addBox(-1F, -2.5F, -0.75F, 2F, 5F, 10F, new CubeDeformation(-0.01F, -0.4F, -0.23F))
-                .texOffs(346, 329).addBox(-1F, 0.9F, -0.25F, 2F, 2F, 9F, new CubeDeformation(-0.01F, -0.2F, -0.25F)),
+                .texOffs(346, 329).addBox(-1F, 0.9F, -0.25F, 2F, 2F, 9F, new CubeDeformation(0.03F, -0.2F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 0F, 9F, 0.0524F, 0F, 0F));
         PartDefinition p_tail10 = p_tail9.addOrReplaceChild("tail10", CubeListBuilder.create()
                 .texOffs(155, 329).addBox(-2F, -1F, -1F, 4F, 2F, 10F, new CubeDeformation(-0.1F, -0.3F, -0.4F))
                 .texOffs(0, 314).addBox(-1F, -2F, -1F, 2F, 4F, 10F, new CubeDeformation(-0.15F, -0.25F, -0.48F))
-                .texOffs(21, 342).addBox(-1F, 0.55F, 0F, 2F, 2F, 8F, new CubeDeformation(-0.15F, -0.2F, 0F))
+                .texOffs(21, 342).addBox(-1F, 0.55F, 0F, 2F, 2F, 8F, new CubeDeformation(-0.11F, -0.2F, 0F))
                 .texOffs(64, 298).addBox(-6.5F, -0.5F, 4F, 13F, 1F, 13F)
                 .texOffs(85, 280).addBox(-0.5F, -6.25F, 2F, 1F, 6F, 11F, new CubeDeformation(0F, -0.25F, 0F)),
                 PartPose.offsetAndRotation(0F, 0F, 8.5F, 0.0349F, 0F, 0F));
@@ -473,11 +473,11 @@ public final class NyxarGeometry {
         PartDefinition p_front_foot_l = p_front_shin_l.addOrReplaceChild("front_foot_l", CubeListBuilder.create()
                 .texOffs(205, 298).addBox(-4.5F, 0.7F, -8.4F, 9F, 2F, 12F, new CubeDeformation(0F, -0.32F, 0F))
                 .texOffs(153, 280).addBox(-3.5F, -0.3F, -8.4F, 7F, 4F, 12F, new CubeDeformation(-0.02F, -0.3F, -0.08F))
-                .texOffs(337, 353).addBox(-4.2F, 1.45F, -12.05F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.25F))
+                .texOffs(337, 353).addBox(-4.2F, 1.45F, -12.05F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.25F))
                 .texOffs(26, 377).addBox(-4.2F, 1.83F, -15.15F, 2F, 2F, 4F, new CubeDeformation(-0.335F, -0.145F, -0.35F))
-                .texOffs(352, 353).addBox(-1F, 1.45F, -12.05F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.25F))
+                .texOffs(352, 353).addBox(-1F, 1.45F, -12.05F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.25F))
                 .texOffs(39, 377).addBox(-1F, 1.83F, -15.15F, 2F, 2F, 4F, new CubeDeformation(-0.335F, -0.145F, -0.35F))
-                .texOffs(367, 353).addBox(2.2F, 1.45F, -12.05F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.25F))
+                .texOffs(367, 353).addBox(2.2F, 1.45F, -12.05F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.25F))
                 .texOffs(52, 377).addBox(2.2F, 1.83F, -15.15F, 2F, 2F, 4F, new CubeDeformation(-0.335F, -0.145F, -0.35F)),
                 PartPose.offsetAndRotation(0F, 11.9F, 0F, 0.1047F, 0F, 0F));
         PartDefinition p_hind_leg_l = p_body.addOrReplaceChild("hind_leg_l", CubeListBuilder.create()
@@ -498,11 +498,11 @@ public final class NyxarGeometry {
         PartDefinition p_hind_foot_l = p_hind_shin_l.addOrReplaceChild("hind_foot_l", CubeListBuilder.create()
                 .texOffs(307, 280).addBox(-5F, 0.7F, -9.1F, 10F, 2F, 13F, new CubeDeformation(0F, -0.32F, 0F))
                 .texOffs(317, 262).addBox(-4F, -0.3F, -9.1F, 8F, 4F, 13F, new CubeDeformation(-0.02F, -0.3F, -0.08F))
-                .texOffs(382, 353).addBox(-4.5333F, 1.45F, -12.95F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.05F))
+                .texOffs(382, 353).addBox(-4.5333F, 1.45F, -12.95F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.05F))
                 .texOffs(65, 377).addBox(-4.5333F, 1.83F, -16.35F, 2F, 2F, 4F, new CubeDeformation(-0.335F, -0.145F, -0.25F))
-                .texOffs(397, 353).addBox(-1F, 1.45F, -12.95F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.05F))
+                .texOffs(397, 353).addBox(-1F, 1.45F, -12.95F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.05F))
                 .texOffs(78, 377).addBox(-1F, 1.83F, -16.35F, 2F, 2F, 4F, new CubeDeformation(-0.335F, -0.145F, -0.25F))
-                .texOffs(412, 353).addBox(2.5333F, 1.45F, -12.95F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.05F))
+                .texOffs(412, 353).addBox(2.5333F, 1.45F, -12.95F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.05F))
                 .texOffs(91, 377).addBox(2.5333F, 1.83F, -16.35F, 2F, 2F, 4F, new CubeDeformation(-0.335F, -0.145F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 12.4F, 0F, -0.384F, 0F, 0F));
         PartDefinition p_front_leg_r = p_body.addOrReplaceChild("front_leg_r", CubeListBuilder.create()
@@ -523,11 +523,11 @@ public final class NyxarGeometry {
         PartDefinition p_front_foot_r = p_front_shin_r.addOrReplaceChild("front_foot_r", CubeListBuilder.create()
                 .texOffs(248, 298).addBox(-4.5F, 0.7F, -8.4F, 9F, 2F, 12F, new CubeDeformation(0F, -0.32F, 0F))
                 .texOffs(192, 280).addBox(-3.5F, -0.3F, -8.4F, 7F, 4F, 12F, new CubeDeformation(-0.02F, -0.3F, -0.08F))
-                .texOffs(427, 353).addBox(-4.2F, 1.45F, -12.05F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.25F))
+                .texOffs(427, 353).addBox(-4.2F, 1.45F, -12.05F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.25F))
                 .texOffs(104, 377).addBox(-4.2F, 1.83F, -15.15F, 2F, 2F, 4F, new CubeDeformation(-0.335F, -0.145F, -0.35F))
-                .texOffs(442, 353).addBox(-1F, 1.45F, -12.05F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.25F))
+                .texOffs(442, 353).addBox(-1F, 1.45F, -12.05F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.25F))
                 .texOffs(117, 377).addBox(-1F, 1.83F, -15.15F, 2F, 2F, 4F, new CubeDeformation(-0.335F, -0.145F, -0.35F))
-                .texOffs(457, 353).addBox(2.2F, 1.45F, -12.05F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.25F))
+                .texOffs(457, 353).addBox(2.2F, 1.45F, -12.05F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.25F))
                 .texOffs(130, 377).addBox(2.2F, 1.83F, -15.15F, 2F, 2F, 4F, new CubeDeformation(-0.335F, -0.145F, -0.35F)),
                 PartPose.offsetAndRotation(0F, 11.9F, 0F, 0.1047F, 0F, 0F));
         PartDefinition p_hind_leg_r = p_body.addOrReplaceChild("hind_leg_r", CubeListBuilder.create()
@@ -548,11 +548,11 @@ public final class NyxarGeometry {
         PartDefinition p_hind_foot_r = p_hind_shin_r.addOrReplaceChild("hind_foot_r", CubeListBuilder.create()
                 .texOffs(354, 280).addBox(-5F, 0.7F, -9.1F, 10F, 2F, 13F, new CubeDeformation(0F, -0.32F, 0F))
                 .texOffs(403, 262).addBox(-4F, -0.3F, -9.1F, 8F, 4F, 13F, new CubeDeformation(-0.02F, -0.3F, -0.08F))
-                .texOffs(472, 353).addBox(-4.5333F, 1.45F, -12.95F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.05F))
+                .texOffs(472, 353).addBox(-4.5333F, 1.45F, -12.95F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.05F))
                 .texOffs(143, 377).addBox(-4.5333F, 1.83F, -16.35F, 2F, 2F, 4F, new CubeDeformation(-0.335F, -0.145F, -0.25F))
-                .texOffs(487, 353).addBox(-1F, 1.45F, -12.95F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.05F))
+                .texOffs(487, 353).addBox(-1F, 1.45F, -12.95F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.05F))
                 .texOffs(156, 377).addBox(-1F, 1.83F, -16.35F, 2F, 2F, 4F, new CubeDeformation(-0.335F, -0.145F, -0.25F))
-                .texOffs(0, 362).addBox(2.5333F, 1.45F, -12.95F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.05F, -0.05F))
+                .texOffs(0, 362).addBox(2.5333F, 1.45F, -12.95F, 2F, 2F, 5F, new CubeDeformation(-0.05F, -0.01F, -0.05F))
                 .texOffs(169, 377).addBox(2.5333F, 1.83F, -16.35F, 2F, 2F, 4F, new CubeDeformation(-0.335F, -0.145F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 12.4F, 0F, -0.384F, 0F, 0F));
         PartDefinition p_wing_l = p_body.addOrReplaceChild("wing_l", CubeListBuilder.create()

@@ -65,7 +65,7 @@ public final class RiftHoundGeometry {
                 PartPose.offsetAndRotation(1.6F, 11F, 5.6F, -0.2094F, 0F, 0F));
         PartDefinition p_left_hind_shin = p_left_hind_leg.addOrReplaceChild("left_hind_shin", CubeListBuilder.create()
                 .texOffs(11, 16).addBox(-1F, -0.2F, -1F, 2F, 8F, 2F, new CubeDeformation(-0.4F, -0.2F, -0.4F))
-                .texOffs(60, 36).addBox(-1F, 6.95F, -2.15F, 2F, 1F, 3F, new CubeDeformation(-0.15F, -0.05F, -0.25F)),
+                .texOffs(60, 36).addBox(-1F, 6.95F, -2.15F, 2F, 1F, 3F, new CubeDeformation(-0.15F, -0.05F, -0.21F)),
                 PartPose.offsetAndRotation(0F, 4.8F, 0.4F, 0.2443F, 0F, 0F));
         PartDefinition p_right_front_leg = root.addOrReplaceChild("right_front_leg", CubeListBuilder.create()
                 .texOffs(68, 16).addBox(-1F, -1.2F, -1F, 2F, 7F, 2F, new CubeDeformation(-0.1F, -0.2F, 0F)),
@@ -79,7 +79,7 @@ public final class RiftHoundGeometry {
                 PartPose.offsetAndRotation(-1.6F, 11F, 5.6F, -0.2094F, 0F, 0F));
         PartDefinition p_right_hind_shin = p_right_hind_leg.addOrReplaceChild("right_hind_shin", CubeListBuilder.create()
                 .texOffs(20, 16).addBox(-1F, -0.2F, -1F, 2F, 8F, 2F, new CubeDeformation(-0.4F, -0.2F, -0.4F))
-                .texOffs(82, 36).addBox(-1F, 6.95F, -2.15F, 2F, 1F, 3F, new CubeDeformation(-0.15F, -0.05F, -0.25F)),
+                .texOffs(82, 36).addBox(-1F, 6.95F, -2.15F, 2F, 1F, 3F, new CubeDeformation(-0.15F, -0.05F, -0.21F)),
                 PartPose.offsetAndRotation(0F, 4.8F, 0.4F, 0.2443F, 0F, 0F));
         PartDefinition p_shard1 = root.addOrReplaceChild("shard1", CubeListBuilder.create()
                 .texOffs(22, 36).addBox(-1F, -1.5F, -1F, 2F, 3F, 2F, new CubeDeformation(-0.4F, 0F, -0.4F)),

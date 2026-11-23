@@ -61,27 +61,27 @@ public final class PrimevalDiggerGeometry {
                 PartPose.offset(0F, 2.5F, -12.5F));
         PartDefinition p_right_front_leg = p_bone.addOrReplaceChild("right_front_leg", CubeListBuilder.create()
                 .texOffs(77, 154).addBox(-3.5F, -1F, -4F, 7F, 10F, 8F)
-                .texOffs(182, 175).addBox(-4F, 7.2F, -5.5F, 8F, 2F, 2F, new CubeDeformation(-0.3F, -0.2F, -0.2F)),
+                .texOffs(182, 175).addBox(-4F, 7.2F, -5.5F, 8F, 2F, 2F, new CubeDeformation(-0.3F, -0.16F, -0.2F)),
                 PartPose.offset(-7.5F, 10F, -15F));
         PartDefinition p_right_mid_leg = p_bone.addOrReplaceChild("right_mid_leg", CubeListBuilder.create()
                 .texOffs(108, 154).addBox(-3.5F, -1F, -4F, 7F, 10F, 8F)
-                .texOffs(203, 175).addBox(-4F, 7.2F, -5.5F, 8F, 2F, 2F, new CubeDeformation(-0.3F, -0.2F, -0.2F)),
+                .texOffs(203, 175).addBox(-4F, 7.2F, -5.5F, 8F, 2F, 2F, new CubeDeformation(-0.3F, -0.16F, -0.2F)),
                 PartPose.offset(-7.5F, 10F, 0F));
         PartDefinition p_right_hind_leg = p_bone.addOrReplaceChild("right_hind_leg", CubeListBuilder.create()
                 .texOffs(139, 154).addBox(-3.5F, -1F, -4F, 7F, 10F, 8F)
-                .texOffs(224, 175).addBox(-4F, 7.2F, -5.5F, 8F, 2F, 2F, new CubeDeformation(-0.3F, -0.2F, -0.2F)),
+                .texOffs(224, 175).addBox(-4F, 7.2F, -5.5F, 8F, 2F, 2F, new CubeDeformation(-0.3F, -0.16F, -0.2F)),
                 PartPose.offset(-7.5F, 10F, 15F));
         PartDefinition p_left_front_leg = p_bone.addOrReplaceChild("left_front_leg", CubeListBuilder.create()
                 .texOffs(170, 154).addBox(-3.5F, -1F, -4F, 7F, 10F, 8F)
-                .texOffs(245, 175).addBox(-4F, 7.2F, -5.5F, 8F, 2F, 2F, new CubeDeformation(-0.3F, -0.2F, -0.2F)),
+                .texOffs(245, 175).addBox(-4F, 7.2F, -5.5F, 8F, 2F, 2F, new CubeDeformation(-0.3F, -0.16F, -0.2F)),
                 PartPose.offset(7.5F, 10F, -15F));
         PartDefinition p_left_mid_leg = p_bone.addOrReplaceChild("left_mid_leg", CubeListBuilder.create()
                 .texOffs(201, 154).addBox(-3.5F, -1F, -4F, 7F, 10F, 8F)
-                .texOffs(0, 192).addBox(-4F, 7.2F, -5.5F, 8F, 2F, 2F, new CubeDeformation(-0.3F, -0.2F, -0.2F)),
+                .texOffs(0, 192).addBox(-4F, 7.2F, -5.5F, 8F, 2F, 2F, new CubeDeformation(-0.3F, -0.16F, -0.2F)),
                 PartPose.offset(7.5F, 10F, 0F));
         PartDefinition p_left_hind_leg = p_bone.addOrReplaceChild("left_hind_leg", CubeListBuilder.create()
                 .texOffs(232, 154).addBox(-3.5F, -1F, -4F, 7F, 10F, 8F)
-                .texOffs(21, 192).addBox(-4F, 7.2F, -5.5F, 8F, 2F, 2F, new CubeDeformation(-0.3F, -0.2F, -0.2F)),
+                .texOffs(21, 192).addBox(-4F, 7.2F, -5.5F, 8F, 2F, 2F, new CubeDeformation(-0.3F, -0.16F, -0.2F)),
                 PartPose.offset(7.5F, 10F, 15F));
         return mesh;
     }

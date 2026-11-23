@@ -34,7 +34,7 @@ public final class LindwormGeometry {
         PartDefinition p_head = p_neck.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(93, 21).addBox(-3.5F, -3.5F, -7F, 7F, 6F, 7F)
                 .texOffs(79, 37).addBox(-2.5F, -2.25F, -12.25F, 5F, 4F, 6F, new CubeDeformation(0F, -0.25F, -0.25F))
-                .texOffs(30, 61).addBox(-3.5F, -4.2F, -6F, 7F, 1F, 4F)
+                .texOffs(30, 61).addBox(-3.5F, -4.2F, -6F, 7F, 1F, 4F, new CubeDeformation(0.04F, 0F, 0F))
                 .texOffs(0, 61).addBox(-2F, 1.5F, -11.75F, 4F, 1F, 5F, new CubeDeformation(0F, 0F, -0.25F))
                 .texOffs(55, 68).addBox(2.95F, -2.6F, -5.6F, 1F, 2F, 2F, new CubeDeformation(-0.25F, -0.4F, -0.1F))
                 .texOffs(62, 68).addBox(-3.95F, -2.6F, -5.6F, 1F, 2F, 2F, new CubeDeformation(-0.25F, -0.4F, -0.1F)),
@@ -52,16 +52,16 @@ public final class LindwormGeometry {
         PartDefinition p_left_leg = p_body.addOrReplaceChild("left_leg", CubeListBuilder.create()
                 .texOffs(63, 51).addBox(-1.5F, -1.5F, -1.5F, 3F, 6F, 3F)
                 .texOffs(89, 51).addBox(-2F, 4.25F, -3.5F, 4F, 2F, 5F, new CubeDeformation(0F, -0.25F, 0F))
-                .texOffs(69, 68).addBox(-2F, 5F, -4.75F, 1F, 1F, 2F, new CubeDeformation(-0.25F, 0F, -0.25F))
-                .texOffs(76, 68).addBox(-0.5F, 5F, -4.75F, 1F, 1F, 2F, new CubeDeformation(-0.25F, 0F, -0.25F))
-                .texOffs(83, 68).addBox(1F, 5F, -4.75F, 1F, 1F, 2F, new CubeDeformation(-0.25F, 0F, -0.25F)),
+                .texOffs(69, 68).addBox(-2F, 5F, -4.75F, 1F, 1F, 2F, new CubeDeformation(-0.25F, 0.04F, -0.25F))
+                .texOffs(76, 68).addBox(-0.5F, 5F, -4.75F, 1F, 1F, 2F, new CubeDeformation(-0.25F, 0.04F, -0.25F))
+                .texOffs(83, 68).addBox(1F, 5F, -4.75F, 1F, 1F, 2F, new CubeDeformation(-0.25F, 0.04F, -0.25F)),
                 PartPose.offset(4.8F, 2F, -3F));
         PartDefinition p_right_leg = p_body.addOrReplaceChild("right_leg", CubeListBuilder.create()
                 .texOffs(76, 51).addBox(-1.5F, -1.5F, -1.5F, 3F, 6F, 3F)
                 .texOffs(108, 51).addBox(-2F, 4.25F, -3.5F, 4F, 2F, 5F, new CubeDeformation(0F, -0.25F, 0F))
-                .texOffs(90, 68).addBox(-2F, 5F, -4.75F, 1F, 1F, 2F, new CubeDeformation(-0.25F, 0F, -0.25F))
-                .texOffs(97, 68).addBox(-0.5F, 5F, -4.75F, 1F, 1F, 2F, new CubeDeformation(-0.25F, 0F, -0.25F))
-                .texOffs(104, 68).addBox(1F, 5F, -4.75F, 1F, 1F, 2F, new CubeDeformation(-0.25F, 0F, -0.25F)),
+                .texOffs(90, 68).addBox(-2F, 5F, -4.75F, 1F, 1F, 2F, new CubeDeformation(-0.25F, 0.04F, -0.25F))
+                .texOffs(97, 68).addBox(-0.5F, 5F, -4.75F, 1F, 1F, 2F, new CubeDeformation(-0.25F, 0.04F, -0.25F))
+                .texOffs(104, 68).addBox(1F, 5F, -4.75F, 1F, 1F, 2F, new CubeDeformation(-0.25F, 0.04F, -0.25F)),
                 PartPose.offset(-4.8F, 2F, -3F));
         PartDefinition p_segment1 = p_body.addOrReplaceChild("segment1", CubeListBuilder.create()
                 .texOffs(43, 0).addBox(-4F, -3.5F, 0F, 8F, 7F, 10F)

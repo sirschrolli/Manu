@@ -25,12 +25,12 @@ public final class SoulShepherdGeometry {
         PartDefinition p_left_leg = root.addOrReplaceChild("left_leg", CubeListBuilder.create()
                 .texOffs(86, 0).addBox(-1.5F, -0.3F, -1.5F, 3F, 13F, 3F, new CubeDeformation(-0.4F, -0.3F, -0.4F))
                 .texOffs(119, 61).addBox(-1.5F, 12.1F, -4.4F, 3F, 2F, 5F, new CubeDeformation(-0.1F, -0.1F, 0F))
-                .texOffs(168, 85).addBox(-1.5F, 12.45F, -5.25F, 3F, 2F, 1F, new CubeDeformation(-0.3F, -0.45F, -0.05F)),
+                .texOffs(168, 85).addBox(-1.5F, 12.45F, -5.25F, 3F, 2F, 1F, new CubeDeformation(-0.3F, -0.41F, -0.05F)),
                 PartPose.offset(2F, 10F, 0.4F));
         PartDefinition p_right_leg = root.addOrReplaceChild("right_leg", CubeListBuilder.create()
                 .texOffs(99, 0).addBox(-1.5F, -0.3F, -1.5F, 3F, 13F, 3F, new CubeDeformation(-0.4F, -0.3F, -0.4F))
                 .texOffs(136, 61).addBox(-1.5F, 12.1F, -4.4F, 3F, 2F, 5F, new CubeDeformation(-0.1F, -0.1F, 0F))
-                .texOffs(177, 85).addBox(-1.5F, 12.45F, -5.25F, 3F, 2F, 1F, new CubeDeformation(-0.3F, -0.45F, -0.05F)),
+                .texOffs(177, 85).addBox(-1.5F, 12.45F, -5.25F, 3F, 2F, 1F, new CubeDeformation(-0.3F, -0.41F, -0.05F)),
                 PartPose.offset(-2F, 10F, 0.4F));
         PartDefinition p_skirt = root.addOrReplaceChild("skirt", CubeListBuilder.create()
                 .texOffs(0, 47).addBox(-4.5F, -1.5F, -3F, 9F, 7F, 6F, new CubeDeformation(-0.3F, -0.3F, -0.1F))
@@ -145,7 +145,7 @@ public final class SoulShepherdGeometry {
                 PartPose.offsetAndRotation(0F, -9.8F, -4.4F, 0.4887F, 0F, 0F));
         PartDefinition p_hood_tail = p_head.addOrReplaceChild("hood_tail", CubeListBuilder.create()
                 .texOffs(100, 61).addBox(-2.5F, -2.6F, -0.4F, 5F, 3F, 4F, new CubeDeformation(-0.3F, -0.4F, -0.4F))
-                .texOffs(207, 71).addBox(-1.5F, -1.8F, 2.6F, 3F, 2F, 3F, new CubeDeformation(-0.3F, -0.2F, -0.4F)),
+                .texOffs(207, 71).addBox(-1.5F, -1.8F, 2.6F, 3F, 2F, 3F, new CubeDeformation(-0.3F, -0.16F, -0.4F)),
                 PartPose.offsetAndRotation(0F, -9F, 3.8F, -1.0821F, 0F, 0F));
         PartDefinition p_horn_l_0 = p_head.addOrReplaceChild("horn_l_0", CubeListBuilder.create()
                 .texOffs(170, 61).addBox(-1.5F, -1.5F, -0.325F, 3F, 3F, 4F, new CubeDeformation(0F, 0F, -0.325F)),
@@ -199,7 +199,7 @@ public final class SoulShepherdGeometry {
                 .texOffs(100, 85).addBox(-0.5F, 10.3F, -1.45F, 1F, 3F, 1F, new CubeDeformation(-0.2F, -0.1F, -0.2F))
                 .texOffs(105, 85).addBox(-0.5F, 10.1F, -0.55F, 1F, 3F, 1F, new CubeDeformation(-0.2F, -0.3F, -0.2F))
                 .texOffs(110, 85).addBox(-0.5F, 10.3F, 0.35F, 1F, 3F, 1F, new CubeDeformation(-0.2F, -0.1F, -0.2F))
-                .texOffs(239, 85).addBox(-1.4F, 9.2F, -1.8F, 1F, 2F, 1F, new CubeDeformation(-0.2F, -0.2F, -0.2F)),
+                .texOffs(239, 85).addBox(-1.4F, 9.2F, -1.8F, 1F, 2F, 1F, new CubeDeformation(-0.16F, -0.2F, -0.2F)),
                 PartPose.offsetAndRotation(0F, 8.8F, 0F, -0.2793F, 0F, 0F));
         PartDefinition p_left_arm_rag = p_left_arm_fore.addOrReplaceChild("left_arm_rag", CubeListBuilder.create()
                 .texOffs(147, 71).addBox(-2F, -0.2F, -0.55F, 4F, 5F, 1F, new CubeDeformation(-0.3F, -0.2F, -0.25F)),
@@ -221,7 +221,7 @@ public final class SoulShepherdGeometry {
                 .texOffs(120, 85).addBox(-0.5F, 10.3F, -1.45F, 1F, 3F, 1F, new CubeDeformation(-0.2F, -0.1F, -0.2F))
                 .texOffs(125, 85).addBox(-0.5F, 10.1F, -0.55F, 1F, 3F, 1F, new CubeDeformation(-0.2F, -0.3F, -0.2F))
                 .texOffs(130, 85).addBox(-0.5F, 10.3F, 0.35F, 1F, 3F, 1F, new CubeDeformation(-0.2F, -0.1F, -0.2F))
-                .texOffs(249, 85).addBox(0.4F, 9.2F, -1.8F, 1F, 2F, 1F, new CubeDeformation(-0.2F, -0.2F, -0.2F)),
+                .texOffs(249, 85).addBox(0.4F, 9.2F, -1.8F, 1F, 2F, 1F, new CubeDeformation(-0.16F, -0.2F, -0.2F)),
                 PartPose.offsetAndRotation(0F, 8.8F, 0F, -0.7679F, 0F, 0F));
         PartDefinition p_right_arm_rag = p_right_arm_fore.addOrReplaceChild("right_arm_rag", CubeListBuilder.create()
                 .texOffs(158, 71).addBox(-2F, -0.2F, -0.55F, 4F, 5F, 1F, new CubeDeformation(-0.3F, -0.2F, -0.25F)),

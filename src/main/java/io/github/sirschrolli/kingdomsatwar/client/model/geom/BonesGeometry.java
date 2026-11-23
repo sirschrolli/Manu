@@ -59,7 +59,7 @@ public final class BonesGeometry {
                 PartPose.offsetAndRotation(0F, 0F, 0F, 0F, 2.3562F, 0F));
         PartDefinition p_body = root.addOrReplaceChild("body", CubeListBuilder.create()
                 .texOffs(18, 22).addBox(-4F, 0F, -2F, 8F, 8F, 4F)
-                .texOffs(9, 22).addBox(-1F, -0.25F, 0.05F, 2F, 11F, 2F, new CubeDeformation(0F, -0.25F, -0.25F))
+                .texOffs(9, 22).addBox(-1F, -0.25F, 0.05F, 2F, 11F, 2F, new CubeDeformation(0F, -0.21F, -0.25F))
                 .texOffs(87, 22).addBox(-3.5F, 10F, -1.5F, 7F, 2F, 3F),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_garb = p_body.addOrReplaceChild("garb", CubeListBuilder.create()
@@ -86,12 +86,12 @@ public final class BonesGeometry {
         PartDefinition p_right_leg = root.addOrReplaceChild("right_leg", CubeListBuilder.create()
                 .texOffs(113, 0).addBox(-1F, 0F, -1F, 2F, 12F, 2F)
                 .texOffs(0, 43).addBox(-1F, 5F, -1F, 2F, 1F, 2F, new CubeDeformation(0.3F))
-                .texOffs(9, 43).addBox(-1F, 11F, -2.8F, 2F, 1F, 2F),
+                .texOffs(9, 43).addBox(-1F, 11F, -2.8F, 2F, 1F, 2F, new CubeDeformation(0.04F, 0.04F, 0F)),
                 PartPose.offset(-2F, 12F, 0F));
         PartDefinition p_left_leg = root.addOrReplaceChild("left_leg", CubeListBuilder.create()
                 .texOffs(0, 22).addBox(-1F, 0F, -1F, 2F, 12F, 2F)
                 .texOffs(18, 43).addBox(-1F, 5F, -1F, 2F, 1F, 2F, new CubeDeformation(0.3F))
-                .texOffs(27, 43).addBox(-1F, 11F, -2.8F, 2F, 1F, 2F),
+                .texOffs(27, 43).addBox(-1F, 11F, -2.8F, 2F, 1F, 2F, new CubeDeformation(0.04F, 0.04F, 0F)),
                 PartPose.offset(2F, 12F, 0F));
         return mesh;
     }

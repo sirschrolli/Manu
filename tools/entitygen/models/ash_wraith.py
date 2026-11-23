@@ -35,7 +35,7 @@ def build() -> Model:
     # Kapuze und Schädel
     m.bone("head", "body", pivot=(0, -14.0, -0.5), rotation=(-8, 0, 0))
     m.cube("head", (-4.4, -9.0, -4.6), (8.8, 9.0, 8.4), "hood")               # vorn offen
-    m.cube("head", (-3.8, -8.5, -2.6), (7.6, 8.2, 6.6), "face")               # das Dunkel in der Kapuze
+    m.cube("head", (-3.8, -8.5, -2.6), (7.6, 8.2, 6.0), "face")               # das Dunkel in der Kapuze (endet vor ihrem Rücken)
     m.cube("head", (-2.6, -7.0, -4.0), (5.2, 5.6, 3.6), "skull")
     m.cube("head", (-2.2, -5.6, -4.2), (1.6, 1.2, 0.3), "eye")
     m.cube("head", (0.6, -5.6, -4.2), (1.6, 1.2, 0.3), "eye")

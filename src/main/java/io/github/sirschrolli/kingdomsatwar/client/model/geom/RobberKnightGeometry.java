@@ -53,9 +53,9 @@ public final class RobberKnightGeometry {
                 .texOffs(9, 70).addBox(-3.5F, -4.6F, -3.05F, 7F, 7F, 8F, new CubeDeformation(0F, -0.3F, -0.05F))
                 .texOffs(126, 70).addBox(-3F, -2.8F, -9.7F, 6F, 6F, 7F, new CubeDeformation(-0.4F, -0.1F, -0.1F))
                 .texOffs(177, 87).addBox(-4F, -5.1F, -3.55F, 8F, 1F, 9F, new CubeDeformation(-0.35F, -0.1F, -0.4F))
-                .texOffs(224, 100).addBox(-3F, -3.55F, -9.8F, 6F, 1F, 7F, new CubeDeformation(-0.25F, -0.1F, 0F))
+                .texOffs(224, 100).addBox(-3F, -3.55F, -9.8F, 6F, 1F, 7F, new CubeDeformation(-0.25F, -0.1F, 0.04F))
                 .texOffs(56, 128).addBox(-1.5F, -3.55F, -10.125F, 3F, 3F, 1F, new CubeDeformation(-0.1F, -0.05F, -0.275F))
-                .texOffs(110, 120).addBox(-1F, -9.45F, 0.15F, 2F, 5F, 2F, new CubeDeformation(-0.25F, -0.45F, -0.25F))
+                .texOffs(110, 120).addBox(-1F, -9.45F, 0.15F, 2F, 5F, 2F, new CubeDeformation(-0.25F, -0.41F, -0.25F))
                 .texOffs(0, 128).addBox(-2F, -5.75F, -2F, 4F, 1F, 4F, new CubeDeformation(-0.2F, -0.15F, -0.3F)),
                 PartPose.offset(0F, -15.2F, -0.8F));
         PartDefinition p_ear_l = p_head.addOrReplaceChild("ear_l", CubeListBuilder.create()

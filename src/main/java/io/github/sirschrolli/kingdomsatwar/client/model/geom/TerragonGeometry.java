@@ -180,21 +180,21 @@ public final class TerragonGeometry {
         PartDefinition p_neck1 = p_body.addOrReplaceChild("neck1", CubeListBuilder.create()
                 .texOffs(345, 194).addBox(-9F, -3.5F, -8F, 18F, 7F, 9F, new CubeDeformation(0F, -0.1F, -0.4F))
                 .texOffs(408, 99).addBox(-4F, -8.5F, -8F, 8F, 17F, 9F, new CubeDeformation(-0.1F, 0F, -0.48F))
-                .texOffs(294, 299).addBox(-4F, 7.3F, -7F, 8F, 2F, 7F, new CubeDeformation(-0.1F, -0.2F, 0F))
+                .texOffs(294, 299).addBox(-4F, 7.3F, -7F, 8F, 2F, 7F, new CubeDeformation(-0.06F, -0.2F, 0F))
                 .texOffs(108, 287).addBox(-7F, -10.5F, -7.5F, 14F, 2F, 8F, new CubeDeformation(0F, -0.4F, -0.2F))
                 .texOffs(43, 274).addBox(-6F, -11.5F, -7.5F, 12F, 4F, 8F, new CubeDeformation(0F, -0.4F, -0.28F)),
                 PartPose.offsetAndRotation(0F, -5F, -21F, -0.2443F, 0F, 0F));
         PartDefinition p_neck2 = p_neck1.addOrReplaceChild("neck2", CubeListBuilder.create()
                 .texOffs(182, 212).addBox(-8.5F, -3.5F, -7.25F, 17F, 7F, 8F, new CubeDeformation(0F, -0.3F, -0.15F))
                 .texOffs(86, 127).addBox(-4F, -8F, -7.25F, 8F, 16F, 8F, new CubeDeformation(-0.3F, 0F, -0.23F))
-                .texOffs(325, 299).addBox(-4F, 6.8F, -6.75F, 8F, 2F, 7F, new CubeDeformation(-0.3F, -0.2F, -0.25F))
+                .texOffs(325, 299).addBox(-4F, 6.8F, -6.75F, 8F, 2F, 7F, new CubeDeformation(-0.26F, -0.2F, -0.25F))
                 .texOffs(153, 287).addBox(-6.5F, -10F, -7.25F, 13F, 2F, 8F, new CubeDeformation(0F, -0.4F, -0.45F))
                 .texOffs(253, 274).addBox(-5.5F, -11F, -6.75F, 11F, 4F, 7F, new CubeDeformation(0F, -0.4F, -0.03F)),
                 PartPose.offsetAndRotation(0F, 0F, -7F, -0.0698F, 0F, 0F));
         PartDefinition p_neck3 = p_neck2.addOrReplaceChild("neck3", CubeListBuilder.create()
                 .texOffs(324, 229).addBox(-8F, -3F, -7F, 16F, 6F, 8F, new CubeDeformation(0F, 0F, -0.4F))
                 .texOffs(197, 127).addBox(-3.5F, -7.5F, -7F, 7F, 15F, 8F, new CubeDeformation(0F, 0F, -0.48F))
-                .texOffs(450, 299).addBox(-3.5F, 6.3F, -6F, 7F, 2F, 6F, new CubeDeformation(0F, -0.2F, 0F))
+                .texOffs(450, 299).addBox(-3.5F, 6.3F, -6F, 7F, 2F, 6F, new CubeDeformation(0.04F, -0.2F, 0F))
                 .texOffs(255, 299).addBox(-6F, -9.5F, -6.5F, 12F, 2F, 7F, new CubeDeformation(0F, -0.4F, -0.2F))
                 .texOffs(364, 274).addBox(-5F, -10.5F, -6.5F, 10F, 4F, 7F, new CubeDeformation(0F, -0.4F, -0.28F)),
                 PartPose.offsetAndRotation(0F, 0F, -6.5F, 0.1047F, 0F, 0F));
@@ -206,13 +206,13 @@ public final class TerragonGeometry {
                 .texOffs(57, 287).addBox(-8.5F, -11.8F, -16.5F, 17F, 2F, 8F, new CubeDeformation(0F, -0.2F, 0F))
                 .texOffs(331, 245).addBox(-7.5F, -3.1F, -23F, 15F, 6F, 7F, new CubeDeformation(-0.1F, -0.1F, 0F))
                 .texOffs(321, 175).addBox(-5F, -5.6F, -23F, 10F, 11F, 7F, new CubeDeformation(0F, -0.2F, -0.08F))
-                .texOffs(258, 260).addBox(-7F, -2.9F, -29.5F, 14F, 6F, 7F, new CubeDeformation(-0.4F, -0.3F, 0F))
+                .texOffs(258, 260).addBox(-7F, -2.9F, -29.5F, 14F, 6F, 7F, new CubeDeformation(-0.4F, -0.26F, 0F))
                 .texOffs(255, 194).addBox(-4.5F, -4.9F, -29.5F, 9F, 10F, 7F, new CubeDeformation(-0.1F, -0.1F, -0.08F))
                 .texOffs(435, 260).addBox(-5.5F, -6.4F, -28F, 11F, 1F, 11F, new CubeDeformation(0F, -0.2F, 0F))
                 .texOffs(373, 229).addBox(-4.5F, -7.4F, -28F, 9F, 3F, 11F, new CubeDeformation(0F, -0.2F, -0.08F))
                 .texOffs(123, 310).addBox(-5F, -3.8F, -30.2F, 10F, 6F, 1F, new CubeDeformation(0F, -0.2F, 0F))
                 .texOffs(240, 326).addBox(1.4F, -3.35F, -30.65F, 3F, 2F, 1F, new CubeDeformation(-0.4F, -0.35F, -0.25F))
-                .texOffs(303, 310).addBox(7F, -6F, -17.6F, 2F, 3F, 4F, new CubeDeformation(0F, -0.4F, -0.2F))
+                .texOffs(303, 310).addBox(7F, -6F, -17.6F, 2F, 3F, 4F, new CubeDeformation(0.04F, -0.4F, -0.2F))
                 .texOffs(389, 175).addBox(8F, -1.5F, -16F, 3F, 7F, 11F, new CubeDeformation(-0.4F, -0.3F, 0F))
                 .texOffs(346, 153).addBox(9F, -2F, -16F, 1F, 8F, 11F, new CubeDeformation(-0.2F, 0F, -0.08F))
                 .texOffs(0, 326).addBox(5F, 4.945F, -29F, 2F, 2F, 2F, new CubeDeformation(-0.4F, -0.055F, -0.4F))
@@ -222,7 +222,7 @@ public final class TerragonGeometry {
                 .texOffs(36, 326).addBox(5F, 4.7F, -21F, 2F, 2F, 2F, new CubeDeformation(-0.4F, -0.3F, -0.4F))
                 .texOffs(45, 326).addBox(5F, 4.945F, -19F, 2F, 2F, 2F, new CubeDeformation(-0.4F, -0.055F, -0.4F))
                 .texOffs(249, 326).addBox(-4.4F, -3.35F, -30.65F, 3F, 2F, 1F, new CubeDeformation(-0.4F, -0.35F, -0.25F))
-                .texOffs(316, 310).addBox(-9F, -6F, -17.6F, 2F, 3F, 4F, new CubeDeformation(0F, -0.4F, -0.2F))
+                .texOffs(316, 310).addBox(-9F, -6F, -17.6F, 2F, 3F, 4F, new CubeDeformation(0.04F, -0.4F, -0.2F))
                 .texOffs(418, 175).addBox(-11F, -1.5F, -16F, 3F, 7F, 11F, new CubeDeformation(-0.4F, -0.3F, 0F))
                 .texOffs(371, 153).addBox(-10F, -2F, -16F, 1F, 8F, 11F, new CubeDeformation(-0.2F, 0F, -0.08F))
                 .texOffs(54, 326).addBox(-7F, 4.945F, -29F, 2F, 2F, 2F, new CubeDeformation(-0.4F, -0.055F, -0.4F))
@@ -288,7 +288,7 @@ public final class TerragonGeometry {
                 .texOffs(180, 326).addBox(-6.6F, -1.5F, -10.5F, 2F, 2F, 2F, new CubeDeformation(-0.45F, -0.4F, -0.45F))
                 .texOffs(189, 326).addBox(-6.6F, -1.5F, -8.3F, 2F, 2F, 2F, new CubeDeformation(-0.45F, -0.4F, -0.45F))
                 .texOffs(198, 326).addBox(-6.6F, -1.71F, -6.1F, 2F, 2F, 2F, new CubeDeformation(-0.45F, -0.19F, -0.45F))
-                .texOffs(288, 194).addBox(-6.5F, -0.5F, -15.2F, 13F, 1F, 15F, new CubeDeformation(-0.3F, -0.35F, 0F))
+                .texOffs(288, 194).addBox(-6.5F, -0.5F, -15.2F, 13F, 1F, 15F, new CubeDeformation(-0.26F, -0.35F, 0F))
                 .texOffs(84, 274).addBox(-4.5F, -0.7F, -13.5F, 9F, 1F, 11F, new CubeDeformation(-0.1F, -0.2F, 0F))
                 .texOffs(376, 245).addBox(-5F, 4.55F, -12F, 10F, 1F, 12F, new CubeDeformation(0F, -0.05F, 0F)),
                 PartPose.offsetAndRotation(0F, 4.9F, -14F, 0.0524F, 0F, 0F));
@@ -305,42 +305,42 @@ public final class TerragonGeometry {
         PartDefinition p_tail1 = p_body.addOrReplaceChild("tail1", CubeListBuilder.create()
                 .texOffs(226, 153).addBox(-8F, -3F, -1F, 16F, 6F, 14F, new CubeDeformation(0F, -0.2F, -0.4F))
                 .texOffs(424, 65).addBox(-4F, -7F, -1F, 8F, 14F, 14F, new CubeDeformation(-0.2F, 0F, -0.48F))
-                .texOffs(414, 229).addBox(-4F, 5.8F, 0F, 8F, 2F, 12F, new CubeDeformation(-0.2F, -0.2F, 0F))
+                .texOffs(414, 229).addBox(-4F, 5.8F, 0F, 8F, 2F, 12F, new CubeDeformation(-0.16F, -0.2F, 0F))
                 .texOffs(102, 245).addBox(-6.5F, -9F, 0.5F, 13F, 2F, 11F, new CubeDeformation(0F, -0.4F, -0.1F))
                 .texOffs(233, 212).addBox(-5.5F, -10F, 0.5F, 11F, 4F, 11F, new CubeDeformation(0F, -0.4F, -0.18F)),
                 PartPose.offsetAndRotation(0F, -2F, 21F, -0.1396F, 0F, 0F));
         PartDefinition p_tail2 = p_tail1.addOrReplaceChild("tail2", CubeListBuilder.create()
                 .texOffs(114, 175).addBox(-7F, -2.5F, -1F, 14F, 5F, 13F, new CubeDeformation(0F, -0.1F, -0.4F))
                 .texOffs(45, 127).addBox(-3.5F, -6F, -1F, 7F, 12F, 13F, new CubeDeformation(-0.1F, 0F, -0.48F))
-                .texOffs(301, 260).addBox(-3.5F, 4.8F, 0F, 7F, 2F, 11F, new CubeDeformation(-0.1F, -0.2F, 0F))
+                .texOffs(301, 260).addBox(-3.5F, 4.8F, 0F, 7F, 2F, 11F, new CubeDeformation(-0.06F, -0.2F, 0F))
                 .texOffs(0, 274).addBox(-5.5F, -8F, 0.5F, 11F, 2F, 10F, new CubeDeformation(0F, -0.4F, -0.1F))
                 .texOffs(0, 245).addBox(-4.5F, -9F, 0.5F, 9F, 4F, 10F, new CubeDeformation(0F, -0.4F, -0.18F)),
                 PartPose.offsetAndRotation(0F, 0F, 12F, -0.0698F, 0F, 0F));
         PartDefinition p_tail3 = p_tail2.addOrReplaceChild("tail3", CubeListBuilder.create()
                 .texOffs(0, 212).addBox(-6F, -2F, -1F, 12F, 4F, 12F, new CubeDeformation(0F, 0F, -0.4F))
                 .texOffs(321, 127).addBox(-3F, -5F, -1F, 6F, 10F, 12F, new CubeDeformation(0F, 0F, -0.48F))
-                .texOffs(164, 274).addBox(-3F, 3.8F, 0F, 6F, 2F, 10F, new CubeDeformation(0F, -0.2F, 0F))
+                .texOffs(164, 274).addBox(-3F, 3.8F, 0F, 6F, 2F, 10F, new CubeDeformation(0.04F, -0.2F, 0F))
                 .texOffs(327, 274).addBox(-4.5F, -7F, 0.5F, 9F, 2F, 9F, new CubeDeformation(0F, -0.4F, -0.1F))
                 .texOffs(373, 260).addBox(-3.5F, -8F, 0.5F, 7F, 4F, 9F, new CubeDeformation(0F, -0.4F, -0.18F)),
                 PartPose.offset(0F, 0F, 11F));
         PartDefinition p_tail4 = p_tail3.addOrReplaceChild("tail4", CubeListBuilder.create()
                 .texOffs(49, 212).addBox(-5F, -2F, -1F, 10F, 4F, 12F, new CubeDeformation(0F, -0.3F, -0.4F))
                 .texOffs(106, 153).addBox(-2.5F, -4.5F, -1F, 5F, 9F, 12F, new CubeDeformation(-0.05F, -0.25F, -0.48F))
-                .texOffs(197, 274).addBox(-2.5F, 3.05F, 0F, 5F, 2F, 10F, new CubeDeformation(-0.05F, -0.2F, 0F))
+                .texOffs(197, 274).addBox(-2.5F, 3.05F, 0F, 5F, 2F, 10F, new CubeDeformation(-0.01F, -0.2F, 0F))
                 .texOffs(399, 274).addBox(-3.5F, -6.25F, 0.5F, 7F, 2F, 9F, new CubeDeformation(0F, -0.4F, -0.1F))
                 .texOffs(406, 260).addBox(-2.5F, -7.25F, 0.5F, 5F, 4F, 9F, new CubeDeformation(0F, -0.4F, -0.18F)),
                 PartPose.offsetAndRotation(0F, 0F, 10F, 0.0349F, 0F, 0F));
         PartDefinition p_tail5 = p_tail4.addOrReplaceChild("tail5", CubeListBuilder.create()
                 .texOffs(455, 229).addBox(-4.5F, -1.5F, -1F, 9F, 3F, 11F, new CubeDeformation(-0.25F, -0.1F, -0.4F))
                 .texOffs(356, 175).addBox(-2.5F, -3.5F, -1F, 5F, 7F, 11F, new CubeDeformation(-0.35F, 0F, -0.48F))
-                .texOffs(432, 274).addBox(-2.5F, 2.3F, 0F, 5F, 2F, 9F, new CubeDeformation(-0.35F, -0.2F, 0F))
+                .texOffs(432, 274).addBox(-2.5F, 2.3F, 0F, 5F, 2F, 9F, new CubeDeformation(-0.31F, -0.2F, 0F))
                 .texOffs(87, 299).addBox(-3F, -5.5F, 0.5F, 6F, 2F, 8F, new CubeDeformation(-0.25F, -0.4F, -0.1F))
                 .texOffs(228, 274).addBox(-2F, -6.5F, 0.5F, 4F, 4F, 8F, new CubeDeformation(-0.25F, -0.4F, -0.18F)),
                 PartPose.offsetAndRotation(0F, 0F, 10F, 0.0524F, 0F, 0F));
         PartDefinition p_tail6 = p_tail5.addOrReplaceChild("tail6", CubeListBuilder.create()
                 .texOffs(338, 260).addBox(-3.5F, -1.5F, -1F, 7F, 3F, 10F, new CubeDeformation(0F, -0.3F, -0.4F))
                 .texOffs(94, 212).addBox(-2F, -3F, -1F, 4F, 6F, 10F, new CubeDeformation(-0.3F, 0F, -0.48F))
-                .texOffs(116, 299).addBox(-2F, 1.8F, 0F, 4F, 2F, 8F, new CubeDeformation(-0.3F, -0.2F, 0F))
+                .texOffs(116, 299).addBox(-2F, 1.8F, 0F, 4F, 2F, 8F, new CubeDeformation(-0.26F, -0.2F, 0F))
                 .texOffs(287, 153).addBox(-8F, -4F, 4F, 16F, 7F, 13F, new CubeDeformation(0F, -0.4F, 0F))
                 .texOffs(275, 99).addBox(-5F, -7F, 4F, 10F, 13F, 13F, new CubeDeformation(-0.4F, 0F, -0.08F))
                 .texOffs(196, 287).addBox(-6F, -8.3F, 6F, 12F, 1F, 9F, new CubeDeformation(0F, -0.1F, 0F))
@@ -379,11 +379,11 @@ public final class TerragonGeometry {
         PartDefinition p_front_foot_l = p_front_shin_l.addOrReplaceChild("front_foot_l", CubeListBuilder.create()
                 .texOffs(400, 194).addBox(-6.5F, 0.5F, -9.8F, 13F, 2F, 14F, new CubeDeformation(0F, -0.4F, 0F))
                 .texOffs(59, 194).addBox(-6F, 0F, -9.8F, 12F, 3F, 14F, new CubeDeformation(-0.4F, 0F, -0.08F))
-                .texOffs(474, 310).addBox(-5.5333F, 1.05F, -12.45F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.05F, -0.25F))
+                .texOffs(474, 310).addBox(-5.5333F, 1.05F, -12.45F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.01F, -0.25F))
                 .texOffs(280, 319).addBox(-5.5333F, 1.43F, -14.55F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.35F))
-                .texOffs(487, 310).addBox(-1F, 1.05F, -12.45F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.05F, -0.25F))
+                .texOffs(487, 310).addBox(-1F, 1.05F, -12.45F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.01F, -0.25F))
                 .texOffs(291, 319).addBox(-1F, 1.43F, -14.55F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.35F))
-                .texOffs(500, 310).addBox(3.5333F, 1.05F, -12.45F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.05F, -0.25F))
+                .texOffs(500, 310).addBox(3.5333F, 1.05F, -12.45F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.01F, -0.25F))
                 .texOffs(302, 319).addBox(3.5333F, 1.43F, -14.55F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.35F)),
                 PartPose.offsetAndRotation(0F, 8.4F, 0F, 0.0349F, 0F, 0F));
         PartDefinition p_hind_leg_l = p_body.addOrReplaceChild("hind_leg_l", CubeListBuilder.create()
@@ -399,11 +399,11 @@ public final class TerragonGeometry {
         PartDefinition p_hind_foot_l = p_hind_shin_l.addOrReplaceChild("hind_foot_l", CubeListBuilder.create()
                 .texOffs(447, 175).addBox(-7F, 0.5F, -10.5F, 14F, 2F, 15F, new CubeDeformation(0F, -0.4F, 0F))
                 .texOffs(0, 175).addBox(-6.5F, 0F, -10.5F, 13F, 3F, 15F, new CubeDeformation(-0.4F, 0F, -0.08F))
-                .texOffs(0, 319).addBox(-5.8667F, 1.05F, -13.25F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.05F, -0.15F))
+                .texOffs(0, 319).addBox(-5.8667F, 1.05F, -13.25F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.01F, -0.15F))
                 .texOffs(313, 319).addBox(-5.8667F, 1.43F, -15.55F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.25F))
-                .texOffs(13, 319).addBox(-1F, 1.05F, -13.25F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.05F, -0.15F))
+                .texOffs(13, 319).addBox(-1F, 1.05F, -13.25F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.01F, -0.15F))
                 .texOffs(324, 319).addBox(-1F, 1.43F, -15.55F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.25F))
-                .texOffs(26, 319).addBox(3.8667F, 1.05F, -13.25F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.05F, -0.15F))
+                .texOffs(26, 319).addBox(3.8667F, 1.05F, -13.25F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.01F, -0.15F))
                 .texOffs(335, 319).addBox(3.8667F, 1.43F, -15.55F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 8.4F, 0F, -0.1396F, 0F, 0F));
         PartDefinition p_front_leg_r = p_body.addOrReplaceChild("front_leg_r", CubeListBuilder.create()
@@ -419,11 +419,11 @@ public final class TerragonGeometry {
         PartDefinition p_front_foot_r = p_front_shin_r.addOrReplaceChild("front_foot_r", CubeListBuilder.create()
                 .texOffs(455, 194).addBox(-6.5F, 0.5F, -9.8F, 13F, 2F, 14F, new CubeDeformation(0F, -0.4F, 0F))
                 .texOffs(112, 194).addBox(-6F, 0F, -9.8F, 12F, 3F, 14F, new CubeDeformation(-0.4F, 0F, -0.08F))
-                .texOffs(39, 319).addBox(-5.5333F, 1.05F, -12.45F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.05F, -0.25F))
+                .texOffs(39, 319).addBox(-5.5333F, 1.05F, -12.45F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.01F, -0.25F))
                 .texOffs(346, 319).addBox(-5.5333F, 1.43F, -14.55F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.35F))
-                .texOffs(52, 319).addBox(-1F, 1.05F, -12.45F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.05F, -0.25F))
+                .texOffs(52, 319).addBox(-1F, 1.05F, -12.45F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.01F, -0.25F))
                 .texOffs(357, 319).addBox(-1F, 1.43F, -14.55F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.35F))
-                .texOffs(65, 319).addBox(3.5333F, 1.05F, -12.45F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.05F, -0.25F))
+                .texOffs(65, 319).addBox(3.5333F, 1.05F, -12.45F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.01F, -0.25F))
                 .texOffs(368, 319).addBox(3.5333F, 1.43F, -14.55F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.35F)),
                 PartPose.offsetAndRotation(0F, 8.4F, 0F, 0.0349F, 0F, 0F));
         PartDefinition p_hind_leg_r = p_body.addOrReplaceChild("hind_leg_r", CubeListBuilder.create()
@@ -439,11 +439,11 @@ public final class TerragonGeometry {
         PartDefinition p_hind_foot_r = p_hind_shin_r.addOrReplaceChild("hind_foot_r", CubeListBuilder.create()
                 .texOffs(0, 194).addBox(-7F, 0.5F, -10.5F, 14F, 2F, 15F, new CubeDeformation(0F, -0.4F, 0F))
                 .texOffs(57, 175).addBox(-6.5F, 0F, -10.5F, 13F, 3F, 15F, new CubeDeformation(-0.4F, 0F, -0.08F))
-                .texOffs(78, 319).addBox(-5.8667F, 1.05F, -13.25F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.05F, -0.15F))
+                .texOffs(78, 319).addBox(-5.8667F, 1.05F, -13.25F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.01F, -0.15F))
                 .texOffs(379, 319).addBox(-5.8667F, 1.43F, -15.55F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.25F))
-                .texOffs(91, 319).addBox(-1F, 1.05F, -13.25F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.05F, -0.15F))
+                .texOffs(91, 319).addBox(-1F, 1.05F, -13.25F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.01F, -0.15F))
                 .texOffs(390, 319).addBox(-1F, 1.43F, -15.55F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.25F))
-                .texOffs(104, 319).addBox(3.8667F, 1.05F, -13.25F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.05F, -0.15F))
+                .texOffs(104, 319).addBox(3.8667F, 1.05F, -13.25F, 2F, 2F, 4F, new CubeDeformation(-0.05F, -0.01F, -0.15F))
                 .texOffs(401, 319).addBox(3.8667F, 1.43F, -15.55F, 2F, 2F, 3F, new CubeDeformation(-0.335F, -0.145F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 8.4F, 0F, -0.1396F, 0F, 0F));
         return mesh;

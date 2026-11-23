@@ -47,7 +47,7 @@ public final class SchreinlingGeometry {
                 .texOffs(112, 74).addBox(6.85F, -4.2F, 4.8F, 1F, 2F, 1F, new CubeDeformation(-0.25F, -0.2F, 0F)),
                 PartPose.offset(0F, 24F, 0F));
         PartDefinition p_base = root.addOrReplaceChild("base", CubeListBuilder.create()
-                .texOffs(0, 29).addBox(-8F, -8F, -8F, 16F, 8F, 16F)
+                .texOffs(0, 29).addBox(-8F, -8F, -8F, 16F, 8F, 16F, new CubeDeformation(0F, 0.04F, 0F))
                 .texOffs(0, 54).addBox(-8.5F, -1.75F, -8.5F, 17F, 2F, 17F, new CubeDeformation(0F, -0.25F, 0F)),
                 PartPose.offset(0F, 24F, 0F));
         PartDefinition p_head = root.addOrReplaceChild("head", CubeListBuilder.create()

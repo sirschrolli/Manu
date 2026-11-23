@@ -49,12 +49,12 @@ public final class LavastelzerGeometry {
                 .texOffs(57, 65).addBox(0F, 0F, 0F, 12F, 0F, 16F),
                 PartPose.offsetAndRotation(8F, 3F, -8F, 0F, 0F, 1.2217F));
         PartDefinition p_right_leg = root.addOrReplaceChild("right_leg", CubeListBuilder.create()
-                .texOffs(65, 0).addBox(-2F, 0F, -2F, 4F, 16F, 4F)
+                .texOffs(65, 0).addBox(-2F, 0F, -2F, 4F, 16F, 4F, new CubeDeformation(0F, 0.04F, 0F))
                 .texOffs(50, 82).addBox(-2.5F, 5.3F, -2.5F, 5F, 3F, 5F, new CubeDeformation(0F, -0.3F, 0F))
                 .texOffs(0, 82).addBox(-3F, 14.3F, -3F, 6F, 2F, 6F, new CubeDeformation(-0.2F, -0.3F, -0.2F)),
                 PartPose.offset(-4F, 8F, 0F));
         PartDefinition p_left_leg = root.addOrReplaceChild("left_leg", CubeListBuilder.create()
-                .texOffs(82, 0).addBox(-2F, 0F, -2F, 4F, 16F, 4F)
+                .texOffs(82, 0).addBox(-2F, 0F, -2F, 4F, 16F, 4F, new CubeDeformation(0F, 0.04F, 0F))
                 .texOffs(71, 82).addBox(-2.5F, 5.3F, -2.5F, 5F, 3F, 5F, new CubeDeformation(0F, -0.3F, 0F))
                 .texOffs(25, 82).addBox(-3F, 14.3F, -3F, 6F, 2F, 6F, new CubeDeformation(-0.2F, -0.3F, -0.2F)),
                 PartPose.offset(4F, 8F, 0F));

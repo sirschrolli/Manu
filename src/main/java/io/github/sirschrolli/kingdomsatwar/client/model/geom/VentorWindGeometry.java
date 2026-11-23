@@ -26,19 +26,19 @@ public final class VentorWindGeometry {
                 PartPose.offset(0F, 1.5F, 0F));
         PartDefinition p_ring_0 = p_wind.addOrReplaceChild("ring_0", CubeListBuilder.create()
                 .texOffs(0, 0).addBox(-5F, 0F, -5F, 10F, 6F, 10F, new CubeDeformation(-0.1F, 0F, -0.1F))
-                .texOffs(74, 0).addBox(-3.5F, 0F, -3.5F, 7F, 6F, 7F, new CubeDeformation(-0.4F, 0F, -0.4F)),
+                .texOffs(74, 0).addBox(-3.5F, 0F, -3.5F, 7F, 6F, 7F, new CubeDeformation(-0.4F, 0.04F, -0.4F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_ring_1 = p_ring_0.addOrReplaceChild("ring_1", CubeListBuilder.create()
                 .texOffs(41, 0).addBox(-4F, 0F, -4F, 8F, 6F, 8F, new CubeDeformation(-0.1F, 0F, -0.1F))
-                .texOffs(0, 17).addBox(-2.5F, 0F, -2.5F, 5F, 6F, 5F, new CubeDeformation(-0.1F, 0F, -0.1F)),
+                .texOffs(0, 17).addBox(-2.5F, 0F, -2.5F, 5F, 6F, 5F, new CubeDeformation(-0.1F, 0.04F, -0.1F)),
                 PartPose.offset(0F, 6F, 0F));
         PartDefinition p_ring_2 = p_ring_1.addOrReplaceChild("ring_2", CubeListBuilder.create()
                 .texOffs(103, 0).addBox(-3F, -0.25F, -3F, 6F, 6F, 6F, new CubeDeformation(-0.1F, -0.25F, -0.1F))
-                .texOffs(21, 17).addBox(-2F, -0.25F, -2F, 4F, 6F, 4F, new CubeDeformation(-0.3F, -0.25F, -0.3F)),
+                .texOffs(21, 17).addBox(-2F, -0.25F, -2F, 4F, 6F, 4F, new CubeDeformation(-0.3F, -0.21F, -0.3F)),
                 PartPose.offset(0F, 6F, 0F));
         PartDefinition p_ring_3 = p_ring_2.addOrReplaceChild("ring_3", CubeListBuilder.create()
                 .texOffs(38, 17).addBox(-2F, 0F, -2F, 4F, 5F, 4F, new CubeDeformation(-0.1F, 0F, -0.1F))
-                .texOffs(55, 17).addBox(-1F, 0F, -1F, 2F, 5F, 2F, new CubeDeformation(-0.1F, 0F, -0.1F)),
+                .texOffs(55, 17).addBox(-1F, 0F, -1F, 2F, 5F, 2F, new CubeDeformation(-0.1F, 0.04F, -0.1F)),
                 PartPose.offset(0F, 5.5F, 0F));
         PartDefinition p_body = root.addOrReplaceChild("body", CubeListBuilder.create(),
                 PartPose.offset(0F, 1.5F, 0F));

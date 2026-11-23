@@ -32,7 +32,7 @@ public final class FarmGoatGeometry {
         PartDefinition p_head = p_body.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(98, 0).addBox(-2F, -5.75F, -3.25F, 4F, 7F, 5F, new CubeDeformation(0F, -0.25F, -0.25F))
                 .texOffs(0, 24).addBox(-2.5F, -8.75F, -5.5F, 5F, 5F, 6F, new CubeDeformation(0F, -0.25F, 0F))
-                .texOffs(17, 36).addBox(-2F, -7.6F, -9F, 4F, 4F, 4F, new CubeDeformation(-0.25F, -0.4F, -0.4F))
+                .texOffs(17, 36).addBox(-2F, -7.6F, -9F, 4F, 4F, 4F, new CubeDeformation(-0.25F, -0.36F, -0.4F))
                 .texOffs(117, 46).addBox(2.15F, -7.5F, -4.45F, 1F, 1F, 2F, new CubeDeformation(-0.35F, 0F, -0.25F))
                 .texOffs(0, 53).addBox(-3.15F, -7.5F, -4.45F, 1F, 1F, 2F, new CubeDeformation(-0.35F, 0F, -0.25F)),
                 PartPose.offset(0F, -3F, -7F));

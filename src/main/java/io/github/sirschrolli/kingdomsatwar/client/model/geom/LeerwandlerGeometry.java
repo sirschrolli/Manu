@@ -54,7 +54,7 @@ public final class LeerwandlerGeometry {
         PartDefinition p_right_leg = root.addOrReplaceChild("right_leg", CubeListBuilder.create()
                 .texOffs(9, 0).addBox(-1F, 0F, -1F, 2F, 30F, 2F)
                 .texOffs(114, 33).addBox(-1.5F, 12.75F, -1.5F, 3F, 2F, 3F, new CubeDeformation(-0.25F, -0.25F, -0.25F))
-                .texOffs(36, 47).addBox(-1.5F, 28.25F, -2.6F, 3F, 2F, 2F, new CubeDeformation(-0.4F, -0.25F, -0.2F)),
+                .texOffs(36, 47).addBox(-1.5F, 28.25F, -2.6F, 3F, 2F, 2F, new CubeDeformation(-0.4F, -0.21F, -0.2F)),
                 PartPose.offset(-2F, -5F, 0F));
         PartDefinition p_left_arm = root.addOrReplaceChild("left_arm", CubeListBuilder.create()
                 .texOffs(18, 0).addBox(-1F, -2F, -1F, 2F, 30F, 2F)
@@ -66,7 +66,7 @@ public final class LeerwandlerGeometry {
         PartDefinition p_left_leg = root.addOrReplaceChild("left_leg", CubeListBuilder.create()
                 .texOffs(27, 0).addBox(-1F, 0F, -1F, 2F, 30F, 2F)
                 .texOffs(13, 47).addBox(-1.5F, 12.75F, -1.5F, 3F, 2F, 3F, new CubeDeformation(-0.25F, -0.25F, -0.25F))
-                .texOffs(47, 47).addBox(-1.5F, 28.25F, -2.6F, 3F, 2F, 2F, new CubeDeformation(-0.4F, -0.25F, -0.2F)),
+                .texOffs(47, 47).addBox(-1.5F, 28.25F, -2.6F, 3F, 2F, 2F, new CubeDeformation(-0.4F, -0.21F, -0.2F)),
                 PartPose.offset(2F, -5F, 0F));
         return mesh;
     }

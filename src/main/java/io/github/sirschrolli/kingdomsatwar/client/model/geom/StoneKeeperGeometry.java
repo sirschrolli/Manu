@@ -28,9 +28,9 @@ public final class StoneKeeperGeometry {
         PartDefinition p_left_shin = p_left_leg.addOrReplaceChild("left_shin", CubeListBuilder.create()
                 .texOffs(86, 66).addBox(-4F, -0.8F, -3.8F, 8F, 7F, 8F, new CubeDeformation(-0.1F, -0.2F, -0.1F))
                 .texOffs(207, 82).addBox(-4.5F, 5.4F, -6F, 9F, 2F, 10F, new CubeDeformation(-0.1F, 0F, -0.2F))
-                .texOffs(171, 124).addBox(-3.7F, 5.5F, -7.2F, 3F, 2F, 2F, new CubeDeformation(-0.3F, -0.1F, -0.2F))
-                .texOffs(182, 124).addBox(-0.7F, 5.5F, -7.2F, 3F, 2F, 2F, new CubeDeformation(-0.3F, -0.1F, -0.2F))
-                .texOffs(193, 124).addBox(2.3F, 5.5F, -7.2F, 3F, 2F, 2F, new CubeDeformation(-0.3F, -0.1F, -0.2F))
+                .texOffs(171, 124).addBox(-3.7F, 5.5F, -7.2F, 3F, 2F, 2F, new CubeDeformation(-0.3F, -0.06F, -0.2F))
+                .texOffs(182, 124).addBox(-0.7F, 5.5F, -7.2F, 3F, 2F, 2F, new CubeDeformation(-0.3F, -0.06F, -0.2F))
+                .texOffs(193, 124).addBox(2.3F, 5.5F, -7.2F, 3F, 2F, 2F, new CubeDeformation(-0.3F, -0.06F, -0.2F))
                 .texOffs(204, 124).addBox(-2F, 0.6F, -4.4F, 4F, 3F, 1F, new CubeDeformation(0F, 0F, -0.1F)),
                 PartPose.offset(0F, 6.6F, -0.4F));
         PartDefinition p_armor_left_leg = p_left_leg.addOrReplaceChild("armor_left_leg", CubeListBuilder.create()
@@ -54,9 +54,9 @@ public final class StoneKeeperGeometry {
         PartDefinition p_right_shin = p_right_leg.addOrReplaceChild("right_shin", CubeListBuilder.create()
                 .texOffs(119, 66).addBox(-4F, -0.8F, -3.8F, 8F, 7F, 8F, new CubeDeformation(-0.1F, -0.2F, -0.1F))
                 .texOffs(0, 95).addBox(-4.5F, 5.4F, -6F, 9F, 2F, 10F, new CubeDeformation(-0.1F, 0F, -0.2F))
-                .texOffs(215, 124).addBox(0.7F, 5.5F, -7.2F, 3F, 2F, 2F, new CubeDeformation(-0.3F, -0.1F, -0.2F))
-                .texOffs(226, 124).addBox(-2.3F, 5.5F, -7.2F, 3F, 2F, 2F, new CubeDeformation(-0.3F, -0.1F, -0.2F))
-                .texOffs(237, 124).addBox(-5.3F, 5.5F, -7.2F, 3F, 2F, 2F, new CubeDeformation(-0.3F, -0.1F, -0.2F))
+                .texOffs(215, 124).addBox(0.7F, 5.5F, -7.2F, 3F, 2F, 2F, new CubeDeformation(-0.3F, -0.06F, -0.2F))
+                .texOffs(226, 124).addBox(-2.3F, 5.5F, -7.2F, 3F, 2F, 2F, new CubeDeformation(-0.3F, -0.06F, -0.2F))
+                .texOffs(237, 124).addBox(-5.3F, 5.5F, -7.2F, 3F, 2F, 2F, new CubeDeformation(-0.3F, -0.06F, -0.2F))
                 .texOffs(0, 130).addBox(-2F, 0.6F, -4.4F, 4F, 3F, 1F, new CubeDeformation(0F, 0F, -0.1F)),
                 PartPose.offset(0F, 6.6F, -0.4F));
         PartDefinition p_armor_right_leg = p_right_leg.addOrReplaceChild("armor_right_leg", CubeListBuilder.create()
@@ -85,7 +85,7 @@ public final class StoneKeeperGeometry {
                 PartPose.offsetAndRotation(0F, 10F, 0F, 0.1745F, 0F, 0F));
         PartDefinition p_core = p_body.addOrReplaceChild("core", CubeListBuilder.create()
                 .texOffs(74, 108).addBox(-2.5F, -2.5F, -1.1F, 5F, 5F, 2F, new CubeDeformation(-0.2F, -0.1F, -0.2F))
-                .texOffs(206, 95).addBox(-1.5F, -3.5F, -1F, 3F, 7F, 2F, new CubeDeformation(-0.2F, -0.1F, -0.4F))
+                .texOffs(206, 95).addBox(-1.5F, -3.5F, -1F, 3F, 7F, 2F, new CubeDeformation(-0.2F, -0.1F, -0.36F))
                 .texOffs(23, 117).addBox(-3.5F, -1.5F, -1F, 7F, 3F, 2F, new CubeDeformation(-0.2F, -0.1F, -0.4F)),
                 PartPose.offset(0F, -15.8F, -8F));
         PartDefinition p_back_crystal_0 = p_body.addOrReplaceChild("back_crystal_0", CubeListBuilder.create()

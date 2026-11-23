@@ -24,11 +24,11 @@ public final class SnowmanGeometry {
         PartDefinition root = mesh.getRoot();
         PartDefinition p_head = root.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(95, 43).addBox(-4F, -6.5F, -3F, 8F, 5F, 6F, new CubeDeformation(-0.1F, -0.082F, -0.192F))
-                .texOffs(29, 43).addBox(-3F, -6.5F, -4F, 6F, 5F, 8F, new CubeDeformation(-0.192F, -0.082F, -0.1F))
+                .texOffs(29, 43).addBox(-3F, -6.5F, -4F, 6F, 5F, 8F, new CubeDeformation(-0.192F, -0.042F, -0.1F))
                 .texOffs(0, 43).addBox(-3.5F, -8F, -3.5F, 7F, 8F, 7F, new CubeDeformation(-0.224F, -0.1F, -0.224F)),
                 PartPose.offset(0F, 4F, 0F));
         PartDefinition p_nose = p_head.addOrReplaceChild("nose", CubeListBuilder.create()
-                .texOffs(105, 59).addBox(-0.5F, -0.5F, -3.8F, 1F, 1F, 4F, new CubeDeformation(0F, 0F, -0.2F))
+                .texOffs(105, 59).addBox(-0.5F, -0.5F, -3.8F, 1F, 1F, 4F, new CubeDeformation(0F, 0F, -0.16F))
                 .texOffs(116, 59).addBox(-1F, -1F, -0.9F, 2F, 2F, 1F, new CubeDeformation(-0.25F, -0.25F, -0.1F)),
                 PartPose.offsetAndRotation(0F, -4.2F, -3.6F, -0.1396F, 0F, 0F));
         PartDefinition p_cap = p_head.addOrReplaceChild("cap", CubeListBuilder.create()
@@ -63,17 +63,17 @@ public final class SnowmanGeometry {
                 PartPose.offsetAndRotation(10.6F, 0F, 0F, 0F, 0F, -0.4887F));
         PartDefinition p_upper_body = root.addOrReplaceChild("upper_body", CubeListBuilder.create()
                 .texOffs(82, 25).addBox(-5F, -8.5F, -4F, 10F, 7F, 8F, new CubeDeformation(0F, -0.4F, -0.4F))
-                .texOffs(45, 25).addBox(-4F, -8.5F, -5F, 8F, 7F, 10F, new CubeDeformation(-0.4F, -0.4F, 0F))
+                .texOffs(45, 25).addBox(-4F, -8.5F, -5F, 8F, 7F, 10F, new CubeDeformation(-0.4F, -0.36F, 0F))
                 .texOffs(90, 0).addBox(-4.5F, -10F, -4.5F, 9F, 10F, 9F, new CubeDeformation(-0.3F, 0F, -0.3F))
                 .texOffs(58, 43).addBox(-4.5F, -10.7F, -4.5F, 9F, 2F, 9F, new CubeDeformation(0F, 0.1F, 0F))
-                .texOffs(83, 59).addBox(1F, -9.6F, -4.95F, 3F, 6F, 1F, new CubeDeformation(-0.4F, -0.2F, -0.05F))
+                .texOffs(83, 59).addBox(1F, -9.6F, -4.95F, 3F, 6F, 1F, new CubeDeformation(-0.36F, -0.2F, -0.05F))
                 .texOffs(0, 70).addBox(-1F, -8F, -5.55F, 2F, 2F, 1F, new CubeDeformation(-0.4F, -0.4F, -0.2F))
                 .texOffs(7, 70).addBox(-1F, -5.8F, -5.55F, 2F, 2F, 1F, new CubeDeformation(-0.4F, -0.4F, -0.2F))
                 .texOffs(14, 70).addBox(-1F, -3.6F, -5.55F, 2F, 2F, 1F, new CubeDeformation(-0.4F, -0.4F, -0.2F)),
                 PartPose.offset(0F, 13F, 0F));
         PartDefinition p_lower_body = root.addOrReplaceChild("lower_body", CubeListBuilder.create()
                 .texOffs(0, 25).addBox(-6.5F, -10.2F, -4.5F, 13F, 8F, 9F, new CubeDeformation(-0.3F, -0.156F, -0.036F))
-                .texOffs(45, 0).addBox(-4.5F, -10.2F, -6.5F, 9F, 8F, 13F, new CubeDeformation(-0.036F, -0.156F, -0.3F))
+                .texOffs(45, 0).addBox(-4.5F, -10.2F, -6.5F, 9F, 8F, 13F, new CubeDeformation(-0.036F, -0.116F, -0.3F))
                 .texOffs(0, 0).addBox(-5.5F, -12.7F, -5.5F, 11F, 13F, 11F, new CubeDeformation(-0.292F, -0.3F, -0.292F)),
                 PartPose.offset(0F, 24F, 0F));
         return mesh;

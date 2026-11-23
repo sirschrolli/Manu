@@ -383,11 +383,11 @@ public final class SchrolliGeometry {
         PartDefinition p_orb = p_left_forearm.addOrReplaceChild("orb", CubeListBuilder.create()
                 .texOffs(250, 59).addBox(-2.5F, -2.5F, -2.5F, 5F, 5F, 5F, new CubeDeformation(-0.1F, -0.1F, -0.1F))
                 .texOffs(292, 59).addBox(-2F, -3F, -2F, 4F, 6F, 4F, new CubeDeformation(-0.2F, -0.1F, -0.2F))
-                .texOffs(295, 71).addBox(-3F, -2F, -2F, 6F, 4F, 4F, new CubeDeformation(-0.1F, -0.2F, -0.2F))
-                .texOffs(271, 59).addBox(-2F, -2F, -3F, 4F, 4F, 6F, new CubeDeformation(-0.2F, -0.2F, -0.1F))
+                .texOffs(295, 71).addBox(-3F, -2F, -2F, 6F, 4F, 4F, new CubeDeformation(-0.1F, -0.2F, -0.16F))
+                .texOffs(271, 59).addBox(-2F, -2F, -3F, 4F, 4F, 6F, new CubeDeformation(-0.16F, -0.16F, -0.1F))
                 .texOffs(212, 82).addBox(-3F, -0.5F, -3F, 6F, 1F, 6F, new CubeDeformation(0F, -0.1F, 0F))
                 .texOffs(159, 139).addBox(-0.5F, -5.4F, -0.5F, 1F, 3F, 1F, new CubeDeformation(-0.15F, -0.4F, -0.15F))
-                .texOffs(121, 144).addBox(-1F, -4.6F, -0.5F, 2F, 1F, 1F, new CubeDeformation(0F, -0.2F, -0.15F)),
+                .texOffs(121, 144).addBox(-1F, -4.6F, -0.5F, 2F, 1F, 1F, new CubeDeformation(0F, -0.2F, -0.11F)),
                 PartPose.offsetAndRotation(0F, 10.4F, -1.2F, 1.3265F, 0F, 0.1396F));
         PartDefinition p_right_arm = p_body.addOrReplaceChild("right_arm", CubeListBuilder.create()
                 .texOffs(217, 29).addBox(-2.5F, -0.1F, -2.5F, 5F, 9F, 5F, new CubeDeformation(-0.2F, -0.3F, -0.1F))
@@ -979,11 +979,11 @@ public final class SchrolliGeometry {
         PartDefinition p_left_shin = p_left_leg.addOrReplaceChild("left_shin", CubeListBuilder.create()
                 .texOffs(279, 0).addBox(-2F, -0.2F, -2.5F, 4F, 10F, 5F, new CubeDeformation(0F, -0.2F, -0.4F))
                 .texOffs(75, 91).addBox(-2.5F, -2.1F, -2.75F, 5F, 4F, 2F, new CubeDeformation(-0.15F, -0.4F, -0.05F))
-                .texOffs(37, 59).addBox(2F, 2.9F, -1.8F, 0F, 6F, 5F, new CubeDeformation(0F, -0.3F, -0.2F)),
+                .texOffs(37, 59).addBox(2F, 2.9F, -1.8F, 0F, 6F, 5F, new CubeDeformation(0.04F, -0.3F, -0.2F)),
                 PartPose.offset(0F, 11F, 0F));
         PartDefinition p_left_foot = p_left_shin.addOrReplaceChild("left_foot", CubeListBuilder.create()
                 .texOffs(200, 59).addBox(-2.5F, -0.1F, -4.7F, 5F, 3F, 7F, new CubeDeformation(-0.35F, -0.1F, -0.4F))
-                .texOffs(75, 139).addBox(-1.5F, 0.85F, -5.95F, 3F, 2F, 2F, new CubeDeformation(0F, -0.05F, -0.25F)),
+                .texOffs(75, 139).addBox(-1.5F, 0.85F, -5.95F, 3F, 2F, 2F, new CubeDeformation(0F, -0.01F, -0.25F)),
                 PartPose.offset(0F, 9.6F, 0F));
         PartDefinition p_right_leg = root.addOrReplaceChild("right_leg", CubeListBuilder.create()
                 .texOffs(244, 0).addBox(-2.5F, 0F, -2.5F, 5F, 11F, 5F, new CubeDeformation(-0.4F, 0F, -0.4F)),
@@ -991,11 +991,11 @@ public final class SchrolliGeometry {
         PartDefinition p_right_shin = p_right_leg.addOrReplaceChild("right_shin", CubeListBuilder.create()
                 .texOffs(298, 0).addBox(-2F, -0.2F, -2.5F, 4F, 10F, 5F, new CubeDeformation(0F, -0.2F, -0.4F))
                 .texOffs(90, 91).addBox(-2.5F, -2.1F, -2.75F, 5F, 4F, 2F, new CubeDeformation(-0.15F, -0.4F, -0.05F))
-                .texOffs(48, 59).addBox(-2F, 2.9F, -1.8F, 0F, 6F, 5F, new CubeDeformation(0F, -0.3F, -0.2F)),
+                .texOffs(48, 59).addBox(-2F, 2.9F, -1.8F, 0F, 6F, 5F, new CubeDeformation(0.04F, -0.3F, -0.2F)),
                 PartPose.offset(0F, 11F, 0F));
         PartDefinition p_right_foot = p_right_shin.addOrReplaceChild("right_foot", CubeListBuilder.create()
                 .texOffs(225, 59).addBox(-2.5F, -0.1F, -4.7F, 5F, 3F, 7F, new CubeDeformation(-0.35F, -0.1F, -0.4F))
-                .texOffs(86, 139).addBox(-1.5F, 0.85F, -5.95F, 3F, 2F, 2F, new CubeDeformation(0F, -0.05F, -0.25F)),
+                .texOffs(86, 139).addBox(-1.5F, 0.85F, -5.95F, 3F, 2F, 2F, new CubeDeformation(0F, -0.01F, -0.25F)),
                 PartPose.offset(0F, 9.6F, 0F));
         return mesh;
     }

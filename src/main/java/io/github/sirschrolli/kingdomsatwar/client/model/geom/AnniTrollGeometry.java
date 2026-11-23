@@ -25,7 +25,7 @@ public final class AnniTrollGeometry {
         PartDefinition p_body = root.addOrReplaceChild("body", CubeListBuilder.create()
                 .texOffs(98, 28).addBox(-8.5F, -3F, -5.5F, 17F, 7F, 11F)
                 .texOffs(13, 0).addBox(-9.5F, -17F, -6F, 19F, 14F, 12F)
-                .texOffs(84, 81).addBox(-7.5F, -12F, -8.5F, 15F, 9F, 3F, new CubeDeformation(0F, 0F, -0.3F))
+                .texOffs(84, 81).addBox(-7.5F, -12F, -8.5F, 15F, 9F, 3F, new CubeDeformation(0F, 0.04F, -0.3F))
                 .texOffs(95, 65).addBox(-10.5F, -19.75F, -5F, 21F, 4F, 10F, new CubeDeformation(-0.3F, -0.25F, -0.2F))
                 .texOffs(174, 96).addBox(-4F, -20.5F, -3.5F, 8F, 2F, 7F, new CubeDeformation(0F, 0F, -0.3F))
                 .texOffs(15, 109).addBox(1.4F, -11.2F, -9.1F, 5F, 5F, 1F, new CubeDeformation(-0.2F, -0.2F, -0.3F))
@@ -43,7 +43,7 @@ public final class AnniTrollGeometry {
                 .texOffs(0, 109).addBox(-2F, -7.4F, -12.2F, 4F, 3F, 3F, new CubeDeformation(-0.2F, 0F, -0.2F))
                 .texOffs(226, 96).addBox(-3F, -5.6F, -13.2F, 6F, 3F, 4F, new CubeDeformation(-0.3F, 0F, -0.3F))
                 .texOffs(100, 48).addBox(-7F, -13.5F, -8.4F, 14F, 2F, 13F, new CubeDeformation(-0.1F, -0.1F, -0.4F))
-                .texOffs(60, 96).addBox(-7F, -12F, 1.6F, 14F, 9F, 2F, new CubeDeformation(-0.2F, 0F, -0.3F)),
+                .texOffs(60, 96).addBox(-7F, -12F, 1.6F, 14F, 9F, 2F, new CubeDeformation(-0.2F, 0.04F, -0.3F)),
                 PartPose.offsetAndRotation(0F, -19F, -5F, -0.4189F, 0F, 0F));
         PartDefinition p_jaw = p_head.addOrReplaceChild("jaw", CubeListBuilder.create()
                 .texOffs(158, 65).addBox(-6F, -0.3F, -5.4F, 12F, 4F, 10F, new CubeDeformation(0F, -0.3F, -0.2F))
@@ -63,7 +63,7 @@ public final class AnniTrollGeometry {
                 .texOffs(0, 116).addBox(-2.75F, 1.45F, -1F, 2F, 2F, 2F, new CubeDeformation(-0.25F, -0.15F, -0.3F)),
                 PartPose.offsetAndRotation(-6.3F, -7F, -3.5F, 0F, 0.6109F, 0.3142F));
         PartDefinition p_tuft = p_head.addOrReplaceChild("tuft", CubeListBuilder.create()
-                .texOffs(121, 81).addBox(-4.5F, -3.7F, -4F, 9F, 4F, 8F, new CubeDeformation(-0.1F, -0.1F, 0F))
+                .texOffs(121, 81).addBox(-4.5F, -3.7F, -4F, 9F, 4F, 8F, new CubeDeformation(-0.1F, -0.1F, 0.04F))
                 .texOffs(155, 48).addBox(-5F, -9F, -4.2F, 10F, 6F, 9F, new CubeDeformation(0F, -0.4F, -0.2F))
                 .texOffs(126, 96).addBox(-4F, -12.3F, -2.8F, 8F, 4F, 7F, new CubeDeformation(-0.2F, -0.1F, -0.2F))
                 .texOffs(205, 96).addBox(-2.5F, -14.9F, -1.2F, 5F, 3F, 5F, new CubeDeformation(-0.1F, -0.1F, -0.2F))

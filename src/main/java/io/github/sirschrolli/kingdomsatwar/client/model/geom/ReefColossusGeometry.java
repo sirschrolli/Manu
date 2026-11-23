@@ -33,8 +33,8 @@ public final class ReefColossusGeometry {
                 .texOffs(92, 94).addBox(3F, -4.7F, -11.7F, 2F, 2F, 2F, new CubeDeformation(-0.1F, -0.1F, -0.1F))
                 .texOffs(101, 94).addBox(7F, -4.7F, -11.7F, 2F, 2F, 2F, new CubeDeformation(-0.1F, -0.1F, -0.1F))
                 .texOffs(333, 86).addBox(-1.5F, -5.6F, -12.8F, 3F, 3F, 3F, new CubeDeformation(-0.2F, -0.4F, -0.2F))
-                .texOffs(110, 94).addBox(-12.2F, -2.6F, -6.7F, 2F, 2F, 2F, new CubeDeformation(-0.2F, -0.2F, -0.2F))
-                .texOffs(119, 94).addBox(10.2F, -2.6F, -6.7F, 2F, 2F, 2F, new CubeDeformation(-0.2F, -0.2F, -0.2F))
+                .texOffs(110, 94).addBox(-12.2F, -2.6F, -6.7F, 2F, 2F, 2F, new CubeDeformation(-0.16F, -0.2F, -0.2F))
+                .texOffs(119, 94).addBox(10.2F, -2.6F, -6.7F, 2F, 2F, 2F, new CubeDeformation(-0.16F, -0.2F, -0.2F))
                 .texOffs(280, 53).addBox(-9F, 3.75F, -9F, 18F, 2F, 12F, new CubeDeformation(0F, -0.25F, 0F)),
                 PartPose.offset(0F, 14F, -4F));
         PartDefinition p_mouth_left = p_body.addOrReplaceChild("mouth_left", CubeListBuilder.create()
@@ -73,7 +73,7 @@ public final class ReefColossusGeometry {
                 .texOffs(65, 29).addBox(-5.5F, -5F, -12.75F, 11F, 10F, 13F, new CubeDeformation(0F, 0F, -0.25F))
                 .texOffs(155, 53).addBox(-5.5F, -2.7F, -20.25F, 6F, 7F, 8F, new CubeDeformation(-0.3F, -0.3F, -0.25F))
                 .texOffs(381, 86).addBox(-2.8F, -5.8F, -8.3F, 3F, 2F, 3F, new CubeDeformation(-0.3F, -0.4F, -0.3F))
-                .texOffs(190, 94).addBox(0.5F, -5.1F, -4F, 2F, 1F, 2F, new CubeDeformation(0F, -0.1F, 0F))
+                .texOffs(190, 94).addBox(0.5F, -5.1F, -4F, 2F, 1F, 2F, new CubeDeformation(0F, -0.06F, 0F))
                 .texOffs(199, 94).addBox(-4F, -5.05F, -3.4F, 2F, 1F, 2F, new CubeDeformation(-0.2F, -0.15F, -0.2F))
                 .texOffs(128, 94).addBox(1.3F, -5.9F, -9.8F, 2F, 2F, 2F, new CubeDeformation(-0.3F, -0.3F, -0.3F))
                 .texOffs(269, 94).addBox(-1.1F, -6.8F, -7.7F, 1F, 2F, 1F, new CubeDeformation(-0.1F, -0.2F, -0.1F)),
@@ -150,25 +150,25 @@ public final class ReefColossusGeometry {
                 .texOffs(39, 94).addBox(-4F, -1F, -1F, 4F, 2F, 2F, new CubeDeformation(0F, -0.3F, -0.3F)),
                 PartPose.offsetAndRotation(-11F, 0F, 0F, 0F, 0F, -0.3491F));
         PartDefinition p_shell = p_body.addOrReplaceChild("shell", CubeListBuilder.create()
-                .texOffs(192, 29).addBox(-12F, -3F, -7.5F, 24F, 4F, 15F, new CubeDeformation(0F, 0F, -0.06F))
-                .texOffs(85, 0).addBox(-7.5F, -3F, -12F, 15F, 4F, 24F, new CubeDeformation(-0.06F, 0F, 0F))
+                .texOffs(192, 29).addBox(-12F, -3F, -7.5F, 24F, 4F, 15F, new CubeDeformation(0F, 0.04F, -0.06F))
+                .texOffs(85, 0).addBox(-7.5F, -3F, -12F, 15F, 4F, 24F, new CubeDeformation(-0.06F, 0.08F, 0F))
                 .texOffs(239, 0).addBox(-10.5F, -3F, -10.5F, 21F, 4F, 21F, new CubeDeformation(-0.18F, 0F, -0.18F))
-                .texOffs(356, 29).addBox(-11.5F, -6.75F, -7F, 23F, 4F, 14F, new CubeDeformation(-0.3F, -0.25F, -0.056F))
-                .texOffs(164, 0).addBox(-7F, -6.75F, -11.5F, 14F, 4F, 23F, new CubeDeformation(-0.056F, -0.25F, -0.3F))
+                .texOffs(356, 29).addBox(-11.5F, -6.75F, -7F, 23F, 4F, 14F, new CubeDeformation(-0.3F, -0.21F, -0.056F))
+                .texOffs(164, 0).addBox(-7F, -6.75F, -11.5F, 14F, 4F, 23F, new CubeDeformation(-0.056F, -0.17F, -0.3F))
                 .texOffs(324, 0).addBox(-10F, -6.75F, -10F, 20F, 4F, 20F, new CubeDeformation(-0.368F, -0.25F, -0.368F))
-                .texOffs(90, 53).addBox(-10F, -9.5F, -6F, 20F, 3F, 12F, new CubeDeformation(-0.4F, 0F, -0.048F))
-                .texOffs(0, 29).addBox(-6F, -9.5F, -10F, 12F, 3F, 20F, new CubeDeformation(-0.048F, 0F, -0.4F))
+                .texOffs(90, 53).addBox(-10F, -9.5F, -6F, 20F, 3F, 12F, new CubeDeformation(-0.4F, 0.04F, -0.048F))
+                .texOffs(0, 29).addBox(-6F, -9.5F, -10F, 12F, 3F, 20F, new CubeDeformation(-0.048F, 0.08F, -0.4F))
                 .texOffs(123, 29).addBox(-8.5F, -9.5F, -8.5F, 17F, 3F, 17F, new CubeDeformation(-0.244F, 0F, -0.244F))
-                .texOffs(427, 53).addBox(-7.5F, -12.25F, -5F, 15F, 3F, 10F, new CubeDeformation(-0.1F, -0.25F, -0.412F))
-                .texOffs(431, 29).addBox(-5F, -12.25F, -7.5F, 10F, 3F, 15F, new CubeDeformation(-0.412F, -0.25F, -0.1F))
+                .texOffs(427, 53).addBox(-7.5F, -12.25F, -5F, 15F, 3F, 10F, new CubeDeformation(-0.1F, -0.21F, -0.412F))
+                .texOffs(431, 29).addBox(-5F, -12.25F, -7.5F, 10F, 3F, 15F, new CubeDeformation(-0.412F, -0.17F, -0.1F))
                 .texOffs(37, 53).addBox(-6.5F, -12.25F, -6.5F, 13F, 3F, 13F, new CubeDeformation(-0.136F, -0.25F, -0.136F))
-                .texOffs(373, 72).addBox(-5F, -14F, -3F, 10F, 2F, 6F, new CubeDeformation(-0.2F, 0F, -0.024F))
-                .texOffs(27, 72).addBox(-3F, -14F, -5F, 6F, 2F, 10F, new CubeDeformation(-0.024F, 0F, -0.2F))
+                .texOffs(373, 72).addBox(-5F, -14F, -3F, 10F, 2F, 6F, new CubeDeformation(-0.2F, 0.04F, -0.024F))
+                .texOffs(27, 72).addBox(-3F, -14F, -5F, 6F, 2F, 10F, new CubeDeformation(-0.024F, 0.08F, -0.2F))
                 .texOffs(89, 72).addBox(-4.5F, -14F, -4.5F, 9F, 2F, 9F, new CubeDeformation(-0.372F, 0F, -0.372F))
                 .texOffs(487, 72).addBox(-2.5F, -15.7F, -2.5F, 5F, 2F, 5F, new CubeDeformation(-0.2F, -0.3F, -0.2F))
                 .texOffs(137, 94).addBox(-1F, -17.2F, -1F, 2F, 2F, 2F, new CubeDeformation(0F, -0.2F, 0F))
                 .texOffs(271, 29).addBox(-13F, -0.2F, -8F, 26F, 2F, 16F, new CubeDeformation(-0.4F, -0.4F, 0F))
-                .texOffs(0, 0).addBox(-8F, -0.2F, -13F, 16F, 2F, 26F, new CubeDeformation(0F, -0.4F, -0.4F))
+                .texOffs(0, 0).addBox(-8F, -0.2F, -13F, 16F, 2F, 26F, new CubeDeformation(0F, -0.36F, -0.4F))
                 .texOffs(262, 72).addBox(3.133F, -6.25F, 8.9779F, 2F, 7F, 2F, new CubeDeformation(-0.1F, -0.25F, -0.1F))
                 .texOffs(271, 72).addBox(8.9779F, -6.25F, 3.133F, 2F, 7F, 2F, new CubeDeformation(-0.1F, -0.25F, -0.1F))
                 .texOffs(280, 72).addBox(8.9779F, -6.25F, -5.133F, 2F, 7F, 2F, new CubeDeformation(-0.1F, -0.25F, -0.1F))
@@ -184,8 +184,8 @@ public final class ReefColossusGeometry {
                 .texOffs(274, 94).addBox(4.6F, -8.4F, 4.6F, 1F, 2F, 1F)
                 .texOffs(284, 94).addBox(5.5F, -11.1F, 3.9F, 3F, 1F, 1F, new CubeDeformation(-0.3F, -0.1F, -0.1F))
                 .texOffs(446, 86).addBox(-3.6F, -11.8F, 4F, 2F, 3F, 2F, new CubeDeformation(-0.2F, -0.2F, -0.2F))
-                .texOffs(146, 94).addBox(-2.6F, -11F, 4.8F, 2F, 2F, 2F, new CubeDeformation(-0.4F, 0F, -0.4F))
-                .texOffs(420, 86).addBox(7.9F, -4.7F, -5.9F, 3F, 2F, 3F, new CubeDeformation(-0.3F, -0.3F, -0.3F))
+                .texOffs(146, 94).addBox(-2.6F, -11F, 4.8F, 2F, 2F, 2F, new CubeDeformation(-0.4F, 0.04F, -0.4F))
+                .texOffs(420, 86).addBox(7.9F, -4.7F, -5.9F, 3F, 2F, 3F, new CubeDeformation(-0.3F, -0.22F, -0.3F))
                 .texOffs(433, 86).addBox(-9.9F, -4.3F, 4.3F, 3F, 2F, 3F, new CubeDeformation(-0.3F, -0.3F, -0.3F))
                 .texOffs(155, 94).addBox(1.6F, -14.6F, -2.6F, 2F, 2F, 2F, new CubeDeformation(0F, -0.4F, 0F))
                 .texOffs(217, 94).addBox(-9.2F, -7.6F, 1.4F, 2F, 1F, 2F, new CubeDeformation(-0.2F, 0F, -0.2F))
@@ -214,8 +214,8 @@ public final class ReefColossusGeometry {
                 .texOffs(440, 72).addBox(-2F, -25.6F, -0.5F, 4F, 7F, 1F, new CubeDeformation(-0.3F, 0F, -0.05F))
                 .texOffs(164, 94).addBox(-1F, -28.6F, -0.5F, 2F, 3F, 1F, new CubeDeformation(0F, 0F, -0.15F))
                 .texOffs(279, 94).addBox(-0.5F, -30.3F, -0.5F, 1F, 2F, 1F, new CubeDeformation(-0.1F, -0.3F, -0.25F))
-                .texOffs(171, 94).addBox(-2.8F, -21.4F, -0.5F, 2F, 3F, 1F, new CubeDeformation(-0.4F, 0F, -0.15F))
-                .texOffs(178, 94).addBox(0.8F, -21.4F, -0.5F, 2F, 3F, 1F, new CubeDeformation(-0.4F, 0F, -0.15F)),
+                .texOffs(171, 94).addBox(-2.8F, -21.4F, -0.5F, 2F, 3F, 1F, new CubeDeformation(-0.36F, 0F, -0.15F))
+                .texOffs(178, 94).addBox(0.8F, -21.4F, -0.5F, 2F, 3F, 1F, new CubeDeformation(-0.36F, 0F, -0.15F)),
                 PartPose.offsetAndRotation(4.2F, -9.5F, -1.2F, -0.3142F, 0.5236F, -0.5585F));
         return mesh;
     }

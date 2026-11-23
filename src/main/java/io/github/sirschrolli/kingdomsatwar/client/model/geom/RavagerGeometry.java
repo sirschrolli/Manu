@@ -48,9 +48,9 @@ public final class RavagerGeometry {
                 .texOffs(221, 139).addBox(-1F, -1F, -3.9F, 2F, 2F, 2F, new CubeDeformation(-0.45F, -0.45F, -0.3F)),
                 PartPose.offsetAndRotation(0F, -13.1F, -13.8F, -0.1745F, 0F, 0F));
         PartDefinition p_nose_ring = p_head.addOrReplaceChild("nose_ring", CubeListBuilder.create()
-                .texOffs(230, 139).addBox(-2.15F, -4.7F, -19.85F, 1F, 3F, 1F, new CubeDeformation(-0.25F, -0.1F, -0.25F))
-                .texOffs(235, 139).addBox(1.15F, -4.7F, -19.85F, 1F, 3F, 1F, new CubeDeformation(-0.25F, -0.1F, -0.25F))
-                .texOffs(11, 150).addBox(-2F, -2.55F, -19.85F, 4F, 1F, 1F, new CubeDeformation(-0.1F, -0.25F, -0.25F)),
+                .texOffs(230, 139).addBox(-2.15F, -4.7F, -19.85F, 1F, 3F, 1F, new CubeDeformation(-0.25F, -0.06F, -0.21F))
+                .texOffs(235, 139).addBox(1.15F, -4.7F, -19.85F, 1F, 3F, 1F, new CubeDeformation(-0.25F, -0.06F, -0.21F))
+                .texOffs(11, 150).addBox(-2F, -2.55F, -19.85F, 4F, 1F, 1F, new CubeDeformation(-0.06F, -0.25F, -0.25F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_right_ear = p_head.addOrReplaceChild("right_ear", CubeListBuilder.create()
                 .texOffs(240, 139).addBox(-3.75F, -1F, -1F, 4F, 2F, 1F, new CubeDeformation(-0.25F, 0F, 0F)),

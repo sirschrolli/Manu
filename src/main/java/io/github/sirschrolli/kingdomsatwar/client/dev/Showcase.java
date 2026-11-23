@@ -181,6 +181,7 @@ final class Showcase {
                 case "uicheck" -> UiCheckShowcase.all(steps);
                 case "party" -> PartyShowcase.fight(steps);
                 case "waystone" -> WaystoneShowcase.waystones(steps);
+                case "audit" -> AuditShowcase.audit(steps);
                 case "veterans" -> VeteranShowcase.veterans(steps);
                 case "siteworld" -> SitesShowcase.siteWorld(steps);
                 case "townplans" -> TownShowcase.plans(steps, "");

@@ -24,8 +24,8 @@ public final class ReefFishLargePatternGeometry {
         PartDefinition root = mesh.getRoot();
         PartDefinition p_body = root.addOrReplaceChild("body", CubeListBuilder.create()
                 .texOffs(0, 12).addBox(-1F, -3F, -2F, 2F, 6F, 4F, new CubeDeformation(0.008F))
-                .texOffs(22, 12).addBox(-1F, -2F, -3F, 2F, 4F, 1F, new CubeDeformation(0.008F))
-                .texOffs(0, 23).addBox(-1F, -2F, 2F, 2F, 4F, 1F, new CubeDeformation(0.008F))
+                .texOffs(22, 12).addBox(-1F, -2F, -3F, 2F, 4F, 1F, new CubeDeformation(0.048F, 0.008F, 0.008F))
+                .texOffs(0, 23).addBox(-1F, -2F, 2F, 2F, 4F, 1F, new CubeDeformation(0.048F, 0.008F, 0.008F))
                 .texOffs(7, 23).addBox(-0.5F, 0F, -4F, 1F, 1F, 1F, new CubeDeformation(0.008F)),
                 PartPose.offset(0F, 19F, 0F));
         PartDefinition p_tail = root.addOrReplaceChild("tail", CubeListBuilder.create()
