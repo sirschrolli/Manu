@@ -59,6 +59,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.RegisterGameTestsEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -98,6 +99,14 @@ public final class ModGameTests {
         } else {
             helper.runAfterDelay(1, () -> await(helper, done, maxTicks - 1, message, then));
         }
+    }
+
+    /**
+     * Der eigene Bereich eines Tests (sein Bauwerk, nach oben um {@code up} Blöcke verlängert) – für Aufräumen und Suchen. Die
+     * Tests stehen dicht an dicht: Wer über sein Bauwerk hinaus aufräumt, nimmt den Nachbartests ihre Ritter und Bosse weg.
+     */
+    static AABB ownArea(GameTestHelper helper, double up) {
+        return helper.getBounds().expandTowards(0.0, up, 0.0);
     }
 
     static boolean awaitLoading(boolean loaded) {

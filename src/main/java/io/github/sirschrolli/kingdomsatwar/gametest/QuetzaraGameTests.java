@@ -165,7 +165,7 @@ final class QuetzaraGameTests {
             throw new IllegalStateException("Der Schlangenaltar hat keine Blockentität");
         }
         helper.assertTrue(level.getBlockState(pos).getDestroySpeed(level, pos) < 0, "Der Schlangenaltar lässt sich abbauen");
-        AABB area = new AABB(pos).inflate(30, 12, 30);
+        AABB area = ModGameTests.ownArea(helper, 12.0);
         ServerPlayer player = MageGameTests.survivalPlayer(helper, "test-quetzara-altar", new EmbeddedChannel[1], 0);
         Runnable tidy = () -> {
             level.getServer().getPlayerList().remove(player);
@@ -325,7 +325,7 @@ final class QuetzaraGameTests {
         QuetzaraEntity serpent = helper.spawn(ModEntities.QUETZARA.get(), new BlockPos(20, 1, 24));
         serpent.confine(16.0);
         LivingEntity knight = knight(helper, new BlockPos(26, 1, 24));
-        AABB area = new AABB(helper.absolutePos(new BlockPos(24, 1, 24))).inflate(30, 16, 30);
+        AABB area = ModGameTests.ownArea(helper, 16.0);
         Runnable tidy = () -> cleanup(level, area);
         Vec3 spot = Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(20, 1, 24)));
         float[] hp = {0.0f};
@@ -417,7 +417,7 @@ final class QuetzaraGameTests {
         QuetzaraEntity serpent = helper.spawn(ModEntities.QUETZARA.get(), new BlockPos(20, 1, 24));
         serpent.confine(16.0);
         LivingEntity knight = knight(helper, new BlockPos(24, 1, 24));
-        AABB area = new AABB(helper.absolutePos(new BlockPos(24, 1, 24))).inflate(30, 16, 30);
+        AABB area = ModGameTests.ownArea(helper, 16.0);
         Runnable tidy = () -> cleanup(level, area);
         Vec3 spot = Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(20, 1, 24)));
         float[] hp = {0.0f};
@@ -477,7 +477,7 @@ final class QuetzaraGameTests {
         QuetzaraEntity serpent = helper.spawn(ModEntities.QUETZARA.get(), new BlockPos(26, 1, 24));
         serpent.confine(16.0);
         LivingEntity knight = knight(helper, new BlockPos(33, 1, 24));
-        AABB area = new AABB(helper.absolutePos(new BlockPos(24, 1, 24))).inflate(30, 16, 30);
+        AABB area = ModGameTests.ownArea(helper, 16.0);
         Runnable tidy = () -> cleanup(level, area);
         Vec3 spot = Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(26, 1, 24)));
         float[] hp = {0.0f};

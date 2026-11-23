@@ -122,7 +122,7 @@ final class SordinGameTests {
         OrganDeskBlockEntity desk = placeDesk(helper, level, pos);
         helper.assertTrue(level.getBlockState(pos).getDestroySpeed(level, pos) < 0, "Das Orgelpult lässt sich abbauen");
         helper.assertTrue(desk.phase() == OrganDeskBlock.Phase.GUARDED, "Das Pult wartet nicht auf seinen Kantor");
-        AABB area = new AABB(pos).inflate(7, 6, 9);
+        AABB area = ModGameTests.ownArea(helper, 6.0);
         ServerPlayer player = MageGameTests.survivalPlayer(helper, "test-cathedral-pilgrim", new io.netty.channel.embedded.EmbeddedChannel[1], 0);
         player.setShiftKeyDown(true);                      // er schleicht: seine Schritte wecken den Kantor nicht
         move(player, pos.getX() + 0.5, pos.getY(), pos.getZ() + 20.0);
@@ -243,7 +243,7 @@ final class SordinGameTests {
         OrganDeskBlockEntity desk = placeDesk(helper, level, pos);
         SordinEntity cantor = desk.spawn(level, false);
         helper.assertTrue(cantor != null && cantor.isPlaying(), "Der Kantor spielt nicht");
-        AABB area = new AABB(pos).inflate(7, 6, 9);
+        AABB area = ModGameTests.ownArea(helper, 6.0);
         ServerPlayer player = MageGameTests.survivalPlayer(helper, "test-cathedral-listener", new io.netty.channel.embedded.EmbeddedChannel[1], 0);
         Runnable tidy = () -> {
             level.getServer().getPlayerList().remove(player);
@@ -314,7 +314,7 @@ final class SordinGameTests {
         LivingEntity knight = helper.spawnWithNoFreeWill(ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get(), new BlockPos(4, 1, 4));
         Vec3 near = knight.position();
         Vec3 far = Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(4, 1, 8)));
-        AABB area = new AABB(helper.absolutePos(new BlockPos(4, 1, 4))).inflate(10, 12, 10);
+        AABB area = ModGameTests.ownArea(helper, 12.0);
         float[] hp = {knight.getHealth()};
         step(helper, cantor, knight, near, hp, SordinEntity.Attack.SWING, SordinEntity.SWING_HIT + 3, "Der Gabelhieb", () ->
                 step(helper, cantor, knight, far, hp, SordinEntity.Attack.SONIC, SordinEntity.SONIC_FIRE + 3, "Die Schallwelle", () ->

@@ -254,7 +254,7 @@ final class RobberKnightGameTests {
         RobberKnightEntity knight = helper.spawn(ModEntities.ROBBER_KNIGHT.get(), new BlockPos(24, 1, 10));
         knight.confine(18.0);
         LivingEntity soldier = helper.spawnWithNoFreeWill(ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get(), new BlockPos(24, 1, 14));
-        AABB area = new AABB(helper.absolutePos(new BlockPos(24, 1, 20))).inflate(30, 12, 30);
+        AABB area = ModGameTests.ownArea(helper, 12.0);
         Runnable tidy = () -> cleanup(level, area);
         Vec3 near = Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(24, 1, 14)));
         Vec3 far = Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(24, 1, 26)));
@@ -385,7 +385,7 @@ final class RobberKnightGameTests {
         floor(helper);
         RobberKnightEntity knight = helper.spawn(ModEntities.ROBBER_KNIGHT.get(), new BlockPos(24, 1, 8));
         knight.confine(20.0);
-        AABB area = new AABB(helper.absolutePos(new BlockPos(24, 1, 20))).inflate(30, 12, 30);
+        AABB area = ModGameTests.ownArea(helper, 12.0);
         ServerPlayer player = MageGameTests.survivalPlayer(helper, "test-robber-shield", new io.netty.channel.embedded.EmbeddedChannel[1], 0);
         Runnable tidy = () -> {
             level.getServer().getPlayerList().remove(player);
