@@ -88,6 +88,7 @@ final class IgnaraPoses {
     static final int[][] CALL = {{0, P_READY, 0}, {8, P_CALL, 2}, {18, P_CALL, 0}, {36, P_READY, 0}};
     static final int[][] PHOENIX = {{0, P_READY, 0}, {20, P_PHOENIX_GATHER, 0}, {26, P_PHOENIX_BURST, 1}, {42, P_PHOENIX_BURST, 0}, {70, P_READY, 0}};
     static final int[][] DIVE = {{0, P_READY, 0}, {10, P_RAIN_RAISE, 2}, {13, P_DIVE, 1}, {26, P_DIVE, 0}, {34, P_READY, 0}, {46, P_READY, 0}};
+    static final int[][] WREATH = {{0, P_READY, 0}, {8, P_RAIN_RAISE, 2}, {12, P_RAIN_RAISE, 0}, {18, P_PILLARS_CAST, 2}, {42, P_PILLARS_CAST, 0}, {48, P_WAVE_SLAM, 1}, {54, P_WAVE_SLAM, 0}, {62, P_READY, 0}};
 
     private IgnaraPoses() {}
 }

@@ -64,6 +64,8 @@ import org.jspecify.annotations.Nullable;
  *     <li><b>Lavawoge</b> – sie reißt die Arme hoch und schlägt die Feuerkugel auf den Boden: Ein Ring aus Glut rollt über das
  *     Heiligtum (darüber springen!);</li>
  *     <li><b>Feuersäulen</b> – unter ihren Gegnern glühen Kreise auf, dann brechen Säulen aus Feuer hervor;</li>
+ *     <li><b>Flammenkranz</b> (seit 1.13) – um ihr Opfer lodert ein Ring aus Flammen auf und zieht sich zusammen (wer nicht
+ *     darüber springt, verbrennt); in der Mitte schlägt er als Feuersäule zusammen;</li>
  *     <li><b>Opalregen</b> – das Rad hinter ihren Schultern dreht sich schneller, und Splitter aus Feueropal regnen auf ihre
  *     Gegner herab;</li>
  *     <li><b>Ruf der Glutgeister</b> – sie ruft zwei Glutgeister aus dem Feuer;</li>
@@ -103,6 +105,15 @@ public class IgnaraEntity extends Monster implements io.github.sirschrolli.kingd
     public static final double PILLAR_RADIUS = 1.7;
     public static final int PILLAR_ERUPT = 32;
     public static final float SHARD_DAMAGE = 7.0f;
+    /** Flammenkranz: so weit (Halbmesser) um ihr Ziel lodert er auf, so eng zieht er sich zusammen … */
+    public static final double WREATH_START = 5.5;
+    public static final double WREATH_END = 0.8;
+    /** … von diesem bis zu diesem Tick; dann schlägt er in der Mitte zusammen. */
+    public static final int WREATH_IGNITE = 12;
+    public static final int WREATH_CLOSE = 48;
+    /** So viel Schaden, wenn der Ring über einen hinwegläuft, und wenn er in der Mitte zusammenschlägt. */
+    public static final float WREATH_BURN = 4.0f;
+    public static final float WREATH_DAMAGE = 13.0f;
     public static final float DIVE_DAMAGE = 14.0f;
     public static final float PHOENIX_BURST = 10.0f;
     /** Die Farbe ihres Feuers. */
@@ -110,7 +121,7 @@ public class IgnaraEntity extends Monster implements io.github.sirschrolli.kingd
 
     public enum Attack {
         NONE(0), PRAY(0), AWAKEN(AWAKEN_TICKS), LASH(32), SNARE(56), WAVE(50), PILLARS(62), OPAL_RAIN(66), CALL(36), PHOENIX(70),
-        DIVE(46);
+        DIVE(46), WREATH(62);
 
         public final int duration;
 
@@ -141,6 +152,9 @@ public class IgnaraEntity extends Monster implements io.github.sirschrolli.kingd
     private @Nullable UUID snared;
     /** Feuersäulen: wo die Kreise glühen. */
     private final List<Vec3> pillars = new ArrayList<>();
+    /** Flammenkranz: seine Mitte, und wen er schon verbrannt hat. */
+    private @Nullable Vec3 wreathCenter;
+    private final java.util.Set<UUID> wreathBurnt = new java.util.HashSet<>();
     /** Phönixsturz: Anfang und Ende der Bahn. */
     private @Nullable Vec3 diveFrom;
     private @Nullable Vec3 diveTo;
@@ -266,6 +280,7 @@ public class IgnaraEntity extends Monster implements io.github.sirschrolli.kingd
         if (next != Attack.PILLARS) {
             this.pillars.clear();
         }
+        this.wreathCenter = null;
         this.bossBar.setVisible(next != Attack.PRAY);
     }
 
@@ -440,6 +455,7 @@ public class IgnaraEntity extends Monster implements io.github.sirschrolli.kingd
             case OPAL_RAIN -> this.tickOpalRain(level, target);
             case CALL -> this.tickCall(level);
             case DIVE -> this.tickDive(level, target);
+            case WREATH -> this.tickWreath(level, target);
             default -> { }
         }
         if (this.attackTick >= this.attack.duration) {
@@ -637,11 +653,11 @@ public class IgnaraEntity extends Monster implements io.github.sirschrolli.kingd
         double distance = this.distanceTo(target);
         List<Attack> options = new ArrayList<>();
         if (distance < 6.0) {
-            options.addAll(List.of(Attack.LASH, Attack.LASH, Attack.WAVE, Attack.PILLARS));
+            options.addAll(List.of(Attack.LASH, Attack.LASH, Attack.WAVE, Attack.PILLARS, Attack.WREATH));
         } else if (distance < 12.0) {
-            options.addAll(List.of(Attack.SNARE, Attack.WAVE, Attack.PILLARS, Attack.OPAL_RAIN, Attack.LASH));
+            options.addAll(List.of(Attack.SNARE, Attack.WAVE, Attack.PILLARS, Attack.OPAL_RAIN, Attack.LASH, Attack.WREATH));
         } else {
-            options.addAll(List.of(Attack.SNARE, Attack.SNARE, Attack.OPAL_RAIN, Attack.OPAL_RAIN, Attack.PILLARS));
+            options.addAll(List.of(Attack.SNARE, Attack.SNARE, Attack.OPAL_RAIN, Attack.OPAL_RAIN, Attack.PILLARS, Attack.WREATH));
         }
         if (this.isPhoenix()) {
             options.add(Attack.DIVE);
@@ -928,6 +944,85 @@ public class IgnaraEntity extends Monster implements io.github.sirschrolli.kingd
                 }
             }
         }
+    }
+
+    /**
+     * Flammenkranz: Sie reckt die Arme empor – um ihr Opfer lodert ein Ring aus Flammen auf, kurze Feuersäulen schießen aus
+     * ihm, und er zieht sich zusammen. Wen er dabei überläuft, der verbrennt (einmal; wer im rechten Moment darüber springt,
+     * bleibt heil); wer zuletzt noch in der Mitte steht, den trifft die Feuersäule, zu der er zusammenschlägt.
+     */
+    private void tickWreath(ServerLevel level, LivingEntity target) {
+        int t = this.attackTick;
+        if (t == 4) {
+            this.sound(level, ModSounds.IGNARA_CHARGE.get(), 2.2f, 0.8f);
+        }
+        if (t == WREATH_IGNITE) {
+            Vec3 c = new Vec3(target.getX(), this.floorY(), target.getZ());
+            this.wreathCenter = c;
+            this.wreathBurnt.clear();
+            float speed = (float) ((WREATH_END - WREATH_START) / (WREATH_CLOSE - WREATH_IGNITE));
+            SpellFxEntity.create(level, SpellFxEntity.Kind.SHOCKWAVE, c.add(0.0, 0.05, 0.0), DragonType.FIRE, FLAME, WREATH_CLOSE - WREATH_IGNITE + 1,
+                    (float) WREATH_START).param(speed).spawn();
+            for (int k = 0; k < 12; k++) {
+                double a = k * Mth.TWO_PI / 12.0;
+                Vec3 p = c.add(Math.cos(a) * WREATH_START, 0.0, Math.sin(a) * WREATH_START);
+                SpellFxEntity.create(level, SpellFxEntity.Kind.PILLAR, p, DragonType.FIRE, FLAME, 12, 0.55f).param(2.6f).spawn();
+            }
+            this.sound(level, ModSounds.IGNARA_PILLAR.get(), 2.6f, 1.25f);
+        }
+        Vec3 c = this.wreathCenter;
+        if (c == null || t < WREATH_IGNITE) {
+            return;
+        }
+        if (t < WREATH_CLOSE) {
+            double r = this.wreathRadius(t);
+            int n = 10 + (int) (r * 3.0);
+            for (int k = 0; k < n; k++) {
+                double a = k * Mth.TWO_PI / n + t * 0.06;
+                level.sendParticles(ParticleTypes.FLAME, c.x + Math.cos(a) * r, c.y + 0.25, c.z + Math.sin(a) * r, 1, 0.05, 0.2, 0.05, 0.01);
+            }
+            if (t % 6 == 0) {
+                level.playSound(null, c.x, c.y, c.z, net.minecraft.sounds.SoundEvents.FIRE_AMBIENT, SoundSource.HOSTILE, 2.0f, 0.8f);
+            }
+            float burn = WREATH_BURN + (this.isPhoenix() ? 2.0f : 0.0f);
+            for (LivingEntity victim : this.victims(level, new AABB(c, c).inflate(r + 1.5, 3.0, r + 1.5))) {
+                double d = Math.hypot(victim.getX() - c.x, victim.getZ() - c.z);
+                boolean grounded = victim.getY() - c.y < SpellFxEntity.SHOCKWAVE_HEIGHT;
+                if (Math.abs(d - r) < 0.4 + victim.getBbWidth() * 0.5 && grounded && victim.getY() > c.y - 1.5
+                        && this.wreathBurnt.add(victim.getUUID()) && victim.hurtServer(level, this.damageSources().mobAttack(this), burn)) {
+                    victim.igniteForSeconds(4.0f);
+                }
+            }
+            return;
+        }
+        if (t == WREATH_CLOSE) {
+            SpellFxEntity.create(level, SpellFxEntity.Kind.PILLAR, c, DragonType.FIRE, FLAME, 20, 1.5f).param(6.5f).spawn();
+            level.sendParticles(ParticleTypes.LAVA, c.x, c.y + 0.3, c.z, 12, 0.6, 0.1, 0.6, 0.0);
+            level.sendParticles(ParticleTypes.FLAME, c.x, c.y + 0.5, c.z, 40, 0.6, 1.2, 0.6, 0.08);
+            this.sound(level, ModSounds.IGNARA_PILLAR.get(), 3.2f, 0.8f);
+            double reach = this.isPhoenix() ? 2.2 : 1.6;
+            float damage = WREATH_DAMAGE + (this.isPhoenix() ? 3.0f : 0.0f);
+            for (LivingEntity victim : this.victims(level, new AABB(c, c).inflate(reach + 0.6, 6.0, reach + 0.6))) {
+                if (Math.hypot(victim.getX() - c.x, victim.getZ() - c.z) < reach + victim.getBbWidth() * 0.5 && victim.getY() < c.y + 6.0
+                        && victim.getY() > c.y - 1.5 && victim.hurtServer(level, this.damageSources().mobAttack(this), damage)) {
+                    victim.igniteForSeconds(6.0f);
+                    victim.push(0.0, 0.8, 0.0);
+                    victim.needsSync = true;
+                }
+            }
+            this.wreathCenter = null;
+        }
+    }
+
+    /** Wie weit der Flammenkranz in diesem Tick noch reicht. */
+    private double wreathRadius(int t) {
+        double f = Mth.clamp((t - WREATH_IGNITE) / (double) (WREATH_CLOSE - WREATH_IGNITE), 0.0, 1.0);
+        return WREATH_START + (WREATH_END - WREATH_START) * f;
+    }
+
+    /** Für Tests: die Mitte des Flammenkranzes (oder null). */
+    public @Nullable Vec3 wreathCenter() {
+        return this.wreathCenter;
     }
 
     /**

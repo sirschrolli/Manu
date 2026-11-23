@@ -212,7 +212,40 @@ final class IgnaraGameTests {
         step(helper, ignara, knight, hp, IgnaraEntity.Attack.LASH, 16, "Der Peitschenhieb", true, () ->
                 step(helper, ignara, knight, hp, IgnaraEntity.Attack.WAVE, 34, "Die Lavawoge", true, () ->
                         step(helper, ignara, knight, hp, IgnaraEntity.Attack.PILLARS, IgnaraEntity.PILLAR_ERUPT + 3, "Die Feuersäule", true, () ->
-                                snare(helper, ignara, knight, hp, () -> rain(helper, level, ignara, knight, hp, area)))));
+                                wreath(helper, ignara, knight, hp, () ->
+                                        snare(helper, ignara, knight, hp, () -> rain(helper, level, ignara, knight, hp, area))))));
+    }
+
+    /**
+     * Der Flammenkranz: Er lodert um den Ritter auf und zieht sich zusammen. Ein zweiter Ritter drei Blöcke daneben (im Kranz)
+     * wird überlaufen und brennt, ein dritter weit draußen bleibt heil; der Ritter in der Mitte wird erst getroffen, wenn der
+     * Kranz zusammenschlägt.
+     */
+    private static void wreath(GameTestHelper helper, IgnaraEntity ignara, LivingEntity knight, float[] hp, Runnable then) {
+        reset(knight, hp);
+        Vec3 mid = helper.absoluteVec(new Vec3(4.5, 1.0, 5.5));
+        knight.teleportTo(mid.x, mid.y, mid.z);
+        LivingEntity inside = helper.spawnWithNoFreeWill(ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get(), new BlockPos(4, 1, 8));
+        LivingEntity outside = helper.spawnWithNoFreeWill(ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get(), new BlockPos(0, 1, 0));
+        float insideHp = inside.getHealth();
+        float outsideHp = outside.getHealth();
+        ignara.setTarget(knight);
+        ignara.forceAttack(IgnaraEntity.Attack.WREATH);
+        helper.runAfterDelay(IgnaraEntity.WREATH_IGNITE + 1, () -> {
+            Vec3 c = ignara.wreathCenter();
+            helper.assertTrue(c != null && Math.hypot(c.x - mid.x, c.z - mid.z) < 0.5, "Der Flammenkranz lodert nicht um den Ritter auf: " + c);
+        });
+        helper.runAfterDelay(IgnaraEntity.WREATH_CLOSE - 2, () -> {
+            helper.assertTrue(inside.getHealth() < insideHp && inside.isOnFire(), "Der Flammenkranz überläuft den Ritter im Kranz nicht");
+            helper.assertTrue(knight.getHealth() >= hp[0], "Der Flammenkranz trifft die Mitte, bevor er zusammenschlägt");
+        });
+        helper.runAfterDelay(IgnaraEntity.WREATH_CLOSE + 2, () -> {
+            helper.assertTrue(knight.getHealth() < hp[0] && knight.isOnFire(), "Der Flammenkranz schlägt nicht in der Mitte zusammen");
+            helper.assertTrue(outside.getHealth() >= outsideHp, "Der Flammenkranz trifft auch den Ritter weit draußen");
+            inside.discard();
+            outside.discard();
+            then.run();
+        });
     }
 
     /**

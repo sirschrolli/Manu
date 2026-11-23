@@ -91,6 +91,9 @@ TIMELINES: dict[str, list[tuple[float, str, int]]] = {
     "CALL": [(0, "ready", 0), (8, "call", 2), (18, "call", 0), (36, "ready", 0)],
     "PHOENIX": [(0, "ready", 0), (20, "phoenix_gather", 0), (26, "phoenix_burst", 1), (42, "phoenix_burst", 0), (70, "ready", 0)],
     "DIVE": [(0, "ready", 0), (10, "rain_raise", 2), (13, "dive", 1), (26, "dive", 0), (34, "ready", 0), (46, "ready", 0)],
+    # Flammenkranz (1.13): die Arme empor (er lodert auf), eine Hand lenkt ihn enger – und sie schlägt ihn in der Mitte zusammen
+    "WREATH": [(0, "ready", 0), (8, "rain_raise", 2), (12, "rain_raise", 0), (18, "pillars_cast", 2), (42, "pillars_cast", 0),
+               (48, "wave_slam", 1), (54, "wave_slam", 0), (62, "ready", 0)],
 }
 
 

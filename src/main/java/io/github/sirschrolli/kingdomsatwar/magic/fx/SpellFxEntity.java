@@ -508,11 +508,20 @@ public class SpellFxEntity extends Entity {
             case SHOCKWAVE -> {
                 double r = this.ringRadius(0.0f);
                 int count = 2 + (int) (r * 0.5);
+                // die Funken am Ring passen zum Element (vorher sprühten auch Feuer- und Wasserringe violette Magie)
+                ParticleOptions accent = element == null ? ParticleTypes.REVERSE_PORTAL : switch (element) {
+                    case FIRE -> ParticleTypes.FLAME;
+                    case ICE -> ParticleTypes.SNOWFLAKE;
+                    case WATER -> ParticleTypes.SPLASH;
+                    case LIGHTNING -> ParticleTypes.ELECTRIC_SPARK;
+                    case NATURE -> ParticleTypes.COMPOSTER;
+                    default -> ParticleTypes.SMOKE;
+                };
                 for (int i = 0; i < count; i++) {
                     double a = this.random.nextDouble() * Mth.TWO_PI;
                     double ox = Math.cos(a);
                     double oz = Math.sin(a);
-                    level.addParticle(this.random.nextInt(3) == 0 ? ParticleTypes.REVERSE_PORTAL : new DustParticleOptions(this.color(), 1.1f),
+                    level.addParticle(this.random.nextInt(3) == 0 ? accent : new DustParticleOptions(this.color(), 1.1f),
                             this.getX() + ox * r, this.getY() + 0.1 + this.random.nextDouble() * 0.5, this.getZ() + oz * r,
                             ox * 0.05, 0.06, oz * 0.05);
                 }

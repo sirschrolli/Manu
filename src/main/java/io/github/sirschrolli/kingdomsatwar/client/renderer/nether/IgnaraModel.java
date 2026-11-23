@@ -90,6 +90,7 @@ public class IgnaraModel extends EntityModel<IgnaraRenderState> {
             case CALL -> IgnaraPoses.CALL;
             case PHOENIX -> IgnaraPoses.PHOENIX;
             case DIVE -> IgnaraPoses.DIVE;
+            case WREATH -> IgnaraPoses.WREATH;
             default -> null;
         };
         if (attack == IgnaraEntity.Attack.PRAY) {
