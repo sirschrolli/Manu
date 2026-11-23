@@ -416,8 +416,11 @@ final class SoulShepherdGameTests {
                 }),
                 new Step(30, () -> {
                     place.accept(6.0);
+                    // Blick nach Westen (zum Hirten) – auch der Leib, sonst dreht sich der Kopf in 20 Ticks dorthin, wohin der
+                    // Leib nach den Stößen davor zufällig zeigt
                     knight.setYRot(90.0f);
                     knight.setYHeadRot(90.0f);
+                    knight.setYBodyRot(90.0f);
                     shepherd.forceAttack(SoulShepherdEntity.Attack.FOG);
                 }, () -> {
                     helper.assertTrue(knight.hasEffect(MobEffects.BLINDNESS), String.format(java.util.Locale.ROOT,

@@ -753,6 +753,9 @@ public class SoulShepherdEntity extends Monster implements io.github.sirschrolli
         }
     }
 
+    /** Wohin der Nebelgang führt, der Reihe nach (Grad um das Ziel, 0 = genau hinter ihm). */
+    private static final float[] FOG_TURNS = {0.0f, 45.0f, -45.0f, 90.0f, -90.0f, 135.0f, -135.0f, 180.0f};
+
     /** Nebelgang: Er zerfließt zu Sumpfnebel und steht im nächsten Augenblick hinter seinem Ziel – und schlägt zu. */
     private void tickFog(ServerLevel level, LivingEntity target) {
         int t = this.attackTick;
@@ -766,10 +769,15 @@ public class SoulShepherdEntity extends Monster implements io.github.sirschrolli
         if (t == 20) {
             Vec3 look = target.getLookAngle().multiply(1.0, 0.0, 1.0);
             Vec3 behind = look.lengthSqr() < 1.0e-4 ? this.toward(target) : look.normalize();
-            Vec3 at = target.position().subtract(behind.scale(2.4));
-            AABB box = this.getDimensions(this.getPose()).makeBoundingBox(at);
-            if (level.noCollision(this, box)) {
-                this.teleportTo(at.x, at.y, at.z);
+            // hinter das Ziel – steht es mit dem Rücken zur Wand, schräg dahinter, daneben, zuletzt vor ihm (bis 1.12.0 blieb
+            // er dann einfach, wo er war, und der Schlag ging ins Leere)
+            for (float turn : FOG_TURNS) {
+                Vec3 at = target.position().subtract(behind.yRot(turn * Mth.DEG_TO_RAD).scale(2.4));
+                AABB box = this.getDimensions(this.getPose()).makeBoundingBox(at);
+                if (level.noCollision(this, box)) {
+                    this.teleportTo(at.x, at.y, at.z);
+                    break;
+                }
             }
             this.fog(level, this.position(), 60);
             this.setInvisible(false);
