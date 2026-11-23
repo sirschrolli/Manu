@@ -418,24 +418,52 @@ final class FaeGameTests {
                     queen.forceAttack(MothQueenEntity.Attack.BEAM);
                     helper.runAfterDelay(40, () -> {
                         helper.assertTrue(knight.getHealth() < beforeBeam, "Der Mondstrahl trifft nicht");
-                        // die Falter verglimmen lassen (sonst stirbt der Ritter vielleicht an ihren Bissen), dann über ihn
-                        for (MoonMothEntity moth : level.getEntitiesOfClass(MoonMothEntity.class, queen.getBoundingBox().inflate(32))) {
-                            moth.vanish(level);
-                        }
-                        knight.setHealth(knight.getMaxHealth());
-                        queen.snapTo(knight.getX() + 1.0, knight.getY() + 6.5, knight.getZ(), 0.0f, 0.0f);
-                        queen.setTarget(knight);
-                        queen.forceAttack(MothQueenEntity.Attack.SCALES);
-                        helper.runAfterDelay(50, () -> {
-                            helper.assertTrue(knight.hasEffect(MobEffects.WEAKNESS), String.format(java.util.Locale.ROOT,
-                                    "Die Schuppenwolke wirkt nicht (waagrecht %.1f, Höhe %.1f, Ritter lebt: %s, Angriff %s)",
-                                    Math.hypot(queen.getX() - knight.getX(), queen.getZ() - knight.getZ()), queen.getY() - knight.getY(),
-                                    knight.isAlive(), queen.currentAttack()));
-                            eclipseAndCocoon(helper, level, queen, knight, () -> dive(helper, level, queen, knight, home));
+                        spiral(helper, queen, knight, () -> {
+                            // die Falter verglimmen lassen (sonst stirbt der Ritter vielleicht an ihren Bissen), dann über ihn
+                            for (MoonMothEntity moth : level.getEntitiesOfClass(MoonMothEntity.class, queen.getBoundingBox().inflate(32))) {
+                                moth.vanish(level);
+                            }
+                            knight.setHealth(knight.getMaxHealth());
+                            queen.snapTo(knight.getX() + 1.0, knight.getY() + 6.5, knight.getZ(), 0.0f, 0.0f);
+                            queen.setTarget(knight);
+                            queen.forceAttack(MothQueenEntity.Attack.SCALES);
+                            helper.runAfterDelay(50, () -> {
+                                helper.assertTrue(knight.hasEffect(MobEffects.WEAKNESS), String.format(java.util.Locale.ROOT,
+                                        "Die Schuppenwolke wirkt nicht (waagrecht %.1f, Höhe %.1f, Ritter lebt: %s, Angriff %s)",
+                                        Math.hypot(queen.getX() - knight.getX(), queen.getZ() - knight.getZ()), queen.getY() - knight.getY(),
+                                        knight.isAlive(), queen.currentAttack()));
+                                eclipseAndCocoon(helper, level, queen, knight, () -> dive(helper, level, queen, knight, home));
+                            });
                         });
                     });
                 });
             });
+        });
+    }
+
+    /**
+     * Mondlichtspirale: Unter dem Ritter glimmt der Kreis, dann fällt der Strahl hinein – er bleibt stehen und wird getroffen
+     * (und leuchtet). Danach geht es gleich weiter (die Spirale wanderte sonst in die Nachbartests).
+     */
+    private static void spiral(GameTestHelper helper, MothQueenEntity queen, net.minecraft.world.entity.LivingEntity knight, Runnable then) {
+        knight.setHealth(knight.getMaxHealth());
+        knight.removeAllEffects();
+        float hp = knight.getHealth();
+        queen.snapTo(knight.getX() + 2.0, knight.getY() + 6.0, knight.getZ() + 4.0, 0.0f, 0.0f);
+        queen.setDeltaMovement(Vec3.ZERO);
+        queen.setTarget(knight);
+        queen.forceAttack(MothQueenEntity.Attack.SPIRAL);
+        helper.runAfterDelay(6, () -> {
+            Vec3 c = queen.spiralCenter();
+            helper.assertTrue(c != null && Math.hypot(c.x - knight.getX(), c.z - knight.getZ()) < 0.5, "Die Mondlichtspirale beginnt nicht beim Ritter: "
+                    + c);
+            helper.assertTrue(knight.getHealth() >= hp, "Die Mondlichtspirale trifft, bevor der Strahl fällt");
+        });
+        helper.runAfterDelay(MothQueenEntity.SPIRAL_START + 3, () -> {
+            helper.assertTrue(knight.getHealth() < hp, "Die Mondlichtspirale trifft den Ritter nicht");
+            helper.assertTrue(knight.hasEffect(MobEffects.GLOWING), "Wen die Mondlichtspirale trifft, der leuchtet nicht");
+            queen.forceAttack(MothQueenEntity.Attack.NONE);
+            then.run();
         });
     }
 

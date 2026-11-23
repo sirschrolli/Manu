@@ -78,6 +78,13 @@ public class MothQueenModel extends EntityModel<FaeRenderState> {
                 amp = 0.18f;
                 speed = 0.12f;
             }
+            case SPIRAL -> {
+                // die Flügel weit und ruhig ausgebreitet, der Kopf blickt hinab, wo der Strahl über den Boden wandert
+                lift = -0.85f;
+                amp = 0.14f;
+                speed = 0.1f;
+                this.head.xRot += 0.4f * Math.min(1.0f, a / 12.0f);
+            }
             case DIVE -> {
                 float fold = a < 12 ? a / 12.0f : 1.0f;
                 sweep = 0.9f * fold;

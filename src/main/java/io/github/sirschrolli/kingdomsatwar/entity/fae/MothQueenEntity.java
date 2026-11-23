@@ -57,7 +57,9 @@ import org.jspecify.annotations.Nullable;
  *     <li><b>Mondfinsternis</b> – der Mond verfinstert sich, Dunkelheit legt sich über alle; nur leuchtende Kreise warnen,
  *     wo gleich Mondlicht herabfällt;</li>
  *     <li><b>Seidenkokon</b> – ein Faden aus Seide schnellt auf ihr Ziel, und es wird in einen Kokon gesponnen (kaum zu
- *     bewegen, schwach, die Seide schnürt zu).</li>
+ *     bewegen, schwach, die Seide schnürt zu);</li>
+ *     <li><b>Mondlichtspirale</b> (seit 1.13) – unter ihrem Ziel glimmt ein Kreis, dann fällt ein Strahl aus Mondlicht hinein und
+ *     wandert in einer Spirale nach außen über den Boden: Wen er streift, den sengt er und lässt ihn leuchten.</li>
  * </ul>
  * Verfehlt sie im Sturzflug ihr Ziel und prallt auf den Boden, liegt sie drei Sekunden benommen da – die Gelegenheit für
  * Schwertkämpfer. Unter halber Kraft wird sie rasend: schneller, mehr Falter, mehr Strahlen. Besiegt hinterlässt sie die
@@ -76,10 +78,17 @@ public class MothQueenEntity extends Monster implements io.github.sirschrolli.ki
     public static final int COCOON_THREAD = 10;
     public static final int COCOON_WRAP = 18;
     public static final int COCOON_LIFE = 70;
+    /** Mondlichtspirale: Der Strahl wandert von diesem bis zu diesem Tick in einer Spirale nach außen … */
+    public static final int SPIRAL_START = 16;
+    public static final int SPIRAL_END = 80;
+    /** … so weit (rasend zwei Blöcke weiter und eine halbe Windung mehr), so breit ist er am Boden. */
+    public static final double SPIRAL_REACH = 11.0;
+    public static final double SPIRAL_WIDTH = 1.2;
+    private static final int MOONLIGHT = 0xE8EEFF;
 
     public enum Attack {
         NONE(0), AWAKEN(AWAKEN_TICKS), GUST(44), SCALES(56), SWARM(34), BEAM(64), DIVE(50), LULLABY(70), STUNNED(60), ECLIPSE(ECLIPSE_TICKS),
-        COCOON(COCOON_TICKS);
+        COCOON(COCOON_TICKS), SPIRAL(90);
 
         public final int duration;
 
@@ -101,6 +110,11 @@ public class MothQueenEntity extends Monster implements io.github.sirschrolli.ki
     private float orbit;
     private @Nullable BlockPos home;
     private final List<Vec3> beams = new ArrayList<>();
+    /** Mondlichtspirale: ihre Mitte, wo sie beginnt (Winkel), wo der Strahl zuletzt war, wen er wann zuletzt traf. */
+    private @Nullable Vec3 spiralCenter;
+    private double spiralTurn;
+    private @Nullable Vec3 spiralLast;
+    private final java.util.Map<UUID, Integer> spiralHits = new java.util.HashMap<>();
     private Vec3 diveDir = Vec3.ZERO;
     private boolean diveHit;
     private boolean lullabyWarned;
@@ -176,6 +190,7 @@ public class MothQueenEntity extends Monster implements io.github.sirschrolli.ki
         this.attack = next;
         this.attackTick = 0;
         this.entityData.set(DATA_ATTACK, next.ordinal());
+        this.spiralCenter = null;
         if (next != Attack.NONE && next != Attack.AWAKEN) {
             this.lastAttack = next;
         }
@@ -325,6 +340,7 @@ public class MothQueenEntity extends Monster implements io.github.sirschrolli.ki
             case LULLABY -> this.tickLullaby(level, target);
             case ECLIPSE -> this.tickEclipse(level, target);
             case COCOON -> this.tickCocoon(level, target);
+            case SPIRAL -> this.tickSpiral(level, target);
             default -> { }
         }
         if (this.attackTick >= this.attack.duration) {
@@ -381,7 +397,7 @@ public class MothQueenEntity extends Monster implements io.github.sirschrolli.ki
 
     private Attack chooseAttack(LivingEntity target) {
         List<Attack> options = new ArrayList<>(List.of(Attack.GUST, Attack.SCALES, Attack.SWARM, Attack.BEAM, Attack.DIVE, Attack.LULLABY,
-                Attack.ECLIPSE, Attack.COCOON));
+                Attack.ECLIPSE, Attack.COCOON, Attack.SPIRAL));
         options.remove(this.lastAttack);
         if (this.distanceTo(target) > 18.0) {
             options.remove(Attack.GUST);
@@ -560,6 +576,83 @@ public class MothQueenEntity extends Monster implements io.github.sirschrolli.ki
                 }
             }
         }
+    }
+
+    /**
+     * Mondlichtspirale: Sie hält inne, die Flügel weit ausgebreitet; unter ihrem Ziel glimmt ein Kreis. Dann fällt ein Strahl aus
+     * Mondlicht hinein und wandert in einer Spirale (zweieinhalb Windungen, rasend drei) nach außen über den Boden. Wen er
+     * streift, den sengt er (Magie) und lässt ihn leuchten – höchstens alle zwölf Ticks. Wer nach innen springt, wo der Strahl
+     * schon war, ist sicher.
+     */
+    private void tickSpiral(ServerLevel level, LivingEntity target) {
+        this.circle(target, 0.3);
+        int t = this.attackTick;
+        if (t == 4) {
+            this.spiralCenter = ground(level, target.getX(), target.getY(), target.getZ());
+            this.spiralTurn = this.random.nextDouble() * Mth.TWO_PI;
+            this.spiralLast = null;
+            this.spiralHits.clear();
+            level.playSound(null, this.blockPosition(), ModSounds.MOTH_QUEEN_BEAM_CHARGE.get(), SoundSource.HOSTILE, 3.0f, 1.25f);
+            SpellFxEntity.create(level, SpellFxEntity.Kind.CIRCLE, this.spiralCenter.add(0.0, 0.05, 0.0), null, MOONLIGHT, SPIRAL_START - 2,
+                    1.6f).spawn();
+        }
+        Vec3 c = this.spiralCenter;
+        if (c == null || t < SPIRAL_START || t > SPIRAL_END) {
+            return;
+        }
+        if (t == SPIRAL_START) {
+            level.playSound(null, BlockPos.containing(c), ModSounds.MOTH_QUEEN_BEAM.get(), SoundSource.HOSTILE, 2.5f, 1.2f);
+        }
+        double f = (t - SPIRAL_START) / (double) (SPIRAL_END - SPIRAL_START);
+        double reach = this.isEnraged() ? SPIRAL_REACH + 2.0 : SPIRAL_REACH;
+        double turns = this.isEnraged() ? 3.0 : 2.5;
+        double r = 0.6 + (reach - 0.6) * f;
+        double a = this.spiralTurn + f * turns * Mth.TWO_PI;
+        Vec3 spot = ground(level, c.x + Math.cos(a) * r, c.y, c.z + Math.sin(a) * r);
+        Vec3 from = this.position().add(0.0, this.getBbHeight() * 0.4, 0.0);
+        if (t % 2 == 0) {
+            SpellFxEntity.create(level, SpellFxEntity.Kind.BEAM, from, null, MOONLIGHT, 3, 0.45f).end(spot).spawn();
+        }
+        level.sendParticles(ParticleTypes.END_ROD, spot.x, spot.y + 0.2, spot.z, 3, 0.3, 0.1, 0.3, 0.03);
+        level.sendParticles(ModParticles.FAE_SPARK.get(), spot.x, spot.y + 0.3, spot.z, 2, 0.4, 0.2, 0.4, 0.02);
+        if (t % 3 == 0) {
+            level.playSound(null, spot.x, spot.y, spot.z, net.minecraft.sounds.SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.HOSTILE, 1.6f,
+                    0.8f + (float) f * 0.8f);
+        }
+        // der Strahl streift alles zwischen seiner letzten und dieser Stelle (er wandert schnell)
+        Vec3 last = this.spiralLast == null ? spot : this.spiralLast;
+        this.spiralLast = spot;
+        float damage = this.isEnraged() ? 8.0f : 6.0f;
+        AABB swept = new AABB(last, spot).inflate(SPIRAL_WIDTH + 0.6, 3.0, SPIRAL_WIDTH + 0.6);
+        for (LivingEntity victim : this.victims(level, swept)) {
+            Vec3 feet = new Vec3(victim.getX(), spot.y, victim.getZ());
+            Integer hit = this.spiralHits.get(victim.getUUID());
+            if (io.github.sirschrolli.kingdomsatwar.entity.boss.BossFx.distanceToSegment(feet, new Vec3(last.x, spot.y, last.z), spot) < SPIRAL_WIDTH + victim.getBbWidth() * 0.5
+                    && Math.abs(victim.getY() - spot.y) < 3.0 && (hit == null || t - hit >= 12)
+                    && victim.hurtServer(level, this.damageSources().indirectMagic(this, this), damage)) {
+                this.spiralHits.put(victim.getUUID(), t);
+                victim.addEffect(new MobEffectInstance(MobEffects.GLOWING, 60, 0), this);
+            }
+        }
+    }
+
+    /** Der Boden bei x, z (von drei Blöcken über {@code y} bis acht darunter; sonst die Oberfläche). */
+    private static Vec3 ground(ServerLevel level, double x, double y, double z) {
+        BlockPos.MutableBlockPos m = BlockPos.containing(x, y + 3.0, z).mutable();
+        for (int i = 0; i < 11; i++) {
+            BlockPos below = m.below();
+            var shape = level.getBlockState(below).getCollisionShape(level, below);
+            if (!shape.isEmpty() && level.getBlockState(m).getCollisionShape(level, m).isEmpty()) {
+                return new Vec3(x, below.getY() + shape.max(net.minecraft.core.Direction.Axis.Y), z);
+            }
+            m.move(0, -1, 0);
+        }
+        return new Vec3(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mth.floor(x), Mth.floor(z)), z);
+    }
+
+    /** Für Tests: die Mitte der Mondlichtspirale (oder null). */
+    public @Nullable Vec3 spiralCenter() {
+        return this.spiralCenter;
     }
 
     /**
