@@ -35,6 +35,8 @@ BONES = ["body", "head", "left_arm", "left_forearm", "right_arm", "right_forearm
 # storm: der Phasensturm – geduckt, die Klinge hinter sich, zum Sprung bereit
 # roar: die Krönung – das Haupt in den Nacken, die Arme ausgebreitet, der Kiefer offen
 # stagger: Wasser! – gekrümmt, die Linke vor dem Gesicht
+# veil/gaze: der Leerenblick (1.13) – erst die Linke vor den Augen, das Haupt gesenkt; dann reißt er sie zur Seite fort,
+#            beugt sich vor und starrt (die Klinge gesenkt)
 # death: er sinkt auf die Knie, das Haupt fällt nach vorn
 POSES: dict[str, dict[str, list[float]]] = {
     "kneel": {"body": [6, 0, 0, 0, 11.5, 0], "head": [26, 0, 0], "left_arm": [17.6, 0, 9], "left_forearm": [-139.7, 25.9, 0], "right_arm": [20.2, 0, 6.8], "right_forearm": [-128.7, -30, 0], "blade": [193.8, -3.6, -14], "left_leg": [-84, 0, -4], "left_shin": [86, 0, 0], "right_leg": [4, 0, 4], "right_shin": [86, 0, 0]},
@@ -51,6 +53,8 @@ POSES: dict[str, dict[str, list[float]]] = {
     "storm": {"body": [24, 10, 0, 0, 3, 0], "head": [-18, -8, 0], "left_arm": [14.6, 0, -6.5], "left_forearm": [-130.3, -3.3, 0], "right_arm": [45, 0, -25.3], "right_forearm": [-97.1, 46.4, 0], "blade": [139.4, -9.6, 55.6], "left_leg": [-34, 0, -6], "left_shin": [40, 0, 0], "right_leg": [16, 0, 6], "right_shin": [36, 0, 0]},
     "roar": {"body": [-10, 0, 0], "head": [-36, 0, 0], "left_arm": [28.3, 0, 14.8], "left_forearm": [-111.1, -60, 0], "right_arm": [28.3, 0, 84.5], "right_forearm": [-111, -60, 0], "blade": [139.6, 1.7, -9.9], "left_leg": [-4, 0, -8], "right_leg": [4, 0, 8]},
     "stagger": {"body": [26, 6, 0, 0, 2, 0], "head": [30, -10, 0], "left_arm": [-78.9, 0, -20.4], "left_forearm": [-150, 5.6, 0], "right_arm": [5.2, 0, 3.2], "right_forearm": [-63.8, -1.6, 0], "blade": [69.3, -0.4, -3.9], "left_leg": [-16, 0, -6], "left_shin": [22, 0, 0], "right_leg": [8, 0, 6], "right_shin": [12, 0, 0]},
+    "veil": {"body": [2, -8, 0], "head": [16, -6, 0], "left_arm": [-80, 0, -24], "left_forearm": [-148, 6, 0], "right_arm": [27.7, 0, -2], "right_forearm": [-62.5, 15.3, 0], "blade": [79, 0.3, 5.2], "left_leg": [-6, 0, -3], "right_leg": [6, 0, 3]},
+    "gaze": {"body": [12, 6, 0, 0, 1, 0], "head": [-8, 0, 0], "left_arm": [-24, 0, -64], "left_forearm": [-28, 0, 0], "right_arm": [24, 0, -10], "right_forearm": [-58, 18, 0], "blade": [76, 0.3, 8], "left_leg": [-14, 0, -6], "left_shin": [12, 0, 0], "right_leg": [10, 0, 6], "right_shin": [8, 0, 0]},
     "death": {"body": [28, 0, 0, 0, 11.5, 0], "head": [44, 0, 8], "left_arm": [22.5, 0, 42], "left_forearm": [-117, -43.9, 0], "right_arm": [25.8, 0, 34.2], "right_forearm": [-121.2, -29.1, 0], "blade": [92.1, -0.2, 19.8], "left_leg": [-84, 0, -4], "left_shin": [86, 0, 0], "right_leg": [4, 0, 4], "right_shin": [86, 0, 0]},
 }
 
@@ -70,6 +74,7 @@ TIMELINES: dict[str, list[tuple[float, str, int]]] = {
               (74, "slash_strike", 0), (84, "ready", 0)],
     "CROWN": [(0, "ready", 0), (10, "roar", 2), (50, "roar", 0), (60, "raise", 2), (72, "ready", 0)],
     "STAGGER": [(0, "stagger", 1), (40, "stagger", 0), (50, "ready", 0)],
+    "GAZE": [(0, "ready", 0), (8, "veil", 2), (18, "veil", 0), (22, "gaze", 1), (72, "gaze", 0), (84, "ready", 0)],
 }
 
 

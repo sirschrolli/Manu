@@ -86,6 +86,7 @@ public class PhasmorModel extends EntityModel<PhasmorRenderState> {
             case STORM -> PhasmorPoses.STORM;
             case CROWN -> PhasmorPoses.CROWN;
             case STAGGER -> PhasmorPoses.STAGGER;
+            case GAZE -> PhasmorPoses.GAZE;
             default -> null;
         };
         if (attack == PhasmorEntity.Attack.GUARD) {
@@ -122,7 +123,8 @@ public class PhasmorModel extends EntityModel<PhasmorRenderState> {
         // Blick zum Gegner (beim Wachen und Erwachen lenkt die Haltung den Kopf)
         if (attack != PhasmorEntity.Attack.GUARD && attack != PhasmorEntity.Attack.AWAKEN && attack != PhasmorEntity.Attack.CROWN
                 && state.deathTime <= 0.0f) {
-            float look = attack == PhasmorEntity.Attack.NONE ? 0.8f : 0.4f;
+            // beim Leerenblick starrt er seinem Gegner geradewegs ins Gesicht
+            float look = attack == PhasmorEntity.Attack.NONE ? 0.8f : attack == PhasmorEntity.Attack.GAZE ? 1.0f : 0.4f;
             this.head.yRot += Mth.clamp(state.yRot, -45.0f, 45.0f) * Anim.DEG * look;
             this.head.xRot += Mth.clamp(state.xRot, -30.0f, 30.0f) * Anim.DEG * look;
         }

@@ -48,6 +48,12 @@ public class PhasmorRenderer<T extends Monster & PhasmorLike> extends MobRendere
                     collector.order(2).submitModel(this.getParentModel(), state, poseStack, GLOW, light, OverlayTexture.NO_OVERLAY,
                             ARGB.color(Math.round(flare * 255.0f), 0xD8FFF6), null, state.outlineColor);
                 }
+                float gaze = gaze(state);
+                if (gaze > 0.01f) {
+                    // der Leerenblick: das Licht lodert auf und blitzt bei jedem Blick
+                    collector.order(3).submitModel(this.getParentModel(), state, poseStack, GLOW, light, OverlayTexture.NO_OVERLAY,
+                            ARGB.color(Math.round(gaze * 255.0f), 0xE6FFFA), null, state.outlineColor);
+                }
             }
         });
     }
@@ -66,6 +72,27 @@ public class PhasmorRenderer<T extends Monster & PhasmorLike> extends MobRendere
             glow *= 1.0f - Mth.clamp(state.deathTime / PhasmorEntity.DEATH_TICKS, 0.0f, 1.0f) * 0.95f;
         }
         return Mth.clamp(glow, 0.0f, 1.0f);
+    }
+
+    /**
+     * Der Leerenblick: Hält er die Hand vor die Augen, sammelt sich das Licht; starrt er, lodert es und blitzt bei jedem Blick
+     * (im selben Takt, in dem der Blick trifft) auf; danach verlischt es.
+     */
+    private static float gaze(PhasmorRenderState state) {
+        if (state.attack != PhasmorEntity.Attack.GAZE.ordinal() || state.illusion || state.deathTime > 0.0f) {
+            return 0.0f;
+        }
+        float a = state.attackTime;
+        if (a < PhasmorEntity.GAZE_OPEN) {
+            float f = Mth.clamp(a / PhasmorEntity.GAZE_OPEN, 0.0f, 1.0f);
+            return f * f * 0.5f;
+        }
+        if (a > PhasmorEntity.GAZE_END) {
+            return Mth.clamp(1.0f - (a - PhasmorEntity.GAZE_END) / 10.0f, 0.0f, 1.0f) * 0.6f;
+        }
+        int pulse = state.crowned ? PhasmorEntity.GAZE_PULSE_CROWNED : PhasmorEntity.GAZE_PULSE;
+        float since = (a - PhasmorEntity.GAZE_OPEN) % pulse;
+        return Mth.clamp(0.6f + Math.max(0.0f, 1.0f - since / 4.0f) * 0.4f, 0.0f, 1.0f);
     }
 
     @Override

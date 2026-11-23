@@ -27,12 +27,15 @@ import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
@@ -66,6 +69,9 @@ import org.jspecify.annotations.Nullable;
  *     <li><b>Blockwurf</b> – Brocken aus Endstein und Purpur steigen um ihn auf und fliegen nacheinander auf seine Gegner;</li>
  *     <li><b>Leerenrisse</b> – er stößt die Klinge in den Boden, unter seinen Gegnern öffnen sich Risse in die Leere; wer
  *     darin steht, wird verschluckt und hoch über dem Heiligtum wieder ausgespuckt;</li>
+ *     <li><b>Leerenblick</b> (seit 1.13) – er hebt die Linke vors Gesicht, seine Augen lodern auf, dann reißt er die Hand
+ *     fort und starrt: Wer ihm jetzt in die Augen sieht, den trifft in kurzen Abständen die Leere (Magie und Dunkelheit). Wie
+ *     bei Endermen hilft Wegsehen, hinter ihn Treten oder ein geschnitzter Kürbis auf dem Kopf;</li>
  *     <li><b>Krönung</b> – unter halber Kraft brüllt er auf, die Krone aus Phasit lodert: Danach ist er schneller, ruft mehr
  *     Trugbilder, öffnet mehr Risse und kennt den <b>Phasensturm</b> (fünf Sprünge, fünf Hiebe).</li>
  * </ul>
@@ -107,6 +113,16 @@ public class PhasmorEntity extends Monster implements PhasmorLike, io.github.sir
     public static final float STORM_DAMAGE = 8.0f;
     public static final int[] STORM_BLINKS = {8, 22, 36, 50, 64};
     public static final int CROWN_FLARE = 34;
+    /** Leerenblick: so viel Schaden je Blick (gekrönt einer mehr) … */
+    public static final float GAZE_DAMAGE = 4.0f;
+    /** … ab diesem Tick (vorher hält er die Hand vor die Augen) … */
+    public static final int GAZE_OPEN = 20;
+    /** … bis zu diesem, alle {@link #GAZE_PULSE} Ticks (gekrönt alle {@link #GAZE_PULSE_CROWNED}) … */
+    public static final int GAZE_END = 72;
+    public static final int GAZE_PULSE = 10;
+    public static final int GAZE_PULSE_CROWNED = 8;
+    /** … wen er so weit (waagerecht) sieht. */
+    public static final double GAZE_RANGE = 26.0;
     public static final float WATER_DAMAGE = 8.0f;
     public static final int STAGGER_TICKS = 50;
     /** So oft phast er einem Geschoss davon (nicht, solange er sich krümmt). */
@@ -116,7 +132,7 @@ public class PhasmorEntity extends Monster implements PhasmorLike, io.github.sir
 
     public enum Attack {
         NONE(0), GUARD(0), AWAKEN(AWAKEN_TICKS), SLASH(32), BLINK(40), ILLUSIONS(44), HURL(64), RIFTS(56), STORM(84), CROWN(72),
-        STAGGER(STAGGER_TICKS);
+        STAGGER(STAGGER_TICKS), GAZE(84);
 
         public final int duration;
 
@@ -468,6 +484,7 @@ public class PhasmorEntity extends Monster implements PhasmorLike, io.github.sir
             case HURL -> this.tickHurl(level, target);
             case RIFTS -> this.tickRifts(level, target);
             case STORM -> this.tickStorm(level, target);
+            case GAZE -> this.tickGaze(level, target);
             default -> { }
         }
         if (this.attackTick >= this.attack.duration) {
@@ -633,9 +650,9 @@ public class PhasmorEntity extends Monster implements PhasmorLike, io.github.sir
         if (distance < 5.5) {
             options.addAll(List.of(Attack.SLASH, Attack.SLASH, Attack.RIFTS, Attack.BLINK));
         } else if (distance < 12.0) {
-            options.addAll(List.of(Attack.BLINK, Attack.BLINK, Attack.HURL, Attack.RIFTS, Attack.SLASH));
+            options.addAll(List.of(Attack.BLINK, Attack.BLINK, Attack.HURL, Attack.RIFTS, Attack.SLASH, Attack.GAZE));
         } else {
-            options.addAll(List.of(Attack.BLINK, Attack.HURL, Attack.HURL, Attack.RIFTS));
+            options.addAll(List.of(Attack.BLINK, Attack.HURL, Attack.HURL, Attack.RIFTS, Attack.GAZE));
         }
         if (this.illusions(level) < 2) {
             options.add(Attack.ILLUSIONS);
@@ -1005,6 +1022,81 @@ public class PhasmorEntity extends Monster implements PhasmorLike, io.github.sir
         victim.setDeltaMovement(0.0, 0.2, 0.0);
         victim.needsSync = true;
         level.sendParticles(ParticleTypes.REVERSE_PORTAL, from.x, from.y + lift + 0.5, from.z, 40, 0.4, 0.6, 0.4, 0.05);
+    }
+
+    /**
+     * Leerenblick: Er hebt die Linke vors Gesicht, seine Augen sammeln Licht (dazu das Starren der Endermen) – dann reißt er die
+     * Hand fort und starrt. Alle paar Ticks trifft die Leere jeden, der ihm in die Augen sieht (siehe {@link #meetsGaze}):
+     * ein Strahl aus seinen Augen, Schaden durch Magie (Rüstung hilft nicht) und Dunkelheit. Er steht dabei still.
+     */
+    private void tickGaze(ServerLevel level, LivingEntity target) {
+        int t = this.attackTick;
+        Vec3 eyes = this.eyes();
+        if (t == 2) {
+            this.sound(level, SoundEvents.ENDERMAN_STARE, 2.8f, 0.55f);
+            SpellFxEntity.create(level, SpellFxEntity.Kind.ECHO, this.position().add(0.0, 0.05, 0.0), null, PHASIT, 30, 1.2f).param(0.5f).spawn();
+        }
+        if (t < GAZE_OPEN) {
+            // die Augen sammeln Licht: Funken ziehen zu ihnen hin
+            if (t % 2 == 0) {
+                for (int i = 0; i < 3; i++) {
+                    Vec3 from = eyes.add((this.random.nextDouble() - 0.5) * 3.0, (this.random.nextDouble() - 0.5) * 2.0,
+                            (this.random.nextDouble() - 0.5) * 3.0);
+                    Vec3 v = eyes.subtract(from).scale(0.12);
+                    level.sendParticles(new DustParticleOptions(PHASIT, 0.9f), from.x, from.y, from.z, 0, v.x, v.y, v.z, 1.0);
+                }
+            }
+            return;
+        }
+        if (t == GAZE_OPEN) {
+            this.sound(level, ModSounds.PHASMOR_RIFT_OPEN.get(), 2.4f, 1.5f);
+            SpellFxEntity.create(level, SpellFxEntity.Kind.ECHO, this.position().add(0.0, 0.05, 0.0), null, PHASIT, 24, 1.5f).param(0.8f).spawn();
+        }
+        if (t > GAZE_END) {
+            return;
+        }
+        // die starrenden Augen glimmen
+        level.sendParticles(ParticleTypes.END_ROD, eyes.x, eyes.y, eyes.z, 1, 0.12, 0.04, 0.12, 0.004);
+        int pulse = this.isCrowned() ? GAZE_PULSE_CROWNED : GAZE_PULSE;
+        if ((t - GAZE_OPEN) % pulse != 0) {
+            return;
+        }
+        level.playSound(null, eyes.x, eyes.y, eyes.z, SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.HOSTILE, 2.0f, 0.5f);
+        float damage = GAZE_DAMAGE + (this.isCrowned() ? 1.0f : 0.0f);
+        for (LivingEntity victim : this.victims(level, this.getBoundingBox().inflate(GAZE_RANGE, 12.0, GAZE_RANGE))) {
+            if (!this.meetsGaze(victim)) {
+                continue;
+            }
+            Vec3 at = victim.getEyePosition();
+            SpellFxEntity.create(level, SpellFxEntity.Kind.BEAM, eyes, null, PHASIT, 7, 0.24f).end(at).spawn();
+            level.sendParticles(ParticleTypes.REVERSE_PORTAL, at.x, at.y, at.z, 14, 0.25, 0.25, 0.25, 0.04);
+            level.playSound(null, at.x, at.y, at.z, SoundEvents.ENDER_EYE_DEATH, SoundSource.HOSTILE, 1.4f, 0.6f);
+            victim.hurtServer(level, this.damageSources().indirectMagic(this, this), damage);
+            victim.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 70, 0, false, true), this);
+        }
+    }
+
+    /** Wo seine Augen sind (ein wenig vor dem Gesicht). */
+    private Vec3 eyes() {
+        return new Vec3(this.getX(), this.getEyeY(), this.getZ()).add(this.forward().scale(0.45));
+    }
+
+    /**
+     * Sieht {@code e} ihm in die Augen? Er muss zu ihm hinsehen (es steht vor ihm), und es muss ihn ansehen – zu den Augen oder
+     * auf den Leib, mit freier Sicht. Ein geschnitzter Kürbis auf dem Kopf schützt wie bei Endermen.
+     */
+    public boolean meetsGaze(LivingEntity e) {
+        if (!LivingEntity.PLAYER_NOT_WEARING_DISGUISE_ITEM_FOR_TARGET.test(e, this)) {
+            return false;
+        }
+        Vec3 to = e.position().subtract(this.position()).multiply(1.0, 0.0, 1.0);
+        if (to.lengthSqr() > GAZE_RANGE * GAZE_RANGE) {
+            return false;
+        }
+        if (to.lengthSqr() > 0.25 && this.forward().dot(to.normalize()) < 0.25) {
+            return false;
+        }
+        return this.isLookingAtMe(e, 0.14, false, true, this.getEyeY(), this.getY(0.55));
     }
 
     /** Phasensturm (gekrönt): fünf Sprünge in rascher Folge, nach jedem ein Hieb rundum. */

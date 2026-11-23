@@ -223,7 +223,8 @@ final class PhasmorGameTests {
         step(helper, king, knight, spot, hp, PhasmorEntity.Attack.SLASH, PhasmorEntity.SLASH_HIT + 3, "Der Klingenhieb", () ->
                 step(helper, king, knight, spot, hp, PhasmorEntity.Attack.BLINK, PhasmorEntity.BLINK_HIT + 3, "Der Phasenstoß", () ->
                         hurl(helper, level, king, knight, spot, hp, area, () ->
-                                rifts(helper, king, knight, spot, hp, () -> storm(helper, level, king, knight, spot, hp, area)))));
+                                rifts(helper, king, knight, spot, hp, () ->
+                                        gaze(helper, king, knight, spot, hp, () -> storm(helper, level, king, knight, spot, hp, area))))));
     }
 
     /** Ein Angriff: erzwingen, warten, prüfen, ob der Ritter getroffen wurde, dann den nächsten. */
@@ -272,6 +273,43 @@ final class PhasmorGameTests {
             helper.assertFalse(king.riftsOpen(), "Die Risse schließen sich nicht");
             then.run();
         });
+    }
+
+    /**
+     * Leerenblick: Der Ritter, der ihn ansieht, wird getroffen (und sieht nur noch Dunkelheit); ein zweiter, der ein paar
+     * Schritte daneben wegsieht, bleibt unversehrt.
+     */
+    private static void gaze(GameTestHelper helper, PhasmorEntity king, LivingEntity knight, Vec3 spot, float[] hp, Runnable then) {
+        reset(knight, spot, hp);
+        knight.removeAllEffects();
+        // er steht wieder an seinem Platz (nach dem Phasenstoß stand er sonst irgendwo), den Blick nach Süden auf den Ritter
+        Vec3 start = helper.absoluteVec(new Vec3(4.5, 1.0, 1.5));
+        king.teleportTo(start.x, start.y, start.z);
+        face(king, 0.0f);
+        face(knight, 180.0f);
+        LivingEntity averted = helper.spawnWithNoFreeWill(ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get(), new BlockPos(6, 1, 5));
+        face(averted, 0.0f);
+        float calm = averted.getHealth();
+        king.setTarget(knight);
+        king.forceAttack(PhasmorEntity.Attack.GAZE);
+        helper.runAfterDelay(PhasmorEntity.GAZE_OPEN - 4, () -> helper.assertTrue(knight.getHealth() >= hp[0],
+                "Der Leerenblick trifft, bevor er die Hand von den Augen nimmt"));
+        helper.runAfterDelay(PhasmorEntity.GAZE_OPEN + 3, () -> {
+            helper.assertTrue(king.meetsGaze(knight), "Der Ritter, der ihn ansieht, begegnet seinem Blick nicht");
+            helper.assertFalse(king.meetsGaze(averted), "Der Ritter, der wegsieht, begegnet seinem Blick");
+            helper.assertTrue(knight.getHealth() < hp[0], "Der Leerenblick trifft den Ritter nicht, der ihn ansieht");
+            helper.assertTrue(knight.hasEffect(net.minecraft.world.effect.MobEffects.DARKNESS), "Der Leerenblick bringt keine Dunkelheit");
+            helper.assertTrue(averted.getHealth() >= calm, "Der Leerenblick trifft auch den Ritter, der wegsieht");
+            averted.discard();
+            then.run();
+        });
+    }
+
+    /** Dreht einen (willenlosen) Ritter samt Kopf und Leib in eine Richtung (0 = Süden, 180 = Norden), den Blick geradeaus. */
+    private static void face(LivingEntity e, float yaw) {
+        e.snapTo(e.getX(), e.getY(), e.getZ(), yaw, 0.0f);
+        e.setYHeadRot(yaw);
+        e.setYBodyRot(yaw);
     }
 
     /** Gekrönt: der Phasensturm – Sprung um Sprung, nach jedem ein Hieb rundum. */

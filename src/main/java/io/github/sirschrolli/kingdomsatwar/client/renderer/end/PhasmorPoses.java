@@ -34,7 +34,9 @@ final class PhasmorPoses {
     static final int P_STORM = 11;
     static final int P_ROAR = 12;
     static final int P_STAGGER = 13;
-    static final int P_DEATH = 14;
+    static final int P_VEIL = 14;
+    static final int P_GAZE = 15;
+    static final int P_DEATH = 16;
 
     /** Je Haltung und Knochen: rx, ry, rz (Grad), dx, dy, dz (Pixel). */
     static final float[][] POSES = {
@@ -66,6 +68,10 @@ final class PhasmorPoses {
             {-10f, 0f, 0f, 0f, 0f, 0f, -36f, 0f, 0f, 0f, 0f, 0f, 28.3f, 0f, 14.8f, 0f, 0f, 0f, -111.1f, -60f, 0f, 0f, 0f, 0f, 28.3f, 0f, 84.5f, 0f, 0f, 0f, -111f, -60f, 0f, 0f, 0f, 0f, 139.6f, 1.7f, -9.9f, 0f, 0f, 0f, -4f, 0f, -8f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 4f, 0f, 8f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f},
             // stagger
             {26f, 6f, 0f, 0f, 2f, 0f, 30f, -10f, 0f, 0f, 0f, 0f, -78.9f, 0f, -20.4f, 0f, 0f, 0f, -150f, 5.6f, 0f, 0f, 0f, 0f, 5.2f, 0f, 3.2f, 0f, 0f, 0f, -63.8f, -1.6f, 0f, 0f, 0f, 0f, 69.3f, -0.4f, -3.9f, 0f, 0f, 0f, -16f, 0f, -6f, 0f, 0f, 0f, 22f, 0f, 0f, 0f, 0f, 0f, 8f, 0f, 6f, 0f, 0f, 0f, 12f, 0f, 0f, 0f, 0f, 0f},
+            // veil
+            {2f, -8f, 0f, 0f, 0f, 0f, 16f, -6f, 0f, 0f, 0f, 0f, -80f, 0f, -24f, 0f, 0f, 0f, -148f, 6f, 0f, 0f, 0f, 0f, 27.7f, 0f, -2f, 0f, 0f, 0f, -62.5f, 15.3f, 0f, 0f, 0f, 0f, 79f, 0.3f, 5.2f, 0f, 0f, 0f, -6f, 0f, -3f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 6f, 0f, 3f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f},
+            // gaze
+            {12f, 6f, 0f, 0f, 1f, 0f, -8f, 0f, 0f, 0f, 0f, 0f, -24f, 0f, -64f, 0f, 0f, 0f, -28f, 0f, 0f, 0f, 0f, 0f, 24f, 0f, -10f, 0f, 0f, 0f, -58f, 18f, 0f, 0f, 0f, 0f, 76f, 0.3f, 8f, 0f, 0f, 0f, -14f, 0f, -6f, 0f, 0f, 0f, 12f, 0f, 0f, 0f, 0f, 0f, 10f, 0f, 6f, 0f, 0f, 0f, 8f, 0f, 0f, 0f, 0f, 0f},
             // death
             {28f, 0f, 0f, 0f, 11.5f, 0f, 44f, 0f, 8f, 0f, 0f, 0f, 22.5f, 0f, 42f, 0f, 0f, 0f, -117f, -43.9f, 0f, 0f, 0f, 0f, 25.8f, 0f, 34.2f, 0f, 0f, 0f, -121.2f, -29.1f, 0f, 0f, 0f, 0f, 92.1f, -0.2f, 19.8f, 0f, 0f, 0f, -84f, 0f, -4f, 0f, 0f, 0f, 86f, 0f, 0f, 0f, 0f, 0f, 4f, 0f, 4f, 0f, 0f, 0f, 86f, 0f, 0f, 0f, 0f, 0f},
     };
@@ -80,6 +86,7 @@ final class PhasmorPoses {
     static final int[][] STORM = {{0, P_READY, 0}, {4, P_STORM, 2}, {10, P_SLASH_STRIKE, 1}, {18, P_STORM, 2}, {24, P_SLASH_STRIKE, 1}, {32, P_STORM, 2}, {38, P_SLASH_STRIKE, 1}, {46, P_STORM, 2}, {52, P_SLASH_STRIKE, 1}, {60, P_STORM, 2}, {66, P_SLASH_STRIKE, 1}, {74, P_SLASH_STRIKE, 0}, {84, P_READY, 0}};
     static final int[][] CROWN = {{0, P_READY, 0}, {10, P_ROAR, 2}, {50, P_ROAR, 0}, {60, P_RAISE, 2}, {72, P_READY, 0}};
     static final int[][] STAGGER = {{0, P_STAGGER, 1}, {40, P_STAGGER, 0}, {50, P_READY, 0}};
+    static final int[][] GAZE = {{0, P_READY, 0}, {8, P_VEIL, 2}, {18, P_VEIL, 0}, {22, P_GAZE, 1}, {72, P_GAZE, 0}, {84, P_READY, 0}};
 
     private PhasmorPoses() {}
 }
