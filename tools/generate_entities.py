@@ -40,7 +40,8 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               world_eater, world_eater_segment, world_eater_tail, world_chunk,
                               quetzara, quetzara_segment, quetzara_tail, quetzara_feather, venom_glob,
                               schrolli, seraphling, divine_spear, divine_feather, divine_halo, divine_planet,
-                              snow_leopard, primeval_elk, storm_gull, griffin, ember_salamander, mire_snapper, flamingo, butterfly)
+                              snow_leopard, primeval_elk, storm_gull, griffin, ember_salamander, mire_snapper, flamingo, butterfly,
+                              mud_ball)
 from entitygen.paint import paint_model  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -139,6 +140,8 @@ def main():
                 "quetzara", quetzara_feather.PALETTES, preview)
     write_model(venom_glob, "VenomGlobGeometry", "Geometrie eines Klumpens Gift, den Quetzara spuckt (1.10).", "quetzara",
                 venom_glob.PALETTES, preview)
+    write_model(mud_ball, "MudBallGeometry", "Geometrie eines Schlammbatzens, den der Moorschlurfer wirft (1.12.1).", "mire_shambler",
+                mud_ball.PALETTES, preview)
     write_model(stone_keeper, "StoneKeeperGeometry", "Geometrie des Steinhüters (im Spiel 1,4-fach vergrößert).",
                 "stone_keeper", stone_keeper.PALETTES, preview)
     write_model(keeper_boulder, "KeeperBoulderGeometry", "Geometrie des Felsbrockens, den der Steinhüter schleudert.",

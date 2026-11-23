@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.client.renderer.biome;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.client.model.ModModelLayers;
 import io.github.sirschrolli.kingdomsatwar.client.model.creature.Anim;
@@ -19,6 +20,14 @@ public class MireSnapperRenderer extends MobRenderer<MireSnapperEntity, MireSnap
     @Override
     public Identifier getTextureLocation(MireSnapperRenderState state) {
         return TEXTURE;
+    }
+
+    /** Jungtiere halb so groß (den großen Kopf macht das Modell). */
+    @Override
+    protected void scale(MireSnapperRenderState state, PoseStack poseStack) {
+        if (state.isBaby) {
+            poseStack.scale(state.ageScale, state.ageScale, state.ageScale);
+        }
     }
 
     @Override

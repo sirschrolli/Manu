@@ -26,6 +26,14 @@ public class FlamingoRenderer extends MobRenderer<FlamingoEntity, FlamingoRender
         return TEXTURES[Math.floorMod(state.variant, TEXTURES.length)];
     }
 
+    /** Jungtiere halb so groß (den großen Kopf macht das Modell). */
+    @Override
+    protected void scale(FlamingoRenderState state, PoseStack poseStack) {
+        if (state.isBaby) {
+            poseStack.scale(state.ageScale, state.ageScale, state.ageScale);
+        }
+    }
+
     @Override
     public FlamingoRenderState createRenderState() {
         return new FlamingoRenderState();

@@ -32,6 +32,14 @@ public class StormGullRenderer extends MobRenderer<StormGullEntity, StormGullRen
         return TEXTURES[Math.floorMod(state.variant, TEXTURES.length)];
     }
 
+    /** Jungtiere halb so groß (den großen Kopf macht das Modell). */
+    @Override
+    protected void scale(StormGullRenderState state, PoseStack poseStack) {
+        if (state.isBaby) {
+            poseStack.scale(state.ageScale, state.ageScale, state.ageScale);
+        }
+    }
+
     @Override
     public StormGullRenderState createRenderState() {
         return new StormGullRenderState();

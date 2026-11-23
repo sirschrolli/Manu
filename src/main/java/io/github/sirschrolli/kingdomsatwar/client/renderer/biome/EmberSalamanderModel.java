@@ -49,6 +49,10 @@ public class EmberSalamanderModel extends EntityModel<EmberSalamanderRenderState
     @Override
     public void setupAnim(EmberSalamanderRenderState state) {
         super.setupAnim(state);
+        // Junge: großer Kopf
+        if (state.isBaby) {
+            this.head.xScale = this.head.yScale = this.head.zScale = 1.35f;
+        }
         float t = state.ageInTicks + state.offset;
         float bask = state.bask;
         float speed = Math.min(1.0f, state.walkAnimationSpeed * 1.6f) * (1.0f - bask);

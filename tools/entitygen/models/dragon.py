@@ -161,11 +161,13 @@ def _membrane_shape(outer: bool, variant: str):
             limit = 0.98 - 0.85 * span ** 1.4
             scallop = 0.08 * abs(math.sin(span * math.pi * 3.0))
             limit -= scallop
-            # Fingerknochen als dunkle Linien von der Handwurzel aus
+            # Fingerknochen als dunkle Linien von der Handwurzel aus. Sie enden am Rand der Flughaut, nur die Spitze ragt wie
+            # eine kleine Kralle heraus (bis 1.12.0 liefen sie bis an den Rand des Quaders: lange, dünne Stacheln, die im
+            # Flug aus den Schwingen standen)
             for ang in (0.12, 0.42, 0.75):
                 fx = span
                 fz = chord
-                if abs(fz - fx * ang * 1.25) < 0.035 and fx > 0.05:
+                if abs(fz - fx * ang * 1.25) < 0.035 and fx > 0.05 and fz <= limit + 0.05:
                     return pick(ctx.pal["back"], 0.3)
         else:
             limit = 0.95 - 0.25 * span

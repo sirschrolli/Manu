@@ -101,6 +101,7 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.LINDWORM, LindwormGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.WEREWOLF, io.github.sirschrolli.kingdomsatwar.client.model.geom.WerewolfGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.MIRE_SHAMBLER, io.github.sirschrolli.kingdomsatwar.client.model.geom.MireShamblerGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.MUD_BALL, io.github.sirschrolli.kingdomsatwar.client.model.geom.MudBallGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.EMBER_WYRM, io.github.sirschrolli.kingdomsatwar.client.model.geom.EmberWyrmGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.ASH_WRAITH, io.github.sirschrolli.kingdomsatwar.client.model.geom.AshWraithGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.SOUL_HERON, io.github.sirschrolli.kingdomsatwar.client.model.geom.SoulHeronGeometry::createLayer);
@@ -339,7 +340,7 @@ public final class ClientSetup {
                 io.github.sirschrolli.kingdomsatwar.client.renderer.biome.FlamingoRenderer::new);
         event.registerEntityRenderer(io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.BUTTERFLY.get(),
                 io.github.sirschrolli.kingdomsatwar.client.renderer.biome.ButterflyRenderer::new);
-        event.registerEntityRenderer(ModEntities.MONSTER_SHOT.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
+        event.registerEntityRenderer(ModEntities.MONSTER_SHOT.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.monster.MonsterShotRenderer::new);
         // Drachen-Bosse (Modell in Grundgröße, im Spiel ×2,1)
         event.registerEntityRenderer(ModEntities.PYRRHON.get(), context -> new DragonBossRenderer<>(context,
                 new DragonBossModel(context.bakeLayer(ModModelLayers.PYRRHON), 6, 8, true, 4, 32.0f),

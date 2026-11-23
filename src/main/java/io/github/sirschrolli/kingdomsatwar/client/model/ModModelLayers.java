@@ -47,6 +47,8 @@ public final class ModModelLayers {
     public static final ModelLayerLocation LINDWORM = new ModelLayerLocation(KingdomsAtWar.id("lindworm"), "main");
     public static final ModelLayerLocation WEREWOLF = new ModelLayerLocation(KingdomsAtWar.id("werewolf"), "main");
     public static final ModelLayerLocation MIRE_SHAMBLER = new ModelLayerLocation(KingdomsAtWar.id("mire_shambler"), "main");
+    /** Schlammbatzen des Moorschlurfers (1.12.1). */
+    public static final ModelLayerLocation MUD_BALL = new ModelLayerLocation(KingdomsAtWar.id("mud_ball"), "main");
     public static final ModelLayerLocation EMBER_WYRM = new ModelLayerLocation(KingdomsAtWar.id("ember_wyrm"), "main");
     public static final ModelLayerLocation ASH_WRAITH = new ModelLayerLocation(KingdomsAtWar.id("ash_wraith"), "main");
     public static final ModelLayerLocation SOUL_HERON = new ModelLayerLocation(KingdomsAtWar.id("soul_heron"), "main");

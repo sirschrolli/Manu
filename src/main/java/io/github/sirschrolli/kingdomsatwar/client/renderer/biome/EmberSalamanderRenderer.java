@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.client.renderer.biome;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.client.model.ModModelLayers;
 import io.github.sirschrolli.kingdomsatwar.client.model.creature.Anim;
@@ -32,6 +33,14 @@ public class EmberSalamanderRenderer extends MobRenderer<EmberSalamanderEntity, 
     @Override
     public Identifier getTextureLocation(EmberSalamanderRenderState state) {
         return TEXTURES[Math.floorMod(state.variant, TEXTURES.length)];
+    }
+
+    /** Jungtiere halb so groß (den großen Kopf macht das Modell). */
+    @Override
+    protected void scale(EmberSalamanderRenderState state, PoseStack poseStack) {
+        if (state.isBaby) {
+            poseStack.scale(state.ageScale, state.ageScale, state.ageScale);
+        }
     }
 
     @Override

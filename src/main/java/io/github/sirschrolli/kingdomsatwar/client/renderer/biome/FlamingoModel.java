@@ -54,6 +54,10 @@ public class FlamingoModel extends EntityModel<FlamingoRenderState> {
     @Override
     public void setupAnim(FlamingoRenderState state) {
         super.setupAnim(state);
+        // Küken: großer Kopf
+        if (state.isBaby) {
+            this.head.xScale = this.head.yScale = this.head.zScale = 1.4f;
+        }
         float t = state.ageInTicks;
         float fly = state.fly;
         float ground = 1.0f - fly;
