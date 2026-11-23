@@ -229,6 +229,7 @@ final class ForgeGameTests {
         ServerLevel level = helper.getLevel();
         floor(helper);
         GlutschmiedEntity smith = helper.spawn(ModEntities.GLUTSCHMIED.get(), new BlockPos(4, 1, 1));
+        smith.confine(8.0);                                // (der Glutrost träfe sonst die Nachbartests)
         LivingEntity knight = helper.spawnWithNoFreeWill(ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get(), new BlockPos(4, 1, 4));
         AABB area = smith.getBoundingBox().inflate(5.5, 3, 5.5);
         float[] hp = {knight.getHealth()};

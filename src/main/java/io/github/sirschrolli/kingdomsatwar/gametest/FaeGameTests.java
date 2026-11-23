@@ -446,6 +446,12 @@ final class FaeGameTests {
      * (und leuchtet). Danach geht es gleich weiter (die Spirale wanderte sonst in die Nachbartests).
      */
     private static void spiral(GameTestHelper helper, MothQueenEntity queen, net.minecraft.world.entity.LivingEntity knight, Runnable then) {
+        // die Falter des Schwarms verglimmen (ihre Bisse stießen den Ritter sonst aus der Mitte), der Ritter steht still
+        for (MoonMothEntity moth : helper.getLevel().getEntitiesOfClass(MoonMothEntity.class, queen.getBoundingBox().inflate(32))) {
+            moth.vanish(helper.getLevel());
+        }
+        knight.teleportTo(knight.getX(), knight.getY(), knight.getZ());
+        knight.setDeltaMovement(Vec3.ZERO);
         knight.setHealth(knight.getMaxHealth());
         knight.removeAllEffects();
         float hp = knight.getHealth();

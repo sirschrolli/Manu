@@ -144,6 +144,8 @@ public class GlutschmiedEntity extends Monster implements io.github.sirschrolli.
     /** Glutrost: die Mitten der Felder A und B. */
     private final List<Vec3> grateA = new ArrayList<>();
     private final List<Vec3> grateB = new ArrayList<>();
+    /** Für Tests: Seine Angriffe treffen nur, wer so nah (waagerecht) bei ihm ist – sonst träfen sie die Nachbartests. */
+    private double confine = Double.MAX_VALUE;
     private int clientAttackStart;
 
     public GlutschmiedEntity(EntityType<? extends GlutschmiedEntity> type, Level level) {
@@ -462,7 +464,13 @@ public class GlutschmiedEntity extends Monster implements io.github.sirschrolli.
     }
 
     private List<LivingEntity> victims(ServerLevel level, AABB area) {
-        return level.getEntitiesOfClass(LivingEntity.class, area, this::canStrike);
+        return level.getEntitiesOfClass(LivingEntity.class, area, e -> this.canStrike(e)
+                && e.distanceToSqr(this.getX(), e.getY(), this.getZ()) <= this.confine * this.confine);
+    }
+
+    /** Für Tests: Seine Angriffe (und der Glutrost) reichen nur so weit (waagerecht). */
+    public void confine(double radius) {
+        this.confine = radius;
     }
 
     private @Nullable LivingEntity findTarget(ServerLevel level) {
@@ -897,7 +905,7 @@ public class GlutschmiedEntity extends Monster implements io.github.sirschrolli.
         this.grateB.clear();
         int cx = Mth.floor(this.getX());
         int cz = Mth.floor(this.getZ());
-        double range = this.isStoked() ? GRATE_RANGE + 3.0 : GRATE_RANGE;
+        double range = Math.min(this.isStoked() ? GRATE_RANGE + 3.0 : GRATE_RANGE, this.confine);
         int n = (int) Math.ceil(range / GRATE_CELL);
         for (int i = -n; i <= n; i++) {
             for (int j = -n; j <= n; j++) {
