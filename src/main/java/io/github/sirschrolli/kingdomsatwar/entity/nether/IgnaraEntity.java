@@ -947,9 +947,9 @@ public class IgnaraEntity extends Monster implements io.github.sirschrolli.kingd
     }
 
     /**
-     * Flammenkranz: Sie reckt die Arme empor – um ihr Opfer lodert ein Ring aus Flammen auf, kurze Feuersäulen schießen aus
-     * ihm, und er zieht sich zusammen. Wen er dabei überläuft, der verbrennt (einmal; wer im rechten Moment darüber springt,
-     * bleibt heil); wer zuletzt noch in der Mitte steht, den trifft die Feuersäule, zu der er zusammenschlägt.
+     * Flammenkranz: Sie reckt die Arme empor – um ihr Opfer lodert ein Ring aus Flammen auf und zieht sich zusammen. Wen er
+     * dabei überläuft, der verbrennt (einmal; wer im rechten Moment darüber springt, bleibt heil); wer zuletzt noch in der
+     * Mitte steht, den trifft die Feuersäule, zu der er zusammenschlägt.
      */
     private void tickWreath(ServerLevel level, LivingEntity target) {
         int t = this.attackTick;
@@ -963,10 +963,12 @@ public class IgnaraEntity extends Monster implements io.github.sirschrolli.kingd
             float speed = (float) ((WREATH_END - WREATH_START) / (WREATH_CLOSE - WREATH_IGNITE));
             SpellFxEntity.create(level, SpellFxEntity.Kind.SHOCKWAVE, c.add(0.0, 0.05, 0.0), DragonType.FIRE, FLAME, WREATH_CLOSE - WREATH_IGNITE + 1,
                     (float) WREATH_START).param(speed).spawn();
-            for (int k = 0; k < 12; k++) {
-                double a = k * Mth.TWO_PI / 12.0;
+            // er lodert auf: Flammen schießen rundum aus dem Boden (keine Feuersäulen – deren Rauch verdeckte den Ring)
+            for (int k = 0; k < 24; k++) {
+                double a = k * Mth.TWO_PI / 24.0;
                 Vec3 p = c.add(Math.cos(a) * WREATH_START, 0.0, Math.sin(a) * WREATH_START);
-                SpellFxEntity.create(level, SpellFxEntity.Kind.PILLAR, p, DragonType.FIRE, FLAME, 12, 0.55f).param(2.6f).spawn();
+                level.sendParticles(ParticleTypes.FLAME, p.x, p.y + 0.3, p.z, 4, 0.15, 0.5, 0.15, 0.04);
+                level.sendParticles(ParticleTypes.LAVA, p.x, p.y + 0.2, p.z, 1, 0.1, 0.0, 0.1, 0.0);
             }
             this.sound(level, ModSounds.IGNARA_PILLAR.get(), 2.6f, 1.25f);
         }

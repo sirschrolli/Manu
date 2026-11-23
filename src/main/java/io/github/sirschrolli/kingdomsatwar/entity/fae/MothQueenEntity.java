@@ -611,7 +611,16 @@ public class MothQueenEntity extends Monster implements io.github.sirschrolli.ki
         Vec3 spot = ground(level, c.x + Math.cos(a) * r, c.y, c.z + Math.sin(a) * r);
         Vec3 from = this.position().add(0.0, this.getBbHeight() * 0.4, 0.0);
         if (t % 2 == 0) {
-            SpellFxEntity.create(level, SpellFxEntity.Kind.BEAM, from, null, MOONLIGHT, 3, 0.45f).end(spot).spawn();
+            SpellFxEntity.create(level, SpellFxEntity.Kind.BEAM, from, null, MOONLIGHT, 3, 0.7f).end(spot).spawn();
+            // wo er auftrifft, glüht der Boden nach: eine Spur aus kurzen Lichtsäulen
+            SpellFxEntity.create(level, SpellFxEntity.Kind.PILLAR, spot, null, MOONLIGHT, 10, 0.6f).param(1.4f).spawn();
+            // und Staub entlang des Strahls (auch vor hellem Himmel gut zu sehen)
+            Vec3 d = spot.subtract(from);
+            int n = Math.max(2, (int) (d.length() * 1.6));
+            for (int k = 1; k < n; k++) {
+                Vec3 p = from.add(d.scale(k / (double) n));
+                level.sendParticles(new net.minecraft.core.particles.DustParticleOptions(MOONLIGHT, 1.2f), p.x, p.y, p.z, 1, 0.03, 0.03, 0.03, 0.0);
+            }
         }
         level.sendParticles(ParticleTypes.END_ROD, spot.x, spot.y + 0.2, spot.z, 3, 0.3, 0.1, 0.3, 0.03);
         level.sendParticles(ModParticles.FAE_SPARK.get(), spot.x, spot.y + 0.3, spot.z, 2, 0.4, 0.2, 0.4, 0.02);

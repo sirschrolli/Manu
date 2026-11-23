@@ -1068,7 +1068,14 @@ public class PhasmorEntity extends Monster implements PhasmorLike, io.github.sir
                 continue;
             }
             Vec3 at = victim.getEyePosition();
-            SpellFxEntity.create(level, SpellFxEntity.Kind.BEAM, eyes, null, PHASIT, 7, 0.24f).end(at).spawn();
+            SpellFxEntity.create(level, SpellFxEntity.Kind.BEAM, eyes, null, PHASIT, 10, 0.3f).end(at).spawn();
+            // dazu eine Spur aus Staub entlang des Blicks (auch vor hellem Himmel gut zu sehen)
+            Vec3 d = at.subtract(eyes);
+            int n = Math.max(2, (int) (d.length() * 2.5));
+            for (int k = 1; k < n; k++) {
+                Vec3 p = eyes.add(d.scale(k / (double) n));
+                level.sendParticles(new DustParticleOptions(PHASIT, 1.1f), p.x, p.y, p.z, 1, 0.02, 0.02, 0.02, 0.0);
+            }
             level.sendParticles(ParticleTypes.REVERSE_PORTAL, at.x, at.y, at.z, 14, 0.25, 0.25, 0.25, 0.04);
             level.playSound(null, at.x, at.y, at.z, SoundEvents.ENDER_EYE_DEATH, SoundSource.HOSTILE, 1.4f, 0.6f);
             victim.hurtServer(level, this.damageSources().indirectMagic(this, this), damage);
