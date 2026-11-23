@@ -81,7 +81,7 @@ final class VentorGameTests {
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
         event.registerTest(STORM_TRIDENT.getId(), new FunctionGameTestInstance(STORM_TRIDENT.key(),
-                new TestData<>(environment, Level.OVERWORLD, ARENA, 300, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
+                new TestData<>(environment, Level.OVERWORLD, ARENA, 600, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         for (var test : List.of(SEAL, ATTACKS)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, TOWN, 1400, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
@@ -542,10 +542,12 @@ final class VentorGameTests {
         helper.onEachTick(() -> {
             tick[0]++;
             if (thrown[0] < 0) {
-                if (java.util.Arrays.stream(lane).allMatch(level::isPositionEntityTicking)) {
+                // (der Testserver tickt so schnell er kann, das Laden der Chunks läuft nebenher: solange sie fehlen, wartet
+                // jeder Tick ein wenig – sonst war die Wartezeit mitunter um, ehe sie da waren)
+                if (ModGameTests.awaitLoading(java.util.Arrays.stream(lane).allMatch(level::isPositionEntityTicking))) {
                     thrown[0] = tick[0];
                     throwTrident.run();
-                } else if (tick[0] > 150) {
+                } else if (tick[0] > 300) {
                     tidyOnFailure(tidy, () -> helper.assertTrue(false, "Die Chunks der Wurfbahn ticken nicht"));
                 }
                 return;

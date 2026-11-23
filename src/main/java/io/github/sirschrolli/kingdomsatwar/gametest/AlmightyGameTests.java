@@ -154,6 +154,11 @@ final class AlmightyGameTests {
                     // was die vorigen Künste noch in der Luft haben (Warnkreise, schwebende Speere), vergeht
                     level.getEntitiesOfClass(SpellFxEntity.class, area).forEach(SpellFxEntity::discard);
                     level.getEntitiesOfClass(DivineShotEntity.class, area).forEach(DivineShotEntity::discard);
+                    // … ebenso ein Brand oder Gift von vorhin (sonst zählte das Brennen innen als Treffer von außen)
+                    for (net.minecraft.world.entity.LivingEntity dummy : List.of(inner, outer)) {
+                        dummy.clearFire();
+                        dummy.removeAllEffects();
+                    }
                     mark.run();
                 }, () -> {
                     if (outer.getHealth() >= hp[1]) {

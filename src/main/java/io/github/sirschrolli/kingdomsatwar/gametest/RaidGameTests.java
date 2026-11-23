@@ -219,7 +219,7 @@ final class RaidGameTests {
         double[] start = {0.0};
         helper.startSequence()
                 .thenExecute(() -> site[0] = site(helper, 0, new Vec3(0.0, 0.0, 1.5)))
-                .thenWaitUntil(() -> helper.assertTrue(site[0].loaded(), "Chunks laden nicht"))
+                .thenWaitUntil(() -> helper.assertTrue(ModGameTests.awaitLoading(site[0].loaded()), "Chunks laden nicht"))
                 .thenExecute(() -> {
                     ServerLevel level = site[0].level();
                     RealmState.of(level).declareWar(Realm.RABENSTEIN, site[0].owner().getUUID());
@@ -260,7 +260,7 @@ final class RaidGameTests {
         helper.startSequence()
                 // der Spieler ist weit weg vom Banner (keine Verteidigung)
                 .thenExecute(() -> site[0] = site(helper, 1, new Vec3(0.0, 0.0, -40.0)))
-                .thenWaitUntil(() -> helper.assertTrue(site[0].loaded(), "Chunks laden nicht"))
+                .thenWaitUntil(() -> helper.assertTrue(ModGameTests.awaitLoading(site[0].loaded()), "Chunks laden nicht"))
                 .thenExecute(() -> {
                     ServerLevel level = site[0].level();
                     RealmState.of(level).declareWar(Realm.DORNFELS, site[0].owner().getUUID());
@@ -293,7 +293,7 @@ final class RaidGameTests {
         long[] marks = {0L};
         helper.startSequence()
                 .thenExecute(() -> site[0] = site(helper, 2, new Vec3(0.0, 0.0, 2.0)))
-                .thenWaitUntil(() -> helper.assertTrue(site[0].loaded(), "Chunks laden nicht"))
+                .thenWaitUntil(() -> helper.assertTrue(ModGameTests.awaitLoading(site[0].loaded()), "Chunks laden nicht"))
                 .thenExecute(() -> {
                     // ohne Krieg: nichts
                     site[0].place(new Vec3(0.0, 0.0, 2.0));

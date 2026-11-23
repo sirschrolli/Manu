@@ -138,6 +138,8 @@ public class DragonEntity extends TamableAnimal {
     /** Kriegsbefehl (Drachenhorn): das Ziel des Angriffs bzw. der Ort des Luftangriffs, sein Umkreis und bis wann er gilt. */
     private java.util.@Nullable UUID warTarget;
     private @Nullable BlockPos strikeAt;
+    /** Beim Luftangriff schon angegriffene Gegner (Kennungen): erst kommen die anderen dran. */
+    private final java.util.Set<Integer> struck = new java.util.HashSet<>();
     private double strikeRadius = DragonWar.STRIKE_RADIUS;
     private long orderUntil;
     /** Seit wann bei einem Luftangriff kein Gegner mehr zu sehen war. */
@@ -527,6 +529,7 @@ public class DragonEntity extends TamableAnimal {
         this.strikeAt = at.immutable();
         this.strikeRadius = radius;
         this.strikeIdle = 0;
+        this.struck.clear();
         this.orderUntil = this.level().getGameTime() + ticks;
         this.setTarget(null);
     }
@@ -552,8 +555,9 @@ public class DragonEntity extends TamableAnimal {
     }
 
     /**
-     * Luftangriff: nach jedem Sturzflug ein anderes Ziel im Umkreis (so trifft der Odem alle Gegner dort nach und nach, statt
-     * sich an einem festzubeißen).
+     * Luftangriff: nach jedem Sturzflug ein anderes Ziel im Umkreis – zuerst die, die noch keinen Sturzflug abbekommen haben,
+     * dann wieder von vorn (so trifft der Odem alle Gegner dort nach und nach; bis 1.12.1 wählte er zufällig unter den
+     * anderen und konnte zwischen zweien hin- und herpendeln, während der dritte verschont blieb).
      */
     void nextStrikeTarget() {
         if (this.strikeAt == null || !(this.level() instanceof ServerLevel level)) {
@@ -561,11 +565,23 @@ public class DragonEntity extends TamableAnimal {
         }
         Vec3 center = Vec3.atBottomCenterOf(this.strikeAt);
         LivingEntity current = this.getTarget();
+        if (current != null) {
+            this.struck.add(current.getId());
+        }
         List<LivingEntity> enemies = level.getEntitiesOfClass(LivingEntity.class,
                 new net.minecraft.world.phys.AABB(center, center).inflate(this.strikeRadius, this.strikeRadius * 0.75, this.strikeRadius),
                 e -> e != current && DragonWar.isEnemy(this, e) && e.distanceToSqr(center) < this.strikeRadius * this.strikeRadius);
-        if (!enemies.isEmpty()) {
-            this.setTarget(enemies.get(this.random.nextInt(enemies.size())));
+        List<LivingEntity> fresh = enemies.stream().filter(e -> !this.struck.contains(e.getId())).toList();
+        if (fresh.isEmpty() && !enemies.isEmpty()) {
+            // alle haben schon einen abbekommen: die nächste Runde
+            this.struck.clear();
+            if (current != null) {
+                this.struck.add(current.getId());
+            }
+            fresh = enemies;
+        }
+        if (!fresh.isEmpty()) {
+            this.setTarget(fresh.get(this.random.nextInt(fresh.size())));
         }
     }
 

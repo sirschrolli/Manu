@@ -89,6 +89,11 @@ public class GladiatorNetEntity extends ThrowableItemProjectile {
         if (this.level() instanceof ServerLevel level && result.getEntity() instanceof LivingEntity victim
                 && !(victim instanceof Player p && (p.isCreative() || p.isSpectator()))) {
             victim.hurtServer(level, this.damageSources().thrown(this, this.getOwner()), this.damage);
+            // das Netz hält fest: kein Rückstoß, der das Opfer gleich wieder aus dem Netz schiebt (bis 1.12.1 konnte der Treffer
+            // es über den Rand des Netzblocks stoßen, dann hing das Netz leer in der Luft)
+            Vec3 v = victim.getDeltaMovement();
+            victim.setDeltaMovement(0.0, Math.min(v.y, 0.0), 0.0);
+            victim.needsSync = true;
             snare(level, victim, SNARE_TICKS);
             if (this.getOwner() instanceof VentorEntity ventor) {
                 ventor.onNetCaught(victim);

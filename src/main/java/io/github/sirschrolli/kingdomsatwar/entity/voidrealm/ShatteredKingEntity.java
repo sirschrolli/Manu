@@ -906,6 +906,9 @@ public class ShatteredKingEntity extends Monster implements io.github.sirschroll
             level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ground), origin.x, origin.y + 0.2, origin.z, 40, 1.2, 0.2, 1.2, 0.2);
         }
         this.shake(level, 30.0, 0.35f, 10);
+        // wie weit das Ziel entfernt steht: dort läuft der mittlere Riss genau unter ihm durch (bis 1.12.1 konnte er im Zucken
+        // an einem still Stehenden vorbeilaufen)
+        double targetDistance = target != null ? Math.sqrt(aim.x * aim.x + aim.z * aim.z) : -10.0;
         for (int i = 0; i < count; i++) {
             double a = base + (i - (count - 1) / 2.0) * spread;
             Vec3 dir = new Vec3(Math.cos(a), 0.0, Math.sin(a));
@@ -913,9 +916,13 @@ public class ShatteredKingEntity extends Monster implements io.github.sirschroll
             List<Vec3> points = new ArrayList<>();
             double y = origin.y;
             double wobble = 0.0;
+            boolean middle = i * 2 == count - 1;
             for (double d = 1.0; d <= RIFT_LENGTH; d += RIFT_SPACING) {
                 // ein Riss ist nie gerade: er zuckt hin und her
                 wobble = Mth.clamp(wobble + (this.random.nextDouble() - 0.5) * 0.9, -1.0, 1.0);
+                if (middle && Math.abs(d - targetDistance) < 3.0) {
+                    wobble *= 0.35;
+                }
                 Vec3 p = origin.add(dir.scale(d)).add(side.scale(wobble));
                 Double floor = floorAt(level, p.x, p.z, y);
                 if (floor == null) {

@@ -335,7 +335,7 @@ final class BossArenaGameTests {
         }
         // erst die Chunks samt ihren Wesen laden (unter Last dauert das ein paar Ticks)
         helper.startSequence()
-                .thenWaitUntil(() -> helper.assertTrue(field.loaded(), "Die Chunks der Felder laden nicht"))
+                .thenWaitUntil(() -> helper.assertTrue(ModGameTests.awaitLoading(field.loaded()), "Die Chunks der Felder laden nicht"))
                 .thenExecute(() -> lairsBody(helper, field, base))
                 .thenSucceed();
     }
@@ -429,7 +429,7 @@ final class BossArenaGameTests {
         field.hold(at, 40);
         field.hold(center, BossArenaKind.ASTERIA.reach());
         helper.startSequence()
-                .thenWaitUntil(() -> helper.assertTrue(field.loaded(), "Die Chunks der Felder laden nicht"))
+                .thenWaitUntil(() -> helper.assertTrue(ModGameTests.awaitLoading(field.loaded()), "Die Chunks der Felder laden nicht"))
                 .thenExecute(() -> victoryBody(helper, field, at, center));
     }
 
@@ -519,7 +519,7 @@ final class BossArenaGameTests {
         Field field = Field.of(level);
         field.hold(at, 40);
         helper.startSequence()
-                .thenWaitUntil(() -> helper.assertTrue(field.loaded(), "Die Chunks des Felds laden nicht"))
+                .thenWaitUntil(() -> helper.assertTrue(ModGameTests.awaitLoading(field.loaded()), "Die Chunks des Felds laden nicht"))
                 .thenExecute(() -> lastStandBody(helper, field, at))
                 .thenSucceed();
     }

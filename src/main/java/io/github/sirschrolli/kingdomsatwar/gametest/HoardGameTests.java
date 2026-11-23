@@ -220,7 +220,9 @@ final class HoardGameTests {
         BlockPos sealPos = center.offset(0, -2, 4);
         level.setBlock(sealPos, AbyssBlocks.HOARD_SEAL.get().defaultBlockState(), Block.UPDATE_ALL);
         // frisch erzeugte Chunks nehmen Wesen erst auf, wenn ihre Karten verarbeitet sind (ein paar Takte später)
-        await(helper, field, () -> level.isPositionEntityTicking(center), 100, () -> "Das Feld des Weltenfressers lädt nicht", () -> {
+        // (solange die Chunks fehlen, wartet jeder Tick ein wenig: der Testserver tickt sonst schneller, als sie laden)
+        await(helper, field, () -> ModGameTests.awaitLoading(level.isPositionEntityTicking(center)), 100,
+                () -> "Das Feld des Weltenfressers lädt nicht", () -> {
             if (!(level.getBlockEntity(sealPos) instanceof HoardSealBlockEntity seal)) {
                 throw new IllegalStateException("Das Siegel des Horts hat keine Blockentität");
             }

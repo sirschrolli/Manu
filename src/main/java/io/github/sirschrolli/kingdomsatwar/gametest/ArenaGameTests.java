@@ -164,8 +164,8 @@ final class ArenaGameTests {
                         }
                     }
                 })
-                .thenWaitUntil(() -> helper.assertTrue(MageArena.entitiesLoaded(level, arenaCenter) && MageArena.entitiesLoaded(level, arenaCenter2),
-                        "Arena-Chunks laden nicht"))
+                .thenWaitUntil(() -> helper.assertTrue(ModGameTests.awaitLoading(MageArena.entitiesLoaded(level, arenaCenter)
+                        && MageArena.entitiesLoaded(level, arenaCenter2)), "Arena-Chunks laden nicht"))
                 .thenExecute(() -> fightBody(helper, arenaCenter, arenaCenter2))
                 .thenSucceed();
     }

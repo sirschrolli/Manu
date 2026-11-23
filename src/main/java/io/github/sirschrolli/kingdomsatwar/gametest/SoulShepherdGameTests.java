@@ -563,7 +563,7 @@ final class SoulShepherdGameTests {
 
     /** Wartet, bis an {@code pos} Wesen ticken (höchstens {@code maxTicks}), dann {@code then}. */
     private static void whenTicking(GameTestHelper helper, ServerLevel level, BlockPos pos, int maxTicks, Runnable then) {
-        if (level.isPositionEntityTicking(pos)) {
+        if (ModGameTests.awaitLoading(level.isPositionEntityTicking(pos))) {
             then.run();
         } else if (maxTicks <= 0) {
             helper.fail("Hier ticken keine Wesen: " + pos.toShortString());

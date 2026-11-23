@@ -76,6 +76,9 @@ public class SoulHeronEntity extends Monster {
     /** 0 = am Boden, 1 = Aufsteigen, 2 = Anflug, 3 = Sturzflug. */
     private int flight;
     private int flightTicks;
+    /** Wen er im Flug angreift: Einmal aufgestiegen, bleibt er bei ihm (bis 1.12.1 konnte ein anderes Ziel ihn mitten im
+     * Sturzflug ablenken – dann stieß er ins Leere). */
+    private @Nullable LivingEntity flightTarget;
     private Vec3 diveDir = Vec3.ZERO;
 
     public SoulHeronEntity(EntityType<? extends SoulHeronEntity> type, Level level) {
@@ -164,6 +167,9 @@ public class SoulHeronEntity extends Monster {
         }
         LivingEntity target = this.getTarget();
         if (this.flight > 0) {
+            if (this.flightTarget != null && this.flightTarget.isAlive() && this.flightTarget.level() == this.level()) {
+                target = this.flightTarget;
+            }
             this.tickFlight(level, target);
             return;
         }
@@ -253,6 +259,7 @@ public class SoulHeronEntity extends Monster {
     private void takeOff() {
         this.flight = 1;
         this.flightTicks = 0;
+        this.flightTarget = this.getTarget();
         this.entityData.set(DATA_FLYING, true);
         this.setNoGravity(true);
         this.getNavigation().stop();
@@ -341,6 +348,7 @@ public class SoulHeronEntity extends Monster {
     private void land() {
         this.flight = 0;
         this.flightTicks = 0;
+        this.flightTarget = null;
         this.entityData.set(DATA_FLYING, false);
         this.setNoGravity(false);
         this.diveCooldown = 180 + this.random.nextInt(80);
