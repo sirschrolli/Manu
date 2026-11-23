@@ -16,6 +16,7 @@ public class ShatteredKingRenderState extends LivingEntityRenderState {
     public final AnimationState beam = new AnimationState();
     public final AnimationState rift = new AnimationState();
     public final AnimationState quake = new AnimationState();
+    public final AnimationState crash = new AnimationState();
 
     /** Ziel des Faustschlags im Modellraum (Pixel, wie die Knochen), damit die Hand genau dort aufschlägt. */
     public float slamX;

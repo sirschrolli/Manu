@@ -145,6 +145,10 @@ public class ShatteredKingModel extends EntityModel<ShatteredKingRenderState> {
         if (quake >= 0.0f && quake < ShatteredKingEntity.QUAKE_TICKS / 20.0f) {
             this.quake(state, quake, t);
         }
+        float crash = Anim.seconds(state.crash, t);
+        if (crash >= 0.0f && crash < ShatteredKingEntity.CRASH_TICKS / 20.0f) {
+            this.crash(state, crash, t);
+        }
         if (state.deathTime > 0.0f) {
             this.death(Mth.clamp(state.deathTime / ShatteredKingEntity.DEATH_TICKS, 0.0f, 1.0f), t);
         }
@@ -529,6 +533,48 @@ public class ShatteredKingModel extends EntityModel<ShatteredKingRenderState> {
         for (int k = 1; k <= 3; k++) {
             this.body.y += Anim.bump(s - hit - k * step, 0.03f, 0.04f, 0.2f) * 0.8f;
         }
+    }
+
+    // ------------------------------------------------------------------ Königssturz
+
+    /**
+     * Königssturz: Im Aufsteigen reißt er beide Hände weit empor, die Finger gespreizt, und blickt hinab auf die Stelle; oben
+     * zittern sie, die Krone lodert. Im Sturz fahren die Fäuste unter ihm zusammen auf die Stelle zu, der Leib neigt sich voran;
+     * der Aufschlag lässt ihn erbeben, dann kehren die Hände an ihren Platz zurück.
+     */
+    private void crash(ShatteredKingRenderState state, float s, float t) {
+        float lx = state.slamX;
+        float ly = state.slamY;
+        float lz = state.slamZ;
+        float toward = (float) Mth.atan2(-lx, -lz);
+        float rise = ShatteredKingEntity.CRASH_RISE / 20.0f;
+        float fall = ShatteredKingEntity.CRASH_FALL / 20.0f;
+        float hit = ShatteredKingEntity.CRASH_IMPACT / 20.0f;
+        float up = smooth(s, 0.0f, rise);
+        float dive = easeIn(s, fall, hit);
+        float back = smooth(s, hit + 0.5f, hit + 1.05f);
+        for (Hand h : this.hands) {
+            // weit empor, gespreizt – er sammelt die Leere
+            h.to(up, 15.0f * h.side, -30.0f, 2.0f, -0.3f * h.side, -1.2f, 0.35f * h.side);
+            h.curl = Mth.lerp(up, h.curl, 0.15f);
+            h.spread = Mth.lerp(up, h.spread, 0.32f);
+            float held = up * (1.0f - dive);
+            h.x += Mth.sin(t * 2.3f + h.side) * 0.35f * held;
+            h.y += Mth.cos(t * 2.0f + h.side) * 0.35f * held;
+            // im Sturz: beide Fäuste unter ihm zusammen, auf die Stelle
+            h.to(dive, lx * 0.3f + 3.4f * h.side, ly - 3.2f, lz * 0.3f + 3.0f, toward, 0.2f, 0.0f);
+            h.curl = Mth.lerp(dive, h.curl, 1.0f);
+            h.spread = Mth.lerp(dive, h.spread, 0.0f);
+            h.toIdle(back);
+        }
+        float hold = up * (1.0f - dive);
+        float down = dive * (1.0f - back);
+        this.body.xRot += -0.22f * hold + 0.42f * down;
+        this.head.xRot += 0.38f * hold + 0.2f * down;
+        this.flareCrown(0.5f * hold + 0.3f * down);
+        this.leftShoulder.zRot += 0.2f * hold;
+        this.rightShoulder.zRot -= 0.2f * hold;
+        this.body.y += Anim.bump(s - hit, 0.03f, 0.05f, 0.35f) * 2.4f;
     }
 
     // ------------------------------------------------------------------ Tod

@@ -67,6 +67,9 @@ import org.jspecify.annotations.Nullable;
  *     <li><b>Leerenbeben</b>: beide Fäuste hoch über dem Haupt, dann rammt er sie in den Boden – Ringe aus Leerenenergie
  *     rollen über den ganzen Platz (im Zorn vier statt drei); wer nicht im rechten Augenblick darüber springt (oder auf
  *     einem Block steht), wird getroffen und zurückgeworfen.</li>
+ *     <li><b>Königssturz</b> (seit 1.13): unter seinem Ziel glimmt ein großer Kreis, er steigt hoch darüber auf, sammelt die
+ *     Leere – und stürzt mit seinem ganzen Gewicht hinein. Wer im Kreis steht, wird schwer getroffen und fortgeschleudert;
+ *     ein Ring aus Leere rollt weiter (darüber springen!).</li>
  * </ul>
  * Er ist bewusst schwächer als die Erzmagier (und die Drachen-Bosse sind die stärksten von allen).
  */
@@ -81,6 +84,7 @@ public class ShatteredKingEntity extends Monster implements io.github.sirschroll
     public static final byte EVENT_BEAM = 97;
     public static final byte EVENT_RIFT = 98;
     public static final byte EVENT_QUAKE = 99;
+    public static final byte EVENT_CRASH = 100;
 
     private static final EntityDataAccessor<Float> DATA_BEAM_YAW = SynchedEntityData.defineId(ShatteredKingEntity.class,
             EntityDataSerializers.FLOAT);
@@ -114,6 +118,14 @@ public class ShatteredKingEntity extends Monster implements io.github.sirschroll
     public static final float QUAKE_SPEED = 0.55f;
     public static final int QUAKE_LIFE = 42;
     public static final int DEATH_TICKS = 80;
+    /** Königssturz: bis hierhin steigt er über sein Ziel, hier stürzt er, hier schlägt er auf, dann erhebt er sich wieder. */
+    public static final int CRASH_RISE = 22;
+    public static final int CRASH_FALL = 30;
+    public static final int CRASH_IMPACT = 34;
+    public static final int CRASH_TICKS = 56;
+    /** So weit (Halbmesser) reicht der Einschlag, so hoch steigt er vorher auf. */
+    public static final double CRASH_RADIUS = 4.0;
+    public static final double CRASH_HEIGHT = 11.0;
     /** So weit (waagerecht) reicht der Thronplatz um die Mitte. */
     public static final double ARENA_RADIUS = 24.0;
     /** Länge des Sternenstrahls (er endet früher, wo er auf Stein trifft). */
@@ -129,6 +141,7 @@ public class ShatteredKingEntity extends Monster implements io.github.sirschroll
     public final AnimationState beamAnimation = new AnimationState();
     public final AnimationState riftAnimation = new AnimationState();
     public final AnimationState quakeAnimation = new AnimationState();
+    public final AnimationState crashAnimation = new AnimationState();
     private static final int RIFT_COLOR = 0xA070FF;
     /** Die Säulen aus Leere sind tiefer gefärbt (dicht an dicht überstrahlen sie sonst zu Weiß). */
     private static final int RIFT_PILLAR_COLOR = 0x6A2CE0;
@@ -138,7 +151,7 @@ public class ShatteredKingEntity extends Monster implements io.github.sirschroll
     private final ServerBossEvent bossBar = new ServerBossEvent(java.util.UUID.randomUUID(),
             Component.translatable("boss.kingdomsatwar.void"), BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.NOTCHED_10);
 
-    private enum Attack { NONE, AWAKEN, SLAM, SWEEP, VOLLEY, GRAVITY, SUMMON, BEAM, RIFT, QUAKE }
+    private enum Attack { NONE, AWAKEN, SLAM, SWEEP, VOLLEY, GRAVITY, SUMMON, BEAM, RIFT, QUAKE, CRASH }
 
     private Attack attack = Attack.NONE;
     private int attackTick;
@@ -513,7 +526,7 @@ public class ShatteredKingEntity extends Monster implements io.github.sirschroll
             this.start(level, Attack.SUMMON, EVENT_SUMMON);
             return;
         }
-        List<Attack> options = new ArrayList<>(List.of(Attack.SLAM, Attack.SLAM, Attack.VOLLEY, Attack.RIFT, Attack.QUAKE));
+        List<Attack> options = new ArrayList<>(List.of(Attack.SLAM, Attack.SLAM, Attack.VOLLEY, Attack.RIFT, Attack.QUAKE, Attack.CRASH));
         if (d < 9.0) {
             options.add(Attack.SWEEP);
             options.add(Attack.SWEEP);
@@ -546,9 +559,20 @@ public class ShatteredKingEntity extends Monster implements io.github.sirschroll
             }
             case RIFT -> this.startGroundAttack(level, Attack.RIFT, EVENT_RIFT, 4.0);
             case QUAKE -> this.startGroundAttack(level, Attack.QUAKE, EVENT_QUAKE, 3.5);
+            case CRASH -> this.startCrash(level, target);
             default -> {
             }
         }
+    }
+
+    /** Königssturz: Die Stelle unter seinem Ziel steht fest – ein großer Kreis glimmt dort, bis er einschlägt. */
+    private void startCrash(ServerLevel level, LivingEntity target) {
+        this.groundPoint = new Vec3(target.getX(), this.floorBelow(level, target.position(), target.getY()), target.getZ());
+        this.entityData.set(DATA_SLAM_POINT, this.groundPoint.toVector3f());
+        SpellFxEntity.create(level, SpellFxEntity.Kind.CIRCLE, this.groundPoint.add(0.0, 0.05, 0.0), null, QUAKE_COLOR, CRASH_IMPACT + 1,
+                (float) CRASH_RADIUS).spawn();
+        level.playSound(null, this.blockPosition(), ModSounds.SHATTERED_KING_ROAR.get(), SoundSource.HOSTILE, 2.5f, 1.25f);
+        this.start(level, Attack.CRASH, EVENT_CRASH);
     }
 
     /** Risse oder Beben: die Stelle vor ihm am Boden, wo seine Hände hineinfahren, steht fest, bevor sie sich heben. */
@@ -597,6 +621,11 @@ public class ShatteredKingEntity extends Monster implements io.github.sirschroll
             case "quake" -> {
                 this.faceNow(target);
                 this.startGroundAttack(level, Attack.QUAKE, EVENT_QUAKE, 3.5);
+            }
+            case "crash" -> {
+                if (target != null) {
+                    this.startCrash(level, target);
+                }
             }
             default -> {
             }
@@ -655,8 +684,75 @@ public class ShatteredKingEntity extends Monster implements io.github.sirschroll
             case BEAM -> this.tickBeam(level, t);
             case RIFT -> this.tickRift(level, target, t);
             case QUAKE -> this.tickQuake(level, t);
+            case CRASH -> this.tickCrash(level, target, t);
             default -> this.finish();
         }
+    }
+
+    /**
+     * Königssturz: Er steigt hoch über die Stelle (der Kreis glimmt), hält inne und sammelt die Leere – dann stürzt er mit
+     * seinem ganzen Gewicht hinein. Wer im Kreis steht, wird schwer getroffen und fortgeschleudert, der Boden bebt, und ein
+     * Ring aus Leere rollt weiter über den Platz. Danach erhebt er sich langsam wieder.
+     */
+    private void tickCrash(ServerLevel level, @Nullable LivingEntity target, int t) {
+        Vec3 g = this.groundPoint;
+        if (t < CRASH_FALL) {
+            // empor und über die Stelle
+            Vec3 to = new Vec3(g.x, g.y + CRASH_HEIGHT, g.z).subtract(this.position());
+            double len = to.length();
+            this.setDeltaMovement(len < 0.05 ? Vec3.ZERO : to.scale(Math.min(0.75, len * 0.2) / len));
+            if (t % 3 == 0) {
+                ring(level, g, CRASH_RADIUS, t % 6 == 0 ? ParticleTypes.END_ROD : ParticleTypes.REVERSE_PORTAL);
+            }
+            if (t == CRASH_RISE) {
+                level.playSound(null, this.blockPosition(), ModSounds.SHARD_WARDEN_CHARGE.get(), SoundSource.HOSTILE, 3.0f, 0.5f);
+            }
+            if (t >= CRASH_RISE) {
+                // er sammelt die Leere um sich
+                level.sendParticles(ParticleTypes.REVERSE_PORTAL, this.getX(), this.getY() + 2.0, this.getZ(), 10, 2.0, 1.5, 2.0, 0.08);
+            }
+            return;
+        }
+        if (t < CRASH_IMPACT) {
+            // der Sturz: genau hinein
+            double drop = Math.max(0.0, this.getY() - g.y);
+            int left = CRASH_IMPACT - t;
+            this.setDeltaMovement(new Vec3((g.x - this.getX()) * 0.6, -Math.max(drop / left, 0.6), (g.z - this.getZ()) * 0.6));
+            level.sendParticles(ParticleTypes.END_ROD, this.getX(), this.getY() + 3.0, this.getZ(), 6, 0.8, 1.2, 0.8, 0.02);
+            return;
+        }
+        if (t == CRASH_IMPACT) {
+            this.setDeltaMovement(Vec3.ZERO);
+            this.crashImpact(level, g);
+        }
+        if (t > CRASH_IMPACT + 8) {
+            this.hover(this.clampToArena(new Vec3(this.getX(), g.y + 2.5, this.getZ())), target);
+        } else {
+            this.setDeltaMovement(this.getDeltaMovement().scale(0.5));
+        }
+        if (t >= CRASH_TICKS) {
+            this.finish();
+        }
+    }
+
+    /** Der Einschlag des Königssturzes: schwerer Treffer im Kreis, ein Ring aus Leere rollt weiter (darüber springen!). */
+    private void crashImpact(ServerLevel level, Vec3 g) {
+        this.shake(level, 44.0, 0.9f, 16);
+        level.playSound(null, g.x, g.y, g.z, ModSounds.SHATTERED_KING_QUAKE.get(), SoundSource.HOSTILE, 4.0f, 0.7f);
+        level.sendParticles(ParticleTypes.REVERSE_PORTAL, g.x, g.y + 0.5, g.z, 80, 2.0, 0.4, 2.0, 0.4);
+        level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, VoidBlocks.ASTRAL_MARBLE.base().get().defaultBlockState()), g.x, g.y + 0.3,
+                g.z, 60, 2.2, 0.3, 2.2, 0.25);
+        float damage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE) * 1.7f;
+        this.impact(level, g, CRASH_RADIUS, damage, 1.1, 0.9);
+        Set<UUID> hit = new HashSet<>();
+        for (LivingEntity e : this.enemiesNear(level, 40.0)) {
+            if (e.position().distanceTo(g) <= CRASH_RADIUS + 0.5) {
+                hit.add(e.getUUID());
+            }
+        }
+        float ringDamage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.7f;
+        SpellFxEntity.create(level, SpellFxEntity.Kind.SHOCKWAVE, g.add(0.0, 0.05, 0.0), null, QUAKE_COLOR, 18, (float) CRASH_RADIUS).param(0.6f)
+                .onTick(fx -> this.ringHits(level, fx, hit, ringDamage)).spawn();
     }
 
     /** Faustschlag: die Hand steigt über die Stelle, an der das Ziel stand (ein Kreis warnt), und schlägt herab. */
@@ -1166,6 +1262,7 @@ public class ShatteredKingEntity extends Monster implements io.github.sirschroll
             case EVENT_BEAM -> this.beamAnimation.start(this.tickCount);
             case EVENT_RIFT -> this.riftAnimation.start(this.tickCount);
             case EVENT_QUAKE -> this.quakeAnimation.start(this.tickCount);
+            case EVENT_CRASH -> this.crashAnimation.start(this.tickCount);
             default -> super.handleEntityEvent(id);
         }
     }
