@@ -70,6 +70,7 @@ public class GlutschmiedModel extends EntityModel<GlutschmiedRenderState> {
             case GLOBS -> GlutschmiedPoses.GLOBS;
             case CALL -> GlutschmiedPoses.CALL;
             case STOKE -> GlutschmiedPoses.STOKE;
+            case GRATE -> GlutschmiedPoses.GRATE;
             case CHAIN -> GlutschmiedPoses.CHAIN;
             case MOLTEN -> GlutschmiedPoses.MOLTEN;
             default -> null;

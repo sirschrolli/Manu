@@ -99,6 +99,14 @@ TIMELINES: dict[str, list[tuple[float, str, int]]] = {
               (24, "globs_back", 0), (28, "globs_fling", 1), (32, "globs_back", 0), (36, "globs_fling", 1), (42, "ready", 0)],
     "CALL": [(0, "ready", 0), (8, "call_raise", 0), (12, "call_high", 0), (15, "call_stamp", 1), (22, "call_stamp", 0), (30, "ready", 0)],
     "STOKE": [(0, "ready", 0), (12, "stoke_raise", 2), (18, "stoke_plant", 1), (40, "stoke_plant", 0), (50, "ready", 0)],
+    # Glutkette: ausholen (die Kette kreist), schleudern, heranziehen – und der Hammer empfängt das Opfer
+    "CHAIN": [(0, "ready", 0), (6, "globs_back", 0), (12, "globs_back", 0), (14, "globs_fling", 1), (20, "globs_back", 0),
+              (24, "slam_raise", 2), (28, "slam_hit", 1), (36, "slam_hit", 0), (50, "ready", 0)],
+    # Schmelzfluss: der Hammer hoch über den Kopf, dann auf das Dach – und er hält inne, während die Rinnen laufen
+    "MOLTEN": [(0, "ready", 0), (12, "slam_raise", 2), (17, "slam_hit", 1), (40, "slam_hit", 0), (58, "ready", 0)],
+    # Glutrost (1.13): drei Hammerschläge aufs Dach (12, 32, 52)
+    "GRATE": [(0, "ready", 0), (8, "slam_raise", 2), (12, "slam_hit", 1), (18, "slam_hit", 0), (28, "slam_raise", 2), (32, "slam_hit", 1),
+              (38, "slam_hit", 0), (48, "slam_raise", 2), (52, "slam_hit", 1), (60, "slam_hit", 0), (70, "ready", 0)],
 }
 
 

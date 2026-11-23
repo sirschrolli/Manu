@@ -70,6 +70,9 @@ import org.jspecify.annotations.Nullable;
  *     empfängt ihn mit dem Hammer;</li>
  *     <li><b>Schmelzfluss</b> – er schmettert den Hammer auf das Dach, und Rinnen aus geschmolzenem Metall schießen
  *     fächerförmig über das Dach (wer darin steht, brennt);</li>
+ *     <li><b>Glutrost</b> (seit 1.13) – drei Hammerschläge aufs Dach: Ringsum glühen Felder auf wie Kreise auf einem
+ *     Schachbrett, beim nächsten Schlag brechen sie als Feuersäulen auf – und die Felder dazwischen glühen; beim dritten brechen
+ *     auch die auf. Man springt von Feld zu Feld;</li>
  *     <li><b>Ruf der Gesellen</b> – Brandgebeine treten aus den Flammen und eilen ihm zu Hilfe;</li>
  *     <li><b>Esse anfachen</b> – unter halber Kraft stößt er den Speer in das Dach und wird weißglühend: schneller,
  *     härter, und wer ihm zu nahe kommt, verbrennt.</li>
@@ -95,6 +98,12 @@ public class GlutschmiedEntity extends Monster implements io.github.sirschrolli.
     public static final int MOLTEN_HIT = 17;
     public static final int MOLTEN_STEP = 2;
     public static final int MOLTEN_LENGTH = 14;
+    /** Glutrost: die drei Hammerschläge (der erste lässt die Felder A glühen, der zweite bricht sie auf und lässt B glühen, …). */
+    public static final int[] GRATE_STRIKES = {12, 32, 52};
+    /** So breit (Blöcke) ist ein Feld des Rosts, so weit (Halbmesser) reicht er (angefacht drei Blöcke weiter). */
+    public static final int GRATE_CELL = 3;
+    public static final double GRATE_RANGE = 10.5;
+    public static final float GRATE_DAMAGE = 7.0f;
     /** Weiter als so weit von seinem Platz am Amboss folgt er niemandem. */
     private static final double LEASH = 40.0;
     /** Das Dach der Esse: wer weiter fort gerät (oder hinunterfällt), kehrt in einer Flammensäule zurück. */
@@ -104,7 +113,7 @@ public class GlutschmiedEntity extends Monster implements io.github.sirschrolli.
 
     public enum Attack {
         NONE(0), FORGE(0), AWAKEN(AWAKEN_TICKS), THRUST(40), SLAM(36), SPARKS(50), GLOBS(42), CALL(30), STOKE(50), CHAIN(CHAIN_TICKS),
-        MOLTEN(MOLTEN_TICKS);
+        MOLTEN(MOLTEN_TICKS), GRATE(70);
 
         public final int duration;
 
@@ -132,6 +141,9 @@ public class GlutschmiedEntity extends Monster implements io.github.sirschrolli.
     private @Nullable UUID chained;
     /** Schmelzfluss: die Richtungen der Rinnen. */
     private final List<Vec3> molten = new ArrayList<>();
+    /** Glutrost: die Mitten der Felder A und B. */
+    private final List<Vec3> grateA = new ArrayList<>();
+    private final List<Vec3> grateB = new ArrayList<>();
     private int clientAttackStart;
 
     public GlutschmiedEntity(EntityType<? extends GlutschmiedEntity> type, Level level) {
@@ -248,6 +260,8 @@ public class GlutschmiedEntity extends Monster implements io.github.sirschrolli.
         if (next == Attack.SLAM) {
             this.slamHit.clear();
         }
+        this.grateA.clear();
+        this.grateB.clear();
         this.bossBar.setVisible(next != Attack.FORGE);
     }
 
@@ -409,6 +423,7 @@ public class GlutschmiedEntity extends Monster implements io.github.sirschrolli.
             case CALL -> this.tickCall(level);
             case CHAIN -> this.tickChain(level, target);
             case MOLTEN -> this.tickMolten(level, target);
+            case GRATE -> this.tickGrate(level);
             default -> { }
         }
         if (this.attackTick >= this.attack.duration) {
@@ -524,9 +539,9 @@ public class GlutschmiedEntity extends Monster implements io.github.sirschrolli.
         double distance = this.distanceTo(target);
         List<Attack> options = new ArrayList<>();
         if (distance < 5.5) {
-            options.addAll(List.of(Attack.THRUST, Attack.THRUST, Attack.SLAM, Attack.SPARKS, Attack.MOLTEN));
+            options.addAll(List.of(Attack.THRUST, Attack.THRUST, Attack.SLAM, Attack.SPARKS, Attack.MOLTEN, Attack.GRATE));
         } else if (distance < 11.0) {
-            options.addAll(List.of(Attack.SLAM, Attack.SPARKS, Attack.GLOBS, Attack.GLOBS, Attack.CHAIN, Attack.MOLTEN));
+            options.addAll(List.of(Attack.SLAM, Attack.SPARKS, Attack.GLOBS, Attack.GLOBS, Attack.CHAIN, Attack.MOLTEN, Attack.GRATE));
         } else {
             options.addAll(List.of(Attack.GLOBS, Attack.GLOBS, Attack.GLOBS, Attack.CHAIN, Attack.CHAIN));
         }
@@ -836,6 +851,116 @@ public class GlutschmiedEntity extends Monster implements io.github.sirschrolli.
                 this.slamHit.clear();
             }
         }
+    }
+
+    /**
+     * Glutrost: Er schlägt dreimal mit dem Hammer aufs Dach. Ringsum liegen Felder wie auf einem Schachbrett (je drei Blöcke
+     * breit, sein eigenes bleibt kühl): Beim ersten Schlag glühen die Felder A auf (ein Kreis füllt sich), beim zweiten brechen
+     * sie als Feuersäulen auf, und die Felder B glühen; beim dritten brechen die auf. Wer im glühenden Kreis steht, verbrennt.
+     */
+    private void tickGrate(ServerLevel level) {
+        int t = this.attackTick;
+        if (t == 4) {
+            this.sound(level, ModSounds.GLUTSCHMIED_ROAR.get(), 2.2f, 1.0f);
+        }
+        if (t == GRATE_STRIKES[0]) {
+            this.grateStrike(level);
+            this.planGrate(level);
+            this.glowGrate(level, this.grateA);
+        } else if (t == GRATE_STRIKES[1]) {
+            this.grateStrike(level);
+            this.eruptGrate(level, this.grateA);
+            this.glowGrate(level, this.grateB);
+        } else if (t == GRATE_STRIKES[2]) {
+            this.grateStrike(level);
+            this.eruptGrate(level, this.grateB);
+        }
+        // die glühenden Felder knistern
+        if (t > GRATE_STRIKES[0] && t < GRATE_STRIKES[2] && t % 3 == 0) {
+            for (Vec3 c : t < GRATE_STRIKES[1] ? this.grateA : this.grateB) {
+                level.sendParticles(ParticleTypes.SMALL_FLAME, c.x, c.y + 0.1, c.z, 1, 0.7, 0.02, 0.7, 0.01);
+            }
+        }
+    }
+
+    /** Der Hammer fällt aufs Dach. */
+    private void grateStrike(ServerLevel level) {
+        this.sound(level, ModSounds.GLUTSCHMIED_SLAM.get(), 3.2f, 1.05f);
+        Vec3 hit = this.position().add(this.forward().scale(2.2));
+        level.sendParticles(ParticleTypes.EXPLOSION, hit.x, this.getY() + 0.2, hit.z, 1, 0.3, 0.0, 0.3, 0.0);
+        level.sendParticles(ParticleTypes.LAVA, hit.x, this.getY() + 0.2, hit.z, 10, 0.6, 0.1, 0.6, 0.0);
+    }
+
+    /** Die Felder des Rosts um ihn (auf den Blöcken ausgerichtet): A, wo die Summe der Feldnummern gerade ist, sonst B. */
+    private void planGrate(ServerLevel level) {
+        this.grateA.clear();
+        this.grateB.clear();
+        int cx = Mth.floor(this.getX());
+        int cz = Mth.floor(this.getZ());
+        double range = this.isStoked() ? GRATE_RANGE + 3.0 : GRATE_RANGE;
+        int n = (int) Math.ceil(range / GRATE_CELL);
+        for (int i = -n; i <= n; i++) {
+            for (int j = -n; j <= n; j++) {
+                if (i == 0 && j == 0) {
+                    continue;
+                }
+                double x = cx + 0.5 + i * GRATE_CELL;
+                double z = cz + 0.5 + j * GRATE_CELL;
+                if (Math.hypot(x - this.getX(), z - this.getZ()) > range) {
+                    continue;
+                }
+                Vec3 at = this.roofAt(level, x, z);
+                if (at != null) {
+                    (Math.floorMod(i + j, 2) == 0 ? this.grateA : this.grateB).add(at);
+                }
+            }
+        }
+    }
+
+    /** Das Dach bei x, z (etwa auf seiner Höhe) – oder null, wenn dort keins ist. */
+    private @Nullable Vec3 roofAt(ServerLevel level, double x, double z) {
+        BlockPos.MutableBlockPos m = BlockPos.containing(x, this.getY() + 2.0, z).mutable();
+        for (int i = 0; i < 6; i++) {
+            BlockPos below = m.below();
+            var shape = level.getBlockState(below).getCollisionShape(level, below);
+            if (!shape.isEmpty() && level.getBlockState(m).getCollisionShape(level, m).isEmpty()) {
+                return new Vec3(x, below.getY() + shape.max(net.minecraft.core.Direction.Axis.Y), z);
+            }
+            m.move(0, -1, 0);
+        }
+        return null;
+    }
+
+    /** Die Felder glühen auf: ein Kreis füllt sich, bis sie aufbrechen. */
+    private void glowGrate(ServerLevel level, List<Vec3> cells) {
+        int life = GRATE_STRIKES[1] - GRATE_STRIKES[0] + 2;
+        for (Vec3 c : cells) {
+            SpellFxEntity.create(level, SpellFxEntity.Kind.CIRCLE, c.add(0.0, 0.05, 0.0), null, 0xFF6A10, life, GRATE_CELL * 0.5f).spawn();
+        }
+    }
+
+    /** Die Felder brechen als Feuersäulen auf: Wer im Kreis steht, nimmt Schaden und brennt. */
+    private void eruptGrate(ServerLevel level, List<Vec3> cells) {
+        level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.FIRECHARGE_USE, SoundSource.HOSTILE, 2.6f, 0.6f);
+        float damage = GRATE_DAMAGE + (this.isStoked() ? 2.0f : 0.0f);
+        double r = GRATE_CELL * 0.5;
+        for (Vec3 c : cells) {
+            SpellFxEntity.create(level, SpellFxEntity.Kind.PILLAR, c, DragonType.FIRE, 0xFF6A10, 14, 1.2f).param(3.2f).spawn();
+            level.sendParticles(ParticleTypes.LAVA, c.x, c.y + 0.2, c.z, 2, 0.5, 0.0, 0.5, 0.0);
+            for (LivingEntity victim : this.victims(level, new AABB(c, c).inflate(r + 0.6, 2.5, r + 0.6))) {
+                if (Math.hypot(victim.getX() - c.x, victim.getZ() - c.z) < r + victim.getBbWidth() * 0.5 && Math.abs(victim.getY() - c.y) < 2.5
+                        && victim.hurtServer(level, this.damageSources().mobAttack(this), damage)) {
+                    victim.igniteForSeconds(4.0f);
+                    victim.push(0.0, 0.4, 0.0);
+                    victim.needsSync = true;
+                }
+            }
+        }
+    }
+
+    /** Für Tests: die Mitten der Felder A (oder B) des Glutrosts. */
+    public List<Vec3> grate(boolean a) {
+        return List.copyOf(a ? this.grateA : this.grateB);
     }
 
     /** Funkenflug: Hammer auf Klinge – ein Kegel glühender Funken in Blickrichtung (gut acht Blöcke weit). */

@@ -294,8 +294,36 @@ final class ForgeGameTests {
             helper.runAfterDelay(GlutschmiedEntity.MOLTEN_HIT + 12, () -> {
                 helper.assertTrue(knight.getHealth() < hp[0], "Der Schmelzfluss trifft nicht");
                 helper.assertTrue(knight.isOnFire(), "Der Schmelzfluss setzt nicht in Brand");
-                then.run();
+                grate(helper, smith, knight, hp, then);
             });
+        });
+    }
+
+    /**
+     * Glutrost: Der Ritter steht drei Blöcke vor ihm – auf einem Feld B. Die Felder A brechen auf, ohne ihn zu treffen; dann
+     * brechen die Felder B auf, und er brennt.
+     */
+    private static void grate(GameTestHelper helper, GlutschmiedEntity smith, LivingEntity knight, float[] hp, Runnable then) {
+        reset(knight, hp);
+        // genau ein Feld vor ihm (die Kette und der Schmelzfluss haben den Ritter verschoben)
+        knight.teleportTo(net.minecraft.util.Mth.floor(smith.getX()) + 0.5, smith.getY(),
+                net.minecraft.util.Mth.floor(smith.getZ()) + 0.5 + GlutschmiedEntity.GRATE_CELL);
+        knight.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
+        smith.setTarget(knight);
+        smith.forceAttack(GlutschmiedEntity.Attack.GRATE);
+        helper.runAfterDelay(GlutschmiedEntity.GRATE_STRIKES[0] + 1, () -> {
+            helper.assertTrue(smith.grate(true).size() >= 4 && smith.grate(false).size() >= 4, "Kein Glutrost: "
+                    + smith.grate(true).size() + " / " + smith.grate(false).size());
+            helper.assertTrue(smith.grate(false).stream().anyMatch(c -> Math.hypot(c.x - knight.getX(), c.z - knight.getZ()) < 1.0),
+                    "Der Ritter steht auf keinem Feld B");
+        });
+        helper.runAfterDelay(GlutschmiedEntity.GRATE_STRIKES[1] + 2, () -> {
+            helper.assertTrue(knight.getHealth() >= hp[0], "Die Felder A treffen den Ritter auf einem Feld B");
+        });
+        helper.runAfterDelay(GlutschmiedEntity.GRATE_STRIKES[2] + 2, () -> {
+            helper.assertTrue(knight.getHealth() < hp[0], "Die Felder B treffen den Ritter nicht");
+            helper.assertTrue(knight.isOnFire(), "Der Glutrost setzt nicht in Brand");
+            then.run();
         });
     }
 
