@@ -93,6 +93,7 @@ public class SordinModel extends EntityModel<SordinRenderState> {
             case SILENCE -> SordinPoses.SILENCE;
             case FORTISSIMO -> SordinPoses.FORTISSIMO;
             case STAGGER -> SordinPoses.STAGGER;
+            case ECHO -> SordinPoses.ECHO;
             default -> null;
         };
         boolean playing = attack == SordinEntity.Attack.GUARD;

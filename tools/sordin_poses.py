@@ -97,6 +97,8 @@ TIMELINES: dict[str, list[tuple[float, str, int]]] = {
                 (70, "ready", 0)],
     "FORTISSIMO": [(0, "ready", 0), (12, "fortissimo", 2), (56, "fortissimo", 0), (64, "conduct_down", 1), (76, "ready", 0)],
     "STAGGER": [(0, "stagger", 1), (50, "stagger", 0), (60, "ready", 0)],
+    # Nachhall (1.13): er schlägt die Gabel an – und lauscht, den Kopf zur Seite geneigt, die Hand am Ohr
+    "ECHO": [(0, "ready", 0), (8, "strike", 2), (12, "strike", 0), (18, "listen", 2), (62, "listen", 0), (70, "ready", 0)],
 }
 
 

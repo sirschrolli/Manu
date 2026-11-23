@@ -27,6 +27,7 @@ import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
@@ -65,6 +66,9 @@ import org.jspecify.annotations.Nullable;
  *     Schallschlag, der durch jede Rüstung und durch Stein dringt – nur <b>Wolle</b> hält ihn auf;</li>
  *     <li><b>Akkord</b> – er dirigiert; bei jedem Schlag läuft ein Ring über den Boden (darüber springen!);</li>
  *     <li><b>Notenschwarm</b> – er singt, und aus den Pfeifen auf seinem Rücken steigen Noten, die ihre Opfer suchen;</li>
+ *     <li><b>Nachhall</b> (seit 1.13) – er schlägt die Gabel an und lauscht: Wo seine Gegner gerade stehen, breitet sich ein
+ *     blasser Ring aus – und kurz darauf hallt es dort als Schallschlag zurück (durch jede Rüstung). Wer in Bewegung bleibt,
+ *     dem hallt es nur hinterher;</li>
  *     <li><b>Stille</b> – er legt den Finger an den Mund: Dunkelheit fällt, und er verschwindet, um hinter seinem Opfer
  *     wieder aufzutauchen (wer die Echoortung der Lauscher kennt, sieht ihn);</li>
  *     <li><b>Fortissimo</b> – unter halber Kraft lassen alle Pfeifen zugleich einen Ton los, der alle fortwirft; danach ist er
@@ -124,6 +128,13 @@ public class SordinEntity extends Monster implements SkyWarden, io.github.sirsch
     public static final int FORTISSIMO_BLAST = 40;
     public static final double FORTISSIMO_RADIUS = 9.0;
     public static final int STAGGER_TICKS = 60;
+    /** Nachhall: so viel Schaden (durch jede Rüstung), so weit (Halbmesser) … */
+    public static final float ECHO_DAMAGE = 6.0f;
+    public static final double ECHO_RADIUS = 2.0;
+    /** … in diesen Ticks merkt er sich, wo seine Gegner stehen (im Fortissimo einmal öfter) … */
+    public static final int[] ECHO_MARKS = {14, 26, 38, 50};
+    /** … und so viel später hallt es dort zurück. */
+    public static final int ECHO_DELAY = 12;
     /** So viel mehr Schaden nimmt er, solange er taumelt. */
     public static final float STAGGER_WEAKNESS = 1.3f;
     /** So lange (Ticks) nach einem Taumeln lässt ihn eine Orgel kalt. */
@@ -136,7 +147,7 @@ public class SordinEntity extends Monster implements SkyWarden, io.github.sirsch
 
     public enum Attack {
         NONE(0), GUARD(0), AWAKEN(AWAKEN_TICKS), SWING(30), SONIC(50), CHORD(60), NOTES(60), SILENCE(70), FORTISSIMO(76),
-        STAGGER(STAGGER_TICKS);
+        STAGGER(STAGGER_TICKS), ECHO(70);
 
         public final int duration;
 
@@ -165,12 +176,17 @@ public class SordinEntity extends Monster implements SkyWarden, io.github.sirsch
     private final List<Vec3> aims = new ArrayList<>();
     /** Die Ringe des Akkords, die gerade laufen. */
     private final List<Ring> rings = new ArrayList<>();
+    /** Nachhall: wo es noch zurückhallen wird. */
+    private final List<Echo> echoes = new ArrayList<>();
     /** Die Noten des Schwarms, die gerade fliegen. */
     private final List<Note> notes = new ArrayList<>();
     private int clientAttackStart;
 
     /** Ein Ring des Akkords: Mitte, Start (Spielzeit) und wen er schon traf. */
     private record Ring(Vec3 center, long start, Set<UUID> hit) {}
+
+    /** Ein Nachhall: wo er zurückhallt und in welchem Tick des Angriffs. */
+    private record Echo(Vec3 at, int burst) {}
 
     /** Eine Note des Schwarms: wo sie ist, wohin sie fliegt, wie alt sie ist, welche Farbe sie hat, wen sie sucht. */
     private static final class Note {
@@ -306,6 +322,7 @@ public class SordinEntity extends Monster implements SkyWarden, io.github.sirsch
         }
         this.struck.clear();
         this.aims.clear();
+        this.echoes.clear();
         if (next != Attack.NONE) {
             this.getNavigation().stop();
         }
@@ -518,6 +535,7 @@ public class SordinEntity extends Monster implements SkyWarden, io.github.sirsch
             case CHORD -> this.tickChord(level);
             case NOTES -> this.tickNotesAttack(level, target);
             case SILENCE -> this.tickSilence(level, target);
+            case ECHO -> this.tickEcho(level, target);
             default -> { }
         }
         if (this.attackTick >= this.attack.duration) {
@@ -686,9 +704,9 @@ public class SordinEntity extends Monster implements SkyWarden, io.github.sirsch
         if (distance < 5.0) {
             options.addAll(List.of(Attack.SWING, Attack.SWING, Attack.CHORD, Attack.SILENCE, Attack.SONIC));
         } else if (distance < 12.0) {
-            options.addAll(List.of(Attack.SONIC, Attack.SONIC, Attack.CHORD, Attack.NOTES, Attack.SILENCE));
+            options.addAll(List.of(Attack.SONIC, Attack.SONIC, Attack.CHORD, Attack.NOTES, Attack.SILENCE, Attack.ECHO));
         } else {
-            options.addAll(List.of(Attack.SONIC, Attack.SONIC, Attack.NOTES, Attack.SILENCE));
+            options.addAll(List.of(Attack.SONIC, Attack.SONIC, Attack.NOTES, Attack.SILENCE, Attack.ECHO));
         }
         if (this.isFortissimo()) {
             options.add(Attack.NOTES);
@@ -936,6 +954,72 @@ public class SordinEntity extends Monster implements SkyWarden, io.github.sirsch
                 }
             }
         }
+    }
+
+    /**
+     * Nachhall: Er schlägt die Gabel an und lauscht. Dreimal (im Fortissimo viermal) merkt er sich, wo seine Gegner stehen (die
+     * nächsten drei, sein Ziel zuerst) – dort breitet sich ein blasser Ring bis zur vollen Weite aus, und {@link #ECHO_DELAY}
+     * Ticks später hallt es zurück: ein Schallschlag, der durch jede Rüstung dringt. Wer in Bewegung bleibt, entgeht ihm.
+     */
+    private void tickEcho(ServerLevel level, LivingEntity target) {
+        int t = this.attackTick;
+        if (t == 8) {
+            this.sound(level, ModSounds.SORDIN_CHORD.get(), 2.6f, 1.8f);
+            SpellFxEntity.create(level, SpellFxEntity.Kind.ECHO, this.position().add(0.0, 0.05, 0.0), null, SCULK, 30, 1.0f).param(0.6f).spawn();
+        }
+        int marks = this.isFortissimo() ? ECHO_MARKS.length : ECHO_MARKS.length - 1;
+        for (int i = 0; i < marks; i++) {
+            if (t == ECHO_MARKS[i]) {
+                this.markEchoes(level, target);
+            }
+        }
+        Iterator<Echo> it = this.echoes.iterator();
+        while (it.hasNext()) {
+            Echo echo = it.next();
+            if (t >= echo.burst()) {
+                it.remove();
+                this.echoBurst(level, echo.at());
+            }
+        }
+    }
+
+    /** Er merkt sich, wo seine Gegner stehen: Dort breitet sich ein blasser Ring aus, bis es zurückhallt. */
+    private void markEchoes(ServerLevel level, LivingEntity target) {
+        List<LivingEntity> marks = new ArrayList<>(this.victims(level, this.getBoundingBox().inflate(HEAR_RADIUS, 8.0, HEAR_RADIUS)));
+        marks.sort((a, b) -> Double.compare(a.distanceToSqr(this), b.distanceToSqr(this)));
+        if (marks.remove(target)) {
+            marks.addFirst(target);
+        }
+        for (LivingEntity e : marks.subList(0, Math.min(3, marks.size()))) {
+            Vec3 at = e.position();
+            this.echoes.add(new Echo(at, this.attackTick + ECHO_DELAY));
+            float grow = (float) ((ECHO_RADIUS - 0.4) / ECHO_DELAY);
+            SpellFxEntity.create(level, SpellFxEntity.Kind.ECHO, at.add(0.0, 0.05, 0.0), null, CRYSTAL, ECHO_DELAY + 2, 0.4f).param(grow).spawn();
+            level.sendParticles(ParticleTypes.SCULK_CHARGE_POP, at.x, at.y + 0.1, at.z, 8, 0.4, 0.05, 0.4, 0.01);
+            level.playSound(null, at.x, at.y, at.z, SoundEvents.SCULK_CLICKING, SoundSource.HOSTILE, 1.4f, 1.3f);
+        }
+    }
+
+    /** Es hallt zurück: ein Schallschlag, der durch jede Rüstung dringt und hochwirft. */
+    private void echoBurst(ServerLevel level, Vec3 at) {
+        level.sendParticles(ParticleTypes.SONIC_BOOM, at.x, at.y + 0.9, at.z, 1, 0.0, 0.0, 0.0, 0.0);
+        level.sendParticles(ParticleTypes.SCULK_SOUL, at.x, at.y + 0.3, at.z, 10, 0.6, 0.2, 0.6, 0.04);
+        SpellFxEntity.create(level, SpellFxEntity.Kind.ECHO, at.add(0.0, 0.05, 0.0), null, SCULK, 10, (float) ECHO_RADIUS).param(0.3f).spawn();
+        level.playSound(null, at.x, at.y, at.z, SoundEvents.WARDEN_SONIC_BOOM, SoundSource.HOSTILE, 1.2f, 1.6f);
+        for (LivingEntity victim : this.victims(level, new AABB(at, at).inflate(ECHO_RADIUS + 0.6, 2.5, ECHO_RADIUS + 0.6))) {
+            double d = Math.hypot(victim.getX() - at.x, victim.getZ() - at.z);
+            if (d < ECHO_RADIUS + victim.getBbWidth() * 0.5 && Math.abs(victim.getY() - at.y) < 2.5
+                    && victim.hurtServer(level, this.damageSources().sonicBoom(this), ECHO_DAMAGE)) {
+                victim.push(0.0, 0.35, 0.0);
+                victim.needsSync = true;
+                victim.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 30, 0), this);
+            }
+        }
+    }
+
+    /** Für Tests: wo es noch zurückhallen wird. */
+    public List<Vec3> echoes() {
+        return this.echoes.stream().map(Echo::at).toList();
     }
 
     /** Notenschwarm: Er singt; aus den Pfeifen steigen Noten (im Fortissimo mehr), die ihre Opfer suchen. */

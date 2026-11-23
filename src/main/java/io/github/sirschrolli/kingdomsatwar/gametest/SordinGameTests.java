@@ -321,7 +321,7 @@ final class SordinGameTests {
                         wool(helper, level, cantor, knight, far, hp, () ->
                                 step(helper, cantor, knight, near, hp, SordinEntity.Attack.CHORD, SordinEntity.CHORD_BEATS[0] + 16, "Der Akkord", () ->
                                         step(helper, cantor, knight, far, hp, SordinEntity.Attack.NOTES, 70, "Der Notenschwarm", () ->
-                                                silence(helper, cantor, knight, near, hp, area))))));
+                                                echo(helper, cantor, knight, far, hp, () -> silence(helper, cantor, knight, near, hp, area)))))));
     }
 
     /** Ein Angriff: erzwingen, warten, prüfen, ob der Ritter getroffen wurde, dann den nächsten. */
@@ -353,6 +353,31 @@ final class SordinGameTests {
             for (BlockPos p : BlockPos.betweenClosed(a, b)) {
                 level.setBlock(p, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
             }
+            then.run();
+        });
+    }
+
+    /**
+     * Der Nachhall: Er merkt sich, wo der Ritter steht; tritt der Ritter rechtzeitig fort, hallt es ins Leere – bleibt er stehen,
+     * hallt es ihn nieder.
+     */
+    private static void echo(GameTestHelper helper, SordinEntity cantor, LivingEntity knight, Vec3 spot, float[] hp, Runnable then) {
+        reset(knight, spot, hp);
+        knight.removeAllEffects();
+        cantor.setTarget(knight);
+        cantor.forceAttack(SordinEntity.Attack.ECHO);
+        Vec3 aside = Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(8, 1, 7)));
+        helper.runAfterDelay(SordinEntity.ECHO_MARKS[0] + 1, () -> {
+            helper.assertTrue(cantor.echoes().stream().anyMatch(p -> p.distanceToSqr(spot) < 0.25), "Er merkt sich nicht, wo der Ritter steht: "
+                    + cantor.echoes());
+            knight.teleportTo(aside.x, aside.y, aside.z);
+        });
+        helper.runAfterDelay(SordinEntity.ECHO_MARKS[0] + SordinEntity.ECHO_DELAY + 1, () -> {
+            helper.assertTrue(knight.getHealth() >= hp[0], "Der Nachhall trifft den Ritter, der fortgetreten ist");
+            helper.assertTrue(cantor.echoes().stream().noneMatch(p -> p.distanceToSqr(spot) < 0.25), "Der erste Nachhall hallt nicht zurück");
+        });
+        helper.runAfterDelay(SordinEntity.ECHO_MARKS[1] + SordinEntity.ECHO_DELAY + 2, () -> {
+            helper.assertTrue(knight.getHealth() < hp[0], "Der Nachhall trifft den Ritter nicht, der stehen bleibt");
             then.run();
         });
     }
