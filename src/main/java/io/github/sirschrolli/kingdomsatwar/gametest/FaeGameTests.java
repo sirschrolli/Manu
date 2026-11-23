@@ -446,33 +446,33 @@ final class FaeGameTests {
      * (und leuchtet). Danach geht es gleich weiter (die Spirale wanderte sonst in die Nachbartests).
      */
     private static void spiral(GameTestHelper helper, MothQueenEntity queen, net.minecraft.world.entity.LivingEntity knight, Runnable then) {
-        // die Falter des Schwarms verglimmen (ihre Bisse stießen den Ritter sonst aus der Mitte), der Ritter steht still
+        // die Falter des Schwarms verglimmen; ein frischer Ritter steht mitten im Feld (der erste steht am Rand und hat eben
+        // erst Treffer eingesteckt – deren Schonzeit schluckte sonst den Strahl)
         for (MoonMothEntity moth : helper.getLevel().getEntitiesOfClass(MoonMothEntity.class, queen.getBoundingBox().inflate(32))) {
             moth.vanish(helper.getLevel());
         }
-        knight.teleportTo(knight.getX(), knight.getY(), knight.getZ());
-        knight.setDeltaMovement(Vec3.ZERO);
-        knight.setHealth(knight.getMaxHealth());
-        knight.removeAllEffects();
-        float hp = knight.getHealth();
-        queen.snapTo(knight.getX() + 2.0, knight.getY() + 6.0, knight.getZ() + 4.0, 0.0f, 0.0f);
+        var mark = helper.spawnWithNoFreeWill(ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get(), new BlockPos(4, 1, 4));
+        float hp = mark.getHealth();
+        queen.snapTo(mark.getX() + 2.0, mark.getY() + 6.0, mark.getZ() + 4.0, 0.0f, 0.0f);
         queen.setDeltaMovement(Vec3.ZERO);
-        queen.setTarget(knight);
+        queen.setTarget(mark);
         queen.forceAttack(MothQueenEntity.Attack.SPIRAL);
         helper.runAfterDelay(6, () -> {
             Vec3 c = queen.spiralCenter();
-            helper.assertTrue(c != null && Math.hypot(c.x - knight.getX(), c.z - knight.getZ()) < 0.5, "Die Mondlichtspirale beginnt nicht beim Ritter: "
+            helper.assertTrue(c != null && Math.hypot(c.x - mark.getX(), c.z - mark.getZ()) < 0.5, "Die Mondlichtspirale beginnt nicht beim Ritter: "
                     + c);
-            helper.assertTrue(knight.getHealth() >= hp, "Die Mondlichtspirale trifft, bevor der Strahl fällt");
+            helper.assertTrue(mark.getHealth() >= hp, "Die Mondlichtspirale trifft, bevor der Strahl fällt");
         });
-        ModGameTests.await(helper, () -> knight.getHealth() < hp, MothQueenEntity.SPIRAL_START + 30, () -> {
+        ModGameTests.await(helper, () -> mark.getHealth() < hp, MothQueenEntity.SPIRAL_START + 30, () -> {
             Vec3 c = queen.spiralCenter();
             return "Die Mondlichtspirale trifft den Ritter nicht (" + queen.currentAttack() + " seit " + (int) queen.attackTime(0.0f)
-                    + " Takten, Mitte " + (c == null ? "-" : String.format(java.util.Locale.ROOT, "%.2f", Math.hypot(c.x - knight.getX(),
-                    c.z - knight.getZ()))) + " vom Ritter)";
+                    + " Takten, Mitte " + (c == null ? "-" : String.format(java.util.Locale.ROOT, "%.2f", Math.hypot(c.x - mark.getX(),
+                    c.z - mark.getZ()))) + " vom Ritter, Ritter " + (mark.isRemoved() ? "fort" : "da") + ")";
         }, () -> {
-            helper.assertTrue(knight.hasEffect(MobEffects.GLOWING), "Wen die Mondlichtspirale trifft, der leuchtet nicht");
+            helper.assertTrue(mark.hasEffect(MobEffects.GLOWING), "Wen die Mondlichtspirale trifft, der leuchtet nicht");
             queen.forceAttack(MothQueenEntity.Attack.NONE);
+            mark.discard();
+            queen.setTarget(knight);
             then.run();
         });
     }
