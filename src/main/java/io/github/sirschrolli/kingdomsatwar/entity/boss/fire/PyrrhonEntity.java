@@ -144,6 +144,7 @@ public class PyrrhonEntity extends DragonBossEntity {
         list.add(new ElementAttacks.NovaRing(fire, 12, 20));
         list.add(new FireAttacks.FireTornado(5));
         list.add(new FireAttacks.MagmaFissures(13));
+        list.add(new FireAttacks.FlameCrescents(12));
     }
 
     // =====================================================================================

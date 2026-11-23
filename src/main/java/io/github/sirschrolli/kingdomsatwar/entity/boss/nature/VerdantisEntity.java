@@ -173,6 +173,7 @@ public class VerdantisEntity extends DragonBossEntity {
         list.add(new NatureAttacks.BlossomHeal());
         list.add(new GroveAttacks.ThornWave(10));
         list.add(new GroveAttacks.SolarBeam(18));
+        list.add(new GroveAttacks.VineLash(12));
     }
 
     // =====================================================================================

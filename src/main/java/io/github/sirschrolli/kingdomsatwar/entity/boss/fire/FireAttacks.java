@@ -5,6 +5,8 @@ import io.github.sirschrolli.kingdomsatwar.entity.boss.BossAttack;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.BossEffects;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.BossFx;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity;
+import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
+import io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity;
 import io.github.sirschrolli.kingdomsatwar.registry.ModParticles;
 import io.github.sirschrolli.kingdomsatwar.registry.ModSounds;
 import java.util.ArrayList;
@@ -22,7 +24,8 @@ import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Pyrrhons eigene große Angriffe: Feuerwirbel, die über das Nest wandern, und Magmaspalten, die sternförmig aufreißen.
+ * Pyrrhons eigene große Angriffe: Feuerwirbel, die über das Nest wandern, Magmaspalten, die sternförmig aufreißen, und
+ * Flammensicheln, die über den Boden jagen (seit 1.13).
  */
 public final class FireAttacks {
     private FireAttacks() {}
@@ -382,6 +385,136 @@ public final class FireAttacks {
         /** Für Tests: die Punkte der Spalten. */
         public List<List<Vec3>> cracks() {
             return this.cracks;
+        }
+    }
+
+    // =====================================================================================
+    // Flammensicheln (seit 1.13)
+    // =====================================================================================
+
+    /**
+     * Flammensicheln: Pyrrhon holt mit der Pranke aus und schlägt Sicheln aus Feuer über den Boden – eine genau auf das Ziel
+     * zu, zwei schräg daneben (ab der zweiten Phase fünf). Sie jagen über den Boden, Stufen hinauf und Kanten hinab, und
+     * verbrennen jeden, den sie erreichen; wer im rechten Moment springt, lässt sie unter sich hindurch.
+     */
+    public static final class FlameCrescents extends BossAttack {
+        static final int RELEASE = 15;
+        static final int LIFE = 36;
+        static final float SPEED = 0.8f;
+        static final float SPAN = 9.0f;
+        private static final int COLOR = 0xFF6A1E;
+        private final float damage;
+        private final List<Sweep> sweeps = new ArrayList<>();
+
+        /** Eine Sichel: woher, wohin (waagerecht, Länge 1), wen sie schon traf. */
+        private record Sweep(Vec3 from, Vec3 dir, Set<UUID> hit) {}
+
+        public FlameCrescents(float damage) {
+            super(BossAnims.CLAW, "flame_crescents");
+            this.damage = damage;
+        }
+
+        @Override
+        public int duration() {
+            return RELEASE + LIFE + 4;
+        }
+
+        @Override
+        public int cooldown() {
+            return 260;
+        }
+
+        @Override
+        public int turnUntil() {
+            return RELEASE - 2;
+        }
+
+        @Override
+        public float weight(DragonBossEntity boss, LivingEntity target, double distance, float angle) {
+            return distance > 5.0 && distance < 28.0 ? (angle < 70.0f ? 7 : 3) : 1;
+        }
+
+        @Override
+        public void start(ServerLevel level, DragonBossEntity boss, LivingEntity target) {
+            this.sweeps.clear();
+        }
+
+        @Override
+        public void tick(ServerLevel level, DragonBossEntity boss, LivingEntity target, int tick) {
+            if (tick < RELEASE && tick % 3 == 0) {
+                // die Pranke glüht auf
+                Vec3 m = boss.mouthPosition();
+                level.sendParticles(EMBER, m.x, m.y - 1.5, m.z, 4, 0.6, 0.4, 0.6, 0.0);
+            }
+            if (tick == RELEASE) {
+                Vec3 to = target.position().subtract(boss.position()).multiply(1.0, 0.0, 1.0);
+                if (to.lengthSqr() < 1.0e-4) {
+                    to = Vec3.directionFromRotation(0.0f, boss.getYRot());
+                }
+                double base = Math.atan2(to.z, to.x);
+                Vec3 front = boss.position().add(to.normalize().scale(3.0));
+                Vec3 origin = BossFx.ground(boss, front.x, front.z);
+                int count = boss.getPhase() >= 2 ? 5 : 3;
+                for (int i = 0; i < count; i++) {
+                    double a = base + (i - (count - 1) / 2.0) * 22.0 * Mth.DEG_TO_RAD;
+                    Vec3 dir = new Vec3(Math.cos(a), 0.0, Math.sin(a));
+                    float yaw = (float) (a * Mth.RAD_TO_DEG) - 90.0f;
+                    this.sweeps.add(new Sweep(origin, dir, new HashSet<>()));
+                    SpellFxEntity.create(level, SpellFxEntity.Kind.CRESCENT, origin, DragonType.FIRE, COLOR, LIFE, SPAN)
+                            .param(SPEED).facing(yaw).spawn();
+                }
+                BossFx.sound(level, boss.position(), SoundEvents.FIRECHARGE_USE, 5.0f, 0.5f);
+                BossFx.sound(level, boss.position(), SoundEvents.BLAZE_SHOOT, 4.0f, 0.6f);
+                BossFx.burst(level, ParticleTypes.FLAME, origin.add(0.0, 0.5, 0.0), 40, 1.5, 0.15);
+            }
+            if (tick > RELEASE && tick <= RELEASE + LIFE) {
+                int age = tick - RELEASE;
+                for (Sweep sweep : this.sweeps) {
+                    Vec3 flat = sweep.from().add(sweep.dir().scale(SPEED * age));
+                    Vec3 p = BossFx.ground(boss, flat.x, flat.z);
+                    if (age % 2 == 0) {
+                        // Flammen an der Schneide
+                        Vec3 side = new Vec3(-sweep.dir().z, 0.0, sweep.dir().x);
+                        for (int k = -2; k <= 2; k++) {
+                            Vec3 q = p.add(side.scale(k * SPAN * 0.2)).add(sweep.dir().scale(SpellFxEntity.CRESCENT_BULGE * (1.0 - k * k / 4.0)));
+                            level.sendParticles(ParticleTypes.FLAME, q.x, q.y + 0.3, q.z, 1, 0.15, 0.2, 0.15, 0.02);
+                        }
+                    }
+                    crescentHits(level, boss, p, sweep.dir(), SPAN, sweep.hit(), e -> {
+                        boss.hurtTarget(level, e, this.damage);
+                        BossEffects.burn(e, 5);
+                        DragonBossEntity.pushAway(e, p.subtract(sweep.dir()), 0.9, 0.35);
+                    });
+                }
+            }
+        }
+    }
+
+    /**
+     * Wen eine Sichel an der Stelle {@code p} (Mitte ihrer Sehne, am Boden) mit Laufrichtung {@code dir} gerade erreicht:
+     * wer vor ihrer Schneide steht und nicht im Sprung darüber ist – jeden nur einmal ({@code hit}).
+     */
+    static void crescentHits(ServerLevel level, DragonBossEntity boss, Vec3 p, Vec3 dir, float span, Set<UUID> hit,
+            java.util.function.Consumer<LivingEntity> onHit) {
+        Vec3 side = new Vec3(-dir.z, 0.0, dir.x);
+        double half = span * 0.5;
+        for (LivingEntity e : boss.enemiesAround(p, half + 1.5, 4.0)) {
+            if (hit.contains(e.getUUID())) {
+                continue;
+            }
+            Vec3 rel = e.position().subtract(p);
+            double across = rel.dot(side);
+            if (Math.abs(across) > half + e.getBbWidth() * 0.5) {
+                continue;
+            }
+            double x = Mth.clamp(across / half, -1.0, 1.0);
+            double along = rel.dot(dir) - SpellFxEntity.CRESCENT_BULGE * (1.0 - x * x);
+            double up = e.getY() - p.y;
+            if (along < -1.3 || along > 0.9 || up < -1.0 || up > 1.1) {
+                continue;
+            }
+            hit.add(e.getUUID());
+            onHit.accept(e);
         }
     }
 }

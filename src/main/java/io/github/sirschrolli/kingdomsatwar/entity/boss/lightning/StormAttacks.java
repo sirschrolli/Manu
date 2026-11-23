@@ -352,4 +352,118 @@ public final class StormAttacks {
             this.zapped.clear();
         }
     }
+
+    // =====================================================================================
+    // Blitzgitter (seit 1.13)
+    // =====================================================================================
+
+    /**
+     * Blitzgitter: Voltarion reckt sich und brüllt in den Himmel – über den Boden legen sich drei parallele Linien aus
+     * knisterndem Licht (die mittlere genau durch das Ziel), und einen Herzschlag später schlagen Blitze an ihnen entlang
+     * ein. Ab der zweiten Phase folgt ein zweites Gitter quer zum ersten. Wer zwischen den Linien steht, bleibt unversehrt.
+     */
+    public static final class LightningGrid extends BossAttack {
+        static final int[] WAVES = {14, 46};
+        static final int WARN = 22;
+        static final double SPACING = 5.0;
+        static final double HALF_LENGTH = 16.0;
+        static final double REACH = 1.3;
+        private final float damage;
+        private final List<GridLine> lines = new ArrayList<>();
+
+        private record GridLine(Vec3 a, Vec3 b, int born) {}
+
+        public LightningGrid(float damage) {
+            super(BossAnims.RAIN, "lightning_grid");
+            this.damage = damage;
+        }
+
+        @Override
+        public int duration() {
+            return WAVES[WAVES.length - 1] + WARN + 14;
+        }
+
+        @Override
+        public int cooldown() {
+            return 300;
+        }
+
+        @Override
+        public Where where() {
+            return Where.ANY;
+        }
+
+        @Override
+        public float weight(DragonBossEntity boss, LivingEntity target, double distance, float angle) {
+            return 6;
+        }
+
+        @Override
+        public void start(ServerLevel level, DragonBossEntity boss, LivingEntity target) {
+            this.lines.clear();
+        }
+
+        @Override
+        public void tick(ServerLevel level, DragonBossEntity boss, LivingEntity target, int tick) {
+            int waves = boss.getPhase() >= 2 ? 2 : 1;
+            for (int w = 0; w < waves; w++) {
+                if (tick != WAVES[w]) {
+                    continue;
+                }
+                Vec3 center = BossFx.ground(boss, target.getX(), target.getZ());
+                Vec3 axis = target.position().subtract(boss.position()).multiply(1.0, 0.0, 1.0);
+                axis = axis.lengthSqr() < 1.0e-4 ? new Vec3(1.0, 0.0, 0.0) : axis.normalize();
+                if (w == 1) {
+                    axis = new Vec3(-axis.z, 0.0, axis.x);
+                }
+                Vec3 side = new Vec3(-axis.z, 0.0, axis.x);
+                for (int k = -1; k <= 1; k++) {
+                    Vec3 mid = center.add(side.scale(k * SPACING));
+                    Vec3 a = BossFx.ground(boss, mid.x - axis.x * HALF_LENGTH, mid.z - axis.z * HALF_LENGTH);
+                    Vec3 b = BossFx.ground(boss, mid.x + axis.x * HALF_LENGTH, mid.z + axis.z * HALF_LENGTH);
+                    this.lines.add(new GridLine(new Vec3(a.x, center.y, a.z), new Vec3(b.x, center.y, b.z), tick));
+                }
+                BossFx.sound(level, center, SoundEvents.BEACON_ACTIVATE, 4.0f, 1.6f);
+                BossFx.sound(level, boss.position(), ModSounds.DRAGON_ROAR.get(), 5.0f, 1.1f);
+            }
+            for (GridLine line : this.lines) {
+                int age = tick - line.born();
+                if (age < WARN) {
+                    // das Gitter knistert am Boden und wird heller, je näher der Schlag
+                    if (age % 3 == 0) {
+                        Vec3 d = line.b().subtract(line.a());
+                        int n = (int) (d.length() / 0.9);
+                        for (int i = 0; i <= n; i++) {
+                            Vec3 q = line.a().add(d.scale((double) i / n));
+                            level.sendParticles(age > WARN - 8 ? GLOW : PYLON, q.x, q.y + 0.12, q.z, 1, 0.08, 0.0, 0.08, 0.0);
+                        }
+                        Vec3 spark = line.a().add(d.scale(boss.getRandom().nextDouble()));
+                        level.sendParticles(ParticleTypes.ELECTRIC_SPARK, spark.x, spark.y + 0.2, spark.z, 6, 0.3, 0.1, 0.3, 0.1);
+                    }
+                    if (age == WARN - 8) {
+                        BossFx.sound(level, line.a().add(line.b()).scale(0.5), SoundEvents.BEACON_POWER_SELECT, 3.0f, 1.8f);
+                    }
+                } else if (age == WARN) {
+                    Vec3 d = line.b().subtract(line.a());
+                    // Blitze an der Linie entlang, dazwischen springt der Funke
+                    for (double t : new double[] {0.2, 0.55, 0.9}) {
+                        LightningAttacks.visualBolt(level, line.a().add(d.scale(t)));
+                    }
+                    for (int seg = 0; seg < 4; seg++) {
+                        LightningAttacks.arc(level, line.a().add(d.scale(seg / 4.0)).add(0.0, 0.3, 0.0),
+                                line.a().add(d.scale((seg + 1) / 4.0)).add(0.0, 0.3, 0.0));
+                    }
+                    for (LivingEntity e : boss.enemiesAround(line.a().add(d.scale(0.5)), HALF_LENGTH + 2.0, 8.0)) {
+                        Vec3 at = new Vec3(e.getX(), line.a().y, e.getZ());
+                        if (BossFx.distanceToSegment(at, line.a(), line.b()) <= REACH + e.getBbWidth() * 0.5
+                                && e.getY() - line.a().y < 3.0) {
+                            boss.hurtTarget(level, e, this.damage);
+                            BossEffects.stun(e, 1);
+                            level.sendParticles(ModParticles.BOSS_SPARK.get(), e.getX(), e.getY(0.5), e.getZ(), 10, 0.3, 0.5, 0.3, 0.05);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

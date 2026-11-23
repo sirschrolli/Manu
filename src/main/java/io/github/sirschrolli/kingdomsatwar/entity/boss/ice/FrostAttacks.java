@@ -283,4 +283,104 @@ public final class FrostAttacks {
             BossFx.sound(level, boss.position(), SoundEvents.TRIDENT_THROW.value(), 4.0f, 0.6f);
         }
     }
+
+    // =====================================================================================
+    // Eiswirbel (seit 1.13)
+    // =====================================================================================
+
+    /**
+     * Eiswirbel: Glaciara bäumt sich auf, reißt das Maul auf und dreht sich einmal um sich selbst, während sie Frost speit – ein
+     * Kegel aus Eis fegt rund um das Nest (ab der zweiten Phase eineinhalb Umdrehungen). Wer vor ihm herläuft oder außer
+     * Reichweite bleibt, entgeht ihm; wen er streift, der friert ein Stück fest.
+     */
+    public static final class FrostSpin extends BossAttack {
+        static final int WINDUP = 14;
+        static final int SPIN = 56;
+        static final double RANGE = 15.0;
+        private final float damage;
+        private final Map<UUID, Integer> lastHit = new HashMap<>();
+        private float startYaw;
+        private float turn;
+
+        public FrostSpin(float damage) {
+            super(BossAnims.BREATH, "frost_spin");
+            this.damage = damage;
+        }
+
+        @Override
+        public int duration() {
+            return WINDUP + SPIN + 12;
+        }
+
+        @Override
+        public int cooldown() {
+            return 320;
+        }
+
+        @Override
+        public int turnUntil() {
+            return WINDUP;
+        }
+
+        @Override
+        public float weight(DragonBossEntity boss, LivingEntity target, double distance, float angle) {
+            return distance < 16.0 ? 6 : 2;
+        }
+
+        @Override
+        public void start(ServerLevel level, DragonBossEntity boss, LivingEntity target) {
+            this.lastHit.clear();
+            this.startYaw = boss.getYRot();
+            this.turn = (boss.getRandom().nextBoolean() ? 1.0f : -1.0f) * (boss.getPhase() >= 2 ? 540.0f : 360.0f);
+        }
+
+        @Override
+        public void tick(ServerLevel level, DragonBossEntity boss, LivingEntity target, int tick) {
+            Vec3 mouth = boss.mouthPosition();
+            if (tick == 0) {
+                BossFx.sound(level, boss.position(), ModSounds.DRAGON_ROAR.get(), 5.0f, 1.2f);
+            }
+            if (tick < WINDUP) {
+                // Kälte sammelt sich im Maul
+                level.sendParticles(CORE, mouth.x, mouth.y, mouth.z, 4, 0.5, 0.5, 0.5, 0.0);
+                level.sendParticles(ParticleTypes.SNOWFLAKE, mouth.x, mouth.y, mouth.z, 3, 0.8, 0.8, 0.8, 0.02);
+                if (tick == WINDUP - 6) {
+                    this.startYaw = boss.getYRot();
+                }
+                return;
+            }
+            if (tick == WINDUP) {
+                BossFx.sound(level, mouth, ModSounds.DRAGON_BREATH.get(io.github.sirschrolli.kingdomsatwar.dragon.DragonType.ICE).get(), 5.0f, 1.3f);
+                BossFx.sound(level, mouth, SoundEvents.POWDER_SNOW_BREAK, 4.0f, 0.5f);
+            }
+            if (tick >= WINDUP + SPIN) {
+                return;
+            }
+            float u = (tick - WINDUP + 1) / (float) SPIN;
+            float yaw = this.startYaw + this.turn * u;
+            boss.setYRot(yaw);
+            boss.setYBodyRot(yaw);
+            boss.setYHeadRot(yaw);
+            Vec3 flat = Vec3.directionFromRotation(0.0f, yaw);
+            Vec3 ground = BossFx.ground(boss, boss.getX() + flat.x * 11.0, boss.getZ() + flat.z * 11.0);
+            Vec3 dir = ground.subtract(mouth).normalize();
+            BossFx.stream(level, ParticleTypes.SNOWFLAKE, mouth, dir, RANGE, 1.1, 2, 0.55);
+            BossFx.stream(level, CORE, mouth, dir, RANGE * 0.85, 0.7, 1, 0.3);
+            level.sendParticles(RIME, ground.x, ground.y + 0.1, ground.z, 6, 1.4, 0.05, 1.4, 0.0);
+            level.sendParticles(ParticleTypes.ITEM_SNOWBALL, ground.x, ground.y + 0.3, ground.z, 2, 0.8, 0.2, 0.8, 0.05);
+            if (tick % 8 == 0) {
+                BossFx.sound(level, ground, SoundEvents.POWDER_SNOW_STEP, 3.0f, 0.6f);
+            }
+            BossFx.cone(boss, mouth, dir, RANGE, 16.0, e -> {
+                Integer last = this.lastHit.get(e.getUUID());
+                if (last != null && tick - last < 12) {
+                    return;
+                }
+                this.lastHit.put(e.getUUID(), tick);
+                boss.hurtTarget(level, e, this.damage);
+                BossEffects.freeze(e, 3);
+                level.sendParticles(CRYSTAL, e.getX(), e.getY(0.5), e.getZ(), 12, 0.4, 0.5, 0.4, 0.0);
+            });
+        }
+    }
 }

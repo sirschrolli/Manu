@@ -23,7 +23,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
-/** Thalassas eigene große Angriffe: das Geysirfeld und die Wasserschlangen. */
+/** Thalassas eigene große Angriffe: das Geysirfeld, die Wasserschlangen und die Hydroklinge (seit 1.13). */
 public final class TideAttacks {
     private TideAttacks() {}
 
@@ -293,6 +293,120 @@ public final class TideAttacks {
         @Override
         public void stop(ServerLevel level, DragonBossEntity boss) {
             this.serpents.clear();
+        }
+    }
+
+    // =====================================================================================
+    // Hydroklinge (seit 1.13)
+    // =====================================================================================
+
+    /**
+     * Hydroklinge: Thalassa hebt den Kopf und schneidet mit einem dünnen Strahl Wasser unter höchstem Druck einmal quer über
+     * den Grund vor sich – ein Bogen von 150 Grad, knapp über dem Boden (ab der zweiten Phase hin und zurück). Wer im rechten
+     * Moment springt, lässt die Klinge unter sich durch; wen sie erwischt, den reißt sie mit und durchnässt ihn.
+     */
+    public static final class HydroBlade extends BossAttack {
+        static final int WINDUP = 16;
+        static final int SWEEP = 30;
+        static final double NEAR = 3.0;
+        static final double RANGE = 18.0;
+        static final double REACH = 0.9;
+        static final double ARC = 150.0;
+        private final float damage;
+        private final java.util.Map<UUID, Integer> lastHit = new java.util.HashMap<>();
+        private double aim;
+        private int sign;
+
+        public HydroBlade(float damage) {
+            super(BossAnims.BREATH, "hydro_blade");
+            this.damage = damage;
+        }
+
+        @Override
+        public int duration() {
+            return WINDUP + 2 * SWEEP + 10;
+        }
+
+        @Override
+        public int cooldown() {
+            return 280;
+        }
+
+        @Override
+        public int turnUntil() {
+            return WINDUP - 2;
+        }
+
+        @Override
+        public float weight(DragonBossEntity boss, LivingEntity target, double distance, float angle) {
+            return distance > 4.0 && distance < RANGE ? 7 : 1;
+        }
+
+        @Override
+        public void start(ServerLevel level, DragonBossEntity boss, LivingEntity target) {
+            this.lastHit.clear();
+            this.aim = Math.atan2(target.getZ() - boss.getZ(), target.getX() - boss.getX());
+            this.sign = boss.getRandom().nextBoolean() ? 1 : -1;
+        }
+
+        @Override
+        public void tick(ServerLevel level, DragonBossEntity boss, LivingEntity target, int tick) {
+            Vec3 mouth = boss.mouthPosition();
+            if (tick < WINDUP) {
+                // sie saugt Wasser an: Blasen und Gischt strömen zum Maul
+                level.sendParticles(ParticleTypes.BUBBLE_POP, mouth.x, mouth.y, mouth.z, 4, 0.8, 0.6, 0.8, 0.02);
+                level.sendParticles(FOAM, mouth.x, mouth.y, mouth.z, 3, 0.6, 0.6, 0.6, 0.0);
+                if (tick == WINDUP - 4) {
+                    this.aim = Math.atan2(target.getZ() - boss.getZ(), target.getX() - boss.getX());
+                }
+                return;
+            }
+            int rounds = boss.getPhase() >= 2 ? 2 : 1;
+            int k = tick - WINDUP;
+            if (k >= SWEEP * rounds) {
+                return;
+            }
+            if (k % SWEEP == 0) {
+                BossFx.sound(level, mouth, ModSounds.DRAGON_BREATH.get(io.github.sirschrolli.kingdomsatwar.dragon.DragonType.WATER).get(), 5.0f, 1.5f);
+                BossFx.sound(level, mouth, SoundEvents.TRIDENT_RIPTIDE_3.value(), 4.0f, 0.7f);
+            }
+            // hin, und (ab Phase 2) zurück
+            double u = (k % SWEEP + 1) / (double) SWEEP;
+            if (k >= SWEEP) {
+                u = 1.0 - u;
+            }
+            double a = this.aim + this.sign * (u - 0.5) * ARC * Mth.DEG_TO_RAD;
+            Vec3 dir = new Vec3(Math.cos(a), 0.0, Math.sin(a));
+            Vec3 near = BossFx.ground(boss, boss.getX() + dir.x * NEAR, boss.getZ() + dir.z * NEAR).add(0.0, 0.5, 0.0);
+            Vec3 far = BossFx.ground(boss, boss.getX() + dir.x * RANGE, boss.getZ() + dir.z * RANGE).add(0.0, 0.5, 0.0);
+            // der Strahl: vom Maul hinab, dann flach über den Grund
+            BossFx.line(level, FOAM, mouth, near, 0.6, 0.06);
+            BossFx.line(level, FOAM, near, far, 0.7, 0.05);
+            level.sendParticles(ParticleTypes.SPLASH, far.x, far.y, far.z, 10, 0.5, 0.2, 0.5, 0.2);
+            level.sendParticles(DEEP, far.x, far.y, far.z, 4, 0.4, 0.2, 0.4, 0.0);
+            Vec3 mid = near.add(far).scale(0.5);
+            level.sendParticles(ParticleTypes.SPLASH, mid.x, mid.y, mid.z, 6, 3.0, 0.1, 3.0, 0.1);
+            if (k % 6 == 0) {
+                BossFx.sound(level, mid, SoundEvents.GENERIC_SPLASH, 2.5f, 1.4f);
+            }
+            Vec3 sweep = new Vec3(-dir.z, 0.0, dir.x).scale(this.sign * (k >= SWEEP ? -1.0 : 1.0));
+            for (LivingEntity e : boss.enemiesAround(boss.position(), RANGE + 2.0, 6.0)) {
+                Vec3 at = new Vec3(e.getX(), near.y, e.getZ());
+                double ground = boss.groundY(e.getX(), e.getZ());
+                if (BossFx.distanceToSegment(at, near, far) > REACH + e.getBbWidth() * 0.5 || e.getY() - ground > 0.9) {
+                    continue;
+                }
+                Integer last = this.lastHit.get(e.getUUID());
+                if (last != null && tick - last < 15) {
+                    continue;
+                }
+                this.lastHit.put(e.getUUID(), tick);
+                boss.hurtTarget(level, e, this.damage);
+                BossEffects.soak(e, 4);
+                e.push(sweep.x * 1.1, 0.3, sweep.z * 1.1);
+                e.needsSync = true;
+                level.sendParticles(ParticleTypes.SPLASH, e.getX(), e.getY(0.5), e.getZ(), 20, 0.4, 0.4, 0.4, 0.3);
+            }
         }
     }
 }

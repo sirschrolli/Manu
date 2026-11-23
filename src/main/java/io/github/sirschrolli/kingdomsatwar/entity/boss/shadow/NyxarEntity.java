@@ -199,6 +199,7 @@ public class NyxarEntity extends DragonBossEntity {
         list.add(new ShadowAttacks.SoulDrain(14, 2));
         list.add(new ShadowAttacks.ShadowRain(12, 3));
         list.add(new ElementAttacks.NovaRing(shadow, 13, 24));
+        list.add(new ShadowAttacks.SoulChains(14));
     }
 
     // =====================================================================================

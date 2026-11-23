@@ -5,6 +5,8 @@ import io.github.sirschrolli.kingdomsatwar.entity.boss.BossAttack;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.BossEffects;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.BossFx;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity;
+import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
+import io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity;
 import io.github.sirschrolli.kingdomsatwar.registry.ModParticles;
 import io.github.sirschrolli.kingdomsatwar.registry.ModSounds;
 import java.util.ArrayList;
@@ -280,6 +282,115 @@ public final class GroveAttacks {
         @Override
         public void stop(ServerLevel level, DragonBossEntity boss) {
             this.hit.clear();
+        }
+    }
+
+    // =====================================================================================
+    // Rankenpeitschen (seit 1.13)
+    // =====================================================================================
+
+    /**
+     * Rankenpeitschen: Verdantis stampft auf, und in einem weiten Bogen vor ihr brechen riesige Dornenranken aus dem Boden –
+     * eine nach der anderen, von links nach rechts (ab der zweiten Phase hin und wieder zurück). Jede peitscht zur nächsten
+     * hinüber: Wer im Bogen steht, wird getroffen, vergiftet und zur Seite geschleudert; wer weiter innen oder außen steht,
+     * bleibt verschont.
+     */
+    public static final class VineLash extends BossAttack {
+        static final int FIRST = 12;
+        static final int STEP = 3;
+        static final int VINES = 7;
+        static final int LASH = 11;
+        static final int LIFE = 30;
+        static final double REACH = 2.2;
+        static final double LENGTH = 3.6;
+        private final float damage;
+        private final List<Vine> vines = new ArrayList<>();
+        private double radius;
+        private double aim;
+
+        /** Eine Ranke: wo, wohin sie peitscht, wann; wen sie traf. */
+        private record Vine(Vec3 pos, Vec3 lash, int born, Set<UUID> hit) {}
+
+        public VineLash(float damage) {
+            super(BossAnims.STOMP, "vine_lash");
+            this.damage = damage;
+        }
+
+        @Override
+        public int duration() {
+            return FIRST + 2 * VINES * STEP + LASH + 6;
+        }
+
+        @Override
+        public int cooldown() {
+            return 280;
+        }
+
+        @Override
+        public int turnUntil() {
+            return FIRST;
+        }
+
+        @Override
+        public float weight(DragonBossEntity boss, LivingEntity target, double distance, float angle) {
+            return distance > 4.0 && distance < 18.0 ? 7 : 1;
+        }
+
+        @Override
+        public void start(ServerLevel level, DragonBossEntity boss, LivingEntity target) {
+            this.vines.clear();
+            this.radius = Mth.clamp(target.position().subtract(boss.position()).horizontalDistance(), 6.0, 14.0);
+            this.aim = Math.atan2(target.getZ() - boss.getZ(), target.getX() - boss.getX());
+        }
+
+        @Override
+        public void tick(ServerLevel level, DragonBossEntity boss, LivingEntity target, int tick) {
+            if (tick == FIRST - 2) {
+                BossFx.sound(level, boss.position(), SoundEvents.ROOTED_DIRT_BREAK, 4.0f, 0.5f);
+                BossFx.groundDust(level, boss.position(), 5.0, 50);
+            }
+            int rounds = boss.getPhase() >= 2 ? 2 : 1;
+            int k = tick - FIRST;
+            if (k >= 0 && k % STEP == 0 && k / STEP < VINES * rounds) {
+                int n = k / STEP;
+                // erst von links nach rechts, dann zurück
+                int i = n < VINES ? n : 2 * VINES - 1 - n;
+                double spread = 120.0 * Mth.DEG_TO_RAD;
+                double a = this.aim - spread / 2.0 + spread * i / (VINES - 1.0);
+                double dirSign = n < VINES ? 1.0 : -1.0;
+                Vec3 pos = BossFx.ground(boss, boss.getX() + Math.cos(a) * this.radius, boss.getZ() + Math.sin(a) * this.radius);
+                // peitscht den Bogen entlang zur nächsten Ranke
+                Vec3 lash = new Vec3(-Math.sin(a) * dirSign, 0.0, Math.cos(a) * dirSign);
+                float yaw = (float) (Mth.atan2(lash.z, lash.x) * Mth.RAD_TO_DEG) - 90.0f;
+                SpellFxEntity.create(level, SpellFxEntity.Kind.VINE, pos, DragonType.NATURE, LIFE, 2.1f)
+                        .param(LASH / (float) LIFE).facing(yaw).spawn();
+                level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.ROOTED_DIRT.defaultBlockState()), pos.x, pos.y + 0.2,
+                        pos.z, 20, 0.6, 0.2, 0.6, 0.1);
+                level.sendParticles(THORN, pos.x, pos.y + 0.4, pos.z, 8, 0.5, 0.5, 0.5, 0.0);
+                BossFx.sound(level, pos, SoundEvents.ROOTED_DIRT_BREAK, 2.5f, 0.7f);
+                this.vines.add(new Vine(pos, lash, tick, new HashSet<>()));
+            }
+            for (Vine vine : this.vines) {
+                if (tick - vine.born() != LASH) {
+                    continue;
+                }
+                BossFx.sound(level, vine.pos(), SoundEvents.SWEET_BERRY_BUSH_PLACE, 3.0f, 0.5f);
+                BossFx.sound(level, vine.pos(), SoundEvents.PLAYER_ATTACK_SWEEP, 2.5f, 0.6f);
+                Vec3 end = vine.pos().add(vine.lash().scale(LENGTH));
+                BossFx.line(level, SPROUT, vine.pos().add(0.0, 1.0, 0.0), end.add(0.0, 1.0, 0.0), 0.5, 0.2);
+                for (LivingEntity e : boss.enemiesAround(vine.pos(), LENGTH + REACH + 1.0, 5.0)) {
+                    Vec3 at = new Vec3(e.getX(), vine.pos().y, e.getZ());
+                    if (vine.hit().contains(e.getUUID()) || BossFx.distanceToSegment(at, vine.pos(), end) > REACH + e.getBbWidth() * 0.5
+                            || e.getY() - vine.pos().y > 4.0) {
+                        continue;
+                    }
+                    vine.hit().add(e.getUUID());
+                    boss.hurtTarget(level, e, this.damage);
+                    BossEffects.poison(e, 4);
+                    e.push(vine.lash().x * 0.9, 0.45, vine.lash().z * 0.9);
+                    e.needsSync = true;
+                }
+            }
         }
     }
 }

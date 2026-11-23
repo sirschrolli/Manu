@@ -167,6 +167,7 @@ public class GlaciaraEntity extends DragonBossEntity {
         list.add(new ElementAttacks.NovaRing(frost, 11, 20));
         list.add(new FrostAttacks.FrostBeam(6));
         list.add(new FrostAttacks.ShardNova(9));
+        list.add(new FrostAttacks.FrostSpin(9));
     }
 
     // =====================================================================================

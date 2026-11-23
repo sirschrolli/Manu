@@ -322,6 +322,7 @@ public class ThalassaEntity extends DragonBossEntity {
         list.add(new WaterAttacks.DepthLeap(18));
         list.add(new TideAttacks.GeyserField(12));
         list.add(new TideAttacks.WaterSerpents(13));
+        list.add(new TideAttacks.HydroBlade(13));
     }
 
     // =====================================================================================

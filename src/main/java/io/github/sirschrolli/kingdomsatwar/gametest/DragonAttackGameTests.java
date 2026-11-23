@@ -29,9 +29,9 @@ import net.neoforged.neoforge.event.RegisterGameTestsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 /**
- * Die großen eigenen Angriffe der sechs Drachen-Bosse: Jeder Boss kennt seine zwei neuen Angriffe, jeder läuft von
- * Anfang bis Ende ohne Fehler durch und trifft einen Ritter, der zwölf Blöcke vor dem Drachen steht (Splittersturm und
- * Felslawine schießen dafür ihre Geschosse ab).
+ * Die großen eigenen Angriffe der Drachen-Bosse: Jeder Boss kennt seine neuen Angriffe (seit 1.13 je einen mehr, dazu Nyxars
+ * Seelenfesseln), jeder läuft von Anfang bis Ende ohne Fehler durch und trifft einen Ritter, der zwölf Blöcke vor dem Drachen
+ * steht (Splittersturm und Felslawine schießen dafür ihre Geschosse ab).
  */
 final class DragonAttackGameTests {
     private static final Identifier TOWN = KingdomsAtWar.id("test_town");
@@ -41,12 +41,14 @@ final class DragonAttackGameTests {
 
     /** Die neuen Angriffe je Element. */
     private static final Map<DragonType, List<String>> NEW = Map.of(
-            DragonType.FIRE, List.of("fire_tornado", "magma_fissures"),
-            DragonType.ICE, List.of("frost_beam", "shard_nova"),
-            DragonType.LIGHTNING, List.of("ball_lightning", "storm_cage"),
-            DragonType.NATURE, List.of("thorn_wave", "solar_beam"),
-            DragonType.EARTH, List.of("rolling_boulders", "earthsplitter"),
-            DragonType.WATER, List.of("geyser_field", "water_serpents"));
+            DragonType.FIRE, List.of("fire_tornado", "magma_fissures", "flame_crescents"),
+            DragonType.ICE, List.of("frost_beam", "shard_nova", "frost_spin"),
+            DragonType.LIGHTNING, List.of("ball_lightning", "storm_cage", "lightning_grid"),
+            DragonType.NATURE, List.of("thorn_wave", "solar_beam", "vine_lash"),
+            DragonType.EARTH, List.of("rolling_boulders", "earthsplitter", "stone_fists"),
+            DragonType.WATER, List.of("geyser_field", "water_serpents", "hydro_blade"));
+    /** Nyxar, der Schattendrache (kein Element der Nester): seine Seelenfesseln (seit 1.13). */
+    private static final List<String> NYXAR = List.of("soul_chains");
 
     private DragonAttackGameTests() {}
 
@@ -63,11 +65,16 @@ final class DragonAttackGameTests {
         int ground = TownGameTests.ground(helper);
         BlockPos home = helper.absolutePos(new BlockPos(24, ground, 14));
         List<String> problems = new ArrayList<>();
-        for (DragonType type : List.of(DragonType.FIRE, DragonType.ICE, DragonType.LIGHTNING, DragonType.NATURE, DragonType.EARTH,
-                DragonType.WATER)) {
-            var bossType = ModEntities.bossType(type);
+        List<DragonType> types = new ArrayList<>(List.of(DragonType.FIRE, DragonType.ICE, DragonType.LIGHTNING, DragonType.NATURE,
+                DragonType.EARTH, DragonType.WATER));
+        types.add(null);    // Nyxar
+        for (DragonType type : types) {
+            net.minecraft.world.entity.EntityType<? extends DragonBossEntity> bossType = type == null ? ModEntities.NYXAR.get()
+                    : ModEntities.bossType(type);
+            String label = type == null ? "shadow" : type.id();
+            List<String> names = type == null ? NYXAR : NEW.get(type);
             if (bossType == null) {
-                problems.add(type.id() + ": kein Boss");
+                problems.add(label + ": kein Boss");
                 continue;
             }
             DragonBossEntity boss = bossType.create(level, EntitySpawnReason.COMMAND);
@@ -84,10 +91,10 @@ final class DragonAttackGameTests {
                 knight.getAttribute(Attributes.MAX_HEALTH).setBaseValue(4000.0);
                 knight.setNoAi(true);
                 level.addFreshEntity(knight);
-                for (String name : NEW.get(type)) {
+                for (String name : names) {
                     BossAttack attack = boss.findAttack(name);
                     if (attack == null) {
-                        problems.add(type.id() + ": kennt " + name + " nicht");
+                        problems.add(label + ": kennt " + name + " nicht");
                         continue;
                     }
                     knight.setHealth(knight.getMaxHealth());
@@ -104,17 +111,17 @@ final class DragonAttackGameTests {
                         }
                         attack.stop(level, boss);
                     } catch (RuntimeException e) {
-                        problems.add(type.id() + "/" + name + ": " + e);
+                        problems.add(label + "/" + name + ": " + e);
                         KingdomsAtWar.LOGGER.error("[Test] Drachenangriff {}", name, e);
                         continue;
                     }
                     boolean hit = knight.getHealth() < knight.getMaxHealth() - 0.01f;
-                    KingdomsAtWar.LOGGER.info("[Test] {}/{}: Leben {} / {}", type.id(), name, knight.getHealth(), knight.getMaxHealth());
+                    KingdomsAtWar.LOGGER.info("[Test] {}/{}: Leben {} / {}", label, name, knight.getHealth(), knight.getMaxHealth());
                     boolean shot = projectiles(helper, boss) > before;
                     // Splittersturm und Felslawine schießen Geschosse ab (die treffen erst später)
                     boolean projectiles = name.equals("shard_nova") || name.equals("rolling_boulders");
                     if (projectiles ? !shot : !hit) {
-                        problems.add(type.id() + "/" + name + (projectiles ? ": keine Geschosse" : ": trifft den Ritter nicht"));
+                        problems.add(label + "/" + name + (projectiles ? ": keine Geschosse" : ": trifft den Ritter nicht"));
                     }
                 }
             } finally {

@@ -201,6 +201,7 @@ public class TerragonEntity extends DragonBossEntity {
         list.add(new ElementAttacks.NovaRing(dust, 12, 22));
         list.add(new RockAttacks.RollingBoulders(16));
         list.add(new RockAttacks.Earthsplitter(14));
+        list.add(new RockAttacks.StoneFists(14));
     }
 
     // =====================================================================================

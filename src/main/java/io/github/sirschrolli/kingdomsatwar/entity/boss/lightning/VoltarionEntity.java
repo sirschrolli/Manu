@@ -178,6 +178,7 @@ public class VoltarionEntity extends DragonBossEntity {
         list.add(new ElementAttacks.NovaRing(lightning, 12, 22));
         list.add(new StormAttacks.BallLightning(12));
         list.add(new StormAttacks.StormCage(16));
+        list.add(new StormAttacks.LightningGrid(13));
     }
 
     // =====================================================================================

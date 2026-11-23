@@ -4,6 +4,8 @@ import io.github.sirschrolli.kingdomsatwar.entity.boss.BossAnims;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.BossAttack;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.BossFx;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity;
+import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
+import io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity;
 import io.github.sirschrolli.kingdomsatwar.registry.ModSounds;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -268,6 +270,104 @@ public final class RockAttacks {
         public void stop(ServerLevel level, DragonBossEntity boss) {
             this.cracks.clear();
             this.hit.clear();
+        }
+    }
+
+    // =====================================================================================
+    // Steinfäuste (seit 1.13)
+    // =====================================================================================
+
+    /**
+     * Steinfäuste: Terragon schlägt mit beiden Pranken auf den Boden – unter jedem Gegner glimmt ein Kreis auf, und einen
+     * Herzschlag später schlägt dort eine Faust aus Stein empor, die hoch in die Luft schleudert. Zwei Wellen, ab der zweiten
+     * Phase drei; jede zielt ein Stück dorthin, wohin man gerade läuft. Wer den Kreis sieht und zur Seite tritt, bleibt
+     * unversehrt.
+     */
+    public static final class StoneFists extends BossAttack {
+        static final int[] WAVES = {14, 38, 62};
+        static final int WARN = 18;
+        static final double REACH = 2.3;
+        private final float damage;
+        private final List<Fist> fists = new ArrayList<>();
+
+        private record Fist(Vec3 pos, int born) {}
+
+        public StoneFists(float damage) {
+            super(BossAnims.ERUPT, "stone_fists");
+            this.damage = damage;
+        }
+
+        @Override
+        public int duration() {
+            return WAVES[WAVES.length - 1] + WARN + 10;
+        }
+
+        @Override
+        public int cooldown() {
+            return 280;
+        }
+
+        @Override
+        public Where where() {
+            return Where.ANY;
+        }
+
+        @Override
+        public float weight(DragonBossEntity boss, LivingEntity target, double distance, float angle) {
+            return distance > 5.0 ? 7 : 3;
+        }
+
+        @Override
+        public void start(ServerLevel level, DragonBossEntity boss, LivingEntity target) {
+            this.fists.clear();
+        }
+
+        @Override
+        public void tick(ServerLevel level, DragonBossEntity boss, LivingEntity target, int tick) {
+            int waves = boss.getPhase() >= 2 ? 3 : 2;
+            for (int w = 0; w < waves; w++) {
+                if (tick != WAVES[w]) {
+                    continue;
+                }
+                int i = 0;
+                for (LivingEntity e : boss.enemiesAround(BossFx.arena(boss), DragonBossEntity.ARENA_RADIUS + 6.0, 40)) {
+                    if (i++ >= 4) {
+                        break;
+                    }
+                    Vec3 lead = e.getDeltaMovement().multiply(1.0, 0.0, 1.0).scale(9.0);
+                    Vec3 spot = BossFx.ground(boss, e.getX() + lead.x, e.getZ() + lead.z);
+                    this.fists.add(new Fist(spot, tick));
+                    SpellFxEntity.create(level, SpellFxEntity.Kind.CIRCLE, spot.add(0.0, 0.02, 0.0), DragonType.EARTH, WARN, (float) REACH)
+                            .spawn();
+                }
+                BossFx.sound(level, boss.position(), SoundEvents.GENERIC_EXPLODE.value(), 3.0f, 0.4f);
+                boss.shake(level, 40, 0.4f, 12);
+                BossFx.groundDust(level, boss.position(), 5.0, 40);
+            }
+            for (Fist fist : this.fists) {
+                int age = tick - fist.born();
+                if (age > 0 && age < WARN && age % 3 == 0) {
+                    level.sendParticles(CRACK, fist.pos().x, fist.pos().y + 0.1, fist.pos().z, 4, 0.9, 0.02, 0.9, 0.0);
+                    level.sendParticles(DUST, fist.pos().x, fist.pos().y + 0.2, fist.pos().z, 3, 0.8, 0.05, 0.8, 0.0);
+                }
+                if (age != WARN) {
+                    continue;
+                }
+                float yaw = (float) (Mth.atan2(boss.getZ() - fist.pos().z, boss.getX() - fist.pos().x) * Mth.RAD_TO_DEG) - 90.0f;
+                SpellFxEntity.create(level, SpellFxEntity.Kind.FIST, fist.pos(), DragonType.EARTH, 34, 2.0f).facing(yaw + 180.0f).spawn();
+                BossFx.sound(level, fist.pos(), SoundEvents.GENERIC_EXPLODE.value(), 3.0f, 0.55f);
+                BossFx.sound(level, fist.pos(), SoundEvents.ANVIL_LAND, 1.6f, 0.45f);
+                BossFx.groundDust(level, fist.pos(), 2.5, 30);
+                for (LivingEntity e : boss.enemiesAround(fist.pos(), REACH + 0.6, 4.0)) {
+                    if (e.getY() - fist.pos().y > 3.0) {
+                        continue;
+                    }
+                    boss.hurtTarget(level, e, this.damage);
+                    e.setDeltaMovement(e.getDeltaMovement().x * 0.3, 1.2, e.getDeltaMovement().z * 0.3);
+                    e.needsSync = true;
+                    e.addEffect(new net.minecraft.world.effect.MobEffectInstance(MobEffects.NAUSEA, 60, 0, false, false, true), boss);
+                }
+            }
         }
     }
 }

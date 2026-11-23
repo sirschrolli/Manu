@@ -11,6 +11,7 @@ import io.github.sirschrolli.kingdomsatwar.registry.ModSounds;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.core.particles.ColorParticleOption;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -668,6 +669,137 @@ public final class ShadowAttacks {
             BossFx.ring(level, ModParticles.BOSS_SHADOW.get(), impact, 2.6, 14, 0.2);
             Vec3 from = impact.add(2 * (boss.getRandom().nextDouble() - 0.5), 28, 2 * (boss.getRandom().nextDouble() - 0.5));
             BossProjectile.shoot(level, boss, BossProjectile.Kind.SOUL_BOLT, from, impact.subtract(from).normalize(), 1.05, this.damage);
+        }
+    }
+
+    // =====================================================================================
+    // Seelenfesseln (seit 1.13)
+    // =====================================================================================
+
+    /** Die Ketten der Seelenfesseln: tiefes Violett und ein fahles Seelenblau. */
+    private static final DustParticleOptions CHAIN = new DustParticleOptions(0x4A1A7A, 1.3f);
+    private static final DustParticleOptions CHAIN_GLOW = new DustParticleOptions(0x8FE3FF, 0.9f);
+
+    /**
+     * Seelenfesseln: Nyxar breitet die Schwingen aus und kreischt – aus seiner Brust schnellen Ketten aus Schatten zu bis zu
+     * vier Gegnern, die er sieht. Gefesselt wird man langsam zu ihm gezogen; wer sich hinter eine Säule rettet oder weit genug
+     * davonläuft, zerreißt die Kette. Wer am Ende noch gefesselt ist, dem reißt er ein Stück der Seele heraus (Schaden,
+     * Verdorren, Dunkelheit).
+     */
+    public static final class SoulChains extends BossAttack {
+        static final int WINDUP = 16;
+        static final int HOLD = 50;
+        static final double RANGE = 22.0;
+        static final double BREAK = 26.0;
+        private final float damage;
+        private final List<LivingEntity> chained = new ArrayList<>();
+
+        public SoulChains(float damage) {
+            super(BossAnims.ROAR, "soul_chains");
+            this.damage = damage;
+        }
+
+        @Override
+        public int duration() {
+            return WINDUP + HOLD + 10;
+        }
+
+        @Override
+        public int cooldown() {
+            return 320;
+        }
+
+        @Override
+        public Where where() {
+            return Where.ANY;
+        }
+
+        @Override
+        public float weight(DragonBossEntity boss, LivingEntity target, double distance, float angle) {
+            return distance > 6.0 && distance < RANGE ? 6 : 2;
+        }
+
+        @Override
+        public void start(ServerLevel level, DragonBossEntity boss, LivingEntity target) {
+            this.chained.clear();
+        }
+
+        private static Vec3 chest(DragonBossEntity boss) {
+            return boss.position().add(0.0, boss.getBbHeight() * 0.55, 0.0)
+                    .add(Vec3.directionFromRotation(0.0f, boss.yBodyRot).scale(boss.getBbWidth() * 0.35));
+        }
+
+        @Override
+        public void tick(ServerLevel level, DragonBossEntity boss, LivingEntity target, int tick) {
+            Vec3 chest = chest(boss);
+            if (tick < WINDUP) {
+                // Schatten sammeln sich an seiner Brust
+                level.sendParticles(CHAIN, chest.x, chest.y, chest.z, 6, 1.2, 1.2, 1.2, 0.0);
+                level.sendParticles(ParticleTypes.SOUL, chest.x, chest.y, chest.z, 2, 1.0, 1.0, 1.0, 0.02);
+                if (tick == 2) {
+                    BossFx.sound(level, chest, SoundEvents.SCULK_SHRIEKER_SHRIEK, 5.0f, 0.6f);
+                }
+                return;
+            }
+            if (tick == WINDUP) {
+                for (LivingEntity e : boss.enemiesAround(boss.position(), RANGE, 16.0)) {
+                    if (this.chained.size() >= 4) {
+                        break;
+                    }
+                    if (boss.hasLineOfSight(e)) {
+                        this.chained.add(e);
+                        BossFx.line(level, CHAIN_GLOW, chest, e.getEyePosition(), 0.4, 0.05);
+                        BossFx.sound(level, e.position(), SoundEvents.CHAIN_PLACE, 3.0f, 0.6f);
+                    }
+                }
+                BossFx.sound(level, chest, SoundEvents.WARDEN_SONIC_CHARGE, 4.0f, 0.8f);
+                return;
+            }
+            int held = tick - WINDUP;
+            if (held < HOLD) {
+                for (int i = this.chained.size() - 1; i >= 0; i--) {
+                    LivingEntity e = this.chained.get(i);
+                    boolean broken = !e.isAlive() || e.distanceTo(boss) > BREAK || held % 4 == 0 && !boss.hasLineOfSight(e);
+                    if (broken) {
+                        // die Kette zerreißt
+                        this.chained.remove(i);
+                        level.sendParticles(CHAIN_GLOW, e.getX(), e.getY(0.6), e.getZ(), 20, 0.4, 0.4, 0.4, 0.05);
+                        BossFx.sound(level, e.position(), SoundEvents.CHAIN_BREAK, 3.0f, 0.7f);
+                        continue;
+                    }
+                    if (held % 2 == 0) {
+                        BossFx.line(level, CHAIN, chest, e.position().add(0.0, e.getBbHeight() * 0.6, 0.0), 0.55, 0.06);
+                        Vec3 glint = chest.lerp(e.position().add(0.0, e.getBbHeight() * 0.6, 0.0), (held % 10) / 10.0);
+                        level.sendParticles(ParticleTypes.SOUL, glint.x, glint.y, glint.z, 1, 0.05, 0.05, 0.05, 0.0);
+                    }
+                    // langsam heran
+                    Vec3 pull = boss.position().subtract(e.position()).multiply(1.0, 0.0, 1.0);
+                    if (pull.lengthSqr() > 1.0e-4) {
+                        pull = pull.normalize().scale(0.055);
+                        e.push(pull.x, 0.0, pull.z);
+                        e.needsSync = true;
+                    }
+                    e.addEffect(BossEffects.debuff(MobEffects.SLOWNESS, 10, 1));
+                }
+                if (held % 10 == 0 && !this.chained.isEmpty()) {
+                    BossFx.sound(level, chest, SoundEvents.CHAIN_STEP, 2.5f, 0.5f);
+                }
+                return;
+            }
+            if (held == HOLD) {
+                for (LivingEntity e : this.chained) {
+                    boss.hurtTarget(level, e, this.damage);
+                    BossEffects.wither(e, 4);
+                    e.addEffect(BossEffects.debuff(MobEffects.DARKNESS, 80, 0));
+                    BossFx.line(level, ParticleTypes.SOUL, e.position().add(0.0, e.getBbHeight() * 0.6, 0.0), chest, 0.35, 0.1);
+                    level.sendParticles(ParticleTypes.SCULK_SOUL, e.getX(), e.getY(0.6), e.getZ(), 8, 0.3, 0.3, 0.3, 0.05);
+                }
+                if (!this.chained.isEmpty()) {
+                    BossFx.sound(level, chest, SoundEvents.SOUL_ESCAPE.value(), 5.0f, 0.6f);
+                    BossFx.sound(level, chest, ModSounds.DRAGON_ROAR.get(), 4.0f, 0.8f);
+                }
+                this.chained.clear();
+            }
         }
     }
 }
