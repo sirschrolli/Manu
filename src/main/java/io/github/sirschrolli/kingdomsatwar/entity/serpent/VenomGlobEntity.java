@@ -22,12 +22,22 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * Ein Klumpen Gift, den Quetzara spuckt (seit 1.10): Er fliegt im Bogen und zerplatzt beim Aufschlag zu einer Giftwolke; wen
- * er unmittelbar trifft, den trifft er hart und vergiftet ihn.
+ * er unmittelbar trifft, den trifft er hart und vergiftet ihn. Die Tropfen ihres Giftregens (seit 1.13) treffen schwächer und
+ * hinterlassen kleinere, kürzere Wolken.
  */
 public class VenomGlobEntity extends ThrowableProjectile {
     public static final float DAMAGE = 7.0f;
     public static final float CLOUD_RADIUS = 2.6f;
     public static final int CLOUD_TICKS = 120;
+    public static final float DROP_DAMAGE = 5.0f;
+    public static final float DROP_CLOUD_RADIUS = 1.6f;
+    public static final int DROP_CLOUD_TICKS = 70;
+    /** Schwerkraft und Luftwiderstand je Tick (so fliegt er; der Giftregen zielt damit). */
+    public static final double GRAVITY = 0.035;
+    public static final double DRAG = 0.99;
+
+    /** Ein Tropfen des Giftregens (nur auf dem Server bekannt; er sieht aus wie ein Klumpen). */
+    private boolean drop;
 
     public VenomGlobEntity(EntityType<? extends VenomGlobEntity> type, Level level) {
         super(type, level);
@@ -38,13 +48,19 @@ public class VenomGlobEntity extends ThrowableProjectile {
         this.setOwner(owner);
     }
 
+    /** Macht ihn zu einem Tropfen des Giftregens. */
+    public VenomGlobEntity asDrop() {
+        this.drop = true;
+        return this;
+    }
+
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
     }
 
     @Override
     protected double getDefaultGravity() {
-        return 0.035;
+        return GRAVITY;
     }
 
     @Override
@@ -74,7 +90,8 @@ public class VenomGlobEntity extends ThrowableProjectile {
         super.onHitEntity(result);
         if (this.level() instanceof ServerLevel level) {
             Entity owner = this.getOwner();
-            if (result.getEntity().hurtServer(level, this.damageSources().mobProjectile(this, owner instanceof LivingEntity living ? living : null), DAMAGE)
+            if (result.getEntity().hurtServer(level, this.damageSources().mobProjectile(this, owner instanceof LivingEntity living ? living : null),
+                    this.drop ? DROP_DAMAGE : DAMAGE)
                     && result.getEntity() instanceof LivingEntity victim) {
                 SerpentFangItem.poison(victim, owner, 1, 100);
             }
@@ -85,22 +102,32 @@ public class VenomGlobEntity extends ThrowableProjectile {
     protected void onHit(HitResult result) {
         super.onHit(result);
         if (this.level() instanceof ServerLevel level && !this.isRemoved()) {
-            splash(level, result.getLocation(), this.getOwner() instanceof LivingEntity living ? living : null);
+            LivingEntity owner = this.getOwner() instanceof LivingEntity living ? living : null;
+            if (this.drop) {
+                splash(level, result.getLocation(), owner, DROP_CLOUD_RADIUS, DROP_CLOUD_TICKS);
+            } else {
+                splash(level, result.getLocation(), owner);
+            }
             this.discard();
         }
     }
 
     /** Die Giftwolke: Wer darin steht, wird vergiftet; sie schrumpft und verweht nach sechs Sekunden. */
     public static void splash(ServerLevel level, Vec3 at, @Nullable LivingEntity owner) {
+        splash(level, at, owner, CLOUD_RADIUS, CLOUD_TICKS);
+    }
+
+    /** Eine Giftwolke dieser Größe und Dauer (sie schrumpft auf die Hälfte). */
+    public static void splash(ServerLevel level, Vec3 at, @Nullable LivingEntity owner, float radius, int ticks) {
         AreaEffectCloud cloud = new AreaEffectCloud(level, at.x, at.y, at.z);
         if (owner != null) {
             cloud.setOwner(owner);
         }
-        cloud.setRadius(CLOUD_RADIUS);
+        cloud.setRadius(radius);
         cloud.setRadiusOnUse(0.0f);
         cloud.setWaitTime(0);
-        cloud.setDuration(CLOUD_TICKS);
-        cloud.setRadiusPerTick(-CLOUD_RADIUS * 0.5f / CLOUD_TICKS);
+        cloud.setDuration(ticks);
+        cloud.setRadiusPerTick(-radius * 0.5f / ticks);
         cloud.setCustomParticle(new DustParticleOptions(QuetzaraEntity.VENOM, 1.2f));
         cloud.addEffect(new MobEffectInstance(MobEffects.POISON, 80, 1));
         level.addFreshEntity(cloud);

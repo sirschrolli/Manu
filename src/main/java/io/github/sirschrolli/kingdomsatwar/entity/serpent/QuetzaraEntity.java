@@ -4,6 +4,7 @@ import io.github.sirschrolli.kingdomsatwar.block.serpent.SerpentAltarBlockEntity
 import io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden;
 import io.github.sirschrolli.kingdomsatwar.item.serpent.SerpentFangItem;
+import io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity;
 import io.github.sirschrolli.kingdomsatwar.registry.ModSounds;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -75,6 +76,9 @@ import org.jspecify.annotations.Nullable;
  *     <li><b>Schwanzpeitsche</b> – wer hinter ihr steht, den fegt der Schwanz davon.</li>
  *     <li><b>Federsturm</b> – hoch aufgerichtet spreizt sie die Krause und schleudert Fächer aus vergifteten Federn.</li>
  *     <li><b>Giftspucke</b> – ein Klumpen Gift im Bogen, der zu einer Giftwolke zerplatzt.</li>
+ *     <li><b>Giftregen</b> (seit 1.13) – sie bäumt sich auf, wirft den Kopf in den Nacken und speit eine Fontäne: Die Tropfen
+ *     steigen hoch auf und regnen auf grüne Warnkreise nieder – einer genau dorthin, wo ihr Gegner steht, die anderen ringsum.
+ *     Jeder zerplatzt zu einer kleinen Giftwolke (wer getroffen wird, nimmt Schaden und wird vergiftet).</li>
  *     <li><b>Häutung</b> – unter halber Kraft streift sie ihre Haut ab: Die leere Haut bleibt als <b>Täuschung</b> liegen
  *     (sie zischt, und wer sie trifft, dem platzt sie als Giftwolke entgegen), während die Schlange selbst getarnt davongleitet
  *     und aus dem Hinterhalt zubeißt. Danach leuchtet ihr neues Schuppenkleid, und sie ist schneller und giftiger.</li>
@@ -140,6 +144,14 @@ public class QuetzaraEntity extends Monster implements SkyWarden, io.github.sirs
     public static final int[] FEATHER_VOLLEYS = {20, 30, 40, 50};
     public static final int SPIT_RELEASE = 14;
     public static final int MOLT_SPLIT = 34;
+    /** Giftregen: so viele Tropfen (gehäutet {@link #RAIN_DROPS_MOLTED}), in diesen Schüben (Ticks) … */
+    public static final int RAIN_DROPS = 8;
+    public static final int RAIN_DROPS_MOLTED = 12;
+    public static final int[] RAIN_BURSTS = {14, 17, 20, 23};
+    /** … höchstens so hoch über der Schnauze (unter einer Decke niedriger) … */
+    public static final double RAIN_APEX = 7.0;
+    /** … auf Warnkreise dieses Halbmessers. */
+    public static final float RAIN_MARK = 1.5f;
     /** So lange bleibt sie nach der Häutung getarnt (oder bis sie zubeißt). */
     public static final int CAMO_TICKS = 140;
     /** Wie viel härter ihr Kopf getroffen wird, solange sie benommen ist. */
@@ -156,7 +168,8 @@ public class QuetzaraEntity extends Monster implements SkyWarden, io.github.sirs
     }
 
     public enum Attack {
-        NONE(0), SLEEP(0), AWAKEN(AWAKEN_TICKS), BITE(34), SPIT(36), FEATHERS(66), WHIP(38), CONSTRICT(220), MOLT(84), STUN(44), RETURN(0);
+        NONE(0), SLEEP(0), AWAKEN(AWAKEN_TICKS), BITE(34), SPIT(36), FEATHERS(66), WHIP(38), CONSTRICT(220), MOLT(84), STUN(44), RETURN(0),
+        RAIN(44);
 
         public final int duration;
 
@@ -224,6 +237,8 @@ public class QuetzaraEntity extends Monster implements SkyWarden, io.github.sirs
     private boolean ambush;
     private final List<UUID> skins = new ArrayList<>();
     private Vec3 moltGoal = Vec3.ZERO;
+    /** Giftregen: wohin die Tropfen fallen. */
+    private final List<Vec3> rainSpots = new ArrayList<>();
     private int clientAttackStart;
     private int sleepSeen;
     private int layoutSeen = -1;
@@ -1025,6 +1040,7 @@ public class QuetzaraEntity extends Monster implements SkyWarden, io.github.sirs
         switch (this.attack) {
             case BITE -> this.tickBite(level, target);
             case SPIT -> this.tickSpit(level, target);
+            case RAIN -> this.tickRain(level, target);
             case FEATHERS -> this.tickFeathers(level, target);
             case WHIP -> this.tickWhip(level);
             case CONSTRICT -> this.tickConstrict(level);
@@ -1182,12 +1198,12 @@ public class QuetzaraEntity extends Monster implements SkyWarden, io.github.sirs
             }
             options.add(Attack.SPIT);
         } else if (distance < 9.0) {
-            options.addAll(List.of(Attack.BITE, Attack.BITE, Attack.SPIT, Attack.FEATHERS));
+            options.addAll(List.of(Attack.BITE, Attack.BITE, Attack.SPIT, Attack.FEATHERS, Attack.RAIN));
             if (coil && distance < 6.5) {
                 options.add(Attack.CONSTRICT);
             }
         } else {
-            options.addAll(List.of(Attack.SPIT, Attack.SPIT, Attack.FEATHERS, Attack.FEATHERS));
+            options.addAll(List.of(Attack.SPIT, Attack.SPIT, Attack.FEATHERS, Attack.FEATHERS, Attack.RAIN, Attack.RAIN));
             if (storm) {
                 options.add(Attack.FEATHERS);
             }
@@ -1385,6 +1401,171 @@ public class QuetzaraEntity extends Monster implements SkyWarden, io.github.sirs
         if (t == SPIT_RELEASE + 6) {
             this.pose(1.6f, 0.35f, 0.0f);
         }
+    }
+
+    // ------------------------------------------------------------------ Giftregen
+
+    /**
+     * Giftregen: Sie bäumt sich hoch auf, wirft den Kopf in den Nacken und speit in vier Schüben eine Fontäne aus Gift. Die
+     * Tropfen steigen in hohem Bogen auf (unter einer Decke nicht bis an sie heran) und fallen jeder genau in seinen grünen
+     * Warnkreis, der sich füllt, bis der Tropfen aufschlägt.
+     */
+    private void tickRain(ServerLevel level, @Nullable LivingEntity target) {
+        int t = this.attackTick;
+        int last = RAIN_BURSTS[RAIN_BURSTS.length - 1];
+        if (t == 1) {
+            this.pose(4.6f, 1.0f, 0.3f);
+            this.sound(level, ModSounds.QUETZARA_RATTLE.get(), 2.6f, 0.8f);
+        }
+        if (target != null && t < RAIN_BURSTS[0]) {
+            this.faceBody(this.toward(target.position()));
+        }
+        if (t < last + 4) {
+            // der Kopf im Nacken, der Blick steil empor
+            this.lookAt(this.jointNow.add(this.bodyDir().scale(2.0)).add(0.0, 8.0, 0.0), 12.0f);
+        }
+        if (t == RAIN_BURSTS[0]) {
+            this.pose(4.8f, 1.0f, 1.0f);
+            this.planRain(level, target);
+        }
+        for (int b = 0; b < RAIN_BURSTS.length; b++) {
+            if (t != RAIN_BURSTS[b]) {
+                continue;
+            }
+            this.sound(level, ModSounds.QUETZARA_SPIT.get(), 2.2f, 0.8f + b * 0.1f);
+            for (int i = b; i < this.rainSpots.size(); i += RAIN_BURSTS.length) {
+                this.launchDrop(level, this.rainSpots.get(i));
+            }
+        }
+        if (t == last + 6) {
+            this.pose(1.6f, 0.35f, 0.0f);
+        }
+    }
+
+    /**
+     * Wohin der Giftregen fällt: je Gegner (die nächsten drei, ihr Ziel zuerst) ein Tropfen genau auf ihn, die übrigen auf
+     * einem Kranz um sie (reihum verteilt, im goldenen Winkel versetzt).
+     */
+    private void planRain(ServerLevel level, @Nullable LivingEntity target) {
+        this.rainSpots.clear();
+        List<LivingEntity> marks = new ArrayList<>(level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(24.0, 10.0, 24.0),
+                e -> this.canStrike(e) && this.inArena(e)));
+        marks.sort((a, b) -> Double.compare(a.distanceToSqr(this), b.distanceToSqr(this)));
+        if (target != null && marks.remove(target)) {
+            marks.addFirst(target);
+        }
+        if (marks.isEmpty()) {
+            return;
+        }
+        List<LivingEntity> chosen = marks.subList(0, Math.min(3, marks.size()));
+        int drops = this.isMolted() ? RAIN_DROPS_MOLTED : RAIN_DROPS;
+        for (LivingEntity e : chosen) {
+            this.rainSpots.add(ground(level, e.position()));
+        }
+        double turn = this.random.nextDouble() * Math.PI * 2.0;
+        for (int i = chosen.size(); i < drops; i++) {
+            LivingEntity around = chosen.get(i % chosen.size());
+            double a = turn + i * 2.39996;
+            double r = 2.6 + this.random.nextDouble() * 2.4;
+            this.rainSpots.add(ground(level, around.position().add(Math.cos(a) * r, 0.0, Math.sin(a) * r)));
+        }
+    }
+
+    /** Ein Tropfen des Giftregens: aus dem Maul in hohem Bogen genau auf {@code spot}; dort füllt sich ein Warnkreis. */
+    private void launchDrop(ServerLevel level, Vec3 spot) {
+        Vec3 from = this.snout().add((this.random.nextDouble() - 0.5) * 0.4, 0.2, (this.random.nextDouble() - 0.5) * 0.4);
+        double apex = Math.min(Math.max(RAIN_APEX, spot.y - from.y + 2.0), headroom(level, from));
+        Lob lob = lob(from, spot, apex);
+        VenomGlobEntity drop = new VenomGlobEntity(level, this).asDrop();
+        drop.setPos(from.x, from.y, from.z);
+        drop.setDeltaMovement(lob.velocity());
+        level.addFreshEntity(drop);
+        SpellFxEntity.create(level, SpellFxEntity.Kind.CIRCLE, spot.add(0.0, 0.05, 0.0), null, VENOM, lob.ticks() + 2, RAIN_MARK).spawn();
+        level.sendParticles(new DustParticleOptions(VENOM, 1.3f), from.x, from.y, from.z, 6, 0.2, 0.2, 0.2, 0.0);
+    }
+
+    /** Für Tests: wohin der letzte Giftregen fiel. */
+    public List<Vec3> rainSpots() {
+        return List.copyOf(this.rainSpots);
+    }
+
+    /** Ein Bogenwurf: Abschussgeschwindigkeit und Flugzeit (Ticks) eines Gifttropfens. */
+    public record Lob(Vec3 velocity, int ticks) {
+    }
+
+    /**
+     * Der Bogen, mit dem ein Gifttropfen (Schwerkraft und Luftwiderstand wie {@link VenomGlobEntity}) von {@code from} genau auf
+     * {@code to} fällt und dabei höchstens {@code apex} über den Start steigt: Die Steiggeschwindigkeit ergibt die Gipfelhöhe,
+     * daraus die Flugzeit bis zum Fall auf die Zielhöhe, daraus die Geschwindigkeit zur Seite (beides Tick für Tick
+     * ausgezählt, genau wie der Tropfen fliegt).
+     */
+    public static Lob lob(Vec3 from, Vec3 to, double apex) {
+        double g = VenomGlobEntity.GRAVITY;
+        double drag = VenomGlobEntity.DRAG;
+        double vy = 0.05;
+        for (double v = 0.05; v < 2.0; v += 0.01) {
+            if (peak(v, g, drag) > apex) {
+                break;
+            }
+            vy = v;
+        }
+        double dy = to.y - from.y;
+        double y = 0.0;
+        double v = vy;
+        double reach = 0.0;
+        double f = 1.0;
+        int n = 0;
+        while (n < 200) {
+            v = (v - g) * drag;
+            y += v;
+            f *= drag;
+            reach += f;
+            n++;
+            if (v < 0.0 && y <= dy) {
+                break;
+            }
+        }
+        return new Lob(new Vec3((to.x - from.x) / reach, vy, (to.z - from.z) / reach), n);
+    }
+
+    /** Wie hoch ein Tropfen mit dieser Steiggeschwindigkeit kommt. */
+    private static double peak(double vy, double g, double drag) {
+        double y = 0.0;
+        double v = vy;
+        for (int i = 0; i < 400; i++) {
+            v = (v - g) * drag;
+            if (v <= 0.0) {
+                break;
+            }
+            y += v;
+        }
+        return y;
+    }
+
+    /** Wie viel Platz über {@code from} ist (bis zur nächsten Decke, höchstens zwölf Blöcke). */
+    private static double headroom(ServerLevel level, Vec3 from) {
+        BlockPos.MutableBlockPos m = BlockPos.containing(from).mutable();
+        for (int i = 1; i <= 12; i++) {
+            m.move(0, 1, 0);
+            if (!level.getBlockState(m).getCollisionShape(level, m).isEmpty()) {
+                return Math.max(1.0, m.getY() - from.y - 1.2);
+            }
+        }
+        return 12.0;
+    }
+
+    /** Der Boden bei {@code p}: die Oberkante des ersten festen Blocks von drei Blöcken darüber bis sechs darunter. */
+    private static Vec3 ground(ServerLevel level, Vec3 p) {
+        BlockPos.MutableBlockPos m = BlockPos.containing(p.x, p.y + 3.0, p.z).mutable();
+        for (int i = 0; i < 10; i++) {
+            BlockPos below = m.below();
+            var shape = level.getBlockState(below).getCollisionShape(level, below);
+            if (!shape.isEmpty() && level.getBlockState(m).getCollisionShape(level, m).isEmpty()) {
+                return new Vec3(p.x, below.getY() + shape.max(Direction.Axis.Y), p.z);
+            }
+            m.move(0, -1, 0);
+        }
+        return p;
     }
 
     // ------------------------------------------------------------------ Federsturm

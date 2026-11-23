@@ -343,10 +343,43 @@ final class QuetzaraGameTests {
                 step(helper, serpent, knight, spot, 9.0, hp, QuetzaraEntity.Attack.FEATHERS, QuetzaraEntity.FEATHER_VOLLEYS[2] + 16,
                         "Der Federsturm", tidy, feathers -> {
                             helper.assertTrue(poisoned(knight, 0), "Die Federn vergiften nicht");
-                            whip(helper, level, serpent, knight, spot, hp, tidy);
+                            rain(helper, level, serpent, knight, spot, hp, area, tidy, () -> whip(helper, level, serpent, knight, spot, hp, tidy));
                         });
             }));
         });
+    }
+
+    /**
+     * Der Giftregen: Ein Warnkreis liegt genau unter dem Ritter, die übrigen ringsum; alle Tropfen steigen auf und fallen jeder
+     * in seinen Kreis (dort steht danach eine kleine Giftwolke). Der Ritter, der stehen bleibt, wird getroffen und vergiftet.
+     */
+    private static void rain(GameTestHelper helper, ServerLevel level, QuetzaraEntity serpent, LivingEntity knight, Vec3 spot, float[] hp,
+            AABB area, Runnable tidy, Runnable then) {
+        place(serpent, knight, spot, 10.0, hp, QuetzaraEntity.Attack.RAIN);
+        int last = QuetzaraEntity.RAIN_BURSTS[QuetzaraEntity.RAIN_BURSTS.length - 1];
+        helper.runAfterDelay(QuetzaraEntity.RAIN_BURSTS[0] + 1, () -> tidyOnFailure(tidy, () -> {
+            List<Vec3> spots = serpent.rainSpots();
+            helper.assertTrue(spots.size() == QuetzaraEntity.RAIN_DROPS, "Der Giftregen plant nicht " + QuetzaraEntity.RAIN_DROPS
+                    + " Tropfen: " + spots.size());
+            Vec3 first = spots.getFirst();
+            helper.assertTrue(Math.hypot(first.x - knight.getX(), first.z - knight.getZ()) < 0.6 && Math.abs(first.y - knight.getY()) < 0.6,
+                    "Kein Warnkreis unter dem Ritter: " + first + " / " + knight.position());
+        }));
+        helper.runAfterDelay(last + 1, () -> tidyOnFailure(tidy, () -> {
+            int drops = level.getEntitiesOfClass(VenomGlobEntity.class, area).size();
+            helper.assertTrue(drops == QuetzaraEntity.RAIN_DROPS, "Es fliegen nicht " + QuetzaraEntity.RAIN_DROPS + " Tropfen: " + drops);
+        }));
+        helper.runAfterDelay(last + 58, () -> tidyOnFailure(tidy, () -> {
+            helper.assertTrue(level.getEntitiesOfClass(VenomGlobEntity.class, area).isEmpty(), "Es fliegen noch Tropfen");
+            List<AreaEffectCloud> clouds = level.getEntitiesOfClass(AreaEffectCloud.class, area);
+            for (Vec3 p : serpent.rainSpots()) {
+                double best = clouds.stream().mapToDouble(c -> Math.hypot(c.getX() - p.x, c.getZ() - p.z)).min().orElse(99.0);
+                helper.assertTrue(best < 1.2, "Ein Tropfen fällt nicht in seinen Kreis (" + fmt(best) + " daneben)");
+            }
+            helper.assertTrue(knight.getHealth() < hp[0], "Der Giftregen trifft den Ritter nicht");
+            helper.assertTrue(poisoned(knight, 0), "Der Giftregen vergiftet nicht");
+            then.run();
+        }));
     }
 
     /** Die Schwanzpeitsche: Der Ritter steht neben dem Schwanz – der Hieb fegt ihn fort. */
