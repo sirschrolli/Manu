@@ -119,7 +119,8 @@ public enum FuryElement {
             case SOUND -> SpellFxEntity.create(level, SpellFxEntity.Kind.ECHO, at.add(0.0, 0.05, 0.0), null, this.color, 14, 0.4f).param(0.25f).spawn();
             case VOID -> SpellFxEntity.create(level, SpellFxEntity.Kind.VORTEX, at.add(0.0, 0.6, 0.0), null, this.color, 14, size * 0.6f).spawn();
             case WIND -> SpellFxEntity.create(level, SpellFxEntity.Kind.SHOCKWAVE, at.add(0.0, 0.05, 0.0), null, this.color, 8, 0.4f).param(0.22f).spawn();
-            default -> SpellFxEntity.create(level, SpellFxEntity.Kind.PILLAR, at, null, this.color, 14, size).param(5.0f).spawn();
+            // Licht, Schatten, Gift: schlanke Säulen in der Farbe des Elements
+            default -> SpellFxEntity.create(level, SpellFxEntity.Kind.PILLAR, at, null, this.color, 14, size * 0.55f).param(6.0f).spawn();
         }
         level.sendParticles(this.particle(), at.x, at.y + 0.4, at.z, 16, size * 0.4, 0.4, size * 0.4, 0.06);
     }

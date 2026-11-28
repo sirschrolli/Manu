@@ -423,8 +423,12 @@ public final class Fury {
     private boolean pull(int t) {
         ServerLevel level = this.level();
         FuryElement e = this.element();
+        // das schwarze Loch schwebt über dem Boss
+        Vec3 hole = new Vec3(this.center.x, Math.min(this.boss.getY() + this.boss.getBbHeight() + 1.6, this.center.y + 6.0), this.center.z);
         if (t == 0) {
-            SpellFxEntity.create(level, SpellFxEntity.Kind.VORTEX, this.center.add(0.0, 1.2, 0.0), null, e.color(), PULL_BLAST, 2.6f).spawn();
+            SpellFxEntity.create(level, SpellFxEntity.Kind.VORTEX, hole, null, e.color(), PULL_BLAST, 2.4f).spawn();
+            // der Kreis am Boden zeigt, wie weit die Explosion reicht
+            this.castCircle((float) PULL_RADIUS, PULL_BLAST);
             this.sound(SoundEvents.WARDEN_SONIC_CHARGE, 2.5f, 0.6f);
         }
         if (t >= 6 && t < PULL_BLAST) {
@@ -439,12 +443,12 @@ public final class Fury {
                 victim.setDeltaMovement(victim.getDeltaMovement().add(pull));
                 victim.needsSync = true;
             }
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 6; i++) {
                 double a = this.random().nextDouble() * Mth.TWO_PI;
                 double r = 3.0 + this.random().nextDouble() * 9.0;
                 Vec3 p = this.center.add(Math.cos(a) * r, 0.3 + this.random().nextDouble() * 1.5, Math.sin(a) * r);
-                Vec3 v = this.center.subtract(p).normalize().scale(0.35);
-                level.sendParticles(e.particle(), p.x, p.y, p.z, 0, v.x, v.y * 0.2, v.z, 1.0);
+                Vec3 v = hole.subtract(p).normalize().scale(0.45);
+                level.sendParticles(i % 2 == 0 ? e.particle() : e.dust(1.0f), p.x, p.y, p.z, 0, v.x, v.y, v.z, 1.0);
             }
         }
         if (t == PULL_BLAST) {
@@ -529,34 +533,42 @@ public final class Fury {
             this.angle = this.random().nextDouble() * Mth.TWO_PI;
             this.castCircle(3.0f, SECTOR_A);
             this.sound(SoundEvents.WARDEN_SONIC_CHARGE, 1.8f, 1.5f);
+            this.sound(SoundEvents.WARDEN_DIG, 1.6f, 1.2f);
+            // Risse teilen den Boden in acht Felder
+            for (int k = 0; k < 8; k++) {
+                double a = this.angle + Math.PI / 4.0 * k;
+                Vec3 dir = new Vec3(Math.cos(a), 0.0, Math.sin(a));
+                SpellFxEntity.create(level, SpellFxEntity.Kind.FISSURE, this.center.add(dir.scale(1.6)).add(0.0, 0.03, 0.0), e.dragon(), e.color(),
+                        SECTOR_B + 6, 0.6f).param(2.0f).end(this.center.add(dir.scale(SECTOR_RADIUS))).spawn();
+            }
         }
         boolean phaseA = t < SECTOR_A + 2;
         int warnFrom = phaseA ? 0 : SECTOR_A + 2;
         int blast = phaseA ? SECTOR_A : SECTOR_B;
         if (t >= warnFrom && t < blast && t % 3 == 0) {
+            // die Felder, die gleich aufbrechen, glühen
             for (int s = phaseA ? 0 : 1; s < 8; s += 2) {
-                for (int i = 0; i < 10; i++) {
-                    double a = this.angle + Math.PI / 4.0 * (s + this.random().nextDouble());
+                for (int i = 0; i < 18; i++) {
+                    double a = this.angle + Math.PI / 4.0 * (s + 0.05 + this.random().nextDouble() * 0.9);
                     double r = 1.5 + Math.sqrt(this.random().nextDouble()) * (SECTOR_RADIUS - 1.5);
                     Vec3 p = this.center.add(Math.cos(a) * r, 0.15, Math.sin(a) * r);
-                    level.sendParticles(e.dust(1.1f), p.x, p.y, p.z, 1, 0.0, 0.02, 0.0, 0.0);
+                    level.sendParticles(e.dust(1.4f), p.x, p.y, p.z, 1, 0.0, 0.02, 0.0, 0.0);
                 }
-                // die Kanten des Felds
-                for (double r = 1.5; r < SECTOR_RADIUS; r += 1.2) {
-                    for (int edge = 0; edge < 2; edge++) {
-                        double a = this.angle + Math.PI / 4.0 * (s + edge);
-                        Vec3 p = this.center.add(Math.cos(a) * r, 0.12, Math.sin(a) * r);
-                        level.sendParticles(e.dust(0.8f), p.x, p.y, p.z, 1, 0.0, 0.0, 0.0, 0.0);
-                    }
+                if (t % 6 == 0) {
+                    double a = this.angle + Math.PI / 4.0 * (s + 0.5);
+                    double r = 3.0 + this.random().nextDouble() * (SECTOR_RADIUS - 5.0);
+                    Vec3 p = this.center.add(Math.cos(a) * r, 0.3, Math.sin(a) * r);
+                    level.sendParticles(e.particle(), p.x, p.y, p.z, 4, 1.0, 0.1, 1.0, 0.02);
                 }
             }
         }
         if (t == SECTOR_A || t == SECTOR_B) {
             int first = t == SECTOR_A ? 0 : 1;
             for (int s = first; s < 8; s += 2) {
-                for (int i = 0; i < 4; i++) {
-                    double a = this.angle + Math.PI / 4.0 * (s + 0.15 + this.random().nextDouble() * 0.7);
-                    double r = 2.5 + this.random().nextDouble() * (SECTOR_RADIUS - 3.5);
+                for (int i = 0; i < 6; i++) {
+                    // gleichmäßig über das Feld: zwei innen, vier außen
+                    double a = this.angle + Math.PI / 4.0 * (s + (i < 2 ? 0.3 + 0.4 * i : 0.12 + 0.25 * (i - 2)));
+                    double r = i < 2 ? 3.5 + this.random().nextDouble() * 1.5 : 8.0 + this.random().nextDouble() * 3.5;
                     Vec3 g = ground(level, this.center.add(Math.cos(a) * r, 2.0, Math.sin(a) * r), 6);
                     if (g != null) {
                         e.impact(level, g, 1.1f);

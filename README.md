@@ -8,6 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
+> **1.14 – Kampfstile und der Zorn der Bosse.** Kein Kampf gleicht mehr dem anderen: Jedes angreifende Monster hat ein **eigenes Temperament** – ungestüm, lauernd, zäh, rasend oder (selten) ein Anführer – und **zwei bis vier besondere Angriffe** aus dem Können seiner Art; beides wird ausgewürfelt, wenn es in die Welt kommt, und so kämpfen zwei Wiedergänger fast nie gleich. Wiedergänger springen dich an, umklammern dich und schlagen den Boden, Gerippe schießen Salven und lange gezielte Schüsse, Spinnen speien Netze, Kriecher täuschen an und ziehen dich mit Ranken heran, Hexen werfen Tränke im Hagel und ziehen Fluchkreise, Schlächter wirbeln mit der Axt, Verwüster stürmen, Glutgeister legen Feuerringe – 31 Angriffe insgesamt, jeder mit eigener Haltung und eigenem Warnzeichen, und wer aufpasst, weicht aus. Die **Bosse** werden richtig ungemütlich: Jeder hat **zwei Zornangriffe** in seinem Element (Einschläge, Ringwellen, Risslinien, Sog, kreisende Strahlen, aufbrechende Bodenfelder), die neben seinen eigenen Angriffen herlaufen, und ab halber Kraft gerät er **in Zorn** – Wutausbruch, schneller und härter, die Zornangriffe kommen doppelt so oft, und dazu die **Vernichtung**, vor der nur Deckung hinter Blöcken schützt. Außerdem freigegeben: **Mouse Tweaks**, **uku's Armor HUD**, **Roughly Enough Items**, **SpruceUI**, **Zoomify**, **Swinging Lanterns**, **ShulkerBoxTooltip** und **LambDynamicLights** (mit Licht für die leuchtenden Gegenstände und Wesen der Mod).
 > **1.13 – Neue Angriffe für die Bosse.** Jeder Boss hat einen **weiteren eigenen Angriff** gelernt – mit eigener Haltung, eigenen Effekten und Klängen, und jeder lässt sich durchschauen: **Pyrrhon** schlägt **Flammensicheln** über den Boden (darüber springen), **Glaciara** dreht sich im **Eiswirbel** mit ihrem Frostodem einmal um sich selbst, **Voltarion** legt ein **Blitzgitter** über das Nest (zwischen den Linien ist man sicher), **Verdantis** lässt im Bogen **Rankenpeitschen** aus dem Boden brechen, unter **Terragons** Gegnern schlagen **Steinfäuste** empor, **Thalassa** schneidet mit der **Hydroklinge** quer über den Grund, und **Nyxar** fesselt bis zu vier Gegner mit **Seelenfesseln** und zieht sie heran (Deckung zerreißt sie). **Phasmor** starrt im **Leerenblick** – wer ihm in die Augen sieht, den trifft die Leere (wegsehen, hinter ihn treten oder einen Kürbis aufsetzen); **Quetzara** speit einen **Giftregen**, der genau in grüne Warnkreise fällt; der **Steinhüter** schließt dich in einen **Mondsteinkäfig** mit nur einer Lücke; **Sordin** lauscht dem **Nachhall** deiner Schritte – wo du standest, hallt es zurück; **Malleus** schlägt dreimal aufs Dach, und Felder wie auf einem Schachbrett brechen als **Glutrost** auf; **Ignara** zieht einen **Flammenkranz** um dich zusammen; **Noctua** lässt einen Strahl in einer **Mondlichtspirale** über den Boden wandern; und der **Zerbrochene König** steigt hoch über dich und stürzt im **Königssturz** hinein. Außerdem behoben: Ein Drache im Luftangriff des eigenen Heeres wechselt jetzt sein Ziel, statt immer denselben Gegner anzufliegen; das **Wurfnetz** der Gladiatoren hält sein Opfer fest, statt es fortzustoßen; die **Leerenrisse** des Zerbrochenen Königs laufen nicht mehr knapp am Ziel vorbei; der **Seelenreiher** verliert sein Ziel im Flug nicht mehr; Bebenringe von Feuer- und Wasserbossen sprühen jetzt Flammen und Gischt statt violetter Funken; und einige Prüfungen warten auf geladenes Land, statt zufällig zu scheitern.
 > **1.12.1 – Designs geprüft und repariert.** Alle Gegenstände, Mobs und Bosse wurden auf Bildtafeln durchgesehen – von vorn und hinten, im Gang, in jeder Spielart, als Jungtier, in der Hand und auf dem Kopf – und was fehlerhaft war, ist repariert: Die **Drachen** hatten im Flug lange, dünne Stacheln an den Schwingen (die Fingerknochen liefen über die Flughaut hinaus) – jetzt enden sie am Rand der Haut. **85 Mob- und Boss-Modelle flimmerten**, wo zwei Flächen in derselben Ebene lagen (Zierleisten, Abzeichen, Balken); der Modell-Erzeuger legt die kleinere jetzt knapp davor. Die Jungtiere von **Greif, Sturmmöwe, Flamingo, Glutsalamander und Moorschnapper** waren so groß wie ihre Eltern – jetzt sind sie halb so groß mit großem Kopf. Der **Moorschlurfer** wirft statt eines glatten Schlammblocks einen nassen, klumpigen **Schlammbatzen** mit Kieseln und Gras darin, der im Flug nachtropft. Beim **Aschengeist** ragte das Dunkel der Kapuze hinten als schwarzes Loch heraus, beim **Hasen** schwebten die Hinterpfoten, und **MissMystiks Zylinder** lag in der Hand als quer liegender Hut statt als Bild.
 > **Version 1.12 – Glanz und Ruhm.** Das **Levelsystem** zeigt jetzt immer, wofür du kämpfst: Im Charakterfenster steht unter deinen Werten das **nächste Ziel** – ein neuer Rang, eine Fähigkeit oder ein Titel – mit Bild, wie viele Stufen noch fehlen, einer Leiste bis dorthin und (unter der Maus) was es bringt und welche Ziele danach kommen. Die **Heldenleiste** über den Herzen bekam einen weichen dunklen Grund, das Abzeichen hüpft und glüht bei einer neuen Stufe, ein Schimmer läuft durch die Leiste, die neue Erfahrung federt herein, und ist ein Ziel nur noch drei Stufen entfernt, meldet sie es („Noch 2 Stufen: Rang Held“). Die **Aufstiegs-Szene** hat einen Schatten hinter den Zeilen (vor hellem Himmel war die Schrift blass), ein leuchtendes Band hinter einem neuen Rang und zum Schluss das nächste Ziel; bei vielen Zeilen rückt sie nach oben, statt in die Heldenleiste zu laufen, und der Lichtring am Boden fliegt dir nicht mehr als große weiße Flecken ins Bild. **Ruhm:** Deine **Heldenstufe steht vor deinem Namen** – über dem Kopf, im Chat und in der Spielerliste, in der Farbe deines Rangs („[47] Dev“) –, und einen neuen Rang erfahren alle Mitspieler. **Alle Fenster** gehen sanft auf, Knöpfe, Karten und Reiter blenden unter der Maus weich über, die Reiter der Stadt gleiten herein, und die **Tooltips** tragen den Stil ihres Fensters: nachtblau mit Goldrand bei Held und Magie, dunkles Leder mit Messingrand in den Pergament-Fenstern. Im Charakterfenster liefen „Alle Talentpunkte verteilt“ und „x von y verteilt“ nicht mehr ineinander. **Neu: der Wegkompass.** Den Kompass von Minecraft kann man nicht mehr herstellen – dafür den **Wegkompass** (Kupfer, Redstone und eine Goldöse) mit eigenem Aussehen: achteckiges Bronzegehäuse, schieferblaues Zifferblatt, türkise Nadel. Er merkt sich bis zu **acht Wegsteine**: Ein **Wegstein** (Steinziegel, Kupfer und Aetherit) ist ein kleiner Obelisk mit leuchtender Rune, über dem ein Kristall schwebt; mit dem Kompass anklicken, und er ist gemerkt. Ein Rechtsklick mit dem Kompass öffnet das **Kompassfenster** – acht Plätze mit Name, Entfernung und Himmelsrichtung (keine Koordinaten) und in der Mitte ein großes Zifferblatt, auf dem die Wegsteine als Edelsteine in ihrer Richtung sitzen. Ein Klick wählt das Ziel, und die Nadel schwingt dorthin (ohne Ziel zum Spawn). Wegsteine heißen nach ihrem Biom oder nach einem Namensschild, und ihr Name steht über ihnen, wenn man sie ansieht. Leere Karten gibt es jetzt aus neun Blatt Papier, den Bergungskompass und den Drachenkompass aus dem Wegkompass.
@@ -486,6 +487,9 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Wegkompass und Wegsteine** (seit 1.12): eigener Kompass statt des Kompasses von Minecraft, merkt sich bis zu acht Wegsteine, Kompassfenster mit Zifferblatt zur Wahl des Ziels | ✅ fertig |
 | **Designs geprüft** (seit 1.12.1): alle Gegenstände, Mobs und Bosse auf Bildtafeln durchgesehen (Ansichten, Gang, Spielarten, Jungtiere, Halten, Tragen); Drachenschwingen, flimmernde Flächen in 85 Modellen, Jungtiere, Schlammbatzen, Aschengeist, Hase und Zylinder repariert | ✅ fertig |
 | **Neue Angriffe der Bosse** (seit 1.13): Flammensicheln, Eiswirbel, Blitzgitter, Rankenpeitschen, Steinfäuste, Hydroklinge, Seelenfesseln, Leerenblick, Giftregen, Mondsteinkäfig, Nachhall, Glutrost, Flammenkranz, Mondlichtspirale und Königssturz – jeder mit Haltung, Effekten, Klängen und Prüfung | ✅ fertig |
+| **Kampfstile der Monster** (seit 1.14): fünf Temperamente und 31 besondere Angriffe; jedes Monster bekommt zwei bis vier davon aus dem Können seiner Art (ausgewürfelt und gespeichert), mit eigener Haltung, Warnzeichen, Klang und Teilchen | ✅ fertig |
+| **Zorn der Bosse** (seit 1.14): zwei Zornangriffe je Boss in seinem Element (91 Namen in sieben Arten und 13 Elementen), Zornphase ab halber Kraft mit Wutausbruch, doppelt so vielen Zornangriffen und der Vernichtung (nur Deckung schützt) | ✅ fertig |
+| **Weitere Mods freigegeben** (seit 1.14): Mouse Tweaks, uku's Armor HUD, Roughly Enough Items, SpruceUI, Zoomify, Swinging Lanterns, ShulkerBoxTooltip, LambDynamicLights (mit eigenen Lichtquellen) | ✅ fertig |
 
 ![Designs geprüft und repariert in 1.12.1: Drachenschwingen ohne Stacheln, Jungtiere in halber Größe, der Schlammbatzen des Moorschlurfers, Aschengeist, Hase und Zylinder – je vorher und nachher](docs/bilder/designs_1_12_1.jpg)
 
@@ -4062,6 +4066,73 @@ Fäuste steigen über sein Haupt) und eigene Klänge: ein saugender, immer schne
 Zusammensturz mit gewaltigem Schlag, das helle Zischen der Sicheln, Klauen, die über Stein schrammen, das Knistern der
 Risse, der Ausbruch der Leere und das Donnern des Bebens.
 
+### Der Zorn der Bosse (seit 1.14)
+
+![Der Zorn der Bosse aus 1.14: Meteorschauer, Felsspalten, Schallwellen, Mahlstrom, Klingenkreuz, Sternenfelder, das Inferno und der Wutausbruch](docs/bilder/zorn_1_14.jpg)
+
+Jeder Boss hat seit 1.14 **zwei Zornangriffe** in seinem Element. Sie laufen neben seinen eigenen Angriffen her – der
+Kampf wird dichter, und wer nur auf den Boss schaut, steht bald mitten im Einschlag. Nach etwa zehn Sekunden Kampf kommt
+der erste, danach alle 16 bis 23 Sekunden einer. Der Boss sagt jeden an (über der Schnellleiste, etwa
+„Malleus, der Glutschmied: Meteorschauer“), und jeder kündigt sich am Boden an:
+
+| Zornangriff | Was geschieht | Was hilft |
+|---|---|---|
+| **Einschläge** (Meteorschauer, Hagelsturm, Blitzgewitter, Steinhagel, Wolkenbruch, Sternenfall, Pfeilhagel …) | Warnkreise unter jedem Kämpfer und um ihn herum (auch dorthin, wohin er läuft) – gut eine Sekunde später schlägt es ein, acht Wellen lang | in Bewegung bleiben, aus den Kreisen treten |
+| **Ringwellen** (Glutwellen, Bebenwellen, Flutringe, Schallwellen, Leerenwellen …) | drei leuchtende Ringe breiten sich nacheinander vom Boss aus | über jeden Ring springen |
+| **Risslinien** (Glutspalten, Eisdornen, Felsspalten, Dornenpfade, Klingenbahnen …) | Risse laufen sternförmig vom Boss aus, einer auf jeden Kämpfer; dann bricht das Element an ihnen entlang hervor, vom Boss nach außen | zur Seite treten, quer zum Riss |
+| **Sog** (Feuersog, Mahlstrom, Rankensog, Leerensog, Wirbelsturm …) | ein schwarzes Loch über dem Boden zieht alle zum Boss – nach knapp drei Sekunden explodiert die Mitte | gegen den Sog anlaufen und aus dem Umkreis von gut sechs Blöcken bleiben |
+| **Kreuz** (Flammenkreuz, Frostkreuz, Blitzkreuz, Sternenkreuz, Klingenkreuz …) | vier Strahlen am Boden drehen sich gut drei Sekunden lang um den Boss (vorher zeigt eine Spur aus Lichtpunkten, wo sie liegen) | darüber springen oder vor ihnen herlaufen |
+| **Felder** (Flammenfelder, Eisfelder, Giftfelder, Sternenfelder, Klingenfelder …) | der Boden rings um den Boss teilt sich in acht Felder: erst glühen und brechen die einen auf, dann die anderen | ins Nachbarfeld wechseln, sobald das eigene glüht – und danach zurück |
+
+**Die Zornphase.** Fällt ein Boss unter die Hälfte seiner Kraft, gerät er **in Zorn**: Gebrüll und eine Druckwelle
+(wer näher als neun Blöcke steht, wird verletzt und fortgeschleudert), danach ist er schneller und schlägt härter zu
+(je +12 %), seine Zornangriffe kommen doppelt so oft – und alle 35 bis 45 Sekunden lädt er die **Vernichtung**
+(„Inferno“, „Ewiger Winter“, „Supernova“, „Weltenbeben“ …): Ein Zauberkreis füllt sich unter ihm, das Licht strömt zu ihm,
+er ruft „geh in Deckung!“, und nach drei Sekunden fegt die Explosion über alles im Umkreis von 16 Blöcken. **Nur Deckung
+hilft**: Wer Blöcke zwischen sich und dem Boss hat, bleibt unversehrt – eine Säule, ein Felsen, eine schnell gebaute
+Mauer. Jedes Element hinterlässt seine Spur: Feuer setzt in Brand, Eis friert ein und verlangsamt, Blitze lähmen kurz,
+Natur und Gift vergiften, Erde verlangsamt, Wasser macht träge, Schatten verdunkelt und schwächt, Licht blendet und lässt
+leuchten, Klang verwirrt, die Leere lässt verdorren, Stahl schwächt. Getroffen werden nur die Gegner des Bosses –
+Spieler (nicht im Kreativmodus), Soldaten und eigene Tiere; seine Diener und Verbündeten bleiben verschont.
+
+| Boss | Element | Zornangriffe | Vernichtung |
+|---|---|---|---|
+| Pyrrhon | Feuer | Flammenfelder, Glutspalten | Inferno |
+| Glaciara | Eis | Frostkreuz, Eisfelder | Ewiger Winter |
+| Voltarion | Blitz | Blitzkreuz, Blitzgewitter | Sturmgericht |
+| Verdantis | Natur | Dornenpfade, Rankensog | Wilder Zorn |
+| Terragon | Erde | Bebenwellen, Felsspalten | Weltenbeben |
+| Thalassa | Wasser | Mahlstrom, Flutringe | Sintflut |
+| Nyxar | Schatten | Schattenkreuz, Schattenregen | Ewige Nacht |
+| Ignatius (Erzmagier des Feuers) | Feuer | Meteorschauer, Glutwellen | Inferno |
+| Isolde (Erzmagierin des Eises) | Eis | Eisfelder, Frostkreuz | Ewiger Winter |
+| Fulgor (Erzmagier des Blitzes) | Blitz | Blitzkreuz, Blitzgewitter | Sturmgericht |
+| Sylvana (Erzmagierin der Natur) | Natur | Dornenpfade, Rankensog | Wilder Zorn |
+| Gorvan (Erzmagier der Erde) | Erde | Bebenwellen, Felsspalten | Weltenbeben |
+| Marena (Erzmagierin des Wassers) | Wasser | Mahlstrom, Flutfelder | Sintflut |
+| Phasmor | Leere | Leerensog, Leerenfelder | Vernichtung |
+| Quetzara | Gift | Giftfelder, Giftkreuz | Pesthauch |
+| Steinhüter | Erde | Steinhagel, Felsspalten | Weltenbeben |
+| Sordin | Klang | Schallwellen, Klangkreuz | Großer Schrei |
+| Malleus, der Glutschmied | Feuer | Meteorschauer, Glutwellen | Inferno |
+| Ignara | Feuer | Flammenkreuz, Feuersog | Inferno |
+| Noctua, die Mottenkönigin | Licht | Sternenfall, Sternenfelder | Supernova |
+| Der Zerbrochene König | Leere | Leerenrisse, Leerenregen | Vernichtung |
+| Karkinos, der Riffkoloss | Wasser | Geysirlinien, Flutfelder | Sintflut |
+| Anni der Troll | Erde | Steinhagel, Bebenwellen | Weltenbeben |
+| Asteria | Licht | Sternenkreuz, Lichtsog | Supernova |
+| MissMystik | Licht | Sternenfelder, Sternenkreuz | Supernova |
+| Seelenhirte | Schatten | Schattenrisse, Schattensog | Ewige Nacht |
+| Sternenweberin | Licht | Strahlenpfade, Sternenfall | Supernova |
+| Der Weltenfresser | Leere | Leerensog, Leerenwellen | Vernichtung |
+| Stundenwächter | Stahl | Klingenkreuz, Klingenfelder | Letztes Gefecht |
+| Kraken | Wasser | Wasserkreuz, Wolkenbruch | Sintflut |
+| Meerhexe | Wasser | Wolkenbruch, Mahlstrom | Sintflut |
+| Kuno von Rabenfels | Stahl | Pfeilhagel, Klingenbahnen | Letztes Gefecht |
+| Ventor | Wind | Windkreuz, Wirbelsturm | Orkan |
+| Fürst eines Reichs | Stahl | Kriegswellen, Klingenbahnen | Letztes Gefecht |
+| Schrolli der Schöpfer | Licht | Sternenfall, Sternenfelder | Supernova |
+
 ### Die Bossleisten (seit 0.94)
 
 ![Die Bossleisten: alle Leisten, die des Kraken, das Erscheinen, ein Treffer, ein zerspringender Edelstein und die letzte Phase](docs/bilder/bossleisten_094.jpg)
@@ -4292,8 +4363,8 @@ gewohnt. Den **Sternenfresserkopf** gibt es als Trophäe in der Reliquienkammer 
 ![Die eigenen Monster](docs/bilder/monster.jpg)
 
 Auch die Untoten und Nachtwesen der Vanilla-Welt sind ersetzt: Wo Vanilla nachts oder in Höhlen ein Monster erscheinen
-lässt, kommt mit dem gleichen Gewicht ein **eigenes Gegenstück** – mit eigenem Modell und Bild, aber denselben Angriffen,
-Schwächen und derselben Beute. Die Gestalt richtet sich nach dem Land: Mönche und Söldner unter den Wiedergängern,
+lässt, kommt mit dem gleichen Gewicht ein **eigenes Gegenstück** – mit eigenem Modell und Bild, aber denselben Angriffen
+(seit 1.14 dazu eigene Kampfstile, siehe unten), Schwächen und derselben Beute. Die Gestalt richtet sich nach dem Land: Mönche und Söldner unter den Wiedergängern,
 Fischer in den Flüssen, Wüstenkriecher mit Kakteenstacheln, Schneespinnen mit weißem Pelz, Höhlenkriecher mit
 Leuchtpilzen. Die Augen der Untoten glimmen in der Nacht. Spinnenreiter, Hühnerreiter, Mumien auf Dörrkamelen,
 Skelettfallen im Gewitter, Hexen bei Überfällen und die Monster der Prüfkammern kommen ebenfalls als eigene Wesen;
@@ -4402,6 +4473,57 @@ Angriffen und eigenen Klängen.
 | **Nachtwidder** (50 Leben, Rüstung 6) | Schattengipfel und Bleiche Öde, im Dunkeln, einzeln oder zu zweit | **scharrt** zweimal mit dem Huf und **stürmt** dann geradeaus los (bis 16 Blöcke, schleudert davon); wer ausweicht, lässt ihn gegen die Wand rennen – dann ist er **benommen** und nimmt anderthalbfachen Schaden; aus nächster Nähe bäumt er sich auf und **stampft** einen Ring aus Kristallsplittern aus dem Boden (Schaden und Langsamkeit ringsum); Hornstoß | Hammelfleisch, schwarze Wolle, Nachtkristallsplitter |
 | **Rissjäger** (28 Leben) | äußere End-Inseln (Hochland, Mittelland, Ödland, kleine Inseln), zu zweit | **Phasensprung:** versinkt in einem Riss im Boden (dabei trifft ihn nichts) und taucht hinter seinem Opfer wieder auf, um sofort zuzubeißen (verlangsamt); weicht Geschossen oft durch die Leere aus; sein **Heulen** hüllt Spieler in Dunkelheit und macht das ganze Rudel schneller | Amethystsplitter, selten Enderperle oder Schattenessenz |
 | **Chorusschlund** (40 Leben, Rüstung 4) | zwischen den Chorusbäumen im End-Hochland und End-Mittelland, auf Endstein | wurzelt: lässt sich weder schieben noch zurückstoßen. Geschlossen eine Chorusknospe wie jede andere – kommt man näher als 14 Blöcke, **blüht** er auf (vier Blütenblätter mit Zähnen, innen glühend): **Rankenhieb** bis 4,8 Blöcke (zieht heran), **Biss** aus nächster Nähe, nach dem Fernen spuckt er **Chorussamen** – wen sie treffen, der wird wie von einer Chorusfrucht davonversetzt, und ihm wird übel; schwer verwundet **verpflanzt** er sich ein Stück weiter | Chorusfrucht, geplatzte Chorusfrucht, selten Chorusblüte |
+
+### Kampfstile der Monster (seit 1.14)
+
+![Kampfstile der Monster aus 1.14: Hammerschlag, Ansprung, Zielschuss, Netz, Rankenzug, Wirbelhieb, Sturmangriff, Fluchkreis, Fangkreis, Feuerring, Hinterhalt und Kampfschrei](docs/bilder/kampfstile_1_14.jpg)
+
+Seit 1.14 kämpft **jedes Monster anders** – auch zwei derselben Art. Kommt ein Monster in die Welt, bekommt es ein
+**Temperament** und **zwei bis vier besondere Angriffe** aus dem Können seiner Art; beides bleibt ihm (es wird mit
+gespeichert). Zwischen seinen gewöhnlichen Hieben und Schüssen setzt es diese Angriffe ein, und jeder **kündigt sich an**:
+eine Haltung (ducken, ausholen, Arme hoch, Schild vor, die Waffe anlegen), ein Klang, Teilchen, ein Warnkreis oder eine
+Ziellinie. Wer aufpasst, weicht aus – wer nicht, liegt im Staub.
+
+| Temperament | Wie oft | Wie es kämpft |
+|---|---|---|
+| **Ungestüm** | gut jedes vierte | 15 % schneller auf den Beinen, setzt seine besonderen Angriffe am häufigsten ein |
+| **Lauernd** | etwa jedes fünfte | umkreist seine Beute und stößt aus der Flanke zu, weicht Pfeilen und Geschossen aus, springt nach einem Treffer zurück |
+| **Zäh** | etwa jedes fünfte | langsamer, aber gepanzert (+4 Rüstung) und schwer zurückzustoßen; geht in **Deckung** – Hiebe von vorn prallen fast ganz ab, wer hineinschlägt, wird zurückgeworfen (von der Seite oder von hinten angreifen!) |
+| **Rasend** | jedes fünfte | gerät unter halber Kraft in **Raserei**: 30 % schneller, 35 % stärker, rote Wutteilchen |
+| **Anführer** | selten (jedes zehnte) | 30 % mehr Leben und 15 % mehr Schaden; sein **Kampfschrei** treibt seinesgleichen im Umkreis von 16 Blöcken an (schneller, stärker, alle auf dasselbe Ziel) |
+
+| Monster | Besondere Angriffe (je zwei bis vier davon) |
+|---|---|
+| Wiedergänger, Mumie, Wasserleiche, Untoter Dorfbewohner, Moderborstling | **Ansprung** (duckt sich und springt dich an), **Umklammern** (hält fest, bis du kräftig zuschlägst), **Hammerschlag** (beide Arme hoch, Wucht im Umkreis, bricht Schilde), **Wurf** (ein Stein; die Mumie wirft Sand, die Wasserleiche Schlamm), **Kampfschrei** |
+| Gerippe, Frostgebein, Moorgebein, Dörrgebein | **Salve** (drei Pfeile im Fächer), **Zielschuss** (zielt lange – eine rote Linie verrät, wohin – und schießt einen durchschlagenden Pfeil), **Rückzugssprung**, **Bogenstoß** |
+| Brandgebein | **Wirbelhieb**, **Ansprung**, **Hammerschlag**, **Wurf** (ein brennender Schädel) |
+| Spinne, Höhlenspinne | **Speien** (ein Netz, das dich festhält), **Ansprung**, **Giftbiss**, **Huschen** (zur Seite und von anderswo wieder heran) |
+| Kriecher | **Finte** (zischt, bläht sich auf – und weicht zurück), **Sprungzünder** (springt dich mit brennender Lunte an), **Sporenstoß** (übel und langsam), **Rankenzug** (eine Ranke zieht dich heran) |
+| Hexe | **Trankhagel** (drei Tränke rasch hintereinander), **Fluchkreis** (wer nicht hinaustritt, wird langsam und schwach), **Entrücken** |
+| Wegelagerer | **Salve**, **Zielschuss**, **Rückzugssprung** |
+| Schlächter | **Wirbelhieb** (einmal rundherum), **Sturmangriff** (prallt er gegen eine Wand, ist er benommen), **Hammerschlag**, **Kampfschrei** |
+| Beschwörer | **Fangkreis** (Fangzähne brechen rings um dich aus dem Boden), **Entrücken** – neben seinen Fangzahnreihen und Plagegeistern |
+| Gaukler | **Salve**, **Entrücken** |
+| Verwüster | **Sturmangriff**, **Hammerschlag**, **Kampfschrei** |
+| Schleim, Glutschleim (die großen) | **Schmetterlandung** (springt hoch hinauf und landet mit Wucht), **Speien** (Schleim oder Glut) |
+| Leerwandler | **Hinterhalt** (Funken verraten den Ort – dann steht er hinter dir), **Wurf** (der Block, den er trägt, oder ein Brocken Leere) |
+| Borstling | **Wirbelhieb**, **Ansprung**, **Kampfschrei** (mit Armbrust: **Salve**, **Zielschuss**, **Kampfschrei**) |
+| Borstenhüne | **Sturmangriff**, **Hammerschlag**, **Wirbelhieb**, **Kampfschrei** |
+| Glutkeiler, Moderkeiler | **Sturmangriff**, **Hammerschlag**, **Kampfschrei** |
+| Glutgeist | **Feuerring** (breitet sich am Boden aus – darüber springen), **Flammensäule** (erst ein Glutkreis, dann schießt sie empor), **Salve** (fünf Feuerkugeln) |
+| Rauchqualle | **Salve** (drei Feuerbälle), **Rauchschwall** (eine Rauchwolke, die blendet) |
+| Nachtmahr | **Schreckensschrei** (schwach und langsam) |
+| Höhlentroll | **Hammerschlag**, **Wirbelhieb**, **Wurf** (ein Felsbrocken) |
+| Werwolf, Dornenwicht | **Wirbelhieb**, **Umklammern** |
+| Lindwurm | **Ansprung**, **Giftbiss**, **Wirbelhieb** |
+| Schattenpirscher, Zerrling | **Ansprung**, **Entrücken** (taucht in deiner Flanke wieder auf) |
+| Kristallkrabbler | **Huschen**, **Giftbiss** |
+| Splitterwächter | **Hammerschlag**, **Wirbelhieb** |
+| Moorschlurfer, Rissjäger | **Hammerschlag** bzw. **Ansprung** |
+| Bandit | **Wirbelhieb**, **Ansprung**, **Kampfschrei** |
+
+Nach jedem besonderen Angriff braucht ein Monster einen Moment, um sich zu fangen – das ist die Gelegenheit zum
+Gegenschlag. Die Lauernden umkreisen dich dazu noch, die Zähen gehen in Deckung, und ein Anführer bringt oft Verstärkung.
 
 ### Wilde Kreaturen
 

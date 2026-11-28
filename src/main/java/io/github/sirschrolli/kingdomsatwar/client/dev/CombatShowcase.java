@@ -81,7 +81,7 @@ final class CombatShowcase {
                     new double[] {0.0, 0.5, 0.0}, 22, 0),
             new Scene("enderman_ambush", () -> ModEntities.ENDERMAN.get(), new double[] {-5.0, -2.0}, Items.AIR, MoveKind.AMBUSH,
                     Blocks.END_STONE.defaultBlockState(), new double[][] {{1.5, 0.0}}, new double[] {-2.5, 2.4, 5.0},
-                    new double[] {1.0, 1.4, -0.6}, 13, 0),
+                    new double[] {1.0, 1.4, -0.6}, 19, 0),
             new Scene("leader_roar", () -> ModEntities.ZOMBIE.get(), new double[] {0.0, -1.0}, Items.IRON_SWORD, MoveKind.ROAR,
                     Blocks.COARSE_DIRT.defaultBlockState(), new double[][] {{0.0, 5.0}}, new double[] {5.0, 3.0, 4.5},
                     new double[] {0.0, 1.2, -0.5}, 15, 3));
@@ -170,6 +170,15 @@ final class CombatShowcase {
                 Mob m = mob[0];
                 LivingEntity target = cast.stream().filter(e -> e instanceof SoldierEntity).map(e -> (LivingEntity) e).findFirst().orElse(null);
                 if (m != null && target != null) {
+                    // zurück auf den Startplatz (es ist inzwischen vielleicht ein Stück spaziert), Blick zum Ritter
+                    double x = ox + 0.5 + scene.at()[0];
+                    double z = oz + 0.5 + scene.at()[1];
+                    float yaw = (float) Math.toDegrees(Math.atan2(-(target.getX() - x), target.getZ() - z));
+                    m.getNavigation().stop();
+                    m.setDeltaMovement(Vec3.ZERO);
+                    m.snapTo(x, Showcase.ground, z, yaw, 0.0f);
+                    m.setYBodyRot(yaw);
+                    m.setYHeadRot(yaw);
                     m.setTarget(target);
                     Combat.force(m, scene.move(), target);
                 }
