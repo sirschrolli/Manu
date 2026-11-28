@@ -211,6 +211,47 @@ final class DecorModels {
         }
     }
 
+    // ------------------------------------------------------------------ Käselaib (1.16)
+
+    /** Die Schnittfläche des Käselaibs (gelb, mit Löchern; genutzt werden die unteren sieben Zeilen). */
+    static final TextureSlot INNER = TextureSlot.create("inner");
+
+    /**
+     * Käselaib mit {@code eaten} gegessenen Stücken (0–3): fünf Quader bilden einen achteckigen Laib (Oberseite aus
+     * {@code top}, Rinde aus {@code side}), von Westen her angeschnitten – dort zeigt sich die Schnittfläche. Blick nach Norden.
+     */
+    static ModelTemplate cheeseWheel(int eaten) {
+        ExtendedModelTemplateBuilder b = builder(TextureSlot.TOP, TextureSlot.SIDE, INNER);
+        float cut = io.github.sirschrolli.kingdomsatwar.block.CheeseWheelBlock.cut(eaten);
+        float height = io.github.sirschrolli.kingdomsatwar.block.CheeseWheelBlock.HEIGHT;
+        for (float[] box : io.github.sirschrolli.kingdomsatwar.block.CheeseWheelBlock.BOXES) {
+            float x1 = Math.max(box[0], cut);
+            if (x1 >= box[2]) {
+                continue;
+            }
+            // die Westseite ist Schnittfläche, wo der Schnitt gerade liegt (die inneren Seiten verdecken die Nachbarn)
+            boolean sliced = eaten > 0 && x1 == cut;
+            float z1 = box[1], x2 = box[2], z2 = box[3];
+            float v1 = 16 - height;
+            b.element(e -> e.from(x1, 0, z1).to(x2, height, z2).allFaces((direction, face) -> {
+                switch (direction) {
+                    case DOWN -> {
+                        face.uvs(x1, 16 - z2, x2, 16 - z1);
+                        face.cullface(Direction.DOWN);
+                    }
+                    case UP -> face.uvs(x1, z1, x2, z2);
+                    case NORTH -> face.uvs(16 - x2, v1, 16 - x1, 16);
+                    case SOUTH -> face.uvs(x1, v1, x2, 16);
+                    case WEST -> face.uvs(z1, v1, z2, 16);
+                    case EAST -> face.uvs(16 - z2, v1, 16 - z1, 16);
+                }
+                face.texture(direction.getAxis() == Direction.Axis.Y ? TextureSlot.TOP : direction == Direction.WEST && sliced ? INNER
+                        : TextureSlot.SIDE);
+            }));
+        }
+        return b.build();
+    }
+
     // ------------------------------------------------------------------ Zinne
 
     /** Halbhohe Brüstung über die volle Breite, Mauerzahn mittig (Reihe in Ost-West-Richtung). */

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kingdomsatwar:flour",
+    "minecraft:apple",
+    "minecraft:apple",
+    "minecraft:sugar",
+    "#minecraft:eggs"
+  ],
+  "result": {
+    "id": "kingdomsatwar:upside_down_cake"
+  }
+}

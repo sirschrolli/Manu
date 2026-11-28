@@ -76,6 +76,10 @@ GROUPS: dict[tuple[float, float], list[str]] = {
     (1.75, 0.5): [  # Essen und Trinken
         "apple_pie", "bread_roll", "cooked_crab_meat", "cooked_venison", "crab_meat", "dusk_bread", "garlic_bread", "meat_pie",
         "venison", "ale", "mead", "wine", "vegetable_stew", "dragon_food",
+        # die Küche der Welten (2.0)
+        "flour", "cheese", "cheese_spaetzle", "pretzel", "raw_sausage", "sausage", "rum", "ember_chili", "fungus_skewer", "hardtack",
+        "chorus_jam", "dusk_porridge", "soul_berry_pie", "star_candy", "upside_down_cake", "pilgrim_ration", "fish_soup", "fish_roll",
+        "gingerbread", "fae_tea", "glimmer_cupcake",
     ],
     (2.0, 0.6): [   # Rundes: Gemüse und Früchte
         "cabbage", "tomato", "moth_cocoon",

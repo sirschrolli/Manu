@@ -38,6 +38,7 @@ public class ModLanguageProvider extends LanguageProvider {
         FishingLang.register(this::text);
         ArmoryLang.register(this::text);
         BeastLang.register(this::text);
+        CuisineLang.register(this::text);
         RelicLang.register(this::text);
         SkyLang.register(this::text);
         VeterancyLang.register(this::text);

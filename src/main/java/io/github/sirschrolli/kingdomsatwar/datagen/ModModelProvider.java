@@ -339,6 +339,29 @@ public class ModModelProvider extends ModelProvider {
         blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(feast).with(servings).with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING));
         blocks.registerSimpleFlatItemModel(feast.asItem());
 
+        // --- die Küche der Welten (1.16): der Käselaib (vier Stufen, dreht sich zum Spieler), die Glutschote, die Speisen ---
+        Block wheel = io.github.sirschrolli.kingdomsatwar.registry.Cuisine.CHEESE_WHEEL.get();
+        TextureMapping cheeseTextures = new TextureMapping().put(TextureSlot.TOP, new Material(KingdomsAtWar.id("block/cheese_wheel_top")))
+                .put(TextureSlot.SIDE, new Material(KingdomsAtWar.id("block/cheese_wheel_side")))
+                .put(DecorModels.INNER, new Material(KingdomsAtWar.id("block/cheese_wheel_inner")))
+                .put(TextureSlot.PARTICLE, new Material(KingdomsAtWar.id("block/cheese_wheel_side")));
+        PropertyDispatch.C1<MultiVariant, Integer> slices = PropertyDispatch.initial(io.github.sirschrolli.kingdomsatwar.block.CheeseWheelBlock.EATEN);
+        for (int eaten = 0; eaten < io.github.sirschrolli.kingdomsatwar.block.CheeseWheelBlock.SERVINGS; eaten++) {
+            Identifier model = DecorModels.cheeseWheel(eaten).createWithSuffix(wheel, eaten == 0 ? "" : "_slice_" + eaten, cheeseTextures,
+                    blocks.modelOutput);
+            slices.select(eaten, BlockModelGenerators.plainVariant(model));
+        }
+        blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(wheel).with(slices).with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING));
+        blocks.registerSimpleFlatItemModel(wheel.asItem());
+        blocks.createCropBlock(io.github.sirschrolli.kingdomsatwar.registry.Cuisine.EMBER_PEPPERS.get(),
+                net.minecraft.world.level.block.NetherWartBlock.AGE, 0, 1, 2, 3);
+        flat(items, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.FLOUR.get());
+        for (DeferredItem<? extends Item> food : io.github.sirschrolli.kingdomsatwar.registry.Cuisine.foods()) {
+            if (food != io.github.sirschrolli.kingdomsatwar.registry.Cuisine.EMBER_PEPPER) {
+                flat(items, food.get());
+            }
+        }
+
         // --- Gegenstände (flache 2D-Modelle) ---
         // Samen und Zwiebel bekommen ihr Modell schon über createCropBlock (Gegenstand der Feldfrucht).
         for (DeferredItem<?> item : java.util.List.of(

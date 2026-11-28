@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kingdomsatwar:duskgrain",
+    "kingdomsatwar:duskgrain",
+    "kingdomsatwar:soul_berries",
+    "minecraft:milk_bucket",
+    "minecraft:bowl"
+  ],
+  "result": {
+    "id": "kingdomsatwar:dusk_porridge"
+  }
+}

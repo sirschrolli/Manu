@@ -259,6 +259,7 @@ public final class ModGameTests {
         FuryGameTests.init();      // seit 1.14: der Zorn der Bosse
         MiniBossGameTests.init();  // seit 1.15: die Mini-Bosse der Tiefe
         DeepLairGameTests.init();  // seit 1.15: die Hallen der Tiefe
+        CuisineGameTests.init();   // seit 2.0: die Küche der Welten
         OutlawGameTests.init();    // die übrigen eigenen Monster
         WaterGameTests.init();     // die eigenen Wassertiere
         ArmyGameTests.init();      // Ausbildung, Söldnertafel und Söldnerhaus
@@ -396,6 +397,7 @@ public final class ModGameTests {
         FuryGameTests.register(event, environment);
         MiniBossGameTests.register(event, environment);
         DeepLairGameTests.register(event, environment);
+        CuisineGameTests.register(event, environment);
         OutlawGameTests.register(event, environment);
         WaterGameTests.register(event, environment);
         ArmyGameTests.register(event, environment);

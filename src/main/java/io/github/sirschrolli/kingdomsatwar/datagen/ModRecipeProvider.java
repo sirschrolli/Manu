@@ -47,6 +47,7 @@ public class ModRecipeProvider extends RecipeProvider {
         resourceRecipes();
         dragonRecipes();
         foodRecipes();
+        cuisine();
         armyRecipes();
         siegeRecipes();
         equipmentRecipes();
@@ -941,6 +942,101 @@ public class ModRecipeProvider extends RecipeProvider {
                 .requires(large)
                 .unlockedBy(getHasName(large), has(large))
                 .save(output, key(smallName + "_from_" + largeName));
+    }
+
+    /**
+     * Die Küche der Welten (seit 1.16): Mehl aus Weizen oder Gerste, der Käselaib aus Milch, daraus Käse und Spätzle,
+     * Brezeln, Bratwurst, Rum, die Gerichte der Glutschote, Zwieback (ein Brötchen, ein zweites Mal gebacken), Chorusmarmelade,
+     * Dämmerbrei und Seelenbeerkuchen, Sternenkandis, Sturzkuchen, Pilgerration, Fischsuppe und Fischbrötchen, Lebkuchen,
+     * Feentee und Glimmerküchlein. Eimer und Flaschen bleiben übrig (wie beim Kuchen).
+     */
+    private void cuisine() {
+        Item flour = io.github.sirschrolli.kingdomsatwar.registry.Cuisine.FLOUR.get();
+        Item cheese = io.github.sirschrolli.kingdomsatwar.registry.Cuisine.CHEESE.get();
+        Item wheel = io.github.sirschrolli.kingdomsatwar.registry.Cuisine.CHEESE_WHEEL.get().asItem();
+        Item pepper = io.github.sirschrolli.kingdomsatwar.registry.Cuisine.EMBER_PEPPER.get();
+        shapeless(RecipeCategory.FOOD, flour).requires(Items.WHEAT)
+                .unlockedBy("has_wheat", has(Items.WHEAT)).save(output, key("flour"));
+        shapeless(RecipeCategory.FOOD, flour).requires(ModItems.BARLEY.get(), 2)
+                .unlockedBy("has_barley", has(ModItems.BARLEY.get())).save(output, key("flour_from_barley"));
+        shapeless(RecipeCategory.FOOD, wheel).requires(Items.MILK_BUCKET, 3)
+                .unlockedBy("has_milk_bucket", has(Items.MILK_BUCKET)).save(output, key("cheese_wheel"));
+        shapeless(RecipeCategory.FOOD, wheel).requires(cheese, 4)
+                .unlockedBy(getHasName(cheese), has(cheese)).save(output, key("cheese_wheel_from_cheese"));
+        shapeless(RecipeCategory.FOOD, cheese, 4).requires(wheel)
+                .unlockedBy(getHasName(wheel), has(wheel)).save(output, key("cheese"));
+        shapeless(RecipeCategory.FOOD, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.CHEESE_SPAETZLE.get())
+                .requires(flour).requires(ItemTags.EGGS).requires(cheese).requires(ModItems.ONION.get()).requires(Items.BOWL)
+                .unlockedBy(getHasName(cheese), has(cheese)).save(output, key("cheese_spaetzle"));
+        shapeless(RecipeCategory.FOOD, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.PRETZEL.get(), 3)
+                .requires(flour, 2).requires(Items.WATER_BUCKET)
+                .unlockedBy(getHasName(flour), has(flour)).save(output, key("pretzel"));
+        Item rawSausage = io.github.sirschrolli.kingdomsatwar.registry.Cuisine.RAW_SAUSAGE.get();
+        Item sausage = io.github.sirschrolli.kingdomsatwar.registry.Cuisine.SAUSAGE.get();
+        shapeless(RecipeCategory.FOOD, rawSausage, 2).requires(Items.PORKCHOP).requires(ModItems.GARLIC.get())
+                .unlockedBy("has_porkchop", has(Items.PORKCHOP)).save(output, key("raw_sausage"));
+        save(SimpleCookingRecipeBuilder.smelting(Ingredient.of(rawSausage), RecipeCategory.FOOD, CookingBookCategory.FOOD, sausage, 0.35f, 200)
+                .unlockedBy(getHasName(rawSausage), has(rawSausage)), "sausage");
+        save(SimpleCookingRecipeBuilder.smoking(Ingredient.of(rawSausage), RecipeCategory.FOOD, sausage, 0.35f, 100)
+                .unlockedBy(getHasName(rawSausage), has(rawSausage)), "sausage_from_smoking");
+        save(SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(rawSausage), RecipeCategory.FOOD, sausage, 0.35f, 600)
+                .unlockedBy(getHasName(rawSausage), has(rawSausage)), "sausage_from_campfire_cooking");
+        shapeless(RecipeCategory.FOOD, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.RUM.get())
+                .requires(Items.SUGAR_CANE, 2).requires(Items.SUGAR).requires(Items.GLASS_BOTTLE)
+                .unlockedBy("has_sugar_cane", has(Items.SUGAR_CANE)).save(output, key("rum"));
+        shapeless(RecipeCategory.FOOD, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.EMBER_CHILI.get())
+                .requires(pepper, 2).requires(Items.COOKED_PORKCHOP).requires(ModItems.TOMATO.get()).requires(Items.BOWL)
+                .unlockedBy(getHasName(pepper), has(pepper)).save(output, key("ember_chili"));
+        shapeless(RecipeCategory.FOOD, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.FUNGUS_SKEWER.get(), 2)
+                .requires(Items.CRIMSON_FUNGUS).requires(Items.WARPED_FUNGUS).requires(Items.STICK, 2).requires(Items.BLAZE_POWDER)
+                .unlockedBy("has_crimson_fungus", has(Items.CRIMSON_FUNGUS)).save(output, key("fungus_skewer"));
+        Item roll = ModItems.BREAD_ROLL.get();
+        Item hardtack = io.github.sirschrolli.kingdomsatwar.registry.Cuisine.HARDTACK.get();
+        save(SimpleCookingRecipeBuilder.smelting(Ingredient.of(roll), RecipeCategory.FOOD, CookingBookCategory.FOOD, hardtack, 0.1f, 200)
+                .unlockedBy(getHasName(roll), has(roll)), "hardtack");
+        save(SimpleCookingRecipeBuilder.smoking(Ingredient.of(roll), RecipeCategory.FOOD, hardtack, 0.1f, 100)
+                .unlockedBy(getHasName(roll), has(roll)), "hardtack_from_smoking");
+        shapeless(RecipeCategory.FOOD, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.CHORUS_JAM.get())
+                .requires(Items.CHORUS_FRUIT, 2).requires(Items.SUGAR).requires(Items.GLASS_BOTTLE)
+                .unlockedBy("has_chorus_fruit", has(Items.CHORUS_FRUIT)).save(output, key("chorus_jam"));
+        Item duskgrain = ShadowItems.DUSKGRAIN.get();
+        Item berries = ShadowItems.SOUL_BERRIES.get();
+        shapeless(RecipeCategory.FOOD, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.DUSK_PORRIDGE.get())
+                .requires(duskgrain, 2).requires(berries).requires(Items.MILK_BUCKET).requires(Items.BOWL)
+                .unlockedBy(getHasName(duskgrain), has(duskgrain)).save(output, key("dusk_porridge"));
+        shapeless(RecipeCategory.FOOD, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.SOUL_BERRY_PIE.get())
+                .requires(berries, 2).requires(duskgrain).requires(Items.SUGAR).requires(ItemTags.EGGS)
+                .unlockedBy(getHasName(berries), has(berries)).save(output, key("soul_berry_pie"));
+        Item stardust = io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.STARDUST.get().asItem();
+        shapeless(RecipeCategory.FOOD, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.STAR_CANDY.get(), 4)
+                .requires(Items.SUGAR, 2).requires(stardust).requires(Items.GLOWSTONE_DUST)
+                .unlockedBy(getHasName(stardust), has(stardust)).save(output, key("star_candy"));
+        shapeless(RecipeCategory.FOOD, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.UPSIDE_DOWN_CAKE.get())
+                .requires(flour).requires(Items.APPLE, 2).requires(Items.SUGAR).requires(ItemTags.EGGS)
+                .unlockedBy(getHasName(flour), has(flour)).save(output, key("upside_down_cake"));
+        shapeless(RecipeCategory.FOOD, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.PILGRIM_RATION.get(), 2)
+                .requires(Items.COOKED_BEEF).requires(Items.DRIED_KELP).requires(Items.SWEET_BERRIES).requires(Items.BREAD)
+                .unlockedBy("has_dried_kelp", has(Items.DRIED_KELP)).save(output, key("pilgrim_ration"));
+        Item soup = io.github.sirschrolli.kingdomsatwar.registry.Cuisine.FISH_SOUP.get();
+        Item fishRoll = io.github.sirschrolli.kingdomsatwar.registry.Cuisine.FISH_ROLL.get();
+        for (Item[] fish : new Item[][] {{Items.COD, Items.COOKED_COD}, {Items.SALMON, Items.COOKED_SALMON}}) {
+            String name = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(fish[0]).getPath();
+            shapeless(RecipeCategory.FOOD, soup).requires(fish[0]).requires(Items.POTATO).requires(ModItems.ONION.get()).requires(Items.BOWL)
+                    .unlockedBy(getHasName(fish[0]), has(fish[0])).save(output, key("fish_soup_from_" + name));
+            shapeless(RecipeCategory.FOOD, fishRoll).requires(roll).requires(fish[1])
+                    .unlockedBy(getHasName(fish[1]), has(fish[1])).save(output, key("fish_roll_from_" + name));
+        }
+        shapeless(RecipeCategory.FOOD, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.GINGERBREAD.get(), 4)
+                .requires(flour, 2).requires(Items.HONEY_BOTTLE).requires(Items.SUGAR).requires(Items.COCOA_BEANS)
+                .unlockedBy("has_honey_bottle", has(Items.HONEY_BOTTLE)).save(output, key("gingerbread"));
+        Item moonbell = io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOONBELL.get().asItem();
+        shapeless(RecipeCategory.FOOD, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.FAE_TEA.get(), 3)
+                .requires(moonbell, 2).requires(Items.SUGAR).requires(Items.WATER_BUCKET).requires(Items.GLASS_BOTTLE, 3)
+                .unlockedBy(getHasName(moonbell), has(moonbell)).save(output, key("fae_tea"));
+        Item dust = io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST.get();
+        shapeless(RecipeCategory.FOOD, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.GLIMMER_CUPCAKE.get(), 3)
+                .requires(flour).requires(ItemTags.EGGS).requires(Items.SUGAR).requires(dust)
+                .unlockedBy(getHasName(dust), has(dust)).save(output, key("glimmer_cupcake"));
     }
 
     private void cookVenison() {

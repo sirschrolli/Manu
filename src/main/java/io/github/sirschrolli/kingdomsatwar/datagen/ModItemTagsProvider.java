@@ -456,6 +456,23 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         add(Tags.Items.FOODS_RAW_MEAT, ModItems.VENISON);
         add(Tags.Items.FOODS_COOKED_MEAT, ModItems.COOKED_VENISON);
         add(ItemTags.WOLF_FOOD, ModItems.VENISON, ModItems.COOKED_VENISON);
+        // die Küche der Welten (1.16)
+        add(Tags.Items.FOODS_BREAD, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.PRETZEL, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.HARDTACK);
+        add(Tags.Items.FOODS_CANDY, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.STAR_CANDY);
+        add(Tags.Items.FOODS_COOKIE, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.GINGERBREAD);
+        add(Tags.Items.FOODS_VEGETABLE, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.EMBER_PEPPER);
+        add(Tags.Items.FOODS_SOUP, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.EMBER_CHILI, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.FISH_SOUP,
+                io.github.sirschrolli.kingdomsatwar.registry.Cuisine.DUSK_PORRIDGE);
+        add(Tags.Items.FOODS_PIE, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.SOUL_BERRY_PIE);
+        add(ItemTags.MEAT, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.RAW_SAUSAGE, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.SAUSAGE);
+        add(Tags.Items.FOODS_RAW_MEAT, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.RAW_SAUSAGE);
+        add(Tags.Items.FOODS_COOKED_MEAT, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.SAUSAGE);
+        add(ItemTags.WOLF_FOOD, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.RAW_SAUSAGE, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.SAUSAGE);
+        add(Tags.Items.DRINKS, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.RUM, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.FAE_TEA);
+        add(Tags.Items.DRINK_CONTAINING_BOTTLE, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.RUM,
+                io.github.sirschrolli.kingdomsatwar.registry.Cuisine.FAE_TEA);
+        tag(Tags.Items.FOODS_EDIBLE_WHEN_PLACED).add(net.minecraft.resources.ResourceKey.create(
+                net.minecraft.core.registries.Registries.ITEM, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.CHEESE_WHEEL.getId()));
 
         // Essen, das Bürger und Soldaten nicht nehmen (Lager und Proviant)
         tag(ModTags.Items.UNFIT_FOOD).add(net.minecraft.world.item.Items.ROTTEN_FLESH.builtInRegistryHolder().key(),

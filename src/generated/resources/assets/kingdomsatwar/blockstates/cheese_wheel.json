@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=east,servings_eaten=0": {
+      "model": "kingdomsatwar:block/cheese_wheel",
+      "y": 90
+    },
+    "facing=east,servings_eaten=1": {
+      "model": "kingdomsatwar:block/cheese_wheel_slice_1",
+      "y": 90
+    },
+    "facing=east,servings_eaten=2": {
+      "model": "kingdomsatwar:block/cheese_wheel_slice_2",
+      "y": 90
+    },
+    "facing=east,servings_eaten=3": {
+      "model": "kingdomsatwar:block/cheese_wheel_slice_3",
+      "y": 90
+    },
+    "facing=north,servings_eaten=0": {
+      "model": "kingdomsatwar:block/cheese_wheel"
+    },
+    "facing=north,servings_eaten=1": {
+      "model": "kingdomsatwar:block/cheese_wheel_slice_1"
+    },
+    "facing=north,servings_eaten=2": {
+      "model": "kingdomsatwar:block/cheese_wheel_slice_2"
+    },
+    "facing=north,servings_eaten=3": {
+      "model": "kingdomsatwar:block/cheese_wheel_slice_3"
+    },
+    "facing=south,servings_eaten=0": {
+      "model": "kingdomsatwar:block/cheese_wheel",
+      "y": 180
+    },
+    "facing=south,servings_eaten=1": {
+      "model": "kingdomsatwar:block/cheese_wheel_slice_1",
+      "y": 180
+    },
+    "facing=south,servings_eaten=2": {
+      "model": "kingdomsatwar:block/cheese_wheel_slice_2",
+      "y": 180
+    },
+    "facing=south,servings_eaten=3": {
+      "model": "kingdomsatwar:block/cheese_wheel_slice_3",
+      "y": 180
+    },
+    "facing=west,servings_eaten=0": {
+      "model": "kingdomsatwar:block/cheese_wheel",
+      "y": 270
+    },
+    "facing=west,servings_eaten=1": {
+      "model": "kingdomsatwar:block/cheese_wheel_slice_1",
+      "y": 270
+    },
+    "facing=west,servings_eaten=2": {
+      "model": "kingdomsatwar:block/cheese_wheel_slice_2",
+      "y": 270
+    },
+    "facing=west,servings_eaten=3": {
+      "model": "kingdomsatwar:block/cheese_wheel_slice_3",
+      "y": 270
+    }
+  }
+}

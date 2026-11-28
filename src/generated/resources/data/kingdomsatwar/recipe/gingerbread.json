@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kingdomsatwar:flour",
+    "kingdomsatwar:flour",
+    "minecraft:honey_bottle",
+    "minecraft:sugar",
+    "minecraft:cocoa_beans"
+  ],
+  "result": {
+    "count": 4,
+    "id": "kingdomsatwar:gingerbread"
+  }
+}

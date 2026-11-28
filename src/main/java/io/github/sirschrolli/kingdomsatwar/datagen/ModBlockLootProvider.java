@@ -315,6 +315,23 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         crop(ModBlocks.GARLIC_CROP, ModItems.GARLIC.get(), ModItems.GARLIC.get());
         // Das Festmahl isst man auf, abgebaut bleibt nichts übrig (wie beim Kuchen)
         add(ModBlocks.FEAST.get(), noDrop());
+        // die Küche der Welten (1.16): der Käselaib gibt sich selbst, solange er nicht angeschnitten ist; die Glutschote wie
+        // Netherwarze (reif zwei bis vier Schoten, mit Glück mehr – unreif nur die eine, aus der sie wuchs)
+        Block wheel = io.github.sirschrolli.kingdomsatwar.registry.Cuisine.CHEESE_WHEEL.get();
+        add(wheel, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                .add(LootItem.lootTableItem(wheel))
+                .when(MatchBlock.blockMatches(this.blocks, wheel, StatePropertiesPredicate.Builder.properties()
+                        .hasProperty(io.github.sirschrolli.kingdomsatwar.block.CheeseWheelBlock.EATEN, 0)))));
+        Block peppers = io.github.sirschrolli.kingdomsatwar.registry.Cuisine.EMBER_PEPPERS.get();
+        Item pepper = io.github.sirschrolli.kingdomsatwar.registry.Cuisine.EMBER_PEPPER.get();
+        add(peppers, LootTable.lootTable().withPool(this.applyExplosionDecay(peppers, LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                .add(LootItem.lootTableItem(pepper)
+                        .apply(SetItemCountFunction.setCount(ContextIntProviders.between(2, 4))
+                                .when(MatchBlock.blockMatches(this.blocks, peppers, StatePropertiesPredicate.Builder.properties()
+                                        .hasProperty(net.minecraft.world.level.block.NetherWartBlock.AGE, 3))))
+                        .apply(ApplyBonusCount.addUniformBonusCount(this.enchantments.getOrThrow(Enchantments.FORTUNE))
+                                .when(MatchBlock.blockMatches(this.blocks, peppers, StatePropertiesPredicate.Builder.properties()
+                                        .hasProperty(net.minecraft.world.level.block.NetherWartBlock.AGE, 3))))))));
 
         // Zierblumen und Blumentöpfe
         ModBlocks.FLOWERS.forEach((flower, pot) -> {
