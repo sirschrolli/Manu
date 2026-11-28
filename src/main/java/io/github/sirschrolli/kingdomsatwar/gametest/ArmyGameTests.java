@@ -181,6 +181,11 @@ final class ArmyGameTests {
             helper.assertTrue(b.isHungry(), "ohne Proviant kein Hunger");
             var fed = helper.spawnWithNoFreeWill(io.github.sirschrolli.kingdomsatwar.registry.ModEntities.HUSK.get(), new BlockPos(1, 1, 8));
             var starved = helper.spawnWithNoFreeWill(io.github.sirschrolli.kingdomsatwar.registry.ModEntities.HUSK.get(), new BlockPos(7, 1, 8));
+            // beide mit gleichem Temperament (ein zähes hätte mehr Rüstung, seit 1.14)
+            for (var husk : List.of(fed, starved)) {
+                io.github.sirschrolli.kingdomsatwar.entity.combat.Combat.setStyle(husk, new io.github.sirschrolli.kingdomsatwar.entity.combat.Style(
+                        io.github.sirschrolli.kingdomsatwar.entity.combat.Temper.RASEND, List.of(), 1.0f));
+            }
             float fedBefore = fed.getHealth();
             float starvedBefore = starved.getHealth();
             fed.hurtServer(level, level.damageSources().mobAttack(a), 6.0f);

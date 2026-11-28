@@ -326,6 +326,10 @@ final class VoidGameTests {
                 "Der Thron ruht nicht");
         var king = seal.awaken(level);
         helper.assertTrue(king != null, "Das Siegel weckt den König nicht");
+        // er erhebt sich sechseinhalb Blöcke vor dem Thron – hier außerhalb des Testfelds, wo der Chunk nicht immer tickt
+        // (dann erwacht er nie): ins Feld holen
+        net.minecraft.world.phys.Vec3 inside = helper.absoluteVec(new net.minecraft.world.phys.Vec3(4.5, 1.0, 1.5));
+        king.snapTo(inside.x, king.getY(), inside.z, 0.0f, 0.0f);
         helper.assertTrue(king.isAwakening(), "Der König erwacht nicht");
         helper.assertTrue(seal.phase() == io.github.sirschrolli.kingdomsatwar.block.voidrealm.ThroneSealBlockEntity.Phase.AWAKE,
                 "Der Thron merkt das Erwachen nicht");
@@ -334,8 +338,11 @@ final class VoidGameTests {
         helper.assertTrue(king.getHealth() >= before, "Beim Erwachen ist der König verwundbar");
         var soldier = helper.spawnWithNoFreeWill(ModEntities.SOLDIERS.get(io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType.KNIGHT).get(),
                 new BlockPos(4, 1, 7));
-        // das Erwachen zählt KI-Takte, nicht Spieltakte: warten, bis er ganz steht (höchstens 40 Takte länger)
-        await(helper, () -> !king.isAwakening(), io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.AWAKEN_TICKS + 40,
+        // ohne Schild: hebt er ihn zufällig (die Splitter der Krone treffen ihn), fängt er die Treffer ab, die hier zählen sollen
+        soldier.setItemSlot(net.minecraft.world.entity.EquipmentSlot.OFFHAND, net.minecraft.world.item.ItemStack.EMPTY);
+        // das Erwachen zählt KI-Takte, nicht Spieltakte (in einem frisch geladenen Testfeld tickt er anfangs nicht immer):
+        // warten, bis er ganz steht
+        await(helper, () -> !king.isAwakening(), io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.AWAKEN_TICKS + 160,
                 "Der König erhebt sich nicht ganz", () -> {
             float health = soldier.getHealth();
             king.forceAttack(level, "slam_left", soldier, true);
@@ -395,12 +402,17 @@ final class VoidGameTests {
      */
     private static void crash(GameTestHelper helper, ServerLevel level, io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity king,
             net.minecraft.world.entity.LivingEntity soldier, Runnable then) {
+        // weg vom Rand (der König ist gut drei Blöcke breit – am Rand säße er beim Sturz auf der Testwand auf) und vom Thron
+        net.minecraft.world.phys.Vec3 mid = helper.absoluteVec(new net.minecraft.world.phys.Vec3(4.5, 1.0, 6.8));
+        soldier.teleportTo(mid.x, mid.y, mid.z);
         soldier.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
         soldier.setHealth(soldier.getMaxHealth());
         king.forceAttack(level, "crash", soldier, true);
         int started = king.tickCount;
         net.minecraft.world.phys.Vec3 g = king.slamPoint();
-        helper.assertTrue(Math.hypot(g.x - soldier.getX(), g.z - soldier.getZ()) < 0.5, "Der Königssturz zielt nicht auf den Ritter: " + g);
+        // der Zielpunkt reist als float (Wesensdaten): bei Testkoordinaten in den Millionen ist er bis zu einem halben Block grob
+        helper.assertTrue(Math.hypot(g.x - soldier.getX(), g.z - soldier.getZ()) < 1.0, "Der Königssturz zielt nicht auf den Ritter: " + helper.relativeVec(g)
+                + ", Ritter " + helper.relativeVec(soldier.position()) + ", König " + helper.relativeVec(king.position()));
         float[] before = {soldier.getHealth()};
         // erst steigt er über die Stelle (der Ritter bleibt heil), dann stürzt er hinein und trifft; die Takte des Königs zählen
         ModGameTests.await(helper, () -> king.getY() > g.y + 6.0, io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.CRASH_RISE + 40,
@@ -409,9 +421,18 @@ final class VoidGameTests {
             soldier.setHealth(soldier.getMaxHealth());
             soldier.setInvulnerableTime(0);
             before[0] = soldier.getHealth();
-            ModGameTests.await(helper, () -> king.getY() < g.y + 3.0 && soldier.getHealth() < before[0], 60,
+            double[] lowest = {Double.MAX_VALUE, Double.MAX_VALUE};
+            StringBuilder trace = new StringBuilder();
+            ModGameTests.await(helper, () -> {
+                        lowest[0] = Math.min(lowest[0], king.getY() - g.y);
+                        lowest[1] = Math.min(lowest[1], soldier.getHealth());
+                        trace.append(String.format(java.util.Locale.ROOT, " %d:%.1f/%.0f", king.tickCount - started, king.getY() - g.y, soldier.getHealth()));
+                        return king.getY() < g.y + 3.0 && soldier.getHealth() < before[0];
+                    }, 60,
                     () -> "Der Königssturz trifft den Ritter nicht (" + king.currentAttack() + ", " + (king.tickCount - started) + " Takte des Königs, Höhe "
-                            + String.format(java.util.Locale.ROOT, "%.1f", king.getY() - g.y) + ")", () ->
+                            + String.format(java.util.Locale.ROOT, "%.1f, tiefste %.1f, Ritter %.1f/%.1f (tiefste %.1f), Abstand %.1f, blockt %s",
+                                    king.getY() - g.y, lowest[0], soldier.getHealth(), before[0], lowest[1],
+                                    Math.hypot(soldier.getX() - g.x, soldier.getZ() - g.z), soldier.isBlocking()) + ")" + trace, () ->
                     ModGameTests.await(helper, () -> king.currentAttack().equals("none"), 60, () -> "Der Königssturz endet nicht: " + king.currentAttack(), () -> {
                         soldier.setHealth(soldier.getMaxHealth());
                         then.run();
