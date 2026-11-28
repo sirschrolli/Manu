@@ -1,0 +1,30 @@
+{
+  "feature": "kingdomsatwar:abyss/shards_ember",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 1
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "kingdomsatwar:not_near_clock_tower"
+    },
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "type": "minecraft:uniform",
+        "max_inclusive": {
+          "absolute": 205
+        },
+        "min_inclusive": {
+          "absolute": 45
+        }
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

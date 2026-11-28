@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_fae_moss": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:fae_moss"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:mossy_faestone_bricks"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_fae_moss"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:mossy_faestone_bricks"
+    ]
+  }
+}

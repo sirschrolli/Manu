@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "kingdomsatwar:block/cracked_stone_blocks",
+    "side": "kingdomsatwar:block/cracked_stone_blocks",
+    "top": "kingdomsatwar:block/cracked_stone_blocks"
+  }
+}

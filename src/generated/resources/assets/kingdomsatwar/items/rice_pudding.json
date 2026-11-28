@@ -1,0 +1,19 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "cases": [
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "kingdomsatwar:item/rice_pudding"
+        },
+        "when": "gui"
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "kingdomsatwar:item/relief/rice_pudding"
+    },
+    "property": "minecraft:display_context"
+  }
+}

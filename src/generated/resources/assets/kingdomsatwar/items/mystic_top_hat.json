@@ -1,0 +1,19 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "cases": [
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "kingdomsatwar:item/mystic_top_hat_worn"
+        },
+        "when": "head"
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "kingdomsatwar:item/mystic_top_hat"
+    },
+    "property": "minecraft:display_context"
+  }
+}

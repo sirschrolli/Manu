@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": "minecraft:enchanted_golden_apple",
+    "K": "kingdomsatwar:soul_crystal",
+    "S": "kingdomsatwar:shadow_essence"
+  },
+  "pattern": [
+    "KSK",
+    "SAS",
+    "KSK"
+  ],
+  "result": {
+    "id": "kingdomsatwar:shadow_apple"
+  }
+}

@@ -1,0 +1,319 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#pole"
+        },
+        "east": {
+          "texture": "#pole"
+        },
+        "north": {
+          "texture": "#pole"
+        },
+        "south": {
+          "texture": "#pole"
+        },
+        "up": {
+          "texture": "#pole"
+        },
+        "west": {
+          "texture": "#pole"
+        }
+      },
+      "from": [
+        7,
+        0,
+        7
+      ],
+      "to": [
+        9,
+        14,
+        9
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#gold"
+        },
+        "east": {
+          "texture": "#gold"
+        },
+        "north": {
+          "texture": "#gold"
+        },
+        "south": {
+          "texture": "#gold"
+        },
+        "up": {
+          "texture": "#gold"
+        },
+        "west": {
+          "texture": "#gold"
+        }
+      },
+      "from": [
+        6.5,
+        14,
+        6.5
+      ],
+      "to": [
+        9.5,
+        14.75,
+        9.5
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#gold"
+        },
+        "east": {
+          "texture": "#gold",
+          "uv": [
+            7.25,
+            0.0,
+            8.75,
+            1.25
+          ]
+        },
+        "north": {
+          "texture": "#gold",
+          "uv": [
+            7.25,
+            0.0,
+            8.75,
+            1.25
+          ]
+        },
+        "south": {
+          "texture": "#gold",
+          "uv": [
+            7.25,
+            0.0,
+            8.75,
+            1.25
+          ]
+        },
+        "up": {
+          "texture": "#gold"
+        },
+        "west": {
+          "texture": "#gold",
+          "uv": [
+            7.25,
+            0.0,
+            8.75,
+            1.25
+          ]
+        }
+      },
+      "from": [
+        7.25,
+        14.75,
+        7.25
+      ],
+      "to": [
+        8.75,
+        16.25,
+        8.75
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#pole",
+          "uv": [
+            1.5,
+            5.75,
+            14.5,
+            7.0
+          ]
+        },
+        "east": {
+          "texture": "#pole",
+          "uv": [
+            5.75,
+            2.75,
+            7.0,
+            4.0
+          ]
+        },
+        "north": {
+          "texture": "#pole"
+        },
+        "south": {
+          "texture": "#pole"
+        },
+        "up": {
+          "texture": "#pole"
+        },
+        "west": {
+          "texture": "#pole"
+        }
+      },
+      "from": [
+        1.5,
+        12,
+        5.75
+      ],
+      "to": [
+        14.5,
+        13.25,
+        7
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#gold",
+          "uv": [
+            0.5,
+            5.5,
+            1.5,
+            7.25
+          ]
+        },
+        "east": {
+          "texture": "#gold",
+          "uv": [
+            5.5,
+            2.5,
+            7.25,
+            4.25
+          ]
+        },
+        "north": {
+          "texture": "#gold",
+          "uv": [
+            0.5,
+            2.5,
+            1.5,
+            4.25
+          ]
+        },
+        "south": {
+          "texture": "#gold"
+        },
+        "up": {
+          "texture": "#gold"
+        },
+        "west": {
+          "texture": "#gold"
+        }
+      },
+      "from": [
+        0.5,
+        11.75,
+        5.5
+      ],
+      "to": [
+        1.5,
+        13.5,
+        7.25
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#gold",
+          "uv": [
+            14.5,
+            5.5,
+            15.5,
+            7.25
+          ]
+        },
+        "east": {
+          "texture": "#gold",
+          "uv": [
+            5.5,
+            2.5,
+            7.25,
+            4.25
+          ]
+        },
+        "north": {
+          "texture": "#gold",
+          "uv": [
+            14.5,
+            2.5,
+            15.5,
+            4.25
+          ]
+        },
+        "south": {
+          "texture": "#gold"
+        },
+        "up": {
+          "texture": "#gold"
+        },
+        "west": {
+          "texture": "#gold"
+        }
+      },
+      "from": [
+        14.5,
+        11.75,
+        5.5
+      ],
+      "to": [
+        15.5,
+        13.5,
+        7.25
+      ]
+    },
+    {
+      "faces": {
+        "east": {
+          "texture": "#cloth",
+          "uv": [
+            13.75,
+            4.0,
+            14.0,
+            16.0
+          ]
+        },
+        "north": {
+          "texture": "#cloth"
+        },
+        "south": {
+          "texture": "#cloth",
+          "uv": [
+            14.0,
+            4.0,
+            2.0,
+            16.0
+          ]
+        },
+        "west": {
+          "texture": "#cloth",
+          "uv": [
+            2.0,
+            4.0,
+            2.25,
+            16.0
+          ]
+        }
+      },
+      "from": [
+        2,
+        0,
+        6.25
+      ],
+      "to": [
+        14,
+        12,
+        6.5
+      ]
+    }
+  ],
+  "textures": {
+    "cloth": "kingdomsatwar:block/town_banner_cloth_upper",
+    "gold": "minecraft:block/gold_block",
+    "particle": "kingdomsatwar:block/town_banner_cloth_upper",
+    "pole": "minecraft:block/stripped_dark_oak_log"
+  }
+}

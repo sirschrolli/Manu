@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "kingdomsatwar:block/mossy_wall_stones",
+    "side": "kingdomsatwar:block/mossy_wall_stones",
+    "top": "kingdomsatwar:block/mossy_wall_stones"
+  }
+}

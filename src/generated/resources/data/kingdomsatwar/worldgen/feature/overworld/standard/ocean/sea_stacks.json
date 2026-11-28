@@ -1,0 +1,6 @@
+{
+  "type": "kingdomsatwar:sea_stack",
+  "band": "minecraft:andesite",
+  "body": "minecraft:stone",
+  "weathered": "minecraft:mossy_cobblestone"
+}

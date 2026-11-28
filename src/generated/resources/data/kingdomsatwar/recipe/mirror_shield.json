@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": "kingdomsatwar:abyssite_ingot",
+    "G": "minecraft:tinted_glass",
+    "S": "minecraft:shield"
+  },
+  "pattern": [
+    "AGA",
+    "ASA",
+    " A "
+  ],
+  "result": {
+    "id": "kingdomsatwar:mirror_shield"
+  }
+}

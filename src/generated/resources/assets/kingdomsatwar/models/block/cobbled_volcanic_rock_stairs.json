@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "kingdomsatwar:block/cobbled_volcanic_rock",
+    "side": "kingdomsatwar:block/cobbled_volcanic_rock",
+    "top": "kingdomsatwar:block/cobbled_volcanic_rock"
+  }
+}

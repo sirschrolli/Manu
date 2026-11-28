@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "kingdomsatwar:block/oak_bench",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "kingdomsatwar:block/oak_bench"
+    },
+    "facing=south": {
+      "model": "kingdomsatwar:block/oak_bench",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "kingdomsatwar:block/oak_bench",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "cases": [
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "kingdomsatwar:item/ice_rune"
+        },
+        "when": "gui"
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "kingdomsatwar:item/relief/ice_rune"
+    },
+    "property": "minecraft:display_context"
+  }
+}

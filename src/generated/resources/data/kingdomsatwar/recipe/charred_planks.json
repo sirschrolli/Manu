@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "kingdomsatwar:charred_log"
+  ],
+  "result": {
+    "count": 4,
+    "id": "kingdomsatwar:charred_planks"
+  }
+}

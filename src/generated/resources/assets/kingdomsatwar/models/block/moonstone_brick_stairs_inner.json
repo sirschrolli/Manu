@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "kingdomsatwar:block/moonstone_bricks",
+    "side": "kingdomsatwar:block/moonstone_bricks",
+    "top": "kingdomsatwar:block/moonstone_bricks"
+  }
+}

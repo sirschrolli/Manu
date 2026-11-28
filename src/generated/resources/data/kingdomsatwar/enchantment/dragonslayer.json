@@ -1,0 +1,43 @@
+{
+  "anvil_cost": 4,
+  "description": {
+    "translate": "enchantment.kingdomsatwar.dragonslayer"
+  },
+  "effects": {
+    "minecraft:damage": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": {
+            "type": "minecraft:linear",
+            "base": 3.0,
+            "per_level_above_first": 3.0
+          }
+        },
+        "requirements": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "#kingdomsatwar:dragons"
+          }
+        }
+      }
+    ]
+  },
+  "exclusive_set": "#minecraft:exclusive_set/damage",
+  "max_cost": {
+    "base": 65,
+    "per_level_above_first": 10
+  },
+  "max_level": 3,
+  "min_cost": {
+    "base": 15,
+    "per_level_above_first": 10
+  },
+  "primary_items": "#minecraft:enchantable/melee_weapon",
+  "slots": [
+    "mainhand"
+  ],
+  "supported_items": "#minecraft:enchantable/weapon",
+  "weight": 2
+}

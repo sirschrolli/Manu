@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/soul_chapel",
+  "kind": "soul_chapel",
+  "spawn_overrides": {},
+  "step": "top_layer_modification"
+}

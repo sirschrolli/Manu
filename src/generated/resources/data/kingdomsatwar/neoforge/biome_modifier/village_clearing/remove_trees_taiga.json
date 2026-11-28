@@ -1,0 +1,9 @@
+{
+  "type": "neoforge:remove_features",
+  "biomes": [
+    "minecraft:taiga",
+    "minecraft:snowy_taiga"
+  ],
+  "features": "minecraft:trees_taiga",
+  "steps": "vegetal_decoration"
+}

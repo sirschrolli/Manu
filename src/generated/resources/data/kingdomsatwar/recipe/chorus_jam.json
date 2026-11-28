@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:chorus_fruit",
+    "minecraft:chorus_fruit",
+    "minecraft:sugar",
+    "minecraft:glass_bottle"
+  ],
+  "result": {
+    "id": "kingdomsatwar:chorus_jam"
+  }
+}

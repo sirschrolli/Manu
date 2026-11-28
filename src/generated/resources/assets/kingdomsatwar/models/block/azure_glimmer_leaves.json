@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/leaves",
+  "textures": {
+    "all": "kingdomsatwar:block/azure_glimmer_leaves"
+  }
+}

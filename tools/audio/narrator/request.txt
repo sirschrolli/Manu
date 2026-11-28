@@ -1,0 +1,2 @@
+# Eine Änderung an dieser Datei startet .github/workflows/narrator.yml (Erzählerstimme neu sprechen).
+2026-11-02: neues Intro „Das Siegel“ (11 Zeilen) und der Erzähler zu den Kapiteln (19 Zeilen), Deutsch und Englisch.

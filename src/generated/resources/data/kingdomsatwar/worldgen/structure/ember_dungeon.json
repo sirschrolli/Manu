@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/ember_dungeon",
+  "kind": "ember_dungeon",
+  "spawn_overrides": {},
+  "step": "top_layer_modification"
+}

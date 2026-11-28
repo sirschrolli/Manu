@@ -1,0 +1,30 @@
+{
+  "values": [
+    "#minecraft:substrate_overworld",
+    "#minecraft:dirt",
+    "#minecraft:nylium",
+    "#minecraft:sand",
+    "#minecraft:snow",
+    "#minecraft:base_stone_overworld",
+    "#minecraft:base_stone_nether",
+    "#c:sands",
+    "#c:gravels",
+    "#c:netherracks",
+    "#c:end_stones",
+    "#kingdomsatwar:natural_ground",
+    "minecraft:snow_block",
+    "minecraft:snow",
+    "minecraft:powder_snow",
+    "minecraft:ice",
+    "minecraft:packed_ice",
+    "minecraft:blue_ice",
+    "minecraft:clay",
+    "minecraft:soul_sand",
+    "minecraft:soul_soil",
+    "minecraft:dirt_path",
+    "minecraft:farmland",
+    "minecraft:calcite",
+    "minecraft:smooth_basalt",
+    "minecraft:magma_block"
+  ]
+}

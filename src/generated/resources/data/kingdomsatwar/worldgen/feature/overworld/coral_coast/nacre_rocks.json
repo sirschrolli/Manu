@@ -1,0 +1,12 @@
+{
+  "type": "kingdomsatwar:boulder",
+  "accent": "minecraft:prismarine",
+  "accent_chance": 0.05,
+  "in_water": true,
+  "max_radius": 2.6,
+  "min_radius": 1.4,
+  "secondary": "minecraft:calcite",
+  "secondary_chance": 0.35,
+  "stone": "kingdomsatwar:nacre_block",
+  "top": "minecraft:air"
+}

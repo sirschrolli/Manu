@@ -1,0 +1,11 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": [
+    "kingdomsatwar:void_crystal_forest",
+    "kingdomsatwar:void_stardust_fields",
+    "kingdomsatwar:void_expanse",
+    "kingdomsatwar:void_ruins"
+  ],
+  "features": "kingdomsatwar:wild_starfruit",
+  "step": "vegetal_decoration"
+}

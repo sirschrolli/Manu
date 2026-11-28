@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "#": "minecraft:stick",
+    "W": "kingdomsatwar:glimmerwood_planks"
+  },
+  "pattern": [
+    "#W#",
+    "#W#"
+  ],
+  "result": {
+    "id": "kingdomsatwar:glimmerwood_fence_gate"
+  }
+}

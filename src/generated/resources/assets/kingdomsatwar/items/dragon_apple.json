@@ -1,0 +1,19 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "cases": [
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "kingdomsatwar:item/dragon_apple"
+        },
+        "when": "gui"
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "kingdomsatwar:item/relief/dragon_apple"
+    },
+    "property": "minecraft:display_context"
+  }
+}

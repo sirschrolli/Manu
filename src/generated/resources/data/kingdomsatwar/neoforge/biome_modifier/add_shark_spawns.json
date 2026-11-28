@@ -1,0 +1,22 @@
+{
+  "type": "kingdomsatwar:add_spawns_in_category",
+  "biomes": [
+    "minecraft:warm_ocean",
+    "minecraft:lukewarm_ocean",
+    "minecraft:deep_lukewarm_ocean",
+    "minecraft:deep_ocean",
+    "minecraft:deep_cold_ocean"
+  ],
+  "category": "water_creature",
+  "spawners": [
+    {
+      "type": "kingdomsatwar:shark",
+      "count": {
+        "type": "minecraft:uniform",
+        "max_inclusive": 2,
+        "min_inclusive": 1
+      },
+      "weight": 2
+    }
+  ]
+}

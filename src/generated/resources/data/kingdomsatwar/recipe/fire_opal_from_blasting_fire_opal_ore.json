@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:blasting",
+  "cookingtime": 100,
+  "experience": 1.2,
+  "group": "fire_opal",
+  "ingredient": "kingdomsatwar:fire_opal_ore",
+  "result": {
+    "id": "kingdomsatwar:fire_opal"
+  }
+}

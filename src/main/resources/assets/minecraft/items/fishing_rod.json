@@ -1,0 +1,28 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "minecraft:fishing_rod/cast",
+    "on_false": {
+      "type": "minecraft:select",
+      "property": "minecraft:display_context",
+      "cases": [
+        {
+          "when": ["gui", "ground", "fixed", "on_shelf"],
+          "model": {"type": "minecraft:model", "model": "minecraft:item/fishing_rod"}
+        }
+      ],
+      "fallback": {"type": "minecraft:model", "model": "kingdomsatwar:item/fishing_rod_in_hand"}
+    },
+    "on_true": {
+      "type": "minecraft:select",
+      "property": "minecraft:display_context",
+      "cases": [
+        {
+          "when": ["gui", "ground", "fixed", "on_shelf"],
+          "model": {"type": "minecraft:model", "model": "minecraft:item/fishing_rod_cast"}
+        }
+      ],
+      "fallback": {"type": "minecraft:model", "model": "kingdomsatwar:item/fishing_rod_cast_in_hand"}
+    }
+  }
+}

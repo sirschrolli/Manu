@@ -1,0 +1,10 @@
+{
+	"match": {
+		"type": "kingdomsatwar:fire_dragon_boss"
+	},
+	"luminance": {
+		"type": "lambdynlights:wet_sensitive",
+		"dry": 13,
+		"wet": 6
+	}
+}

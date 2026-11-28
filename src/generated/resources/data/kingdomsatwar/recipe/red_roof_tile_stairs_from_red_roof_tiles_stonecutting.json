@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:red_roof_tiles",
+  "result": {
+    "id": "kingdomsatwar:red_roof_tile_stairs"
+  }
+}

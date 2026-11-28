@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "P": "minecraft:oak_planks",
+    "S": "minecraft:stick"
+  },
+  "pattern": [
+    "P  ",
+    "PPP",
+    "S S"
+  ],
+  "result": {
+    "count": 2,
+    "id": "kingdomsatwar:oak_chair"
+  }
+}

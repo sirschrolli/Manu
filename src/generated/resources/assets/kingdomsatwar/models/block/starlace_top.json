@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross_emissive",
+  "textures": {
+    "cross": "kingdomsatwar:block/starlace_top",
+    "cross_emissive": "kingdomsatwar:block/starlace_top_emissive"
+  }
+}

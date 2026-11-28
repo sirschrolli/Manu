@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "H": "minecraft:goat_horn",
+    "S": "#kingdomsatwar:dragon_scales"
+  },
+  "pattern": [
+    " G ",
+    "SHS",
+    " G "
+  ],
+  "result": {
+    "id": "kingdomsatwar:dragon_horn"
+  }
+}

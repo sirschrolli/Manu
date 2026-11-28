@@ -1,0 +1,38 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "exclusion_zone": {
+      "chunk_count": 5,
+      "other_set": "minecraft:nether_complexes"
+    },
+    "salt": 20261117,
+    "separation": 9,
+    "spacing": 19
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:ember_dungeon",
+      "weight": 3
+    },
+    {
+      "structure": "kingdomsatwar:strider_ranch",
+      "weight": 3
+    },
+    {
+      "structure": "kingdomsatwar:wart_brewery",
+      "weight": 3
+    },
+    {
+      "structure": "kingdomsatwar:soul_chapel",
+      "weight": 3
+    },
+    {
+      "structure": "kingdomsatwar:gold_mine",
+      "weight": 3
+    },
+    {
+      "structure": "kingdomsatwar:broken_bridge",
+      "weight": 2
+    }
+  ]
+}

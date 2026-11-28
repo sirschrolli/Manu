@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "kingdomsatwar:block/starfruit_bush_stage1"
+  }
+}

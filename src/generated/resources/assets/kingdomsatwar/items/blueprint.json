@@ -1,0 +1,15 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "component": "kingdomsatwar:custom_plan",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "kingdomsatwar:item/blueprint"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "kingdomsatwar:item/blueprint_custom"
+    },
+    "property": "minecraft:has_component"
+  }
+}

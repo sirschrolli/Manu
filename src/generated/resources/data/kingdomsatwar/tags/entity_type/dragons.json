@@ -1,0 +1,19 @@
+{
+  "values": [
+    "kingdomsatwar:fire_dragon",
+    "kingdomsatwar:ice_dragon",
+    "kingdomsatwar:lightning_dragon",
+    "kingdomsatwar:nature_dragon",
+    "kingdomsatwar:earth_dragon",
+    "kingdomsatwar:water_dragon",
+    "kingdomsatwar:fire_dragon_boss",
+    "kingdomsatwar:ice_dragon_boss",
+    "kingdomsatwar:nature_dragon_boss",
+    "kingdomsatwar:earth_dragon_boss",
+    "kingdomsatwar:lightning_dragon_boss",
+    "kingdomsatwar:water_dragon_boss",
+    "kingdomsatwar:shadow_dragon_boss",
+    "kingdomsatwar:lindworm",
+    "minecraft:ender_dragon"
+  ]
+}

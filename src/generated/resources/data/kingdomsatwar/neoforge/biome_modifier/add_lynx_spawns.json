@@ -1,0 +1,22 @@
+{
+  "type": "kingdomsatwar:add_spawns_in_category",
+  "biomes": [
+    "minecraft:taiga",
+    "minecraft:snowy_taiga",
+    "minecraft:old_growth_pine_taiga",
+    "minecraft:old_growth_spruce_taiga",
+    "minecraft:grove"
+  ],
+  "category": "monster",
+  "spawners": [
+    {
+      "type": "kingdomsatwar:wildcat",
+      "count": {
+        "type": "minecraft:uniform",
+        "max_inclusive": 1,
+        "min_inclusive": 1
+      },
+      "weight": 2
+    }
+  ]
+}

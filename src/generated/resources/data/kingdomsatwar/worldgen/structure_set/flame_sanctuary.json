@@ -1,0 +1,18 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "exclusion_zone": {
+      "chunk_count": 10,
+      "other_set": "kingdomsatwar:realm_castles"
+    },
+    "salt": 61220903,
+    "separation": 26,
+    "spacing": 58
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:flame_sanctuary",
+      "weight": 1
+    }
+  ]
+}

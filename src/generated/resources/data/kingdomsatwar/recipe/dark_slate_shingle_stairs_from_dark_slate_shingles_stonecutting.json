@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:dark_slate_shingles",
+  "result": {
+    "id": "kingdomsatwar:dark_slate_shingle_stairs"
+  }
+}

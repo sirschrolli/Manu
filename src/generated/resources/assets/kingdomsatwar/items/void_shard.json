@@ -1,0 +1,19 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "cases": [
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "kingdomsatwar:item/void_shard"
+        },
+        "when": "gui"
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "kingdomsatwar:item/relief/void_shard"
+    },
+    "property": "minecraft:display_context"
+  }
+}

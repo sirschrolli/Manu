@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_astral_marble": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:astral_marble"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:astral_marble_wall_from_astral_marble_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_astral_marble"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:astral_marble_wall_from_astral_marble_stonecutting"
+    ]
+  }
+}

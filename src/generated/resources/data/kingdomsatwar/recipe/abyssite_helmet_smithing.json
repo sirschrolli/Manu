@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "kingdomsatwar:abyssite_ingot",
+  "base": "kingdomsatwar:nightsteel_helmet",
+  "result": {
+    "id": "kingdomsatwar:abyssite_helmet"
+  },
+  "template": "kingdomsatwar:abyssite_upgrade_smithing_template"
+}

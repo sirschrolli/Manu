@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": "minecraft:chest",
+    "I": "minecraft:iron_ingot",
+    "L": "#minecraft:logs",
+    "P": "#minecraft:planks",
+    "W": "#minecraft:wool"
+  },
+  "pattern": [
+    "WWW",
+    "PCP",
+    "LIL"
+  ],
+  "result": {
+    "id": "kingdomsatwar:wagon"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "kingdomsatwar:block/kelpwood_plank_slab"
+    },
+    "type=double": {
+      "model": "kingdomsatwar:block/kelpwood_planks"
+    },
+    "type=top": {
+      "model": "kingdomsatwar:block/kelpwood_plank_slab_top"
+    }
+  }
+}

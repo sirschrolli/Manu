@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross_emissive",
+  "textures": {
+    "cross": "kingdomsatwar:block/lift_crystal",
+    "cross_emissive": "kingdomsatwar:block/lift_crystal_emissive"
+  }
+}

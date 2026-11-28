@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:milk_bucket",
+    "minecraft:milk_bucket",
+    "minecraft:milk_bucket"
+  ],
+  "result": {
+    "id": "kingdomsatwar:cheese_wheel"
+  }
+}

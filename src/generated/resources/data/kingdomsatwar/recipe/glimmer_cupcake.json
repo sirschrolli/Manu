@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kingdomsatwar:flour",
+    "#minecraft:eggs",
+    "minecraft:sugar",
+    "kingdomsatwar:fae_dust"
+  ],
+  "result": {
+    "count": 3,
+    "id": "kingdomsatwar:glimmer_cupcake"
+  }
+}

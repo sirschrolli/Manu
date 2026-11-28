@@ -1,0 +1,15 @@
+{
+  "placement": {
+    "type": "kingdomsatwar:shadow_citadel",
+    "biomes": "#kingdomsatwar:has_shadow_citadel",
+    "max_distance": 1700,
+    "min_distance": 900,
+    "salt": 66613
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:shadow_citadel",
+      "weight": 1
+    }
+  ]
+}

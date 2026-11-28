@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": "kingdomsatwar:abyssite_ingot",
+    "E": "minecraft:ender_eye",
+    "R": "minecraft:stick"
+  },
+  "pattern": [
+    "AEA",
+    " R ",
+    " R "
+  ],
+  "result": {
+    "id": "kingdomsatwar:ore_seeker"
+  }
+}

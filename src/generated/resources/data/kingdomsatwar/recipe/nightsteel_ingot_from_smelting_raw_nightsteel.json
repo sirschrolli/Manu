@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "cookingtime": 200,
+  "experience": 1.0,
+  "group": "nightsteel_ingot",
+  "ingredient": "kingdomsatwar:raw_nightsteel",
+  "result": {
+    "id": "kingdomsatwar:nightsteel_ingot"
+  }
+}

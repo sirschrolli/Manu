@@ -1,0 +1,8 @@
+{
+	"match": {
+		"type": "kingdomsatwar:monster_shot"
+	},
+	"luminance": {
+		"type": "lambdynlights:projectile/throwable_item"
+	}
+}

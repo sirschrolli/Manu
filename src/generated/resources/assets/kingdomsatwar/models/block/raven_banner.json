@@ -1,0 +1,251 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "cullface": "down",
+          "texture": "#iron"
+        },
+        "east": {
+          "texture": "#iron"
+        },
+        "north": {
+          "texture": "#iron"
+        },
+        "south": {
+          "texture": "#iron"
+        },
+        "up": {
+          "texture": "#iron"
+        },
+        "west": {
+          "texture": "#iron"
+        }
+      },
+      "from": [
+        5,
+        0,
+        5
+      ],
+      "to": [
+        11,
+        1.5,
+        11
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#iron"
+        },
+        "east": {
+          "texture": "#iron"
+        },
+        "north": {
+          "texture": "#iron"
+        },
+        "south": {
+          "texture": "#iron"
+        },
+        "up": {
+          "texture": "#iron"
+        },
+        "west": {
+          "texture": "#iron"
+        }
+      },
+      "from": [
+        6.25,
+        1.5,
+        6.25
+      ],
+      "to": [
+        9.75,
+        2.5,
+        9.75
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#pole"
+        },
+        "east": {
+          "texture": "#pole"
+        },
+        "north": {
+          "texture": "#pole"
+        },
+        "south": {
+          "texture": "#pole"
+        },
+        "up": {
+          "texture": "#pole"
+        },
+        "west": {
+          "texture": "#pole"
+        }
+      },
+      "from": [
+        7,
+        2.5,
+        7
+      ],
+      "to": [
+        9,
+        16,
+        9
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#pole"
+        },
+        "east": {
+          "texture": "#pole",
+          "uv": [
+            7.0,
+            -0.0,
+            9.0,
+            16.0
+          ]
+        },
+        "north": {
+          "texture": "#pole",
+          "uv": [
+            7.0,
+            -0.0,
+            9.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#pole",
+          "uv": [
+            7.0,
+            -0.0,
+            9.0,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#pole"
+        },
+        "west": {
+          "texture": "#pole",
+          "uv": [
+            7.0,
+            -0.0,
+            9.0,
+            16.0
+          ]
+        }
+      },
+      "from": [
+        7,
+        16,
+        7
+      ],
+      "to": [
+        9,
+        32,
+        9
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#iron"
+        },
+        "east": {
+          "texture": "#iron"
+        },
+        "north": {
+          "texture": "#iron"
+        },
+        "south": {
+          "texture": "#iron"
+        },
+        "up": {
+          "texture": "#iron"
+        },
+        "west": {
+          "texture": "#iron"
+        }
+      },
+      "from": [
+        6.75,
+        9,
+        6.75
+      ],
+      "to": [
+        9.25,
+        10,
+        9.25
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#iron"
+        },
+        "east": {
+          "texture": "#iron",
+          "uv": [
+            6.75,
+            9.0,
+            9.25,
+            10.0
+          ]
+        },
+        "north": {
+          "texture": "#iron",
+          "uv": [
+            6.75,
+            9.0,
+            9.25,
+            10.0
+          ]
+        },
+        "south": {
+          "texture": "#iron",
+          "uv": [
+            6.75,
+            9.0,
+            9.25,
+            10.0
+          ]
+        },
+        "up": {
+          "texture": "#iron"
+        },
+        "west": {
+          "texture": "#iron",
+          "uv": [
+            6.75,
+            9.0,
+            9.25,
+            10.0
+          ]
+        }
+      },
+      "from": [
+        6.75,
+        22,
+        6.75
+      ],
+      "to": [
+        9.25,
+        23,
+        9.25
+      ]
+    }
+  ],
+  "textures": {
+    "iron": "kingdomsatwar:block/raven_banner_iron",
+    "particle": "kingdomsatwar:block/raven_banner_pole",
+    "pole": "kingdomsatwar:block/raven_banner_pole"
+  }
+}

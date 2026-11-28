@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "S": "kingdomsatwar:night_crystal_shard"
+  },
+  "pattern": [
+    "SS",
+    "SS"
+  ],
+  "result": {
+    "id": "kingdomsatwar:night_crystal"
+  }
+}

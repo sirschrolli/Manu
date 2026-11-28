@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "kingdomsatwar:block/rough_fieldstone",
+    "side": "kingdomsatwar:block/rough_fieldstone",
+    "top": "kingdomsatwar:block/rough_fieldstone"
+  }
+}

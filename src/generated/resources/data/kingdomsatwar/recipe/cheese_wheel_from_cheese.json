@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kingdomsatwar:cheese",
+    "kingdomsatwar:cheese",
+    "kingdomsatwar:cheese",
+    "kingdomsatwar:cheese"
+  ],
+  "result": {
+    "id": "kingdomsatwar:cheese_wheel"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "cookingtime": 200,
+  "experience": 1.2,
+  "group": "phasit",
+  "ingredient": "kingdomsatwar:phasit_ore",
+  "result": {
+    "id": "kingdomsatwar:phasit"
+  }
+}

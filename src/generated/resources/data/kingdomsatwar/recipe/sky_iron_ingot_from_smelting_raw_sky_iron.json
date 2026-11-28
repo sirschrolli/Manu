@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "cookingtime": 200,
+  "experience": 1.2,
+  "group": "sky_iron_ingot",
+  "ingredient": "kingdomsatwar:raw_sky_iron",
+  "result": {
+    "id": "kingdomsatwar:sky_iron_ingot"
+  }
+}

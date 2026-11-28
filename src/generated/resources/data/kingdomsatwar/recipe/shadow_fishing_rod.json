@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "G": "kingdomsatwar:moonsilver_ingot",
+    "L": "minecraft:string",
+    "M": "kingdomsatwar:nightsteel_ingot"
+  },
+  "pattern": [
+    "  M",
+    " ML",
+    "G L"
+  ],
+  "result": {
+    "id": "kingdomsatwar:shadow_fishing_rod"
+  }
+}

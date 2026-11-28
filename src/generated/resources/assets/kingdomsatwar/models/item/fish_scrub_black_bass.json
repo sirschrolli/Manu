@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "kingdomsatwar:item/fish/scrub_black_bass"
+  }
+}

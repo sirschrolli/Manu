@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kingdomsatwar:float_berries",
+    "kingdomsatwar:float_berries",
+    "kingdomsatwar:float_berries",
+    "kingdomsatwar:flour",
+    "minecraft:sugar",
+    "#minecraft:eggs"
+  ],
+  "result": {
+    "count": 2,
+    "id": "kingdomsatwar:float_berry_tart"
+  }
+}

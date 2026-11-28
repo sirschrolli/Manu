@@ -1,0 +1,80 @@
+{
+  "lines": {
+    "kingdom": {
+      "de": 11.012,
+      "en": 9.751
+    },
+    "chronicle": {
+      "de": 10.672,
+      "en": 11.967
+    },
+    "dragon_1": {
+      "de": 11.727,
+      "en": 11.975
+    },
+    "fallen_fire": {
+      "de": 7.494,
+      "en": 6.742
+    },
+    "fallen_ice": {
+      "de": 5.869,
+      "en": 5.751
+    },
+    "fallen_lightning": {
+      "de": 6.121,
+      "en": 7.112
+    },
+    "fallen_nature": {
+      "de": 6.84,
+      "en": 6.505
+    },
+    "fallen_earth": {
+      "de": 5.669,
+      "en": 5.619
+    },
+    "fallen_water": {
+      "de": 4.764,
+      "en": 5.681
+    },
+    "remaining_5": {
+      "de": 5.734,
+      "en": 5.61
+    },
+    "remaining_4": {
+      "de": 6.417,
+      "en": 7.909
+    },
+    "remaining_3": {
+      "de": 6.136,
+      "en": 6.167
+    },
+    "remaining_2": {
+      "de": 5.284,
+      "en": 6.81
+    },
+    "remaining_1": {
+      "de": 9.275,
+      "en": 10.015
+    },
+    "all_fallen": {
+      "de": 6.26,
+      "en": 6.53
+    },
+    "seal": {
+      "de": 8.898,
+      "en": 10.087
+    },
+    "crown": {
+      "de": 12.319,
+      "en": 12.243
+    },
+    "nyxar": {
+      "de": 5.477,
+      "en": 6.161
+    },
+    "crowned": {
+      "de": 9.618,
+      "en": 8.879
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "kingdomsatwar:block/keeper_stone_bottom",
+    "side": "kingdomsatwar:block/keeper_stone_side",
+    "top": "kingdomsatwar:block/keeper_stone_top"
+  }
+}

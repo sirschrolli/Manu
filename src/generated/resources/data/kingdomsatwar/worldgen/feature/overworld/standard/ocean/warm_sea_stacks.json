@@ -1,0 +1,6 @@
+{
+  "type": "kingdomsatwar:sea_stack",
+  "band": "minecraft:calcite",
+  "body": "minecraft:sandstone",
+  "weathered": "minecraft:smooth_sandstone"
+}

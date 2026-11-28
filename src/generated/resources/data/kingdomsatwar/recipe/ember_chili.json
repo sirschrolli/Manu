@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kingdomsatwar:ember_pepper",
+    "kingdomsatwar:ember_pepper",
+    "minecraft:cooked_porkchop",
+    "kingdomsatwar:tomato",
+    "minecraft:bowl"
+  ],
+  "result": {
+    "id": "kingdomsatwar:ember_chili"
+  }
+}

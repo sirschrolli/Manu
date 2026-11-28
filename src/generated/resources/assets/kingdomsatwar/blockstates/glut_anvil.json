@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=east,phase=awake": {
+      "model": "kingdomsatwar:block/glut_anvil_hot",
+      "y": 90
+    },
+    "facing=east,phase=cold": {
+      "model": "kingdomsatwar:block/glut_anvil_cold",
+      "y": 90
+    },
+    "facing=east,phase=dormant": {
+      "model": "kingdomsatwar:block/glut_anvil",
+      "y": 90
+    },
+    "facing=north,phase=awake": {
+      "model": "kingdomsatwar:block/glut_anvil_hot"
+    },
+    "facing=north,phase=cold": {
+      "model": "kingdomsatwar:block/glut_anvil_cold"
+    },
+    "facing=north,phase=dormant": {
+      "model": "kingdomsatwar:block/glut_anvil"
+    },
+    "facing=south,phase=awake": {
+      "model": "kingdomsatwar:block/glut_anvil_hot",
+      "y": 180
+    },
+    "facing=south,phase=cold": {
+      "model": "kingdomsatwar:block/glut_anvil_cold",
+      "y": 180
+    },
+    "facing=south,phase=dormant": {
+      "model": "kingdomsatwar:block/glut_anvil",
+      "y": 180
+    },
+    "facing=west,phase=awake": {
+      "model": "kingdomsatwar:block/glut_anvil_hot",
+      "y": 270
+    },
+    "facing=west,phase=cold": {
+      "model": "kingdomsatwar:block/glut_anvil_cold",
+      "y": 270
+    },
+    "facing=west,phase=dormant": {
+      "model": "kingdomsatwar:block/glut_anvil",
+      "y": 270
+    }
+  }
+}

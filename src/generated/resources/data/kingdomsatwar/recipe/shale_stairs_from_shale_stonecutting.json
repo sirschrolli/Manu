@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:shale",
+  "result": {
+    "id": "kingdomsatwar:shale_stairs"
+  }
+}

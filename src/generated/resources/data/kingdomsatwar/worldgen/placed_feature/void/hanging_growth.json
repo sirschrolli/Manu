@@ -1,0 +1,19 @@
+{
+  "feature": "kingdomsatwar:void/hanging_growth",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 4
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "kingdomsatwar:any_surface",
+      "ceiling": true
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

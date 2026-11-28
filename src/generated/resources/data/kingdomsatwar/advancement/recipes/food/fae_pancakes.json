@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_fae_berries": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:fae_berries"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:fae_pancakes"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_fae_berries"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:fae_pancakes"
+    ]
+  }
+}

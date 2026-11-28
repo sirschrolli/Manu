@@ -1,0 +1,15 @@
+{
+  "type": "kingdomsatwar:abyss_world_shard",
+  "inverted_chance": 0.3,
+  "max_radius": 12,
+  "min_radius": 4,
+  "palettes": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ]
+}

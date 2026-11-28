@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:village",
+  "biomes": "#kingdomsatwar:has_village/timber",
+  "spawn_overrides": {},
+  "step": "surface_structures",
+  "style": "timber"
+}

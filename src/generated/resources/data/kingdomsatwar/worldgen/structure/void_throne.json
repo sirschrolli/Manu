@@ -1,0 +1,15 @@
+{
+  "type": "kingdomsatwar:void_throne",
+  "biomes": "#kingdomsatwar:has_void_throne",
+  "spawn_overrides": {
+    "creature": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "monster": {
+      "bounding_box": "full",
+      "spawns": []
+    }
+  },
+  "step": "top_layer_modification"
+}

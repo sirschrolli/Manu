@@ -1,0 +1,59 @@
+package io.github.sirschrolli.kingdomsatwar.datagen;
+
+import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.loot.ModLootTables;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
+import net.minecraft.resources.Identifier;
+import net.neoforged.neoforge.common.data.GlobalLootModifierProvider;
+import net.neoforged.neoforge.common.loot.AddTableLootModifier;
+import net.neoforged.neoforge.common.loot.LootTableIdCondition;
+
+/**
+ * Globale Loot-Modifier: hängen zusätzliche Beute an Vanilla-Loot-Tables an.
+ */
+public class ModLootModifierProvider extends GlobalLootModifierProvider {
+    public ModLootModifierProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(output, registries, KingdomsAtWar.MODID);
+    }
+
+    @Override
+    protected void start() {
+        seedsFromGrass("seeds_from_short_grass", "blocks/short_grass");
+        seedsFromGrass("seeds_from_tall_grass", "blocks/tall_grass");
+        // Münzen von Monstern, die ein Spieler besiegt
+        var entities = this.registries.lookupOrThrow(net.minecraft.core.registries.Registries.ENTITY_TYPE);
+        var monster = net.minecraft.world.level.storage.loot.predicates.AllOfCondition.allOf(
+                net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition.killedByPlayer(),
+                net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition.hasProperties(
+                        net.minecraft.world.level.storage.loot.LootContext.EntityTarget.THIS,
+                        net.minecraft.advancements.predicates.entity.EntityPredicate.Builder.entity().entityType(
+                                net.minecraft.advancements.predicates.entity.EntityTypePredicate.of(entities,
+                                        io.github.sirschrolli.kingdomsatwar.registry.ModTags.EntityTypes.DROPS_COINS)))).build();
+        add("coins_from_monsters", new AddTableLootModifier(Optional.of(Holder.direct(monster)), 0, ModLootTables.MONSTER_COINS));
+        // seltenere Monsterbeute (seit 1.3): ein gutes Drittel dessen, was Monster fallen lassen, bleibt aus (nicht, was man
+        // für den Fortgang braucht)
+        var anyMonster = net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition.hasProperties(
+                net.minecraft.world.level.storage.loot.LootContext.EntityTarget.THIS,
+                net.minecraft.advancements.predicates.entity.EntityPredicate.Builder.entity().entityType(
+                        net.minecraft.advancements.predicates.entity.EntityTypePredicate.of(entities,
+                                io.github.sirschrolli.kingdomsatwar.registry.ModTags.EntityTypes.DROPS_COINS))).build();
+        add("lean_monster_drops", new io.github.sirschrolli.kingdomsatwar.loot.LeanDropsLootModifier(Optional.of(Holder.direct(anyMonster)), 0, 0.35f));
+        // karge Truhen: in allen eigenen Truhen bleibt nur ein Teil liegen (Wertvolles noch seltener), Stapel schrumpfen
+        add("lean_chests", new io.github.sirschrolli.kingdomsatwar.loot.LeanLootModifier(Optional.empty(), 0, 0.45f, 0.7f, 0.5f, "chests/"));
+        // Froschlichter, wenn ein eigener Frosch einen kleinen Magmawürfel frisst
+        add("froglights_from_magma_cubes", new AddTableLootModifier(
+                Optional.of(Holder.direct(LootTableIdCondition.builder(Identifier.withDefaultNamespace("entities/magma_cube")).build())),
+                0, ModLootTables.FROGLIGHTS));
+    }
+
+    private void seedsFromGrass(String name, String vanillaTable) {
+        add(name, new AddTableLootModifier(
+                Optional.of(Holder.direct(LootTableIdCondition.builder(Identifier.withDefaultNamespace(vanillaTable)).build())),
+                0,
+                ModLootTables.GRASS_SEEDS));
+    }
+}

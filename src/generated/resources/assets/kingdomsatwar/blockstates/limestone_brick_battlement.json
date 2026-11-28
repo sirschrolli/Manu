@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "kingdomsatwar:block/limestone_brick_battlement",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "kingdomsatwar:block/limestone_brick_battlement"
+    },
+    "facing=south": {
+      "model": "kingdomsatwar:block/limestone_brick_battlement",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "kingdomsatwar:block/limestone_brick_battlement",
+      "y": 270
+    }
+  }
+}

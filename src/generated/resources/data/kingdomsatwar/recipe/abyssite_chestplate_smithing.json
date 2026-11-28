@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "kingdomsatwar:abyssite_ingot",
+  "base": "kingdomsatwar:nightsteel_chestplate",
+  "result": {
+    "id": "kingdomsatwar:abyssite_chestplate"
+  },
+  "template": "kingdomsatwar:abyssite_upgrade_smithing_template"
+}

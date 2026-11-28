@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "kingdomsatwar:stormstone",
+    "kingdomsatwar:storm_crystal"
+  ],
+  "result": {
+    "id": "kingdomsatwar:charged_stormstone"
+  }
+}

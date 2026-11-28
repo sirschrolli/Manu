@@ -1,0 +1,43 @@
+{
+  "anvil_cost": 8,
+  "description": {
+    "translate": "enchantment.kingdomsatwar.lifesteal"
+  },
+  "effects": {
+    "minecraft:post_attack": [
+      {
+        "affected": "attacker",
+        "effect": {
+          "type": "kingdomsatwar:heal",
+          "amount": {
+            "type": "minecraft:linear",
+            "base": 0.5,
+            "per_level_above_first": 0.5
+          }
+        },
+        "enchanted": "attacker",
+        "requirements": {
+          "type": "minecraft:damage_source_properties",
+          "predicate": {
+            "is_direct": true
+          }
+        }
+      }
+    ]
+  },
+  "max_cost": {
+    "base": 70,
+    "per_level_above_first": 15
+  },
+  "max_level": 3,
+  "min_cost": {
+    "base": 20,
+    "per_level_above_first": 15
+  },
+  "primary_items": "#minecraft:enchantable/melee_weapon",
+  "slots": [
+    "mainhand"
+  ],
+  "supported_items": "#minecraft:enchantable/sharp_weapon",
+  "weight": 1
+}

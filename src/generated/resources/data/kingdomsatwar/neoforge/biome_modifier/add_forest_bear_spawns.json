@@ -1,0 +1,22 @@
+{
+  "type": "kingdomsatwar:add_spawns_in_category",
+  "biomes": [
+    "minecraft:taiga",
+    "minecraft:old_growth_pine_taiga",
+    "minecraft:old_growth_spruce_taiga",
+    "minecraft:windswept_forest",
+    "kingdomsatwar:primeval_forest"
+  ],
+  "category": "creature",
+  "spawners": [
+    {
+      "type": "kingdomsatwar:bear",
+      "count": {
+        "type": "minecraft:uniform",
+        "max_inclusive": 2,
+        "min_inclusive": 1
+      },
+      "weight": 2
+    }
+  ]
+}

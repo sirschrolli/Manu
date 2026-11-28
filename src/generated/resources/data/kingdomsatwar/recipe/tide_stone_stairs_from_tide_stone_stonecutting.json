@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:tide_stone",
+  "result": {
+    "id": "kingdomsatwar:tide_stone_stairs"
+  }
+}

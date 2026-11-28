@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/alchemist_tower",
+  "kind": "alchemist_tower",
+  "spawn_overrides": {},
+  "step": "top_layer_modification"
+}

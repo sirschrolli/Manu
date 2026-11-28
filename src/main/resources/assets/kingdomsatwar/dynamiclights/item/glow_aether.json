@@ -1,0 +1,12 @@
+{
+	"match": {
+		"items": [
+			"kingdomsatwar:aether_core",
+			"kingdomsatwar:aetherit",
+			"kingdomsatwar:aetherit_staff",
+			"kingdomsatwar:creator_spark"
+		]
+	},
+	"luminance": 9,
+	"water_sensitive": false
+}

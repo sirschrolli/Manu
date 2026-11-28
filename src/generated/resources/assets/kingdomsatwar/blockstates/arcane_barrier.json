@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "element=earth": {
+      "model": "kingdomsatwar:block/arcane_barrier_earth"
+    },
+    "element=fire": {
+      "model": "kingdomsatwar:block/arcane_barrier_fire"
+    },
+    "element=ice": {
+      "model": "kingdomsatwar:block/arcane_barrier_ice"
+    },
+    "element=lightning": {
+      "model": "kingdomsatwar:block/arcane_barrier_lightning"
+    },
+    "element=nature": {
+      "model": "kingdomsatwar:block/arcane_barrier_nature"
+    },
+    "element=water": {
+      "model": "kingdomsatwar:block/arcane_barrier_water"
+    }
+  }
+}

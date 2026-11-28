@@ -1,0 +1,9 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": [
+    "minecraft:taiga",
+    "minecraft:snowy_taiga"
+  ],
+  "features": "kingdomsatwar:village_safe/trees_taiga",
+  "step": "vegetal_decoration"
+}

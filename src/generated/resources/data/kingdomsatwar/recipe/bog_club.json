@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "H": "kingdomsatwar:bog_heart",
+    "R": "kingdomsatwar:bog_root"
+  },
+  "pattern": [
+    " HR",
+    " RR",
+    "R  "
+  ],
+  "result": {
+    "id": "kingdomsatwar:bog_club"
+  }
+}

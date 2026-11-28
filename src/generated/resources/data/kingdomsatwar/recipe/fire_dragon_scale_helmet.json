@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": "kingdomsatwar:steel_helmet",
+    "S": "kingdomsatwar:fire_dragon_scale"
+  },
+  "pattern": [
+    "SSS",
+    "SAS"
+  ],
+  "result": {
+    "id": "kingdomsatwar:fire_dragon_scale_helmet"
+  }
+}

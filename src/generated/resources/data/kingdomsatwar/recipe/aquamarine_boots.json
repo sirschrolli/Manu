@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": "kingdomsatwar:aquamarine",
+    "K": "minecraft:dried_kelp"
+  },
+  "pattern": [
+    "A A",
+    "K K",
+    "A A"
+  ],
+  "result": {
+    "id": "kingdomsatwar:aquamarine_boots"
+  }
+}

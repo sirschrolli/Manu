@@ -1,0 +1,45 @@
+{
+  "debug_functions": [
+    {
+      "function": "kingdomsatwar:urmeer/final_density",
+      "label": "N"
+    },
+    {
+      "function": "kingdomsatwar:urmeer/reef",
+      "label": "T"
+    },
+    {
+      "function": "kingdomsatwar:urmeer/islands",
+      "label": "C"
+    },
+    {
+      "function": "kingdomsatwar:urmeer/trench",
+      "label": "E"
+    },
+    {
+      "function": "kingdomsatwar:urmeer/height",
+      "label": "H"
+    }
+  ],
+  "default_block": "kingdomsatwar:tide_stone",
+  "default_fluid": "minecraft:water",
+  "disable_mob_generation": false,
+  "legacy_random_source": false,
+  "material_rule": "kingdomsatwar:urmeer",
+  "noise": {
+    "height": 288,
+    "min_y": -32
+  },
+  "noise_router": {
+    "chunk_surface_level": "kingdomsatwar:urmeer/height",
+    "continents": "kingdomsatwar:urmeer/islands",
+    "depth": 0.0,
+    "erosion": "kingdomsatwar:urmeer/trench",
+    "final_density": "kingdomsatwar:urmeer/final_density",
+    "ridges": 0.0,
+    "temperature": "kingdomsatwar:urmeer/reef",
+    "vegetation": "kingdomsatwar:urmeer/vegetation"
+  },
+  "sea_level": 96,
+  "spawn_target": []
+}

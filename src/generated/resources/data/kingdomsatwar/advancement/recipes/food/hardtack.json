@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_bread_roll": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:bread_roll"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:hardtack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_bread_roll"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:hardtack"
+    ]
+  }
+}

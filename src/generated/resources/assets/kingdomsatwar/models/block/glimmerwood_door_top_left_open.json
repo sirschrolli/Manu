@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_top_left_open",
+  "textures": {
+    "bottom": "kingdomsatwar:block/glimmerwood_door_bottom",
+    "top": "kingdomsatwar:block/glimmerwood_door_top"
+  }
+}

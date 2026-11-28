@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "G": "minecraft:gold_nugget"
+  },
+  "pattern": [
+    "CGC",
+    "GCG",
+    "CGC"
+  ],
+  "result": {
+    "count": 4,
+    "id": "kingdomsatwar:clock_bronze"
+  }
+}

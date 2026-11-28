@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kingdomsatwar:moonsilver_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "kingdomsatwar:moonsilver_ingot"
+  }
+}

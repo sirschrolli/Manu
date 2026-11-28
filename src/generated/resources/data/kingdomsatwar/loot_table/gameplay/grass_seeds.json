@@ -1,0 +1,46 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "kingdomsatwar:tomato_seeds"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "kingdomsatwar:cabbage_seeds"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "kingdomsatwar:barley_seeds"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "kingdomsatwar:onion"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "kingdomsatwar:hops"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "kingdomsatwar:grapes"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "kingdomsatwar:garlic"
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 56
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "kingdomsatwar:gameplay/grass_seeds"
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "kingdomsatwar:block/shadow_stone_slab"
+    },
+    "type=double": {
+      "model": "kingdomsatwar:block/shadow_stone"
+    },
+    "type=top": {
+      "model": "kingdomsatwar:block/shadow_stone_slab_top"
+    }
+  }
+}

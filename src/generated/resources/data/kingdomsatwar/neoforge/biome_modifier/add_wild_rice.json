@@ -1,0 +1,11 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": [
+    "minecraft:swamp",
+    "minecraft:mangrove_swamp",
+    "minecraft:river",
+    "kingdomsatwar:mist_moor"
+  ],
+  "features": "kingdomsatwar:wild_rice",
+  "step": "vegetal_decoration"
+}

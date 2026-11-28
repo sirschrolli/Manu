@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:cache",
+  "input": {
+    "type": "minecraft:add",
+    "left": {
+      "type": "minecraft:mul",
+      "left": {
+        "type": "minecraft:noise",
+        "noise": "kingdomsatwar:void/height",
+        "xz_scale": 1.0,
+        "y_scale": 0.0
+      },
+      "right": 55.0
+    },
+    "right": 105.0
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "kingdomsatwar:block/abyssal_stone_slab"
+    },
+    "type=double": {
+      "model": "kingdomsatwar:block/abyssal_stone"
+    },
+    "type=top": {
+      "model": "kingdomsatwar:block/abyssal_stone_slab_top"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kingdomsatwar:abyssite_shard",
+    "kingdomsatwar:abyssite_shard",
+    "kingdomsatwar:abyssite_shard",
+    "kingdomsatwar:abyssite_shard",
+    "kingdomsatwar:nightsteel_ingot",
+    "kingdomsatwar:nightsteel_ingot",
+    "kingdomsatwar:nightsteel_ingot",
+    "kingdomsatwar:nightsteel_ingot"
+  ],
+  "result": {
+    "id": "kingdomsatwar:abyssite_ingot"
+  }
+}

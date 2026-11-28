@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "L": "kingdomsatwar:angler_lure",
+    "N": "minecraft:iron_nugget",
+    "P": "minecraft:prismarine_shard"
+  },
+  "pattern": [
+    "NPN",
+    "PLP",
+    "NPN"
+  ],
+  "result": {
+    "id": "kingdomsatwar:deep_sea_lantern"
+  }
+}

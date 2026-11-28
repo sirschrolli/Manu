@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:cache",
+  "input": {
+    "type": "minecraft:noise",
+    "noise": "kingdomsatwar:abyss/mask",
+    "xz_scale": 1.0,
+    "y_scale": 0.0
+  }
+}

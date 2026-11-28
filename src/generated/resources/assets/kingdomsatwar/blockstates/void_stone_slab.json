@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "kingdomsatwar:block/void_stone_slab"
+    },
+    "type=double": {
+      "model": "kingdomsatwar:block/void_stone"
+    },
+    "type=top": {
+      "model": "kingdomsatwar:block/void_stone_slab_top"
+    }
+  }
+}

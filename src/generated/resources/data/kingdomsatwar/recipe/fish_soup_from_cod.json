@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:cod",
+    "minecraft:potato",
+    "kingdomsatwar:onion",
+    "minecraft:bowl"
+  ],
+  "result": {
+    "id": "kingdomsatwar:fish_soup"
+  }
+}

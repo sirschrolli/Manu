@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "phase=awake": {
+      "model": "kingdomsatwar:block/clock_heart_awake"
+    },
+    "phase=defeated": {
+      "model": "kingdomsatwar:block/clock_heart_defeated"
+    },
+    "phase=sleeping": {
+      "model": "kingdomsatwar:block/clock_heart"
+    }
+  }
+}

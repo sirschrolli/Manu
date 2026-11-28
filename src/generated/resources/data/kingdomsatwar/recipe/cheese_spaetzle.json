@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kingdomsatwar:flour",
+    "#minecraft:eggs",
+    "kingdomsatwar:cheese",
+    "kingdomsatwar:onion",
+    "minecraft:bowl"
+  ],
+  "result": {
+    "id": "kingdomsatwar:cheese_spaetzle"
+  }
+}

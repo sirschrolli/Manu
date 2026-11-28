@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "L": "#minecraft:logs",
+    "P": "#minecraft:planks",
+    "S": "minecraft:string",
+    "X": "minecraft:crossbow"
+  },
+  "pattern": [
+    "SXS",
+    "PIP",
+    "L L"
+  ],
+  "result": {
+    "id": "kingdomsatwar:ballista"
+  }
+}

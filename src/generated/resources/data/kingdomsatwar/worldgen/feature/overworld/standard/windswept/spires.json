@@ -1,0 +1,12 @@
+{
+  "type": "kingdomsatwar:spire",
+  "band": "minecraft:calcite",
+  "band_every": 4,
+  "base_radius": 1.6,
+  "body": "minecraft:stone",
+  "in_water": false,
+  "lean": 0.1,
+  "max_height": 14,
+  "min_height": 6,
+  "tip": "minecraft:air"
+}

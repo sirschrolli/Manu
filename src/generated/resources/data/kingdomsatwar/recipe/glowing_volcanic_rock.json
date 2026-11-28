@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "kingdomsatwar:volcanic_rock",
+    "minecraft:magma_cream"
+  ],
+  "result": {
+    "id": "kingdomsatwar:glowing_volcanic_rock"
+  }
+}

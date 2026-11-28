@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/leaves",
+  "textures": {
+    "all": "kingdomsatwar:block/abysswood_leaves"
+  }
+}

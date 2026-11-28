@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_savanna",
+  "features": "kingdomsatwar:flower_fire_lily",
+  "step": "vegetal_decoration"
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "minecraft:book",
+    "E": "minecraft:emerald",
+    "P": "#minecraft:planks",
+    "S": "minecraft:stick"
+  },
+  "pattern": [
+    "EBE",
+    "PPP",
+    "S S"
+  ],
+  "result": {
+    "id": "kingdomsatwar:recruitment_table"
+  }
+}

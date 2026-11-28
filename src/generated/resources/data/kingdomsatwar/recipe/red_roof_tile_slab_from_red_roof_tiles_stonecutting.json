@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:red_roof_tiles",
+  "result": {
+    "count": 2,
+    "id": "kingdomsatwar:red_roof_tile_slab"
+  }
+}

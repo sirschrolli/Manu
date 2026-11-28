@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "kingdomsatwar:waystone_compass",
+    "E": "minecraft:echo_shard"
+  },
+  "pattern": [
+    "EEE",
+    "ECE",
+    "EEE"
+  ],
+  "result": {
+    "id": "minecraft:recovery_compass"
+  }
+}

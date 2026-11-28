@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "H": "kingdomsatwar:reinforced_handle",
+    "M": "kingdomsatwar:steel_ingot",
+    "S": "minecraft:stick"
+  },
+  "pattern": [
+    "MMM",
+    " H ",
+    " S "
+  ],
+  "result": {
+    "id": "kingdomsatwar:steel_pickaxe"
+  }
+}

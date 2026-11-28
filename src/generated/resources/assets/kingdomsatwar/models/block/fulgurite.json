@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "kingdomsatwar:block/fulgurite_top",
+    "side": "kingdomsatwar:block/fulgurite"
+  }
+}

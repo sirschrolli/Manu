@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "kingdomsatwar:nightsteel"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "kingdomsatwar:nightsteel"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "kingdomsatwar:nightsteel"
+      }
+    ]
+  }
+}

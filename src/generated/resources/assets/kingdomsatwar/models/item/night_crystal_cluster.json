@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "kingdomsatwar:block/night_crystal_cluster",
+    "layer1": "kingdomsatwar:block/night_crystal_cluster_emissive"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/fallen_star",
+  "kind": "fallen_star",
+  "spawn_overrides": {},
+  "step": "strongholds"
+}

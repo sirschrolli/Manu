@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "kingdomsatwar:block/astral_marble",
+    "side": "kingdomsatwar:block/astral_marble",
+    "top": "kingdomsatwar:block/astral_marble"
+  }
+}

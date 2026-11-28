@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "kingdomsatwar:creator_spark",
+    "E": "kingdomsatwar:totem_ember",
+    "F": "kingdomsatwar:totem_frost",
+    "G": "kingdomsatwar:totem_grove",
+    "H": "kingdomsatwar:heart_crystal",
+    "R": "kingdomsatwar:totem_stone",
+    "S": "kingdomsatwar:totem_storm",
+    "T": "kingdomsatwar:totem_tide"
+  },
+  "pattern": [
+    "EFS",
+    "HCH",
+    "RGT"
+  ],
+  "result": {
+    "id": "kingdomsatwar:totem_creator"
+  }
+}

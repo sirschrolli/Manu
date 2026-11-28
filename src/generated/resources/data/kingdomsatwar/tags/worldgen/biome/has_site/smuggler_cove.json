@@ -1,0 +1,12 @@
+{
+  "values": [
+    "#minecraft:is_beach",
+    "minecraft:stony_shore",
+    "kingdomsatwar:storm_coast",
+    "kingdomsatwar:coral_coast",
+    "minecraft:ocean",
+    "minecraft:lukewarm_ocean",
+    "minecraft:cold_ocean",
+    "minecraft:warm_ocean"
+  ]
+}

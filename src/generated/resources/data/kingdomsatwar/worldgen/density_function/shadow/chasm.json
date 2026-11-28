@@ -1,0 +1,54 @@
+{
+  "type": "minecraft:cache",
+  "input": {
+    "type": "minecraft:mul",
+    "left": {
+      "type": "minecraft:mul",
+      "left": {
+        "type": "minecraft:add",
+        "left": {
+          "type": "minecraft:mul",
+          "left": {
+            "type": "minecraft:clamp",
+            "input": {
+              "type": "minecraft:abs",
+              "input": "kingdomsatwar:shadow/ridges"
+            },
+            "max": 0.075,
+            "min": 0.0
+          },
+          "right": -13.333333
+        },
+        "right": 1.0
+      },
+      "right": {
+        "type": "minecraft:add",
+        "left": {
+          "type": "minecraft:mul",
+          "left": {
+            "type": "minecraft:clamp",
+            "input": "kingdomsatwar:shadow/temperature",
+            "max": 0.06,
+            "min": -0.08
+          },
+          "right": 7.142857
+        },
+        "right": 0.57142854
+      }
+    },
+    "right": {
+      "type": "minecraft:add",
+      "left": {
+        "type": "minecraft:mul",
+        "left": {
+          "type": "minecraft:clamp",
+          "input": "kingdomsatwar:shadow/continents",
+          "max": -0.04,
+          "min": -0.16
+        },
+        "right": 8.333334
+      },
+      "right": 1.3333334
+    }
+  }
+}

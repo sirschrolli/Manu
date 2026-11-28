@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "kingdomsatwar:block/faestone_slab"
+    },
+    "type=double": {
+      "model": "kingdomsatwar:block/faestone"
+    },
+    "type=top": {
+      "model": "kingdomsatwar:block/faestone_slab_top"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "kingdomsatwar:block/abysswood_plank_slab"
+    },
+    "type=double": {
+      "model": "kingdomsatwar:block/abysswood_planks"
+    },
+    "type=top": {
+      "model": "kingdomsatwar:block/abysswood_plank_slab_top"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "feature": "kingdomsatwar:fae/moonstone_quarry",
+  "placement": [
+    {
+      "type": "kingdomsatwar:spaced",
+      "salt": 61337,
+      "separation": 14,
+      "spacing": 32
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

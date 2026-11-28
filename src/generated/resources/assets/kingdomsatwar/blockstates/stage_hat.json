@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "phase=empty": {
+      "model": "kingdomsatwar:block/stage_hat_empty"
+    },
+    "phase=show": {
+      "model": "kingdomsatwar:block/stage_hat"
+    },
+    "phase=waiting": {
+      "model": "kingdomsatwar:block/stage_hat"
+    }
+  }
+}

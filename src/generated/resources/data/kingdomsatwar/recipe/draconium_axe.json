@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "minecraft:blaze_rod",
+    "D": "kingdomsatwar:draconium",
+    "S": "kingdomsatwar:steel_ingot"
+  },
+  "pattern": [
+    "DDS",
+    "DB ",
+    " B "
+  ],
+  "result": {
+    "id": "kingdomsatwar:draconium_axe"
+  }
+}

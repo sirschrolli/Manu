@@ -1,0 +1,17 @@
+{
+  "placement": {
+    "type": "kingdomsatwar:unique_nest",
+    "biomes": "#kingdomsatwar:has_ice_dragon_nests",
+    "element": "ice",
+    "inland": true,
+    "max_distance": 2600,
+    "min_distance": 1000,
+    "salt": 118
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:ice_dragon_lair",
+      "weight": 1
+    }
+  ]
+}

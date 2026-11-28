@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "kingdomsatwar:block/astral_marble_bricks",
+    "side": "kingdomsatwar:block/astral_marble_bricks",
+    "top": "kingdomsatwar:block/astral_marble_bricks"
+  }
+}

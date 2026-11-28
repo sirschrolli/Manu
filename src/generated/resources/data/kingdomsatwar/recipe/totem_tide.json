@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "minecraft:nautilus_shell",
+    "E": "kingdomsatwar:water_dragon_scale",
+    "T": "minecraft:totem_of_undying"
+  },
+  "pattern": [
+    "CEC",
+    "ETE",
+    "CEC"
+  ],
+  "result": {
+    "id": "kingdomsatwar:totem_tide"
+  }
+}

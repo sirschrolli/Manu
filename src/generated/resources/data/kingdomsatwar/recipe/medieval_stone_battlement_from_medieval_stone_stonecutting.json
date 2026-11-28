@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:medieval_stone",
+  "result": {
+    "id": "kingdomsatwar:medieval_stone_battlement"
+  }
+}

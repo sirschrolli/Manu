@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_ember_pepper": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:ember_pepper"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:ember_chili"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_ember_pepper"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:ember_chili"
+    ]
+  }
+}

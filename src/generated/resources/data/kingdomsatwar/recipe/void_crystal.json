@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "S": "kingdomsatwar:void_shard"
+  },
+  "pattern": [
+    "SS",
+    "SS"
+  ],
+  "result": {
+    "id": "kingdomsatwar:void_crystal"
+  }
+}

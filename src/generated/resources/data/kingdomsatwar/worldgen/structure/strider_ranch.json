@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/strider_ranch",
+  "kind": "strider_ranch",
+  "spawn_overrides": {},
+  "step": "top_layer_modification"
+}

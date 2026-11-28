@@ -1,0 +1,1000 @@
+package io.github.sirschrolli.kingdomsatwar.client.hero;
+
+import io.github.sirschrolli.kingdomsatwar.economy.Coins;
+import io.github.sirschrolli.kingdomsatwar.hero.Crystals;
+import io.github.sirschrolli.kingdomsatwar.hero.HeroLevel;
+import io.github.sirschrolli.kingdomsatwar.magic.Mana;
+import io.github.sirschrolli.kingdomsatwar.network.HeroTalentPayload;
+import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
+import java.util.ArrayList;
+import java.util.List;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiMotion;
+import io.github.sirschrolli.kingdomsatwar.client.gui.UiTheme;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.ARGB;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.Mth;
+import net.minecraft.util.Util;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+import org.jspecify.annotations.Nullable;
+
+/**
+ * Das Charakterfenster (Taste K) im dunkelgoldenen Stil der Heldenstufe:
+ *
+ * <ul>
+ *   <li>links der Held selbst (er folgt der Maus), sein Rang, seine Werte (Leben, Mana, Rüstung, Schaden), was er gefunden
+ *       hat (Herz- und Manakristalle, Biome) und die Knöpfe;</li>
+ *   <li>rechts oben das Rangabzeichen mit der Stufe (Strahlen drehen sich dahinter; darüber verrät ein Hinweis die
+ *       Heldenkraft und das Licht der Unsterblichkeit), die Leiste der Heldenerfahrung (sie füllt sich beim Öffnen) und der
+ *       Heldenweg: die elf Ränge auf einer Linie, der nächste leuchtet;</li>
+ *   <li>darunter, je nach Reiter (seit 1.11 hängen drei Lesezeichen am rechten Rand): die Kampftalente oder das Handwerk
+ *       als Karten – Bild, Name, was die Punkte bringen, zwanzig Kästchen in der Farbe des Talents (in der Meisterschaft,
+ *       ab Punkt 21, werden sie nacheinander golden) und ein goldener Plus-Knopf, der pulsiert, solange Punkte frei sind;
+ *       ein neuer Punkt blitzt auf und sprüht Funken – oder die acht Fähigkeiten in zwei Spalten (gesperrte grau mit der
+ *       Stufe, ab der sie kommen; ein Klick legt eine auf die Fähigkeitstaste).</li>
+ * </ul>
+ * Unter dem Rang steht ab Stufe 250 der Titel mit seinem Siegel. Im Hintergrund steigen langsam Glutfunken auf.
+ */
+public class CharacterScreen extends Screen implements UiTheme.HeroStyle {
+    private static final int WIDTH = 324;
+    private static final int HEIGHT = 268;
+    private static final int LEFT_W = 90;
+    private static final int RIGHT_X = 116;
+    private static final int CARD_Y = 108;
+    private static final int CARD_H = 20;
+    private static final int CARD_GAP = 2;
+    private static final int TAB_W = 26;
+    private static final int TAB_H = 26;
+    private static final int TAB_Y = 26;
+    private static final int ABILITY_H = 36;
+    private static final Identifier HEART = Identifier.withDefaultNamespace("hud/heart/full");
+    private static final Identifier ARMOR = Identifier.withDefaultNamespace("hud/armor_full");
+
+    /** Die Reiter: Kampftalente, Handwerk, Fähigkeiten. */
+    private enum Tab {
+        COMBAT, CRAFT, ABILITIES
+    }
+
+    /** Welcher Reiter zuletzt offen war (bleibt, bis das Spiel endet). */
+    private static Tab lastTab = Tab.COMBAT;
+
+    private int left;
+    private int top;
+    /** Maßstab, in dem das Fenster gezeichnet wird (kleiner als 1, wenn der Bildschirm zu klein ist). */
+    private float fit = 1.0f;
+    private long openedAt;
+    private long tabAt;
+    private Tab tab = lastTab;
+    private final List<HeroButton> plus = new ArrayList<>();
+    private final List<HeroLevel.Talent> shown = new ArrayList<>();
+    private @Nullable HeroButton reset;
+    /** Wann zuletzt ein Punkt in ein Talent ging (für das Aufblitzen), und welches Kästchen. */
+    private final long[] spentAt = new long[HeroLevel.Talent.values().length];
+    private final int[] lastPoints = new int[HeroLevel.Talent.values().length];
+
+    public CharacterScreen() {
+        super(Component.translatable("gui.kingdomsatwar.character.title"));
+        java.util.Arrays.fill(this.lastPoints, -1);
+    }
+
+    @Override
+    protected void init() {
+        // passt das Fenster nicht ganz auf den Bildschirm (große GUI-Skalierung), wird alles etwas kleiner gezeichnet; gerechnet
+        // wird dann in der größeren, gedachten Fläche
+        this.fit = HeroGui.fit(WIDTH + TAB_W + 2, HEIGHT + 6);
+        int w = Mth.floor(this.width / this.fit);
+        int h = Mth.floor(this.height / this.fit);
+        // die Lesezeichen ragen rechts heraus: das Ganze bleibt mittig
+        this.left = (w - WIDTH - TAB_W + 6) / 2;
+        this.top = (h - HEIGHT) / 2;
+        if (this.openedAt == 0L) {
+            this.openedAt = Util.getMillis();
+            this.tabAt = this.openedAt;
+        }
+        this.plus.clear();
+        this.shown.clear();
+        int rw = WIDTH - RIGHT_X - 12;
+        if (this.tab != Tab.ABILITIES) {
+            this.shown.addAll(HeroLevel.Talent.of(this.pot()));
+            for (int i = 0; i < this.shown.size(); i++) {
+                HeroLevel.Talent talent = this.shown.get(i);
+                int y = this.top + CARD_Y + i * (CARD_H + CARD_GAP) + 4;
+                this.plus.add(this.addRenderableWidget(HeroButton.plus(this.left + RIGHT_X + rw - 16, y,
+                        Component.translatable("gui.kingdomsatwar.character.talent.spend"),
+                        button -> ClientPacketDistributor.sendToServer(new HeroTalentPayload(talent.ordinal())))));
+            }
+        }
+        int bx = this.left + 12;
+        this.reset = this.addRenderableWidget(HeroButton.text(bx, this.top + HEIGHT - 58, LEFT_W,
+                Component.translatable("gui.kingdomsatwar.character.reset"),
+                button -> ClientPacketDistributor.sendToServer(new HeroTalentPayload(this.pot() == HeroLevel.Pot.CRAFT ? HeroTalentPayload.RESET_CRAFT
+                        : HeroTalentPayload.RESET))));
+        this.reset.visible = this.tab != Tab.ABILITIES;
+        this.addRenderableWidget(HeroButton.text(bx, this.top + HEIGHT - 34, LEFT_W, Component.translatable("gui.kingdomsatwar.character.path"),
+                button -> this.minecraft.gui.setScreen(new HeroPathScreen())));
+        this.updateButtons();
+    }
+
+    private HeroLevel.Pot pot() {
+        return this.tab == Tab.CRAFT ? HeroLevel.Pot.CRAFT : HeroLevel.Pot.COMBAT;
+    }
+
+    /** Wechselt den Reiter (die Karten gleiten neu herein). */
+    private void open(Tab next) {
+        if (next == this.tab) {
+            return;
+        }
+        this.tab = next;
+        lastTab = next;
+        this.tabAt = Util.getMillis();
+        this.minecraft.getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(
+                net.minecraft.sounds.SoundEvents.BOOK_PAGE_TURN, 1.1f, 0.8f));
+        this.rebuildWidgets();
+    }
+
+    /** Nur für Vorführungen: einen Reiter öffnen (0 Kampf, 1 Handwerk, 2 Fähigkeiten). */
+    public void devTab(int index) {
+        this.open(Tab.values()[Math.floorMod(index, Tab.values().length)]);
+    }
+
+    @Override
+    public void tick() {
+        this.updateButtons();
+    }
+
+    private void updateButtons() {
+        Player player = this.minecraft.player;
+        if (player == null || this.reset == null) {
+            return;
+        }
+        HeroLevel.Hero hero = HeroLevel.of(player);
+        HeroLevel.Pot pot = this.pot();
+        for (int i = 0; i < this.shown.size(); i++) {
+            HeroLevel.Talent talent = this.shown.get(i);
+            HeroButton button = this.plus.get(i);
+            boolean full = hero.points(talent) >= HeroLevel.MAX_TALENT;
+            button.active = hero.unspent(pot) > 0 && !full;
+            button.setTooltip(Tooltip.create(Component.translatable(full ? "gui.kingdomsatwar.character.talent.full" : hero.unspent(pot) > 0
+                    ? "gui.kingdomsatwar.character.talent.spend" : pot == HeroLevel.Pot.CRAFT ? "gui.kingdomsatwar.character.talent.no_craft"
+                            : "gui.kingdomsatwar.character.talent.no_points", HeroLevel.MAX_TALENT)));
+        }
+        for (HeroLevel.Talent talent : HeroLevel.Talent.values()) {
+            int points = hero.points(talent);
+            int before = this.lastPoints[talent.ordinal()];
+            if (before >= 0 && points > before) {
+                this.spentAt[talent.ordinal()] = Util.getMillis();
+            }
+            this.lastPoints[talent.ordinal()] = points;
+        }
+        int cost = HeroLevel.resetCost(hero, pot);
+        boolean affordable = player.hasInfiniteMaterials() || Coins.canAfford(player, cost);
+        this.reset.active = hero.spent(pot) > 0 && affordable;
+        this.reset.setTooltip(Tooltip.create(hero.spent(pot) == 0 ? Component.translatable("gui.kingdomsatwar.character.reset.none")
+                : Component.translatable(pot == HeroLevel.Pot.CRAFT ? "gui.kingdomsatwar.character.reset.hint_craft"
+                        : "gui.kingdomsatwar.character.reset.hint", Coins.format(cost)).withStyle(affordable ? ChatFormatting.WHITE : ChatFormatting.RED)));
+    }
+
+    @Override
+    public boolean keyPressed(KeyEvent event) {
+        if (this.minecraft.options.keyInventory.matches(event)
+                || io.github.sirschrolli.kingdomsatwar.client.ModKeyMappings.CHARACTER.matches(event)) {
+            this.onClose();
+            return true;
+        }
+        return super.keyPressed(event);
+    }
+
+    @Override
+    public boolean isPauseScreen() {
+        return false;
+    }
+
+    @Override
+    public boolean isInGameUi() {
+        return true;
+    }
+
+    private float age() {
+        return (Util.getMillis() - this.openedAt) / 1000.0f;
+    }
+
+    // ------------------------------------------------------------------------------------------------ Zeichnen
+
+    /** Mausstelle in der gedachten Fläche des Fensters. */
+    private int virtual(double screen) {
+        return Mth.floor(screen / this.fit);
+    }
+
+    private MouseButtonEvent virtual(MouseButtonEvent event) {
+        return this.fit >= 1.0f ? event : new MouseButtonEvent(event.x() / this.fit, event.y() / this.fit, event.buttonInfo());
+    }
+
+    @Override
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
+        super.extractBackground(g, mouseX, mouseY, a);
+        UiMotion.begin(g, this.openedAt, this.width / 2.0f, this.height / 2.0f);
+        g.pose().pushMatrix();
+        g.pose().scale(this.fit, this.fit);
+        this.background(g, this.virtual(mouseX), this.virtual(mouseY));
+        g.pose().popMatrix();
+        UiMotion.end(g);
+    }
+
+    private void background(GuiGraphicsExtractor g, int mouseX, int mouseY) {
+        // die Lesezeichen: die anderen hinter dem Fenster, der offene davor
+        for (Tab t : Tab.values()) {
+            if (t != this.tab) {
+                this.drawTab(g, t, mouseX, mouseY);
+            }
+        }
+        g.blitSprite(RenderPipelines.GUI_TEXTURED, HeroGui.PANEL, this.left, this.top, WIDTH, HEIGHT);
+        this.drawTab(g, this.tab, mouseX, mouseY);
+        this.embers(g);
+        // links: der Held in seinem Rahmen
+        g.blitSprite(RenderPipelines.GUI_TEXTURED, HeroGui.INSET, this.left + 12, this.top + 12, LEFT_W, 98);
+        // die goldene Trennlinie zwischen den Spalten, oben und unten ein Ziernagel
+        int lx = this.left + RIGHT_X - 9;
+        g.fillGradient(lx, this.top + 16, lx + 1, this.top + HEIGHT - 16, 0x00B5832C, 0xFFB5832C);
+        g.fill(lx, this.top + HEIGHT / 2 - 40, lx + 1, this.top + HEIGHT / 2 + 40, 0xFFE2B24A);
+        g.fill(lx - 1, this.top + HEIGHT / 2 - 1, lx + 2, this.top + HEIGHT / 2 + 2, 0xFFFFE7A0);
+    }
+
+    /** Glutfunken, die langsam im Fenster aufsteigen und flackern (ohne eigenen Zustand: alles aus der Uhrzeit). */
+    private void embers(GuiGraphicsExtractor g) {
+        float time = HeroGui.seconds();
+        g.enableScissor(this.left + 10, this.top + 10, this.left + WIDTH - 10, this.top + HEIGHT - 10);
+        for (int i = 0; i < 26; i++) {
+            float speed = 7.0f + (i * 37 % 11);
+            float offset = (i * 97.3f) % (HEIGHT - 20);
+            float y = this.top + HEIGHT - 12 - ((time * speed + offset) % (HEIGHT - 24));
+            float x = this.left + 14 + ((i * 71.7f) % (WIDTH - 28)) + Mth.sin(time * 0.7f + i) * 6.0f;
+            float life = ((time * speed + offset) % (HEIGHT - 24)) / (HEIGHT - 24);
+            float flicker = 0.6f + 0.4f * Mth.sin(time * 5.0f + i * 1.7f);
+            float k = Mth.sin(life * Mth.PI) * flicker;
+            HeroGui.light(g, HeroGui.GLOW, x, y, 7.0f + (i % 4), 0.0f, i % 3 == 0 ? 0xFFFF9A3C : 0xFFF2C14E, 0.22f * k);
+        }
+        g.disableScissor();
+    }
+
+    @Override
+    public void extractRenderState(GuiGraphicsExtractor g, int realX, int realY, float a) {
+        UiMotion.begin(g, this.openedAt, this.width / 2.0f, this.height / 2.0f);
+        try {
+            this.extractWindow(g, realX, realY, a);
+        } finally {
+            UiMotion.end(g);
+        }
+    }
+
+    private void extractWindow(GuiGraphicsExtractor g, int realX, int realY, float a) {
+        int mouseX = this.virtual(realX);
+        int mouseY = this.virtual(realY);
+        g.pose().pushMatrix();
+        g.pose().scale(this.fit, this.fit);
+        Player player = this.minecraft.player;
+        if (player != null) {
+            this.drawContent(g, player, mouseX, mouseY, realX, realY);
+        }
+        // die Knöpfe zuletzt: über den Karten
+        super.extractRenderState(g, mouseX, mouseY, a);
+        if (this.fit < 1.0f) {
+            // Tooltips gleich hier, im selben Maßstab und an der richtigen Stelle
+            g.extractDeferredElements(mouseX, mouseY, a);
+        }
+        g.pose().popMatrix();
+    }
+
+    private void drawContent(GuiGraphicsExtractor g, Player player, int mouseX, int mouseY, int realX, int realY) {
+        HeroLevel.Hero hero = HeroLevel.of(player);
+        int x0 = this.left;
+        int y0 = this.top;
+        // die Figur wird als eigenes Bild eingesetzt (ohne den Maßstab): Lage und Größe auf dem echten Bildschirm
+        InventoryScreen.extractEntityInInventoryFollowsMouse(g, this.real(x0 + 13), this.real(y0 + 13), this.real(x0 + 12 + LEFT_W - 1),
+                this.real(y0 + 109), Math.round(40 * this.fit), 0.0625f, realX, realY, player);
+        this.drawLeft(g, player, hero, x0 + 12, y0 + 114, mouseX, mouseY);
+        int rx = x0 + RIGHT_X;
+        int rw = WIDTH - RIGHT_X - 12;
+        this.drawHeader(g, player, hero, rx, y0 + 12, rw, mouseX, mouseY);
+        this.drawTrack(g, hero, rx, y0 + 68, rw, mouseX, mouseY);
+        if (this.tab == Tab.ABILITIES) {
+            this.drawAbilities(g, player, hero, rx, y0, rw, mouseX, mouseY);
+            return;
+        }
+        HeroLevel.Pot pot = this.pot();
+        int unspent = hero.unspent(pot);
+        boolean craft = pot == HeroLevel.Pot.CRAFT;
+        Component points = unspent > 0 ? Component.translatable(craft ? "gui.kingdomsatwar.character.craft_points" : "gui.kingdomsatwar.character.points",
+                unspent) : Component.translatable(craft ? "gui.kingdomsatwar.character.craft_points.none" : "gui.kingdomsatwar.character.points.none");
+        HeroGui.text(g, this.font, points, rx + 2, y0 + CARD_Y - 11, unspent > 0 ? HeroGui.GOOD : HeroGui.MUTED);
+        if (unspent > 0) {
+            float pulse = 0.5f + 0.5f * Mth.sin(HeroGui.seconds() * 4.5f);
+            int sx = rx + 2 + this.font.width(points) + 4;
+            HeroGui.light(g, HeroGui.GLOW, sx + 3.5f, y0 + CARD_Y - 7.5f, 18.0f, 0.0f, HeroGui.GOLD, 0.3f + 0.4f * pulse);
+            g.text(this.font, "★", sx, y0 + CARD_Y - 11, ARGB.color(Math.round(170 + 85 * pulse), 0xFFE7A0), false);
+        }
+        // klein und rechtsbündig, damit auch "Talentpunkte: 219" mit dem Stern daneben Platz hat – und nur, wo es Platz hat
+        // (sonst liefe "Alle Talentpunkte verteilt" hinein)
+        Component spent = Component.translatable("gui.kingdomsatwar.character.spent", hero.spent(pot), hero.earned(pot));
+        int left = this.font.width(points) + (unspent > 0 ? 14 : 0);
+        if (left + 6 + this.font.width(spent) * 0.75f <= rw - 4) {
+            g.pose().pushMatrix();
+            g.pose().translate(rx + rw - 2, y0 + CARD_Y - 9);
+            g.pose().scale(0.75f, 0.75f);
+            g.text(this.font, spent, -this.font.width(spent), 0, HeroGui.MUTED, false);
+            g.pose().popMatrix();
+        }
+        for (int i = 0; i < this.shown.size(); i++) {
+            this.drawTalent(g, hero, this.shown.get(i), i, rx, y0 + CARD_Y + i * (CARD_H + CARD_GAP), rw, mouseX, mouseY);
+        }
+        if (craft) {
+            // unter den vier Karten: wie man Handwerkspunkte bekommt
+            int ty = y0 + CARD_Y + this.shown.size() * (CARD_H + CARD_GAP) + 8;
+            float in = HeroGui.easeOutCubic(HeroGui.span(this.tabAge(), 0.3f, 0.7f));
+            g.fillGradient(rx + 6, ty - 3, rx + rw / 2, ty - 2, 0x00B5832C, ARGB.color(Math.round(255 * in), 0xB5832C));
+            g.fillGradient(rx + rw / 2, ty - 3, rx + rw - 6, ty - 2, ARGB.color(Math.round(255 * in), 0xB5832C), 0x00B5832C);
+            List<FormattedCharSequence> lines = this.font.split(Component.translatable("gui.kingdomsatwar.character.craft.hint", HeroLevel.CRAFT_EVERY,
+                    HeroLevel.craftPointsFor(HeroLevel.MAX_LEVEL)), Math.round((rw - 12) / 0.75f));
+            g.pose().pushMatrix();
+            g.pose().translate(rx + 6, ty + 3);
+            g.pose().scale(0.75f, 0.75f);
+            int ly = 0;
+            for (FormattedCharSequence line : lines) {
+                g.text(this.font, line, 0, ly, ARGB.color(Math.round(255 * in), HeroGui.MUTED & 0xFFFFFF), false);
+                ly += 11;
+            }
+            g.pose().popMatrix();
+        }
+    }
+
+    private float tabAge() {
+        return (Util.getMillis() - this.tabAt) / 1000.0f;
+    }
+
+    /** Ein Lesezeichen am rechten Rand: Bild des Reiters, der offene hell und ans Fenster angeschlossen. */
+    private void drawTab(GuiGraphicsExtractor g, Tab t, int mouseX, int mouseY) {
+        int x = this.left + WIDTH - 6;
+        int y = this.top + TAB_Y + t.ordinal() * (TAB_H + 4);
+        boolean open = t == this.tab;
+        boolean hover = mouseX >= x && mouseX < x + TAB_W && mouseY >= y && mouseY < y + TAB_H;
+        int w = open ? TAB_W + 2 : TAB_W;
+        g.blitSprite(RenderPipelines.GUI_TEXTURED, open || hover ? HeroGui.CARD_HOVER : HeroGui.CARD, x, y, w, TAB_H);
+        if (open) {
+            g.fill(x + 1, y + 2, x + 4, y + TAB_H - 2, 0xFF1A1626);
+            g.fill(x + w - 2, y + 3, x + w - 1, y + TAB_H - 3, 0xFFE2B24A);
+        }
+        int ix = x + (w - 16) / 2 + 2;
+        int iy = y + (TAB_H - 16) / 2;
+        switch (t) {
+            case COMBAT -> g.item(new ItemStack(Items.IRON_SWORD), ix, iy);
+            case CRAFT -> g.item(new ItemStack(Items.IRON_PICKAXE), ix, iy);
+            case ABILITIES -> g.blitSprite(RenderPipelines.GUI_TEXTURED, io.github.sirschrolli.kingdomsatwar.hero.HeroAbility.WHIRLWIND.icon(), ix - 2,
+                    iy - 2, 20, 20);
+        }
+        if (!open) {
+            g.fill(x, y, x + w, y + TAB_H, 0x55100C18);
+        }
+        if (hover) {
+            g.setTooltipForNextFrame(this.font, this.lines(List.of(Component.translatable("gui.kingdomsatwar.character.tab." + t.name().toLowerCase(
+                    java.util.Locale.ROOT)).withStyle(ChatFormatting.GOLD), Component.translatable("gui.kingdomsatwar.character.tab."
+                    + t.name().toLowerCase(java.util.Locale.ROOT) + ".hint").withStyle(ChatFormatting.GRAY))), mouseX, mouseY);
+        }
+    }
+
+    /** Stelle der gedachten Fläche auf dem echten Bildschirm. */
+    private int real(int virtual) {
+        return Math.round(virtual * this.fit);
+    }
+
+    @Override
+    public boolean mouseReleased(MouseButtonEvent event) {
+        return super.mouseReleased(this.virtual(event));
+    }
+
+    @Override
+    public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
+        return super.mouseDragged(this.virtual(event), dx / this.fit, dy / this.fit);
+    }
+
+    @Override
+    public boolean mouseScrolled(double x, double y, double scrollX, double scrollY) {
+        return super.mouseScrolled(x / this.fit, y / this.fit, scrollX, scrollY);
+    }
+
+    @Override
+    public void mouseMoved(double x, double y) {
+        super.mouseMoved(x / this.fit, y / this.fit);
+    }
+
+    @Override
+    public boolean mouseClicked(MouseButtonEvent real, boolean doubleClick) {
+        MouseButtonEvent event = this.virtual(real);
+        // (seit 26.x zählt das Spiel die Maustasten wie SDL: links 1, Mitte 2, rechts 3)
+        if (event.button() == com.mojang.blaze3d.platform.InputConstants.MOUSE_BUTTON_LEFT) {
+            for (Tab t : Tab.values()) {
+                int x = this.left + WIDTH - 6;
+                int y = this.top + TAB_Y + t.ordinal() * (TAB_H + 4);
+                if (event.x() >= x && event.x() < x + TAB_W + 2 && event.y() >= y && event.y() < y + TAB_H) {
+                    this.open(t);
+                    return true;
+                }
+            }
+            if (this.tab == Tab.ABILITIES && this.minecraft.player != null) {
+                io.github.sirschrolli.kingdomsatwar.hero.HeroAbility ability = this.abilityAt(event.x(), event.y());
+                if (ability != null) {
+                    int level = HeroLevel.of(this.minecraft.player).level();
+                    if (ability.unlocked(level)) {
+                        AbilityClient.select(this.minecraft.player, ability);
+                        this.minecraft.getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(
+                                net.minecraft.sounds.SoundEvents.AMETHYST_BLOCK_CHIME, 1.4f, 0.8f));
+                    } else {
+                        this.minecraft.getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(
+                                net.minecraft.sounds.SoundEvents.CHAIN_PLACE, 0.6f, 0.6f));
+                    }
+                    return true;
+                }
+            }
+        }
+        return super.mouseClicked(event, doubleClick);
+    }
+
+    /** Die Karte einer Fähigkeit unter der Maus (zwei Spalten, vier Reihen). */
+    private io.github.sirschrolli.kingdomsatwar.hero.@Nullable HeroAbility abilityAt(double mx, double my) {
+        int rx = this.left + RIGHT_X;
+        int rw = WIDTH - RIGHT_X - 12;
+        int cw = (rw - 4) / 2;
+        io.github.sirschrolli.kingdomsatwar.hero.HeroAbility[] all = io.github.sirschrolli.kingdomsatwar.hero.HeroAbility.values();
+        for (int i = 0; i < all.length; i++) {
+            int x = rx + (i % 2) * (cw + 4);
+            int y = this.top + CARD_Y + (i / 2) * (ABILITY_H + 2);
+            if (mx >= x && mx < x + cw && my >= y && my < y + ABILITY_H) {
+                return all[i];
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Der Reiter der Fähigkeiten: oben wie viele freigeschaltet sind und welche Taste sie auslöst, darunter acht Karten –
+     * Bild in einer Fassung, Name, ab welcher Stufe bzw. wie lange sie ruht; die gewählte golden gerahmt.
+     */
+    private void drawAbilities(GuiGraphicsExtractor g, Player player, HeroLevel.Hero hero, int rx, int y0, int rw, int mouseX, int mouseY) {
+        int level = hero.level();
+        int count = io.github.sirschrolli.kingdomsatwar.hero.HeroAbility.count(level);
+        Component head = Component.translatable("gui.kingdomsatwar.character.abilities", count,
+                io.github.sirschrolli.kingdomsatwar.hero.HeroAbility.values().length);
+        HeroGui.text(g, this.font, head, rx + 2, y0 + CARD_Y - 11, count > 0 ? HeroGui.TEXT : HeroGui.MUTED);
+        Component key = Component.translatable("gui.kingdomsatwar.character.abilities.key",
+                io.github.sirschrolli.kingdomsatwar.client.ModKeyMappings.ABILITY.getTranslatedKeyMessage());
+        g.pose().pushMatrix();
+        g.pose().translate(rx + rw - 2, y0 + CARD_Y - 9);
+        g.pose().scale(0.75f, 0.75f);
+        g.text(this.font, key, -this.font.width(key), 0, HeroGui.MUTED, false);
+        g.pose().popMatrix();
+        io.github.sirschrolli.kingdomsatwar.hero.HeroAbilities.State state = io.github.sirschrolli.kingdomsatwar.hero.HeroAbilities.state(player);
+        io.github.sirschrolli.kingdomsatwar.hero.HeroAbility selected = state.selectedAbility();
+        int cw = (rw - 4) / 2;
+        io.github.sirschrolli.kingdomsatwar.hero.HeroAbility[] all = io.github.sirschrolli.kingdomsatwar.hero.HeroAbility.values();
+        for (int i = 0; i < all.length; i++) {
+            io.github.sirschrolli.kingdomsatwar.hero.HeroAbility ability = all[i];
+            int x = rx + (i % 2) * (cw + 4);
+            int y = y0 + CARD_Y + (i / 2) * (ABILITY_H + 2);
+            float slide = HeroGui.easeOutCubic(HeroGui.span(this.tabAge(), 0.03f + i * 0.04f, 0.33f + i * 0.04f));
+            x += Math.round(12 * (1.0f - slide));
+            boolean unlocked = ability.unlocked(level);
+            boolean hover = mouseX >= x && mouseX < x + cw && mouseY >= y && mouseY < y + ABILITY_H;
+            boolean chosen = unlocked && ability == selected;
+            g.blitSprite(RenderPipelines.GUI_TEXTURED, hover ? HeroGui.CARD_HOVER : HeroGui.CARD, x, y, cw, ABILITY_H, ARGB.white(slide));
+            if (slide < 0.5f) {
+                continue;
+            }
+            if (chosen) {
+                float pulse = 0.5f + 0.5f * Mth.sin(HeroGui.seconds() * 3.0f);
+                HeroGui.lightRect(g, HeroGui.GLOW, x + cw / 2.0f, y + ABILITY_H / 2.0f, cw + 10.0f, ABILITY_H + 10.0f, ability.color(), 0.18f + 0.12f * pulse);
+                g.fill(x, y, x + cw, y + 1, 0xFFE2B24A);
+                g.fill(x, y + ABILITY_H - 1, x + cw, y + ABILITY_H, 0xFFB5832C);
+                g.fill(x, y, x + 1, y + ABILITY_H, 0xFFE2B24A);
+                g.fill(x + cw - 1, y, x + cw, y + ABILITY_H, 0xFFB5832C);
+            }
+            // die Fassung mit dem Bild
+            int ix = x + 5;
+            int iy = y + (ABILITY_H - 24) / 2;
+            if (unlocked) {
+                HeroGui.light(g, HeroGui.GLOW, ix + 12.0f, iy + 12.0f, 34.0f, 0.0f, ability.color(), hover || chosen ? 0.45f : 0.2f);
+            }
+            g.fill(ix - 1, iy - 1, ix + 25, iy + 25, 0xFF0B0910);
+            g.fill(ix, iy, ix + 24, iy + 24, unlocked ? 0xFF221A33 : 0xFF17141F);
+            g.blitSprite(RenderPipelines.GUI_TEXTURED, ability.icon(), ix, iy, 24, 24, unlocked ? 0xFFFFFFFF : 0xFF4A4458);
+            long rest = unlocked ? io.github.sirschrolli.kingdomsatwar.hero.HeroAbilities.cooldown(player, ability) : 0L;
+            if (rest > 0L) {
+                int h = Mth.ceil(24.0f * rest / ability.cooldownTicks());
+                g.fill(ix, iy + 24 - h, ix + 24, iy + 24, 0x9A0C0814);
+            }
+            // Name (zu lang für eine Zeile: auf zwei verteilt) und Zustand
+            int tx = ix + 29;
+            Component abilityName = Component.translatable(ability.translationKey());
+            int room = x + cw - 3 - tx;
+            List<FormattedCharSequence> nameLines = this.font.width(abilityName) * 0.8f > room
+                    ? this.font.split(abilityName, Math.round(room / 0.8f)) : List.of(abilityName.getVisualOrderText());
+            int nameColor = unlocked ? ability.color() : HeroGui.MUTED;
+            for (int k = 0; k < Math.min(2, nameLines.size()); k++) {
+                g.pose().pushMatrix();
+                g.pose().translate(tx, y + (nameLines.size() > 1 ? 3 : 6) + k * 8);
+                g.pose().scale(0.8f, 0.8f);
+                g.text(this.font, nameLines.get(k), 0, 0, nameColor, false);
+                g.pose().popMatrix();
+            }
+            Component line;
+            int color;
+            if (!unlocked) {
+                line = Component.translatable("gui.kingdomsatwar.character.ability.from", ability.level());
+                color = HeroGui.MUTED;
+            } else if (rest > 0L) {
+                line = Component.translatable("gui.kingdomsatwar.character.ability.rest", (rest + 19L) / 20L);
+                color = 0xFFFFE0A0;
+            } else {
+                line = Component.translatable(chosen ? "gui.kingdomsatwar.character.ability.chosen" : "gui.kingdomsatwar.character.ability.ready");
+                color = chosen ? HeroGui.GOLD : HeroGui.GOOD;
+            }
+            g.pose().pushMatrix();
+            g.pose().translate(tx, y + (nameLines.size() > 1 ? 22 : 19));
+            g.pose().scale(0.75f, 0.75f);
+            g.text(this.font, line, 0, 0, color, false);
+            g.pose().popMatrix();
+            if (hover) {
+                List<Component> tip = new ArrayList<>();
+                tip.add(Component.translatable(ability.translationKey()).withColor(ability.color() & 0xFFFFFF).withStyle(ChatFormatting.BOLD));
+                tip.add(Component.translatable(ability.translationKey() + ".desc").withStyle(ChatFormatting.GRAY));
+                tip.add(Component.translatable("gui.kingdomsatwar.character.ability.cooldown", ability.cooldownSeconds()).withStyle(ChatFormatting.DARK_AQUA));
+                tip.add(unlocked ? Component.translatable(chosen ? "gui.kingdomsatwar.character.ability.on_key"
+                        : "gui.kingdomsatwar.character.ability.click", io.github.sirschrolli.kingdomsatwar.client.ModKeyMappings.ABILITY
+                        .getTranslatedKeyMessage()).withStyle(ChatFormatting.GOLD)
+                        : Component.translatable("gui.kingdomsatwar.character.ability.locked", ability.level()).withStyle(ChatFormatting.DARK_GRAY));
+                g.setTooltipForNextFrame(this.font, this.lines(tip), mouseX, mouseY);
+            }
+        }
+    }
+
+    /** Kopf: Abzeichen mit Stufe, "Heldenstufe N", Rang und Name, die Leiste (füllt sich beim Öffnen) mit Zahlen. */
+    private void drawHeader(GuiGraphicsExtractor g, Player player, HeroLevel.Hero hero, int x, int y, int width, int mouseX, int mouseY) {
+        HeroLevel.Rank rank = hero.rank();
+        int color = HeroGui.rankColor(rank);
+        float open = HeroGui.easeOutBack(HeroGui.span(this.age(), 0.0f, 0.5f));
+        HeroGui.emblem(g, this.font, rank, hero.level(), x + 25, y + 25, 0.6f + 0.4f * open, Math.min(1.0f, this.age() * 4.0f), 1.0f, true);
+        int tx = x + 56;
+        g.pose().pushMatrix();
+        g.pose().translate(tx, y + 3);
+        g.pose().scale(1.25f, 1.25f);
+        Component title = Component.translatable("gui.kingdomsatwar.character.level", hero.level());
+        g.text(this.font, title, 1, 1, 0xFF0B0910, false);
+        g.text(this.font, title, 0, 0, 0xFFFFE7A0, false);
+        g.pose().popMatrix();
+        Component rankName = Component.translatable(rank.translationKey());
+        HeroGui.text(g, this.font, rankName, tx, y + 17, color);
+        Component name = player.getName();
+        g.text(this.font, name, x + width - this.font.width(name) - 2, y + 17, HeroGui.MUTED, false);
+        // Leiste
+        float progress = HeroLevel.progress(hero.experience()) * HeroGui.easeOutCubic(HeroGui.span(this.age(), 0.15f, 0.9f));
+        int bw = width - 56;
+        HeroGui.bar(g, tx, y + 29, bw, 9, progress, progress, 0.0f, color);
+        boolean max = hero.level() >= HeroLevel.MAX_LEVEL;
+        Component numbers = max ? Component.translatable("gui.kingdomsatwar.character.experience.max", HeroGui.number(hero.experience()))
+                : Component.translatable("gui.kingdomsatwar.character.experience", HeroGui.number(hero.experience()),
+                        HeroGui.number(HeroLevel.total(hero.level() + 1)));
+        g.pose().pushMatrix();
+        g.pose().translate(tx + bw, y + 41);
+        g.pose().scale(0.75f, 0.75f);
+        g.text(this.font, numbers, -this.font.width(numbers), 0, HeroGui.MUTED, false);
+        g.pose().popMatrix();
+        if (mouseX >= x && mouseX < tx + bw && mouseY >= y && mouseY < y + 27) {
+            g.setTooltipForNextFrame(this.font, this.lines(this.mightLines(player, hero)), mouseX, mouseY);
+        }
+        if (mouseX >= tx && mouseX < tx + bw && mouseY >= y + 27 && mouseY < y + 48) {
+            List<Component> lines = new ArrayList<>();
+            lines.add(Component.translatable("gui.kingdomsatwar.character.sources.title").withStyle(ChatFormatting.GOLD));
+            if (!max) {
+                lines.add(Component.translatable("gui.kingdomsatwar.character.next", HeroGui.number(HeroLevel.total(hero.level() + 1) - hero.experience()),
+                        hero.level() + 1).withStyle(ChatFormatting.YELLOW));
+            }
+            lines.add(Component.translatable("gui.kingdomsatwar.character.sources").withStyle(ChatFormatting.GRAY));
+            g.setTooltipForNextFrame(this.font, this.lines(lines), mouseX, mouseY);
+        }
+    }
+
+    /** Der Heldenweg: elf kleine Abzeichen auf einer Linie, erreichte golden, der nächste Rang leuchtet. */
+    private void drawTrack(GuiGraphicsExtractor g, HeroLevel.Hero hero, int x, int y, int width, int mouseX, int mouseY) {
+        HeroLevel.Rank[] ranks = HeroLevel.Rank.values();
+        int level = hero.level();
+        int n = ranks.length;
+        float step = (width - 22) / (float) (n - 1);
+        int ly = y + 7;
+        // die Linie: erreicht golden, bis zum nächsten Rang anteilig gefüllt
+        int startX = x + 11;
+        int endX = Math.round(x + 11 + step * (n - 1));
+        g.fill(startX, ly, endX, ly + 2, 0xFF2E2840);
+        float reached = 0.0f;
+        for (int i = 0; i < n - 1; i++) {
+            if (level >= ranks[i + 1].minLevel()) {
+                reached = i + 1;
+            } else if (level >= ranks[i].minLevel()) {
+                int from = HeroLevel.total(ranks[i].minLevel());
+                int to = HeroLevel.total(ranks[i + 1].minLevel());
+                reached = i + Mth.clamp((hero.experience() - from) / (float) (to - from), 0.0f, 1.0f);
+            }
+        }
+        reached *= HeroGui.easeOutCubic(HeroGui.span(this.age(), 0.2f, 1.0f));
+        int fillTo = Math.round(startX + step * reached);
+        g.fillGradient(startX, ly, fillTo, ly + 2, 0xFFFFE7A0, 0xFFB5832C);
+        HeroLevel.Rank current = hero.rank();
+        HeroLevel.@Nullable Rank next = current.next();
+        for (int i = 0; i < n; i++) {
+            HeroLevel.Rank rank = ranks[i];
+            float cx = x + 11 + step * i;
+            boolean got = level >= rank.minLevel();
+            if (rank == next) {
+                float pulse = 0.5f + 0.5f * Mth.sin(HeroGui.seconds() * 3.0f);
+                HeroGui.light(g, HeroGui.GLOW, cx, ly + 1, 34.0f, 0.0f, rank.color(), 0.25f + 0.3f * pulse);
+            } else if (rank == current) {
+                HeroGui.light(g, HeroGui.GLOW, cx, ly + 1, 30.0f, 0.0f, HeroGui.rankColor(rank), 0.35f);
+            }
+            g.blitSprite(RenderPipelines.GUI_TEXTURED, HeroGui.badge(rank), Math.round(cx - 7.5f), ly - 6, HeroGui.BADGE, HeroGui.BADGE,
+                    got || rank == next ? 0xFFFFFFFF : 0xFF5A5468);
+            String label = String.valueOf(rank.minLevel());
+            g.pose().pushMatrix();
+            g.pose().translate(cx, ly + 10);
+            g.pose().scale(0.75f, 0.75f);
+            g.text(this.font, label, -this.font.width(label) / 2, 0, got ? HeroGui.rankColor(rank) : HeroGui.MUTED, false);
+            g.pose().popMatrix();
+            if (Math.abs(mouseX - cx) <= 8 && mouseY >= ly - 7 && mouseY <= ly + 16) {
+                List<Component> lines = new ArrayList<>();
+                lines.add(Component.translatable(rank.translationKey()).withColor(rank.color() & 0xFFFFFF).withStyle(ChatFormatting.BOLD));
+                lines.add(Component.translatable("gui.kingdomsatwar.character.rank.from", rank.minLevel(), HeroGui.number(HeroLevel.total(rank.minLevel())))
+                        .withStyle(ChatFormatting.GRAY));
+                if (rank.ordinal() > 0) {
+                    lines.add(Component.translatable("gui.kingdomsatwar.character.rank.bonus", HeroLevel.RANK_BONUS).withStyle(ChatFormatting.GREEN));
+                }
+                if (rank == HeroLevel.Rank.LEGEND) {
+                    lines.add(Component.translatable("gui.kingdomsatwar.character.rank.reward", Component.keybind("key.kingdomsatwar.pat"))
+                            .withStyle(ChatFormatting.LIGHT_PURPLE));
+                }
+                if (rank == HeroLevel.Rank.IMMORTAL) {
+                    lines.add(Component.translatable("gui.kingdomsatwar.character.rank.reward.immortal", HeroLevel.IMMORTAL_MINUTES)
+                            .withStyle(ChatFormatting.GOLD));
+                }
+                lines.add(Component.translatable(got ? "gui.kingdomsatwar.character.rank.reached" : "gui.kingdomsatwar.character.rank.ahead")
+                        .withStyle(got ? ChatFormatting.GOLD : ChatFormatting.DARK_GRAY));
+                g.setTooltipForNextFrame(this.font, this.lines(lines), mouseX, mouseY);
+            }
+        }
+    }
+
+    /** Eine Talentkarte: Bild, Name, was die Punkte bringen, zwanzig Kästchen und die Zahl der Punkte. */
+    private void drawTalent(GuiGraphicsExtractor g, HeroLevel.Hero hero, HeroLevel.Talent talent, int index, int x, int y, int width, int mouseX,
+            int mouseY) {
+        int points = hero.points(talent);
+        boolean hover = mouseX >= x && mouseX < x + width - 18 && mouseY >= y && mouseY < y + CARD_H;
+        // die Karten gleiten nacheinander herein (auch nach einem Wechsel des Reiters)
+        float slide = HeroGui.easeOutCubic(HeroGui.span(this.tabAge(), 0.05f + index * 0.05f, 0.35f + index * 0.05f));
+        int dx = Math.round(14 * (1.0f - slide));
+        x += dx;
+        g.blitSprite(RenderPipelines.GUI_TEXTURED, hover ? HeroGui.CARD_HOVER : HeroGui.CARD, x, y, width, CARD_H, ARGB.white(slide));
+        if (slide < 0.5f) {
+            return;
+        }
+        int color = talent.color();
+        g.item(talent.icon(), x + 2, y + 2);
+        int nx = x + 21;
+        Component name = Component.translatable(talent.translationKey());
+        HeroGui.text(g, this.font, name, nx, y + 2, points > 0 ? HeroGui.TEXT : HeroGui.MUTED);
+        int ex = x + width - 20;
+        if (talent == HeroLevel.Talent.TOUGHNESS && points > HeroLevel.MASTERY) {
+            // Rüstung und Härte passen nicht zusammen in eine Zeile: sie wechseln sich sanft ab, die Härte der Meisterschaft golden
+            float phase = (HeroGui.seconds() % 7.0f) / 7.0f;
+            float hard = HeroGui.easeInOut(Mth.clamp(phase < 0.5f ? (phase - 0.42f) / 0.08f : (1.0f - phase) / 0.08f, 0.0f, 1.0f));
+            Component armor = Component.translatable(talent.translationKey() + ".effect", HeroGui.decimal(talent.value(points)));
+            Component toughness = Component.translatable(talent.translationKey() + ".effect_hard", HeroGui.decimal(HeroLevel.masteryToughness(points)));
+            if (hard < 0.98f) {
+                g.text(this.font, armor, ex - this.font.width(armor), y + 2, ARGB.color(Math.round(255 * (1.0f - hard)), color), false);
+            }
+            if (hard > 0.02f) {
+                g.text(this.font, toughness, ex - this.font.width(toughness), y + 2, ARGB.color(Math.round(255 * hard), HeroGui.GOLD), false);
+            }
+        } else {
+            // (auf der Karte nur der Grundwert von Angeln, Bogen und Handwerk – was die Meisterschaft dazu bringt, steht im Hinweis)
+            boolean shortForm = talent == HeroLevel.Talent.FISHING || talent == HeroLevel.Talent.ARCHERY || talent.pot() == HeroLevel.Pot.CRAFT;
+            Component effect = shortForm
+                    ? Component.translatable(talent.translationKey() + ".effect", HeroGui.decimal(talent.value(points))) : effect(talent, points);
+            g.text(this.font, effect, ex - this.font.width(effect), y + 2, points > 0 ? color : HeroGui.MUTED, false);
+        }
+        // zwanzig Kästchen, nach je fünf ein Spalt; in der Meisterschaft (ab Punkt 21) werden sie nacheinander golden
+        long now = Util.getMillis();
+        float flash = 1.0f - Mth.clamp((now - this.spentAt[talent.ordinal()]) / 600.0f, 0.0f, 1.0f);
+        int py = y + 13;
+        int mastered = Math.max(0, points - HeroLevel.MASTERY);
+        int newest = points > HeroLevel.MASTERY ? mastered - 1 : points - 1;
+        float shimmer = HeroGui.seconds();
+        for (int i = 0; i < HeroLevel.MASTERY; i++) {
+            int px = nx + i * 4 + (i / 5) * 2;
+            if (i < mastered) {
+                // golden, mit einem Schimmer, der über die Meisterschaft wandert
+                float wave = 0.5f + 0.5f * Mth.sin(shimmer * 3.2f - i * 0.55f);
+                g.fillGradient(px, py, px + 3, py + 4, ARGB.srgbLerp(0.35f * wave, 0xFFFFE27A, 0xFFFFFFFF), 0xFFC07A18);
+                g.fill(px, py, px + 3, py + 1, ARGB.srgbLerp(0.5f + 0.5f * wave, 0xFFFFE7A0, 0xFFFFFFFF));
+                if (i == newest && flash > 0.0f) {
+                    g.fill(px - 1, py - 1, px + 4, py + 5, ARGB.color(Math.round(230 * flash), 255, 255, 255));
+                    HeroGui.light(g, HeroGui.GLOW, px + 1.5f, py + 2.0f, 30.0f, 0.0f, 0xFFFFD27A, flash);
+                    for (int k = 0; k < 4; k++) {
+                        float rise = 1.0f - flash;
+                        HeroGui.light(g, HeroGui.SPARKLE, px + 1.5f + (k - 1.5f) * 5.0f * rise, py - 11.0f * rise - k * 2.0f, 8.0f, rise * 3.0f,
+                                0xFFFFE7A0, flash);
+                    }
+                }
+            } else if (i < points) {
+                g.fillGradient(px, py, px + 3, py + 4, ARGB.srgbLerp(0.4f, color, 0xFFFFFFFF), ARGB.srgbLerp(0.25f, color, 0xFF000000));
+                if (i == newest && flash > 0.0f) {
+                    g.fill(px - 1, py - 1, px + 4, py + 5, ARGB.color(Math.round(230 * flash), 255, 255, 255));
+                    HeroGui.light(g, HeroGui.GLOW, px + 1.5f, py + 2.0f, 26.0f, 0.0f, color, flash);
+                    for (int k = 0; k < 3; k++) {
+                        float rise = 1.0f - flash;
+                        HeroGui.light(g, HeroGui.SPARKLE, px + 1.5f + (k - 1) * 5.0f * rise, py - 10.0f * rise - k * 2.0f, 7.0f, rise * 3.0f,
+                                0xFFFFFFFF, flash);
+                    }
+                }
+            } else {
+                g.fill(px, py, px + 3, py + 4, 0xFF15121F);
+                g.fill(px, py + 3, px + 3, py + 4, 0xFF2E2840);
+            }
+        }
+        String count = points + "/" + HeroLevel.MAX_TALENT;
+        g.pose().pushMatrix();
+        g.pose().translate(x + width - 20, y + 13);
+        g.pose().scale(0.75f, 0.75f);
+        g.text(this.font, count, -this.font.width(count), 0, points >= HeroLevel.MAX_TALENT ? HeroGui.GOLD : HeroGui.MUTED, false);
+        g.pose().popMatrix();
+        if (hover) {
+            g.setTooltipForNextFrame(this.font, this.lines(List.of(
+                    Component.translatable(talent.translationKey()).withColor(color & 0xFFFFFF)
+                            .append(Component.literal("  " + points + "/" + HeroLevel.MAX_TALENT).withStyle(ChatFormatting.YELLOW)),
+                    Component.translatable(talent.translationKey() + ".desc").withStyle(ChatFormatting.GRAY),
+                    Component.translatable("gui.kingdomsatwar.character.talent.mastery", HeroLevel.MASTERY + 1, HeroLevel.MAX_TALENT)
+                            .withStyle(ChatFormatting.GOLD),
+                    Component.translatable("gui.kingdomsatwar.character.talent.now", effect(talent, points)).withStyle(ChatFormatting.YELLOW),
+                    Component.translatable("gui.kingdomsatwar.character.talent.max", HeroLevel.MAX_TALENT, effect(talent, HeroLevel.MAX_TALENT))
+                            .withStyle(ChatFormatting.DARK_GRAY))),
+                    mouseX, mouseY);
+        }
+    }
+
+    /**
+     * Was die Punkte eines Talents zusammen bringen ("+1,5 Schaden"; die Zähigkeit in der Meisterschaft auch die Härte, die
+     * Angelkunst dazu das Glück beim Angeln).
+     */
+    static Component effect(HeroLevel.Talent talent, int points) {
+        int mastery = Math.max(0, points - HeroLevel.MASTERY);
+        if (mastery > 0) {
+            double second = switch (talent) {
+                case ARCHERY -> HeroLevel.ARCHERY_SAVE * mastery * 100.0;
+                case MINING -> HeroLevel.MINING_DOUBLE * mastery * 100.0;
+                case WOODCUTTING -> HeroLevel.WOOD_EXTRA * mastery * 100.0;
+                case FARMING -> HeroLevel.FARM_REPLANT * mastery * 100.0;
+                default -> -1.0;
+            };
+            if (second >= 0.0) {
+                return Component.translatable(talent.translationKey() + ".effect_mastery", HeroGui.decimal(talent.value(points)), HeroGui.decimal(second));
+            }
+        }
+        if (talent == HeroLevel.Talent.FISHING && points > HeroLevel.MASTERY) {
+            return Component.translatable(talent.translationKey() + ".effect_mastery", HeroGui.decimal(talent.value(points)),
+                    HeroGui.decimal(HeroLevel.FISHING_LUCK * (points - HeroLevel.MASTERY)));
+        }
+        if (talent == HeroLevel.Talent.TOUGHNESS && points > HeroLevel.MASTERY) {
+            return Component.translatable(talent.translationKey() + ".effect_mastery", HeroGui.decimal(talent.value(points)),
+                    HeroGui.decimal(HeroLevel.masteryToughness(points)));
+        }
+        return Component.translatable(talent.translationKey() + ".effect", HeroGui.decimal(talent.value(points)));
+    }
+
+    /** Die Heldenkraft dieser Stufe (und, für den Unsterblichen, ob das Licht bereit ist). */
+    private List<Component> mightLines(Player player, HeroLevel.Hero hero) {
+        int level = hero.level();
+        List<Component> lines = new ArrayList<>();
+        lines.add(Component.translatable("gui.kingdomsatwar.character.might").withStyle(ChatFormatting.GOLD));
+        lines.add(Component.translatable("gui.kingdomsatwar.character.might.hint").withStyle(ChatFormatting.GRAY));
+        lines.add(Component.translatable("gui.kingdomsatwar.character.might.health", HeroGui.decimal(HeroLevel.levelHealth(level) / 2.0))
+                .withStyle(ChatFormatting.RED));
+        lines.add(Component.translatable("gui.kingdomsatwar.character.might.damage", HeroGui.decimal2(HeroLevel.levelDamage(level)))
+                .withStyle(ChatFormatting.YELLOW));
+        lines.add(Component.translatable("gui.kingdomsatwar.character.might.mana", HeroLevel.levelMana(level),
+                Math.round(HeroLevel.levelRegen(level) * 100.0f)).withStyle(ChatFormatting.AQUA));
+        lines.add(Component.translatable("gui.kingdomsatwar.character.might.toughness", HeroGui.decimal(HeroLevel.levelToughness(level)))
+                .withStyle(ChatFormatting.WHITE));
+        int next = HeroLevel.nextHeartLevel(level);
+        if (next > 0) {
+            lines.add(Component.translatable("gui.kingdomsatwar.character.might.next", next).withStyle(ChatFormatting.DARK_GRAY));
+        }
+        if (level >= HeroLevel.IMMORTAL_LEVEL) {
+            long rest = HeroLevel.immortalCooldown(player);
+            lines.add(rest <= 0L ? Component.translatable("gui.kingdomsatwar.character.immortal.ready").withStyle(ChatFormatting.GOLD)
+                    : Component.translatable("gui.kingdomsatwar.character.immortal.rest", (rest + 1199L) / 1200L).withStyle(ChatFormatting.DARK_GRAY));
+        }
+        return lines;
+    }
+
+    /** Links unter dem Bild: Rang, Werte mit kleinen Bildern, dann Kristalle und Biome. */
+    private void drawLeft(GuiGraphicsExtractor g, Player player, HeroLevel.Hero hero, int x, int y, int mouseX, int mouseY) {
+        int line = 11;
+        int w = LEFT_W;
+        HeroLevel.Rank rank = hero.rank();
+        Component rankName = Component.translatable(rank.translationKey());
+        HeroGui.centered(g, this.font, rankName, x + w / 2.0f, y, HeroGui.rankColor(rank), 1.0f);
+        int sy = y + 13;
+        HeroLevel.Title title = hero.title();
+        if (title != null) {
+            // der Titel hinter dem Unsterblichen: sein Siegel und der Name, etwas kleiner
+            Component name = Component.translatable(title.translationKey());
+            float tw = this.font.width(name) * 0.75f + 11.0f;
+            float tx = x + (w - tw) / 2.0f;
+            HeroGui.light(g, HeroGui.GLOW, tx + 4.5f, y + 14.5f, 22.0f, 0.0f, title.color(), 0.35f);
+            g.blitSprite(RenderPipelines.GUI_TEXTURED, title.sprite(), Math.round(tx), y + 10, 9, 9);
+            g.pose().pushMatrix();
+            g.pose().translate(tx + 11.0f, y + 11.5f);
+            g.pose().scale(0.75f, 0.75f);
+            g.text(this.font, name, 0, 0, title.color(), false);
+            g.pose().popMatrix();
+            if (mouseX >= x && mouseX < x + w && mouseY >= y + 9 && mouseY < y + 20) {
+                g.setTooltipForNextFrame(this.font, this.lines(List.of(name.copy().withColor(title.color() & 0xFFFFFF).withStyle(ChatFormatting.BOLD),
+                        Component.translatable("gui.kingdomsatwar.character.title.hint", title.minLevel()).withStyle(ChatFormatting.GRAY))), mouseX, mouseY);
+            }
+            sy += 9;
+        }
+        g.blitSprite(RenderPipelines.GUI_TEXTURED, HEART, x + 2, sy, 9, 9);
+        HeroGui.text(g, this.font, Component.literal(HeroGui.decimal(player.getMaxHealth() / 2.0)), x + 13, sy + 1, HeroGui.TEXT);
+        icon(g, new ItemStack(ModItems.MANA_CRYSTAL.get()), x + 1, sy + line - 1);
+        HeroGui.text(g, this.font, Component.literal(String.valueOf(Math.round(Mana.maxFor(player)))), x + 13, sy + line + 1, HeroGui.TEXT);
+        g.blitSprite(RenderPipelines.GUI_TEXTURED, ARMOR, x + 46, sy, 9, 9);
+        HeroGui.text(g, this.font, Component.literal(HeroGui.decimal(player.getAttributeValue(Attributes.ARMOR))), x + 57, sy + 1, HeroGui.TEXT);
+        icon(g, new ItemStack(Items.IRON_SWORD), x + 45, sy + line - 1);
+        HeroGui.text(g, this.font, Component.literal(HeroGui.decimal(damage(player, hero))), x + 57, sy + line + 1, HeroGui.TEXT);
+        if (mouseX >= x && mouseX < x + w && mouseY >= sy && mouseY < sy + 2 * line) {
+            List<Component> lines = new ArrayList<>(List.of(Component.translatable("gui.kingdomsatwar.character.stats")
+                    .withStyle(ChatFormatting.GOLD), Component.translatable("gui.kingdomsatwar.character.stats.hint").withStyle(ChatFormatting.GRAY)));
+            lines.addAll(this.mightLines(player, hero));
+            g.setTooltipForNextFrame(this.font, this.lines(lines), mouseX, mouseY);
+        }
+        // was er gefunden hat
+        Crystals.Count crystals = Crystals.of(player);
+        int cy = sy + 2 * line + 5;
+        g.fillGradient(x + 4, cy - 3, x + w / 2, cy - 2, 0x00B5832C, 0xFFB5832C);
+        g.fillGradient(x + w / 2, cy - 3, x + w - 4, cy - 2, 0xFFB5832C, 0x00B5832C);
+        icon(g, new ItemStack(ModItems.HEART_CRYSTAL.get()), x + 1, cy);
+        g.text(this.font, crystals.hearts() + "/" + Crystals.MAX, x + 13, cy + 2, HeroGui.MUTED, false);
+        icon(g, new ItemStack(ModItems.MANA_CRYSTAL.get()), x + 45, cy);
+        g.text(this.font, crystals.mana() + "/" + Crystals.MAX, x + 57, cy + 2, HeroGui.MUTED, false);
+        icon(g, new ItemStack(Items.FILLED_MAP), x + 1, cy + line);
+        g.text(this.font, String.valueOf(hero.discoveries()), x + 13, cy + line + 2, HeroGui.MUTED, false);
+        if (mouseX >= x && mouseX < x + w && mouseY >= cy - 1 && mouseY < cy + 2 * line + 1) {
+            g.setTooltipForNextFrame(this.font, this.lines(List.of(
+                    Component.translatable("gui.kingdomsatwar.character.hearts", crystals.hearts(), Crystals.MAX).withStyle(ChatFormatting.RED),
+                    Component.translatable("gui.kingdomsatwar.character.mana", crystals.mana(), Crystals.MAX).withStyle(ChatFormatting.AQUA),
+                    Component.translatable("gui.kingdomsatwar.character.biomes", hero.discoveries()).withStyle(ChatFormatting.GREEN))),
+                    mouseX, mouseY);
+        }
+        // darunter: das nächste Ziel auf dem Weg (bis über die Knöpfe ist Platz)
+        this.drawGoal(g, hero, x, cy + 2 * line + 3, w, this.top + HEIGHT - 61, mouseX, mouseY);
+    }
+
+    /**
+     * Das nächste Ziel (seit 1.12): ein neuer Rang, eine Fähigkeit oder ein Titel – mit Bild, Name, wie viele Stufen noch
+     * fehlen, und einer Leiste vom letzten erreichten Ziel bis dorthin. Unter der Maus: was es bringt und die Ziele danach.
+     */
+    private void drawGoal(GuiGraphicsExtractor g, HeroLevel.Hero hero, int x, int y, int w, int bottom, int mouseX, int mouseY) {
+        HeroGoals.Goal goal = HeroGoals.next(hero.level());
+        int room = bottom - y;
+        if (room < 14) {
+            return;
+        }
+        float in = HeroGui.easeOutCubic(HeroGui.span(this.age(), 0.35f, 0.85f));
+        boolean full = room >= 25;
+        int ry = y;
+        if (full) {
+            // die Überschrift sitzt in der goldenen Linie
+            Component head = Component.translatable(goal == null ? "gui.kingdomsatwar.character.goal.done" : "gui.kingdomsatwar.character.goal");
+            float hw = this.font.width(head) * 0.75f;
+            int mid = y + 3;
+            g.fillGradient(x + 4, mid, Math.round(x + w / 2.0f - hw / 2.0f - 3), mid + 1, 0x00B5832C, 0xFFB5832C);
+            g.fillGradient(Math.round(x + w / 2.0f + hw / 2.0f + 3), mid, x + w - 4, mid + 1, 0xFFB5832C, 0x00B5832C);
+            g.pose().pushMatrix();
+            g.pose().translate(x + w / 2.0f - hw / 2.0f, y);
+            g.pose().scale(0.75f, 0.75f);
+            g.text(this.font, head, 0, 0, HeroGui.GOLD_DARK, false);
+            g.pose().popMatrix();
+            ry = y + 9;
+        }
+        if (goal == null) {
+            return;
+        }
+        // Bild (das Abzeichen des Rangs, das Bild der Fähigkeit, das Siegel des Titels) mit einem Schimmer dahinter
+        float pulse = 0.75f + 0.25f * Mth.sin(HeroGui.seconds() * 2.2f);
+        HeroGui.light(g, HeroGui.GLOW, x + 6.5f, ry + 5.5f, 20.0f, 0.0f, goal.color(), 0.32f * pulse * in);
+        g.blitSprite(RenderPipelines.GUI_TEXTURED, goal.icon(), x + 1, ry, 11, 11, ARGB.white(in));
+        int remaining = goal.level() - hero.level();
+        Component left = Component.translatable(remaining == 1 ? "gui.kingdomsatwar.character.goal.one" : "gui.kingdomsatwar.character.goal.levels",
+                remaining);
+        float lw = this.font.width(left) * 0.75f;
+        Component name = goal.name();
+        int nameRoom = Math.round(w - 14 - lw - 4);
+        // zu lang: erst kleiner (bis drei Viertel), dann gekürzt
+        float ns = Math.max(0.75f, Math.min(1.0f, nameRoom / (float) Math.max(1, this.font.width(name))));
+        String shown = io.github.sirschrolli.kingdomsatwar.client.town.Parchment.ellipsize(this.font, name.getString(), Math.round(nameRoom / ns));
+        g.pose().pushMatrix();
+        g.pose().translate(x + 14, ry + 2 + (1.0f - ns) * 4.0f);
+        g.pose().scale(ns, ns);
+        HeroGui.text(g, this.font, Component.literal(shown), 0, 0, ARGB.color(Math.round(255 * in), goal.color() & 0xFFFFFF));
+        g.pose().popMatrix();
+        g.pose().pushMatrix();
+        g.pose().translate(x + w - 1 - lw, ry + 3.5f);
+        g.pose().scale(0.75f, 0.75f);
+        g.text(this.font, left, 0, 0, HeroGui.MUTED, false);
+        g.pose().popMatrix();
+        // die Leiste vom letzten Ziel bis zu diesem
+        int by = ry + 12;
+        if (by + 4 <= bottom) {
+            float progress = HeroGoals.progress(hero.experience(), goal) * HeroGui.easeOutCubic(HeroGui.span(this.age(), 0.3f, 1.0f));
+            HeroGui.bar(g, x + 1, by, w - 2, 4, progress, progress, 0.0f, goal.color());
+        }
+        if (mouseX >= x && mouseX < x + w && mouseY >= y && mouseY < Math.min(bottom, by + 4)) {
+            List<Component> lines = new ArrayList<>();
+            lines.add(Component.translatable("gui.kingdomsatwar.character.goal").withStyle(ChatFormatting.GOLD));
+            lines.add(Component.translatable("gui.kingdomsatwar.character.goal.at", goal.label(), goal.level()).withColor(goal.color() & 0xFFFFFF));
+            lines.add(goal.reward().copy().withStyle(ChatFormatting.GRAY));
+            lines.add(Component.translatable("gui.kingdomsatwar.character.goal.experience",
+                    HeroGui.number(Math.max(0, HeroLevel.total(goal.level()) - hero.experience()))).withStyle(ChatFormatting.YELLOW));
+            List<HeroGoals.Goal> later = HeroGoals.upcoming(goal.level(), 3);
+            if (!later.isEmpty()) {
+                lines.add(Component.translatable("gui.kingdomsatwar.character.goal.later").withStyle(ChatFormatting.DARK_GRAY));
+                for (HeroGoals.Goal next : later) {
+                    lines.add(Component.translatable("gui.kingdomsatwar.character.goal.at", next.label(), next.level()).withColor(
+                            ARGB.srgbLerp(0.35f, next.color(), 0xFF8F86A3) & 0xFFFFFF));
+                }
+            }
+            g.setTooltipForNextFrame(this.font, this.lines(lines), mouseX, mouseY);
+        }
+    }
+
+    /**
+     * Der Schaden eines Schlags: Der Wert des Spielers kommt nicht vollständig beim Spiel an (Waffe und Stärke rechnet der
+     * Server), also hier selbst: Grundwert, Stärke und die Waffe in der Hand.
+     */
+    private static double damage(Player player, HeroLevel.Hero hero) {
+        double base = player.getAttributeBaseValue(Attributes.ATTACK_DAMAGE) + HeroLevel.Talent.STRENGTH.value(hero.points(HeroLevel.Talent.STRENGTH))
+                + HeroLevel.levelDamage(hero.level());
+        return player.getMainHandItem().getOrDefault(net.minecraft.core.component.DataComponents.ATTRIBUTE_MODIFIERS,
+                net.minecraft.world.item.component.ItemAttributeModifiers.EMPTY).compute(Attributes.ATTACK_DAMAGE, base,
+                net.minecraft.world.entity.EquipmentSlot.MAINHAND);
+    }
+
+    /** Ein Gegenstand als kleines Bild (11 Pixel). */
+    private static void icon(GuiGraphicsExtractor g, ItemStack stack, int x, int y) {
+        g.pose().pushMatrix();
+        g.pose().translate(x, y);
+        g.pose().scale(0.6875f, 0.6875f);
+        g.item(stack, 0, 0);
+        g.pose().popMatrix();
+    }
+
+    private List<FormattedCharSequence> lines(List<Component> components) {
+        return components.stream().flatMap(c -> this.font.split(c, 220).stream()).toList();
+    }
+}

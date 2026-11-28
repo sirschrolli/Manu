@@ -1,0 +1,30 @@
+{
+  "feature": "kingdomsatwar:abyss/shards_great",
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 4
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "kingdomsatwar:not_near_clock_tower"
+    },
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "type": "minecraft:uniform",
+        "max_inclusive": {
+          "absolute": 190
+        },
+        "min_inclusive": {
+          "absolute": 60
+        }
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

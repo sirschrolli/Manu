@@ -1,0 +1,15 @@
+{
+  "placement": {
+    "type": "kingdomsatwar:sunken_atoll",
+    "biomes": "#kingdomsatwar:has_sunken_atoll",
+    "max_distance": 1300,
+    "min_distance": 450,
+    "salt": 88207
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:sunken_atoll",
+      "weight": 1
+    }
+  ]
+}

@@ -1,0 +1,246 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#end"
+        },
+        "east": {
+          "texture": "#side",
+          "uv": [
+            5.0,
+            2.0,
+            11.0,
+            13.0
+          ]
+        },
+        "north": {
+          "texture": "#side",
+          "uv": [
+            5.0,
+            2.0,
+            11.0,
+            13.0
+          ]
+        },
+        "south": {
+          "texture": "#side",
+          "uv": [
+            5.0,
+            2.0,
+            11.0,
+            13.0
+          ]
+        },
+        "up": {
+          "texture": "#end"
+        },
+        "west": {
+          "texture": "#side",
+          "uv": [
+            5.0,
+            2.0,
+            11.0,
+            13.0
+          ]
+        }
+      },
+      "from": [
+        5,
+        2,
+        5
+      ],
+      "to": [
+        11,
+        13,
+        11
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#end"
+        },
+        "east": {
+          "texture": "#end",
+          "uv": [
+            6.0,
+            6.0,
+            10.0,
+            10.0
+          ]
+        },
+        "north": {
+          "texture": "#end",
+          "uv": [
+            6.0,
+            6.0,
+            10.0,
+            10.0
+          ]
+        },
+        "south": {
+          "texture": "#end",
+          "uv": [
+            6.0,
+            6.0,
+            10.0,
+            10.0
+          ]
+        },
+        "up": {
+          "texture": "#end"
+        },
+        "west": {
+          "texture": "#end",
+          "uv": [
+            6.0,
+            6.0,
+            10.0,
+            10.0
+          ]
+        }
+      },
+      "from": [
+        6,
+        0,
+        6
+      ],
+      "to": [
+        10,
+        2,
+        10
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#end"
+        },
+        "east": {
+          "texture": "#end",
+          "uv": [
+            6.0,
+            6.0,
+            10.0,
+            10.0
+          ]
+        },
+        "north": {
+          "texture": "#end",
+          "uv": [
+            6.0,
+            6.0,
+            10.0,
+            10.0
+          ]
+        },
+        "south": {
+          "texture": "#end",
+          "uv": [
+            6.0,
+            6.0,
+            10.0,
+            10.0
+          ]
+        },
+        "up": {
+          "texture": "#end"
+        },
+        "west": {
+          "texture": "#end",
+          "uv": [
+            6.0,
+            6.0,
+            10.0,
+            10.0
+          ]
+        }
+      },
+      "from": [
+        6,
+        13,
+        6
+      ],
+      "to": [
+        10,
+        15,
+        10
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#side",
+          "uv": [
+            7.0,
+            7.0,
+            8.0,
+            8.0
+          ]
+        },
+        "east": {
+          "texture": "#side",
+          "uv": [
+            7.0,
+            7.0,
+            8.0,
+            8.0
+          ]
+        },
+        "north": {
+          "texture": "#side",
+          "uv": [
+            7.0,
+            7.0,
+            8.0,
+            8.0
+          ]
+        },
+        "south": {
+          "texture": "#side",
+          "uv": [
+            7.0,
+            7.0,
+            8.0,
+            8.0
+          ]
+        },
+        "up": {
+          "texture": "#side",
+          "uv": [
+            7.0,
+            7.0,
+            8.0,
+            8.0
+          ]
+        },
+        "west": {
+          "texture": "#side",
+          "uv": [
+            7.0,
+            7.0,
+            8.0,
+            8.0
+          ]
+        }
+      },
+      "from": [
+        7.5,
+        15,
+        7.5
+      ],
+      "to": [
+        8.5,
+        16,
+        8.5
+      ]
+    }
+  ],
+  "textures": {
+    "end": "kingdomsatwar:block/star_cocoon_end",
+    "particle": "kingdomsatwar:block/star_cocoon_side",
+    "side": "kingdomsatwar:block/star_cocoon_side"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=east,phase=awake": {
+      "model": "kingdomsatwar:block/organ_desk",
+      "y": 90
+    },
+    "facing=east,phase=guarded": {
+      "model": "kingdomsatwar:block/organ_desk",
+      "y": 90
+    },
+    "facing=east,phase=silenced": {
+      "model": "kingdomsatwar:block/organ_desk_silenced",
+      "y": 90
+    },
+    "facing=north,phase=awake": {
+      "model": "kingdomsatwar:block/organ_desk"
+    },
+    "facing=north,phase=guarded": {
+      "model": "kingdomsatwar:block/organ_desk"
+    },
+    "facing=north,phase=silenced": {
+      "model": "kingdomsatwar:block/organ_desk_silenced"
+    },
+    "facing=south,phase=awake": {
+      "model": "kingdomsatwar:block/organ_desk",
+      "y": 180
+    },
+    "facing=south,phase=guarded": {
+      "model": "kingdomsatwar:block/organ_desk",
+      "y": 180
+    },
+    "facing=south,phase=silenced": {
+      "model": "kingdomsatwar:block/organ_desk_silenced",
+      "y": 180
+    },
+    "facing=west,phase=awake": {
+      "model": "kingdomsatwar:block/organ_desk",
+      "y": 270
+    },
+    "facing=west,phase=guarded": {
+      "model": "kingdomsatwar:block/organ_desk",
+      "y": 270
+    },
+    "facing=west,phase=silenced": {
+      "model": "kingdomsatwar:block/organ_desk_silenced",
+      "y": 270
+    }
+  }
+}

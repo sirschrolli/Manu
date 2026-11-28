@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:hewn_sandstone",
+  "result": {
+    "count": 2,
+    "id": "kingdomsatwar:hewn_sandstone_slab"
+  }
+}

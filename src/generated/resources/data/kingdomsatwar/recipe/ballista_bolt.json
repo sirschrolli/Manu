@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "F": "minecraft:feather",
+    "I": "minecraft:iron_ingot",
+    "S": "minecraft:stick"
+  },
+  "pattern": [
+    " I ",
+    " S ",
+    "FSF"
+  ],
+  "result": {
+    "count": 4,
+    "id": "kingdomsatwar:ballista_bolt"
+  }
+}

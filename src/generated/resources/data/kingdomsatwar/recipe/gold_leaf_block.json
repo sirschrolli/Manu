@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "S": "minecraft:stone"
+  },
+  "pattern": [
+    "SSS",
+    "SGS",
+    "SSS"
+  ],
+  "result": {
+    "count": 8,
+    "id": "kingdomsatwar:gold_leaf_block"
+  }
+}

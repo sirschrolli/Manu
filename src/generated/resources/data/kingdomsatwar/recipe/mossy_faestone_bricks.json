@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "kingdomsatwar:faestone_bricks",
+    "kingdomsatwar:fae_moss"
+  ],
+  "result": {
+    "id": "kingdomsatwar:mossy_faestone_bricks"
+  }
+}

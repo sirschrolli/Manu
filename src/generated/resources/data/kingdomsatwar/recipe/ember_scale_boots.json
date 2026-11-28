@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "S": "kingdomsatwar:ember_scale"
+  },
+  "pattern": [
+    "S S",
+    "S S"
+  ],
+  "result": {
+    "id": "kingdomsatwar:ember_scale_boots"
+  }
+}

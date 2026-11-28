@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "kingdomsatwar:steel_block",
+    "S": "kingdomsatwar:steel_ingot"
+  },
+  "pattern": [
+    "S S",
+    "SBS",
+    "SSS"
+  ],
+  "result": {
+    "id": "kingdomsatwar:steel_dragon_armor"
+  }
+}

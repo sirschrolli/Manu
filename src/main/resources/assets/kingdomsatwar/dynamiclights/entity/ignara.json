@@ -1,0 +1,10 @@
+{
+	"match": {
+		"type": "kingdomsatwar:ignara"
+	},
+	"luminance": {
+		"type": "lambdynlights:wet_sensitive",
+		"dry": 14,
+		"wet": 7
+	}
+}

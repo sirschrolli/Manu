@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_polished_shadow_stone": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:polished_shadow_stone"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:shadow_stone_bricks_from_polished_shadow_stone_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_polished_shadow_stone"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:shadow_stone_bricks_from_polished_shadow_stone_stonecutting"
+    ]
+  }
+}

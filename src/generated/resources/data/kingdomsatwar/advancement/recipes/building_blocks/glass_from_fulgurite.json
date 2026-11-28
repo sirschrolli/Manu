@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_fulgurite": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:fulgurite"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:glass_from_fulgurite"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_fulgurite"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:glass_from_fulgurite"
+    ]
+  }
+}

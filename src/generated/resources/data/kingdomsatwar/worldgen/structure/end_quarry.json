@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/end_quarry",
+  "kind": "end_quarry",
+  "spawn_overrides": {},
+  "step": "top_layer_modification"
+}

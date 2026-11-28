@@ -1,0 +1,15 @@
+{
+  "type": "kingdomsatwar:world_eater_hoard",
+  "biomes": "#kingdomsatwar:has_world_eater_hoard",
+  "spawn_overrides": {
+    "creature": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "monster": {
+      "bounding_box": "full",
+      "spawns": []
+    }
+  },
+  "step": "top_layer_modification"
+}

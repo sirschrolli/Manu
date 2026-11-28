@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "kingdomsatwar:block/stone_pillar",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "kingdomsatwar:block/stone_pillar"
+    },
+    "axis=z": {
+      "model": "kingdomsatwar:block/stone_pillar",
+      "x": 90
+    }
+  }
+}

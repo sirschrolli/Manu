@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:weathered_stone_bricks",
+  "result": {
+    "id": "kingdomsatwar:weathered_stone_brick_stairs"
+  }
+}

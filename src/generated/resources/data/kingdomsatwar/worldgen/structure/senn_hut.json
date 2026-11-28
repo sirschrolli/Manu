@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/senn_hut",
+  "kind": "senn_hut",
+  "spawn_overrides": {},
+  "step": "top_layer_modification"
+}

@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "kingdomsatwar:block/clock_face"
+      },
+      {
+        "model": "kingdomsatwar:block/clock_face",
+        "y": 90
+      },
+      {
+        "model": "kingdomsatwar:block/clock_face",
+        "y": 180
+      },
+      {
+        "model": "kingdomsatwar:block/clock_face",
+        "y": 270
+      }
+    ]
+  }
+}

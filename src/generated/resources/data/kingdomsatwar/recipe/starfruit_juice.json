@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kingdomsatwar:starfruit",
+    "kingdomsatwar:starfruit",
+    "kingdomsatwar:starfruit",
+    "minecraft:sugar",
+    "minecraft:glass_bottle",
+    "minecraft:glass_bottle"
+  ],
+  "result": {
+    "count": 2,
+    "id": "kingdomsatwar:starfruit_juice"
+  }
+}
