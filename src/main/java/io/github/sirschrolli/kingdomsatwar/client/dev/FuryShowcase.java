@@ -40,7 +40,7 @@ final class FuryShowcase {
 
     private static final List<Scene> SCENES = List.of(
             new Scene("glutschmied_rain", () -> ModEntities.GLUTSCHMIED.get(), FuryAttack.RAIN, Blocks.BLACKSTONE.defaultBlockState(),
-                    new double[][] {{3.5, -3.0}, {-3.0, -3.5}, {0.5, -6.0}}, new double[] {3.5, 4.2, 7.5}, new double[] {0.0, 1.8, -2.0}, 28),
+                    new double[][] {{3.5, -3.0}, {-3.0, -3.5}, {0.5, -6.0}}, new double[] {7.5, 5.0, 5.0}, new double[] {0.0, 1.2, -2.5}, 34),
             new Scene("stonekeeper_lines", () -> ModEntities.STONE_KEEPER.get(), FuryAttack.LINES, Blocks.MOSSY_STONE_BRICKS.defaultBlockState(),
                     new double[][] {{6.0, 1.0}, {-2.5, 6.0}, {-4.0, -4.5}}, new double[] {2.0, 13.0, 13.0}, new double[] {0.0, 0.0, 0.5}, 27),
             new Scene("sordin_waves", () -> ModEntities.SORDIN.get(), FuryAttack.WAVES, Blocks.DEEPSLATE_TILES.defaultBlockState(),
