@@ -136,7 +136,19 @@ public enum SiteKind implements StringRepresentable {
     /** Borstling-Goldmine: ein Tagebau mit Goldadern, Gerüst, Kran, Lore und Schmelzhütte. */
     GOLD_MINE(World.NETHER),
     /** Zerbrochene Brücke: eine gewaltige Bogenbrücke über dem Lavameer, in der Mitte eingestürzt, mit Zollturm. */
-    BROKEN_BRIDGE(World.NETHER);
+    BROKEN_BRIDGE(World.NETHER),
+    /** Luftschiffwrack: ein abgestürztes Luftschiff, schief im Krater, mit Kajüte, Masten und der schlaffen Hülle. */
+    AIRSHIP_WRECK(World.END),
+    /** Chorusgarten: ein ummauerter Garten mit Chorusbeeten, Schwebebeeren, Pavillon und der Hütte des Gärtners. */
+    CHORUS_GARDEN(World.END),
+    /** Purpurwarte: ein schlanker Purpurturm mit Wendeltreppe und Signalfeuer auf der Plattform. */
+    PURPUR_WATCHTOWER(World.END),
+    /** Leerenangler: eine Fischerhütte am Inselrand mit einem Steg weit hinaus über die Leere. */
+    VOID_ANGLER(World.END),
+    /** Endsteinbruch: eine gestufte Grube mit Phasitadern, Kran, Lore und der Hütte der Steinmetze. */
+    END_QUARRY(World.END),
+    /** Drachengrab: das Gerippe eines riesigen Drachen aus Knochen, umgeben von Obsidiansplittern und einem Altar. */
+    DRAGON_GRAVE(World.END);
 
     public static final Codec<SiteKind> CODEC = StringRepresentable.fromEnum(SiteKind::values);
 

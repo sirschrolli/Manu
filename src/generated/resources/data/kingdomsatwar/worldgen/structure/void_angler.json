@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/void_angler",
+  "kind": "void_angler",
+  "spawn_overrides": {},
+  "step": "top_layer_modification"
+}

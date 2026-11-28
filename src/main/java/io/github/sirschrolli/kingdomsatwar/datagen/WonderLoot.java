@@ -45,6 +45,7 @@ final class WonderLoot {
         WonderLoot loot = new WonderLoot(output, enchantments);
         loot.overworld();
         loot.nether();
+        loot.end();
     }
 
     private void accept(String name, LootTable.Builder table) {
@@ -215,5 +216,81 @@ final class WonderLoot {
                 .withPool(pool(2, 5, item(Items.GOLD_NUGGET, 6, 2, 8), item(ModItems.BRONZE_COIN.get(), 5, 1, 4), item(Items.QUARTZ, 4, 1, 4),
                         item(Cuisine.EMBER_CHILI.get(), 2, 1, 1), item(Cuisine.EMBER_PEPPER.get(), 4, 1, 4), item(Items.LEATHER, 3, 1, 2),
                         item(Items.STRING, 3, 1, 3))));
+    }
+
+    private void end() {
+        var phasit = io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT.get();
+        // Luftschiffwrack: die Kajüte des Kapitäns und die Ladung im Bauch
+        this.accept("airship_wreck", coins(LootTable.lootTable().withPool(crystals(8, 8)), 3, 10, 1, 4, 0.2f)
+                .withPool(pool(3, 6, item(Items.COMPASS, 2, 1, 1), item(Items.MAP, 3, 1, 1), item(Items.SPYGLASS, 2, 1, 1), item(Items.CLOCK, 1, 1, 1),
+                        item(Items.PAPER, 4, 2, 6), item(Items.STRING, 4, 2, 6), item(Items.PHANTOM_MEMBRANE, 3, 1, 3), item(Items.GOLD_INGOT, 3, 1, 3),
+                        item(Items.ENDER_PEARL, 3, 1, 2), item(Cuisine.HARDTACK.get(), 4, 2, 5), item(Cuisine.RUM.get(), 3, 1, 2),
+                        item(Cuisine.FLOAT_BERRIES.get(), 3, 1, 4)))
+                .withPool(this.book(0.4f)));
+        this.accept("airship_wreck_cargo", LootTable.lootTable()
+                .withPool(pool(3, 6, item(Cuisine.HARDTACK.get(), 6, 2, 6), item(Cuisine.RUM.get(), 4, 1, 2), item(Items.STRING, 5, 2, 6),
+                        item(Items.LEATHER, 4, 1, 3), item(Items.IRON_INGOT, 3, 1, 3), item(Items.COAL, 4, 2, 6), item(Items.GUNPOWDER, 3, 1, 3),
+                        item(Items.FIREWORK_ROCKET, 3, 1, 4), item(Items.CHORUS_FRUIT, 4, 2, 6), item(Cuisine.FLOAT_BERRIES.get(), 3, 2, 5))));
+        // Chorusgarten: die Truhe des Gärtners und die Vorratskammer
+        this.accept("chorus_garden", coins(LootTable.lootTable().withPool(crystals(5, 6)), 2, 7, 0, 2, 0.05f)
+                .withPool(pool(3, 6, item(Items.CHORUS_FRUIT, 6, 2, 6), item(Items.CHORUS_FLOWER, 3, 1, 2), item(Items.POPPED_CHORUS_FRUIT, 4, 2, 5),
+                        item(Cuisine.FLOAT_BERRIES.get(), 6, 2, 6), item(Cuisine.CHORUS_JAM.get(), 4, 1, 2), item(Cuisine.FLOAT_BERRY_TART.get(), 2, 1, 1),
+                        item(Items.BONE_MEAL, 4, 2, 6), item(Items.ENDER_PEARL, 2, 1, 1), item(Items.END_ROD, 3, 1, 3),
+                        item(Items.DYE.pick(DyeColor.PURPLE), 3, 1, 3)))
+                .withPool(worn(Items.IRON_HOE, 0.4f)));
+        this.accept("chorus_garden_pantry", LootTable.lootTable()
+                .withPool(pool(3, 6, item(Cuisine.CHORUS_JAM.get(), 5, 1, 3), item(Cuisine.FLOAT_BERRIES.get(), 7, 2, 6),
+                        item(Cuisine.FLOAT_BERRY_TART.get(), 3, 1, 2), item(Items.POPPED_CHORUS_FRUIT, 4, 2, 5), item(Items.CHORUS_FRUIT, 5, 2, 6),
+                        item(Items.SUGAR, 3, 1, 4), item(Items.GLASS_BOTTLE, 3, 1, 3), item(Items.BOWL, 2, 1, 2))));
+        // Purpurwarte: die Truhe des Wächters oben auf der Plattform
+        this.accept("purpur_watchtower", coins(LootTable.lootTable().withPool(crystals(8, 8)), 3, 9, 1, 3, 0.15f)
+                .withPool(pool(3, 6, item(Items.ARROW, 5, 4, 12), item(Items.SPECTRAL_ARROW, 3, 2, 6), item(Items.END_ROD, 4, 1, 4),
+                        item(Items.ENDER_PEARL, 4, 1, 3), item(Items.SPYGLASS, 2, 1, 1), item(Items.SHULKER_SHELL, 1, 1, 1),
+                        item(Items.POPPED_CHORUS_FRUIT, 3, 1, 4), item(phasit, 2, 1, 2), item(Items.GOLD_INGOT, 3, 1, 3),
+                        item(Items.EXPERIENCE_BOTTLE, 3, 1, 3), item(Cuisine.HARDTACK.get(), 3, 1, 3)))
+                .withPool(worn(Items.CROSSBOW, 0.35f))
+                .withPool(this.book(0.35f)));
+        // Leerenangler: die Truhe in der Hütte und der Fang am Ende des Stegs
+        this.accept("void_angler", coins(LootTable.lootTable().withPool(crystals(4, 6)), 2, 7, 0, 2, 0.05f)
+                .withPool(pool(3, 6, item(Items.STRING, 5, 2, 6), item(io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies.ENDER_SALMON.item(), 5, 1, 3),
+                        item(io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies.CHORUS_FISH.item(), 3, 1, 2),
+                        item(io.github.sirschrolli.kingdomsatwar.registry.FishingItems.COOKED_FILLET.get(), 4, 1, 4), item(Cuisine.HARDTACK.get(), 4, 1, 4),
+                        item(Cuisine.FLOAT_BERRIES.get(), 3, 1, 4), item(Items.ENDER_PEARL, 2, 1, 2), item(Items.LEAD, 2, 1, 1),
+                        item(Items.LANTERN, 2, 1, 1), item(Items.CHORUS_FRUIT, 3, 1, 4)))
+                .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                        .add(LootItem.lootTableItem(Items.FISHING_ROD).setWeight(3)
+                                .apply(SetItemDamageFunction.setDamage(ContextFloatProviders.between(0.3f, 0.8f))))
+                        .add(LootItem.lootTableItem(io.github.sirschrolli.kingdomsatwar.registry.FishingItems.rod(
+                                io.github.sirschrolli.kingdomsatwar.fishing.RodType.IRON)).setWeight(1)
+                                .apply(SetItemDamageFunction.setDamage(ContextFloatProviders.between(0.3f, 0.8f))))
+                        .add(EmptyLootItem.emptyItem().setWeight(3))));
+        this.accept("void_angler_catch", LootTable.lootTable()
+                .withPool(pool(3, 6, item(io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies.ENDER_SALMON.item(), 7, 1, 3),
+                        item(io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies.CHORUS_FISH.item(), 4, 1, 2),
+                        item(io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies.VOID_RAY.item(), 1, 1, 1),
+                        item(io.github.sirschrolli.kingdomsatwar.registry.FishingItems.COOKED_FILLET.get(), 3, 1, 3), item(Items.STRING, 3, 1, 3),
+                        item(Items.CHORUS_FRUIT, 4, 1, 4), item(Items.BONE_MEAL, 2, 1, 3))));
+        // Endsteinbruch: die Truhe der Steinmetze und die beladene Lore
+        this.accept("end_quarry", coins(LootTable.lootTable().withPool(crystals(5, 5)), 2, 8, 0, 3, 0.1f)
+                .withPool(pool(3, 6, item(phasit, 3, 1, 2), item(Items.END_STONE_BRICKS, 6, 4, 12), item(Items.PURPUR_BLOCK, 4, 2, 8),
+                        item(Items.OBSIDIAN, 3, 1, 3), item(Items.IRON_INGOT, 4, 1, 3), item(Items.ENDER_PEARL, 2, 1, 1), item(Items.END_ROD, 3, 1, 3),
+                        item(Cuisine.HARDTACK.get(), 3, 1, 3), item(Items.CRYING_OBSIDIAN, 1, 1, 1), item(Items.TORCH, 3, 2, 6)))
+                .withPool(worn(Items.IRON_PICKAXE, 0.5f)));
+        this.accept("end_quarry_cart", LootTable.lootTable()
+                .withPool(pool(3, 6, item(Items.END_STONE, 8, 8, 24), item(Items.END_STONE_BRICKS, 6, 4, 12),
+                        item(io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT_ORE.get(), 2, 1, 2), item(phasit, 2, 1, 2),
+                        item(Items.OBSIDIAN, 4, 1, 4), item(Items.GRAVEL, 3, 2, 6), item(Items.PURPUR_BLOCK, 3, 2, 6))));
+        // Drachengrab: die Gaben am Schrein neben dem Schädel
+        LootPool.Builder scales = LootPool.lootPool().setRolls(ContextIntProviders.exactly(1)).add(EmptyLootItem.emptyItem().setWeight(8));
+        for (var scale : ModItems.DRAGON_SCALES.values()) {
+            scales.add(LootItem.lootTableItem(scale.get()).setWeight(1));
+        }
+        this.accept("dragon_grave", coins(LootTable.lootTable().withPool(crystals(14, 14)), 4, 12, 2, 6, 0.3f)
+                .withPool(pool(3, 5, item(Items.DRAGON_BREATH, 4, 1, 3), item(Items.ENDER_PEARL, 4, 1, 3), item(phasit, 3, 1, 3),
+                        item(Items.EXPERIENCE_BOTTLE, 4, 1, 4), item(Items.BONE, 5, 2, 6), item(Items.BONE_BLOCK, 2, 1, 2),
+                        item(Items.CRYING_OBSIDIAN, 2, 1, 2), item(Items.END_CRYSTAL, 1, 1, 1), item(Items.GOLDEN_APPLE, 1, 1, 1),
+                        item(Items.SHULKER_SHELL, 1, 1, 1)))
+                .withPool(scales)
+                .withPool(this.book(0.6f)));
     }
 }

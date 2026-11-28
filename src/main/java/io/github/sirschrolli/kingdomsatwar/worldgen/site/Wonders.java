@@ -33,7 +33,9 @@ public final class Wonders {
         /** Felsdecke der Unterwelt: über dem Bauwerk Netherrack, darunter Luft und tief unten Lava */
         CEILING,
         /** Steilküste: vorn (+z) Meer, dahinter Strand, hinten (−z) eine Klippe zehn Blöcke über dem Meer */
-        COAST
+        COAST,
+        /** Inselkante (End, Leere): Boden bis z = 6, vorn (+z) dahinter nur noch Leere */
+        EDGE
     }
 
     @FunctionalInterface
@@ -66,6 +68,8 @@ public final class Wonders {
         Overworld.register();
         // die Unterwelt
         Nether.register();
+        // das End
+        End.register();
     }
 
     private Wonders() {}

@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/purpur_watchtower",
+  "kind": "purpur_watchtower",
+  "spawn_overrides": {},
+  "step": "top_layer_modification"
+}

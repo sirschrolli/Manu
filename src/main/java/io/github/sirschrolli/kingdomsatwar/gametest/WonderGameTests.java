@@ -93,6 +93,26 @@ final class WonderGameTests {
         MARKS.put(SiteKind.BROKEN_BRIDGE, List.of(new Mark(() -> Blocks.NETHER_BRICK_FENCE, 20), new Mark(() -> Blocks.RED_NETHER_BRICKS, 30),
                 new Mark(() -> Blocks.SOUL_LANTERN, 8)));
         DWELLERS.put(SiteKind.BROKEN_BRIDGE, List.of(new Dweller(() -> ModEntities.BLAZE.get(), 2), new Dweller(() -> ModEntities.WITHER_SKELETON.get(), 1)));
+        // End
+        MARKS.put(SiteKind.AIRSHIP_WRECK, List.of(new Mark(() -> Blocks.CARTOGRAPHY_TABLE, 1), new Mark(() -> Blocks.WOOL.pick(net.minecraft.world.item.DyeColor.WHITE), 10),
+                new Mark(() -> Blocks.STRIPPED_DARK_OAK_LOG, 6)));
+        DWELLERS.put(SiteKind.AIRSHIP_WRECK, List.of(new Dweller(() -> ModEntities.ENDERMAN.get(), 2), new Dweller(() -> ModEntities.ENDERMITE.get(), 2)));
+        MARKS.put(SiteKind.CHORUS_GARDEN, List.of(new Mark(() -> Cuisine.FLOAT_BERRY_BUSH.get(), 4), new Mark(() -> Blocks.CHORUS_PLANT, 5),
+                new Mark(() -> Blocks.PURPUR_PILLAR, 4), new Mark(() -> Blocks.END_ROD, 4)));
+        DWELLERS.put(SiteKind.CHORUS_GARDEN, List.of(new Dweller(() -> ModEntities.ENDERMAN.get(), 1)));
+        MARKS.put(SiteKind.PURPUR_WATCHTOWER, List.of(new Mark(() -> Blocks.PURPUR_STAIRS, 20), new Mark(() -> Blocks.PURPUR_PILLAR, 30),
+                new Mark(() -> Blocks.END_ROD, 8), new Mark(() -> Blocks.STAINED_GLASS_PANE.pick(net.minecraft.world.item.DyeColor.MAGENTA), 6)));
+        DWELLERS.put(SiteKind.PURPUR_WATCHTOWER, List.of(new Dweller(() -> ModEntities.SHULKER.get(), 2)));
+        MARKS.put(SiteKind.VOID_ANGLER, List.of(new Mark(() -> Blocks.SPRUCE_PLANKS, 20), new Mark(() -> Blocks.SMOKER, 1), new Mark(() -> Blocks.IRON_CHAIN, 10),
+                new Mark(() -> Blocks.SOUL_LANTERN, 4)));
+        DWELLERS.put(SiteKind.VOID_ANGLER, List.of(new Dweller(() -> ModEntities.ENDERMAN.get(), 1), new Dweller(() -> ModEntities.ENDERMITE.get(), 1)));
+        MARKS.put(SiteKind.END_QUARRY, List.of(new Mark(() -> io.github.sirschrolli.kingdomsatwar.registry.PhaseGear.PHASIT_ORE.get(), 3),
+                new Mark(() -> Blocks.STONECUTTER, 2), new Mark(() -> Blocks.RAIL, 5), new Mark(() -> Blocks.LADDER, 8)));
+        DWELLERS.put(SiteKind.END_QUARRY, List.of(new Dweller(() -> ModEntities.ENDERMAN.get(), 2),
+                new Dweller(() -> net.minecraft.world.entity.EntityTypes.CHEST_MINECART, 1)));
+        MARKS.put(SiteKind.DRAGON_GRAVE, List.of(new Mark(() -> Blocks.BONE_BLOCK, 150), new Mark(() -> Blocks.CRYING_OBSIDIAN, 2),
+                new Mark(() -> Blocks.OBSIDIAN, 20), new Mark(() -> Blocks.END_ROD, 5)));
+        DWELLERS.put(SiteKind.DRAGON_GRAVE, List.of(new Dweller(() -> ModEntities.ENDERMITE.get(), 3), new Dweller(() -> ModEntities.RIFT_HOUND.get(), 1)));
         for (Wonders.Wonder wonder : Wonders.all()) {
             TESTS.add(ModGameTests.TEST_FUNCTIONS.register("wonder_" + wonder.kind().id(), () -> helper -> test(helper, wonder)));
         }

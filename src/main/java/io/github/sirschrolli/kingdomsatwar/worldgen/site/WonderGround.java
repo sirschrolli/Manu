@@ -91,6 +91,13 @@ public final class WonderGround {
                                 state = dy == 10 ? grass : dy == 9 ? soil : dy < 9 && dy >= -7 ? Blocks.STONE.defaultBlockState() : state;
                             }
                         }
+                        case EDGE -> {
+                            // die Insel endet bei z = 6; ihre Unterseite läuft zur Kante hin schräg zu
+                            int depth = dz <= 0 ? 12 : 12 - dz * 3 / 2;
+                            if (dz <= 6) {
+                                state = dy == -1 ? grass : dy < -1 && dy >= -depth ? soil : state;
+                            }
+                        }
                         case AIR -> {
                         }
                     }

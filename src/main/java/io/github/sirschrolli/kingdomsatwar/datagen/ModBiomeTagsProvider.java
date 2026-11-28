@@ -405,6 +405,15 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.GOLD_MINE)).add(Biomes.NETHER_WASTES).add(Biomes.CRIMSON_FOREST);
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.BROKEN_BRIDGE)).add(Biomes.NETHER_WASTES).add(Biomes.CRIMSON_FOREST)
                 .add(Biomes.WARPED_FOREST).add(Biomes.SOUL_SAND_VALLEY).add(Biomes.BASALT_DELTAS);
+        // End: nur auf den äußeren Inseln (nie auf der Hauptinsel des Drachen); der Leerenangler auch an ihren kargen Rändern
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.AIRSHIP_WRECK)).add(Biomes.END_HIGHLANDS).add(Biomes.END_MIDLANDS);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.CHORUS_GARDEN)).add(Biomes.END_HIGHLANDS);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.PURPUR_WATCHTOWER)).add(Biomes.END_HIGHLANDS).add(Biomes.END_MIDLANDS);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.VOID_ANGLER)).add(Biomes.END_HIGHLANDS).add(Biomes.END_MIDLANDS)
+                .add(Biomes.END_BARRENS);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.END_QUARRY)).add(Biomes.END_HIGHLANDS).add(Biomes.END_MIDLANDS);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.DRAGON_GRAVE)).add(Biomes.END_HIGHLANDS).add(Biomes.END_MIDLANDS)
+                .add(Biomes.END_BARRENS);
     }
 
     private void overworldBiomes() {

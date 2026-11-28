@@ -671,6 +671,55 @@ final class Kit {
         return new BlockPos(x, sea, z);
     }
 
+    /** Ein Platz an der Kante einer Insel: der Ursprung und die Drehung, in der die eigene +z-Richtung ins Leere zeigt. */
+    record Edge(BlockPos origin, Rotation rotation) {}
+
+    /**
+     * Ebenes Land an der Kante einer Insel (End, Leere): unter der Mitte ebener Boden wie bei {@link #land}, und in einer der
+     * vier Richtungen ab {@code reach} Blöcken nur noch Leere (kein Boden über dem Grund der Welt).
+     */
+    static @Nullable Edge voidEdge(Structure.GenerationContext context, SiteTerrain terrain, long seed, int r, int maxDiff, int reach) {
+        BlockPos origin = land(context, terrain, r, maxDiff);
+        if (origin == null) {
+            return null;
+        }
+        int start = Math.floorMod((int) (seed >>> 5), 4);
+        for (int i = 0; i < 4; i++) {
+            Rotation rotation = Rotation.values()[(start + i) % 4];
+            boolean empty = true;
+            for (int d = reach; d <= reach + 6 && empty; d += 2) {
+                for (int side = -2; side <= 2 && empty; side += 2) {
+                    BlockPos s = new BlockPos(side, 0, d).rotate(rotation);
+                    empty = terrain.ground(origin.getX() + s.getX(), origin.getZ() + s.getZ()) < terrain.minY() + 8;
+                }
+            }
+            if (empty) {
+                return new Edge(origin, rotation);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Weiches Rauschen (0 bis 1) über der Ebene: Zufallswerte an einem Gitter der Weite {@code cell}, dazwischen weich
+     * verblendet – für Flecken und Inseln statt Schachbrettmuster.
+     */
+    static double smooth(VillageBuilder b, int x, int z, double cell, int salt) {
+        double fx = x / cell;
+        double fz = z / cell;
+        int ix = (int) Math.floor(fx);
+        int iz = (int) Math.floor(fz);
+        double tx = fx - ix;
+        double tz = fz - iz;
+        tx = tx * tx * (3 - 2 * tx);
+        tz = tz * tz * (3 - 2 * tz);
+        double a = b.noise(ix, salt, iz);
+        double c = b.noise(ix + 1, salt, iz);
+        double d = b.noise(ix, salt, iz + 1);
+        double e = b.noise(ix + 1, salt, iz + 1);
+        return (a * (1 - tx) + c * tx) * (1 - tz) + (d * (1 - tx) + e * tx) * tz;
+    }
+
     /** Ein Schlüssel für die Beute einer Truhe eines Bauwerks von 2.0. */
     static ResourceKey<LootTable> loot(String name) {
         return io.github.sirschrolli.kingdomsatwar.loot.ModLootTables.wonder(name);
