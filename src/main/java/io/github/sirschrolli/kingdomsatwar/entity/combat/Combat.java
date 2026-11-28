@@ -52,6 +52,8 @@ public final class Combat {
     public static final double GUARD_ANGLE = 75.0;
 
     private static final Map<Mob, Fight> FIGHTS = new WeakHashMap<>();
+    /** Tests: auch auf dem Testserver das Temperament auswürfeln und anlegen (sonst bleibt der Körper unverändert). */
+    public static boolean rollInTests;
 
     private Combat() {}
 
@@ -162,8 +164,16 @@ public final class Combat {
             style = mob.getData(ModAttachments.COMBAT_STYLE.get());
         } else {
             style = Style.roll(mob.getRandom(), family, Family.ranged(mob, family));
+            boolean calm = mob.level().getServer() instanceof net.minecraft.gametest.framework.GameTestServer && !rollInTests;
+            if (calm) {
+                // in den Tests ohne Temperament am Körper: sonst schwanken die Messungen der übrigen Tests (Schaden, Tempo,
+                // Leben) – wer Temperamente prüft, würfelt ausdrücklich (rollInTests) oder setzt den Stil
+                style = new Style(Temper.UNGESTUEM, style.moves(), 1.0f);
+            }
             mob.setData(ModAttachments.COMBAT_STYLE.get(), style);
-            applyTemper(mob, style);
+            if (!calm) {
+                applyTemper(mob, style);
+            }
         }
         Fight fight = new Fight(mob, family, style);
         FIGHTS.put(mob, fight);

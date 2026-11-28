@@ -157,6 +157,18 @@ final class CombatGameTests {
         ServerLevel level = helper.getLevel();
         Set<Temper> tempers = new HashSet<>();
         Set<List<MoveKind>> sets = new HashSet<>();
+        Combat.rollInTests = true;
+        try {
+            rollMany(helper, level, tempers, sets);
+        } finally {
+            Combat.rollInTests = false;
+        }
+        helper.assertTrue(tempers.size() >= 4, "zu wenige Temperamente: " + tempers);
+        helper.assertTrue(sets.size() >= 6, "zu wenige verschiedene Angriffsauswahlen: " + sets.size());
+        helper.succeed();
+    }
+
+    private static void rollMany(GameTestHelper helper, ServerLevel level, Set<Temper> tempers, Set<List<MoveKind>> sets) {
         for (int i = 0; i < 40; i++) {
             Mob mob = ModEntities.ZOMBIE.get().create(level, EntitySpawnReason.MOB_SUMMONED);
             Vec3 at = helper.absoluteVec(new Vec3(1.5 + i % 7, 1.0, 1.5 + i / 7));
@@ -187,9 +199,6 @@ final class CombatGameTests {
             }
             mob.discard();
         }
-        helper.assertTrue(tempers.size() >= 4, "zu wenige Temperamente: " + tempers);
-        helper.assertTrue(sets.size() >= 6, "zu wenige verschiedene Angriffsauswahlen: " + sets.size());
-        helper.succeed();
     }
 
     /** Ansprung: aus sechs Blöcken Abstand – es fliegt heran und trifft. */
