@@ -5,7 +5,7 @@ on:
 permissions:
   contents: write
 jobs:
-  localenv:
+  jdk:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -13,60 +13,12 @@ jobs:
         with:
           java-version: '25'
           distribution: 'temurin'
-      - uses: gradle/actions/setup-gradle@v6
-        with:
-          cache-provider: basic
-      - name: Bauen und Starts vorbereiten
-        run: ./gradlew build prepareClientRun prepareServerRun prepareGameTestServerRun prepareDataRun exportClasspaths downloadAssets --no-configuration-cache --stacktrace
-      - name: Dekompilieren
+      - name: JDK einpacken
         run: |
-          JAR=$(ls build/moddev/artifacts/minecraft-patched-*.jar | grep -v sources | head -1)
-          VF=$(curl -sS https://repo1.maven.org/maven2/org/vineflower/vineflower/maven-metadata.xml | grep -oP '(?<=<release>)[^<]+')
-          curl -sSL -o vineflower.jar "https://repo1.maven.org/maven2/org/vineflower/vineflower/$VF/vineflower-$VF.jar"
-          mkdir -p mcsrc
-          java -Xmx6g -jar vineflower.jar -dgs=1 -rsy=1 -lit=1 -mpm=60 -log=ERROR "$JAR" mcsrc/ > decompile.log 2>&1 || echo "Vineflower exit $?"
-          find mcsrc -name "*.java" | wc -l
-      - name: Sammeln
-        run: |
-          mkdir -p localenv/libs localenv/moddev
-          ls -laR build/moddev > localenv/moddev-listing.txt 2>&1 || true
-          cp build/moddev/*.txt build/moddev/*.xml build/moddev/*.properties build/moddev/*.json localenv/moddev/ 2>/dev/null || true
-          cp devtools-cp/*.txt localenv/
-          cat devtools-cp/compile.txt devtools-cp/runtime.txt build/moddev/*.txt 2>/dev/null | tr ':' '\n' | grep '\.jar$' | sort -u > localenv/alljars.txt
-          while read -r j; do
-            [ -f "$j" ] || continue
-            rel=$(echo "$j" | sed "s#^$HOME/##; s#^$GITHUB_WORKSPACE/#ws/#")
-            mkdir -p "localenv/libs/$(dirname "$rel")"
-            cp "$j" "localenv/libs/$rel"
-          done < localenv/alljars.txt
-          # Assets (ohne Klänge und Musik – für Bilder genügt das)
-          ASSETS=$(grep -h -A1 -- '--assetsDir' build/moddev/*.txt 2>/dev/null | grep -v -- '--assetsDir' | head -1 | tr -d '"')
-          echo "assets: $ASSETS"
-          python3 - "$ASSETS" localenv/assets <<'PYEOF'
-          import json, os, shutil, sys
-          src, dst = sys.argv[1], sys.argv[2]
-          if not src or not os.path.isdir(src):
-              print("keine Assets gefunden:", src); sys.exit(0)
-          os.makedirs(dst + '/indexes', exist_ok=True)
-          n = 0
-          for f in os.listdir(src + '/indexes'):
-              shutil.copy(src + '/indexes/' + f, dst + '/indexes/' + f)
-              idx = json.load(open(src + '/indexes/' + f))
-              for name, o in idx['objects'].items():
-                  if '/sounds/' in name or name.startswith('minecraft/sounds') or 'music' in name:
-                      continue
-                  h = o['hash']
-                  os.makedirs(dst + '/objects/' + h[:2], exist_ok=True)
-                  p = src + '/objects/' + h[:2] + '/' + h
-                  if os.path.exists(p):
-                      shutil.copy(p, dst + '/objects/' + h[:2] + '/' + h); n += 1
-          print("Assets kopiert:", n)
-          PYEOF
-          (cd mcsrc && zip -qr ../localenv/mc-sources.zip .)
-          cp vineflower.jar localenv/
-          cp -r "$JAVA_HOME" localenv/jdk
-          echo "HOME=$HOME WS=$GITHUB_WORKSPACE JAVA_HOME=$JAVA_HOME" > localenv/paths.txt
-          du -sh localenv; du -sh localenv/libs localenv/jdk localenv/assets 2>/dev/null || true
+          mkdir -p localenv/jdk
+          cp -rL "$JAVA_HOME/." localenv/jdk/
+          localenv/jdk/bin/java -version
+          du -sh localenv/jdk
           tar czf localenv.tar.gz localenv
           ls -la localenv.tar.gz
       - name: Verschlüsselt zurückgeben
@@ -76,5 +28,5 @@ jobs:
           openssl cms -encrypt -stream -binary -aes256 -in localenv.tar.gz -out localenv.enc -outform DER ci/probe.crt
           mkdir out && split -b 45m -d localenv.enc out/localenv.enc.part && ls -la out && cd out
           git init -q && git checkout -q -b ci/probe-output && git add .
-          git -c user.name=ci -c user.email=ci@localhost commit -q -m "localenv ${{ github.run_id }}"
+          git -c user.name=ci -c user.email=ci@localhost commit -q -m "jdk ${{ github.run_id }}"
           git push -f -q "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci/probe-output
