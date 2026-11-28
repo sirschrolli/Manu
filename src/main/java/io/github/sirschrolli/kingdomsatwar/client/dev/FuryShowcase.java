@@ -40,13 +40,13 @@ final class FuryShowcase {
 
     private static final List<Scene> SCENES = List.of(
             new Scene("glutschmied_rain", () -> ModEntities.GLUTSCHMIED.get(), FuryAttack.RAIN, Blocks.BLACKSTONE.defaultBlockState(),
-                    new double[][] {{3.5, -3.0}, {-3.0, -3.5}, {0.5, -6.0}}, new double[] {5.0, 6.0, 11.0}, new double[] {0.0, 1.0, -2.0}, 28),
+                    new double[][] {{3.5, -3.0}, {-3.0, -3.5}, {0.5, -6.0}}, new double[] {3.5, 4.2, 7.5}, new double[] {0.0, 1.8, -2.0}, 28),
             new Scene("stonekeeper_lines", () -> ModEntities.STONE_KEEPER.get(), FuryAttack.LINES, Blocks.MOSSY_STONE_BRICKS.defaultBlockState(),
                     new double[][] {{6.0, 1.0}, {-2.5, 6.0}, {-4.0, -4.5}}, new double[] {2.0, 13.0, 13.0}, new double[] {0.0, 0.0, 0.5}, 27),
             new Scene("sordin_waves", () -> ModEntities.SORDIN.get(), FuryAttack.WAVES, Blocks.DEEPSLATE_TILES.defaultBlockState(),
                     new double[][] {{3.0, 5.0}, {-4.5, 4.0}, {5.5, -1.0}}, new double[] {0.0, 7.0, 13.0}, new double[] {0.0, 0.0, 1.0}, 37),
             new Scene("mage_pull", () -> ModEntities.MAGES.get(DragonType.WATER).get(), FuryAttack.PULL, Blocks.PRISMARINE_BRICKS.defaultBlockState(),
-                    new double[][] {{4.0, 2.0}, {-3.5, 3.0}, {1.0, 5.5}}, new double[] {6.0, 6.0, 10.5}, new double[] {0.0, 2.2, 0.5}, 40),
+                    new double[][] {{4.0, 2.0}, {-3.5, 3.0}, {1.0, 5.5}}, new double[] {6.0, 5.5, 10.5}, new double[] {0.0, 2.8, 0.5}, 40),
             new Scene("hourwarden_beams", () -> ModEntities.HOUR_WARDEN.get(), FuryAttack.BEAMS, Blocks.POLISHED_BLACKSTONE_BRICKS.defaultBlockState(),
                     new double[][] {{5.0, 4.0}, {-5.5, 2.5}, {2.0, -6.0}}, new double[] {9.0, 7.5, 10.0}, new double[] {0.0, 0.0, 0.0}, 34),
             new Scene("mystik_sectors", () -> ModEntities.MISS_MYSTIK.get(), FuryAttack.SECTORS, Blocks.MOSS_BLOCK.defaultBlockState(),

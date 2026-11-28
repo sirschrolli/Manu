@@ -137,14 +137,15 @@ public final class CombatPoses {
                     lean(stack, p.body(), 10.0f * w);
                     squash(stack, 0.17f * w);
                 } else {
-                    float k = decay(a, 6.0f);
+                    // im Sprung nach vorn gestreckt, bis er landet
+                    float k = decay(a, 12.0f);
                     lean(stack, p.body(), 18.0f * k);
-                    squash(stack, -0.12f * k);
+                    squash(stack, -0.12f * Math.min(1.0f, k * 2.0f) * k);
                 }
             }
             case RAISE -> {
                 if (a < 0.0f) {
-                    lean(stack, p.body(), -14.0f * w);
+                    lean(stack, p.body(), -9.0f * w);
                     squash(stack, -0.06f * w);
                 } else {
                     float k = decay(a, 6.0f);
@@ -302,9 +303,9 @@ public final class CombatPoses {
                     set(right, w, 0.6f, 0.0f, 0.15f);
                     set(left, w, 0.6f, 0.0f, -0.15f);
                 } else {
-                    float k = decay(a, 10.0f);
-                    set(right, k, -1.7f, -0.1f, 0.0f);
-                    set(left, k, -1.7f, 0.1f, 0.0f);
+                    float k = decay(a, 14.0f);
+                    set(right, Math.min(1.0f, k * 2.0f), -1.7f, -0.1f, 0.0f);
+                    set(left, Math.min(1.0f, k * 2.0f), -1.7f, 0.1f, 0.0f);
                 }
             }
             case CHARGE -> {

@@ -172,6 +172,13 @@ final class NetworkGameTests {
         check(problems, "Kristalle", registries, Crystals.Count.STREAM_CODEC, new Samples().make(Crystals.Count.class));
         check(problems, "Fangbuch (leer)", registries, FishLog.STREAM_CODEC, new FishLog());
         check(problems, "Fangbuch", registries, FishLog.STREAM_CODEC, new Samples().make(FishLog.class));
+        // seit 1.14: der laufende Angriff eines Monsters (für seine Haltung auf allen Bildschirmen)
+        check(problems, "Kampfakt (leer)", registries, io.github.sirschrolli.kingdomsatwar.entity.combat.Act.STREAM_CODEC,
+                io.github.sirschrolli.kingdomsatwar.entity.combat.Act.NONE);
+        for (var kind : io.github.sirschrolli.kingdomsatwar.entity.combat.MoveKind.values()) {
+            check(problems, "Kampfakt " + kind, registries, io.github.sirschrolli.kingdomsatwar.entity.combat.Act.STREAM_CODEC,
+                    new io.github.sirschrolli.kingdomsatwar.entity.combat.Act(kind.ordinal(), 34, 123456789L));
+        }
         helper.assertTrue(problems.isEmpty(), "Daten des Spielers kommen nicht heil an: " + String.join(" | ", problems));
         helper.succeed();
     }

@@ -103,11 +103,15 @@ public final class Fury {
     final IntSet struck = new IntOpenHashSet();
     final Int2IntOpenHashMap lastHit = new Int2IntOpenHashMap();
     @Nullable SpellFxEntity charge;
+    /** Die kreisenden Strahlen des Kreuzes. */
+    final List<SpellFxEntity> beams = new ArrayList<>();
     /** Wen der laufende (oder letzte) Zornangriff getroffen hat. */
     final IntSet victims = new IntOpenHashSet();
     /** Nur Gegner in diesem Bereich (Tests: die Nachbarn bleiben verschont); null = überall. */
     @Nullable AABB confine;
     int idle;
+    private @Nullable List<LivingEntity> fighters;
+    private long fightersAt = Long.MIN_VALUE;
 
     Fury(Mob boss, FuryProfile profile) {
         this.boss = boss;
@@ -159,6 +163,11 @@ public final class Fury {
             // ein kurzer Zielwechsel unterbricht den Kampf nicht
             if (++this.idle > 100) {
                 this.engaged = 0;
+                if (this.enraged && this.boss.getHealth() >= this.boss.getMaxHealth() * 0.9f) {
+                    // der Kampf ist vorbei und er hat sich erholt: der Zorn verraucht
+                    this.enraged = false;
+                    this.bonus(false);
+                }
             }
             return;
         }
@@ -201,6 +210,7 @@ public final class Fury {
         this.struck.clear();
         this.lastHit.clear();
         this.victims.clear();
+        this.beams.clear();
         this.center = this.groundCenter();
         Component title = Component.translatable(attack.key(this.element())).withStyle(attack == FuryAttack.NOVA ? ChatFormatting.RED : ChatFormatting.YELLOW);
         this.announce(Component.translatable(attack == FuryAttack.NOVA ? "fury.kingdomsatwar.announce_nova" : "fury.kingdomsatwar.announce",
@@ -215,6 +225,8 @@ public final class Fury {
             this.charge.discard();
             this.charge = null;
         }
+        this.beams.forEach(SpellFxEntity::discard);
+        this.beams.clear();
         if (this.current != null) {
             this.cooldown = this.enraged ? 180 + this.random().nextInt(100) : 320 + this.random().nextInt(140);
         }
@@ -495,8 +507,12 @@ public final class Fury {
                 }
                 continue;
             }
-            if (t % 2 == 0) {
-                SpellFxEntity.create(level, SpellFxEntity.Kind.BEAM, origin, e.dragon(), e.color(), 3, 0.4f).end(end).spawn();
+            // ein Strahl je Richtung, der sich mitdreht (kein Flackern)
+            if (t == BEAMS_ARM) {
+                this.beams.add(SpellFxEntity.create(level, SpellFxEntity.Kind.BEAM, origin, e.dragon(), e.color(), BEAMS_END - BEAMS_ARM + 2, 0.5f)
+                        .end(end).spawn());
+            } else if (i < this.beams.size()) {
+                this.beams.get(i).moveEnd(end);
             }
             for (LivingEntity victim : this.fighters()) {
                 Vec3 p = victim.position();
@@ -671,13 +687,20 @@ public final class Fury {
 
     /** Wen die Zornangriffe treffen: Spieler (nicht im Kreativmodus), Soldaten, Tiere der Spieler, das Ziel – keine Monster. */
     List<LivingEntity> fighters() {
+        long now = this.level().getGameTime();
+        if (this.fightersAt == now && this.fighters != null) {
+            // einmal je Tick suchen genügt (Strahlen und Einschläge fragen mehrmals)
+            return this.fighters.stream().filter(LivingEntity::isAlive).toList();
+        }
         AABB box = this.boss.getBoundingBox().inflate(RANGE, 16.0, RANGE);
         if (this.confine != null) {
             box = box.intersect(this.confine);
         }
         List<LivingEntity> list = this.level().getEntitiesOfClass(LivingEntity.class, box, this::foe);
         list.sort((a, b) -> Double.compare(a.distanceToSqr(this.boss), b.distanceToSqr(this.boss)));
-        return list.size() > 10 ? list.subList(0, 10) : list;
+        this.fighters = List.copyOf(list.size() > 10 ? list.subList(0, 10) : list);
+        this.fightersAt = now;
+        return this.fighters;
     }
 
     boolean foe(LivingEntity e) {
