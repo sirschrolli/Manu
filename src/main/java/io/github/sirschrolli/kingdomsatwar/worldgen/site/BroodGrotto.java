@@ -80,16 +80,22 @@ final class BroodGrotto {
             DeepLair.boss(this.b, ModEntities.BROOD_MOTHER.get(), 0, 3, 0, 0.0, Direction.SOUTH);
         }
 
+        /** Der Boden in weichen Flecken: um das Nest bleiches Moos (Seide), sonst Stein, Tuff, grobe Erde und Kies. */
         BlockState ground(int x, int z) {
             double r = Math.sqrt(x * x + z * z);
             float n = this.b.noise(x, -3, z);
-            if (r < 7.0 + n * 2.0) {
+            double silk = SiteCave.smooth(this.b, x, 0, z, 5, 5) + (n - 0.5) * 0.12;
+            if (r < 6.5 + silk * 3.0 || silk > 0.68) {
                 return Blocks.PALE_MOSS_BLOCK.defaultBlockState();
             }
-            return n < 0.3f ? Blocks.COARSE_DIRT.defaultBlockState()
-                    : n < 0.55f ? Blocks.STONE.defaultBlockState()
-                    : n < 0.72f ? Blocks.TUFF.defaultBlockState()
-                    : n < 0.86f ? Blocks.GRAVEL.defaultBlockState() : Blocks.PALE_MOSS_BLOCK.defaultBlockState();
+            double earth = SiteCave.smooth(this.b, x, 0, z, 9, 4) + (n - 0.5) * 0.12;
+            if (earth > 0.62) {
+                return Blocks.COARSE_DIRT.defaultBlockState();
+            }
+            if (earth < 0.28) {
+                return Blocks.GRAVEL.defaultBlockState();
+            }
+            return earth < 0.45 ? Blocks.TUFF.defaultBlockState() : Blocks.STONE.defaultBlockState();
         }
 
         /** Der Hügel aus Seide in der Mitte, auf dem sie ruht. */
@@ -103,7 +109,7 @@ final class BroodGrotto {
                     }
                     if (r < 5.8 && this.b.get(x, h + 1, z).isAir()) {
                         float n = this.b.noise(x, 4, z);
-                        if (r > 4.6 && n < 0.45f) {
+                        if (r > 4.6 && n < 0.25f) {
                             this.b.set(x, h + 1, z, Blocks.COBWEB);
                         } else if (n < 0.7f) {
                             this.b.set(x, h + 1, z, Blocks.PALE_MOSS_CARPET);

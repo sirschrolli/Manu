@@ -81,44 +81,52 @@ final class TrollDen {
             DeepLair.boss(this.b, ModEntities.TROLL_FATHER.get(), BED.getX(), 3, BED.getZ(), 0.0, Direction.SOUTH);
         }
 
+        /** Der Boden in weichen Flecken: Moos, grober Erde, Stein und Kies (nicht Block für Block gewürfelt); um das Feuer Asche und Kies. */
         BlockState ground(int x, int z) {
-            float n = this.b.noise(x, -3, z);
             double fire = Math.hypot(x - FIRE.getX(), z - FIRE.getZ());
-            if (fire < 3.5) {
-                return n < 0.5f ? Blocks.COARSE_DIRT.defaultBlockState() : Blocks.GRAVEL.defaultBlockState();
+            float n = this.b.noise(x, -3, z);
+            if (fire < 3.2 + n) {
+                return n < 0.55f ? Blocks.COARSE_DIRT.defaultBlockState() : Blocks.GRAVEL.defaultBlockState();
             }
-            return n < 0.36f ? Blocks.MOSS_BLOCK.defaultBlockState()
-                    : n < 0.6f ? Blocks.COARSE_DIRT.defaultBlockState()
-                    : n < 0.74f ? Blocks.STONE.defaultBlockState()
-                    : n < 0.84f ? Blocks.ROOTED_DIRT.defaultBlockState()
-                    : n < 0.93f ? Blocks.GRAVEL.defaultBlockState() : Blocks.TUFF.defaultBlockState();
+            double moss = SiteCave.smooth(this.b, x, 0, z, 3, 6) + (n - 0.5) * 0.12;
+            double earth = SiteCave.smooth(this.b, x, 0, z, 7, 4) + (n - 0.5) * 0.12;
+            if (moss > 0.56) {
+                return Blocks.MOSS_BLOCK.defaultBlockState();
+            }
+            if (earth > 0.6) {
+                return n < 0.25f ? Blocks.ROOTED_DIRT.defaultBlockState() : Blocks.COARSE_DIRT.defaultBlockState();
+            }
+            if (earth < 0.3) {
+                return Blocks.GRAVEL.defaultBlockState();
+            }
+            return n < 0.3f ? Blocks.TUFF.defaultBlockState() : Blocks.STONE.defaultBlockState();
         }
 
-        /** Das Lager: ein Hügel aus Knochen und Erde, darauf Felle (Teppiche) und ein paar Schädel. */
+        /** Das Lager: ein Hügel aus Knochen und Erde, oben Felle (braun, am Rand grau), ringsum Schädel. */
         void bed() {
             for (int x = -4; x <= 4; x++) {
                 for (int z = -4; z <= 4; z++) {
-                    double r = Math.hypot(x, z) + (this.b.noise(x, 5, z) - 0.5) * 0.9;
-                    int h = r < 2.2 ? 2 : r < 3.9 ? 1 : 0;
+                    double r = Math.hypot(x, z) + (this.b.noise(x, 5, z) - 0.5) * 0.7;
+                    int h = r < 2.3 ? 2 : r < 3.8 ? 1 : 0;
                     int wx = BED.getX() + x;
                     int wz = BED.getZ() + z;
                     for (int y = 1; y <= h; y++) {
-                        float n = this.b.noise(wx, y, wz);
-                        this.b.set(wx, y, wz, n < 0.55f ? Blocks.BONE_BLOCK.defaultBlockState().setValue(BlockStateProperties.AXIS,
-                                n < 0.27f ? Direction.Axis.X : Direction.Axis.Z) : Blocks.COARSE_DIRT.defaultBlockState());
+                        boolean bone = y == h || this.b.noise(wx, y, wz) < 0.5f;
+                        this.b.set(wx, y, wz, bone ? Blocks.BONE_BLOCK.defaultBlockState().setValue(BlockStateProperties.AXIS,
+                                (x + z) % 2 == 0 ? Direction.Axis.X : Direction.Axis.Z) : Blocks.COARSE_DIRT.defaultBlockState());
                     }
-                    if (r < 4.2) {
-                        float n = this.b.noise(wx, 9, wz);
-                        if (h >= 1 && n < 0.55f) {
-                            this.b.set(wx, h + 1, wz, n < 0.3f ? Blocks.CARPET.pick(DyeColor.BROWN) : n < 0.45f ? Blocks.CARPET.pick(DyeColor.BLACK) : Blocks.CARPET.pick(DyeColor.GRAY));
-                        } else if (h == 0 && n < 0.25f) {
-                            this.b.set(wx, 1, wz, Blocks.SKELETON_SKULL.defaultBlockState().setValue(SkullBlock.ROTATION, (int) (n * 64) & 15));
-                        }
+                    if (h == 2 && r < 2.0) {
+                        this.b.set(wx, 3, wz, Blocks.CARPET.pick(DyeColor.BROWN));
+                    } else if (h >= 1 && r < 3.2 && this.b.noise(wx, 9, wz) < 0.6f) {
+                        this.b.set(wx, h + 1, wz, Blocks.CARPET.pick(DyeColor.GRAY));
+                    } else if (h == 0 && r < 4.6 && this.b.noise(wx, 9, wz) < 0.22f) {
+                        this.b.set(wx, 1, wz, Blocks.SKELETON_SKULL.defaultBlockState().setValue(SkullBlock.ROTATION,
+                                (int) (this.b.noise(wx, 10, wz) * 16) & 15));
                     }
                 }
             }
             // die Mitte frei für ihn (er ist zwei Blöcke breit und über vier hoch)
-            this.b.air(BED.getX() - 1, 3, BED.getZ() - 1, BED.getX() + 1, 7, BED.getZ() + 1);
+            this.b.air(BED.getX() - 1, 4, BED.getZ() - 1, BED.getX() + 1, 7, BED.getZ() + 1);
         }
 
         /** Die Feuerstelle: ein Steinring, ein Lagerfeuer und der Bratspieß darüber. */

@@ -91,6 +91,8 @@ public class TrollFatherEntity extends CaveTrollEntity implements MiniBoss {
 
     public TrollFatherEntity(EntityType<? extends TrollFatherEntity> type, Level level) {
         super(type, level);
+        // die Größe (SCALE) steht schon in den Grundwerten – der Rahmen wächst aber erst, wenn man ihn neu bemisst
+        this.refreshDimensions();
         this.xpReward = 120;
         this.setPersistenceRequired();
         this.core = new MiniBossCore(this, BossEvent.BossBarColor.GREEN)

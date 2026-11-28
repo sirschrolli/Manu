@@ -507,6 +507,42 @@ final class WorldSitesShowcase {
                 add(views, first, -10, 3, 3, 0, 3, 0);
                 add(views, first, 1, -3, -1, 0, -3, 0.5);
             }
+            // die Hallen der Tiefe (1.15)
+            case CRYPT -> {
+                int surface = first.data(0);
+                add(views, first, 0.5, 1.5, 6.5, 0.5, 3.5, -12);
+                add(views, first, 2.5, 2, -6.5, 0, 3.5, -12);
+                add(views, first, -5.5, 1.5, 6.5, -5.5, 2, -8);
+                add(views, first, 3.5, 1, 11.5, 7, 1.5, 13);
+                add(views, first, 2.5, 1, 16.5, 0, 4, 19);
+                if (surface > 0) {
+                    add(views, first, 7, surface + 3, 30, 0, surface + 4, 19);
+                    add(views, first, 0.5, surface + 1, 21.5, 0, surface - 6, 19);
+                }
+            }
+            case BROOD_GROTTO -> {
+                add(views, first, 12, 7, 12, 0, 1, 0);
+                add(views, first, 5, 3, 6, 0, 3, 0);
+                add(views, first, -4, 2, -4, -11, 5, -10);
+                add(views, first, -8, 2, 0, -12, 1, -5);
+                add(views, first, 0.5, 1, 9, 0.5, 2, 22);
+            }
+            case DWARF_HALL -> {
+                add(views, first, 0.5, 3, 14, 0.5, 4, -14);
+                add(views, first, 0.5, 7, -10, 0.5, 3, 12);
+                add(views, first, 4, 2, 4, 0, 2, 0);
+                add(views, first, -0.5, 2, 13.5, -4, 2, 6);
+                add(views, first, 3, 2, -9, 0, 3, -16);
+                add(views, first, 0.5, 1, -19, 0.5, 1.5, -23);
+                add(views, first, 10.5, 1, 0.5, 21, 1.5, 0.5);
+            }
+            case TROLL_DEN -> {
+                add(views, first, 11, 7, 11, 0, 2, -3);
+                add(views, first, 4, 3, -1, 0, 4, -7);
+                add(views, first, 3, 2, 8, 0, 1, 4);
+                add(views, first, -6, 2, 2, -11, 1, -1);
+                add(views, first, 2.5, 1, 11, 5, 2, 24);
+            }
         }
     }
 

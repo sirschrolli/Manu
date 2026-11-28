@@ -118,6 +118,7 @@ final class Showcase {
                 case "attacks113" -> AttackShowcase.attacks(steps, "");
                 case "combat114" -> CombatShowcase.combat(steps, "");
                 case "fury114" -> FuryShowcase.fury(steps, "");
+                case "miniboss115" -> MiniBossShowcase.miniBosses(steps, "");
                 case "raid" -> RaidShowcase.raid(steps);
                 case "troops" -> TroopShowcase.troops(steps);
                 case "dragonwar" -> DragonWarShowcase.dragonWar(steps);
@@ -235,6 +236,8 @@ final class Showcase {
                         CombatShowcase.combat(steps, scene.substring(10));
                     } else if (scene.startsWith("fury114_")) {
                         FuryShowcase.fury(steps, scene.substring(8));
+                    } else if (scene.startsWith("miniboss115_")) {
+                        MiniBossShowcase.miniBosses(steps, scene.substring(12));
                     } else if (scene.startsWith("beasts_")) {
                         BeastShowcase.beasts(steps, scene.substring(7));
                     } else if (scene.equals("biome_beasts2") || scene.startsWith("biome_beasts2_")) {

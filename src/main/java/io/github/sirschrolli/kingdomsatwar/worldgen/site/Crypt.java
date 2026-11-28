@@ -51,18 +51,30 @@ final class Crypt {
 
     private Crypt() {}
 
+    /**
+     * Die Gruft liegt 22 bis 36 Blöcke unter dem Boden über der Treppe (so führt fast immer eine Treppe hinauf), aber nie zu nah
+     * an der Oberfläche: Über der ganzen Anlage müssen mindestens 16 Blöcke Fels liegen. Unter Wasser, an zu steilen Hängen oder
+     * wenn das Gelände dort zu tief abfällt, bleibt sie ohne Treppe und Mausoleum.
+     */
     static Optional<Structure.GenerationStub> plan(Structure.GenerationContext context, SiteTerrain terrain, long seed) {
-        BlockPos origin = DeepLair.origin(context, terrain, seed, -28, 37, 24, 16);
-        if (origin == null) {
+        int x = context.chunkPos().getMiddleBlockX();
+        int z = context.chunkPos().getMiddleBlockZ();
+        Rotation rotation = DeepLair.rotation(seed);
+        BlockPos shaft = new BlockPos(x, 0, z).offset(new BlockPos(0, 0, SHAFT_Z).rotate(rotation));
+        int ground = terrain.ground(shaft.getX(), shaft.getZ());
+        int depth = 22 + Math.floorMod((int) (seed >>> 13), 15);
+        int floor = ground - depth;
+        if (floor - 8 < terrain.minY()) {
             return Optional.empty();
         }
-        Rotation rotation = DeepLair.rotation(seed);
-        BlockPos shaft = origin.offset(new BlockPos(0, 0, SHAFT_Z).rotate(rotation));
-        int ground = terrain.ground(shaft.getX(), shaft.getZ());
+        int[] span = terrain.span(x, z, 22, 8);
+        if (span[0] < floor + 16 || DeepLair.sculk(terrain, x, floor, z, 24)) {
+            return Optional.empty();
+        }
         int[] around = terrain.span(shaft.getX(), shaft.getZ(), 4, 2);
-        int surface = ground - origin.getY();
-        boolean reachable = surface >= 12 && surface <= MAX_SHAFT && !terrain.water(shaft.getX(), shaft.getZ()) && around[1] - around[0] <= 4;
-        int top = reachable ? surface : 0;
+        boolean reachable = !terrain.water(shaft.getX(), shaft.getZ()) && around[1] - around[0] <= 4 && depth <= MAX_SHAFT;
+        int top = reachable ? depth : 0;
+        BlockPos origin = new BlockPos(x, floor, z);
         BoundingBox box = box(origin, rotation, top);
         return Optional.of(new Structure.GenerationStub(origin,
                 builder -> builder.addPiece(new SitePiece(SiteKind.CRYPT, 0, origin, rotation, seed, new int[] {top}, box))));

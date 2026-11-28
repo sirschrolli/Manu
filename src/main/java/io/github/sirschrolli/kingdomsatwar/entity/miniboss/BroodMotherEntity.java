@@ -83,6 +83,8 @@ public class BroodMotherEntity extends Spider implements MiniBoss {
 
     public BroodMotherEntity(EntityType<? extends BroodMotherEntity> type, Level level) {
         super(type, level);
+        // die Größe (SCALE) steht schon in den Grundwerten – der Rahmen wächst aber erst, wenn man ihn neu bemisst
+        this.refreshDimensions();
         this.xpReward = 120;
         this.setPersistenceRequired();
         this.core = new MiniBossCore(this, BossEvent.BossBarColor.PURPLE)

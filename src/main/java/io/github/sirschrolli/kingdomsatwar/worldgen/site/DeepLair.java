@@ -41,12 +41,20 @@ final class DeepLair {
         if (span[0] < floor + cover) {
             return null;
         }
-        for (int[] d : new int[][] {{0, 0}, {reach / 2, 0}, {-reach / 2, 0}, {0, reach / 2}, {0, -reach / 2}}) {
-            if (terrain.biome(x + d[0], floor + 4, z + d[1]).is(Biomes.DEEP_DARK)) {
-                return null;
-            }
+        if (sculk(terrain, x, floor, z, reach)) {
+            return null;
         }
         return new BlockPos(x, floor, z);
+    }
+
+    /** Liegt die Stelle (oder ihr Umkreis) im Reich des Sculk? Das gehört der Stillen Kathedrale. */
+    static boolean sculk(SiteTerrain terrain, int x, int floor, int z, int reach) {
+        for (int[] d : new int[][] {{0, 0}, {reach / 2, 0}, {-reach / 2, 0}, {0, reach / 2}, {0, -reach / 2}}) {
+            if (terrain.biome(x + d[0], floor + 4, z + d[1]).is(Biomes.DEEP_DARK)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     static net.minecraft.world.level.block.Rotation rotation(long seed) {

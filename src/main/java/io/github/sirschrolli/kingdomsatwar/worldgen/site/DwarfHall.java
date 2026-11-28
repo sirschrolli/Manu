@@ -125,8 +125,9 @@ final class DwarfHall {
             return Blocks.COPPER_BULB.waxed().oxidized().defaultBlockState().setValue(CopperBulbBlock.LIT, true);
         }
 
+        /** Gealtertes Kupfer (gewachst, damit es nicht weiter anläuft). */
         static BlockState copper() {
-            return Blocks.CUT_COPPER.waxed().unaffected().defaultBlockState();
+            return Blocks.CUT_COPPER.waxed().exposed().defaultBlockState();
         }
 
         BlockState rock(int x, int y, int z) {
