@@ -257,6 +257,8 @@ public final class ModGameTests {
         MonsterGameTests.init();   // die eigenen Monster
         CombatGameTests.init();    // seit 1.14: die Kampfstile der Monster
         FuryGameTests.init();      // seit 1.14: der Zorn der Bosse
+        MiniBossGameTests.init();  // seit 1.15: die Mini-Bosse der Tiefe
+        DeepLairGameTests.init();  // seit 1.15: die Hallen der Tiefe
         OutlawGameTests.init();    // die übrigen eigenen Monster
         WaterGameTests.init();     // die eigenen Wassertiere
         ArmyGameTests.init();      // Ausbildung, Söldnertafel und Söldnerhaus
@@ -392,6 +394,8 @@ public final class ModGameTests {
         MonsterGameTests.register(event, environment);
         CombatGameTests.register(event, environment);
         FuryGameTests.register(event, environment);
+        MiniBossGameTests.register(event, environment);
+        DeepLairGameTests.register(event, environment);
         OutlawGameTests.register(event, environment);
         WaterGameTests.register(event, environment);
         ArmyGameTests.register(event, environment);

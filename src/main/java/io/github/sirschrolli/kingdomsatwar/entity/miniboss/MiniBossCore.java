@@ -256,12 +256,18 @@ public final class MiniBossCore {
             return;
         }
         for (ServerPlayer player : level.players()) {
-            if (fighter(player) && player.distanceToSqr(this.mob) < WAKE_RADIUS * WAKE_RADIUS && Math.abs(player.getY() - this.mob.getY()) < 8.0
-                    && (player.distanceToSqr(this.mob) < 25.0 || this.mob.hasLineOfSight(player))) {
+            if (this.wakes(player)) {
                 this.wake(level, player);
                 return;
             }
         }
+    }
+
+    /** Weckt dieser Spieler ihn – kann er kämpfen, ist er nahe genug (kaum höher oder tiefer) und sieht er ihn (oder steht dicht bei ihm)? */
+    public boolean wakes(Player player) {
+        double d = player.distanceToSqr(this.mob);
+        return fighter(player) && d < WAKE_RADIUS * WAKE_RADIUS && Math.abs(player.getY() - this.mob.getY()) < 8.0
+                && (d < 25.0 || this.mob.hasLineOfSight(player));
     }
 
     /** Er erwacht: Bossleiste, Gebrüll, und wer ihn geweckt hat, ist sein erstes Ziel. */
@@ -278,6 +284,11 @@ public final class MiniBossCore {
         }
         this.announce(level, Component.translatable("miniboss.kingdomsatwar.awake", this.mob.getDisplayName()).withStyle(ChatFormatting.GOLD));
         this.boss.onWake(level, cause);
+    }
+
+    /** Schickt ihn sofort heim zum Schlafen, geheilt (wie wenn alle davongelaufen sind; für Tests und Befehle). */
+    public void rest(ServerLevel level) {
+        this.giveUp(level);
     }
 
     /** Niemand mehr da: zurück an den Platz, geheilt, die Diener vergehen, er schläft wieder ein. */
