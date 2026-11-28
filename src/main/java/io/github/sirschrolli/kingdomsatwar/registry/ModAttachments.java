@@ -190,5 +190,23 @@ public final class ModAttachments {
                     .serialize(io.github.sirschrolli.kingdomsatwar.entity.boss.BossParty.Party.CODEC.fieldOf("party"))
                     .build());
 
+    /**
+     * Der Kampfstil eines Monsters (seit 1.14, siehe {@link io.github.sirschrolli.kingdomsatwar.entity.combat.Style}):
+     * Temperament und besondere Angriffe – einmal ausgewürfelt, mit dem Monster gespeichert.
+     */
+    public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.entity.combat.Style>> COMBAT_STYLE =
+            ATTACHMENTS.register("combat_style", () -> AttachmentType.builder(() -> io.github.sirschrolli.kingdomsatwar.entity.combat.Style.NONE)
+                    .serialize(io.github.sirschrolli.kingdomsatwar.entity.combat.Style.CODEC.fieldOf("style"), style -> !style.isNone())
+                    .build());
+
+    /**
+     * Was ein Monster gerade tut (seit 1.14) – nur für die Haltung im Spiel: geht an alle, die es sehen, und wird nicht
+     * gespeichert.
+     */
+    public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.entity.combat.Act>> COMBAT_ACT =
+            ATTACHMENTS.register("combat_act", () -> AttachmentType.builder(() -> io.github.sirschrolli.kingdomsatwar.entity.combat.Act.NONE)
+                    .sync((holder, to) -> true, io.github.sirschrolli.kingdomsatwar.entity.combat.Act.STREAM_CODEC)
+                    .build());
+
     private ModAttachments() {}
 }

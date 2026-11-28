@@ -34,6 +34,11 @@ public class Conjurer extends Evoker implements Monsters.Varied, ReplacesVanilla
         super(type, level);
     }
 
+    /** Hebt die Arme zum Zauber der Fangzähne (Fangkreis, seit 1.14) oder senkt sie wieder. */
+    public void showFangCasting(boolean on) {
+        this.setIsCastingSpell(on ? IllagerSpell.FANGS : IllagerSpell.NONE);
+    }
+
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
