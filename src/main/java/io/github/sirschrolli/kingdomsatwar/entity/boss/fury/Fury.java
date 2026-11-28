@@ -86,7 +86,8 @@ public final class Fury {
     final Mob boss;
     final FuryProfile profile;
     boolean enraged;
-    int cooldown = FIRST;
+    /** Wartezeit bis zum nächsten Zornangriff (läuft erst, wenn er {@link #FIRST} Ticks im Kampf ist). */
+    int cooldown;
     int novaCooldown;
     int engaged;
     int next;
@@ -668,7 +669,7 @@ public final class Fury {
     }
 
     boolean foe(LivingEntity e) {
-        if (e == this.boss || !e.isAlive() || e.isSpectator()) {
+        if (e == this.boss || !e.isAlive() || e.isSpectator() || this.boss.isAlliedTo(e)) {
             return false;
         }
         if (e instanceof Player player) {

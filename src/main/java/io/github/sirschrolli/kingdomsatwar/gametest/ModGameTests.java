@@ -256,6 +256,7 @@ public final class ModGameTests {
         WildGameTests.init();      // die eigenen Wildtiere
         MonsterGameTests.init();   // die eigenen Monster
         CombatGameTests.init();    // seit 1.14: die Kampfstile der Monster
+        FuryGameTests.init();      // seit 1.14: der Zorn der Bosse
         OutlawGameTests.init();    // die übrigen eigenen Monster
         WaterGameTests.init();     // die eigenen Wassertiere
         ArmyGameTests.init();      // Ausbildung, Söldnertafel und Söldnerhaus
@@ -390,6 +391,7 @@ public final class ModGameTests {
         WildGameTests.register(event, environment);
         MonsterGameTests.register(event, environment);
         CombatGameTests.register(event, environment);
+        FuryGameTests.register(event, environment);
         OutlawGameTests.register(event, environment);
         WaterGameTests.register(event, environment);
         ArmyGameTests.register(event, environment);
