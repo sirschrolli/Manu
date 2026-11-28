@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/gold_mine",
+  "kind": "gold_mine",
+  "spawn_overrides": {},
+  "step": "top_layer_modification"
+}

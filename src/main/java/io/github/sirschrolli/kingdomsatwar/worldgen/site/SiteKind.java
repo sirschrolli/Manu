@@ -124,7 +124,19 @@ public enum SiteKind implements StringRepresentable {
     /** Alchemistenturm: ein schiefer, halb verfallener Turm mit Labor, Brauständen und Bibliothek. */
     ALCHEMIST_TOWER(World.OVERWORLD),
     /** Jagdhütte: ein Blockhaus im Wald mit Trophäen, Räucherkammer, Fellen und Hochsitz. */
-    HUNTING_LODGE(World.OVERWORLD);
+    HUNTING_LODGE(World.OVERWORLD),
+    /** Glutkerker: Ringmauer, Wachturm und darunter der Zellengang mit der Halle des Kerkermeisters. */
+    EMBER_DUNGEON(World.NETHER),
+    /** Schreiterhof: ein Hof auf einer Basaltinsel im Lavameer, Koppeln für Lavastelzer, Glutschotenbeete. */
+    STRIDER_RANCH(World.NETHER),
+    /** Warzenbrauerei: ein Brauhaus aus Netherziegeln mit Kesseln und Braustand, ringsum Warzenfelder. */
+    WART_BREWERY(World.NETHER),
+    /** Seelenkapelle: eine Kapelle aus Schwarzstein im Seelensandtal mit Glockenturm, Seelenfeuer und Gruft. */
+    SOUL_CHAPEL(World.NETHER),
+    /** Borstling-Goldmine: ein Tagebau mit Goldadern, Gerüst, Kran, Lore und Schmelzhütte. */
+    GOLD_MINE(World.NETHER),
+    /** Zerbrochene Brücke: eine gewaltige Bogenbrücke über dem Lavameer, in der Mitte eingestürzt, mit Zollturm. */
+    BROKEN_BRIDGE(World.NETHER);
 
     public static final Codec<SiteKind> CODEC = StringRepresentable.fromEnum(SiteKind::values);
 

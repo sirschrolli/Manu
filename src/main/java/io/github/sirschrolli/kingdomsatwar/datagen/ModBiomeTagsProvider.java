@@ -394,6 +394,17 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
                 .add(Biomes.DARK_FOREST).add(Biomes.PALE_GARDEN).add(Biomes.OLD_GROWTH_BIRCH_FOREST).add(OverworldBiomes.MIST_MOOR);
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.HUNTING_LODGE)).addTag(BiomeTags.IS_TAIGA).add(Biomes.FOREST)
                 .add(Biomes.BIRCH_FOREST).add(Biomes.WINDSWEPT_FOREST).add(OverworldBiomes.PRIMEVAL_FOREST);
+        // Unterwelt
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.EMBER_DUNGEON)).add(Biomes.NETHER_WASTES).add(Biomes.CRIMSON_FOREST)
+                .add(Biomes.WARPED_FOREST).add(Biomes.SOUL_SAND_VALLEY);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.STRIDER_RANCH)).add(Biomes.NETHER_WASTES).add(Biomes.CRIMSON_FOREST)
+                .add(Biomes.WARPED_FOREST).add(Biomes.SOUL_SAND_VALLEY).add(Biomes.BASALT_DELTAS);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.WART_BREWERY)).add(Biomes.NETHER_WASTES).add(Biomes.CRIMSON_FOREST)
+                .add(Biomes.SOUL_SAND_VALLEY);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.SOUL_CHAPEL)).add(Biomes.SOUL_SAND_VALLEY);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.GOLD_MINE)).add(Biomes.NETHER_WASTES).add(Biomes.CRIMSON_FOREST);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.BROKEN_BRIDGE)).add(Biomes.NETHER_WASTES).add(Biomes.CRIMSON_FOREST)
+                .add(Biomes.WARPED_FOREST).add(Biomes.SOUL_SAND_VALLEY).add(Biomes.BASALT_DELTAS);
     }
 
     private void overworldBiomes() {

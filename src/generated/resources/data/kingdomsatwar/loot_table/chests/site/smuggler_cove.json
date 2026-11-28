@@ -193,6 +193,19 @@
           },
           "name": "kingdomsatwar:hardtack",
           "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 6,
+              "min": 2
+            }
+          },
+          "name": "kingdomsatwar:rice",
+          "weight": 4
         }
       ],
       "rolls": {

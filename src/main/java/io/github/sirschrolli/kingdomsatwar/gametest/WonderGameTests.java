@@ -73,6 +73,26 @@ final class WonderGameTests {
         DWELLERS.put(SiteKind.ALCHEMIST_TOWER, List.of(new Dweller(() -> ModEntities.WITCH.get(), 1)));
         MARKS.put(SiteKind.HUNTING_LODGE, List.of(new Mark(() -> Blocks.SMOKER, 2), new Mark(() -> Blocks.FLETCHING_TABLE, 1),
                 new Mark(() -> Blocks.LADDER, 4), new Mark(() -> Blocks.STRAW_BED, 2)));
+        // Unterwelt
+        MARKS.put(SiteKind.EMBER_DUNGEON, List.of(new Mark(() -> Blocks.IRON_BARS, 20), new Mark(() -> Blocks.SOUL_CAMPFIRE, 4),
+                new Mark(() -> Blocks.SPAWNER, 1), new Mark(() -> Blocks.LAVA_CAULDRON, 2)));
+        DWELLERS.put(SiteKind.EMBER_DUNGEON, List.of(new Dweller(() -> ModEntities.WITHER_SKELETON.get(), 2)));
+        MARKS.put(SiteKind.STRIDER_RANCH, List.of(new Mark(() -> Cuisine.EMBER_PEPPERS.get(), 6), new Mark(() -> Blocks.NETHER_BRICK_FENCE, 20),
+                new Mark(() -> Blocks.LAVA_CAULDRON, 1)));
+        DWELLERS.put(SiteKind.STRIDER_RANCH, List.of(new Dweller(() -> ModEntities.STRIDER.get(), 3), new Dweller(() -> ModEntities.PIGLIN.get(), 1)));
+        MARKS.put(SiteKind.WART_BREWERY, List.of(new Mark(() -> Blocks.NETHER_WART, 20), new Mark(() -> Blocks.BREWING_STAND, 2),
+                new Mark(() -> Blocks.WATER_CAULDRON, 2)));
+        DWELLERS.put(SiteKind.WART_BREWERY, List.of(new Dweller(() -> ModEntities.PIGLIN.get(), 2)));
+        MARKS.put(SiteKind.SOUL_CHAPEL, List.of(new Mark(() -> Blocks.BELL, 1), new Mark(() -> Blocks.SOUL_CAMPFIRE, 2),
+                new Mark(() -> Blocks.CRIMSON_STAIRS, 12)));
+        DWELLERS.put(SiteKind.SOUL_CHAPEL, List.of(new Dweller(() -> ModEntities.SKELETON.get(), 2)));
+        MARKS.put(SiteKind.GOLD_MINE, List.of(new Mark(() -> Blocks.NETHER_GOLD_ORE, 10), new Mark(() -> Blocks.BLAST_FURNACE, 2),
+                new Mark(() -> Blocks.RAIL, 5), new Mark(() -> Blocks.GOLD_BLOCK, 2)));
+        DWELLERS.put(SiteKind.GOLD_MINE, List.of(new Dweller(() -> ModEntities.PIGLIN.get(), 3), new Dweller(() -> ModEntities.PIGLIN_BRUTE.get(), 1),
+                new Dweller(() -> net.minecraft.world.entity.EntityTypes.CHEST_MINECART, 1)));
+        MARKS.put(SiteKind.BROKEN_BRIDGE, List.of(new Mark(() -> Blocks.NETHER_BRICK_FENCE, 20), new Mark(() -> Blocks.RED_NETHER_BRICKS, 30),
+                new Mark(() -> Blocks.SOUL_LANTERN, 8)));
+        DWELLERS.put(SiteKind.BROKEN_BRIDGE, List.of(new Dweller(() -> ModEntities.BLAZE.get(), 2), new Dweller(() -> ModEntities.WITHER_SKELETON.get(), 1)));
         for (Wonders.Wonder wonder : Wonders.all()) {
             TESTS.add(ModGameTests.TEST_FUNCTIONS.register("wonder_" + wonder.kind().id(), () -> helper -> test(helper, wonder)));
         }

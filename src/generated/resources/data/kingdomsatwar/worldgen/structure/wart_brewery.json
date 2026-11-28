@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/wart_brewery",
+  "kind": "wart_brewery",
+  "spawn_overrides": {},
+  "step": "top_layer_modification"
+}

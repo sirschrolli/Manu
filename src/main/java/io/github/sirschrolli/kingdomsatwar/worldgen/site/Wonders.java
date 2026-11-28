@@ -64,6 +64,8 @@ public final class Wonders {
     static {
         // die Oberwelt
         Overworld.register();
+        // die Unterwelt
+        Nether.register();
     }
 
     private Wonders() {}

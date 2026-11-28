@@ -504,11 +504,22 @@ public final class ModStructures {
                 entries.add(StructureSet.entry(structures.getOrThrow(site(wonder.kind())), wonder.weight()));
             }
             int field = wider(world == io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.World.OVERWORLD ? 16 : 12);
+            // Abstand zu den großen Bauwerken der Dimension: in der Oberwelt die Stammburgen, in der Unterwelt Aschenesse und
+            // Hortfeste (sie teilen sich die Plätze der Bastionen), im End die Sternwarten (Plätze der Endstädte)
+            var keepAway = switch (world) {
+                case OVERWORLD -> castles;
+                case NETHER -> java.util.Optional.of(new net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement
+                        .ExclusionZone(context.lookup(Registries.STRUCTURE_SET).getOrThrow(
+                                net.minecraft.world.level.levelgen.structure.BuiltinStructureSets.NETHER_COMPLEXES), 5));
+                case END -> java.util.Optional.of(new net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement
+                        .ExclusionZone(context.lookup(Registries.STRUCTURE_SET).getOrThrow(
+                                net.minecraft.world.level.levelgen.structure.BuiltinStructureSets.END_CITIES), 4));
+                default -> java.util.Optional.<net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement.ExclusionZone>empty();
+            };
             context.register(wonderSet(world), new StructureSet(entries, new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(
                     net.minecraft.core.Vec3i.ZERO,
                     net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement.FrequencyReductionMethod.DEFAULT, 1.0f,
-                    20_260_000 + world.ordinal() * 1_117,
-                    world == io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.World.OVERWORLD ? castles : java.util.Optional.empty(),
+                    20_260_000 + world.ordinal() * 1_117, keepAway,
                     field, gap(field), net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR)));
         }
     }

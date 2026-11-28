@@ -44,6 +44,7 @@ final class WonderLoot {
     static void register(LootTableSubProvider.Context output, HolderGetter<Enchantment> enchantments) {
         WonderLoot loot = new WonderLoot(output, enchantments);
         loot.overworld();
+        loot.nether();
     }
 
     private void accept(String name, LootTable.Builder table) {
@@ -78,7 +79,7 @@ final class WonderLoot {
                 .withPool(pool(3, 6, item(Cuisine.RUM.get(), 8, 1, 4), item(ModItems.WINE.get(), 4, 1, 2), item(Items.GUNPOWDER, 5, 2, 5),
                         item(Items.GOLD_NUGGET, 5, 3, 9), item(Items.STRING, 4, 2, 6), item(Items.SUGAR, 4, 2, 5), item(Items.COCOA_BEANS, 3, 2, 5),
                         item(Items.LEAD, 2, 1, 2), item(Items.COMPASS, 2, 1, 1), item(Items.MAP, 2, 1, 1), item(Items.SPYGLASS, 1, 1, 1),
-                        item(Cuisine.HARDTACK.get(), 4, 2, 5))));
+                        item(Cuisine.HARDTACK.get(), 4, 2, 5), item(Cuisine.RICE.get(), 4, 2, 6))));
         this.accept("smuggler_cove_hoard", coins(LootTable.lootTable().withPool(crystals(12, 10)), 6, 16, 3, 7, 0.4f)
                 .withPool(pool(3, 5, item(Items.GOLD_INGOT, 6, 2, 5), item(Items.EMERALD, 4, 1, 4), item(ModItems.GEMSTONE.get(), 3, 1, 2),
                         item(Items.DIAMOND, 1, 1, 1), item(Items.HEART_OF_THE_SEA, 1, 1, 1), item(Cuisine.RUM.get(), 4, 1, 3),
@@ -135,5 +136,84 @@ final class WonderLoot {
                 .withPool(pool(3, 6, item(ModItems.COOKED_VENISON.get(), 6, 1, 4), item(Cuisine.SAUSAGE.get(), 6, 2, 5),
                         item(Items.COOKED_PORKCHOP, 4, 1, 3), item(Items.COOKED_MUTTON, 4, 1, 3), item(Cuisine.RAW_SAUSAGE.get(), 3, 1, 3),
                         item(Items.CHARCOAL, 4, 2, 6), item(ModItems.VENISON.get(), 3, 1, 3))));
+    }
+
+    /** Mit {@code chance} ein beschädigtes Stück {@code item} (Waffe, Werkzeug). */
+    private static LootPool.Builder worn(net.minecraft.world.level.ItemLike item, float chance) {
+        return LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                .add(LootItem.lootTableItem(item).apply(SetItemDamageFunction.setDamage(ContextFloatProviders.between(0.2f, 0.7f))))
+                .when(LootItemRandomChanceCondition.randomChance(chance));
+    }
+
+    private void nether() {
+        // Glutkerker: die Wachstube, die Zellen und die Truhe des Kerkermeisters
+        this.accept("ember_dungeon", coins(LootTable.lootTable().withPool(crystals(6, 6)), 2, 8, 0, 3, 0.1f)
+                .withPool(pool(3, 6, item(Items.GOLD_NUGGET, 6, 3, 9), item(Items.IRON_INGOT, 4, 1, 3), item(Items.BONE, 5, 2, 5),
+                        item(Items.COAL, 5, 2, 6), item(Items.IRON_CHAIN, 3, 1, 3), item(Items.SOUL_TORCH, 4, 2, 6), item(Items.MAGMA_CREAM, 3, 1, 2),
+                        item(Cuisine.EMBER_PEPPER.get(), 4, 1, 4), item(Items.ARROW, 4, 3, 9)))
+                .withPool(worn(Items.IRON_SWORD, 0.35f)));
+        this.accept("ember_dungeon_cell", LootTable.lootTable()
+                .withPool(pool(2, 5, item(Items.BONE, 8, 1, 4), item(Items.ROTTEN_FLESH, 6, 1, 3), item(Items.STRING, 4, 1, 3),
+                        item(Items.IRON_NUGGET, 4, 1, 4), item(Items.SOUL_SAND, 3, 1, 3), item(Items.COAL, 3, 1, 3), item(Items.IRON_CHAIN, 2, 1, 2),
+                        item(Items.GOLD_NUGGET, 2, 1, 3), item(Items.SKELETON_SKULL, 1, 1, 1))));
+        this.accept("ember_dungeon_vault", coins(LootTable.lootTable().withPool(crystals(14, 12)), 6, 16, 3, 7, 0.4f)
+                .withPool(pool(3, 5, item(Items.GOLD_INGOT, 6, 2, 6), item(Items.GOLD_BLOCK, 1, 1, 1), item(Items.DIAMOND, 2, 1, 2),
+                        item(Items.NETHERITE_SCRAP, 1, 1, 1), item(Items.GOLDEN_APPLE, 2, 1, 1), item(Items.BLAZE_ROD, 3, 1, 3),
+                        item(Items.EXPERIENCE_BOTTLE, 3, 1, 3), item(Items.WITHER_SKELETON_SKULL, 1, 1, 1), item(Items.MAGMA_CREAM, 3, 1, 3)))
+                .withPool(this.book(0.6f)));
+        // Schreiterhof: Sattelzeug und Futter, in der Speisekammer Scharfes
+        this.accept("strider_ranch", coins(LootTable.lootTable().withPool(crystals(5, 5)), 2, 7, 0, 2, 0.05f)
+                .withPool(pool(3, 6, item(Items.SADDLE, 3, 1, 1), item(Items.WARPED_FUNGUS_ON_A_STICK, 4, 1, 1), item(Items.WARPED_FUNGUS, 6, 2, 6),
+                        item(Items.CRIMSON_FUNGUS, 4, 1, 4), item(Items.STRING, 4, 2, 5), item(Items.LEAD, 3, 1, 2), item(Items.MAGMA_CREAM, 3, 1, 3),
+                        item(Items.GOLD_NUGGET, 5, 2, 8), item(Cuisine.EMBER_PEPPER.get(), 6, 2, 6), item(Items.LEATHER, 3, 1, 3))));
+        this.accept("strider_ranch_pantry", LootTable.lootTable()
+                .withPool(pool(3, 6, item(Cuisine.EMBER_PEPPER.get(), 8, 2, 6), item(Cuisine.EMBER_CHILI.get(), 4, 1, 1),
+                        item(Cuisine.FUNGUS_SKEWER.get(), 5, 1, 3), item(Items.COOKED_PORKCHOP, 4, 1, 3), item(Items.CRIMSON_FUNGUS, 4, 1, 4),
+                        item(Items.WARPED_FUNGUS, 4, 1, 4), item(Items.BOWL, 2, 1, 2))));
+        // Warzenbrauerei: die Stube des Braumeisters und der Gärkeller
+        this.accept("wart_brewery", coins(LootTable.lootTable().withPool(crystals(6, 10)), 2, 8, 1, 3, 0.1f)
+                .withPool(pool(3, 6, item(Items.NETHER_WART, 8, 2, 8), item(Items.BLAZE_POWDER, 4, 1, 3), item(Items.GLOWSTONE_DUST, 5, 1, 5),
+                        item(Items.MAGMA_CREAM, 4, 1, 3), item(Items.GLASS_BOTTLE, 5, 1, 4), item(Items.FERMENTED_SPIDER_EYE, 2, 1, 2),
+                        item(Items.GLISTERING_MELON_SLICE, 2, 1, 2), item(Items.BREWING_STAND, 1, 1, 1), item(ModItems.ALE.get(), 3, 1, 2)))
+                .withPool(LootPool.lootPool().setRolls(ContextIntProviders.between(1, 3))
+                        .add(potion(Potions.FIRE_RESISTANCE, 4)).add(potion(Potions.STRENGTH, 2)).add(potion(Potions.HEALING, 3))
+                        .add(potion(Potions.REGENERATION, 2)).add(potion(Potions.LONG_FIRE_RESISTANCE, 2)).add(EmptyLootItem.emptyItem().setWeight(2)))
+                .withPool(this.book(0.3f)));
+        this.accept("wart_brewery_cellar", LootTable.lootTable()
+                .withPool(pool(3, 6, item(Items.NETHER_WART, 8, 2, 6), item(ModItems.ALE.get(), 5, 1, 2), item(ModItems.WINE.get(), 3, 1, 2),
+                        item(Cuisine.RUM.get(), 3, 1, 2), item(Items.SUGAR, 4, 1, 4), item(Items.GLASS_BOTTLE, 5, 1, 4),
+                        item(Items.SPIDER_EYE, 3, 1, 2), item(Cuisine.EMBER_CHILI.get(), 2, 1, 1)))
+                .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                        .add(potion(Potions.AWKWARD, 4)).add(potion(Potions.FIRE_RESISTANCE, 2)).add(potion(Potions.SWIFTNESS, 2))
+                        .add(EmptyLootItem.emptyItem().setWeight(3))));
+        // Seelenkapelle: die Gruft und der Altar
+        this.accept("soul_chapel", coins(LootTable.lootTable().withPool(crystals(10, 10)), 3, 10, 1, 4, 0.2f)
+                .withPool(pool(3, 6, item(Items.BONE, 6, 2, 6), item(Items.QUARTZ, 5, 2, 8), item(Items.SOUL_LANTERN, 3, 1, 2),
+                        item(Items.SOUL_TORCH, 4, 2, 6), item(Items.GOLD_INGOT, 4, 1, 3), item(Items.GHAST_TEAR, 2, 1, 1),
+                        item(Items.DYED_CANDLE.pick(DyeColor.BLACK), 3, 1, 3), item(Items.SKELETON_SKULL, 1, 1, 1),
+                        item(Items.EXPERIENCE_BOTTLE, 2, 1, 3), item(ModItems.GEMSTONE.get(), 1, 1, 1)))
+                .withPool(this.book(0.45f)));
+        this.accept("soul_chapel_altar", LootTable.lootTable()
+                .withPool(pool(2, 5, item(Items.DYED_CANDLE.pick(DyeColor.BLACK), 5, 1, 3), item(Items.CANDLE, 4, 1, 3), item(Items.SOUL_SAND, 4, 1, 4),
+                        item(Items.BONE_MEAL, 4, 2, 6), item(Items.QUARTZ, 4, 1, 4), item(Items.GOLD_NUGGET, 4, 2, 6), item(Items.GHAST_TEAR, 1, 1, 1))));
+        // Goldmine der Borstlinge: die Truhe des Aufsehers und die Lore voller Erz
+        this.accept("gold_mine", coins(LootTable.lootTable().withPool(crystals(6, 6)), 3, 10, 1, 4, 0.2f)
+                .withPool(pool(3, 6, item(Items.GOLD_INGOT, 6, 2, 6), item(Items.GOLD_NUGGET, 6, 4, 12), item(Items.RAW_GOLD, 5, 2, 5),
+                        item(Items.GILDED_BLACKSTONE, 3, 1, 3), item(Items.QUARTZ, 4, 2, 6), item(Items.GOLDEN_CARROT, 2, 1, 3),
+                        item(Items.GOLDEN_HELMET, 1, 1, 1), item(Items.GOLD_BLOCK, 1, 1, 1)))
+                .withPool(worn(Items.GOLDEN_PICKAXE, 0.5f)));
+        this.accept("gold_mine_cart", LootTable.lootTable()
+                .withPool(pool(3, 6, item(Items.RAW_GOLD, 6, 2, 6), item(Items.NETHER_GOLD_ORE, 5, 2, 6), item(Items.GOLD_NUGGET, 6, 3, 10),
+                        item(Items.GILDED_BLACKSTONE, 3, 1, 3), item(Items.QUARTZ, 4, 2, 6), item(Items.COAL, 4, 2, 6), item(Items.BLACKSTONE, 3, 2, 6))));
+        // Zerbrochene Brücke: die Zollstube und das Zollgut im Torhaus
+        this.accept("broken_bridge", coins(LootTable.lootTable().withPool(crystals(8, 8)), 4, 12, 2, 5, 0.25f)
+                .withPool(pool(3, 6, item(Items.GOLD_INGOT, 5, 1, 4), item(Items.IRON_INGOT, 4, 1, 4), item(Items.QUARTZ, 4, 2, 6),
+                        item(Items.ARROW, 4, 4, 10), item(Items.CROSSBOW, 1, 1, 1), item(Items.BLAZE_ROD, 3, 1, 2), item(Items.MAGMA_CREAM, 3, 1, 2),
+                        item(Items.EMERALD, 2, 1, 2), item(Cuisine.RUM.get(), 2, 1, 2)))
+                .withPool(this.book(0.4f)));
+        this.accept("broken_bridge_toll", LootTable.lootTable()
+                .withPool(pool(2, 5, item(Items.GOLD_NUGGET, 6, 2, 8), item(ModItems.BRONZE_COIN.get(), 5, 1, 4), item(Items.QUARTZ, 4, 1, 4),
+                        item(Cuisine.EMBER_CHILI.get(), 2, 1, 1), item(Cuisine.EMBER_PEPPER.get(), 4, 1, 4), item(Items.LEATHER, 3, 1, 2),
+                        item(Items.STRING, 3, 1, 3))));
     }
 }

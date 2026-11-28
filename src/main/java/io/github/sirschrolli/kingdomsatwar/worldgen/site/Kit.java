@@ -588,6 +588,89 @@ final class Kit {
         return new BlockPos(x, surface, z);
     }
 
+    /**
+     * Ein Höhlengrund der Unterwelt: unter der Mitte des Chunks, von einer Höhe aus dem Samen abwärts, der erste Boden über dem
+     * Lavameer, über dem {@code headroom} Blöcke frei sind und um den herum (Umkreis {@code r}) Boden in ähnlicher Höhe liegt
+     * (höchstens {@code maxDiff} Unterschied, darüber Luft); im passenden Biom. Gibt den ersten freien Block zurück.
+     */
+    static @Nullable BlockPos cavern(Structure.GenerationContext context, SiteTerrain terrain, long seed, int r, int maxDiff, int headroom) {
+        ChunkPos chunk = context.chunkPos();
+        int x = chunk.getMiddleBlockX();
+        int z = chunk.getMiddleBlockZ();
+        int sea = terrain.seaLevel();
+        int top = Math.min(terrain.minY() + context.heightAccessor().getHeight(), 128) - 6 - headroom;
+        if (top <= sea + 4) {
+            return null;
+        }
+        for (int attempt = 0; attempt < 4; attempt++) {
+            int start = top - Math.floorMod((int) (seed >>> (11 + attempt * 7)), Math.max(1, top - sea - 4));
+            int floor = Integer.MIN_VALUE;
+            boolean air = false;
+            for (int y = start; y > sea + 1; y--) {
+                boolean free = !terrain.rock(x, y, z) && !terrain.fluid(x, y, z);
+                air |= free;
+                if (air && free && terrain.rock(x, y - 1, z)) {
+                    floor = y;
+                    break;
+                }
+            }
+            if (floor == Integer.MIN_VALUE || !terrain.valid(x, floor, z)) {
+                continue;
+            }
+            boolean open = true;
+            for (int y = floor; y < floor + headroom && open; y++) {
+                open = !terrain.rock(x, y, z) && !terrain.fluid(x, y, z);
+            }
+            if (!open) {
+                continue;
+            }
+            int misses = 0;
+            for (int[] d : new int[][] {{r, 0}, {-r, 0}, {0, r}, {0, -r}, {r * 7 / 10, r * 7 / 10}, {-r * 7 / 10, r * 7 / 10}, {r * 7 / 10, -r * 7 / 10},
+                    {-r * 7 / 10, -r * 7 / 10}, {r / 2, 0}, {-r / 2, 0}, {0, r / 2}, {0, -r / 2}}) {
+                int found = Integer.MIN_VALUE;
+                for (int y = floor + maxDiff; y >= floor - maxDiff; y--) {
+                    if (!terrain.rock(x + d[0], y, z + d[1]) && !terrain.fluid(x + d[0], y, z + d[1]) && terrain.rock(x + d[0], y - 1, z + d[1])) {
+                        found = y;
+                        break;
+                    }
+                }
+                if (found == Integer.MIN_VALUE || terrain.rock(x + d[0], found + 4, z + d[1])) {
+                    misses++;
+                }
+            }
+            if (misses <= 2) {
+                return new BlockPos(x, floor, z);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Offenes Lavameer an der Mitte des Chunks: im Umkreis {@code r} überall Lava unter dem Meeresspiegel und Luft darüber,
+     * über der Mitte {@code clear} Blöcke frei; im passenden Biom. Gibt den ersten Block über der Lava zurück.
+     */
+    static @Nullable BlockPos lavaSea(Structure.GenerationContext context, SiteTerrain terrain, int r, int clear) {
+        ChunkPos chunk = context.chunkPos();
+        int x = chunk.getMiddleBlockX();
+        int z = chunk.getMiddleBlockZ();
+        int sea = terrain.seaLevel();
+        if (!terrain.valid(x, sea, z)) {
+            return null;
+        }
+        for (int[] d : new int[][] {{0, 0}, {r, 0}, {-r, 0}, {0, r}, {0, -r}, {r * 7 / 10, r * 7 / 10}, {-r * 7 / 10, -r * 7 / 10},
+                {r * 7 / 10, -r * 7 / 10}, {-r * 7 / 10, r * 7 / 10}}) {
+            if (!terrain.fluid(x + d[0], sea - 1, z + d[1]) || terrain.rock(x + d[0], sea + 1, z + d[1]) || terrain.rock(x + d[0], sea + 3, z + d[1])) {
+                return null;
+            }
+        }
+        for (int y = sea; y < sea + clear; y++) {
+            if (terrain.rock(x, y, z)) {
+                return null;
+            }
+        }
+        return new BlockPos(x, sea, z);
+    }
+
     /** Ein Schlüssel für die Beute einer Truhe eines Bauwerks von 2.0. */
     static ResourceKey<LootTable> loot(String name) {
         return io.github.sirschrolli.kingdomsatwar.loot.ModLootTables.wonder(name);
