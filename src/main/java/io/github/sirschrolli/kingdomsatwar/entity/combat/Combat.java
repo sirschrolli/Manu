@@ -159,15 +159,16 @@ public final class Combat {
         if (family == null || !Hardness.isEnemy(mob) || !Family.big(mob)) {
             return null;
         }
+        // in den Tests kämpfen die Monster wie früher – ohne Temperament am Körper und ohne besondere Angriffe von selbst:
+        // sonst schwanken die Messungen der übrigen Tests (Schaden, Tempo, Leben, wer wann wen erreicht). Die Tests der
+        // Kampfstile würfeln ausdrücklich (rollInTests) oder setzen den Stil und lösen die Angriffe selbst aus.
+        boolean calm = mob.level().getServer() instanceof net.minecraft.gametest.framework.GameTestServer && !rollInTests;
         Style style;
         if (mob.hasData(ModAttachments.COMBAT_STYLE.get())) {
             style = mob.getData(ModAttachments.COMBAT_STYLE.get());
         } else {
             style = Style.roll(mob.getRandom(), family, Family.ranged(mob, family));
-            boolean calm = mob.level().getServer() instanceof net.minecraft.gametest.framework.GameTestServer && !rollInTests;
             if (calm) {
-                // in den Tests ohne Temperament am Körper: sonst schwanken die Messungen der übrigen Tests (Schaden, Tempo,
-                // Leben) – wer Temperamente prüft, würfelt ausdrücklich (rollInTests) oder setzt den Stil
                 style = new Style(Temper.UNGESTUEM, style.moves(), 1.0f);
             }
             mob.setData(ModAttachments.COMBAT_STYLE.get(), style);
@@ -176,6 +177,9 @@ public final class Combat {
             }
         }
         Fight fight = new Fight(mob, family, style);
+        if (calm) {
+            fight.global = Integer.MAX_VALUE / 4;
+        }
         FIGHTS.put(mob, fight);
         for (WrappedGoal wrapped : List.copyOf(mob.goalSelector.getAvailableGoals())) {
             if (wrapped.getGoal() instanceof CombatGoal || wrapped.getGoal() instanceof Ticker) {
