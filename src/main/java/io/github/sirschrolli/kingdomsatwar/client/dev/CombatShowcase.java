@@ -138,6 +138,8 @@ final class CombatShowcase {
                     double a = Math.PI * (0.7 + i * 0.3);
                     Mob ally = spawn(level, scene.type().get(), new Vec3(ox + 0.5 + Math.cos(a) * 2.6, g, oz - 0.5 + Math.sin(a) * 2.6 - 1.5),
                             Items.AIR);
+                    // eine Kettenhaube gegen die Mittagssonne (sonst brennen die Untoten im Bild)
+                    ally.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
                     Combat.pause(ally, 100000);
                     ally.setNoAi(true);
                     cast.add(ally);

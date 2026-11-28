@@ -495,6 +495,10 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 ![Die neuen Angriffe aus 1.13: Flammensicheln, Eiswirbel, Blitzgitter, Rankenpeitschen, Steinfäuste, Hydroklinge, Seelenfesseln, Leerenblick, Giftregen, Mondsteinkäfig, Nachhall, Glutrost, Flammenkranz, Mondlichtspirale und Königssturz](docs/bilder/angriffe_1_13.jpg)
 
+![Kampfstile der Monster aus 1.14: Hammerschlag, Ansprung, Zielschuss, Speien, Rankenzug, Wirbelhieb, Sturmangriff, Fluchkreis, Fangkreis, Feuerring, Hinterhalt und Kampfschrei](docs/bilder/kampfstile_1_14.jpg)
+
+![Der Zorn der Bosse aus 1.14: Meteorschauer, Felsspalten, Schallwellen, Mahlstrom, Klingenkreuz, Sternenfelder, das Inferno und der Wutausbruch](docs/bilder/zorn_1_14.jpg)
+
 ---
 
 ## Herunterladen und spielen
