@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/troll_den",
+  "kind": "troll_den",
+  "spawn_overrides": {},
+  "step": "top_layer_modification"
+}

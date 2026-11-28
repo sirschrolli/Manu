@@ -59,6 +59,10 @@ public class SiteStructure extends Structure {
             case SUNKEN_TEMPLE -> SunkenTemple.plan(context, terrain, seed);
             case FLAME_SANCTUARY -> FlameSanctum.plan(context, terrain, seed);
             case PHASE_SANCTUARY -> PhaseSanctum.plan(context, terrain, seed);
+            case CRYPT -> Crypt.plan(context, terrain, seed);
+            case BROOD_GROTTO -> BroodGrotto.plan(context, terrain, seed);
+            case DWARF_HALL -> DwarfHall.plan(context, terrain, seed);
+            case TROLL_DEN -> TrollDen.plan(context, terrain, seed);
         };
     }
 

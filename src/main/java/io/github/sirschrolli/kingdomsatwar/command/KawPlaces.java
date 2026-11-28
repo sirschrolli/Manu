@@ -172,6 +172,11 @@ public final class KawPlaces {
     public static final Site BURIED_ABBEY = siteKind("verschuettetes_kloster", SiteKind.BURIED_ABBEY, Approach.FRONT, 24);
     public static final Site SILENT_CATHEDRAL = siteKind("stille_kathedrale", SiteKind.SILENT_CATHEDRAL, Approach.INSIDE, 0);
     public static final Site TRIAL_ARENA = siteKind("pruefungsarena", SiteKind.TRIAL_ARENA, Approach.INSIDE, 0);
+    // die Hallen der Tiefe (1.15)
+    public static final Site CRYPT = siteKind("gruft", SiteKind.CRYPT, Approach.INSIDE, 0);
+    public static final Site BROOD_GROTTO = siteKind("brutgrotte", SiteKind.BROOD_GROTTO, Approach.INSIDE, 0);
+    public static final Site DWARF_HALL = siteKind("zwergenhalle", SiteKind.DWARF_HALL, Approach.INSIDE, 0);
+    public static final Site TROLL_DEN = siteKind("trollhoehle", SiteKind.TROLL_DEN, Approach.INSIDE, 0);
     public static final Site ROBBER_CASTLE = siteKind("raubritterburg", SiteKind.ROBBER_CASTLE, Approach.FRONT, 40);
     public static final Site ERROR_ZONE = register(new Site("fehlerzone", Level.OVERWORLD, ModStructures.site(SiteKind.ERROR_ZONE),
             chunkCenter(ModStructures.site(SiteKind.ERROR_ZONE)), (level, spot) -> surfaceAt(level, spot.center(), 0, 19, 10.0f)));
@@ -261,6 +266,11 @@ public final class KawPlaces {
         boss(new Boss("sordin", ModEntities.SORDIN, SILENT_CATHEDRAL, KawPlaces::awakenSordin, KawPlaces::resetSordin, null));
         boss(new Boss("raubritter", ModEntities.ROBBER_KNIGHT, ROBBER_CASTLE, KawPlaces::awakenRobberKnight, KawPlaces::resetRobberKnight, null));
         boss(new Boss("ventor", ModEntities.VENTOR, TRIAL_ARENA, KawPlaces::awakenVentor, KawPlaces::resetVentor, null));
+        // die Mini-Bosse der Hallen der Tiefe (1.15): finden und hinreisen; sie erwachen, wenn man ihnen nahe kommt
+        boss(new Boss("gruftkoenig", ModEntities.CRYPT_KING, CRYPT, null, null, null));
+        boss(new Boss("brutmutter", ModEntities.BROOD_MOTHER, BROOD_GROTTO, null, null, null));
+        boss(new Boss("runenwaechter", ModEntities.RUNE_WARDEN, DWARF_HALL, null, null, null));
+        boss(new Boss("trollvater", ModEntities.TROLL_FATHER, TROLL_DEN, null, null, null));
         boss(new Boss("quetzara", ModEntities.QUETZARA, SERPENT_TEMPLE, KawPlaces::awakenQuetzara, KawPlaces::resetQuetzara, null));
         boss(new Boss("noctua", ModEntities.MOTH_QUEEN, MONDHAIN, KawPlaces::awakenNoctua, null, null));
         boss(new Boss("missmystik", ModEntities.MISS_MYSTIK, MYSTIK_STAGE, KawPlaces::awakenMystik, KawPlaces::resetMystik, null));

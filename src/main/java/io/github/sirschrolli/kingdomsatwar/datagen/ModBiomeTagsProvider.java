@@ -321,6 +321,12 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.SILENT_CATHEDRAL)).add(net.minecraft.world.level.biome.Biomes.DEEP_DARK);
         // die Arena liegt tief unter der Erde, fast überall (das Reich des Sculk prüft sie selbst aus)
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.TRIAL_ARENA)).addTag(BiomeTags.IS_OVERWORLD);
+        // die Hallen der Tiefe (1.15) liegen tief im Fels, fast überall (das Reich des Sculk prüfen sie selbst aus)
+        for (var kind : java.util.List.of(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.CRYPT,
+                io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.BROOD_GROTTO, io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.DWARF_HALL,
+                io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.TROLL_DEN)) {
+            this.tag(has.get(kind)).addTag(BiomeTags.IS_OVERWORLD);
+        }
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.ROBBER_CASTLE)).add(net.minecraft.world.level.biome.Biomes.DARK_FOREST)
                 .add(net.minecraft.world.level.biome.Biomes.PALE_GARDEN);
         // in der Unterwelt: die Aschenesse überall (wie die Festung, die sie ersetzt)

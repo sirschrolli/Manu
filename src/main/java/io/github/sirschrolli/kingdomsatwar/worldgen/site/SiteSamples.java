@@ -163,6 +163,66 @@ public final class SiteSamples {
         return new SitePiece(SiteKind.TRIAL_ARENA, 0, origin, Rotation.NONE, seed, new int[0], TrialArena.box(origin));
     }
 
+    /**
+     * Eine Gruft der Vergessenen mit der Mitte der Halle bei {@code origin} (y = Schicht des Fußbodens), der Thron im Norden;
+     * {@code surface}: Höhe des Mausoleums über dem Boden (0: ohne Treppe hinauf).
+     */
+    public static SitePiece crypt(BlockPos origin, int surface) {
+        return new SitePiece(SiteKind.CRYPT, 0, origin, Rotation.NONE, 0xC2A7L, new int[] {surface}, Crypt.box(origin, Rotation.NONE, surface));
+    }
+
+    /** Wo in einer so gebauten Gruft der Sitz des Throns ist (dort sitzt der Gruftkönig). */
+    public static BlockPos cryptThrone(BlockPos origin) {
+        return origin.offset(Crypt.THRONE);
+    }
+
+    /** Wo in einer so gebauten Gruft die Mitte der Wendeltreppe liegt. */
+    public static BlockPos cryptShaft(BlockPos origin) {
+        return origin.offset(0, 0, Crypt.SHAFT_Z);
+    }
+
+    /** Eine Brutgrotte mit der Mitte der Höhle bei {@code origin} (y = Schicht des Bodens). */
+    public static SitePiece broodGrotto(BlockPos origin) {
+        return new SitePiece(SiteKind.BROOD_GROTTO, 0, origin, Rotation.NONE, 0xB2CDL, new int[0], BroodGrotto.box(origin, Rotation.NONE));
+    }
+
+    /** Die Nester mit den Spawnern in einer so gebauten Brutgrotte. */
+    public static java.util.List<BlockPos> broodNests(BlockPos origin) {
+        java.util.List<BlockPos> list = new java.util.ArrayList<>();
+        for (int[] n : BroodGrotto.NESTS) {
+            list.add(origin.offset(n[0], 1, n[1]));
+        }
+        return list;
+    }
+
+    /** Eine Zwergenhalle mit der Mitte der Halle bei {@code origin} (y = Schicht des Bodens), die Schatzkammer im Norden. */
+    public static SitePiece dwarfHall(BlockPos origin) {
+        return new SitePiece(SiteKind.DWARF_HALL, 0, origin, Rotation.NONE, 0xD3A2L, new int[0], DwarfHall.box(origin, Rotation.NONE));
+    }
+
+    /** Wo in einer so gebauten Zwergenhalle der Runenwächter steht und wo die Tür zur Schatzkammer ist (unten). */
+    public static BlockPos dwarfWarden(BlockPos origin) {
+        return origin.offset(DwarfHall.WARDEN);
+    }
+
+    public static BlockPos dwarfVaultDoor(BlockPos origin) {
+        return origin.offset(DwarfHall.VAULT_DOOR);
+    }
+
+    /** Eine Trollhöhle mit der Mitte der Höhle bei {@code origin} (y = Schicht des Bodens), das Lager im Norden. */
+    public static SitePiece trollDen(BlockPos origin) {
+        return new SitePiece(SiteKind.TROLL_DEN, 0, origin, Rotation.NONE, 0x7201L, new int[0], TrollDen.box(origin, Rotation.NONE));
+    }
+
+    /** Wo in einer so gebauten Trollhöhle das Lager (unten) und die Feuerstelle liegen. */
+    public static BlockPos trollBed(BlockPos origin) {
+        return origin.offset(TrollDen.BED);
+    }
+
+    public static BlockPos trollFire(BlockPos origin) {
+        return origin.offset(TrollDen.FIRE);
+    }
+
     /** Eine Raubritterburg mit der Mitte des Hofs bei {@code origin} (y = oberste Schicht des Hofs). */
     /** Der Turm der Aschenesse mit der Mitte bei {@code center} (y = Boden der Schlackenhalle, eine Schicht über der Lava). */
     public static SitePiece ashForge(BlockPos center) {

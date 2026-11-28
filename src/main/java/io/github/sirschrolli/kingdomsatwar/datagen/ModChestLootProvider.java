@@ -408,6 +408,45 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         item(Items.ENDER_PEARL, 4, 1, 3), item(Items.POPPED_CHORUS_FRUIT, 3, 2, 5), item(Items.CHORUS_FRUIT, 3, 2, 6),
                         item(Items.PURPUR_BLOCK, 2, 2, 6), item(Items.GOLD_INGOT, 3, 1, 3), item(Items.EMERALD, 2, 1, 2),
                         item(Items.ENDER_EYE, 1, 1, 1), item(Items.END_ROD, 2, 1, 3))));
+        this.deepLairs();
+    }
+
+    /**
+     * Die Hallen der Tiefe (1.15): in den Beinhäusern der Gruft, was man Toten mitgab (wie in einem Verlies), im Hort des
+     * Gruftkönigs Gold und Edelsteine; die Habe der Opfer in der Brutgrotte (Abenteurergut); Werkstoff und Werkzeug der Zwerge
+     * in Fässern und Stollen, in ihrer Schatzkammer Gold, Edelsteine und Stahl; im Hort des Trollvaters, was Trolle eben
+     * zusammentragen. Herzkristalle überall nur selten.
+     */
+    private void deepLairs() {
+        this.output.accept(ModLootTables.SITE_CRYPT, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.SIMPLE_DUNGEON)
+                .withPool(crystals(6, 6)), 1, 5, 0, 2, 0.05f)
+                .withPool(pool(1, 3, item(Items.BONE, 5, 2, 6), item(Items.CANDLE, 3, 1, 3), item(Items.ARROW, 3, 3, 9), item(Items.IRON_NUGGET, 3, 2, 6),
+                        item(Items.SKELETON_SKULL, 1, 1, 1))));
+        this.output.accept(ModLootTables.SITE_CRYPT_HOARD, coins(LootTable.lootTable().withPool(crystals(14, 10)), 6, 16, 2, 6, 0.4f)
+                .withPool(pool(2, 4, item(Items.GOLD_INGOT, 5, 2, 5), item(ModItems.GEMSTONE.get(), 3, 1, 2), item(Items.EMERALD, 3, 1, 3),
+                        item(Items.DIAMOND, 1, 1, 1), item(Items.GOLDEN_APPLE, 1, 1, 1), item(Items.AMETHYST_SHARD, 2, 2, 4)))
+                .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                        .add(LootItem.lootTableItem(Items.BOOK).apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
+                        .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance(0.5f))));
+        this.output.accept(ModLootTables.SITE_BROOD_GROTTO, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.ABANDONED_MINESHAFT)
+                .withPool(crystals(6, 6)), 2, 6, 0, 2, 0.1f)
+                .withPool(pool(1, 3, item(Items.STRING, 5, 3, 9), item(Items.TORCH, 4, 3, 8), item(Items.BREAD, 3, 1, 3), item(Items.IRON_INGOT, 3, 1, 3),
+                        item(Items.SPIDER_EYE, 3, 1, 2), item(Items.LEAD, 1, 1, 1))));
+        this.output.accept(ModLootTables.SITE_DWARF_HALL, coins(LootTable.lootTable(), 1, 6, 0, 2, 0.05f)
+                .withPool(pool(2, 4, item(Items.IRON_INGOT, 5, 1, 4), item(Items.RAW_IRON, 4, 2, 6), item(Items.RAW_GOLD, 3, 1, 4), item(Items.COAL, 5, 3, 9),
+                        item(Items.COPPER_INGOT, 4, 2, 6), item(ModItems.STEEL_INGOT.get(), 3, 1, 2), item(Items.IRON_PICKAXE, 1, 1, 1),
+                        item(Items.TORCH, 3, 4, 10))));
+        this.output.accept(ModLootTables.SITE_DWARF_HOARD, coins(LootTable.lootTable().withPool(crystals(15, 12)), 8, 20, 3, 8, 0.45f)
+                .withPool(pool(3, 5, item(Items.GOLD_INGOT, 6, 2, 6), item(ModItems.GEMSTONE.get(), 4, 1, 3), item(Items.EMERALD, 3, 1, 3),
+                        item(Items.DIAMOND, 2, 1, 2), item(ModItems.STEEL_INGOT.get(), 3, 2, 4), item(Items.AMETHYST_SHARD, 3, 2, 5),
+                        item(Items.GOLD_BLOCK, 1, 1, 1)))
+                .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                        .add(LootItem.lootTableItem(Items.BOOK).apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
+                        .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance(0.5f))));
+        this.output.accept(ModLootTables.SITE_TROLL_DEN, coins(LootTable.lootTable().withPool(crystals(8, 6)), 3, 10, 1, 4, 0.25f)
+                .withPool(pool(2, 4, item(Items.GOLD_INGOT, 4, 1, 4), item(Items.GOLD_NUGGET, 4, 3, 9), item(Items.IRON_INGOT, 3, 1, 3),
+                        item(Items.LEATHER, 4, 2, 5), item(Items.BONE, 4, 2, 6), item(ModItems.GEMSTONE.get(), 2, 1, 2), item(Items.SADDLE, 1, 1, 1),
+                        item(Items.COOKED_MUTTON, 2, 1, 3))));
     }
 
     /**

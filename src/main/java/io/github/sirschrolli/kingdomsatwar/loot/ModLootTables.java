@@ -132,6 +132,14 @@ public final class ModLootTables {
     public static final ResourceKey<LootTable> SITE_ROBBER_CASTLE_HOARD = site("robber_castle_hoard");
     public static final ResourceKey<LootTable> SITE_ASH_FORGE = site("ash_forge");
     public static final ResourceKey<LootTable> SITE_ASH_FORGE_HOARD = site("ash_forge_hoard");
+    /** Die Hallen der Tiefe (seit 1.15): Beinhäuser und Hort der Gruft, die Habe der Opfer in der Brutgrotte, Fässer und Stollen der
+     * Zwergenhalle und ihre Schatzkammer, der Hort des Trollvaters. */
+    public static final ResourceKey<LootTable> SITE_CRYPT = site("crypt");
+    public static final ResourceKey<LootTable> SITE_CRYPT_HOARD = site("crypt_hoard");
+    public static final ResourceKey<LootTable> SITE_BROOD_GROTTO = site("brood_grotto");
+    public static final ResourceKey<LootTable> SITE_DWARF_HALL = site("dwarf_hall");
+    public static final ResourceKey<LootTable> SITE_DWARF_HOARD = site("dwarf_hoard");
+    public static final ResourceKey<LootTable> SITE_TROLL_DEN = site("troll_den");
 
     /** Truhen in den Stammburgen der Reiche: Schatzkammer des Herrschers, Waffenkammer und Vorräte. */
     public static final ResourceKey<LootTable> REALM_TREASURY = realm("treasury");

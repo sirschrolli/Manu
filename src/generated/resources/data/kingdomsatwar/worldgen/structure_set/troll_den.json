@@ -1,0 +1,18 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "exclusion_zone": {
+      "chunk_count": 10,
+      "other_set": "kingdomsatwar:realm_castles"
+    },
+    "salt": 71115007,
+    "separation": 20,
+    "spacing": 45
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:troll_den",
+      "weight": 1
+    }
+  ]
+}

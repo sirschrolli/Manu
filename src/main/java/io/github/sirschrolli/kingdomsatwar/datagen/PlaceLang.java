@@ -66,6 +66,10 @@ final class PlaceLang {
         map.put("verschuettetes_kloster", new String[] {"Buried Abbey", "Verschüttetes Kloster"});
         map.put("stille_kathedrale", new String[] {"Silent Cathedral", "Stille Kathedrale"});
         map.put("pruefungsarena", new String[] {"Arena of Trials", "Arena der Prüfungen"});
+        map.put("gruft", new String[] {"Crypt of the Forgotten", "Gruft der Vergessenen"});
+        map.put("brutgrotte", new String[] {"Brood Grotto", "Brutgrotte"});
+        map.put("zwergenhalle", new String[] {"Dwarven Hall", "Zwergenhalle"});
+        map.put("trollhoehle", new String[] {"Troll Den", "Trollhöhle"});
         map.put("raubritterburg", new String[] {"Robber Baron's Castle", "Raubritterburg"});
         map.put("fehlerzone", new String[] {"Error Zone", "Fehlerzone"});
         map.put("versunkener_tempel", new String[] {"Sunken Temple", "Versunkener Tempel"});

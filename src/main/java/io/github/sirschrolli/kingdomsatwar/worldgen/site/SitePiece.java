@@ -130,6 +130,10 @@ public class SitePiece extends StructurePiece {
             case SUNKEN_TEMPLE -> SunkenTemple.build(b, this);
             case FLAME_SANCTUARY -> FlameSanctum.build(b, this);
             case PHASE_SANCTUARY -> PhaseSanctum.build(b, this);
+            case CRYPT -> Crypt.build(b, this);
+            case BROOD_GROTTO -> BroodGrotto.build(b, this);
+            case DWARF_HALL -> DwarfHall.build(b, this);
+            case TROLL_DEN -> TrollDen.build(b, this);
         }
         b.finish();
     }

@@ -480,6 +480,11 @@ public final class ModStructures {
                 case FLAME_SANCTUARY -> spread(36, 12, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 61_220_903, castles);
                 // das Phasenheiligtum (1.5): über den äußeren Inseln des Ends – viele Plätze fallen ins Leere, daher dichter
                 case PHASE_SANCTUARY -> spread(22, 8, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 15_150_421, castles);
+                // die Hallen der Tiefe (1.15): unter der Erde schwerer zu finden – daher etwas dichter als die Bauwerke darüber
+                case CRYPT -> spread(30, 10, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 71_115_001, castles);
+                case BROOD_GROTTO -> spread(26, 9, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 71_115_003, castles);
+                case DWARF_HALL -> spread(32, 11, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 71_115_005, castles);
+                case TROLL_DEN -> spread(28, 10, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 71_115_007, castles);
             };
             if (placement != null) {
                 context.register(siteSet(kind), new StructureSet(structure, placement));

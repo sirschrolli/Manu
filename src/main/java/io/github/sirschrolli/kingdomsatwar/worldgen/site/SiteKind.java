@@ -95,7 +95,19 @@ public enum SiteKind implements StringRepresentable {
      * mit Mosaikboden, Phasitkristallen auf Purpursäulen und dem Leerenthron, vor dem Phasmor, der Leerwandlerkönig, kniet;
      * schwebende Stufen führen hinab (ein eigenes Bauwerk, an keiner Vanilla-Stelle). Ganz zuletzt gebaut.
      */
-    PHASE_SANCTUARY(GenerationStep.Decoration.TOP_LAYER_MODIFICATION);
+    PHASE_SANCTUARY(GenerationStep.Decoration.TOP_LAYER_MODIFICATION),
+    /**
+     * Gruft der Vergessenen (seit 1.15): unter einem verwitterten Mausoleum führt eine Wendeltreppe hinab zu Beinhäusern und
+     * einer gewölbten Gruft, in der Morvan, der Gruftkönig, auf seinem Thron schläft (ein eigenes Bauwerk). Zuletzt gebaut,
+     * damit weder Erzadern noch Quellen in ihre Mauern geraten.
+     */
+    CRYPT(GenerationStep.Decoration.TOP_LAYER_MODIFICATION),
+    /** Brutgrotte (seit 1.15): eine ausgesponnene Höhle voller Eiersäcke und Netze, das Nest der Brutmutter. Zuletzt gebaut. */
+    BROOD_GROTTO(GenerationStep.Decoration.TOP_LAYER_MODIFICATION),
+    /** Zwergenhalle (seit 1.15): eine Pfeilerhalle mit Esse, Tafeln, Stollen und Schatzkammer, bewacht vom Runenwächter. Zuletzt gebaut. */
+    DWARF_HALL(GenerationStep.Decoration.TOP_LAYER_MODIFICATION),
+    /** Trollhöhle (seit 1.15): eine bemooste Höhle mit Feuerstelle und Hort, in der Grumbold, der Trollvater, schläft. Zuletzt gebaut. */
+    TROLL_DEN(GenerationStep.Decoration.TOP_LAYER_MODIFICATION);
 
     public static final Codec<SiteKind> CODEC = StringRepresentable.fromEnum(SiteKind::values);
 
