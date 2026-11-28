@@ -30,5 +30,6 @@ public class BonesModel extends SkeletonModel<BonesRenderState> {
         this.flames.yScale = 0.9f + 0.14f * Mth.sin(t * 0.83f) + 0.07f * Mth.sin(t * 2.1f + 1.3f);
         this.flames.xScale = 1.0f + 0.05f * Mth.sin(t * 0.61f + 0.4f);
         this.flames.zScale = this.flames.xScale;
+        io.github.sirschrolli.kingdomsatwar.client.combat.CombatPoses.humanoid(this, state);
     }
 }

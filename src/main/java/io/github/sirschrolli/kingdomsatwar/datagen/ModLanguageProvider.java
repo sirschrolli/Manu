@@ -45,6 +45,7 @@ public class ModLanguageProvider extends LanguageProvider {
         PlaceLang.register(this::text);
         WaystoneLang.register(this::text);
         bosses();
+        fury();
         shadowWorld();
         voidWorld();
         // Untertitel der Umgebungsklänge
@@ -1964,6 +1965,18 @@ public class ModLanguageProvider extends LanguageProvider {
         item(ShadowItems.MOONSILVER_BLADE, "Moonsilver Blade", "Mondsilberklinge");
         lore("moonsilver_blade", "Strikes shadow creatures and the undead hard", "Trifft Schattenwesen und Untote hart");
         text(ModItems.loreKey("moonsilver_blade", 2), "Struck foes glow brightly", "Getroffene leuchten hell auf");
+    }
+
+    /** Die Zornangriffe der Bosse (seit 1.14): Ansagen und die Namen in jedem Element. */
+    private void fury() {
+        text("fury.kingdomsatwar.announce", "%s: %s", "%s: %s");
+        text("fury.kingdomsatwar.announce_nova", "%s: %s – take cover!", "%s: %s – geh in Deckung!");
+        text("fury.kingdomsatwar.enraged", "%s is seized by fury!", "%s gerät in Zorn!");
+        for (var attack : io.github.sirschrolli.kingdomsatwar.entity.boss.fury.FuryAttack.values()) {
+            for (var element : io.github.sirschrolli.kingdomsatwar.entity.boss.fury.FuryElement.values()) {
+                text(attack.key(element), attack.english(element), attack.german(element));
+            }
+        }
     }
 
     private void bosses() {

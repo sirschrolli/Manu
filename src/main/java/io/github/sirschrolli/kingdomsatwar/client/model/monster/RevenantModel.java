@@ -15,6 +15,12 @@ public class RevenantModel extends ZombieModel<RevenantRenderState> {
     }
 
     @Override
+    public void setupAnim(RevenantRenderState state) {
+        super.setupAnim(state);
+        io.github.sirschrolli.kingdomsatwar.client.combat.CombatPoses.humanoid(this, state);
+    }
+
+    @Override
     protected void setupSwimAnimation(RevenantRenderState state, float animationPos, float swimAmount) {
         if (!state.drowned) {
             super.setupSwimAnimation(state, animationPos, swimAmount);

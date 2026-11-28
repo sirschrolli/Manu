@@ -50,5 +50,6 @@ public class HagModel extends HumanoidModel<HagRenderState> {
             this.rightArm.zRot = Mth.lerp(drink, this.rightArm.zRot, 0.0f);
             this.head.xRot = Mth.lerp(drink, this.head.xRot, -0.45f);
         }
+        io.github.sirschrolli.kingdomsatwar.client.combat.CombatPoses.humanoid(this, state);
     }
 }

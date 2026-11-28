@@ -18,6 +18,12 @@ public class UndeadCitizenModel extends CitizenModel {
     }
 
     @Override
+    public void setupAnim(CitizenRenderState state) {
+        super.setupAnim(state);
+        io.github.sirschrolli.kingdomsatwar.client.combat.CombatPoses.humanoid(this, state);
+    }
+
+    @Override
     protected void setupAttackAnimation(CitizenRenderState state) {
         super.setupAttackAnimation(state);
         if (state instanceof UndeadVillagerRenderState undead) {
