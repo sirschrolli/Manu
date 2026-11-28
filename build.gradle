@@ -107,3 +107,15 @@ idea {
         downloadJavadoc = true
     }
 }
+
+// --- nur auf dem temporären Branch ci/dev-tools: Klassenpfade exportieren ---
+tasks.register('exportClasspaths') {
+    def compileCp = sourceSets.main.compileClasspath
+    def runtimeCp = sourceSets.main.runtimeClasspath
+    def outDir = file('devtools-cp')
+    doLast {
+        outDir.mkdirs()
+        new File(outDir, 'compile.txt').text = compileCp.files.collect { it.absolutePath }.join('\n')
+        new File(outDir, 'runtime.txt').text = runtimeCp.files.collect { it.absolutePath }.join('\n')
+    }
+}
