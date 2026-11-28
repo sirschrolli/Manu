@@ -69,10 +69,15 @@ public final class MeleeMoves {
         }
     }
 
-    /** Sprunggeschwindigkeit, um in etwa {@code ticks} Ticks (in der Luft: Reibung 0,91) {@code h} Blöcke weit zu kommen. */
-    static double airSpeed(double h, int ticks) {
-        double sum = (1.0 - Math.pow(0.91, ticks)) / (1.0 - 0.91);
-        return h / sum;
+    /**
+     * Sprunggeschwindigkeit, um in etwa {@code ticks} Ticks {@code h} Blöcke weit zu kommen: Den ersten Tick bremst noch
+     * der Boden (Reibung des Blocks darunter), danach nur die Luft (0,91).
+     */
+    static double leap(Mob mob, double h, int ticks) {
+        BlockPos below = mob.getBlockPosBelowThatAffectsMyMovement();
+        double ground = mob.onGround() ? mob.level().getBlockState(below).getFriction(mob.level(), below, mob) * 0.91 : 0.91;
+        double air = (1.0 - Math.pow(0.91, ticks - 1)) / (1.0 - 0.91);
+        return h / (1.0 + ground * air);
     }
 
     /** Abstand in der Waagerechten. */
@@ -132,7 +137,7 @@ public final class MeleeMoves {
             if (t == 0) {
                 Vec3 to = f.target.position();
                 double h = Math.max(0.5, flat(mob.position(), to) - 0.8);
-                double speed = Math.min(1.15, airSpeed(h, 12));
+                double speed = Math.min(1.25, leap(mob, h, 12));
                 Vec3 dir = f.forward();
                 mob.setDeltaMovement(dir.x * speed, 0.46, dir.z * speed);
                 mob.needsSync = true;
@@ -767,7 +772,7 @@ public final class MeleeMoves {
             Mob mob = f.mob;
             if (t == 0) {
                 double h = Math.max(0.0, flat(mob.position(), f.target.position()) - 0.5);
-                double speed = Math.min(0.9, airSpeed(h, 20));
+                double speed = Math.min(1.0, leap(mob, h, 22));
                 Vec3 dir = f.forward();
                 mob.setDeltaMovement(dir.x * speed, 0.92, dir.z * speed);
                 mob.needsSync = true;

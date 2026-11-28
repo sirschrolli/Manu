@@ -257,7 +257,7 @@ public final class SpecialMoves {
             Mob mob = f.mob;
             if (t == 0) {
                 double h = Math.max(0.5, MeleeMoves.flat(mob.position(), f.target.position()) - 1.0);
-                double speed = Math.min(1.0, MeleeMoves.airSpeed(h, 12));
+                double speed = Math.min(1.15, MeleeMoves.leap(mob, h, 12));
                 Vec3 dir = f.forward();
                 mob.setDeltaMovement(dir.x * speed, 0.48, dir.z * speed);
                 mob.needsSync = true;
