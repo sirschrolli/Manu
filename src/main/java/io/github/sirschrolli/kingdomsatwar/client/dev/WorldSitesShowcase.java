@@ -516,8 +516,8 @@ final class WorldSitesShowcase {
                 add(views, first, 3.5, 1, 11.5, 7, 1.5, 13);
                 add(views, first, 2.5, 1, 16.5, 0, 4, 19);
                 if (surface > 0) {
-                    add(views, first, 7, surface + 3, 30, 0, surface + 4, 19);
-                    add(views, first, 0.5, surface + 1, 21.5, 0, surface - 6, 19);
+                    add(views, first, 9, surface + 7, 31, 0, surface + 3, 20);
+                    add(views, first, 0.5, surface + 1, 26.5, 0.5, surface + 2, 19);
                 }
             }
             case BROOD_GROTTO -> {

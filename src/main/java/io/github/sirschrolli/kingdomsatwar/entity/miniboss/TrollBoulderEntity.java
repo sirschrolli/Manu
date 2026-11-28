@@ -101,7 +101,7 @@ public class TrollBoulderEntity extends ThrowableProjectile {
     /** Wo er ihn hält: über dem Kopf, ein wenig vor dem Gesicht. */
     public static Vec3 held(Entity owner) {
         Vec3 look = Vec3.directionFromRotation(0.0f, owner instanceof LivingEntity l ? l.yBodyRot : owner.getYRot());
-        return owner.position().add(look.scale(0.25)).add(0.0, owner.getBbHeight() * 1.02, 0.0);
+        return owner.position().add(look.scale(0.2)).add(0.0, owner.getBbHeight() * 1.08, 0.0);
     }
 
     @Override

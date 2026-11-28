@@ -8,6 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
+> **1.15 – Die Hallen der Tiefe.** Tief unter der Oberwelt warten vier neue Bauwerke, jedes mit einem eigenen **Mini-Boss**: Unter einem verwitterten Mausoleum mit kleinem Friedhof führt eine Wendeltreppe in die **Gruft der Vergessenen** – Beinhäuser voller Schädel, eine gewölbte Halle mit Sarkophagen und Seelenlaternen, und am Ende sitzt **Morvan, der Gruftkönig**, schlafend auf seinem Thron. In der **Brutgrotte** hängen Eiersäcke und bleiche Fäden, eingesponnene Opfer stehen herum, und auf einem Hügel aus Seide ruht die **Brutmutter**. Die **Zwergenhalle** ist eine Pfeilerhalle mit Runenfries, großer Esse, langen Tafeln, Erzstollen mit Schienen und einer Schatzkammer – davor wacht der **Runenwächter**. In der **Trollhöhle** glimmt eine Feuerstelle neben dem Hort, und auf seinem Lager aus Knochen und Fellen schläft **Grumbold, der Trollvater**. Jeder Mini-Boss erwacht, wenn man ihm nahe kommt, hat eine eigene Bossleiste und **vier besondere Angriffe** (einer nur in Rage, ab 40 % seiner Kraft), die sich alle ankündigen – Netzsalven, Sprünge und Giftwolken, Totenruf, Seelenschnitt und Knochenpfad, Runenbeben, Runenblick und Runenfallen, Felswurf, Erdstoß, Trollgebrüll mit Steinschlag und Keulenwirbel. Wer davonläuft, lässt ihn geheilt an seinen Platz zurückkehren.
 > **1.14 – Kampfstile und der Zorn der Bosse.** Kein Kampf gleicht mehr dem anderen: Jedes angreifende Monster hat ein **eigenes Temperament** – ungestüm, lauernd, zäh, rasend oder (selten) ein Anführer – und **zwei bis vier besondere Angriffe** aus dem Können seiner Art; beides wird ausgewürfelt, wenn es in die Welt kommt, und so kämpfen zwei Wiedergänger fast nie gleich. Wiedergänger springen dich an, umklammern dich und schlagen den Boden, Gerippe schießen Salven und lange gezielte Schüsse, Spinnen speien Netze, Kriecher täuschen an und ziehen dich mit Ranken heran, Hexen werfen Tränke im Hagel und ziehen Fluchkreise, Schlächter wirbeln mit der Axt, Verwüster stürmen, Glutgeister legen Feuerringe – 31 Angriffe insgesamt, jeder mit eigener Haltung und eigenem Warnzeichen, und wer aufpasst, weicht aus. Die **Bosse** werden richtig ungemütlich: Jeder hat **zwei Zornangriffe** in seinem Element (Einschläge, Ringwellen, Risslinien, Sog, kreisende Strahlen, aufbrechende Bodenfelder), die neben seinen eigenen Angriffen herlaufen, und ab halber Kraft gerät er **in Zorn** – Wutausbruch, schneller und härter, die Zornangriffe kommen doppelt so oft, und dazu die **Vernichtung**, vor der nur Deckung hinter Blöcken schützt. Außerdem freigegeben: **Mouse Tweaks**, **uku's Armor HUD**, **Roughly Enough Items**, **SpruceUI**, **Zoomify**, **Swinging Lanterns**, **ShulkerBoxTooltip** und **LambDynamicLights** (mit Licht für die leuchtenden Gegenstände und Wesen der Mod).
 > **1.13 – Neue Angriffe für die Bosse.** Jeder Boss hat einen **weiteren eigenen Angriff** gelernt – mit eigener Haltung, eigenen Effekten und Klängen, und jeder lässt sich durchschauen: **Pyrrhon** schlägt **Flammensicheln** über den Boden (darüber springen), **Glaciara** dreht sich im **Eiswirbel** mit ihrem Frostodem einmal um sich selbst, **Voltarion** legt ein **Blitzgitter** über das Nest (zwischen den Linien ist man sicher), **Verdantis** lässt im Bogen **Rankenpeitschen** aus dem Boden brechen, unter **Terragons** Gegnern schlagen **Steinfäuste** empor, **Thalassa** schneidet mit der **Hydroklinge** quer über den Grund, und **Nyxar** fesselt bis zu vier Gegner mit **Seelenfesseln** und zieht sie heran (Deckung zerreißt sie). **Phasmor** starrt im **Leerenblick** – wer ihm in die Augen sieht, den trifft die Leere (wegsehen, hinter ihn treten oder einen Kürbis aufsetzen); **Quetzara** speit einen **Giftregen**, der genau in grüne Warnkreise fällt; der **Steinhüter** schließt dich in einen **Mondsteinkäfig** mit nur einer Lücke; **Sordin** lauscht dem **Nachhall** deiner Schritte – wo du standest, hallt es zurück; **Malleus** schlägt dreimal aufs Dach, und Felder wie auf einem Schachbrett brechen als **Glutrost** auf; **Ignara** zieht einen **Flammenkranz** um dich zusammen; **Noctua** lässt einen Strahl in einer **Mondlichtspirale** über den Boden wandern; und der **Zerbrochene König** steigt hoch über dich und stürzt im **Königssturz** hinein. Außerdem behoben: Ein Drache im Luftangriff des eigenen Heeres wechselt jetzt sein Ziel, statt immer denselben Gegner anzufliegen; das **Wurfnetz** der Gladiatoren hält sein Opfer fest, statt es fortzustoßen; die **Leerenrisse** des Zerbrochenen Königs laufen nicht mehr knapp am Ziel vorbei; der **Seelenreiher** verliert sein Ziel im Flug nicht mehr; Bebenringe von Feuer- und Wasserbossen sprühen jetzt Flammen und Gischt statt violetter Funken; und einige Prüfungen warten auf geladenes Land, statt zufällig zu scheitern.
 > **1.12.1 – Designs geprüft und repariert.** Alle Gegenstände, Mobs und Bosse wurden auf Bildtafeln durchgesehen – von vorn und hinten, im Gang, in jeder Spielart, als Jungtier, in der Hand und auf dem Kopf – und was fehlerhaft war, ist repariert: Die **Drachen** hatten im Flug lange, dünne Stacheln an den Schwingen (die Fingerknochen liefen über die Flughaut hinaus) – jetzt enden sie am Rand der Haut. **85 Mob- und Boss-Modelle flimmerten**, wo zwei Flächen in derselben Ebene lagen (Zierleisten, Abzeichen, Balken); der Modell-Erzeuger legt die kleinere jetzt knapp davor. Die Jungtiere von **Greif, Sturmmöwe, Flamingo, Glutsalamander und Moorschnapper** waren so groß wie ihre Eltern – jetzt sind sie halb so groß mit großem Kopf. Der **Moorschlurfer** wirft statt eines glatten Schlammblocks einen nassen, klumpigen **Schlammbatzen** mit Kieseln und Gras darin, der im Flug nachtropft. Beim **Aschengeist** ragte das Dunkel der Kapuze hinten als schwarzes Loch heraus, beim **Hasen** schwebten die Hinterpfoten, und **MissMystiks Zylinder** lag in der Hand als quer liegender Hut statt als Bild.
@@ -490,6 +491,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Kampfstile der Monster** (seit 1.14): fünf Temperamente und 31 besondere Angriffe; jedes Monster bekommt zwei bis vier davon aus dem Können seiner Art (ausgewürfelt und gespeichert), mit eigener Haltung, Warnzeichen, Klang und Teilchen | ✅ fertig |
 | **Zorn der Bosse** (seit 1.14): zwei Zornangriffe je Boss in seinem Element (91 Namen in sieben Arten und 13 Elementen), Zornphase ab halber Kraft mit Wutausbruch, doppelt so vielen Zornangriffen und der Vernichtung (nur Deckung schützt) | ✅ fertig |
 | **Weitere Mods freigegeben** (seit 1.14): Mouse Tweaks, uku's Armor HUD, Roughly Enough Items, SpruceUI, Zoomify, Swinging Lanterns, ShulkerBoxTooltip, LambDynamicLights (mit eigenen Lichtquellen) | ✅ fertig |
+| **Hallen der Tiefe** (seit 1.15): Gruft der Vergessenen (mit Mausoleum, Friedhof und Wendeltreppe), Brutgrotte, Zwergenhalle und Trollhöhle – tief unter der Oberwelt, mit Spawnern, eigener Beute und je einem Mini-Boss | ✅ fertig |
+| **Mini-Bosse** (seit 1.15): Brutmutter, Morvan der Gruftkönig, Runenwächter und Grumbold der Trollvater – Schlaf und Erwachen, eigene Bossleiste, je vier angekündigte Angriffe, Rage ab 40 %, Heimkehr, Diener, eigene Gestalt und Haltungen | ✅ fertig |
 
 ![Designs geprüft und repariert in 1.12.1: Drachenschwingen ohne Stacheln, Jungtiere in halber Größe, der Schlammbatzen des Moorschlurfers, Aschengeist, Hase und Zylinder – je vorher und nachher](docs/bilder/designs_1_12_1.jpg)
 
@@ -498,6 +501,10 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 ![Kampfstile der Monster aus 1.14: Hammerschlag, Ansprung, Zielschuss, Speien, Rankenzug, Wirbelhieb, Sturmangriff, Fluchkreis, Fangkreis, Feuerring, Hinterhalt und Kampfschrei](docs/bilder/kampfstile_1_14.jpg)
 
 ![Der Zorn der Bosse aus 1.14: Meteorschauer, Felsspalten, Schallwellen, Mahlstrom, Klingenkreuz, Sternenfelder, das Inferno und der Wutausbruch](docs/bilder/zorn_1_14.jpg)
+
+![Die Hallen der Tiefe aus 1.15: das Mausoleum über der Gruft, die Gruft mit dem schlafenden Gruftkönig, die Brutgrotte, die Zwergenhalle mit dem Runenwächter, ihre Schatzkammer und die Trollhöhle](docs/bilder/hallen_1_15.jpg)
+
+![Die Mini-Bosse aus 1.15 im Kampf: Netzsalve und Giftwolke der Brutmutter, Totenruf und Gruftkälte des Gruftkönigs, Runenbeben und Runenblick des Runenwächters, Felswurf und Erdstoß des Trollvaters](docs/bilder/minibosse_1_15.jpg)
 
 ---
 
@@ -513,7 +520,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.13.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.15.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -521,7 +528,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-1.13.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-1.15.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -542,13 +549,13 @@ Im Kreativmodus gibt es sechzehn eigene Tabs.
 Kingdoms at War läuft nur mit freigegebenen Mods (siehe „Regeln“) – dazu gehört **Essential**
 ([essential.gg](https://essential.gg/)). Damit öffnest du deine Welt für Freunde, ohne selbst einen Server aufzusetzen:
 
-1. Essential für **NeoForge 26.3** herunterladen und neben `kingdomsatwar-1.13.0.jar` in den Ordner `mods` legen.
+1. Essential für **NeoForge 26.3** herunterladen und neben `kingdomsatwar-1.15.0.jar` in den Ordner `mods` legen.
 2. Deine Welt starten, mit **Esc** das Pausenmenü öffnen, im Menü von Essential auf **Host** und dann **Start Hosting**
    klicken und Freunde einladen (bis zu acht spielen gleichzeitig).
 3. Jeder Mitspieler braucht genau dasselbe: NeoForge 26.3, **dieselbe Version** von Kingdoms at War und Essential.
 
 Dein Spiel ist dabei der Server – solange du spielst, können die anderen in deine Welt. Statt Essential geht auch
-**„Im LAN öffnen“** oder ein eigener NeoForge-Server mit `kingdomsatwar-1.13.0.jar` im Ordner `mods`. Jeder hat seinen
+**„Im LAN öffnen“** oder ein eigener NeoForge-Server mit `kingdomsatwar-1.15.0.jar` im Ordner `mods`. Jeder hat seinen
 eigenen Helden, sein eigenes Heer, seine eigenen Siedlungen, sein Fangbuch und sein Intro; die Geschichte der Welt (die
 Chronik), die Bosse und die fremden Reiche erlebt ihr gemeinsam. Tipp: Mit `/gamerule pvp false` können Spieler einander
 nicht verletzen – und ihre Heere verschonen einander dann auch.
@@ -1459,6 +1466,48 @@ Funde und Münzen – aber karg (siehe unten).
   Stapel schrumpfen auf drei Fünftel.
   Ganz leer ist keine Truhe, und was man für den Fortgang braucht, liegt immer darin: das Herz des Meeres, die Netherit-
   und die Abyssit-Vorlage, der Drachenkompass, die Zaubertafeln und die Prüfungsschlüssel.
+
+### Die Hallen der Tiefe und ihre Mini-Bosse (seit 1.15)
+
+![Die Hallen der Tiefe](docs/bilder/hallen_1_15.jpg)
+
+Tief im Fels der Oberwelt liegen vier eigene Bauwerke, die an keiner Vanilla-Stelle stehen – jedes mit einem **Mini-Boss**.
+Sie sind etwas häufiger als die Bauwerke an der Oberfläche (unter der Erde findet man sie schwerer), meiden das Reich des
+Sculk und haben immer genug Gestein über sich. Nur zur Gruft führt ein Weg von oben.
+
+| Bauwerk | Wo | Was man dort findet | Mini-Boss |
+|---|---|---|---|
+| **Gruft der Vergessenen** | 22 bis 36 Blöcke unter der Oberfläche | oben ein verwittertes **Mausoleum** mit Schädel über der Tür und ein kleiner **Friedhof**; eine **Wendeltreppe** hinab in die Vorhalle, ein Gang mit Wandschädeln, zwei **Beinhäuser** (Wände aus Knochen, Schädel in Nischen, je ein Spawner der Gerippe und eine Truhe), dann die gewölbte **Gruft**: Pfeiler, Sarkophage (einer aufgebrochen), Grabnischen, purpurne Banner und Läufer, Seelenlaternen; am Ende ein Podest mit Thron, zwei Seelenfeuern und dem **Hort** | **Morvan, der Gruftkönig**, sitzt schlafend auf dem Thron |
+| **Brutgrotte** | tief im Fels (unter y = −8) | eine weite, dunkle Höhle voller Netze, bleicher Fäden und weißer **Eiersäcke** (am Boden und unter der Decke), **eingesponnene Opfer** mit ihrer Habe, zwei **Nester mit Spawnern** der Höhlenspinnen, Knochen und Leuchtflechte; zwei gewundene Gänge hinaus | **die Brutmutter** ruht auf einem Hügel aus Seide |
+| **Zwergenhalle** | sehr tief (unter y = −14) | eine große Pfeilerhalle mit Kupferbändern, Runenfries und alten Kupferleuchten; in der Mitte die **Esse** (Lava hinter Gittern, Hochöfen, Ambosse, Schleifstein, Löschbottiche), lange **Tafeln** unter Kupferleuchtern, Pulte und Bücherregale der Runenmeister, zwei **Erzstollen** mit Schienen bis zu Erzkammern; im Norden die **Schatzkammer** hinter einer Eisentür (sie öffnet sich mit einem Knopf); das alte Haupttor ist verschüttet | **der Runenwächter** steht auf seinem Sockel vor der Schatzkammer |
+| **Trollhöhle** | tief im Fels (unter y = −2) | eine hohe, bemooste Höhle mit Tropfsteinen und Wurzeln, eine **Feuerstelle** mit Bratspieß, abgenagte Knochen, der **Hort** an der Westwand (Gold, rohes Erz, Fässer, ein Amboss, ein Kessel, zwei Truhen), ein breiter Trollgang | **Grumbold, der Trollvater**, schläft auf seinem Lager aus Knochen und Fellen |
+
+**Wie Mini-Bosse kämpfen:** Sie schlafen an ihrem Platz – auch Spieler im Kreativmodus wecken sie nicht. Wer ihnen nahe
+kommt (elf Blöcke, mit Sicht) oder sie trifft, weckt sie: Eine Meldung erscheint, eine **eigene Bossleiste** zeigt
+ihre Kraft. Neben ihren gewöhnlichen Hieben haben sie je **vier besondere Angriffe**, die sich alle ankündigen (Haltung,
+Warnkreis, Linie, Klang) – einer davon kommt nur **in Rage**, die bei 40 % ihrer Kraft beginnt (dann sind sie schneller und
+greifen öfter an). Läuft man davon (20 Sekunden niemand mehr in der Nähe), kehren sie **geheilt an ihren Platz** zurück und
+schlafen wieder ein; was sie gerufen haben, vergeht mit ihnen. Sie zählen für die Härte der Mod wie Bosse, stehen aber nicht
+in `c:bosses` und haben keinen Zorn wie die großen Bosse. Sie kommen nicht wieder, wenn sie besiegt sind.
+
+| Mini-Boss | Gestalt | Angriffe |
+|---|---|---|
+| **Brutmutter** | eine riesige Spinne (2,3-mal so groß) mit schwarzviolettem Chitin und einem knochenweißen **Totenschädel** auf dem Hinterleib, acht rot glühende Augen | **Netzsalve** (sie bäumt sich auf und speit drei Netze im Fächer, in Rage fünf), **Brut** (Seidenkokons platzen, Höhlenspinnen schlüpfen), **Sprung** (sie duckt sich, springt hoch und schlägt mit einer Druckwelle auf – Gift), **Giftwolke** (nur in Rage: eine grüne Wolke um sie) |
+| **Morvan, der Gruftkönig** | ein Gerippe in dunkler Patina mit **Goldkrone** und rotem Stein, zerschlissenem purpurnem Königsmantel mit Hermelinkragen, eisblauen Augen und einem Schwert aus Nachtstahl; schlafend sitzt er auf dem Thron, das Haupt gesenkt | **Totenruf** (Seelenflammen züngeln aus dem Boden, dann erheben sich zwei, in Rage drei **Gruftwächter**), **Seelenschnitt** (die Klinge glimmt, ein Bogen am Boden zeigt den weiten Hieb – Verdorren), **Gruftkälte** (ein Warnkreis, dann bricht eisige Seelenkälte aus dem Boden – lähmt und lässt frieren), **Knochenpfad** (nur in Rage: ein Riss läuft auf dich zu, dann brechen Knochen hervor) |
+| **Runenwächter** | ein Koloss aus dunklem Stein und Eisen mit Messingbändern und eisblauen Runen, die im Schlaf erlöschen; je mehr er abbekommt, desto mehr Risse zeigt er | **Runenbeben** (beide Fäuste über den Kopf, ein Warnkreis – dann in den Boden; die Welle schleudert hoch), **Runenblick** (eine feine Linie zeigt, wohin er blickt; er hält den Blick einen Herzschlag lang fest und feuert einen Strahl – rechtzeitig zur Seite gehen), **Runenfallen** (leuchtende Kreise um dich, kurz darauf gehen sie hoch), **Runenwall** (nur in Rage: gekreuzte Arme, kreisende Runen – Schläge prallen fast wirkungslos ab und schlagen zurück, am Ende entlädt sich der Wall in einer Welle) |
+| **Grumbold, der Trollvater** | der älteste Troll (1,45-mal so groß): blaugrau wie alter Fels, Flechten im Pelz, weißes Haar, orange glühende Augen, die Keule mit Goldbändern; schlafend döst er im Stehen | **Felswurf** (er reißt einen Brocken aus dem Boden, stemmt ihn über den Kopf und schleudert ihn – in Rage zerspringt er in Splitter), **Erdstoß** (ein Warnkreis, dann schmettert er die Keule in den Boden; Risse laufen nach außen), **Trollgebrüll** (wer nahe steht, wird schwach und langsam – und Brocken fallen von der Decke, ihre Schatten zeigen wo), **Keulenwirbel** (nur in Rage: er dreht sich mit ausgestreckter Keule und stapft auf dich zu) |
+
+![Die Mini-Bosse im Kampf](docs/bilder/minibosse_1_15.jpg)
+
+- **Beute:** Münzen, Edelsteine und Werkstoff ihrer Art; der Gruftkönig manchmal die **Edelsteinkrone** (und sein
+  Nachtstahlschwert), der Runenwächter manchmal eine **Erdrune**, der Trollvater manchmal die **Trollkeule** – ein
+  **Herzkristall** nur selten. In den Truhen: in den Beinhäusern, was man Toten mitgab, im Hort der Gruft Gold, Edelsteine
+  und ein verzaubertes Buch; die Habe der Opfer in der Brutgrotte; Werkstoff, Stahl und Werkzeug der Zwerge in Fässern und
+  Stollen, in ihrer Schatzkammer Gold, Edelsteine, Diamanten und Stahl; im Hort des Trollvaters, was Trolle zusammentragen.
+- Finden mit `/kaw structure gruft` (bzw. `brutgrotte`, `zwergenhalle`, `trollhoehle`) oder `/kaw boss gruftkoenig`
+  (bzw. `brutmutter`, `runenwaechter`, `trollvater`), mit `/locate structure kingdomsatwar:crypt` (bzw. `brood_grotto`,
+  `dwarf_hall`, `troll_den`). Die Bauwerke entstehen nur in neu erzeugten Chunks.
+- Spawn-Eier der vier Mini-Bosse liegen im Kreativ-Tab „Legenden“.
 
 ### Hallkristall und die Rüstung der Lauscher (seit 1.6)
 
@@ -5471,7 +5520,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.13.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.15.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |

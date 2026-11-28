@@ -48,6 +48,8 @@ final class Crypt {
     static final int[] PILLARS_Z = {4, 0, -4, -8};
     /** Die Runde der Wendeltreppe um den Mittelpfeiler (Versatz zur Mitte der Treppe). */
     static final int[][] SPIRAL = {{1, -1}, {1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}};
+    /** Die Gräber um das Mausoleum (x, z ab der Rückwand des Mausoleums). */
+    static final int[][] GRAVES = {{-6, -1}, {6, 1}, {-6, 6}, {5, 8}, {-3, 10}, {7, 4}};
 
     private Crypt() {}
 
@@ -81,7 +83,7 @@ final class Crypt {
     }
 
     static BoundingBox box(BlockPos origin, Rotation rotation, int surface) {
-        return SitePiece.box(origin, rotation, -10, -3, -16, 10, Math.max(14, surface + 11), 25);
+        return SitePiece.box(origin, rotation, -10, -3, -16, 10, Math.max(14, surface + 11), 30);
     }
 
     static void build(VillageBuilder b, SitePiece piece) {
@@ -457,6 +459,18 @@ final class Crypt {
             int s = this.surface;
             int z0 = SHAFT_Z - 3;
             int z1 = SHAFT_Z + 3;
+            // Bäume und Gestrüpp rings um das Mausoleum weg (der Wald ist vorher gewachsen)
+            for (int x = -6; x <= 6; x++) {
+                for (int z = z0 - 3; z <= z1 + 5; z++) {
+                    for (int y = s + 1; y <= s + 16; y++) {
+                        BlockState old = this.b.get(x, y, z);
+                        if (old.is(net.minecraft.tags.BlockTags.LOGS) || old.is(net.minecraft.tags.BlockTags.LEAVES)
+                                || (!old.isAir() && old.canBeReplaced() && old.getFluidState().isEmpty())) {
+                            this.b.set(x, y, z, Blocks.AIR);
+                        }
+                    }
+                }
+            }
             // Fundament bis hinab auf festen Grund, Boden (mit dem Treppenloch), innen Luft
             for (int x = -3; x <= 3; x++) {
                 for (int z = z0; z <= z1; z++) {
@@ -538,6 +552,32 @@ final class Crypt {
             this.b.set(0, s + 1, SHAFT_Z, Blocks.SOUL_LANTERN);
             this.b.set(-2, s + 1, z0 + 1, Blocks.COBWEB);
             this.b.set(2, s + 1, z0 + 1, candle(Blocks.DYED_CANDLE.pick(DyeColor.BLACK), 2));
+            // ringsum ein verwilderter kleiner Friedhof
+            for (int[] g : GRAVES) {
+                this.grave(g[0], z0 + g[1]);
+            }
+        }
+
+        /** Ein Grab auf dem Gelände bei (x, z): ein Grabstein und davor ein Hügel aus grober Erde. */
+        void grave(int x, int z) {
+            int s = this.surface;
+            for (int y = s + 6; y >= s - 6; y--) {
+                BlockState ground = this.b.get(x, y, z);
+                BlockState above = this.b.get(x, y + 1, z);
+                if (VillageBuilder.isSolidGround(ground) && (above.isAir() || above.canBeReplaced())) {
+                    boolean mossy = this.b.noise(x, 3, z) < 0.5f;
+                    this.b.set(x, y + 1, z, mossy ? Blocks.MOSSY_STONE_BRICK_WALL : Blocks.STONE_BRICK_WALL);
+                    if (this.b.noise(x, 4, z) < 0.35f) {
+                        this.b.set(x, y + 2, z, VillageBuilder.slab(mossy ? Blocks.MOSSY_STONE_BRICK_SLAB : Blocks.STONE_BRICK_SLAB, SlabType.BOTTOM));
+                    }
+                    BlockState front = this.b.get(x, y, z + 1);
+                    if (VillageBuilder.isSolidGround(front) && this.b.get(x, y + 1, z + 1).canBeReplaced()) {
+                        this.b.set(x, y, z + 1, Blocks.COARSE_DIRT);
+                        this.b.set(x, y + 1, z + 1, Blocks.AIR);
+                    }
+                    return;
+                }
+            }
         }
 
         // =================================================================================

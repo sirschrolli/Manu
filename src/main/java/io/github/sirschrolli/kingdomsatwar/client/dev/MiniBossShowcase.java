@@ -74,7 +74,7 @@ final class MiniBossShowcase {
             new Scene("rune_slam_hit", () -> ModEntities.RUNE_WARDEN.get(), "slam", false, HALL, new double[] {0, 4}, new double[] {5.5, 3.0, 7.0},
                     new double[] {0, 1.0, 0}, 23),
             new Scene("rune_beam", () -> ModEntities.RUNE_WARDEN.get(), "beam", false, HALL, new double[] {0, 11}, new double[] {6.5, 3.2, -3.0},
-                    new double[] {0, 2.0, 5}, 33),
+                    new double[] {0, 2.0, 5}, 35),
             new Scene("rune_mines", () -> ModEntities.RUNE_WARDEN.get(), "mines", false, HALL, new double[] {0, 8}, new double[] {7.5, 3.2, 1.0},
                     new double[] {0, 1.0, 5}, 22),
             new Scene("rune_mines_burst", () -> ModEntities.RUNE_WARDEN.get(), "mines", false, HALL, new double[] {0, 8}, new double[] {7.5, 3.2, 1.0},
@@ -188,23 +188,6 @@ final class MiniBossShowcase {
             }));
             steps.add(Step.waitTicks(Math.max(1, scene.shot())));
             steps.add(Step.screenshot("miniboss115_" + scene.name()));
-            steps.add(Step.server(level -> {
-                Mob m = boss[0];
-                if (m != null) {
-                    for (Entity e : level.getEntities((Entity) null, m.getBoundingBox().inflate(12.0), e -> e != m)) {
-                        LOGGER.info("[Showcase]   {} bei {}", e.getType().builtInRegistryHolder().key().identifier(), e.position());
-                    }
-                }
-            }));
-            steps.add(Step.once(minecraft -> {
-                if (minecraft.level != null) {
-                    for (Entity e : minecraft.level.entitiesForRendering()) {
-                        if (e instanceof io.github.sirschrolli.kingdomsatwar.entity.miniboss.TrollBoulderEntity rock) {
-                            LOGGER.info("[Showcase]   Client: Brocken bei {} gehalten={} Block={}", rock.position(), rock.isHeld(), rock.blockState());
-                        }
-                    }
-                }
-            }));
             steps.add(Step.waitTicks(10));
             steps.add(Step.server(level -> {
                 cast.forEach(Entity::discard);
