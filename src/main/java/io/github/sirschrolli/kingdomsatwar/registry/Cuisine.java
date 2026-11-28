@@ -2,7 +2,14 @@ package io.github.sirschrolli.kingdomsatwar.registry;
 
 import io.github.sirschrolli.kingdomsatwar.block.CheeseWheelBlock;
 import io.github.sirschrolli.kingdomsatwar.block.EmberPepperBlock;
+import io.github.sirschrolli.kingdomsatwar.block.crop.BerryBushBlock;
+import io.github.sirschrolli.kingdomsatwar.block.crop.RiceBlock;
+import io.github.sirschrolli.kingdomsatwar.block.crop.SeaGrapeBlock;
+import io.github.sirschrolli.kingdomsatwar.block.crop.ShadowTuberBlock;
+import io.github.sirschrolli.kingdomsatwar.item.ChaosFood;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -15,7 +22,11 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
@@ -130,11 +141,117 @@ public final class Cuisine {
             p -> p.food(foodValues(4, 0.6f, false), eat(1.2f, new MobEffectInstance(MobEffects.JUMP_BOOST, 900, 0)))
                     .rarity(Rarity.UNCOMMON).component(DataComponents.LORE, ModItems.lore("glimmer_cupcake", 1)));
 
-    /** Alle neuen Speisen (ohne Mehl), in der Reihenfolge des Kreativ-Tabs – für Modelle, Tests und Vorführung. */
+    // =====================================================================================
+    // Die Feldfrüchte der Welten (2.0): in jeder Dimension etwas, das man findet, pflanzt und kocht
+    // =====================================================================================
+
+    // ---------------------------------------------------------------- Oberwelt: Reis (im seichten Wasser)
+
+    public static final DeferredBlock<RiceBlock> RICE_PLANT = ModBlocks.BLOCKS.registerBlock("rice", p -> new RiceBlock(() -> Cuisine.RICE.get(), p),
+            p -> p.mapColor(MapColor.PLANT).noCollision().randomTicks().instabreak().sound(SoundType.CROP).pushReaction(PushReaction.POPPED));
+    /** Reis: das Korn ist zugleich der Samen – in seichtes Wasser über Erde oder Schlamm gepflanzt. Roh nicht essbar. */
+    public static final DeferredItem<BlockItem> RICE = plantable("rice", RICE_PLANT, null, null);
+    /** Milchreis: in Milch gekocht, mit Zucker – mild und sättigend. */
+    public static final DeferredItem<Item> RICE_PUDDING = bowl("rice_pudding", 7, 0.7f, null);
+    /** Sushi: Reis und roher Fisch in getrocknetem Seetang gerollt – schnell gegessen. */
+    public static final DeferredItem<Item> SUSHI = item("sushi", p -> p.food(foodValues(4, 0.6f, false), Consumables.defaultFood().consumeSeconds(0.8f).build()));
+
+    // ---------------------------------------------------------------- Urmeer: Meertrauben (unter Wasser)
+
+    public static final DeferredBlock<SeaGrapeBlock> SEA_GRAPE_PLANT = ModBlocks.BLOCKS.registerBlock("sea_grape_plant",
+            p -> new SeaGrapeBlock(() -> Cuisine.SEA_GRAPES.get(), p),
+            p -> p.mapColor(MapColor.WATER).noCollision().randomTicks().instabreak().sound(SoundType.WET_GRASS).lightLevel(SeaGrapeBlock::light)
+                    .pushReaction(PushReaction.POPPED));
+    /** Meertrauben: salzig und knackig – ein paar Atemzüge länger unter Wasser; unter Wasser auf Sand gepflanzt, wachsen sie nach. */
+    public static final DeferredItem<BlockItem> SEA_GRAPES = plantable("sea_grapes", SEA_GRAPE_PLANT, foodValues(2, 0.4f, false),
+            eat(1.0f, new MobEffectInstance(MobEffects.WATER_BREATHING, 200, 0)));
+    /** Meertraubensalat: Meertrauben und Seetang mit etwas Kabeljau – eine Minute lang Kiemen. */
+    public static final DeferredItem<Item> SEA_GRAPE_SALAD = bowl("sea_grape_salad", 7, 0.7f, new MobEffectInstance(MobEffects.WATER_BREATHING, 1200, 0));
+
+    // ---------------------------------------------------------------- End: Schwebebeeren (auf Endstein)
+
+    public static final DeferredBlock<BerryBushBlock> FLOAT_BERRY_BUSH = bush("float_berry_bush", () -> Cuisine.FLOAT_BERRIES.get(),
+            state -> state.is(Blocks.END_STONE), MapColor.COLOR_PURPLE, 0, 4);
+    /** Schwebebeeren: leicht wie Luft – kurz fällt man wie eine Feder; auf Endstein gepflanzt, wächst ein neuer Strauch. */
+    public static final DeferredItem<BlockItem> FLOAT_BERRIES = plantable("float_berries", FLOAT_BERRY_BUSH, foodValues(2, 0.3f, false),
+            eat(1.0f, new MobEffectInstance(MobEffects.SLOW_FALLING, 100, 0)));
+    /** Schwebebeerentörtchen: man springt danach höher und landet sanft. */
+    public static final DeferredItem<Item> FLOAT_BERRY_TART = item("float_berry_tart",
+            p -> p.food(foodValues(6, 0.6f, false), eat(1.6f, new MobEffectInstance(MobEffects.SLOW_FALLING, 600, 0),
+                    new MobEffectInstance(MobEffects.JUMP_BOOST, 600, 0))).component(DataComponents.LORE, ModItems.lore("float_berry_tart", 1)));
+
+    // ---------------------------------------------------------------- Schattenwelt: Schattenknollen (auch im Dunkeln)
+
+    public static final DeferredBlock<ShadowTuberBlock> SHADOW_TUBERS = ModBlocks.BLOCKS.registerBlock("shadow_tubers",
+            p -> new ShadowTuberBlock(() -> Cuisine.SHADOW_TUBER.get(), p),
+            p -> p.mapColor(MapColor.COLOR_PURPLE).noCollision().randomTicks().instabreak().sound(SoundType.CROP).lightLevel(ShadowTuberBlock::light)
+                    .pushReaction(PushReaction.POPPED));
+    /** Schattenknolle: roh nur ein Bissen, geröstet ein gutes Essen; wächst auch in völliger Finsternis. */
+    public static final DeferredItem<BlockItem> SHADOW_TUBER = plantable("shadow_tuber", SHADOW_TUBERS, foodValues(1, 0.3f, false), null);
+    public static final DeferredItem<Item> ROASTED_SHADOW_TUBER = food("roasted_shadow_tuber", 6, 0.6f, null);
+    /** Knolleneintopf: Schattenknollen mit Hammel – macht zäh wie die Umbrer. */
+    public static final DeferredItem<Item> SHADOW_TUBER_STEW = bowl("shadow_tuber_stew", 10, 0.8f, new MobEffectInstance(MobEffects.RESISTANCE, 1200, 0));
+
+    // ---------------------------------------------------------------- Leere: Sternfrüchte (auf Leerenmoos und Sternenstaub)
+
+    public static final DeferredBlock<BerryBushBlock> STARFRUIT_BUSH = bush("starfruit_bush", () -> Cuisine.STARFRUIT.get(),
+            state -> state.is(VoidBlocks.VOID_MOSS.get()) || state.is(VoidBlocks.STARDUST.get()), MapColor.COLOR_CYAN, 3, 7);
+    /** Sternfrucht: leuchtet von innen – man sieht danach eine Weile im Dunkeln. */
+    public static final DeferredItem<BlockItem> STARFRUIT = plantable("starfruit", STARFRUIT_BUSH, foodValues(3, 0.5f, false),
+            eat(1.2f, new MobEffectInstance(MobEffects.NIGHT_VISION, 300, 0)));
+    /** Sternfruchtsaft: drei Minuten Nachtsicht und eine halbe Minute flink. */
+    public static final DeferredItem<Item> STARFRUIT_JUICE = drink("starfruit_juice", 3, 0.4f, 0.0f, new MobEffectInstance(MobEffects.NIGHT_VISION, 3600, 0),
+            new MobEffectInstance(MobEffects.SPEED, 600, 0));
+
+    // ---------------------------------------------------------------- Abgrund: Chaosbohnen (auf allem, woraus die Splitter sind)
+
+    public static final DeferredBlock<BerryBushBlock> CHAOS_BEAN_BUSH = bush("chaos_bean_bush", () -> Cuisine.CHAOS_BEANS.get(), Cuisine::chaosSoil,
+            MapColor.COLOR_MAGENTA, 0, 3);
+    /** Chaosbohnen: jede wirkt anders – nicht immer gut. */
+    public static final DeferredItem<ChaosFood.Beans> CHAOS_BEANS = addTo(ModItems.ITEMS.registerItem("chaos_beans",
+            p -> new ChaosFood.Beans(CHAOS_BEAN_BUSH.get(), p),
+            () -> new Item.Properties().useItemDescriptionPrefix().food(foodValues(2, 0.2f, true), Consumables.defaultFood().consumeSeconds(1.0f).build())
+                    .compostable(ContextIntProviders.COMPOSTABLE_MEDIUM).component(DataComponents.LORE, ModItems.lore("chaos_beans", 1))));
+    /** Chaosbohneneintopf: wirkt jedes Mal anders – aber immer gut, und anderthalb Minuten lang. */
+    public static final DeferredItem<ChaosFood.Stew> CHAOS_BEAN_STEW = addTo(ModItems.ITEMS.registerItem("chaos_bean_stew", ChaosFood.Stew::new,
+            () -> new Item.Properties().food(foodValues(9, 0.8f, false)).usingConvertsTo(Items.BOWL).stacksTo(1)
+                    .component(DataComponents.LORE, ModItems.lore("chaos_bean_stew", 1))));
+
+    // ---------------------------------------------------------------- Feenreich: Feenbeeren (auf Feengras)
+
+    public static final DeferredBlock<BerryBushBlock> FAE_BERRY_BUSH = bush("fae_berry_bush", () -> Cuisine.FAE_BERRIES.get(),
+            state -> state.is(FaeBlocks.FAE_GRASS.get()) || state.is(FaeBlocks.FAE_SOIL.get()), MapColor.COLOR_PINK, 0, 3);
+    /** Feenbeeren: süß und heilsam. */
+    public static final DeferredItem<BlockItem> FAE_BERRIES = plantable("fae_berries", FAE_BERRY_BUSH, foodValues(2, 0.3f, false),
+            eat(1.0f, new MobEffectInstance(MobEffects.REGENERATION, 100, 0)));
+    /** Feenpfannkuchen mit Feenbeeren: heilen eine Weile. */
+    public static final DeferredItem<Item> FAE_PANCAKES = item("fae_pancakes",
+            p -> p.food(foodValues(8, 0.6f, false), eat(1.6f, new MobEffectInstance(MobEffects.REGENERATION, 300, 0)))
+                    .component(DataComponents.LORE, ModItems.lore("fae_pancakes", 1)));
+
+    /** Worauf die Chaosbohne wächst: Erde und Gras, Nyzel, Endstein, Chaosstein, Weltnaht, Schattengras und Leerenmoos. */
+    private static boolean chaosSoil(BlockState state) {
+        return state.is(net.minecraft.tags.BlockTags.SUBSTRATE_OVERWORLD) || state.is(net.minecraft.tags.BlockTags.NYLIUM) || state.is(Blocks.END_STONE)
+                || state.is(AbyssBlocks.CHAOS_STONE.base().get()) || state.is(AbyssBlocks.WORLD_SEAM.get()) || state.is(ShadowBlocks.SHADOW_GRASS.get())
+                || state.is(ShadowBlocks.SHADOW_SOIL.get()) || state.is(VoidBlocks.VOID_MOSS.get());
+    }
+
+    /** Alle neuen Speisen (ohne Mehl und Reis), in der Reihenfolge des Kreativ-Tabs – für Modelle, Tests und Vorführung. */
     public static List<DeferredItem<? extends Item>> foods() {
         return List.of(CHEESE, CHEESE_SPAETZLE, PRETZEL, RAW_SAUSAGE, SAUSAGE, RUM, EMBER_PEPPER, EMBER_CHILI, FUNGUS_SKEWER, HARDTACK,
                 CHORUS_JAM, DUSK_PORRIDGE, SOUL_BERRY_PIE, STAR_CANDY, UPSIDE_DOWN_CAKE, PILGRIM_RATION, FISH_SOUP, FISH_ROLL, GINGERBREAD,
-                FAE_TEA, GLIMMER_CUPCAKE);
+                FAE_TEA, GLIMMER_CUPCAKE, RICE_PUDDING, SUSHI, SEA_GRAPES, SEA_GRAPE_SALAD, FLOAT_BERRIES, FLOAT_BERRY_TART, SHADOW_TUBER,
+                ROASTED_SHADOW_TUBER, SHADOW_TUBER_STEW, STARFRUIT, STARFRUIT_JUICE, CHAOS_BEANS, CHAOS_BEAN_STEW, FAE_BERRIES, FAE_PANCAKES);
+    }
+
+    /** Was man pflanzt (ihre Gegenstandsmodelle kommen mit den Pflanzen). */
+    public static List<DeferredItem<? extends Item>> plantables() {
+        return List.of(EMBER_PEPPER, RICE, SEA_GRAPES, FLOAT_BERRIES, SHADOW_TUBER, STARFRUIT, CHAOS_BEANS, FAE_BERRIES);
+    }
+
+    /** Die Fruchtsträucher der fremden Welten. */
+    public static List<DeferredBlock<BerryBushBlock>> bushes() {
+        return List.of(FLOAT_BERRY_BUSH, STARFRUIT_BUSH, CHAOS_BEAN_BUSH, FAE_BERRY_BUSH);
     }
 
     // ---------------------------------------------------------------- Hilfen
@@ -189,6 +306,28 @@ public final class Cuisine {
         Consumable consumable = builder.build();
         return item(name, p -> p.food(foodValues(nutrition, saturation, true), consumable).usingConvertsTo(Items.GLASS_BOTTLE).stacksTo(16)
                 .component(DataComponents.LORE, ModItems.lore(name, 1)));
+    }
+
+    /** Was man pflanzt: der Gegenstand der Pflanze, essbar oder nicht, mit einer Zeile darüber, wo es wächst. */
+    private static DeferredItem<BlockItem> plantable(String name, DeferredBlock<? extends Block> plant, @Nullable FoodProperties food,
+            @Nullable Consumable consumable) {
+        return addTo(ModItems.ITEMS.registerItem(name, p -> new BlockItem(plant.get(), p), () -> {
+            Item.Properties properties = new Item.Properties().useItemDescriptionPrefix().compostable(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                    .component(DataComponents.LORE, ModItems.lore(name, 1));
+            return food == null ? properties : consumable == null ? properties.food(food) : properties.food(food, consumable);
+        }));
+    }
+
+    /** Ein Fruchtstrauch: halbreif leuchtet er mit {@code halfLight}, reif mit {@code ripeLight}. */
+    private static DeferredBlock<BerryBushBlock> bush(String name, Supplier<? extends ItemLike> fruit, Predicate<BlockState> soil, MapColor color,
+            int halfLight, int ripeLight) {
+        return ModBlocks.BLOCKS.registerBlock(name, p -> new BerryBushBlock(fruit, soil, p),
+                p -> p.mapColor(color).randomTicks().noCollision().strength(0.2f).sound(SoundType.SWEET_BERRY_BUSH)
+                        .lightLevel(state -> switch (state.getValue(BerryBushBlock.AGE)) {
+                            case 2 -> halfLight;
+                            case 3 -> ripeLight;
+                            default -> 0;
+                        }).pushReaction(PushReaction.POPPED));
     }
 
     private static DeferredBlock<CheeseWheelBlock> block(String name) {

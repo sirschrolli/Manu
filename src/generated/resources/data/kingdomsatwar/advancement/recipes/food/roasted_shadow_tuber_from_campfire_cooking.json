@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_shadow_tuber": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:shadow_tuber"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:roasted_shadow_tuber_from_campfire_cooking"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_shadow_tuber"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:roasted_shadow_tuber_from_campfire_cooking"
+    ]
+  }
+}

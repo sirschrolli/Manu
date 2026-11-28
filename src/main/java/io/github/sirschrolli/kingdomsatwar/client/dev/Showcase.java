@@ -101,6 +101,7 @@ final class Showcase {
                 case "creatures" -> creatures(steps);
                 case "decor" -> decor(steps);
                 case "farm" -> farm(steps);
+                case "harvest" -> HarvestShowcase.harvest(steps);
                 case "farmanimals" -> farmAnimals(steps);
                 case "wildanimals" -> WildShowcase.wildAnimals(steps);
                 case "monsters" -> MonsterShowcase.monsters(steps);

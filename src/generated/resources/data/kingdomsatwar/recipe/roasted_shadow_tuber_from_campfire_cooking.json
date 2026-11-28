@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "category": "food",
+  "cookingtime": 600,
+  "experience": 0.35,
+  "ingredient": "kingdomsatwar:shadow_tuber",
+  "result": {
+    "id": "kingdomsatwar:roasted_shadow_tuber"
+  }
+}

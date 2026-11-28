@@ -53,13 +53,23 @@ final class CuisineGameTests {
             ModGameTests.TEST_FUNCTIONS.register("cuisine_ember_peppers", () -> CuisineGameTests::emberPeppers);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> RECIPES =
             ModGameTests.TEST_FUNCTIONS.register("cuisine_recipes", () -> CuisineGameTests::recipes);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> BUSHES =
+            ModGameTests.TEST_FUNCTIONS.register("cuisine_bushes", () -> CuisineGameTests::bushes);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> WATER_CROPS =
+            ModGameTests.TEST_FUNCTIONS.register("cuisine_water_crops", () -> CuisineGameTests::waterCrops);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SHADOW_TUBERS =
+            ModGameTests.TEST_FUNCTIONS.register("cuisine_shadow_tubers", () -> CuisineGameTests::shadowTubers);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> CHAOS_BEANS =
+            ModGameTests.TEST_FUNCTIONS.register("cuisine_chaos_beans", () -> CuisineGameTests::chaosBeans);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> WILD_CROPS =
+            ModGameTests.TEST_FUNCTIONS.register("cuisine_wild_crops", () -> CuisineGameTests::wildCrops);
 
     private CuisineGameTests() {}
 
     static void init() {}
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : List.of(FOODS, CHEESE_WHEEL, EMBER_PEPPERS, RECIPES)) {
+        for (var test : List.of(FOODS, CHEESE_WHEEL, EMBER_PEPPERS, RECIPES, BUSHES, WATER_CROPS, SHADOW_TUBERS, CHAOS_BEANS, WILD_CROPS)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 100, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -77,14 +87,22 @@ final class CuisineGameTests {
     private static void foods(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        Map<Item, Item> rests = Map.of(Cuisine.RUM.get(), Items.GLASS_BOTTLE, Cuisine.FAE_TEA.get(), Items.GLASS_BOTTLE,
-                Cuisine.CHORUS_JAM.get(), Items.GLASS_BOTTLE, Cuisine.CHEESE_SPAETZLE.get(), Items.BOWL, Cuisine.EMBER_CHILI.get(), Items.BOWL,
-                Cuisine.DUSK_PORRIDGE.get(), Items.BOWL, Cuisine.FISH_SOUP.get(), Items.BOWL, Cuisine.FUNGUS_SKEWER.get(), Items.STICK);
-        Map<Item, Holder<MobEffect>> effects = Map.of(Cuisine.RUM.get(), MobEffects.RESISTANCE, Cuisine.EMBER_PEPPER.get(), MobEffects.FIRE_RESISTANCE,
-                Cuisine.EMBER_CHILI.get(), MobEffects.FIRE_RESISTANCE, Cuisine.CHORUS_JAM.get(), MobEffects.SLOW_FALLING,
-                Cuisine.DUSK_PORRIDGE.get(), MobEffects.NIGHT_VISION, Cuisine.STAR_CANDY.get(), MobEffects.SPEED,
-                Cuisine.UPSIDE_DOWN_CAKE.get(), MobEffects.SLOW_FALLING, Cuisine.FISH_SOUP.get(), MobEffects.WATER_BREATHING,
-                Cuisine.FAE_TEA.get(), MobEffects.REGENERATION, Cuisine.GLIMMER_CUPCAKE.get(), MobEffects.JUMP_BOOST);
+        Map<Item, Item> rests = Map.ofEntries(Map.entry(Cuisine.RUM.get(), Items.GLASS_BOTTLE), Map.entry(Cuisine.FAE_TEA.get(), Items.GLASS_BOTTLE),
+                Map.entry(Cuisine.CHORUS_JAM.get(), Items.GLASS_BOTTLE), Map.entry(Cuisine.CHEESE_SPAETZLE.get(), Items.BOWL),
+                Map.entry(Cuisine.EMBER_CHILI.get(), Items.BOWL), Map.entry(Cuisine.DUSK_PORRIDGE.get(), Items.BOWL), Map.entry(Cuisine.FISH_SOUP.get(), Items.BOWL),
+                Map.entry(Cuisine.FUNGUS_SKEWER.get(), Items.STICK), Map.entry(Cuisine.RICE_PUDDING.get(), Items.BOWL),
+                Map.entry(Cuisine.SEA_GRAPE_SALAD.get(), Items.BOWL), Map.entry(Cuisine.SHADOW_TUBER_STEW.get(), Items.BOWL),
+                Map.entry(Cuisine.CHAOS_BEAN_STEW.get(), Items.BOWL), Map.entry(Cuisine.STARFRUIT_JUICE.get(), Items.GLASS_BOTTLE));
+        Map<Item, Holder<MobEffect>> effects = Map.ofEntries(Map.entry(Cuisine.RUM.get(), MobEffects.RESISTANCE),
+                Map.entry(Cuisine.EMBER_PEPPER.get(), MobEffects.FIRE_RESISTANCE), Map.entry(Cuisine.EMBER_CHILI.get(), MobEffects.FIRE_RESISTANCE),
+                Map.entry(Cuisine.CHORUS_JAM.get(), MobEffects.SLOW_FALLING), Map.entry(Cuisine.DUSK_PORRIDGE.get(), MobEffects.NIGHT_VISION),
+                Map.entry(Cuisine.STAR_CANDY.get(), MobEffects.SPEED), Map.entry(Cuisine.UPSIDE_DOWN_CAKE.get(), MobEffects.SLOW_FALLING),
+                Map.entry(Cuisine.FISH_SOUP.get(), MobEffects.WATER_BREATHING), Map.entry(Cuisine.FAE_TEA.get(), MobEffects.REGENERATION),
+                Map.entry(Cuisine.GLIMMER_CUPCAKE.get(), MobEffects.JUMP_BOOST), Map.entry(Cuisine.SEA_GRAPES.get(), MobEffects.WATER_BREATHING),
+                Map.entry(Cuisine.SEA_GRAPE_SALAD.get(), MobEffects.WATER_BREATHING), Map.entry(Cuisine.FLOAT_BERRIES.get(), MobEffects.SLOW_FALLING),
+                Map.entry(Cuisine.FLOAT_BERRY_TART.get(), MobEffects.JUMP_BOOST), Map.entry(Cuisine.SHADOW_TUBER_STEW.get(), MobEffects.RESISTANCE),
+                Map.entry(Cuisine.STARFRUIT.get(), MobEffects.NIGHT_VISION), Map.entry(Cuisine.STARFRUIT_JUICE.get(), MobEffects.SPEED),
+                Map.entry(Cuisine.FAE_BERRIES.get(), MobEffects.REGENERATION), Map.entry(Cuisine.FAE_PANCAKES.get(), MobEffects.REGENERATION));
         for (var food : Cuisine.foods()) {
             Item item = food.get();
             var props = new ItemStack(item).get(DataComponents.FOOD);
@@ -101,6 +119,9 @@ final class CuisineGameTests {
             Holder<MobEffect> effect = effects.get(item);
             if (effect != null) {
                 helper.assertTrue(player.hasEffect(effect), item + " wirkt nicht (" + effect.getRegisteredName() + ")");
+            }
+            if (item == Cuisine.CHAOS_BEANS.get() || item == Cuisine.CHAOS_BEAN_STEW.get()) {
+                helper.assertTrue(!player.getActiveEffects().isEmpty(), item + " wirkt nicht");
             }
         }
         helper.assertTrue(Cuisine.PILGRIM_RATION.get().getDefaultInstance().getUseDuration(player) > Items.BREAD.getDefaultInstance()
@@ -175,9 +196,178 @@ final class CuisineGameTests {
         for (String name : List.of("flour", "flour_from_barley", "cheese_wheel", "cheese_wheel_from_cheese", "cheese", "cheese_spaetzle", "pretzel",
                 "raw_sausage", "sausage", "sausage_from_smoking", "sausage_from_campfire_cooking", "rum", "ember_chili", "fungus_skewer", "hardtack",
                 "chorus_jam", "dusk_porridge", "soul_berry_pie", "star_candy", "upside_down_cake", "pilgrim_ration", "fish_soup_from_cod",
-                "fish_soup_from_salmon", "fish_roll_from_cod", "fish_roll_from_salmon", "gingerbread", "fae_tea", "glimmer_cupcake")) {
+                "fish_soup_from_salmon", "fish_roll_from_cod", "fish_roll_from_salmon", "gingerbread", "fae_tea", "glimmer_cupcake", "rice_pudding",
+                "sushi_from_cod", "sushi_from_salmon", "sea_grape_salad", "float_berry_tart", "roasted_shadow_tuber", "roasted_shadow_tuber_from_smoking",
+                "roasted_shadow_tuber_from_campfire_cooking", "shadow_tuber_stew", "starfruit_juice", "chaos_bean_stew", "fae_pancakes")) {
             ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE, KingdomsAtWar.id(name));
             helper.assertTrue(recipes.byKey(key) != null, "Rezept fehlt: " + key.identifier());
+        }
+        helper.succeed();
+    }
+
+    /** Zählt die Gegenstände {@code item}, die um {@code pos} herum liegen (und räumt sie fort). */
+    private static int picked(GameTestHelper helper, BlockPos pos, Item item) {
+        var area = new net.minecraft.world.phys.AABB(helper.absolutePos(pos)).inflate(2.0);
+        int count = 0;
+        for (var entity : helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, area)) {
+            if (entity.getItem().is(item)) {
+                count += entity.getItem().getCount();
+            }
+            entity.discard();
+        }
+        return count;
+    }
+
+    /**
+     * Die Sträucher der fremden Welten: jeder wächst nur auf seinem Grund, wird mit seiner Frucht gepflanzt, reift mit
+     * Knochenmehl, gibt reif beim Pflücken zwei bis drei Früchte und trägt danach von neuem; reif leuchtet die Sternfrucht.
+     */
+    private static void bushes(GameTestHelper helper) {
+        floor(helper);
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        Map<net.minecraft.world.level.block.Block, net.minecraft.world.level.block.Block> soils = Map.of(
+                Cuisine.FLOAT_BERRY_BUSH.get(), Blocks.END_STONE,
+                Cuisine.STARFRUIT_BUSH.get(), io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_MOSS.get(),
+                Cuisine.CHAOS_BEAN_BUSH.get(), io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.CHAOS_STONE.base().get(),
+                Cuisine.FAE_BERRY_BUSH.get(), io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_GRASS.get());
+        int x = 1;
+        for (var deferred : Cuisine.bushes()) {
+            var bush = deferred.get();
+            Item fruit = bush.fruit().asItem();
+            BlockPos soil = new BlockPos(x, 1, 2);
+            BlockPos at = soil.above();
+            helper.setBlock(soil, Blocks.STONE);
+            helper.assertTrue(!bush.defaultBlockState().canSurvive(level, helper.absolutePos(at)), bush + " wächst auf Stein");
+            helper.setBlock(soil, soils.get(bush));
+            helper.assertTrue(bush.defaultBlockState().canSurvive(level, helper.absolutePos(at)), bush + " wächst nicht auf " + soils.get(bush));
+            player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(fruit));
+            helper.placeAt(player, new ItemStack(fruit), soil, net.minecraft.core.Direction.UP);
+            helper.assertBlockPresent(bush, at);
+            for (int i = 0; i < 3; i++) {
+                net.minecraft.world.item.BoneMealItem.growCrop(new ItemStack(Items.BONE_MEAL, 1), level, helper.absolutePos(at));
+            }
+            helper.assertTrue(helper.getBlockState(at).getValue(io.github.sirschrolli.kingdomsatwar.block.crop.BerryBushBlock.AGE) == 3,
+                    bush + " reift nicht mit Knochenmehl");
+            player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+            helper.useBlock(at, player);
+            int count = picked(helper, at, fruit);
+            helper.assertTrue(count >= 2 && count <= 3, bush + " gibt reif " + count + " Früchte");
+            helper.assertTrue(helper.getBlockState(at).getValue(io.github.sirschrolli.kingdomsatwar.block.crop.BerryBushBlock.AGE) == 1,
+                    bush + " trägt nach dem Pflücken nicht von neuem");
+            x += 2;
+        }
+        BlockState ripeStar = Cuisine.STARFRUIT_BUSH.get().defaultBlockState().setValue(io.github.sirschrolli.kingdomsatwar.block.crop.BerryBushBlock.AGE, 3);
+        helper.assertTrue(ripeStar.getLightEmission(level, BlockPos.ZERO) > 0, "Reife Sternfrüchte leuchten nicht");
+        helper.succeed();
+    }
+
+    /**
+     * Unter Wasser: Meertrauben wachsen nur im Wasser auf Sand (nicht an Land), werden mit den Trauben gepflanzt und reif
+     * gepflückt. Reis wächst nur im seichten Wasser (ein Block tief über Erde), nicht im tiefen und nicht an Land; reif gibt er
+     * mehrere Körner.
+     */
+    private static void waterCrops(GameTestHelper helper) {
+        floor(helper);
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        // ein Becken: Sand am Grund, zwei Blöcke Wasser, ringsum Glas
+        for (int x = 0; x < 5; x++) {
+            for (int z = 0; z < 5; z++) {
+                boolean rim = x == 0 || z == 0 || x == 4 || z == 4;
+                helper.setBlock(x, 1, z, rim ? Blocks.GLASS : Blocks.SAND);
+                helper.setBlock(x, 2, z, rim ? Blocks.GLASS : Blocks.WATER);
+                helper.setBlock(x, 3, z, rim ? Blocks.GLASS : Blocks.WATER);
+            }
+        }
+        BlockState grapes = Cuisine.SEA_GRAPE_PLANT.get().defaultBlockState();
+        helper.assertTrue(grapes.canSurvive(level, helper.absolutePos(new BlockPos(2, 2, 2))), "Meertrauben wachsen nicht unter Wasser auf Sand");
+        helper.setBlock(6, 1, 6, Blocks.SAND);
+        helper.assertTrue(!grapes.canSurvive(level, helper.absolutePos(new BlockPos(6, 2, 6))), "Meertrauben wachsen an Land");
+        player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(Cuisine.SEA_GRAPES.get()));
+        helper.placeAt(player, new ItemStack(Cuisine.SEA_GRAPES.get()), new BlockPos(2, 1, 2), net.minecraft.core.Direction.UP);
+        helper.assertBlockPresent(Cuisine.SEA_GRAPE_PLANT.get(), new BlockPos(2, 2, 2));
+        helper.setBlock(new BlockPos(2, 2, 2), grapes.setValue(io.github.sirschrolli.kingdomsatwar.block.crop.SeaGrapeBlock.AGE, 3));
+        helper.assertTrue(helper.getBlockState(new BlockPos(2, 2, 2)).getFluidState().isSource(), "Meertrauben stehen nicht im Wasser");
+        player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+        helper.useBlock(new BlockPos(2, 2, 2), player);
+        int count = picked(helper, new BlockPos(2, 2, 2), Cuisine.SEA_GRAPES.get());
+        helper.assertTrue(count >= 2 && count <= 3, "Reife Meertrauben geben " + count);
+        // Reis: im tiefen Wasser nicht, im seichten über Erde ja, an Land nicht
+        BlockState rice = Cuisine.RICE_PLANT.get().defaultBlockState();
+        helper.setBlock(new BlockPos(3, 1, 3), Blocks.DIRT);
+        helper.assertTrue(!rice.canSurvive(level, helper.absolutePos(new BlockPos(3, 2, 3))), "Reis wächst im tiefen Wasser");
+        helper.setBlock(new BlockPos(3, 3, 3), Blocks.AIR);
+        helper.assertTrue(rice.canSurvive(level, helper.absolutePos(new BlockPos(3, 2, 3))), "Reis wächst nicht im seichten Wasser über Erde");
+        player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(Cuisine.RICE.get()));
+        helper.placeAt(player, new ItemStack(Cuisine.RICE.get()), new BlockPos(3, 1, 3), net.minecraft.core.Direction.UP);
+        helper.assertBlockPresent(Cuisine.RICE_PLANT.get(), new BlockPos(3, 2, 3));
+        helper.setBlock(7, 1, 7, Blocks.DIRT);
+        helper.assertTrue(!rice.canSurvive(level, helper.absolutePos(new BlockPos(7, 2, 7))), "Reis wächst an Land");
+        BlockState ripe = rice.setValue(net.minecraft.world.level.block.CropBlock.AGE, 7);
+        for (int i = 0; i < 8; i++) {
+            int grains = drops(helper, ripe).stream().filter(st -> st.is(Cuisine.RICE.get())).mapToInt(ItemStack::getCount).sum();
+            helper.assertTrue(grains >= 2 && grains <= 5, "Reifer Reis gibt " + grains + " Körner");
+        }
+        helper.succeed();
+    }
+
+    /** Schattenknollen: auf Ackerland, Schattengras und Schattenerde (nicht auf Stein); reif mehrere Knollen; geröstet ein Essen. */
+    private static void shadowTubers(GameTestHelper helper) {
+        floor(helper);
+        ServerLevel level = helper.getLevel();
+        BlockState crop = Cuisine.SHADOW_TUBERS.get().defaultBlockState();
+        helper.setBlock(new BlockPos(1, 1, 1), Blocks.FARMLAND);
+        helper.setBlock(new BlockPos(3, 1, 1), io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks.SHADOW_GRASS.get());
+        helper.setBlock(new BlockPos(5, 1, 1), io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks.SHADOW_FARMLAND.get());
+        helper.assertTrue(crop.canSurvive(level, helper.absolutePos(new BlockPos(1, 2, 1))), "Schattenknollen wachsen nicht auf Ackerland");
+        helper.assertTrue(crop.canSurvive(level, helper.absolutePos(new BlockPos(3, 2, 1))), "Schattenknollen wachsen nicht auf Schattengras");
+        helper.assertTrue(crop.canSurvive(level, helper.absolutePos(new BlockPos(5, 2, 1))), "Schattenknollen wachsen nicht auf Schattenackerland");
+        helper.assertTrue(!crop.canSurvive(level, helper.absolutePos(new BlockPos(7, 1, 1))), "Schattenknollen wachsen auf Stein");
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(Cuisine.SHADOW_TUBER.get()));
+        helper.placeAt(player, new ItemStack(Cuisine.SHADOW_TUBER.get()), new BlockPos(1, 1, 1), net.minecraft.core.Direction.UP);
+        helper.assertBlockPresent(Cuisine.SHADOW_TUBERS.get(), new BlockPos(1, 2, 1));
+        BlockState ripe = crop.setValue(net.minecraft.world.level.block.CropBlock.AGE, 7);
+        helper.assertTrue(ripe.getLightEmission(level, BlockPos.ZERO) > 0, "Reife Schattenknollen schimmern nicht");
+        for (int i = 0; i < 8; i++) {
+            int tubers = drops(helper, ripe).stream().filter(st -> st.is(Cuisine.SHADOW_TUBER.get())).mapToInt(ItemStack::getCount).sum();
+            helper.assertTrue(tubers >= 2 && tubers <= 5, "Reife Schattenknollen geben " + tubers);
+        }
+        int young = drops(helper, crop).stream().filter(st -> st.is(Cuisine.SHADOW_TUBER.get())).mapToInt(ItemStack::getCount).sum();
+        helper.assertTrue(young == 1, "Junge Schattenknollen geben " + young);
+        helper.succeed();
+    }
+
+    /** Chaosbohnen: roh mal diese, mal jene Wirkung (aus der Liste, auch schlechte), der Eintopf immer eine gute. */
+    private static void chaosBeans(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        java.util.Set<Holder<MobEffect>> seen = new java.util.HashSet<>();
+        for (int i = 0; i < 40; i++) {
+            player.removeAllEffects();
+            new ItemStack(Cuisine.CHAOS_BEANS.get()).finishUsingItem(level, player);
+            helper.assertTrue(player.getActiveEffects().size() == 1, "Eine Chaosbohne gibt " + player.getActiveEffects().size() + " Wirkungen");
+            Holder<MobEffect> effect = player.getActiveEffects().iterator().next().getEffect();
+            helper.assertTrue(io.github.sirschrolli.kingdomsatwar.item.ChaosFood.possible(false).contains(effect), "Unbekannte Wirkung " + effect);
+            seen.add(effect);
+        }
+        helper.assertTrue(seen.size() >= 4, "Chaosbohnen wirken zu gleichförmig: " + seen.size());
+        for (int i = 0; i < 20; i++) {
+            player.removeAllEffects();
+            ItemStack rest = new ItemStack(Cuisine.CHAOS_BEAN_STEW.get()).finishUsingItem(level, player);
+            helper.assertTrue(rest.is(Items.BOWL), "Der Chaosbohneneintopf lässt keine Schüssel übrig");
+            Holder<MobEffect> effect = player.getActiveEffects().iterator().next().getEffect();
+            helper.assertTrue(effect.value().isBeneficial(), "Der Eintopf wirkt schlecht: " + effect.getRegisteredName());
+        }
+        helper.succeed();
+    }
+
+    /** Die wilden Grüppchen sind da (als Platzierungen geladen), und jedes wächst dort, wo es wachsen soll. */
+    private static void wildCrops(GameTestHelper helper) {
+        var placed = helper.getLevel().registryAccess().lookupOrThrow(Registries.PLACED_FEATURE);
+        for (var patch : io.github.sirschrolli.kingdomsatwar.worldgen.WildCrops.PATCHES) {
+            helper.assertTrue(placed.get(patch.placedKey()).isPresent(), "Wilde Pflanzen fehlen: " + patch.placedKey().identifier());
         }
         helper.succeed();
     }

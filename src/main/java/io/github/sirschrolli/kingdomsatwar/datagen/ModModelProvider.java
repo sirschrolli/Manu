@@ -353,13 +353,21 @@ public class ModModelProvider extends ModelProvider {
         }
         blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(wheel).with(slices).with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING));
         blocks.registerSimpleFlatItemModel(wheel.asItem());
-        blocks.createCropBlock(io.github.sirschrolli.kingdomsatwar.registry.Cuisine.EMBER_PEPPERS.get(),
-                net.minecraft.world.level.block.NetherWartBlock.AGE, 0, 1, 2, 3);
+        // die Pflanzen (Stufen ohne eigenes Gegenstandsmodell – das kommt mit den Speisen über flat(), plastisch in der Hand):
+        // Glutschote und Schattenknollen als Feldfrucht, Meertrauben und die Sträucher im Kreuz, der Reis hoch aus dem Wasser
+        stages(blocks, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.EMBER_PEPPERS.get(), net.minecraft.world.level.block.NetherWartBlock.AGE,
+                false, 0, 1, 2, 3);
+        stages(blocks, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.SHADOW_TUBERS.get(), CropBlock.AGE, false, 0, 0, 1, 1, 2, 2, 2, 3);
+        stages(blocks, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.SEA_GRAPE_PLANT.get(), io.github.sirschrolli.kingdomsatwar.block.crop.SeaGrapeBlock.AGE,
+                true, 0, 1, 2, 3);
+        for (var bush : io.github.sirschrolli.kingdomsatwar.registry.Cuisine.bushes()) {
+            stages(blocks, bush.get(), io.github.sirschrolli.kingdomsatwar.block.crop.BerryBushBlock.AGE, true, 0, 1, 2, 3);
+        }
+        this.rice(blocks);
         flat(items, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.FLOUR.get());
+        flat(items, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.RICE.get());
         for (DeferredItem<? extends Item> food : io.github.sirschrolli.kingdomsatwar.registry.Cuisine.foods()) {
-            if (food != io.github.sirschrolli.kingdomsatwar.registry.Cuisine.EMBER_PEPPER) {
-                flat(items, food.get());
-            }
+            flat(items, food.get());
         }
 
         // --- Gegenstände (flache 2D-Modelle) ---
@@ -566,6 +574,38 @@ public class ModModelProvider extends ModelProvider {
         // --- Eigene Oberwelt-Biome ---
         blocks.createTrivialCube(ModBlocks.PEAT.get());
         blocks.createDoublePlantWithDefaultItem(ModBlocks.REEDS.get(), BlockModelGenerators.PlantType.NOT_TINTED);
+    }
+
+    /**
+     * Eine Pflanze mit Stufen (je Stufe ein Feldfrucht- oder Kreuzmodell aus {@code <name>_stage<n>}) – wie createCropBlock und
+     * createCrossBlock von Minecraft, aber ohne das Gegenstandsmodell (Frucht und Samen bekommen ihres über flat()).
+     */
+    static void stages(BlockModelGenerators blocks, Block block, net.minecraft.world.level.block.state.properties.Property<Integer> property, boolean cross,
+            int... stages) {
+        if (property.getPossibleValues().size() != stages.length) {
+            throw new IllegalArgumentException("Stufen fehlen für " + block);
+        }
+        java.util.Map<Integer, Identifier> models = new java.util.HashMap<>();
+        blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(block).with(PropertyDispatch.initial(property).generate(value ->
+                BlockModelGenerators.plainVariant(models.computeIfAbsent(stages[value], stage -> cross
+                        ? blocks.createSuffixedVariant(block, "_stage" + stage, ModelTemplates.CROSS, TextureMapping::cross)
+                        : blocks.createSuffixedVariant(block, "_stage" + stage, ModelTemplates.CROP, TextureMapping::crop))))));
+    }
+
+    /** Reis: zwei Stufen unter Wasser (Feldfrucht-Modell), zwei, die aus dem Wasser ragen (doppelt hoch, mit eigenem oberen Bild). */
+    private void rice(BlockModelGenerators blocks) {
+        Block rice = io.github.sirschrolli.kingdomsatwar.registry.Cuisine.RICE_PLANT.get();
+        Identifier[] models = new Identifier[4];
+        for (int stage = 0; stage < 4; stage++) {
+            Material bottom = TextureMapping.getBlockTexture(rice, "_stage" + stage);
+            models[stage] = stage < 2 ? ModelTemplates.CROP.createWithSuffix(rice, "_stage" + stage, TextureMapping.crop(bottom), blocks.modelOutput)
+                    : DecorModels.tallCrop().createWithSuffix(rice, "_stage" + stage, new TextureMapping().put(TextureSlot.CROP, bottom)
+                            .put(DecorModels.CROP_TOP, TextureMapping.getBlockTexture(rice, "_stage" + stage + "_top")).put(TextureSlot.PARTICLE, bottom),
+                            blocks.modelOutput);
+        }
+        int[] stages = {0, 0, 1, 1, 2, 2, 2, 3};
+        blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(rice).with(PropertyDispatch.initial(CropBlock.AGE)
+                .generate(age -> BlockModelGenerators.plainVariant(models[stages[age]]))));
     }
 
     /** Ascheschicht: sieben flache Modelle (2 bis 14 Pixel hoch), acht Lagen sind ein voller Aschenblock. */

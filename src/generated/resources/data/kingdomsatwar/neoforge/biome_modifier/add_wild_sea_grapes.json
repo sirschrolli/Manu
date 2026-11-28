@@ -1,0 +1,13 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": [
+    "kingdomsatwar:urmeer_reef",
+    "kingdomsatwar:urmeer_kelp_forest",
+    "kingdomsatwar:urmeer_coral_garden",
+    "kingdomsatwar:urmeer_pearl_grounds",
+    "kingdomsatwar:urmeer_isles",
+    "kingdomsatwar:urmeer_deep"
+  ],
+  "features": "kingdomsatwar:wild_sea_grapes",
+  "step": "vegetal_decoration"
+}

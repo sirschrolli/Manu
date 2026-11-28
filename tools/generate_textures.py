@@ -56,6 +56,7 @@ import items_architect  # noqa: E402
 import items_eggs  # noqa: E402
 import items_food  # noqa: E402
 import items_cuisine  # noqa: E402
+import items_harvest  # noqa: E402
 import items_gear  # noqa: E402
 import items_materials  # noqa: E402
 import items_misc  # noqa: E402
@@ -441,6 +442,7 @@ def build_all() -> dict[str, Image.Image]:
     items_materials.build(put)
     items_food.build(put)
     items_cuisine.build(put)
+    items_harvest.build(put)
     items_eggs.build(put)
     items_misc.build(put)
     items_rods.build(put)

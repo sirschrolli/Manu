@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_chaos_beans": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:chaos_beans"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:chaos_bean_stew"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_chaos_beans"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:chaos_bean_stew"
+    ]
+  }
+}

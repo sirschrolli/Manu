@@ -252,6 +252,38 @@ final class DecorModels {
         return b.build();
     }
 
+    // ------------------------------------------------------------------ Reis (2.0)
+
+    /** Der obere Teil einer hohen Feldfrucht. */
+    static final TextureSlot CROP_TOP = TextureSlot.create("crop_top");
+
+    /**
+     * Eine hohe Feldfrucht (Reis im seichten Wasser): wie das Feldfrucht-Modell (vier Ebenen im Doppelkreuz), aber zwei Blöcke
+     * hoch – unten die Halme im Wasser ({@code #crop}), darüber, was aus dem Wasser ragt ({@code #crop_top}).
+     */
+    static ModelTemplate tallCrop() {
+        ExtendedModelTemplateBuilder b = ExtendedModelTemplateBuilder.builder().requiredTextureSlot(TextureSlot.CROP).requiredTextureSlot(CROP_TOP)
+                .requiredTextureSlot(TextureSlot.PARTICLE).ambientOcclusion(false);
+        for (int part = 0; part < 2; part++) {
+            float y1 = part == 0 ? -1 : 15;
+            float y2 = y1 + 16;
+            TextureSlot slot = part == 0 ? TextureSlot.CROP : CROP_TOP;
+            for (float x : new float[] {4, 12}) {
+                boolean west = x == 4;
+                b.element(e -> e.from(x, y1, 0).to(x, y2, 16).shadeDirectionOverride(Direction.UP)
+                        .face(Direction.WEST, f -> f.uvs(west ? 0 : 16, 0, west ? 16 : 0, 16).texture(slot))
+                        .face(Direction.EAST, f -> f.uvs(west ? 16 : 0, 0, west ? 0 : 16, 16).texture(slot)));
+            }
+            for (float z : new float[] {4, 12}) {
+                boolean north = z == 4;
+                b.element(e -> e.from(0, y1, z).to(16, y2, z).shadeDirectionOverride(Direction.UP)
+                        .face(Direction.NORTH, f -> f.uvs(north ? 0 : 16, 0, north ? 16 : 0, 16).texture(slot))
+                        .face(Direction.SOUTH, f -> f.uvs(north ? 16 : 0, 0, north ? 0 : 16, 16).texture(slot)));
+            }
+        }
+        return b.build();
+    }
+
     // ------------------------------------------------------------------ Zinne
 
     /** Halbhohe Brüstung über die volle Breite, Mauerzahn mittig (Reihe in Ost-West-Richtung). */

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kingdomsatwar:chaos_beans",
+    "kingdomsatwar:chaos_beans",
+    "kingdomsatwar:chaos_beans",
+    "kingdomsatwar:tomato",
+    "kingdomsatwar:onion",
+    "minecraft:bowl"
+  ],
+  "result": {
+    "id": "kingdomsatwar:chaos_bean_stew"
+  }
+}

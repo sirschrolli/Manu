@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kingdomsatwar:roasted_shadow_tuber",
+    "kingdomsatwar:roasted_shadow_tuber",
+    "minecraft:cooked_mutton",
+    "kingdomsatwar:duskgrain",
+    "minecraft:bowl"
+  ],
+  "result": {
+    "id": "kingdomsatwar:shadow_tuber_stew"
+  }
+}

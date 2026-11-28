@@ -58,5 +58,43 @@ final class CuisineLang {
         lore(text, "fae_tea", "Moonbell tea: refreshes and heals a little", "Mondglöckchentee: belebt und heilt ein wenig");
         item(text, "glimmer_cupcake", "Glimmer Cupcake", "Glimmerküchlein");
         lore(text, "glimmer_cupcake", "Baked with fae dust – jump as if on clouds", "Mit Feenstaub gebacken – springen wie auf Wolken");
+
+        // die Feldfrüchte der Welten (2.0)
+        text.add("block.kingdomsatwar.rice", "Rice", "Reis");
+        item(text, "rice", "Rice", "Reis");
+        lore(text, "rice", "Plant in shallow water over dirt or mud", "In seichtes Wasser über Erde oder Schlamm pflanzen");
+        item(text, "rice_pudding", "Rice Pudding", "Milchreis");
+        item(text, "sushi", "Sushi", "Sushi");
+        text.add("block.kingdomsatwar.sea_grape_plant", "Sea Grapes", "Meertrauben");
+        item(text, "sea_grapes", "Sea Grapes", "Meertrauben");
+        lore(text, "sea_grapes", "Salty and crunchy. Plant underwater on sand", "Salzig und knackig. Unter Wasser auf Sand pflanzen");
+        item(text, "sea_grape_salad", "Sea Grape Salad", "Meertraubensalat");
+        lore(text, "sea_grape_salad", "Breathe underwater for a minute", "Eine Minute lang Kiemen");
+        text.add("block.kingdomsatwar.float_berry_bush", "Float Berry Bush", "Schwebebeerenstrauch");
+        item(text, "float_berries", "Float Berries", "Schwebebeeren");
+        lore(text, "float_berries", "Light as air. Plant on end stone", "Leicht wie Luft. Auf Endstein pflanzen");
+        item(text, "float_berry_tart", "Float Berry Tart", "Schwebebeerentörtchen");
+        lore(text, "float_berry_tart", "Jump higher and land softly", "Höher springen, sanft landen");
+        text.add("block.kingdomsatwar.shadow_tubers", "Shadow Tubers", "Schattenknollen");
+        item(text, "shadow_tuber", "Shadow Tuber", "Schattenknolle");
+        lore(text, "shadow_tuber", "Grows even in darkness. Plant on farmland", "Wächst auch im Dunkeln. Auf Ackerland pflanzen");
+        item(text, "roasted_shadow_tuber", "Roasted Shadow Tuber", "Geröstete Schattenknolle");
+        item(text, "shadow_tuber_stew", "Tuber Stew", "Knolleneintopf");
+        lore(text, "shadow_tuber_stew", "Makes you tough as the Umbrer", "Macht zäh wie die Umbrer");
+        text.add("block.kingdomsatwar.starfruit_bush", "Starfruit Bush", "Sternfruchtstrauch");
+        item(text, "starfruit", "Starfruit", "Sternfrucht");
+        lore(text, "starfruit", "Glows from within. Plant on void moss or stardust", "Leuchtet von innen. Auf Leerenmoos oder Sternenstaub pflanzen");
+        item(text, "starfruit_juice", "Starfruit Juice", "Sternfruchtsaft");
+        lore(text, "starfruit_juice", "See in the dark – and be swift", "Sehen im Dunkeln – und flink sein");
+        text.add("block.kingdomsatwar.chaos_bean_bush", "Chaos Bean Bush", "Chaosbohnenstrauch");
+        item(text, "chaos_beans", "Chaos Beans", "Chaosbohnen");
+        lore(text, "chaos_beans", "Every bean works differently – not always well", "Jede Bohne wirkt anders – nicht immer gut");
+        item(text, "chaos_bean_stew", "Chaos Bean Stew", "Chaosbohneneintopf");
+        lore(text, "chaos_bean_stew", "Different every time – but always good", "Jedes Mal anders – aber immer gut");
+        text.add("block.kingdomsatwar.fae_berry_bush", "Fae Berry Bush", "Feenbeerenstrauch");
+        item(text, "fae_berries", "Fae Berries", "Feenbeeren");
+        lore(text, "fae_berries", "Sweet and healing. Plant on fae grass", "Süß und heilsam. Auf Feengras pflanzen");
+        item(text, "fae_pancakes", "Fae Pancakes", "Feenpfannkuchen");
+        lore(text, "fae_pancakes", "Heal for a while", "Heilen eine Weile");
     }
 }

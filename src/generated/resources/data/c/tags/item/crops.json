@@ -6,6 +6,9 @@
     "#c:crops/barley",
     "#c:crops/hops",
     "#c:crops/grape",
-    "#c:crops/garlic"
+    "#c:crops/garlic",
+    "kingdomsatwar:rice",
+    "kingdomsatwar:shadow_tuber",
+    "kingdomsatwar:ember_pepper"
   ]
 }

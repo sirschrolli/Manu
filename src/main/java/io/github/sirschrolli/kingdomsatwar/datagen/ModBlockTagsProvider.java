@@ -257,6 +257,16 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockTags.CLIMBABLE, ShadowBlocks.GLIMMER_VINES, ShadowBlocks.GLIMMER_VINES_PLANT);
         add(BlockTags.SWORD_EFFICIENT, ShadowBlocks.SOUL_BERRY_BUSH, ShadowBlocks.GLIMMER_VINES, ShadowBlocks.GLIMMER_VINES_PLANT);
         add(BlockTags.BEE_GROWABLES, ShadowBlocks.DUSKGRAIN, ShadowBlocks.SOUL_BERRY_BUSH);
+        // die Feldfrüchte der Welten (2.0)
+        add(BlockTags.CROPS, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.RICE_PLANT, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.SHADOW_TUBERS);
+        add(BlockTags.MAINTAINS_FARMLAND, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.RICE_PLANT,
+                io.github.sirschrolli.kingdomsatwar.registry.Cuisine.SHADOW_TUBERS);
+        add(BlockTags.BEE_GROWABLES, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.RICE_PLANT, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.SHADOW_TUBERS,
+                io.github.sirschrolli.kingdomsatwar.registry.Cuisine.EMBER_PEPPERS);
+        for (var bush : io.github.sirschrolli.kingdomsatwar.registry.Cuisine.bushes()) {
+            add(BlockTags.BEE_GROWABLES, bush);
+            add(BlockTags.SWORD_EFFICIENT, bush);
+        }
         tag(BlockTags.BASE_STONE_OVERWORLD).add(ShadowBlocks.SHADOW_STONE.base().key());
 
         // --- Das Feenreich ---

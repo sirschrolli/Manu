@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": [
+    "kingdomsatwar:shadow_forest",
+    "kingdomsatwar:glimmer_meadows",
+    "kingdomsatwar:soul_marsh"
+  ],
+  "features": "kingdomsatwar:wild_shadow_tubers",
+  "step": "vegetal_decoration"
+}

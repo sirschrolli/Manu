@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kingdomsatwar:fae_berries",
+    "kingdomsatwar:fae_berries",
+    "kingdomsatwar:flour",
+    "#minecraft:eggs",
+    "minecraft:milk_bucket"
+  ],
+  "result": {
+    "count": 2,
+    "id": "kingdomsatwar:fae_pancakes"
+  }
+}

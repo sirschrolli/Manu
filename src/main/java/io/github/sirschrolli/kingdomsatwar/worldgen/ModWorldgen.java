@@ -261,6 +261,7 @@ public final class ModWorldgen {
         io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerFeatures.bootstrapFeatures(context);
         io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees.bootstrapModFeatures(context);
         io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldFeatures.bootstrapFeatures(context);
+        WildCrops.bootstrapFeatures(context);
     }
 
     public static void bootstrapPlacedFeatures(BootstrapContext<PlacedFeature> context) {
@@ -331,6 +332,7 @@ public final class ModWorldgen {
         io.github.sirschrolli.kingdomsatwar.fae.FaeFeatures.bootstrapPlacedFeatures(context);
         io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerFeatures.bootstrapPlacedFeatures(context);
         io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldFeatures.bootstrapPlacedFeatures(context);
+        WildCrops.bootstrapPlacedFeatures(context);
         io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageTrees.bootstrapPlacedFeatures(context);
     }
 
@@ -448,6 +450,7 @@ public final class ModWorldgen {
                     GenerationStep.Decoration.UNDERGROUND_DECORATION));
         }
 
+        WildCrops.bootstrapBiomeModifiers(context);
         for (FlowerPatch patch : FLOWER_PATCHES) {
             context.register(patch.modifierKey(), new BiomeModifiers.AddFeaturesBiomeModifier(
                     biomes.getOrThrow(patch.biomes()),

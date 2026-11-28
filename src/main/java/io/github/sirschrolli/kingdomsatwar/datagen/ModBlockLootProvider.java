@@ -332,6 +332,17 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
                         .apply(ApplyBonusCount.addUniformBonusCount(this.enchantments.getOrThrow(Enchantments.FORTUNE))
                                 .when(MatchBlock.blockMatches(this.blocks, peppers, StatePropertiesPredicate.Builder.properties()
                                         .hasProperty(net.minecraft.world.level.block.NetherWartBlock.AGE, 3))))))));
+        // die Feldfrüchte der Welten (2.0): Reis und Schattenknollen wie Kartoffeln (reif mehrere, unreif die eine), die Sträucher
+        // und Meertrauben wie Seelenbeeren
+        crop(io.github.sirschrolli.kingdomsatwar.registry.Cuisine.RICE_PLANT, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.RICE.get(),
+                io.github.sirschrolli.kingdomsatwar.registry.Cuisine.RICE.get());
+        crop(io.github.sirschrolli.kingdomsatwar.registry.Cuisine.SHADOW_TUBERS, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.SHADOW_TUBER.get(),
+                io.github.sirschrolli.kingdomsatwar.registry.Cuisine.SHADOW_TUBER.get());
+        berries(io.github.sirschrolli.kingdomsatwar.registry.Cuisine.SEA_GRAPE_PLANT.get(), io.github.sirschrolli.kingdomsatwar.block.crop.SeaGrapeBlock.AGE,
+                io.github.sirschrolli.kingdomsatwar.registry.Cuisine.SEA_GRAPES.get());
+        for (var bush : io.github.sirschrolli.kingdomsatwar.registry.Cuisine.bushes()) {
+            berries(bush.get(), io.github.sirschrolli.kingdomsatwar.block.crop.BerryBushBlock.AGE, bush.get().fruit().asItem());
+        }
 
         // Zierblumen und Blumentöpfe
         ModBlocks.FLOWERS.forEach((flower, pot) -> {
@@ -364,6 +375,17 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
 
     private void ore(DeferredBlock<? extends Block> ore, Item drop) {
         add(ore.get(), block -> createOreDrop(block, drop));
+    }
+
+    /** Ein Strauch mit vier Stufen: reif zwei bis drei Früchte, halbreif eine bis zwei, sonst eine (zum Umpflanzen). */
+    private void berries(Block block, net.minecraft.world.level.block.state.properties.IntegerProperty age, Item fruit) {
+        add(block, b -> LootTable.lootTable().withPool(applyExplosionCondition(b, LootPool.lootPool()
+                .setRolls(ContextIntProviders.exactly(1))
+                .add(AlternativesEntry.alternatives(age.getPossibleValues(),
+                        value -> LootItem.lootTableItem(fruit)
+                                .when(MatchBlock.blockMatches(this.blocks, b, StatePropertiesPredicate.Builder.properties().hasProperty(age, value.intValue())))
+                                .apply(SetItemCountFunction.setCount(value == 3 ? ContextIntProviders.between(2, 3)
+                                        : value == 2 ? ContextIntProviders.between(1, 2) : ContextIntProviders.exactly(1))))))));
     }
 
     private void crop(DeferredBlock<? extends CropBlock> crop, Item produce, Item seeds) {

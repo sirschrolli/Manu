@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "kingdomsatwar:block/shadow_tubers_stage1"
+  }
+}

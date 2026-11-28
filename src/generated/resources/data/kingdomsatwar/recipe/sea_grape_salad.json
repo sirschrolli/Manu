@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kingdomsatwar:sea_grapes",
+    "kingdomsatwar:sea_grapes",
+    "kingdomsatwar:sea_grapes",
+    "minecraft:kelp",
+    "minecraft:cooked_cod",
+    "minecraft:bowl"
+  ],
+  "result": {
+    "id": "kingdomsatwar:sea_grape_salad"
+  }
+}

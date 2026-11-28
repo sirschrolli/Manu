@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": [
+    "kingdomsatwar:fae_meadows",
+    "kingdomsatwar:glimmerwood",
+    "kingdomsatwar:thornwild"
+  ],
+  "features": "kingdomsatwar:wild_fae_berries",
+  "step": "vegetal_decoration"
+}

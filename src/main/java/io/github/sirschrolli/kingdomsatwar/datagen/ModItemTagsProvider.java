@@ -464,6 +464,14 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         add(Tags.Items.FOODS_SOUP, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.EMBER_CHILI, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.FISH_SOUP,
                 io.github.sirschrolli.kingdomsatwar.registry.Cuisine.DUSK_PORRIDGE);
         add(Tags.Items.FOODS_PIE, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.SOUL_BERRY_PIE);
+        // die Feldfrüchte der Welten (2.0)
+        add(Tags.Items.FOODS_BERRY, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.FLOAT_BERRIES, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.FAE_BERRIES);
+        add(Tags.Items.FOODS_FRUIT, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.STARFRUIT);
+        add(Tags.Items.FOODS_VEGETABLE, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.SHADOW_TUBER, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.SEA_GRAPES,
+                io.github.sirschrolli.kingdomsatwar.registry.Cuisine.CHAOS_BEANS);
+        add(Tags.Items.FOODS_SOUP, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.SHADOW_TUBER_STEW, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.CHAOS_BEAN_STEW);
+        add(Tags.Items.CROPS, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.RICE, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.SHADOW_TUBER,
+                io.github.sirschrolli.kingdomsatwar.registry.Cuisine.EMBER_PEPPER);
         add(ItemTags.MEAT, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.RAW_SAUSAGE, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.SAUSAGE);
         add(Tags.Items.FOODS_RAW_MEAT, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.RAW_SAUSAGE);
         add(Tags.Items.FOODS_COOKED_MEAT, io.github.sirschrolli.kingdomsatwar.registry.Cuisine.SAUSAGE);

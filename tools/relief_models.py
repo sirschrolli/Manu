@@ -80,9 +80,12 @@ GROUPS: dict[tuple[float, float], list[str]] = {
         "flour", "cheese", "cheese_spaetzle", "pretzel", "raw_sausage", "sausage", "rum", "ember_chili", "fungus_skewer", "hardtack",
         "chorus_jam", "dusk_porridge", "soul_berry_pie", "star_candy", "upside_down_cake", "pilgrim_ration", "fish_soup", "fish_roll",
         "gingerbread", "fae_tea", "glimmer_cupcake",
+        # die Feldfrüchte der Welten (2.0)
+        "rice_pudding", "sushi", "sea_grape_salad", "float_berry_tart", "roasted_shadow_tuber", "shadow_tuber_stew", "starfruit_juice",
+        "chaos_bean_stew", "fae_pancakes", "sea_grapes", "float_berries", "chaos_beans", "fae_berries",
     ],
     (2.0, 0.6): [   # Rundes: Gemüse und Früchte
-        "cabbage", "tomato", "moth_cocoon",
+        "cabbage", "tomato", "moth_cocoon", "ember_pepper", "shadow_tuber", "starfruit",
     ],
     (1.25, 0.45): [  # Gerät und Schmuck
         "ember_fang", "werewolf_claw", "crab_claw", "shark_tooth", "bog_root", "dragon_horn", "tide_horn", "gemstone_crown",

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kingdomsatwar:rice",
+    "kingdomsatwar:rice",
+    "minecraft:milk_bucket",
+    "minecraft:sugar",
+    "minecraft:bowl"
+  ],
+  "result": {
+    "id": "kingdomsatwar:rice_pudding"
+  }
+}
