@@ -135,6 +135,12 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
         this.tag(EntityTypeTags.ARTHROPOD).add(ModEntities.SPIDER.key()).add(ModEntities.CAVE_SPIDER.key()).add(ModEntities.SILVERFISH.key());
         // die Sternenweberin und ihre Brut (0.99): Spinnen – Nemesis der Gliederfüßer wirkt
         this.tag(EntityTypeTags.ARTHROPOD).add(ModEntities.STAR_WEAVER.key()).add(ModEntities.STAR_SPIDERLING.key());
+        // die Mini-Bosse der Hallen der Tiefe (1.15) – NICHT in c:bosses: die Brutmutter ist eine Spinne, der Gruftkönig ein
+        // Untoter (der Frost seiner Gruft ficht ihn nicht an), der Runenwächter fällt ohne Schaden
+        this.tag(EntityTypeTags.ARTHROPOD).add(ModEntities.BROOD_MOTHER.key());
+        this.tag(EntityTypeTags.UNDEAD).add(ModEntities.CRYPT_KING.key());
+        this.tag(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES).add(ModEntities.CRYPT_KING.key());
+        this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(ModEntities.RUNE_WARDEN.key());
         this.tag(EntityTypeTags.DISMOUNTS_UNDERWATER).add(ModEntities.SPIDER.key()).add(ModEntities.ZOMBIE_HORSE.key());
         this.tag(EntityTypeTags.FROG_FOOD).add(ModEntities.SLIME.key());
         this.tag(EntityTypeTags.IMMUNE_TO_OOZING).add(ModEntities.SLIME.key());

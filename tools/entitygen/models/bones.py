@@ -72,6 +72,12 @@ PALETTES = {
                          flame=("#06504a", "#eefffd"), cloth=("#0a141c", "#2e5a6e"), trim=("#1e2a2a", "#80aca8"),
                          mail=("#090a0b", "#454a4c"), leather=("#0a0a0a", "#33302c"), brass=("#1a2a2a", "#80c0b8"),
                          rust=("#0e1414", "#2e3e3e")),
+    # Morvan, der Gruftkönig (1.15, im Spiel 1,3-fach vergrößert): uralte, dunkel angelaufene Knochen, eisblau glühende
+    # Augen, eine Goldkrone mit rotem Stein, ein zerschlissener Königsmantel in Purpur und Gold, ein Hermelinkragen
+    "gruftkoenig": _pal({"bone": ramp("#2a2724", "#aaa294", steps=8), "stain": ramp("#1a1816", "#4e4840"), "socket": _SOCKET,
+                         "eye": ramp("#04304e", "#d4f8ff")},
+                        gold=("#4a2c00", "#ffd848"), gem=("#4a0008", "#ff3048"), cloth=("#16081e", "#6c3a96"),
+                        trim=("#4a3410", "#f4d47a"), fur=("#7e7a74", "#ffffff"), spot=("#030303", "#2c2a2a")),
 }
 
 # Zubehör je Bild (Knochen-Namen); was nicht dabei ist, bleibt durchsichtig
@@ -84,6 +90,7 @@ GEAR = {
     "doerrgebein": {"garb", "collar"},
     "brandgebein": {"garb", "collar", "flames"},
     "seelengebein": {"garb", "collar", "flames"},
+    "gruftkoenig": {"garb", "collar"},
 }
 ALL_GEAR = {"garb", "collar", "quiver", "mushrooms", "flames"}
 
@@ -454,6 +461,27 @@ def _hat(ctx: Ctx):
         if t <= 4 - int(hash01(s, face, 675) * 2):
             return pick(ctx.pal["stripe"], 0.55) if stripe else _cloth(ctx, "sand", 0.5, seed=676)
         return None
+    if v == "gruftkoenig":
+        # die Krone: ein Goldreif mit Zacken rings um den Scheitel, vorn ein roter Stein, oben offen
+        if face == "bottom":
+            return None
+        if face == "top":
+            if s in (0, w - 1) or t in (0, h - 1):
+                return pick(ctx.pal["gold"], 0.62 + hash01(ctx.u, ctx.v, 691) * 0.18)
+            return None
+        rows = _CROWN_FRONT if face in ("front", "back") else _CROWN_SIDE
+        c = rows[t][s] if t < len(rows) and s < len(rows[t]) else "."
+        if c == "X":
+            return pick(ctx.pal["gold"], 0.78 - t * 0.06 + hash01(ctx.u, ctx.v, 692) * 0.08)
+        if c == "G":
+            return pick(ctx.pal["gold"], 0.6 + (0.12 if s % 2 else 0.0))
+        if c == "g":
+            return pick(ctx.pal["gold"], 0.36)
+        if c == "R":
+            col = pick(ctx.pal["gem"], 0.75 if t == 2 else 0.55)
+            ctx.glow = mix(col, (0, 0, 0, 255), 0.55)
+            return col
+        return None
     if v in ("brandgebein", "seelengebein"):
         # Glutkranz: mitten auf dem Scheitel (unter den Flammen) Glut, ringsum Asche mit Lücken, am Rand ein paar Funken
         if face == "bottom":
@@ -470,6 +498,17 @@ def _hat(ctx: Ctx):
             return _ember(ctx, 0.35 + hash01(ctx.u, ctx.v, 683) * 0.4)
         return None
     return None
+
+
+# Die Krone des Gruftkönigs auf den Seiten der Überlage (8 Texel breit): Zacken, Reif, unterer Rand
+_CROWN_FRONT = ["X..XX..X",
+                "XX.XX.XX",
+                "GGGRRGGG",
+                "gggggggg"]
+_CROWN_SIDE = [".X....X.",
+               "XXX..XXX",
+               "GGGGGGGG",
+               "gggggggg"]
 
 
 # --- Pilze (nur Moorgebein) --------------------------------------------------------------------
@@ -737,6 +776,35 @@ def _garb(ctx: Ctx):
         if s in (1, 7):
             col = pick(ctx.pal["trim"], 0.32 + (0.1 if t % 3 == 0 else 0.0))                   # Borte
         return col
+    if v == "gruftkoenig":
+        # der Königsmantel: vorn offen (der Brustkorb bleibt sichtbar), goldene Säume, eine Kette mit Medaillon,
+        # hinten die Krone auf dem Purpur; unten zerschlissen
+        if face == "bottom":
+            return None
+        if face == "top":
+            return _cloth(ctx, "cloth", 0.42, seed=791) if s in (0, 1, 2, 6, 7, 8) else None
+        hem = 13 + int(hash01(s, face, 792) * 3)
+        if t > hem:
+            return None
+        if face == "front":
+            if 3 <= s <= 5:
+                if t in (2, 3) and s == 4:
+                    return pick(ctx.pal["gold"], 0.82 if t == 3 else 0.6)                       # Medaillon
+                if t == 1 and s in (3, 5):
+                    return pick(ctx.pal["gold"], 0.5)                                           # Kette
+                return None
+            if s in (2, 6):
+                return pick(ctx.pal["trim"], 0.55 + (0.12 if t % 2 else 0.0))                  # Goldsaum der Öffnung
+        col = _cloth(ctx, "cloth", 0.5, seed=793, holes=0.05)
+        if col is None:
+            return None
+        if t == hem:
+            return pick(ctx.pal["trim"], 0.4)                                                   # Saum
+        if face == "back" and _crown_emblem(s, t - 2):
+            return mix(pick(ctx.pal["trim"], 0.66), col, 0.12)                                  # die Krone auf dem Rücken
+        if face in ("west", "east") and t % 4 == 1:
+            return mix(col, pick(ctx.pal["trim"], 0.4), 0.35)                                   # gestickte Streifen
+        return col
     return None
 
 
@@ -796,6 +864,12 @@ def _collar(ctx: Ctx):
         if t == 1 and face != "top":
             return pick(ctx.pal["stripe"], 0.5 + (0.12 if s % 2 else 0.0))
         return _cloth(ctx, "sand", 0.52, seed=769)
+    if v == "gruftkoenig":
+        # Hermelin: weißer Pelz mit schwarzen Schwanzspitzen
+        if (s * 3 + t * 5) % 7 == 0 and hash01(s, t, face, 797) > 0.3:
+            return pick(ctx.pal["spot"], 0.4)
+        x, y, z = ctx.world
+        return pick(ctx.pal["fur"], 0.6 + (noise3(x * 1.3, y * 0.4, z * 1.3, 798) - 0.5) * 0.3)
     if v in ("brandgebein", "seelengebein"):
         # geschwärzte Kettenglieder, ein paar glühen noch
         if last and hash01(ctx.s, face, 771) > 0.6:

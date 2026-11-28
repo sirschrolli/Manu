@@ -315,6 +315,12 @@ public final class ClientSetup {
         event.registerEntityRenderer(ModEntities.COMET_LANCE.get(),
                 io.github.sirschrolli.kingdomsatwar.client.renderer.end.CometLanceRenderer::new);
         event.registerEntityRenderer(ModEntities.CAVE_TROLL.get(), CaveTrollRenderer::new);
+        // die Mini-Bosse der Hallen der Tiefe (1.15)
+        event.registerEntityRenderer(ModEntities.BROOD_MOTHER.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.miniboss.BroodMotherRenderer::new);
+        event.registerEntityRenderer(ModEntities.CRYPT_KING.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.miniboss.CryptKingRenderer::new);
+        event.registerEntityRenderer(ModEntities.RUNE_WARDEN.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.miniboss.RuneWardenRenderer::new);
+        event.registerEntityRenderer(ModEntities.TROLL_FATHER.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.miniboss.TrollFatherRenderer::new);
+        event.registerEntityRenderer(ModEntities.TROLL_BOULDER.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.miniboss.TrollBoulderRenderer::new);
         event.registerEntityRenderer(ModEntities.LINDWORM.get(), LindwormRenderer::new);
         event.registerEntityRenderer(ModEntities.WEREWOLF.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.monster.WerewolfRenderer::new);
         event.registerEntityRenderer(ModEntities.MIRE_SHAMBLER.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.monster.MireShamblerRenderer::new);

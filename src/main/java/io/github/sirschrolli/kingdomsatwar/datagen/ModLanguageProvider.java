@@ -977,6 +977,18 @@ public class ModLanguageProvider extends LanguageProvider {
             subtitle("entity.moth_queen." + e[0], e[1], e[2]);
         }
         subtitle("item.fae_elytra.flap", "Wings beat", "Flügel schlagen");
+        // die Mini-Bosse der Hallen der Tiefe (1.15)
+        creature(ModEntities.BROOD_MOTHER, io.github.sirschrolli.kingdomsatwar.registry.DeepLairs.BROOD_MOTHER_SPAWN_EGG,
+                "Brood Mother", "Brutmutter", "Brutmutter");
+        creature(ModEntities.CRYPT_KING, io.github.sirschrolli.kingdomsatwar.registry.DeepLairs.CRYPT_KING_SPAWN_EGG,
+                "Morvan, the Crypt King", "Morvan, der Gruftkönig", "Gruftkönig");
+        creature(ModEntities.RUNE_WARDEN, io.github.sirschrolli.kingdomsatwar.registry.DeepLairs.RUNE_WARDEN_SPAWN_EGG,
+                "Rune Warden", "Runenwächter", "Runenwächter");
+        creature(ModEntities.TROLL_FATHER, io.github.sirschrolli.kingdomsatwar.registry.DeepLairs.TROLL_FATHER_SPAWN_EGG,
+                "Grumbold, the Troll Father", "Grumbold, der Trollvater", "Trollvater");
+        add(ModEntities.TROLL_BOULDER.get(), pick("Troll Boulder", "Trollbrocken"));
+        text("miniboss.kingdomsatwar.awake", "%s awakens!", "%s erwacht!");
+        text("miniboss.kingdomsatwar.enraged", "%s flies into a rage!", "%s gerät in Rage!");
         // der Steinhüter und der alte Mondsteinbruch (0.96)
         creature(ModEntities.STONE_KEEPER, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.STONE_KEEPER_SPAWN_EGG,
                 "Stone Keeper", "Steinhüter", "Steinhüter");

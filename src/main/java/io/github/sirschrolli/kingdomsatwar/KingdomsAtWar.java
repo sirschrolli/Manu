@@ -63,6 +63,7 @@ public final class KingdomsAtWar {
         io.github.sirschrolli.kingdomsatwar.registry.EchoGear.init();    // seit 1.6: Hallkristall und die Rüstung der Lauscher
         io.github.sirschrolli.kingdomsatwar.registry.CathedralGear.init();   // seit 1.7: Orgelpult, Stimmgabel, Sordin
         io.github.sirschrolli.kingdomsatwar.registry.CastleGear.init();      // seit 1.8: Rabenbanner, Morgenstern, Raubritter
+        io.github.sirschrolli.kingdomsatwar.registry.DeepLairs.init();       // seit 1.15: die Mini-Bosse der Hallen der Tiefe
         io.github.sirschrolli.kingdomsatwar.registry.ArenaGear.init();       // seit 1.9: Arenasiegel, Sturmdreizack, Wurfnetz, Ventor
         io.github.sirschrolli.kingdomsatwar.registry.SerpentGear.init();     // seit 1.10: Schlangenaltar, Schlangenzahn, Quetzalfedern
         io.github.sirschrolli.kingdomsatwar.registry.PhaseSanctuary.init();   // seit 1.5: Leerenthron, Phasenklinge, Phasmor

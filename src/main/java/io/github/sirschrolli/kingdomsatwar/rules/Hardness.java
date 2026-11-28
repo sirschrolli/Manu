@@ -136,10 +136,12 @@ public final class Hardness {
         return entity instanceof Mob mob && mob instanceof Enemy && !(mob instanceof OwnableEntity ownable && ownable.getOwnerReference() != null);
     }
 
-    /** Ein Boss: Drachen und Erzmagier, der Aschenkönig und andere Bosse, der Herrscher eines Reichs. */
+    /** Ein Boss: Drachen und Erzmagier, der Aschenkönig und andere Bosse, der Herrscher eines Reichs, die Mini-Bosse. */
     public static boolean isBoss(Entity entity) {
         return entity instanceof ElementalBoss || entity.is(Tags.EntityTypes.BOSSES)
-                || entity instanceof RealmWarriorEntity warrior && warrior.role() == WarriorRole.LORD;
+                || entity instanceof RealmWarriorEntity warrior && warrior.role() == WarriorRole.LORD
+                // die Mini-Bosse (seit 1.15) sind auf ihre Kraft abgestimmt: Bossregeln der Härte, nicht die der Monster
+                || entity instanceof io.github.sirschrolli.kingdomsatwar.entity.miniboss.MiniBoss;
     }
 
     @SubscribeEvent

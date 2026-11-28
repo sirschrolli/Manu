@@ -947,9 +947,39 @@ public final class ModEntities {
             SeatEntity::new, MobCategory.MISC,
             builder -> builder.sized(0.001f, 0.001f).noLootTable().noSummon().clientTrackingRange(10).updateInterval(20));
 
+    // ---------------------------------------------------------------- Mini-Bosse der Tiefe (1.15)
+    /** Die Brutmutter: wacht in der Brutgrotte über ihre Eiersäcke. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.miniboss.BroodMotherEntity>> BROOD_MOTHER =
+            ENTITIES.registerEntityType("brood_mother", io.github.sirschrolli.kingdomsatwar.entity.miniboss.BroodMotherEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(1.4f, 0.9f).eyeHeight(0.65f).notInPeaceful().clientTrackingRange(12)
+                            .updateInterval(2));
+    /** Morvan, der Gruftkönig: sitzt am Ende der Gruft der Vergessenen auf seinem Thron. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.miniboss.CryptKingEntity>> CRYPT_KING =
+            ENTITIES.registerEntityType("crypt_king", io.github.sirschrolli.kingdomsatwar.entity.miniboss.CryptKingEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(0.6f, 1.99f).eyeHeight(1.74f).notInPeaceful().clientTrackingRange(12)
+                            .updateInterval(2));
+    /** Der Runenwächter: steht reglos am Ende der Zwergenhalle. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.miniboss.RuneWardenEntity>> RUNE_WARDEN =
+            ENTITIES.registerEntityType("rune_warden", io.github.sirschrolli.kingdomsatwar.entity.miniboss.RuneWardenEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(1.4f, 2.7f).eyeHeight(2.35f).notInPeaceful().clientTrackingRange(12)
+                            .updateInterval(2));
+    /** Grumbold, der Trollvater: schläft in der Trollhöhle auf seinem Knochenhaufen. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.miniboss.TrollFatherEntity>> TROLL_FATHER =
+            ENTITIES.registerEntityType("troll_father", io.github.sirschrolli.kingdomsatwar.entity.miniboss.TrollFatherEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(1.4f, 2.9f).eyeHeight(2.45f).notInPeaceful().clientTrackingRange(12)
+                            .updateInterval(2));
+    /** Ein Felsbrocken, den der Trollvater schleudert (oder der von der Decke fällt). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.miniboss.TrollBoulderEntity>> TROLL_BOULDER =
+            ENTITIES.registerEntityType("troll_boulder", io.github.sirschrolli.kingdomsatwar.entity.miniboss.TrollBoulderEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(0.9f, 0.9f).noLootTable().clientTrackingRange(10).updateInterval(1));
+
     private ModEntities() {}
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {
+        event.put(BROOD_MOTHER.get(), io.github.sirschrolli.kingdomsatwar.entity.miniboss.BroodMotherEntity.createAttributes().build());
+        event.put(CRYPT_KING.get(), io.github.sirschrolli.kingdomsatwar.entity.miniboss.CryptKingEntity.createAttributes().build());
+        event.put(RUNE_WARDEN.get(), io.github.sirschrolli.kingdomsatwar.entity.miniboss.RuneWardenEntity.createAttributes().build());
+        event.put(TROLL_FATHER.get(), io.github.sirschrolli.kingdomsatwar.entity.miniboss.TrollFatherEntity.createAttributes().build());
         DRAGONS.values().forEach(type -> event.put(type.get(), DragonEntity.createAttributes().build()));
         SOLDIERS.values().forEach(type -> event.put(type.get(), SoldierEntity.createAttributes().build()));
         event.put(BANDIT.get(), BanditEntity.createAttributes().build());

@@ -42,6 +42,12 @@ PALETTES = {
                       "rime": ramp("#7fa3bd", "#ffffff", steps=7), "ice": ramp("#3f7ea6", "#e6fbff", steps=7)},
     "rostwaechter": {**_IRON, "iron": ramp("#1c1512", "#c9c0b8", steps=10, hue_shift=0.02),
                      "rust": ramp("#2e1409", "#c8783a", steps=8, hue_shift=-0.03)},
+    # der Runenwächter (1.15, im Spiel 1,25-fach vergrößert): aus dunklem Tiefenstein gehauen, mit Gold beschlagen; statt
+    # des Schmiedefeuers glüht ein Runenkern, und über die Platten laufen leuchtende Runen der Zwerge
+    "runenwaechter": {**_IRON, "iron": ramp("#0b0d11", "#7e8692", steps=10, hue_shift=0.02),
+                      "brass": ramp("#3a2406", "#ffe07a", steps=8),
+                      "ember": ramp("#022634", "#e4ffff", steps=8, hue_shift=0.04),
+                      "rune": ramp("#043c4a", "#d0ffff", steps=6)},
 }
 
 LOOKS = tuple(PALETTES)
@@ -195,6 +201,16 @@ def _weather(ctx: Ctx, col, rivet: bool = False):
             if f > 0.62:
                 return mix(col, pick(ctx.pal["rime"], 0.45), (f - 0.62) * 1.6)  # Reifschleier
         return col
+    if look == "runenwaechter":
+        if rivet or face in ("top", "bottom") or ctx.w < 4 or ctx.h < 4:
+            return col
+        rune = _rune(ctx)
+        if rune is not None:
+            ctx.glow = rune
+            return rune
+        if (ctx.s % 4 == 3 or ctx.t % 4 == 3) and hash01(ctx.s // 4, ctx.t // 4, face, 81) > 0.62:
+            return mix(col, pick(ctx.pal["iron"], 0.12), 0.35)                    # eingemeißelte Fugen
+        return col
     if look == "rostwaechter":
         n = noise3(x * 0.24, y * 0.24, z * 0.24, 61)
         streak = noise3(x * 1.3, y * 0.06, z * 1.3, 63)
@@ -210,6 +226,33 @@ def _weather(ctx: Ctx, col, rivet: bool = False):
             return mix(col, pick(ctx.pal["rust"], 0.36), (n - 0.6) * 4.0)
         return col
     return col
+
+
+# ------------------------------------------------------------------------------- Runen (Runenwächter)
+
+_RUNES = (
+    ("X.X.", "XX..", "X...", "X..."),
+    (".X..", "XXX.", ".X..", ".X.."),
+    ("X..X", ".XX.", ".XX.", "X..X"),
+    ("XX..", "X.X.", "XX..", "X.X."),
+    ("X...", "X.X.", "XX..", "X..."),
+    (".X..", "X.X.", ".X..", ".X.."),
+)
+
+
+def _rune(ctx: Ctx):
+    """Leuchtende Runen in einem Raster aus 4 × 4 Texeln: nicht in jeder Zelle, je Zelle ein Zeichen."""
+    cs, ct = ctx.s // 4, ctx.t // 4
+    if (cs + 1) * 4 > ctx.w or (ct + 1) * 4 > ctx.h:
+        return None
+    ox, oy, oz = ctx.cube.origin
+    key = (cs, ct, ctx.face, round(ox * 2), round(oy * 2), round(oz * 2))
+    if hash01(*key, 83) < 0.66:
+        return None
+    glyph = _RUNES[int(hash01(*key, 85) * len(_RUNES)) % len(_RUNES)]
+    if glyph[ctx.t % 4][ctx.s % 4] != "X":
+        return None
+    return pick(ctx.pal["rune"], 0.62 + hash01(ctx.u, ctx.v, 87) * 0.3)
 
 
 # ------------------------------------------------------------------------------- Efeu (Mooswächter)

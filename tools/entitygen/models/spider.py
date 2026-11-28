@@ -36,6 +36,10 @@ PALETTES = {
     "hoehlenspinne": {"chitin": ramp("#040d10", "#1e4a4c", steps=7), "hair": ramp("#0e2426", "#3e7a74"),
                       "mark": ramp("#2a8a10", "#c8ff5a"), "band": ramp("#103a30", "#3a8a6a"), "eye": ramp("#1a6a04", "#d4ff6a"),
                       "fang": ramp("#020404", "#1a3a2a"), "belly": ramp("#061416", "#1c3c3c")},
+    # die Brutmutter (1.15, im Spiel 2,3-fach vergrößert): schwarzviolett, ein knochenbleicher Totenkopf auf dem Hinterleib
+    "brutmutter": {"chitin": ramp("#06040a", "#3c2a4a", steps=7), "hair": ramp("#1c1424", "#8a7a9a"),
+                   "mark": ramp("#5e5248", "#f2eadc"), "band": ramp("#241830", "#8a6aa4"), "eye": ramp("#5a0204", "#ff4a32"),
+                   "fang": ramp("#050305", "#6a2a3a"), "belly": ramp("#100a14", "#46344e")},
 }
 
 # Vanilla-Beine: Name -> (Drehpunkt, Grundwinkel) und eigene Knicke (Schenkel hoch, Schiene runter, Längen)
@@ -170,6 +174,21 @@ def _waist(ctx: Ctx):
     return _hairy(ctx, 0.3)
 
 
+# Der Totenkopf der Brutmutter auf dem Hinterleib (10 breit, 12 lang; Zeile 0 vorn an der Taille)
+_SKULL = ["..........",
+          "...xXXx...",
+          "..XXXXXX..",
+          ".xXXXXXXx.",
+          ".XooXXooX.",
+          ".XooXXooX.",
+          ".xXXooXXx.",
+          "..xXXXXx..",
+          "..X.XX.X..",
+          "...x..x...",
+          "..........",
+          ".........."]
+
+
 def _abdomen_pattern(ctx: Ctx, xr: float, zr: float):
     """Zeichnung auf dem Hinterleib. xr: -1..1 quer, zr: 0 vorn (Taille) .. 1 hinten."""
     v = _variant(ctx)
@@ -199,6 +218,21 @@ def _abdomen_pattern(ctx: Ctx, xr: float, zr: float):
         dist = abs(xr) * 1.6 + abs(cell - 0.5)
         if dist < 0.42 and zr > 0.12:
             return ("mark", 0.3 if dist < 0.25 else 0.55)
+        return None
+    if v == "brutmutter":
+        # ein knochenbleicher Totenkopf, der Schädel nach vorn (zur Taille), die Zähne nach hinten
+        row = int(zr * len(_SKULL))
+        col_i = int((xr + 1.0) / 2.0 * len(_SKULL[0]))
+        if 0 <= row < len(_SKULL) and 0 <= col_i < len(_SKULL[0]):
+            c = _SKULL[row][col_i]
+            if c == "X":
+                return ("mark", 0.86)
+            if c == "x":
+                return ("mark", 0.62)
+            if c == "o":
+                return ("chitin", 0.06)
+        if zr > 0.86 and abs(xr) < 0.5 and int(zr * 24) % 2 == 0:
+            return ("mark", 0.4)                                                           # Querstreifen am Ende
         return None
     if v == "hoehlenspinne":
         # drei Paar giftgrün leuchtender Flecken, dazu ein Mittelfleck vorn

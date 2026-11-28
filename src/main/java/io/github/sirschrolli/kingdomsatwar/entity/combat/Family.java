@@ -187,6 +187,10 @@ public enum Family {
 
     /** Die Familie eines Monsters oder null (Bosse, Begleiter der Bosse, Reittiere und was zu eigen ist, bleiben, wie sie sind). */
     public static @Nullable Family of(Mob mob) {
+        // die Mini-Bosse (seit 1.15) haben ihre eigenen Künste
+        if (mob instanceof io.github.sirschrolli.kingdomsatwar.entity.miniboss.MiniBoss) {
+            return null;
+        }
         if (mob instanceof Revenant || mob instanceof Mummy || mob instanceof DrownedCorpse || mob instanceof UndeadVillager
                 || mob instanceof RottenBristling) {
             return UNTOTE;

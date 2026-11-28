@@ -18,6 +18,14 @@ PALETTES = {
         "hair": ramp("#141210", "#4a4038"), "tusk": ramp("#8a8070", "#f4ecd8"), "iron": ramp("#2a2c30", "#9aa0a8"),
         "back": ramp("#262a24", "#8c9484"),
     },
+    # Grumbold, der Trollvater (1.15, im Spiel 1,45-fach vergrößert): alt, blaugrau wie Schiefer, von Flechten und Moos
+    # überwachsen, weißes Haar, mächtige Hauer, rot glühende Augen, Goldringe um die Keule
+    "trollvater": {
+        "skin": ramp("#1c2026", "#8e98a4"), "moss": ramp("#22280e", "#b8b44a"), "cloth": ramp("#160e08", "#6e4a2a"),
+        "wood": ramp("#160c06", "#6a4628"), "nail": ramp("#2a2420", "#c8b8a4"), "eye": ramp("#7a1400", "#ff8a3a"),
+        "hair": ramp("#5a5a5c", "#f4f4f2"), "tusk": ramp("#9a8a6c", "#fff8e4"), "iron": ramp("#4a3008", "#ffd860"),
+        "back": ramp("#1c2026", "#8e98a4"),
+    },
 }
 
 
@@ -92,12 +100,18 @@ def _hide(ctx: Ctx, moss: bool, seed: int) -> tuple:
     elif hash01(ctx.u, ctx.v - 1, seed) > 0.975:
         v -= 0.1
     col = pick(ctx.pal["skin"], v)
-    if moss and ctx.face in ("top", "back", "west", "east") and ry < 0.45:
-        m = noise3(x * 0.22, y * 0.22, z * 0.22, seed + 7) + (0.45 - ry) * 0.35
-        if m > 0.7:
+    old = ctx.params.get("variant") == "trollvater"
+    if moss and ctx.face in ("top", "back", "west", "east") and ry < (0.6 if old else 0.45):
+        m = noise3(x * 0.22, y * 0.22, z * 0.22, seed + 7) + ((0.6 if old else 0.45) - ry) * 0.35
+        limit = 0.6 if old else 0.7
+        if m > limit:
             return pick(ctx.pal["moss"], 0.5 + (noise3(x * 0.6, y * 0.6, z * 0.6, seed + 8) - 0.5) * 0.3)
-        if m > 0.66:
+        if m > (0.56 if old else 0.66):
             return pick(ctx.pal["moss"], 0.2)
+    if old and hash01(ctx.u, ctx.v, seed + 11) > 0.965:
+        return pick(ctx.pal["moss"], 0.75)                       # Flechten: helle Tupfen überall
+    if old and ctx.face in ("front", "west", "east") and abs(math.sin(x * 0.9 + y * 0.7 + z * 0.4)) < 0.03:
+        return pick(ctx.pal["skin"], 0.2)                        # alte Narben
     return col
 
 

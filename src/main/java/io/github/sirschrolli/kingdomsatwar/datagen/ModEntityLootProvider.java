@@ -604,6 +604,36 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         this.add(ModEntities.MERMAID.get(), LootTable.lootTable());
         this.add(ModEntities.TRITON.get(), LootTable.lootTable()
                 .withPool(drop(net.minecraft.world.item.Items.PRISMARINE_SHARD, 0, 3)));
+        // die Mini-Bosse der Hallen der Tiefe (1.15): je ein paar Münzen und Edelsteine, ihr Sonderstück nicht immer, der
+        // Herzkristall nur selten (die Mod soll schwer sein)
+        this.add(ModEntities.BROOD_MOTHER.get(), LootTable.lootTable()
+                .withPool(drop(Items.STRING, 4, 8))
+                .withPool(drop(Items.SPIDER_EYE, 1, 3))
+                .withPool(drop(Items.FERMENTED_SPIDER_EYE, 0, 1))
+                .withPool(material(ModItems.SILVER_COIN.get(), 2, 4))
+                .withPool(rare(ModItems.GEMSTONE.get(), 0.4f, 0.05f))
+                .withPool(hearts(1)));
+        this.add(ModEntities.CRYPT_KING.get(), LootTable.lootTable()
+                .withPool(drop(Items.BONE, 3, 6))
+                .withPool(material(ModItems.GOLD_COIN.get(), 1, 3))
+                .withPool(material(ModItems.GEMSTONE.get(), 1, 2))
+                .withPool(chance(ModItems.GEMSTONE_CROWN.get(), 0.2f))
+                .withPool(hearts(1)));
+        this.add(ModEntities.RUNE_WARDEN.get(), LootTable.lootTable()
+                .withPool(drop(Items.IRON_INGOT, 3, 6))
+                .withPool(drop(Items.AMETHYST_SHARD, 2, 5))
+                .withPool(material(ModItems.GOLD_COIN.get(), 1, 2))
+                .withPool(material(ModItems.GEMSTONE.get(), 1, 2))
+                .withPool(chance(ModItems.RUNES.get(DragonType.EARTH).get(), 0.35f))
+                .withPool(hearts(1)));
+        this.add(ModEntities.TROLL_FATHER.get(), LootTable.lootTable()
+                .withPool(drop(Items.LEATHER, 2, 5))
+                .withPool(drop(Items.IRON_NUGGET, 6, 12))
+                .withPool(drop(Items.GOLD_INGOT, 1, 2))
+                .withPool(material(ModItems.GOLD_COIN.get(), 1, 2))
+                .withPool(rare(ModItems.GEMSTONE.get(), 0.5f, 0.05f))
+                .withPool(chance(ModItems.TROLL_CLUB.get(), 0.35f))
+                .withPool(hearts(1)));
     }
 
     /** Fleisch: wird gebraten, wenn das Tier brennend stirbt; Plünderung bringt mehr. */
