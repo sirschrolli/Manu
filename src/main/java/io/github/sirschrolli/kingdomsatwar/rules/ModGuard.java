@@ -28,7 +28,9 @@ import org.jspecify.annotations.Nullable;
  * <p>Freigegeben sind {@link #APPROVED}: <b>Essential</b> (essential.gg – damit lädt man Freunde in die eigene Welt ein)
  * und seit 1.11.7 Mods für Anzeige, Bedienung und Leistung, die das Spiel nicht leichter machen – samt den Bibliotheken,
  * die sie brauchen (Searchables für Controlling, Prickle für Enchantment Descriptions, libIPN und Kotlin für Inventory
- * Profiles Next, die Config Lib von SuperMartijn642 für Durability Tooltip). Erkannt wird eine Mod an ihrer Kennung oder
+ * Profiles Next, die Config Lib von SuperMartijn642 für Durability Tooltip). Seit 1.14 kommen Mouse Tweaks, uku's Armor HUD
+ * (mit ukulib), Roughly Enough Items, SpruceUI, Zoomify (mit YetAnotherConfigLib), Swinging Lanterns, ShulkerBoxTooltip
+ * und LambDynamicLights dazu. Erkannt wird eine Mod an ihrer Kennung oder
  * an ihrem Namen (ohne Groß- und Kleinschreibung, Leer- und Sonderzeichen); was in der Datei einer freigegebenen Mod
  * steckt, ist mit ihr freigegeben.
  *
@@ -44,7 +46,7 @@ public final class ModGuard {
         }
     }
 
-    /** Die freigegebenen Mods (seit 1.11.7; bis dahin nur Essential). */
+    /** Die freigegebenen Mods (seit 1.11.7; bis dahin nur Essential; seit 1.14 noch acht weitere). */
     public static final List<Approved> APPROVED = List.of(
             new Approved("Essential", "essential", "essentialmod"),
             new Approved("3D Skin Layers", "skinlayers3d"),
@@ -64,7 +66,17 @@ public final class ModGuard {
             new Approved("InventoryHUD+", "inventoryhud", "inventoryhudplus"),
             new Approved("InvMove", "invmove", "invmove_compat"),
             new Approved("Jade", "jade"),
-            new Approved("KotlinLangForge", "klf", "kotlinforforge"));
+            new Approved("KotlinLangForge", "klf", "kotlinforforge"),
+            // seit 1.14
+            new Approved("LambDynamicLights", "lambdynlights", "lambdynlights_api", "lambdynamiclights", "yumi_mc_core", "yumi_mc_foundation",
+                    "pridelib"),
+            new Approved("Mouse Tweaks", "mousetweaks"),
+            new Approved("Roughly Enough Items", "roughlyenoughitems", "Roughly Enough Items (REI)", "rei_plugin_compatibilities"),
+            new Approved("ShulkerBoxTooltip", "shulkerboxtooltip"),
+            new Approved("SpruceUI", "spruceui"),
+            new Approved("Swinging Lanterns", "swinginglanterns", "swinging_lanterns"),
+            new Approved("uku's Armor HUD", "ukus_armor_hud", "ukulib"),
+            new Approved("Zoomify", "zoomify", "yet_another_config_lib_v3", "yacl", "YetAnotherConfigLib"));
 
     /** Was immer geladen sein darf: das Spiel selbst, der Mod-Lader, diese Mod – und MixinExtras, das in vielen Mods steckt. */
     static final Set<String> BASE = Set.of("minecraft", "neoforge", KingdomsAtWar.MODID, "mixinextras");

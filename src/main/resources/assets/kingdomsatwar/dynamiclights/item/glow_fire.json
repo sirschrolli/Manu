@@ -1,0 +1,15 @@
+{
+	"match": {
+		"items": [
+			"kingdomsatwar:ember_fang",
+			"kingdomsatwar:ember_fang_blade",
+			"kingdomsatwar:ember_scale",
+			"kingdomsatwar:fire_opal",
+			"kingdomsatwar:fire_rune",
+			"kingdomsatwar:fire_seal_shard",
+			"kingdomsatwar:fire_spell_tablet"
+		]
+	},
+	"luminance": 8,
+	"water_sensitive": true
+}

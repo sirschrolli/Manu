@@ -1,0 +1,8 @@
+{
+	"match": {
+		"type": "kingdomsatwar:enderman"
+	},
+	"luminance": {
+		"type": "lambdynlights:enderman"
+	}
+}

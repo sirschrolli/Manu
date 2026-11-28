@@ -1,0 +1,9 @@
+{
+	"match": {
+		"type": "kingdomsatwar:soul_wisp"
+	},
+	"luminance": {
+		"type": "lambdynlights:water_sensitive",
+		"out_of_water": 10
+	}
+}

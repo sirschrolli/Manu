@@ -1,0 +1,8 @@
+{
+	"match": {
+		"type": "kingdomsatwar:creeper"
+	},
+	"luminance": {
+		"type": "lambdynlights:creeper"
+	}
+}

@@ -1,0 +1,10 @@
+{
+	"match": {
+		"type": "kingdomsatwar:ember_wyrm"
+	},
+	"luminance": {
+		"type": "lambdynlights:wet_sensitive",
+		"dry": 12,
+		"wet": 5
+	}
+}

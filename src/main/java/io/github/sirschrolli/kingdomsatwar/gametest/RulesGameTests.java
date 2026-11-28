@@ -96,13 +96,18 @@ final class RulesGameTests {
         List<String> approvedIds = List.of("skinlayers3d", "appleskin", "architectury", "cloth_config", "clumps", "controlling", "searchables",
                 "distanthorizons", "durabilitytooltip", "supermartijn642configlib", "effecttimerplus", "enchdesc", "prickle", "entityculling",
                 "ferritecore", "inventoryprofilesnext", "libipn", "inventoryhud", "invmove", "invmove_compat", "jade", "klf", "kotlinforforge",
-                "mixinextras");
+                "mixinextras",
+                // seit 1.14 – samt ihren Bibliotheken (ukulib, YetAnotherConfigLib, was in LambDynamicLights steckt)
+                "mousetweaks", "ukus_armor_hud", "ukulib", "roughlyenoughitems", "spruceui", "zoomify", "yet_another_config_lib_v3",
+                "swinginglanterns", "shulkerboxtooltip", "lambdynlights", "lambdynlights_api", "yumi_mc_core", "pridelib");
         if (!ModGuard.foreignIds(approvedIds).isEmpty()) {
             problems.add("freigegebene Mods gelten als fremd: " + ModGuard.foreignIds(approvedIds));
         }
         // an ihrem Namen erkannt, auch wenn die Kennung unbekannt ist – aber nur genau dieser Name
         if (!ModGuard.approved("nsi_armor", "Armor Durability HUD") || !ModGuard.approved("ihp", "InventoryHUD+")
-                || !ModGuard.approved("x", "Jade 🔍") || !ModGuard.approved("cloth_config", "Cloth Config v21 API")) {
+                || !ModGuard.approved("x", "Jade 🔍") || !ModGuard.approved("cloth_config", "Cloth Config v21 API")
+                || !ModGuard.approved("rei", "Roughly Enough Items (REI)") || !ModGuard.approved("x", "uku's Armor HUD")
+                || !ModGuard.approved("x", "Swinging Lanterns")) {
             problems.add("freigegebene Mods nicht an ihrem Namen erkannt");
         }
         if (ModGuard.approved("jei", "Just Enough Items") || ModGuard.approved("controllingplus", "Controlling Plus")

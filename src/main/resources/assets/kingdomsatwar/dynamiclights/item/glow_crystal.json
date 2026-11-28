@@ -1,0 +1,10 @@
+{
+	"match": {
+		"items": [
+			"kingdomsatwar:abyssite_shard",
+			"kingdomsatwar:echo_crystal"
+		]
+	},
+	"luminance": 6,
+	"water_sensitive": false
+}
