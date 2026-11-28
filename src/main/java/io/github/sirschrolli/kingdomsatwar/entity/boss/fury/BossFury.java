@@ -59,6 +59,14 @@ public final class BossFury {
         }
     }
 
+    /** Tests: der Boss gerät von selbst in Zorn und beginnt von selbst Zornangriffe (sonst nur, wenn ein Test es auslöst). */
+    public static void allowAuto(Mob boss) {
+        Fury fury = attach(boss);
+        if (fury != null) {
+            fury.auto = true;
+        }
+    }
+
     /** Nur Gegner in diesem Bereich werden getroffen (Tests: die Nachbartests bleiben verschont). */
     public static void confine(Mob boss, @Nullable AABB area) {
         Fury fury = attach(boss);

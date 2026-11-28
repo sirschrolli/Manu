@@ -109,6 +109,11 @@ public final class Fury {
     final IntSet victims = new IntOpenHashSet();
     /** Nur Gegner in diesem Bereich (Tests: die Nachbarn bleiben verschont); null = überall. */
     @Nullable AABB confine;
+    /**
+     * Gerät er von selbst in Zorn und beginnt er von selbst Zornangriffe? In den Tests nicht (die übrigen Bosstests prüfen
+     * ihre eigenen Angriffe) – außer ein Test erlaubt es ({@link BossFury#allowAuto}).
+     */
+    boolean auto;
     int idle;
     private @Nullable List<LivingEntity> fighters;
     private long fightersAt = Long.MIN_VALUE;
@@ -116,6 +121,7 @@ public final class Fury {
     Fury(Mob boss, FuryProfile profile) {
         this.boss = boss;
         this.profile = profile;
+        this.auto = !(boss.level().getServer() instanceof net.minecraft.gametest.framework.GameTestServer);
         // nach dem Laden: schon unter halber Kraft heißt schon im Zorn (ohne neuen Ausbruch)
         if (boss.getHealth() <= boss.getMaxHealth() * ENRAGE_AT && boss.getHealth() > 0.0f) {
             this.enraged = true;
@@ -173,7 +179,7 @@ public final class Fury {
         }
         this.idle = 0;
         this.engaged++;
-        if (!this.enraged && this.boss.getHealth() <= this.boss.getMaxHealth() * ENRAGE_AT && this.engaged > 20 && this.current == null) {
+        if (this.auto && !this.enraged && this.boss.getHealth() <= this.boss.getMaxHealth() * ENRAGE_AT && this.engaged > 20 && this.current == null) {
             this.enrage();
             return;
         }
@@ -187,7 +193,7 @@ public final class Fury {
             }
             return;
         }
-        if (this.engaged < FIRST || --this.cooldown > 0 || this.boss.isInvulnerable()) {
+        if (!this.auto || this.engaged < FIRST || --this.cooldown > 0 || this.boss.isInvulnerable()) {
             return;
         }
         FuryAttack pick;

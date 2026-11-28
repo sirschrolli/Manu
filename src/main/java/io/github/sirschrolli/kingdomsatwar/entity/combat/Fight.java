@@ -347,7 +347,7 @@ public final class Fight {
     /** Raserei an oder aus (an: einmal ein Wutausbruch, dann schneller, stärker, angriffslustiger). */
     void frenzy(boolean on) {
         this.frenzied = on;
-        modifier(this.mob, Attributes.MOVEMENT_SPEED, FRENZY_SPEED, on ? FRENZY_SPEED_BONUS : 0.0);
+        modifier(this.mob, Attributes.MOVEMENT_SPEED, FRENZY_SPEED, on && !Family.ownPace(this.mob) ? FRENZY_SPEED_BONUS : 0.0);
         modifier(this.mob, Attributes.ATTACK_DAMAGE, FRENZY_DAMAGE, on ? FRENZY_DAMAGE_BONUS : 0.0);
         if (on) {
             ServerLevel level = this.level();
@@ -536,7 +536,8 @@ public final class Fight {
         }
         instance.removeModifier(id);
         if (amount != 0.0) {
-            instance.addTransientModifier(new AttributeModifier(id, amount, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+            // auf das Ergebnis (mal), wie das Tempo des Temperaments
+            instance.addTransientModifier(new AttributeModifier(id, amount, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         }
     }
 

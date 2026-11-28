@@ -177,13 +177,18 @@ public final class Combat {
         return fight;
     }
 
-    /** Was das Temperament am Körper ändert (einmalig beim Auswürfeln; bleibt gespeichert). */
+    /**
+     * Was das Temperament am Körper ändert (einmalig beim Auswürfeln; bleibt gespeichert). Das Tempo wirkt auf das Ergebnis
+     * (mal), damit eigene Kniffe der Monster – der Schattenpirscher erstarrt, wenn man ihn ansieht, Konterit macht flink –
+     * im gleichen Maß wirken.
+     */
     static void applyTemper(Mob mob, Style style) {
+        boolean pace = !Family.ownPace(mob);
         switch (style.temper()) {
-            case UNGESTUEM -> permanent(mob, Attributes.MOVEMENT_SPEED, TEMPER_SPEED, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
-            case LAUERND -> permanent(mob, Attributes.MOVEMENT_SPEED, TEMPER_SPEED, 0.06, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+            case UNGESTUEM -> permanent(mob, Attributes.MOVEMENT_SPEED, TEMPER_SPEED, pace ? 0.15 : 0.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+            case LAUERND -> permanent(mob, Attributes.MOVEMENT_SPEED, TEMPER_SPEED, pace ? 0.06 : 0.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
             case ZAEH -> {
-                permanent(mob, Attributes.MOVEMENT_SPEED, TEMPER_SPEED, -0.08, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+                permanent(mob, Attributes.MOVEMENT_SPEED, TEMPER_SPEED, pace ? -0.08 : 0.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
                 permanent(mob, Attributes.ARMOR, TEMPER_ARMOR, 4.0, AttributeModifier.Operation.ADD_VALUE);
                 permanent(mob, Attributes.KNOCKBACK_RESISTANCE, TEMPER_STEADY, 0.4, AttributeModifier.Operation.ADD_VALUE);
             }
@@ -213,7 +218,12 @@ public final class Combat {
 
     private static void permanent(Mob mob, Holder<Attribute> attribute, Identifier id, double amount, AttributeModifier.Operation operation) {
         AttributeInstance instance = mob.getAttribute(attribute);
-        if (instance != null) {
+        if (instance == null) {
+            return;
+        }
+        if (amount == 0.0) {
+            instance.removeModifier(id);
+        } else {
             instance.addOrReplacePermanentModifier(new AttributeModifier(id, amount, operation));
         }
     }

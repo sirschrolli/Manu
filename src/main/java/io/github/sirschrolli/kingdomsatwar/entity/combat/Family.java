@@ -301,6 +301,14 @@ public enum Family {
     }
 
     /** Schleime nur ab mittlerer Größe (die winzigen haben nichts Besonderes). */
+    /**
+     * Hat das Monster ein eigenes Tempo (der Schattenpirscher schleicht nur, wenn man ihn ansieht, und hetzt sonst)? Dann
+     * ändern weder Temperament noch Raserei sein Tempo – sonst ginge sein Kniff verloren.
+     */
+    public static boolean ownPace(Mob mob) {
+        return mob instanceof ShadeStalkerEntity;
+    }
+
     public static boolean big(Mob mob) {
         return !(mob instanceof AbstractCubeMob cube) || cube.getSize() >= 2;
     }

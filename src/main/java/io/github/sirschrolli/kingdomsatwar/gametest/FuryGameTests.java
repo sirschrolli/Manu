@@ -194,6 +194,7 @@ final class FuryGameTests {
     private static void enrage(GameTestHelper helper) {
         floor(helper);
         Mob boss = boss(helper);
+        BossFury.allowAuto(boss);
         LivingEntity knight = knight(helper, 4.5, 7.0);
         boss.setTarget(knight);
         double speed = boss.getAttributeValue(Attributes.MOVEMENT_SPEED);
@@ -215,6 +216,7 @@ final class FuryGameTests {
     private static void auto(GameTestHelper helper) {
         floor(helper);
         Mob boss = still(helper);
+        BossFury.allowAuto(boss);
         LivingEntity knight = knight(helper, 4.5, 7.5);
         boss.setTarget(knight);
         FuryProfile profile = FuryProfile.of(boss);
