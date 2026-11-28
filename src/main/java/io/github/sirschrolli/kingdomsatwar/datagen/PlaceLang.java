@@ -34,6 +34,10 @@ final class PlaceLang {
         text.add("command.kingdomsatwar.boss.cannot_awaken", "%s cannot be awakened right now.", "%s lässt sich gerade nicht wecken.");
 
         Map<String, String[]> names = names();
+        // die Bauwerke von 2.0 bringen ihre Namen mit
+        for (var wonder : io.github.sirschrolli.kingdomsatwar.worldgen.site.Wonders.all()) {
+            names.put(wonder.place(), new String[] {wonder.english(), wonder.deutsch()});
+        }
         for (KawPlaces.Site site : KawPlaces.sites()) {
             String[] name = names.remove(site.id());
             if (name == null) {

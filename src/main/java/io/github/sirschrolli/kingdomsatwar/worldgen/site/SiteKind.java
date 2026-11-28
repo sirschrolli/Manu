@@ -107,14 +107,44 @@ public enum SiteKind implements StringRepresentable {
     /** Zwergenhalle (seit 1.15): eine Pfeilerhalle mit Esse, Tafeln, Stollen und Schatzkammer, bewacht vom Runenwächter. Zuletzt gebaut. */
     DWARF_HALL(GenerationStep.Decoration.TOP_LAYER_MODIFICATION),
     /** Trollhöhle (seit 1.15): eine bemooste Höhle mit Feuerstelle und Hort, in der Grumbold, der Trollvater, schläft. Zuletzt gebaut. */
-    TROLL_DEN(GenerationStep.Decoration.TOP_LAYER_MODIFICATION);
+    TROLL_DEN(GenerationStep.Decoration.TOP_LAYER_MODIFICATION),
+
+    // =====================================================================================
+    // Die Bauwerke von 2.0: sechs neue in jeder Dimension (siehe Wonders) – alle ganz zuletzt gebaut
+    // =====================================================================================
+
+    /** Sennhütte: eine Almhütte aus Stein und Holz mit Käsekeller, Weide und Brunnentrog. */
+    SENN_HUT(World.OVERWORLD),
+    /** Schmugglerhöhle: eine Meereshöhle in der Steilküste mit Steg, Boot, Lager und einem geheimen Gang hinauf. */
+    SMUGGLER_COVE(World.OVERWORLD),
+    /** Imkerei: Bienenstöcke und Strohkörbe auf einer Blumenwiese, das Haus des Imkers mit Honigküche und Metfässern. */
+    APIARY(World.OVERWORLD),
+    /** Hünengrab: ein Grabhügel mit Steinkreis, darin die Grabkammer eines alten Fürsten. */
+    BARROW(World.OVERWORLD),
+    /** Alchemistenturm: ein schiefer, halb verfallener Turm mit Labor, Brauständen und Bibliothek. */
+    ALCHEMIST_TOWER(World.OVERWORLD),
+    /** Jagdhütte: ein Blockhaus im Wald mit Trophäen, Räucherkammer, Fellen und Hochsitz. */
+    HUNTING_LODGE(World.OVERWORLD);
 
     public static final Codec<SiteKind> CODEC = StringRepresentable.fromEnum(SiteKind::values);
 
+    /** Die Dimension eines Bauwerks. */
+    public enum World {
+        OVERWORLD, NETHER, END, SHADOW, VOID, ABYSS, URMEER, FAE
+    }
+
     private final GenerationStep.Decoration step;
+    private final @org.jspecify.annotations.Nullable World wonder;
 
     SiteKind(GenerationStep.Decoration step) {
         this.step = step;
+        this.wonder = null;
+    }
+
+    /** Ein Bauwerk von 2.0 in seiner Dimension: ganz zuletzt gebaut (nach Bäumen, Erzen und Quellen). */
+    SiteKind(World world) {
+        this.step = GenerationStep.Decoration.TOP_LAYER_MODIFICATION;
+        this.wonder = world;
     }
 
     public String id() {
@@ -123,6 +153,23 @@ public enum SiteKind implements StringRepresentable {
 
     public GenerationStep.Decoration step() {
         return this.step;
+    }
+
+    /** Eines der Bauwerke von 2.0 (mit gemeinsamer Verteilung je Dimension, siehe {@link Wonders})? */
+    public boolean wonder() {
+        return this.wonder != null;
+    }
+
+    /** In welcher Dimension das Bauwerk steht. */
+    public World world() {
+        if (this.wonder != null) {
+            return this.wonder;
+        }
+        return switch (this) {
+            case ASH_FORGE, HORTFESTE, GIANT_BONES, LOST_GATE, FLAME_SANCTUARY -> World.NETHER;
+            case STARWATCH, PHASE_SANCTUARY -> World.END;
+            default -> World.OVERWORLD;
+        };
     }
 
     @Override

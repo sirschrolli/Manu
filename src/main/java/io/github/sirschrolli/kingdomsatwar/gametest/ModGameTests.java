@@ -260,6 +260,7 @@ public final class ModGameTests {
         MiniBossGameTests.init();  // seit 1.15: die Mini-Bosse der Tiefe
         DeepLairGameTests.init();  // seit 1.15: die Hallen der Tiefe
         CuisineGameTests.init();   // seit 2.0: die Küche der Welten
+        WonderGameTests.init();    // seit 2.0: sechs neue Bauwerke je Dimension
         OutlawGameTests.init();    // die übrigen eigenen Monster
         WaterGameTests.init();     // die eigenen Wassertiere
         ArmyGameTests.init();      // Ausbildung, Söldnertafel und Söldnerhaus
@@ -398,6 +399,7 @@ public final class ModGameTests {
         MiniBossGameTests.register(event, environment);
         DeepLairGameTests.register(event, environment);
         CuisineGameTests.register(event, environment);
+        WonderGameTests.register(event, environment);
         OutlawGameTests.register(event, environment);
         WaterGameTests.register(event, environment);
         ArmyGameTests.register(event, environment);

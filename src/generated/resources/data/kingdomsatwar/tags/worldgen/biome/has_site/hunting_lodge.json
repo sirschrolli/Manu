@@ -1,0 +1,9 @@
+{
+  "values": [
+    "#minecraft:is_taiga",
+    "minecraft:forest",
+    "minecraft:birch_forest",
+    "minecraft:windswept_forest",
+    "kingdomsatwar:primeval_forest"
+  ]
+}

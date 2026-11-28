@@ -1,0 +1,38 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "exclusion_zone": {
+      "chunk_count": 10,
+      "other_set": "kingdomsatwar:realm_castles"
+    },
+    "salt": 20260000,
+    "separation": 12,
+    "spacing": 26
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:senn_hut",
+      "weight": 3
+    },
+    {
+      "structure": "kingdomsatwar:smuggler_cove",
+      "weight": 3
+    },
+    {
+      "structure": "kingdomsatwar:apiary",
+      "weight": 3
+    },
+    {
+      "structure": "kingdomsatwar:barrow",
+      "weight": 3
+    },
+    {
+      "structure": "kingdomsatwar:alchemist_tower",
+      "weight": 3
+    },
+    {
+      "structure": "kingdomsatwar:hunting_lodge",
+      "weight": 3
+    }
+  ]
+}

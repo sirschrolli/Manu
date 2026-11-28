@@ -485,11 +485,37 @@ public final class ModStructures {
                 case BROOD_GROTTO -> spread(26, 9, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 71_115_003, castles);
                 case DWARF_HALL -> spread(32, 11, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 71_115_005, castles);
                 case TROLL_DEN -> spread(28, 10, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 71_115_007, castles);
+                // die Bauwerke von 2.0 teilen sich je Dimension eine Verteilung (siehe unten)
+                default -> null;
             };
             if (placement != null) {
                 context.register(siteSet(kind), new StructureSet(structure, placement));
             }
         }
+        // die Bauwerke von 2.0: je Dimension eine gemeinsame Verteilung – je Feld höchstens eines (passt das gewürfelte nicht ins
+        // Gelände, wird das nächste versucht); in der Oberwelt Felder von 26 Chunks, sonst von 19, nie nahe einer Stammburg
+        for (var world : io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.World.values()) {
+            var wonders = io.github.sirschrolli.kingdomsatwar.worldgen.site.Wonders.of(world);
+            if (wonders.isEmpty()) {
+                continue;
+            }
+            java.util.List<StructureSet.StructureSelectionEntry> entries = new java.util.ArrayList<>();
+            for (var wonder : wonders) {
+                entries.add(StructureSet.entry(structures.getOrThrow(site(wonder.kind())), wonder.weight()));
+            }
+            int field = wider(world == io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.World.OVERWORLD ? 16 : 12);
+            context.register(wonderSet(world), new StructureSet(entries, new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(
+                    net.minecraft.core.Vec3i.ZERO,
+                    net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement.FrequencyReductionMethod.DEFAULT, 1.0f,
+                    20_260_000 + world.ordinal() * 1_117,
+                    world == io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.World.OVERWORLD ? castles : java.util.Optional.empty(),
+                    field, gap(field), net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR)));
+        }
+    }
+
+    /** Die gemeinsame Verteilung der Bauwerke von 2.0 in einer Dimension. */
+    public static ResourceKey<StructureSet> wonderSet(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.World world) {
+        return ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("wonders_" + world.name().toLowerCase(java.util.Locale.ROOT)));
     }
 
     /**
@@ -565,6 +591,18 @@ public final class ModStructures {
                                     .add(new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
                                             io.github.sirschrolli.kingdomsatwar.registry.ModEntities.MAGMA_CUBE.get(),
                                             net.minecraft.util.valueproviders.ConstantInt.of(4)), 3)
+                                    .build()));
+            // in der Schmugglerhöhle (2.0) tauchen immer wieder Schmuggler auf
+            case SMUGGLER_COVE -> java.util.Map.of(
+                    net.minecraft.world.entity.MobCategory.MONSTER, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
+                            net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
+                            net.minecraft.util.random.WeightedList.<net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData>builder()
+                                    .add(new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
+                                            io.github.sirschrolli.kingdomsatwar.registry.ModEntities.BANDIT.get(),
+                                            net.minecraft.util.valueproviders.ConstantInt.of(1)), 3)
+                                    .add(new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
+                                            io.github.sirschrolli.kingdomsatwar.registry.ModEntities.BANDIT_ARCHER.get(),
+                                            net.minecraft.util.valueproviders.ConstantInt.of(1)), 1)
                                     .build()));
             // in der Kathedrale herrscht Stille: dort entsteht nichts von selbst (wie in der antiken Stadt)
             case SILENT_CATHEDRAL -> {

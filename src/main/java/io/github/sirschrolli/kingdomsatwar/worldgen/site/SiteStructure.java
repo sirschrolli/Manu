@@ -63,6 +63,7 @@ public class SiteStructure extends Structure {
             case BROOD_GROTTO -> BroodGrotto.plan(context, terrain, seed);
             case DWARF_HALL -> DwarfHall.plan(context, terrain, seed);
             case TROLL_DEN -> TrollDen.plan(context, terrain, seed);
+            default -> Wonders.plan(this.kind, context, terrain, seed);
         };
     }
 

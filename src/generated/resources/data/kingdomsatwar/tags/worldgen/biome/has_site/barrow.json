@@ -1,0 +1,15 @@
+{
+  "values": [
+    "minecraft:plains",
+    "minecraft:meadow",
+    "minecraft:taiga",
+    "minecraft:snowy_plains",
+    "minecraft:snowy_taiga",
+    "minecraft:windswept_hills",
+    "minecraft:forest",
+    "minecraft:birch_forest",
+    "minecraft:savanna",
+    "minecraft:old_growth_pine_taiga",
+    "kingdomsatwar:royal_meadows"
+  ]
+}

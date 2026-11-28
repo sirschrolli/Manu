@@ -38,7 +38,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
      * = 1 Gold) und im Handel. Die alten Mengen bleiben als Maß für die Truhe: wo früher Silber lag, liegt etwas mehr
      * Bronze, insgesamt aber weit weniger Wert als zuvor.
      */
-    private static LootTable.Builder coins(LootTable.Builder table, int bronzeMin, int bronzeMax, int silverMin, int silverMax,
+    static LootTable.Builder coins(LootTable.Builder table, int bronzeMin, int bronzeMax, int silverMin, int silverMax,
             float goldChance) {
         // nur Bronze, und karg: die alten Silber- und Goldmünzen zählen nur noch als ein paar Bronzestücke mehr – seit 1.3
         // (seltenere Schätze) noch etwas weniger: höchstens drei Fünftel, wenigstens die Hälfte des Mindestwerts
@@ -55,7 +55,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
      * Höchstens ein Herz- oder Manakristall: mit der halben Wahrscheinlichkeit {@code heart} bzw. {@code mana} (in
      * Hundertsteln; seit 1.3 – seltenere Schätze – nur noch die Hälfte), sonst keiner.
      */
-    private static LootPool.Builder crystals(int heartChance, int manaChance) {
+    static LootPool.Builder crystals(int heartChance, int manaChance) {
         int heart = (heartChance + 1) / 2;
         int mana = (manaChance + 1) / 2;
         LootPool.Builder pool = LootPool.lootPool().setRolls(ContextIntProviders.exactly(1));
@@ -68,7 +68,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
         return pool.add(EmptyLootItem.emptyItem().setWeight(100 - heart - mana));
     }
 
-    private static UniformContainerBase.Builder<?> item(ItemLike item, int weight, int min, int max) {
+    static UniformContainerBase.Builder<?> item(ItemLike item, int weight, int min, int max) {
         return LootItem.lootTableItem(item).setWeight(weight).apply(SetItemCountFunction.setCount(ContextIntProviders.between(min, max)));
     }
 
@@ -77,7 +77,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
      * höchstens zwei unter dem alten Höchstwert (die Truhen sollen sich verdient anfühlen).
      */
     @SafeVarargs
-    private static LootPool.Builder pool(int min, int max, UniformContainerBase.Builder<?>... entries) {
+    static LootPool.Builder pool(int min, int max, UniformContainerBase.Builder<?>... entries) {
         int lean = Math.max(1, min - 1);
         LootPool.Builder pool = LootPool.lootPool().setRolls(ContextIntProviders.between(lean, Math.max(lean, max - 2)));
         for (UniformContainerBase.Builder<?> entry : entries) {
@@ -409,6 +409,8 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         item(Items.PURPUR_BLOCK, 2, 2, 6), item(Items.GOLD_INGOT, 3, 1, 3), item(Items.EMERALD, 2, 1, 2),
                         item(Items.ENDER_EYE, 1, 1, 1), item(Items.END_ROD, 2, 1, 3))));
         this.deepLairs();
+        // die Bauwerke von 2.0
+        WonderLoot.register(this.output, this.enchantments);
     }
 
     /**

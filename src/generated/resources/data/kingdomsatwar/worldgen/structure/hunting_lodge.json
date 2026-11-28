@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/hunting_lodge",
+  "kind": "hunting_lodge",
+  "spawn_overrides": {},
+  "step": "top_layer_modification"
+}

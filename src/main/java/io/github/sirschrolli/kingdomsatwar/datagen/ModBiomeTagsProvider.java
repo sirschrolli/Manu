@@ -356,6 +356,7 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
                 .addTag(BiomeTags.IS_SAVANNA).addTag(BiomeTags.IS_BADLANDS).add(net.minecraft.world.level.biome.Biomes.PLAINS)
                 .add(net.minecraft.world.level.biome.Biomes.SUNFLOWER_PLAINS).add(net.minecraft.world.level.biome.Biomes.MEADOW)
                 .add(net.minecraft.world.level.biome.Biomes.SNOWY_PLAINS).add(net.minecraft.world.level.biome.Biomes.DESERT);
+        this.wonders();
         this.tag(BiomeTags.HAS_END_CITY).replace();
         for (TagKey<Biome> old : java.util.List.of(BiomeTags.HAS_STRONGHOLD, BiomeTags.HAS_MINESHAFT, BiomeTags.HAS_MINESHAFT_MESA,
                 BiomeTags.HAS_BURIED_TREASURE, BiomeTags.HAS_SHIPWRECK, BiomeTags.HAS_SHIPWRECK_BEACHED, BiomeTags.HAS_DESERT_PYRAMID,
@@ -372,6 +373,27 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
                 BiomeTags.HAS_ANCIENT_CITY, BiomeTags.HAS_TRIAL_CHAMBERS, BiomeTags.HAS_WOODLAND_MANSION)) {
             this.tag(old).replace();
         }
+    }
+
+    /** Die Bauwerke von 2.0: jedes in den Biomen, zu denen es passt. */
+    private void wonders() {
+        var has = ModTags.Biomes.HAS_SITE;
+        // Oberwelt
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.SENN_HUT)).add(Biomes.MEADOW).add(Biomes.CHERRY_GROVE)
+                .add(Biomes.GROVE).add(Biomes.WINDSWEPT_HILLS).add(Biomes.WINDSWEPT_GRAVELLY_HILLS).add(Biomes.WINDSWEPT_FOREST)
+                .add(Biomes.SNOWY_SLOPES).add(OverworldBiomes.ROYAL_MEADOWS);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.SMUGGLER_COVE)).addTag(BiomeTags.IS_BEACH).add(Biomes.STONY_SHORE)
+                .add(OverworldBiomes.STORM_COAST).add(OverworldBiomes.CORAL_COAST).add(Biomes.OCEAN).add(Biomes.LUKEWARM_OCEAN)
+                .add(Biomes.COLD_OCEAN).add(Biomes.WARM_OCEAN);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.APIARY)).add(Biomes.FLOWER_FOREST).add(Biomes.MEADOW)
+                .add(Biomes.SUNFLOWER_PLAINS).add(Biomes.PLAINS).add(Biomes.CHERRY_GROVE).add(Biomes.BIRCH_FOREST).add(OverworldBiomes.ROYAL_MEADOWS);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.BARROW)).add(Biomes.PLAINS).add(Biomes.MEADOW).add(Biomes.TAIGA)
+                .add(Biomes.SNOWY_PLAINS).add(Biomes.SNOWY_TAIGA).add(Biomes.WINDSWEPT_HILLS).add(Biomes.FOREST).add(Biomes.BIRCH_FOREST)
+                .add(Biomes.SAVANNA).add(Biomes.OLD_GROWTH_PINE_TAIGA).add(OverworldBiomes.ROYAL_MEADOWS);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.ALCHEMIST_TOWER)).add(Biomes.SWAMP).add(Biomes.MANGROVE_SWAMP)
+                .add(Biomes.DARK_FOREST).add(Biomes.PALE_GARDEN).add(Biomes.OLD_GROWTH_BIRCH_FOREST).add(OverworldBiomes.MIST_MOOR);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.HUNTING_LODGE)).addTag(BiomeTags.IS_TAIGA).add(Biomes.FOREST)
+                .add(Biomes.BIRCH_FOREST).add(Biomes.WINDSWEPT_FOREST).add(OverworldBiomes.PRIMEVAL_FOREST);
     }
 
     private void overworldBiomes() {

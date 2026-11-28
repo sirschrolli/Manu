@@ -378,6 +378,10 @@ final class Showcase {
                         WorldSitesShowcase.sites(steps, "");
                     } else if (scene.startsWith("worldsite_")) {
                         WorldSitesShowcase.sites(steps, scene.substring(10));
+                    } else if (scene.startsWith("wlab_")) {
+                        WonderShowcase.lab(steps, scene.substring(5));
+                    } else if (scene.startsWith("wonder_")) {
+                        WonderShowcase.world(steps, scene.substring(7));
                     } else if (scene.equals("villages_stats")) {
                         VillageShowcase.stats(steps, 6);
                     } else if (scene.equals("villages_life")) {

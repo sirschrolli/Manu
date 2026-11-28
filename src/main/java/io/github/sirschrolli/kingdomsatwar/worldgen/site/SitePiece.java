@@ -134,6 +134,7 @@ public class SitePiece extends StructurePiece {
             case BROOD_GROTTO -> BroodGrotto.build(b, this);
             case DWARF_HALL -> DwarfHall.build(b, this);
             case TROLL_DEN -> TrollDen.build(b, this);
+            default -> Wonders.build(this.kind, b, this);
         }
         b.finish();
     }

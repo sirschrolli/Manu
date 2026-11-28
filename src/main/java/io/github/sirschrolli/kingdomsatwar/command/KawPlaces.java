@@ -247,6 +247,29 @@ public final class KawPlaces {
             (level, from) -> unknownY(Mondsteinbruch.nearest(level.getSeed(), from.getX(), from.getZ())),
             (level, spot) -> surfaceAt(level, spot.center(), 0, 19, 25.0f)));
 
+    // ---- die Bauwerke von 2.0: sechs neue in jeder Dimension (frei schwebende: man landet auf ihnen)
+    static {
+        for (var wonder : io.github.sirschrolli.kingdomsatwar.worldgen.site.Wonders.all()) {
+            ResourceKey<Structure> key = ModStructures.site(wonder.kind());
+            register(new Site(wonder.place(), level(wonder.kind().world()), key, structure(key),
+                    approach(wonder.inside() ? Approach.INSIDE : Approach.FRONT, 30)));
+        }
+    }
+
+    /** Die Welt einer Dimension der Bauwerke. */
+    public static ResourceKey<Level> level(SiteKind.World world) {
+        return switch (world) {
+            case OVERWORLD -> Level.OVERWORLD;
+            case NETHER -> Level.NETHER;
+            case END -> Level.END;
+            case SHADOW -> ShadowGate.SHADOW_WORLD;
+            case VOID -> VoidGate.THE_VOID;
+            case ABYSS -> AbyssGate.THE_ABYSS;
+            case URMEER -> UrmeerDimension.LEVEL;
+            case FAE -> FaeGate.FAE_REALM;
+        };
+    }
+
     // =====================================================================================
     // Die Bosse
     // =====================================================================================

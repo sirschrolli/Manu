@@ -154,6 +154,11 @@ public final class ModLootTables {
         return ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/site/" + name));
     }
 
+    /** Eine Truhe eines der Bauwerke von 2.0 (sechs je Dimension): {@code chests/site/<name>}. */
+    public static ResourceKey<LootTable> wonder(String name) {
+        return site(name);
+    }
+
     private static ResourceKey<LootTable> village(String name) {
         return ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/village/" + name));
     }

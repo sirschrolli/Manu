@@ -79,6 +79,7 @@ public final class ShowcaseRunner {
         Minecraft minecraft = Minecraft.getInstance();
         boolean flat = !(SCENES.contains("terrain") || SCENES.contains("lair") || SCENES.contains("seal") || SCENES.contains("tower")
                 || SCENES.contains("magefight") || SCENES.contains("biome") || SCENES.contains("villages") || SCENES.contains("worldsite")
+                || SCENES.contains("wonder_")
                 || SCENES.contains("castleworld") || SCENES.contains("conquest")
                 || SCENES.contains("crystals") || SCENES.contains("atoll") || SCENES.contains("seafloor") || SCENES.contains("forge_boss") || SCENES.contains("ignara_boss")
                 || SCENES.contains("phasmor_boss") || SCENES.contains("star_boss") || SCENES.contains("anni_boss") || SCENES.contains("boss_arena")
